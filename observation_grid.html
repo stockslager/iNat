@@ -68,7 +68,6 @@ function fresults(data) {
    var results2 = data.results;
    var recsfound = results ? results.length : 0;
    var obsseq = 0; 
-    faddelem('p',document.body,{innerHTML:'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa <br><br><br><br>'}); 
    var grid = faddelem('div',document.body,{id:'grid',style:{height:cellpx+'px',width:cellpx+'px'}});
  faddelem('p',document.body,{innerHTML:'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'});   
    for (r=1;r<=rows;r++) {
@@ -125,7 +124,9 @@ else {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
       })
-      .then((data) => { fresults(data); })
+      .then((data) => { 
+         faddelem('p',document.body,{innerHTML:'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa <br><br><br><br>'}); 
+         fresults(data); })
       .catch((err) => {
          console.error(err.message);
          faddelem('p',document.body,{innerHTML:'There was a problem retrieving data. Error '+err.message+'.'})
