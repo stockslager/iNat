@@ -70,12 +70,12 @@ function fresults(data) {
 
    faddelem('p',document.body,{innerHTML:'111111 :'+recsfound});
 
- //  for( r=1;r<=recsfound;r++) {
+   for( r=1;r<=recsfound;r++) {
       let obs = results[obsseq];
       let taxon = obs.taxon?(obs.taxon.preferred_common_name?(obs.taxon.preferred_common_name+' ('+obs.taxon.name+')'):obs.taxon.name)+(obs.taxon.rank?' ('+obs.taxon.rank+')':''):'(Unknown Taxon)';      
-      faddelem('p',document.body,{innerHTML:' Taxon: '+obs}); 
- //     obsseq++;
-//   }
+      faddelem('p',document.body,{innerHTML:' Taxon: '+obs.user.name}); 
+      obsseq++;
+   }
       
 /*   if (recsfound===0&&data.total_results===0) { 
       faddelem('p',document.body,{innerHTML:'aaaaaa'});
