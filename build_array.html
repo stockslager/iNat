@@ -73,7 +73,7 @@ function fresults(data) {
  //  for( r=1;r<=recsfound;r++) {
       let obs = results[obsseq];
       let taxon = obs.taxon?(obs.taxon.preferred_common_name?(obs.taxon.preferred_common_name+' ('+obs.taxon.name+')'):obs.taxon.name)+(obs.taxon.rank?' ('+obs.taxon.rank+')':''):'(Unknown Taxon)';      
-      faddelem('p',document.body,{innerHTML:' Taxon: '+taxon}); 
+      faddelem('p',document.body,{innerHTML:' Taxon: '+obs.taxon.taxon_id}); 
  //     obsseq++;
 //   }
       
