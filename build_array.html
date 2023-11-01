@@ -63,12 +63,12 @@ winurlparams.append('per_page',recsmax);
 var apiurlbase = 'https://api.inaturalist.org/v1/observations'
 var apiurl = apiurlbase+'?'+winurlparams.toString();
 
-/*function fresults(data) {
+function fresults(data) {
    var results = data.results;
    var recsfound = results ? results.length : 0;
    var obsseq = 0; 
 
-   if (recsfound===0&&data.total_results===0) { 
+ /*  if (recsfound===0&&data.total_results===0) { 
             gcell.innerHTML = furl(famp(obsurl),'<span>no<br />data</span>');
             break;
    } else {
@@ -83,9 +83,9 @@ var apiurl = apiurlbase+'?'+winurlparams.toString();
             faddelem('p',document.body,{innerHTML:'Taxon: '+obs.taxon.preferred_common_name'});            
             
             obsseq++;
-      };
-   };
-}; */
+      }; 
+   }; */
+}; 
 
    faddelem('p',document.body,{innerHTML:'This is a qui'}); 
    
@@ -102,7 +102,7 @@ else {
       })
       .then((data) => { 
           faddelem('p',document.body,{innerHTML:'This is a qui'});         
-       //  fresults(data);
+          fresults(data);
 })
       .catch((err) => {
          console.error(err.message);
