@@ -11,7 +11,7 @@
    a { text-decoration:none; color:#006600; }
    p { margin:15px; }
    #grid { margin:0px; padding:0px; border:0px; }
-   .gridcell { position:relative; background:#cccccc; text-align:center; display:flex; justify-content:center; align-items:center; }
+   .gridcell { position:absolute; background:#cccccc; text-align:center; display:flex; justify-content:center; align-items:center; }
 </style>
 </head>
 
@@ -125,8 +125,9 @@ else {
          return response.json();
       })
       .then((data) => { 
-         faddelem('p',document.body,{innerHTML:'444444444444444444444444444444444'}); 
-         fresults(data); })
+         faddelem('p',document.body,{innerHTML:'555555555555555555555555'}); 
+         fresults(data);
+         fresults(data);})
       .catch((err) => {
          console.error(err.message);
          faddelem('p',document.body,{innerHTML:'There was a problem retrieving data. Error '+err.message+'.'})
