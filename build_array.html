@@ -74,7 +74,7 @@ function fresults(data) {
       let obs = results[obsseq];
       let taxon = obs.taxon?(obs.taxon.preferred_common_name?(obs.taxon.preferred_common_name+' ('+obs.taxon.name+')'):obs.taxon.name)+(obs.taxon.rank?' ('+obs.taxon.rank+')':''):'(Unknown Taxon)';      
       faddelem('p',document.body,{innerHTML:' Taxon: '+obs.user.name}); 
-      faddelem('p',document.body,{innerHTML:' Taxon: '+obs.field});
+      faddelem('p',document.body,{innerHTML:' Taxon: '+obs.field:Name%20of%20Associated%20Plant});
       obsseq++;
    }
       
