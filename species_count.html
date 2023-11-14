@@ -228,6 +228,8 @@ function fresults(xobj) {
             {classList:'tar',innerHTML:furl(url_explore+'&verifiable=any',fcomnum(rec.taxon.observations_count))},
          ];
          if (p_options.includes('ancestry')) { values.splice(7,0,{innerHTML:rec.taxon.ancestor_ids.map(function(e){return furl('http://www.inaturalist.org/taxa/'+e,e)}).join('/')||''}); };
+         
+         innerHTML:'This page displays the response from the '+rec.taxon.observations_count+'.';    
          if( rec.taxon.observations_count < 250 ) {
             faddelems('td',brow,values);
          };     
