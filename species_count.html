@@ -230,7 +230,7 @@ function fresults(xobj) {
          ];
          if (p_options.includes('ancestry')) { values.splice(7,0,{innerHTML:rec.taxon.ancestor_ids.map(function(e){return furl('http://www.inaturalist.org/taxa/'+e,e)}).join('/')||''}); };
 
-               if( obsparams.get('url_max_total_obs') > 0 ){
+               if( obsparams.get('url_max_total_obs') != null; ){
                   
                   if( rec.taxon.observations_count < obsparams.get('url_max_total_obs') ) {
                      faddelems('td',brow,values);
