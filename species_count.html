@@ -82,6 +82,7 @@ function faddelem(etype,eparent=null,eattributes={}) {
 function faddelems(etype,eparent=null,eattributes=[]) { for (let e of eattributes) { faddelem(etype,eparent,e); }; };
 function fpageurl(urlbase,urlparams,per_page,page) {
    let params = new URLSearchParams(urlparams);
+   let url_max_total_obs = params.get('max_total_obs');
    let url_per_page = params.get('per_page');
    let url_page = params.get('page');
    (url_per_page===null) ? params.append('per_page',per_page) : params.set('per_page',per_page);
@@ -228,9 +229,13 @@ function fresults(xobj) {
             {classList:'tar',innerHTML:furl(url_explore+'&verifiable=any',fcomnum(rec.taxon.observations_count))},
          ];
          if (p_options.includes('ancestry')) { values.splice(7,0,{innerHTML:rec.taxon.ancestor_ids.map(function(e){return furl('http://www.inaturalist.org/taxa/'+e,e)}).join('/')||''}); };
-         
-         innerHTML:'This page displays the response from the '+rec.taxon.observations_count+'.';    
-         if( rec.taxon.observations_count < 250 ) {
+
+         if( url_max_total_obs != null ){
+            
+            if( rec.taxon.observations_count < url_max_total_obs ) {
+               faddelems('td',brow,values);
+            };
+         else {
             faddelems('td',brow,values);
          };     
       };
