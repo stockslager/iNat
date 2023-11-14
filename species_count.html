@@ -200,11 +200,13 @@ function fresults(xobj) {
       
       let tbody = faddelem('tbody',table);
       for (let i=0; i<results.length; i++) {
-         let brow = faddelem('tr',tbody);
+         
          let rec = results[i];
 
          //if( rec.taxon.observations_count < obsparams.get('url_max_total_obs') ) {
          if( rec.taxon.observations_count < 250 ) {       
+
+                  let brow = faddelem('tr',tbody);
             
                   // this section sets up parameters for hyperlinks to Explore page
                   // won't be able properly to handle situations where user inputs subspecies in URL parameters
