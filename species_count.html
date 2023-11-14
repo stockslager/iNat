@@ -197,43 +197,45 @@ function fresults(xobj) {
       ];
       if (p_options.includes('ancestry')) { labels.splice(7,0,{innerText:'Ancestry'}); };
       faddelems('th',hrow,labels);
-
+      
       let tbody = faddelem('tbody',table);
       for (let i=0; i<results.length; i++) {
          let brow = faddelem('tr',tbody);
          let rec = results[i];
+
+         //if( rec.taxon.observations_count < obsparams.get('url_max_total_obs') ) {
+         if( rec.taxon.observations_count < 250 ) {       
+            
+                  // this section sets up parameters for hyperlinks to Explore page
+                  // won't be able properly to handle situations where user inputs subspecies in URL parameters
+                  // also, won't always tie exactly because Explore page always filters for spam=false (cannot change this parameter on that page) 
+                  let obsparams = new URLSearchParams(winurlparams);
+                  obsparams.delete('order');
+                  obsparams.delete('page');
+                  obsparams.delete('per_page');
+                  obsparams.delete('taxon_id'); 
+                  let url_explore = 'https://www.inaturalist.org/observations?taxon_id='+rec.taxon.id
+                  let obsparam_verifiable = (obsparams.get('verifiable')===null)?'&verifiable=any':('&verifiable='+obsparams.get('verifiable'));
+                  obsparams.delete('verifiable');
          
-         // this section sets up parameters for hyperlinks to Explore page
-         // won't be able properly to handle situations where user inputs subspecies in URL parameters
-         // also, won't always tie exactly because Explore page always filters for spam=false (cannot change this parameter on that page) 
-         let obsparams = new URLSearchParams(winurlparams);
-         obsparams.delete('order');
-         obsparams.delete('page');
-         obsparams.delete('per_page');
-         obsparams.delete('taxon_id'); 
-         let url_explore = 'https://www.inaturalist.org/observations?taxon_id='+rec.taxon.id
-         let obsparam_verifiable = (obsparams.get('verifiable')===null)?'&verifiable=any':('&verifiable='+obsparams.get('verifiable'));
-         obsparams.delete('verifiable');
-
-         let values = [
-            {innerText:i+1},
-            {innerHTML:furl('https://www.inaturalist.org/taxa/'+rec.taxon.id,rec.taxon.id)},
-            (p_options.includes('bigger_image'))
-               ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
-               : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-            {innerText:rec.taxon.name||''},
-            {innerText:rec.taxon.preferred_common_name||''},
-            {innerText:rec.taxon.rank||''},
-            {innerText:rec.taxon.iconic_taxon_name||''},
-            {classList:'tar',innerHTML:furl(url_explore+obsparam_verifiable+(obsparams==''?'':('&'+obsparams)),fcomnum(rec.count))},
-            {classList:'tar',innerHTML:furl(url_explore+'&verifiable=any',fcomnum(rec.taxon.observations_count))},
-         ];
-         if (p_options.includes('ancestry')) { values.splice(7,0,{innerHTML:rec.taxon.ancestor_ids.map(function(e){return furl('http://www.inaturalist.org/taxa/'+e,e)}).join('/')||''}); };
-
-                  //if( rec.taxon.observations_count < obsparams.get('url_max_total_obs') ) {
-                  if( rec.taxon.observations_count < 250 ) {
-                     faddelems('td',brow,values);
-                  };    
+                  let values = [
+                     {innerText:i+1},
+                     {innerHTML:furl('https://www.inaturalist.org/taxa/'+rec.taxon.id,rec.taxon.id)},
+                     (p_options.includes('bigger_image'))
+                        ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
+                        : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
+                     {innerText:rec.taxon.name||''},
+                     {innerText:rec.taxon.preferred_common_name||''},
+                     {innerText:rec.taxon.rank||''},
+                     {innerText:rec.taxon.iconic_taxon_name||''},
+                     {classList:'tar',innerHTML:furl(url_explore+obsparam_verifiable+(obsparams==''?'':('&'+obsparams)),fcomnum(rec.count))},
+                     {classList:'tar',innerHTML:furl(url_explore+'&verifiable=any',fcomnum(rec.taxon.observations_count))},
+                  ];
+                  if (p_options.includes('ancestry')) { values.splice(7,0,{innerHTML:rec.taxon.ancestor_ids.map(function(e){return furl('http://www.inaturalist.org/taxa/'+e,e)}).join('/')||''}); };
+         
+         
+                              faddelems('td',brow,values);  
+         };
       };
 
       // buttons to go to prev or next page
