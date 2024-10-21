@@ -64,6 +64,8 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 //let p_page = winurlparams.get('page') || 1;
 let p_options = winurlparams.get('options') || [];
 winurlparams.delete('options');
+winurlparams.delete('iconic_taxa');
+winurlparams.append('iconic_taxa','Plantae');
 
 function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
 function famp(str) { return str.replace(/&/g,'&amp;'); };
@@ -127,13 +129,9 @@ function fexport(count=0) {
    Promise.all(pary)
    .then(results=>{
       let ary = [[
-         'id',
          'name',
          'common_name',
          'rank',
-         'iconic_taxon',
-         'taxon_obs_count',
-         'taxon_ttl_obs_count',
       ]];
       if (p_options.includes('ancestry')) { ary[0].splice(5,0,'ancestry'); };
 
@@ -185,14 +183,11 @@ function fresults(xobj) {
       let hrow = faddelem('tr',thead);
       let labels = [
          {innerText:'#'},
-         {innerText:'ID'},
          {innerText:'Photo'},
          {innerText:'Name'},
          {innerText:'Common Name'},
+         {innerText:' '},
          {innerText:'Rank'},
-         {innerText:'Iconic Taxon'},
-         {classList:'tar',innerText:'Taxon Obs Count'},
-         {classList:'tar',innerText:'Taxon Ttl Obs Count'},
       ];
       if (p_options.includes('ancestry')) { labels.splice(7,0,{innerText:'Ancestry'}); };
       faddelems('th',hrow,labels);
@@ -216,16 +211,13 @@ function fresults(xobj) {
 
          let values = [
             {innerText:i+1},
-            {innerHTML:furl('https://www.inaturalist.org/taxa/'+rec.taxon.id,rec.taxon.id)},
             (p_options.includes('bigger_image'))
                ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
                : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
             {innerText:rec.taxon.name||''},
             {innerText:rec.taxon.preferred_common_name||''},
+            {innerHTML:furl('https://www.inaturalist.org/observations?project_id='+winurlparams.get('project_id')+'&subview=map&field:Plant%20that%20the%20organism%20was%20found%20on='+rec.taxon.id,'Visiting Organisms...')},
             {innerText:rec.taxon.rank||''},
-            {innerText:rec.taxon.iconic_taxon_name||''},
-            {classList:'tar',innerHTML:furl(url_explore+obsparam_verifiable+(obsparams==''?'':('&'+obsparams)),fcomnum(rec.count))},
-            {classList:'tar',innerHTML:furl(url_explore+'&verifiable=any',fcomnum(rec.taxon.observations_count))},
          ];
          if (p_options.includes('ancestry')) { values.splice(7,0,{innerHTML:rec.taxon.ancestor_ids.map(function(e){return furl('http://www.inaturalist.org/taxa/'+e,e)}).join('/')||''}); };
          faddelems('td',brow,values);
