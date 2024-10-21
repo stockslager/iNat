@@ -257,7 +257,7 @@ function fresults(xobj) {
          let rec = results[i];
          let values = [
             {innerText:i+1},
-            {innerHTML:furl('https://www.inaturalist.org/observations?project_id=cincinnati-nature-center-pollinator-garden&subview=map&field:Plant%20that%20the%20organism%20was%20found%20on='+'47911','milk')},
+            {innerHTML:furl('https://www.inaturalist.org/observations?project_id=cincinnati-nature-center-pollinator-garden&subview=map&field:Plant%20that%20the%20organism%20was%20found%20on='+rec.taxon.id,'Found On')},
             {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
             {innerHTML:rec.taxon?furl(inat_taxa+rec.taxon.id,rec.taxon.name):''},
             {innerText:rec.taxon?(rec.taxon.preferred_common_name||''):''},
