@@ -186,7 +186,8 @@ function fresults(xobj) {
          {innerText:'Photo'},
          {innerText:'Name'},
          {innerText:'Common Name'},
-         {innerText:' '},
+         {innerText:'Visiting'},
+         {innerText:'Nectaring'},
          {innerText:'Rank'},
       ];
       if (p_options.includes('ancestry')) { labels.splice(7,0,{innerText:'Ancestry'}); };
@@ -217,6 +218,7 @@ function fresults(xobj) {
             {innerText:rec.taxon.name||''},
             {innerText:rec.taxon.preferred_common_name||''},
             {innerHTML:furl('https://www.inaturalist.org/observations?project_id='+winurlparams.get('project_id')+'&subview=map&field:Plant%20that%20the%20organism%20was%20found%20on='+rec.taxon.id,'Visiting Organisms...')},
+            {innerHTML:furl('https://www.inaturalist.org/observations?project_id='+winurlparams.get('project_id')+'&subview=map&field:Nectar%20Plant='+rec.taxon.id,'Nectaring Organisms...')},
             {innerText:rec.taxon.rank||''},
          ];
          if (p_options.includes('ancestry')) { values.splice(7,0,{innerHTML:rec.taxon.ancestor_ids.map(function(e){return furl('http://www.inaturalist.org/taxa/'+e,e)}).join('/')||''}); };
@@ -249,7 +251,7 @@ if (winurlsearchstr==='') {
    faddelems('p',document.body,instructions);
 }
 else {
-   faddelem('p',document.body,{innerHTML:'List of plant species with a link to the organisms observed visiting those plants.  Relies on the \"plant the organism was found on\" observation field.'});
+   faddelem('p',document.body,{innerHTML:'List of plant species with a link to the organisms observed nectaring or visiting those plants.  Relies on the \"plant the organism was found on\" and \"Nectar Plant\" observation fields.'});
    fetch(apiurl)
    .then((response) => {
       if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
