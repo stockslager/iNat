@@ -235,7 +235,7 @@ function fresults(xobj) {
 let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
-let apirefname = 'List of plant species for a project with a link to the organisms observed visiting those plants';
+let apirefname = 'Organisms Found Visiting';
 let apiref = furl(apirefurl,apirefname);
 faddelem('h1',document.body,{innerText:apirefname});
 
@@ -249,7 +249,7 @@ if (winurlsearchstr==='') {
    faddelems('p',document.body,instructions);
 }
 else {
-   //faddelem('p',document.body,{innerHTML:'This is the base query: '+furl(famp(apiurl))+'. (This page will accept most parameters from the '+apiref+' API endpoint.)'});
+   faddelem('p',document.body,{innerHTML:'List of plant species with a link to the organisms observed visiting those plants.  Relies on the \"plant the organism was found on\" observation field.'});
    fetch(apiurl)
    .then((response) => {
       if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
