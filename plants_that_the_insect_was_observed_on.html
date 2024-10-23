@@ -201,10 +201,9 @@ function fresults(xobj) {
       let hrow = faddelem('tr',thead);
       let labels = [
          {innerText:'#'},
-         {innerText:'Observed On'},
-         {innerText:'Photo'},
-         {innerText:'Common Name'},         
          {innerText:'Name'},
+         {innerText:'Common Name'},         
+         {innerText:'Photo'},
          {innerText:'Grade'},
          {innerText:'User Photo'},
          {innerText:'User Login'},
@@ -265,9 +264,8 @@ function fresults(xobj) {
          let values = [
             {innerText:i+1},
             {innerText:ss},
-            {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
             {innerText:rec.taxon?(rec.taxon.preferred_common_name||''):''},
-            {innerHTML:rec.taxon?furl(inat_taxa+rec.taxon.id,rec.taxon.name):''},
+            {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
             {innerText:rec.quality_grade},
             {innerHTML:'<img class="icon" src="'+rec.user.icon+'" />'},
             {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
