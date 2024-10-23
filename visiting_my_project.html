@@ -60,7 +60,7 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-//let p_per_page = winurlparams.get('per_page') || 500;
+let p_per_page = winurlparams.get('per_page') || 100;
 //let p_page = winurlparams.get('page') || 1;
 let p_options = winurlparams.get('options') || [];
 winurlparams.delete('options');
