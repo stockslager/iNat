@@ -141,7 +141,7 @@ function fexport(count=0) {
                data.taxon.id||'',
                data.taxon.name||'',
                (!data.taxon.preferred_common_name)?'':(data.taxon.preferred_common_name.search(',')===-1)?data.taxon.preferred_common_name:'"'+data.preferred_common_name+'"',
-               data.taxon.rank||'',
+               data.taxon.rank+data.taxon.rank_level||'',
                data.taxon.iconic_taxon_name||'',
                data.count||'',
                data.taxon.observations_count||'',
