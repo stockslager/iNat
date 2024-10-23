@@ -246,7 +246,7 @@ function fresults(xobj) {
 let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
-let apirefname = 'Organisms Found Visiting';
+let apirefname = 'Organisms Found Visiting ~ CNC Native Plant Garden';
 let apiref = furl(apirefurl,apirefname);
 faddelem('h1',document.body,{innerText:apirefname});
 
@@ -260,7 +260,7 @@ if (winurlsearchstr==='') {
    faddelems('p',document.body,instructions);
 }
 else {
-   faddelem('p',document.body,{innerHTML:'List of plant species with a link to the organisms observed nectaring or visiting those plants.  Relies on the \"Plant that the organism was found on\" and \"Nectar Plant\" observation fields.'});
+   faddelem('p',document.body,{innerHTML:'List of insect species with a link to the plants those insects visited.  Relies on the \"Plant that the organism was found on\" and \"Nectar Plant\" observation fields.'});
    fetch(apiurl)
    .then((response) => {
       if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
