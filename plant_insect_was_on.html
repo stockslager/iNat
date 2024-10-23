@@ -255,6 +255,12 @@ function fresults(xobj) {
       for (let i=0; i<results.length; i++) {
          let brow = faddelem('tr',tbody);
          let rec = results[i];
+
+//start
+         for (let j=0; j<rec.ofvs.length; j++){
+
+         if(rec.ofvs[j].field_id===7623){
+//end
          let values = [
             {innerText:i+1},
             {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
@@ -270,14 +276,11 @@ function fresults(xobj) {
             {innerText:fdate(rec.updated_at)},
             {innerText:rec.location?rec.location.replace(',',', '):''},
             {innerText:rec.place_guess},
-            {innerText:rec.ofvs?(
-            for(let j=0; j<rec.ofvs.length; j++){
-               if (rec.ofvs[j].field_id===7623){
-                  rec.ofvs[j].name:'')
-                  j=rec.ofvs.length;
-               } 
-            }},
+            {innerText:rec.ofvs?(rec.ofvs[j].name:'')},
          ];
+//start
+         }}
+//end
          if (p_options.includes('idextra')) {
             let idextra = fidextra(rec);
             let values_id = [
