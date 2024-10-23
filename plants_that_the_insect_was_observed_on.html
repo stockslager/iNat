@@ -200,15 +200,15 @@ function fresults(xobj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
       let labels = [
+         {innerText:'Observed On'},
          {innerText:'#'},
-         {innerText:'Observation ID'},
          {innerText:'Photo'},
          {innerText:'Common Name'},         
          {innerText:'Name'},
          {innerText:'Grade'},
          {innerText:'User Photo'},
          {innerText:'User Login'},
-         {innerText:'Description'},
+         {innerText:'Observation ID'},
       ];
       if (p_options.includes('idextra')) {
          let labels_id = [
@@ -263,7 +263,7 @@ function fresults(xobj) {
          }
 //end
          let values = [
-            {innerText:i+1},
+            {innerText:ss},
             {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
             {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
             {innerText:rec.taxon?(rec.taxon.preferred_common_name||''):''},
@@ -271,7 +271,7 @@ function fresults(xobj) {
             {innerText:rec.quality_grade},
             {innerHTML:'<img class="icon" src="'+rec.user.icon+'" />'},
             {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
-            {innerText:ss},
+            {innerText:i+1},
             //{innerText:rec.ofvs&&rec.ofvs.length>0?(rec.ofvs[0].name||''):''},
          ];
 //start
