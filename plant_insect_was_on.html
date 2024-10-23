@@ -270,7 +270,12 @@ function fresults(xobj) {
             {innerText:fdate(rec.updated_at)},
             {innerText:rec.location?rec.location.replace(',',', '):''},
             {innerText:rec.place_guess},
-            {innerText:rec.ofvs?rec.ofvs[0].name:''},
+            for(let j=0; j<rec.ofvs.length; j++){
+               if (rec.ofvs[j].field_id===7623){
+                  {innerText:rec.ofvs?rec.ofvs[0].name:''},
+                  j=rec.ovfs.length;
+               } 
+            }
          ];
          if (p_options.includes('idextra')) {
             let idextra = fidextra(rec);
@@ -278,8 +283,8 @@ function fresults(xobj) {
                {classList:'tar',innerText:(idextra===null)?0:idextra.count.all},
                {classList:'tar',innerText:(idextra===null)?0:idextra.count.obs},
                {classList:'tar',innerText:(idextra===null)?'N/A':idextra.taxa.obs.length},
-               {classList:'tar',innerText:(idextra===null)?'N/A':idextra.taxa.ancestor.length},
-               {classList:'tar',innerText:(idextra===null)?'N/A':idextra.taxa.descendant.length},
+               {classList:'tar',innerText:(idextra=null)?'N/A':idextra.taxa.ancestor.length},
+               {classList:'tar',innerText:(idextra=null)?'N/A':idextra.taxa.descendant.length},
                {classList:'tar',innerText:(idextra===null)?'N/A':idextra.taxa.other.length},
                {innerText:(idextra===null)?'N/A':idextra.obs_taxon_is_community,classList:`bin_${(idextra===null||idextra.obs_taxon_is_community)}`},
             ];
