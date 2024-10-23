@@ -132,6 +132,7 @@ function fexport(count=0) {
          'name',
          'common_name',
          'rank',
+         'rank_level',
       ]];
       if (p_options.includes('ancestry')) { ary[0].splice(5,0,'ancestry'); };
 
@@ -141,7 +142,8 @@ function fexport(count=0) {
                data.taxon.id||'',
                data.taxon.name||'',
                (!data.taxon.preferred_common_name)?'':(data.taxon.preferred_common_name.search(',')===-1)?data.taxon.preferred_common_name:'"'+data.preferred_common_name+'"',
-               data.taxon.rank+data.taxon.rank_level||'',
+               data.taxon.rank||'',
+               data.taxon.rank_level||'',
                data.taxon.iconic_taxon_name||'',
                data.count||'',
                data.taxon.observations_count||'',
@@ -192,6 +194,7 @@ function fresults(xobj) {
          {innerText:'Visiting'},
          {innerText:'Nectaring'},
          {innerText:'Rank'},
+         {innerText:'Rank Level'},
       ];
       if (p_options.includes('ancestry')) { labels.splice(7,0,{innerText:'Ancestry'}); };
       faddelems('th',hrow,labels);
@@ -223,6 +226,7 @@ function fresults(xobj) {
             {innerHTML:furl('https://www.inaturalist.org/observations?project_id='+winurlparams.get('project_id')+'&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa'+'&subview=map&field:Plant%20that%20the%20organism%20was%20found%20on='+rec.taxon.id,'Visiting Organisms...')},
             {innerHTML:furl('https://www.inaturalist.org/observations?project_id='+winurlparams.get('project_id')+'&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa'+'&subview=map&field:Nectar%20Plant='+rec.taxon.id,'Nectaring Organisms...')},
             {innerText:rec.taxon.rank||''},
+            {innerText:rec.taxon.rank_level||''},
          ];
          if (p_options.includes('ancestry')) { values.splice(7,0,{innerHTML:rec.taxon.ancestor_ids.map(function(e){return furl('http://www.inaturalist.org/taxa/'+e,e)}).join('/')||''}); };
          faddelems('td',brow,values);
