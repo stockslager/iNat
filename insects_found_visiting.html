@@ -62,6 +62,7 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let per_page = winurlparams.get('per_page') || 100;
 //let p_page = winurlparams.get('page') || 1;
+let p_visitor_taxon_id = winurlparams.get('visitor_taxon_id') || [];
 let p_options = winurlparams.get('options') || [];
 let p_action = winurlparams.get('action') || [];
 let nnn = winurlparams.get('nn') || '';
@@ -260,7 +261,7 @@ function fresults(xobj) {
                {innerText:rec.taxon.preferred_common_name||''},
                {innerText:rec.taxon.name||''},
                {innerText:recCount||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=500&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&view='+p_view,ss)},
+               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=500&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&view='+p_view+'&visitor_taxon_id='+p_visitor_taxon_id,ss)},
                //{innerHTML:furl('https://www.inaturalist.org/observations?project_id='+winurlparams.get('project_id')+'&iconic_taxa=Plantae'+'&subview=map&field:Plant%20that%20the%20organism%20was%20found%20on='+rec.taxon.id,ss)},
                {innerText:rec.taxon.rank||''},
             ];
@@ -274,7 +275,7 @@ function fresults(xobj) {
                {innerText:rec.taxon.name||''},
                {innerText:recCount||''},
                {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=500&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name,ss)},
-               //{innerHTML:furl('https://www.inaturalist.org/observations?project_id='+winurlparams.get('project_id')+'&iconic_taxa=Plantae'+'&subview=map&field:Plant%20that%20the%20organism%20was%20found%20on='+rec.taxon.id,ss)},
+               //{innerHTML:furl('https://www.inaturalist.org/observations?project_id='+winurlparams.get('project_id')+'&iconic_taxa=Plantae'+'&subview=map&field:Plant%20that%20the%20organism%20was%20found%20on='+rec.taxon.id+'&visitor_taxon_id='+p_visitor_taxon_id,ss)},
                {innerText:rec.taxon.rank||''},
             ];
          }
