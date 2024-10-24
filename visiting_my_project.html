@@ -63,9 +63,15 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let per_page = winurlparams.get('per_page') || 100;
 //let p_page = winurlparams.get('page') || 1;
 let p_options = winurlparams.get('options') || [];
+let prj = '';
 winurlparams.delete('options');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Plantae');
+
+let prj_id = winurlparams.get('project_id') || [];
+if(prj_id === 'cincinnati-nature-center-pollinator-garden' || prj_id === 220623){
+   prj += 'Cincinnati Nature Center Pollinator Garden';
+}
 
 function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
 function famp(str) { return str.replace(/&/g,'&amp;'); };
@@ -252,7 +258,8 @@ let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
 let apirefname = 'Plants Being Visited';
 let apiref = furl(apirefurl,apirefname);
-faddelem('h1',document.body,{innerText:apirefname});
+faddelem('h1',document.body,{innerText:prj});
+faddelem('h2',document.body,{innerText:apirefname});
 
 if (winurlsearchstr==='') {
    let instructions = [
