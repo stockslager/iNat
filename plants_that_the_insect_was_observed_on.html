@@ -64,7 +64,7 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let nnn = winurlparams.get('nn') || '';
 //let p_per_page = winurlparams.get('per_page') || 200;
 //let p_page = winurlparams.get('page') || 1;
-let view_id = winurlparams.get('view') || 'all';
+let p_view = winurlparams.get('view') || 'all';
 let p_options = winurlparams.get('options') || [];
 winurlparams.delete('options');
 let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
@@ -258,11 +258,22 @@ function fresults(xobj) {
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
 
-               if(rec.ofvs[j].field_id===7623){
-                  tax_name += rec.ofvs[j].taxon.name;
-                  pref_tax_name += rec.ofvs[j].taxon.preferred_common_name;
-                  tax_photo += rec.ofvs[j].taxon.default_photo.url;
-                  j=rec.ofvs.length;
+               if( p_view === 'nectaring' ){
+                  if(rec.ofvs[j].field_id===498){
+                     // 498 == Nectar Plant.
+                     tax_name += rec.ofvs[j].taxon.name;
+                     pref_tax_name += rec.ofvs[j].taxon.preferred_common_name;
+                     tax_photo += rec.ofvs[j].taxon.default_photo.url;
+                     j=rec.ofvs.length;
+                  }               
+               } else {
+                  if(rec.ofvs[j].field_id===7623){
+                     // 7623 == Plant that the organism was found on.
+                     tax_name += rec.ofvs[j].taxon.name;
+                     pref_tax_name += rec.ofvs[j].taxon.preferred_common_name;
+                     tax_photo += rec.ofvs[j].taxon.default_photo.url;
+                     j=rec.ofvs.length;
+                  }
                }
             }
          }
