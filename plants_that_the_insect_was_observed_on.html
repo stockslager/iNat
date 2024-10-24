@@ -255,17 +255,17 @@ function fresults(xobj) {
 
 //start
          if(rec.ofvs&&rec.ofvs.length>0){
-         for (let j=0; j<rec.ofvs.length; j++){
+            for (let j=0; j<rec.ofvs.length; j++){
 
-         if(rec.ofvs[j].field_id===7623){
-            tax_name += rec.ofvs[j].taxon.name;
-            pref_tax_name += rec.ofvs[j].taxon.preferred_common_name;
-            //tax_photo += rec.ofvs[j].taxon.square_url;
-            j=rec.ofvs.length;
-         }}
-            let d=0;
+               if(rec.ofvs[j].field_id===7623){
+                  tax_name += rec.ofvs[j].taxon.name;
+                  pref_tax_name += rec.ofvs[j].taxon.preferred_common_name;
+                  tax_photo += rec.ofvs[j].taxon.square_url;
+                  j=rec.ofvs.length;
+               }
+            }
          }
-//end
+         
          let values = [
             {innerText:i+1},
             {innerText:pref_tax_name},
