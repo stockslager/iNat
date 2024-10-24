@@ -269,8 +269,8 @@ function fresults(xobj) {
                      foundNectaring += 'yes';
                      j=rec.ofvs.length;
                   }               
-               }
-               if( p_view != 'visiting' ){
+               } 
+               if( p_view === 'visiting' ){
                   if(rec.ofvs[j].field_id===7623){
                      // 7623 == Plant that the organism was found on.
                      tax_name += rec.ofvs[j].taxon.name;
@@ -279,6 +279,13 @@ function fresults(xobj) {
                      foundVisiting += 'yes';
                      j=rec.ofvs.length;
                   }
+               } 
+               if(p_view === 'all' ){
+                  if(rec.ofvs[j].field_id===7623){
+                     tax_name += rec.ofvs[j].taxon.name;
+                     pref_tax_name += rec.ofvs[j].taxon.preferred_common_name;
+                     tax_photo += rec.ofvs[j].taxon.default_photo.url;  
+                  }             
                }
             }
          }
