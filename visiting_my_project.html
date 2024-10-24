@@ -193,8 +193,9 @@ function fresults(xobj) {
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
+      let labels = [];
       if( view_id === 'nectaring' ){
-            let labels = [
+         labels = [
             {innerText:'#'},
             {innerText:'Photo'},   
             {innerText:'Name'},
@@ -204,8 +205,8 @@ function fresults(xobj) {
             {innerText:'Rank Level'},
          ];      
       } else { 
-         let labels = [
-            {innerText:('#'+view_id)},
+         labels = [
+            {innerText:('#')},
             {innerText:'Photo'},   
             {innerText:'Name'},
             {innerText:'Common Name'},
@@ -214,7 +215,7 @@ function fresults(xobj) {
             {innerText:'Rank'},
             {innerText:'Rank Level'},
          ];
-   }
+      }
       if (p_options.includes('ancestry')) { labels.splice(7,0,{innerText:'Ancestry'}); };
       faddelems('th',hrow,labels);
 
