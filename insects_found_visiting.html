@@ -68,8 +68,13 @@ let nnn = winurlparams.get('nn') || '';
 winurlparams.delete('options');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Insecta');
-winurlparams.delete('project_id');
-winurlparams.append('project_id', '220623');
+let prj_id = winurlparams.get('project_id')||[];
+if(prj_id === '220623' || prj_id === '152539'){
+   break;
+} else {
+   winurlparams.delete('project_id');
+   winurlparams.append('project_id', '220623');
+}
 
 function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
 function famp(str) { return str.replace(/&/g,'&amp;'); };
