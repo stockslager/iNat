@@ -252,6 +252,9 @@ function fresults(xobj) {
 
       let tbody = faddelem('tbody',table);
       let inat_taxa = 'https://www.inaturalist.org/taxa/';
+
+      let displayCount = 0;
+      
       for (let i=0; i<results.length; i++) {
          let brow = faddelem('tr',tbody);
          let rec = results[i];
@@ -274,6 +277,7 @@ function fresults(xobj) {
                         pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
                         tax_photo = rec.ofvs[j].taxon.default_photo.url;
                         foundNectaring = 'yes';
+                        displayCount++;
                         j=rec.ofvs.length;
                      }
                   }               
@@ -285,6 +289,7 @@ function fresults(xobj) {
                         pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
                         tax_photo = rec.ofvs[j].taxon.default_photo.url;
                         foundVisiting = 'yes';
+                        displayCount++;
                         j=rec.ofvs.length;
                      }
                   }
@@ -294,7 +299,11 @@ function fresults(xobj) {
                            pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
                            tax_photo = rec.ofvs[j].taxon.default_photo.url;  
                            j=rec.ofvs.length;
-                     }             
+                     } else {
+                        tax_name = 'Unknown Plant';
+                        pref_tax_name = 'Unknown Plant';
+                        tax_photo = ';o)';
+                     }
                }
             }
          }
@@ -303,7 +312,7 @@ function fresults(xobj) {
 
          if( p_view === 'nectaring' && foundNectaring === 'yes' ){
                values = [
-                  {innerText:i+1},
+                  {innerText:displayCount},
                   {innerHTML:'<img class="icon" src="'+tax_photo+'" />'},
                   {innerText:pref_tax_name},
                   {innerText:tax_name},
@@ -315,7 +324,7 @@ function fresults(xobj) {
                ];            
          } else if( p_view === 'visiting' && foundVisiting === 'yes'){
                values = [
-                  {innerText:i+1},
+                  {innerText:displayCount},
                   {innerHTML:'<img class="icon" src="'+tax_photo+'" />'},
                   {innerText:pref_tax_name},
                   {innerText:tax_name},
