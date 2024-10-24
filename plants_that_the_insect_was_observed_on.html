@@ -65,6 +65,9 @@ let nnn = winurlparams.get('nn') || '';
 //let p_per_page = winurlparams.get('per_page') || 200;
 //let p_page = winurlparams.get('page') || 1;
 let p_view = winurlparams.get('view') || 'all';
+if( p_view != 'all' && p_view != 'nectaring' && p_view != 'visiting' ){
+   p_view = 'all';
+}
 let p_options = winurlparams.get('options') || [];
 winurlparams.delete('options');
 let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
