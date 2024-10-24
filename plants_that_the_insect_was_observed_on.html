@@ -246,12 +246,17 @@ function fresults(xobj) {
 
       let tbody = faddelem('tbody',table);
       let inat_taxa = 'https://www.inaturalist.org/taxa/';
+      let org_name = '';
       for (let i=0; i<results.length; i++) {
          let brow = faddelem('tr',tbody);
          let rec = results[i];
          let tax_name = '';
          let pref_tax_name = '';
          let tax_photo = '';
+
+         if(i===0){
+            org_name += rec.taxon.preferred_common_name;
+         }
 
 //start
          if(rec.ofvs&&rec.ofvs.length>0){
@@ -367,7 +372,7 @@ let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
 let apirefname = 'Observations of ';
-//apirefname += rec.taxon.preferred_common_name;
+apirefname += org_name;
 apirefname += ' visiting plants in the CNC Native Plant Garden';
 let apiref = furl(apirefurl,apirefname);
 faddelem('h2',document.body,{innerText:apirefname});
