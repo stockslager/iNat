@@ -266,7 +266,8 @@ function fresults(xobj) {
                      tax_photo += rec.ofvs[j].taxon.default_photo.url;
                      j=rec.ofvs.length;
                   }               
-               } else {
+               }
+               if( p_view != 'nectaring' ){
                   if(rec.ofvs[j].field_id===7623){
                      // 7623 == Plant that the organism was found on.
                      tax_name += rec.ofvs[j].taxon.name;
