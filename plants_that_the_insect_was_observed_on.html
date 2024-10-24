@@ -201,12 +201,13 @@ function fresults(xobj) {
       let hrow = faddelem('tr',thead);
       let labels = [
          {innerText:'#'},
-         {innerText:'Common Name'},         
+         {innerText:'Common Name'}, 
          {innerText:'Photo'},
          {innerText:'Name'},
          {innerText:'Grade'},
          {innerText:'User Photo'},
          {innerText:'User Login'},
+         {innerText:'Observation Photo'},
          {innerText:'Observation ID'},
       ];
       if (p_options.includes('idextra')) {
@@ -250,6 +251,7 @@ function fresults(xobj) {
          let rec = results[i];
          let tax_name = '';
          let pref_tax_name = '';
+         let tax_photo = '';
 
 //start
          if(rec.ofvs&&rec.ofvs.length>0){
@@ -258,6 +260,7 @@ function fresults(xobj) {
          if(rec.ofvs[j].field_id===7623){
             tax_name += rec.ofvs[j].taxon.name;
             pref_tax_name += rec.ofvs[j].taxon.preferred_common_name;
+            tax_photo += rec.ofvs[j].taxon.square_url;
             j=rec.ofvs.length;
          }}
             let d=0;
@@ -266,12 +269,14 @@ function fresults(xobj) {
          let values = [
             {innerText:i+1},
             {innerText:pref_tax_name},
-            {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
+            //{innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
+            {innerHTML:'<img class="photo" src="'+tax_photo+'" />'},
             //{innerText:rec.taxon?(rec.taxon.preferred_common_name||''):''},
             {innerText:tax_name},
             {innerText:rec.quality_grade},
             {innerHTML:'<img class="icon" src="'+rec.user.icon+'" />'},
             {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
+            {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
             {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
             //{innerText:rec.ofvs&&rec.ofvs.length>0?(rec.ofvs[0].name||''):''},
          ];
