@@ -65,7 +65,7 @@ let per_page = winurlparams.get('per_page') || 100;
 let p_options = winurlparams.get('options') || [];
 let p_action = winurlparams.get('action') || [];
 let nnn = winurlparams.get('nn') || '';
-let view_id = winurlparams.get('view') || 'all';
+let p_view = winurlparams.get('view') || 'all';
 winurlparams.delete('options');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Insecta');
@@ -196,15 +196,30 @@ function fresults(xobj) {
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
-      let labels = [
-         {innerText:'#'},
-         {innerText:'Photo'},
-         {innerText:'Common Name'},
-         {innerText:'Name'},
-         {innerText:'Occurrences'},
-         {innerText:'Plants Visited'},
-         {innerText:'Rank'},
-      ];
+      let labels = [];
+
+      if( p_view === 'nectaring' ){
+         labels = [
+            {innerText:'#'},
+            {innerText:'Photo'},
+            {innerText:'Common Name'},
+            {innerText:'Name'},
+            {innerText:'Occurrences'},
+            {innerText:'Nectaring Visits'},
+            {innerText:'Rank'},
+         ];
+      } else {
+         labels = [
+            {innerText:'#'},
+            {innerText:'Photo'},
+            {innerText:'Common Name'},
+            {innerText:'Name'},
+            {innerText:'Occurrences'},
+            {innerText:'Plants Visited'},
+            {innerText:'Rank'},
+         ];
+      }
+      
       if (p_options.includes('ancestry')) { labels.splice(7,0,{innerText:'Ancestry'}); };
       faddelems('th',hrow,labels);
 
@@ -227,11 +242,16 @@ function fresults(xobj) {
 
          let recCount = rec.count;
          //let ss = rec.count;
-         let ss = 'All Plants Visited';
+         let ss = '';
+         if( p_view === 'nectaring' ){
+            ss += 'Nectaring visits';
+         } else {
+            ss += 'All Plants Visited';
+         }
          let ins_name = rec.taxon.preferred_common_name || rec.taxon.name || '';
          let values = [];
 
-         if( view_id != null && view_id === 'nectaring'){
+         if( p_view != null && p_view === 'nectaring'){
             values = [
                {innerText:i+1},
                (p_options.includes('bigger_image'))
@@ -240,7 +260,7 @@ function fresults(xobj) {
                {innerText:rec.taxon.preferred_common_name||''},
                {innerText:rec.taxon.name||''},
                {innerText:recCount||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=500&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&view='+view_id,ss)},
+               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=500&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&view='+p_view,ss)},
                //{innerHTML:furl('https://www.inaturalist.org/observations?project_id='+winurlparams.get('project_id')+'&iconic_taxa=Plantae'+'&subview=map&field:Plant%20that%20the%20organism%20was%20found%20on='+rec.taxon.id,ss)},
                {innerText:rec.taxon.rank||''},
             ];
