@@ -201,9 +201,9 @@ function fresults(xobj) {
       let hrow = faddelem('tr',thead);
       let labels = [
          {innerText:'#'},
-         {innerText:'Name'},
-         {innerText:'Photo'},
          {innerText:'Common Name'},         
+         {innerText:'Photo'},
+         {innerText:'Name'},
          {innerText:'Grade'},
          {innerText:'User Photo'},
          {innerText:'User Login'},
@@ -265,10 +265,10 @@ function fresults(xobj) {
 //end
          let values = [
             {innerText:i+1},
-            {innerText:tax_name},
+            {innerText:pref_tax_name},
             {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
             //{innerText:rec.taxon?(rec.taxon.preferred_common_name||''):''},
-            {innerText:pref_tax_name},
+            {innerText:tax_name},
             {innerText:rec.quality_grade},
             {innerHTML:'<img class="icon" src="'+rec.user.icon+'" />'},
             {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
