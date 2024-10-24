@@ -61,6 +61,7 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let nnn = winurlparams.get('nn') || '';
 //let p_per_page = winurlparams.get('per_page') || 200;
 //let p_page = winurlparams.get('page') || 1;
 let p_options = winurlparams.get('options') || [];
@@ -364,7 +365,8 @@ function fresults(xobj) {
 let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
-let apirefname = 'Individual Observations in the CNC Pollinator Garden';
+let apirefname = nnn;
+apirefname += ' Observations in the CNC Pollinator Garden';
 let apiref = furl(apirefurl,apirefname);
 faddelem('h1',document.body,{innerText:apirefname});
 
