@@ -260,7 +260,7 @@ function fresults(xobj) {
                if(rec.ofvs[j].field_id===7623){
                   tax_name += rec.ofvs[j].taxon.name;
                   pref_tax_name += rec.ofvs[j].taxon.preferred_common_name;
-                  tax_photo += rec.ofvs[j].taxon.square_url;
+                  tax_photo += rec.ofvs[j].taxon.default_photo.url;
                   j=rec.ofvs.length;
                }
             }
@@ -270,7 +270,7 @@ function fresults(xobj) {
             {innerText:i+1},
             {innerText:pref_tax_name},
             //{innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
-            {innerHTML:'<img class="photo" src="asdf" />'},
+            {innerHTML:'<img class="photo" src="'+tax_photo+'" />'},
             //{innerText:rec.taxon?(rec.taxon.preferred_common_name||''):''},
             {innerText:tax_name},
             {innerText:rec.quality_grade}, 
