@@ -68,6 +68,7 @@ let p_view = winurlparams.get('view') || 'all';
 if( p_view != 'all' && p_view != 'nectaring' && p_view != 'visiting' ){
    p_view = 'all';
 }
+let p_visitor_taxon_id = winurlparams.get('visitor_taxon_id') || [];
 let p_options = winurlparams.get('options') || [];
 winurlparams.delete('options');
 let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
@@ -268,29 +269,31 @@ function fresults(xobj) {
                if( p_view === 'nectaring' ){
                   if(rec.ofvs[j].field_id===498){
                      // 498 == Nectar Plant.
-                     tax_name += rec.ofvs[j].taxon.name;
-                     pref_tax_name += rec.ofvs[j].taxon.preferred_common_name;
-                     tax_photo += rec.ofvs[j].taxon.default_photo.url;
-                     foundNectaring += 'yes';
-                     j=rec.ofvs.length;
+                     if( rec.ofvs[j].taxon.id === p_visitor_taxon_id ){
+                        tax_name += rec.ofvs[j].taxon.name;
+                        pref_tax_name += rec.ofvs[j].taxon.preferred_common_name;
+                        tax_photo += rec.ofvs[j].taxon.default_photo.url;
+                        foundNectaring += 'yes';
+                        j=rec.ofvs.length;
+                     }
                   }               
                } else if( p_view === 'visiting' ){
                   if(rec.ofvs[j].field_id===7623){
-                     // 7623 == Plant that the organism was found on.
-                     tax_name += rec.ofvs[j].taxon.name;
-                     pref_tax_name += rec.ofvs[j].taxon.preferred_common_name;
-                     tax_photo += rec.ofvs[j].taxon.default_photo.url;
-                     foundVisiting += 'yes';
-                     j=rec.ofvs.length;
+                     if( rec.ofvs[j].taxon.id === p_visitor_taxon_id ){
+                        // 7623 == Plant that the organism was found on.
+                        tax_name += rec.ofvs[j].taxon.name;
+                        pref_tax_name += rec.ofvs[j].taxon.preferred_common_name;
+                        tax_photo += rec.ofvs[j].taxon.default_photo.url;
+                        foundVisiting += 'yes';
+                        j=rec.ofvs.length;
+                     }
                   }
-               } else {
-                  if(p_view === 'all' ){
-                     if(rec.ofvs[j].field_id===7623){
+               } else if(p_view === 'all' ){
+                     if(rec.ofvs[j].field_id===7623 || rec.ofvs[j].field_id===498){
                         tax_name += rec.ofvs[j].taxon.name;
                         pref_tax_name += rec.ofvs[j].taxon.preferred_common_name;
                         tax_photo += rec.ofvs[j].taxon.default_photo.url;  
-                     }
-                  }             
+                     }             
                }
             }
          }
@@ -325,7 +328,7 @@ function fresults(xobj) {
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
                ];            
             }
-         } else {
+         } else if( p_view === 'all' ){
                values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+tax_photo+'" />'},
