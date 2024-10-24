@@ -235,8 +235,9 @@ function fresults(xobj) {
          let url_explore = 'https://www.inaturalist.org/observations?taxon_id='+rec.taxon.id
          let obsparam_verifiable = (obsparams.get('verifiable')===null)?'&verifiable=any':('&verifiable='+obsparams.get('verifiable'));
          obsparams.delete('verifiable');
+         let values = [];
          if(view_id === 'nectaring'){
-            let values = [
+            values = [
                {innerText:i+1},
                (p_options.includes('bigger_image'))
                   ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
@@ -248,7 +249,7 @@ function fresults(xobj) {
                {innerText:rec.taxon.rank_level||''},
             ];
          } else {
-            let values = [
+            values = [
                {innerText:i+1},
                (p_options.includes('bigger_image'))
                   ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
