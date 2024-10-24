@@ -301,8 +301,7 @@ function fresults(xobj) {
 
          let values = [];
 
-         if( p_view === 'nectaring' ){
-            if( foundNectaring === 'yes' ){
+         if( p_view === 'nectaring' && foundNectaring === 'yes' ){
                values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+tax_photo+'" />'},
@@ -314,9 +313,7 @@ function fresults(xobj) {
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
                ];            
-            }
-         } else if( p_view === 'visiting' ){
-            if( foundVisiting === 'yes' ){
+         } else if( p_view === 'visiting' && foundVisiting === 'yes'){
                values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+tax_photo+'" />'},
@@ -328,7 +325,6 @@ function fresults(xobj) {
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
                ];            
-            }
          } else if( p_view === 'all' ){
                values = [
                   {innerText:i+1},
