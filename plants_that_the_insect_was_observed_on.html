@@ -270,10 +270,10 @@ function fresults(xobj) {
                   if(rec.ofvs[j].field_id===498){
                      // 498 == Nectar Plant.
                      if( rec.ofvs[j].taxon.id === p_visitor_taxon_id ){
-                        tax_name += rec.ofvs[j].taxon.name;
-                        pref_tax_name += rec.ofvs[j].taxon.preferred_common_name;
-                        tax_photo += rec.ofvs[j].taxon.default_photo.url;
-                        foundNectaring += 'yes';
+                        tax_name = rec.ofvs[j].taxon.name;
+                        pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
+                        tax_photo = rec.ofvs[j].taxon.default_photo.url;
+                        foundNectaring = 'yes';
                         j=rec.ofvs.length;
                      }
                   }               
@@ -281,18 +281,19 @@ function fresults(xobj) {
                   if(rec.ofvs[j].field_id===7623){
                      if( rec.ofvs[j].taxon.id === p_visitor_taxon_id ){
                         // 7623 == Plant that the organism was found on.
-                        tax_name += rec.ofvs[j].taxon.name;
-                        pref_tax_name += rec.ofvs[j].taxon.preferred_common_name;
-                        tax_photo += rec.ofvs[j].taxon.default_photo.url;
-                        foundVisiting += 'yes';
+                        tax_name = rec.ofvs[j].taxon.name;
+                        pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
+                        tax_photo = rec.ofvs[j].taxon.default_photo.url;
+                        foundVisiting = 'yes';
                         j=rec.ofvs.length;
                      }
                   }
                } else if(p_view === 'all' ){
                      if(rec.ofvs[j].field_id===7623 || rec.ofvs[j].field_id===498){
-                        tax_name += rec.ofvs[j].taxon.name;
-                        pref_tax_name += rec.ofvs[j].taxon.preferred_common_name;
-                        tax_photo += rec.ofvs[j].taxon.default_photo.url;  
+                        tax_name = rec.ofvs[j].taxon.name;
+                        pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
+                        tax_photo = rec.ofvs[j].taxon.default_photo.url;  
+                        j=rec.ofvs.length;
                      }             
                }
             }
