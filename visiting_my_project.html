@@ -64,7 +64,7 @@ let per_page = winurlparams.get('per_page') || 100;
 //let p_page = winurlparams.get('page') || 1;
 let p_options = winurlparams.get('options') || [];
 let prj = '';
-let view_id = winurlparams.get('view') || 'all';
+let view_id = winurlparams.get('view') || 0;
 winurlparams.delete('options');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Plantae');
@@ -193,7 +193,7 @@ function fresults(xobj) {
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
-      if(view_id === 'nectaring'){
+      if(view_id === 1){
             let labels = [
             {innerText:'#'},
             {innerText:'Photo'},   
@@ -234,7 +234,7 @@ function fresults(xobj) {
          let url_explore = 'https://www.inaturalist.org/observations?taxon_id='+rec.taxon.id
          let obsparam_verifiable = (obsparams.get('verifiable')===null)?'&verifiable=any':('&verifiable='+obsparams.get('verifiable'));
          obsparams.delete('verifiable');
-         if(view_id === 'nectaring'){
+         if(view_id === 1){
             let values = [
                {innerText:i+1},
                (p_options.includes('bigger_image'))
