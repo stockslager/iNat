@@ -269,7 +269,7 @@ function fresults(xobj) {
             {innerText:i+1},
             {innerText:pref_tax_name},
             //{innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
-            {innerHTML:'<img class="photo" src="'+tax_photo+'" />'},
+            {innerHTML:'<img class="icon" src="'+tax_photo+'" />'},
             //{innerText:rec.taxon?(rec.taxon.preferred_common_name||''):''},
             {innerText:tax_name},
             {innerText:rec.quality_grade}, 
@@ -363,9 +363,9 @@ function fresults(xobj) {
 let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
-//let apirefname = 'Individual Observations in the CNC Pollinator Garden';
-//let apiref = furl(apirefurl,apirefname);
-//faddelem('h2',document.body,{innerText:apirefname});
+let apirefname = 'Individual Observations in the CNC Pollinator Garden';
+let apiref = furl(apirefurl,apirefname);
+faddelem('h1',document.body,{innerText:apirefname});
 
 if (winurlsearchstr==='') {
    let instructions = [
