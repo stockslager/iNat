@@ -367,7 +367,7 @@ let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
 let apirefname = 'Individual observations of ' 
-apirefname += rec.preferred_common_name;
+apirefname += rec.taxon.preferred_common_name;
 apirefname += 'visiting plants in the CNC Native Plant Garden';
 let apiref = furl(apirefurl,apirefname);
 faddelem('h2',document.body,{innerText:apirefname});
