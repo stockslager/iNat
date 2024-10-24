@@ -193,7 +193,7 @@ function fresults(xobj) {
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
-      if(view_id != null){
+/*      if( view_id != null ){
             let labels = [
             {innerText:'#'},
             {innerText:'Photo'},   
@@ -205,8 +205,9 @@ function fresults(xobj) {
             {innerText:'Rank Level'},
          ];      
       } else { 
+*/
          let labels = [
-            {innerText:'#'},
+            {innerText:('#'+view_id)},
             {innerText:'Photo'},   
             {innerText:'Name'},
             {innerText:'Common Name'},
@@ -215,7 +216,7 @@ function fresults(xobj) {
             {innerText:'Rank'},
             {innerText:'Rank Level'},
          ];
-      }
+   //}
       if (p_options.includes('ancestry')) { labels.splice(7,0,{innerText:'Ancestry'}); };
       faddelems('th',hrow,labels);
 
@@ -235,7 +236,7 @@ function fresults(xobj) {
          let url_explore = 'https://www.inaturalist.org/observations?taxon_id='+rec.taxon.id
          let obsparam_verifiable = (obsparams.get('verifiable')===null)?'&verifiable=any':('&verifiable='+obsparams.get('verifiable'));
          obsparams.delete('verifiable');
-         if(view_id != null){
+/*         if(view_id != null){
             let values = [
                {innerText:i+1},
                (p_options.includes('bigger_image'))
@@ -249,6 +250,7 @@ function fresults(xobj) {
                {innerText:rec.taxon.rank_level||''},
             ];
          } esle {
+   */
             let values = [
                {innerText:i+1},
                (p_options.includes('bigger_image'))
@@ -261,7 +263,7 @@ function fresults(xobj) {
                {innerText:rec.taxon.rank||''},
                {innerText:rec.taxon.rank_level||''},
             ];
-         }
+//         }
          if (p_options.includes('ancestry')) { values.splice(7,0,{innerHTML:rec.taxon.ancestor_ids.map(function(e){return furl('http://www.inaturalist.org/taxa/'+e,e)}).join('/')||''}); };
          faddelems('td',brow,values);
       };
