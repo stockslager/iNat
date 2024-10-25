@@ -251,12 +251,13 @@ function fresults(xobj) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)
-         +'<a href="https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+ +'&per_page=500&page=1&taxon_id='+83086+'&nn='+Zebra%20Swallowtail+'&target_plant='+purpletop%20vervain+'&view='+all+'&visitor_taxon_id='+79487">show all</a>'
          +'<br />'
          +'per page: '+fcomnum(per_page)+'<br />'
          +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
          });
-
+      
+      faddelem('p',document.body,{innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=500&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&target_plant='+nnn+'&view='+p_view+'&visitor_taxon_id='+p_visitor_taxon_id,ss)});
+               
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
