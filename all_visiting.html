@@ -286,19 +286,53 @@ function fresults(xobj) {
       for (let i=0; i<results.length; i++) {
          let brow = faddelem('tr',tbody);
          let rec = results[i];
-         let values = [
-            {innerText:i+1},
-            (p_options.includes('bigger_image'))
-                  ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
-                  : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},            
-            //{innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-            {innerHTML:rec.taxon?furl(inat_taxa+rec.taxon.id,rec.taxon.name):''},
-            {innerText:rec.taxon?(rec.taxon.preferred_common_name||''):''},
-            {innerHTML:'<img class="icon" src="'+rec.user.icon+'" />'},
-            {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
-            {innerText:rec.taxon.rank||''},
-            {innerText:rec.taxon.rank_level||''},         
-         ];
+         
+         let values = [];
+         if(view_id === 'nectaring'){
+            values = [
+               {innerText:i+1},
+               (p_options.includes('bigger_image'))
+                     ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
+                     : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},            
+               {innerHTML:rec.taxon?furl(inat_taxa+rec.taxon.id,rec.taxon.name):''},
+               {innerText:rec.taxon?(rec.taxon.preferred_common_name||''):''},
+               {innerHTML:'<img class="icon" src="'+rec.user.icon+'" />'},
+               {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
+               {innerHTML:furl('https://stockslager.github.io/iNat/insects_found_visiting.html?project_id='+winurlparams.get('project_id')+'&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa&field:Nectar%20Plant='+rec.taxon.id+'&per_page=100&page=1&action=Nectaring%20at&nn='+rec.taxon.preferred_common_name+'&visitor_taxon_id='+rec.taxon.id+'&view=nectaring','Nectaring Organisms...')},
+               {innerText:rec.taxon.rank||''},
+               {innerText:rec.taxon.rank_level||''},         
+            ];
+         } else if ( view_id === 'visiting' ){
+            values = [
+               {innerText:i+1},
+               (p_options.includes('bigger_image'))
+                     ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
+                     : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},            
+               {innerHTML:rec.taxon?furl(inat_taxa+rec.taxon.id,rec.taxon.name):''},
+               {innerText:rec.taxon?(rec.taxon.preferred_common_name||''):''},
+               {innerHTML:'<img class="icon" src="'+rec.user.icon+'" />'},
+               {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
+               {innerHTML:furl('https://stockslager.github.io/iNat/insects_found_visiting.html?project_id='+winurlparams.get('project_id')+'&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa&field:Plant%20that%20the%20organism%20was%20found%20on='+rec.taxon.id+'&per_page=100&page=1&action=Visiting&nn='+rec.taxon.preferred_common_name+'&visitor_taxon_id='+rec.taxon.id,'Visiting Organisms...')},
+               {innerText:rec.taxon.rank||''},
+               {innerText:rec.taxon.rank_level||''},         
+            ];
+         } else {
+            values = [
+               {innerText:i+1},
+               (p_options.includes('bigger_image'))
+                     ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
+                     : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},            
+               {innerHTML:rec.taxon?furl(inat_taxa+rec.taxon.id,rec.taxon.name):''},
+               {innerText:rec.taxon?(rec.taxon.preferred_common_name||''):''},
+               {innerHTML:'<img class="icon" src="'+rec.user.icon+'" />'},
+               {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
+               {innerHTML:furl('https://stockslager.github.io/iNat/insects_found_visiting.html?project_id='+winurlparams.get('project_id')+'&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa&field:Plant%20that%20the%20organism%20was%20found%20on='+rec.taxon.id+'&per_page=100&page=1&action=Visiting&nn='+rec.taxon.preferred_common_name+'&visitor_taxon_id='+rec.taxon.id,'Visiting Organisms...')},
+               {innerHTML:furl('https://stockslager.github.io/iNat/insects_found_visiting.html?project_id='+winurlparams.get('project_id')+'&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa&field:Nectar%20Plant='+rec.taxon.id+'&per_page=100&page=1&action=Nectaring%20at&nn='+rec.taxon.preferred_common_name+'&visitor_taxon_id='+rec.taxon.id+'&view=nectaring','Nectaring Organisms...')},
+               {innerText:rec.taxon.rank||''},
+               {innerText:rec.taxon.rank_level||''},         
+            ];
+         }
+         
          if (p_options.includes('idextra')) {
             let idextra = fidextra(rec);
             let values_id = [
