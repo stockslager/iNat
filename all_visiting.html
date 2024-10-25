@@ -214,6 +214,8 @@ function fresults(xobj) {
          {innerText:'Grade'},
          {innerText:'User Photo'},
          {innerText:'User Login'},
+         {innerText:'Rank'},
+         {innerText:'Rank Level'},
       ];
       if (p_options.includes('idextra')) {
          let labels_id = [
@@ -266,6 +268,8 @@ function fresults(xobj) {
             {innerText:rec.quality_grade},
             {innerHTML:'<img class="icon" src="'+rec.user.icon+'" />'},
             {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
+            {innerText:rec.taxon.rank||''},
+            {innerText:rec.taxon.rank_level||''},         
          ];
          if (p_options.includes('idextra')) {
             let idextra = fidextra(rec);
