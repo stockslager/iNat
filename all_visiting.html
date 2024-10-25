@@ -61,6 +61,7 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let prj = '';
 //let p_per_page = winurlparams.get('per_page') || 200;
 //let p_page = winurlparams.get('page') || 1;
 let p_options = winurlparams.get('options') || [];
@@ -69,6 +70,11 @@ let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
 winurlparams.delete('idextra_user_id');
 let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
 winurlparams.delete('photo_curl_filename_prefix');
+
+let prj_id = winurlparams.get('project_id') || [];
+if(prj_id === 'cincinnati-nature-center-pollinator-garden' || prj_id === 220623){
+   prj += 'Cincinnati Nature Center Pollinator Garden';
+}
 
 function fdate(str,dateonly=false) {
    str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
@@ -355,7 +361,13 @@ function fresults(xobj) {
 let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
-let apirefname = 'iNaturalist Observations';
+
+let apirefname = 'Plants Visited ';
+if( prj != ''){
+   apirefname += '@ ';
+   apirefname += prj;
+}
+
 let apiref = furl(apirefurl,apirefname);
 faddelem('h1',document.body,{innerText:apirefname});
 
