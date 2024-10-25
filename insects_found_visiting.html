@@ -69,7 +69,7 @@ let nnn = winurlparams.get('nn') || '';
 let p_view = winurlparams.get('view') || 'visiting';
 winurlparams.delete('options');
 winurlparams.delete('iconic_taxa');
-winurlparams.append('iconic_taxa','Insecta');
+winurlparams.append('iconic_taxa','Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa');
 let prj_id = winurlparams.get('project_id')||[];
 //if(prj_id === '220623' || prj_id === '152539'){
   // break;
@@ -293,7 +293,7 @@ function fresults(xobj) {
 let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
-let apirefname = 'Insects Found ';
+let apirefname = 'Organisms Found ';
 apirefname += p_action;
 apirefname += ' ';
 apirefname += nnn;
@@ -311,7 +311,7 @@ if (winurlsearchstr==='') {
    faddelems('p',document.body,instructions);
 }
 else {
-   faddelem('p',document.body,{innerHTML:'List of insect species with a link to the plants those insects visited.  Relies on the \"Plant that the organism was found on\" observation field.'});
+   faddelem('p',document.body,{innerHTML:'List of organism species with a link to the plants those organisms visited.  Relies on the \"Plant that the organism was found on\" observation field.'});
    fetch(apiurl)
    .then((response) => {
       if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
