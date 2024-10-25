@@ -204,7 +204,17 @@ function fresults(xobj) {
             {innerText:'Rank'},
             {innerText:'Rank Level'},
          ];      
-      } else { 
+      } else if( view_id === 'visiting' ){ 
+         labels = [
+            {innerText:('#')},
+            {innerText:'Photo'},   
+            {innerText:'Name'},
+            {innerText:'Common Name'},
+            {innerText:'Visiting'},
+            {innerText:'Rank'},
+            {innerText:'Rank Level'},
+         ];
+      } else {
          labels = [
             {innerText:('#')},
             {innerText:'Photo'},   
@@ -248,7 +258,19 @@ function fresults(xobj) {
                {innerText:rec.taxon.rank||''},
                {innerText:rec.taxon.rank_level||''},
             ];
-         } else {
+         } else if( view_id === 'visiting' ){
+            values = [
+               {innerText:i+1},
+               (p_options.includes('bigger_image'))
+                  ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
+                  : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
+               {innerText:rec.taxon.name||''},
+               {innerText:rec.taxon.preferred_common_name||''},
+               {innerHTML:furl('https://stockslager.github.io/iNat/insects_found_visiting.html?project_id='+winurlparams.get('project_id')+'&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa&field:Plant%20that%20the%20organism%20was%20found%20on='+rec.taxon.id+'&per_page=500&page=1&action=Visiting&nn='+rec.taxon.preferred_common_name+'&visitor_taxon_id='+rec.taxon.id,'Visiting Organisms...')},
+               {innerText:rec.taxon.rank||''},
+               {innerText:rec.taxon.rank_level||''},
+            ];         
+         } else {   
             values = [
                {innerText:i+1},
                (p_options.includes('bigger_image'))
