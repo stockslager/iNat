@@ -62,9 +62,9 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let nnn = winurlparams.get('nn') || '';
+let p_target_plant = winurlparams.get('target_plant') || '';
 //let p_per_page = winurlparams.get('per_page') || 200;
 //let p_page = winurlparams.get('page') || 1;
-let p_plant_name = '';
 let p_view = winurlparams.get('view') || 'all';
 if( p_view != 'all' && p_view != 'nectaring' && p_view != 'visiting' ){
    p_view = 'all';
@@ -109,13 +109,12 @@ else {
 };
 
 //to here
-   //let apirefname = nnn;
-let apirefname = p_plant_name;
+let apirefname = nnn;
 if( p_view === 'nectaring' ){
    apirefname += ' Nectaring On...';
 } else {
-   apirefname += ' Found On...';
-   apirefname += p_plant_name;
+   apirefname += ' Visiting ';
+   apirefname += p_target_plant;
 }
 //let apirefname = nnn;
 //apirefname += ' Found On...";
@@ -375,7 +374,6 @@ function fresults(xobj) {
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
                ];            
          } else if( p_view === 'visiting' && foundVisiting === 'yes'){
-               p_plant_name = pref_tax_name;
                values = [
                   {innerText:displayCount},
                   {innerHTML:'<img class="icon" src="'+tax_photo+'" />'},
