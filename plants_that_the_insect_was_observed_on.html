@@ -63,6 +63,7 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let nnn = winurlparams.get('nn') || '';
 let p_target_plant = winurlparams.get('target_plant') || '';
+let p_taxon_id = winurlparams.get('taxon_id') || '';
 //let p_per_page = winurlparams.get('per_page') || 200;
 //let p_page = winurlparams.get('page') || 1;
 let p_view = winurlparams.get('view') || 'all';
@@ -256,7 +257,7 @@ function fresults(xobj) {
          +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
          });
       
-      faddelem('p',document.body,{innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=500&page=1&target_plant='+p_target_plant+'&nn='+nnn+'&view='+p_view+'&visitor_taxon_id='+p_visitor_taxon_id,'view all')});
+      faddelem('p',document.body,{innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=500&page=1&target_plant='+p_target_plant+'taxon_id='+p_taxon_id+'&nn='+nnn+'&view=all&visitor_taxon_id='+p_visitor_taxon_id,'view all')});
                
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
@@ -280,11 +281,11 @@ function fresults(xobj) {
             {classList:'tar',innerText:'ID Taxa @ Ansc'},
             {classList:'tar',innerText:'ID Taxa @ Desc'},
             {classList:'tar',innerText:'ID Taxa @ Other'},
-            {innerText:'Obs Taxon = Community Taxon'},
+            {innerText:'Obs  = Community '},
          ];
          if (p_idextra_user_id && p_idextra_user_id.length>0) {
             for (u=0; u<p_idextra_user_id.length; u++) {
-               labels_id.push({innerText:'User ' +p_idextra_user_id[u]+ ' ID taxon category'});
+               labels_id.push({innerText:'User ' +p_idextra_user_id[u]+ ' ID  category'});
                labels_id.push({innerText:'User ' +p_idextra_user_id[u]+ ' ID category'});
             };
          };
@@ -328,10 +329,10 @@ function fresults(xobj) {
                if( p_view === 'nectaring' ){
                   if(rec.ofvs[j].field_id===498){
                      // 498 == Nectar Plant.
-                     if( rec.ofvs[j].taxon_id === p_visitor_taxon_id ){
-                        tax_name = rec.ofvs[j].taxon.name;
-                        pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
-                        tax_photo = rec.ofvs[j].taxon.default_photo.url;
+                     if( rec.ofvs[j]._id === p_visitor__id ){
+                        tax_name = rec.ofvs[j]..name;
+                        pref_tax_name = rec.ofvs[j]..preferred_common_name;
+                        tax_photo = rec.ofvs[j]..default_photo.url;
                         foundNectaring = 'yes';
                         displayCount++;
                         j=rec.ofvs.length;
@@ -339,9 +340,9 @@ function fresults(xobj) {
                   }               
                } else if( p_view === 'visiting' ){
                   if(rec.ofvs[j].field_id===7623){
-                     if( rec.ofvs[j].taxon_id === p_visitor_taxon_id ){
+                     if( rec.ofvs[j]._id === p_visitor__id ){
                         // 7623 == Plant that the organism was found on.
-                        tax_name = rec.ofvs[j].taxon.name;
+                        tax_name = rec.ofvs[j]..name;
                         pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
                         tax_photo = rec.ofvs[j].taxon.default_photo.url;
                         foundVisiting = 'yes';
