@@ -64,7 +64,6 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let nnn = winurlparams.get('nn') || '';
 //let p_per_page = winurlparams.get('per_page') || 200;
 //let p_page = winurlparams.get('page') || 1;
-//let p_plant_name = '';
 let p_view = winurlparams.get('view') || 'all';
 if( p_view != 'all' && p_view != 'nectaring' && p_view != 'visiting' ){
    p_view = 'all';
@@ -328,7 +327,6 @@ function fresults(xobj) {
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
                ];            
          } else if( p_view === 'visiting' && foundVisiting === 'yes'){
-               //p_plant_name = pref_tax_name;
                values = [
                   {innerText:displayCount},
                   {innerHTML:'<img class="icon" src="'+tax_photo+'" />'},
@@ -438,17 +436,7 @@ let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
 let apirefname = nnn;
-//let apirefname = p_view;
-//if( p_view === 'nectaring' ){
-  // apirefname += ' Nectaring On...';
-/*} else if( p_view === 'visiting' ){
-   //apirefname += p_plant_name;
-   apirefname += ' Visiting ';
-   apirefname += ' '; 
-*/
-//} else {
-   apirefname += ' Found On...";
-//}
+apirefname += ' Found On...";
 
 let apiref = furl(apirefurl,apirefname);
 faddelem('h2',document.body,{innerText:apirefname});
