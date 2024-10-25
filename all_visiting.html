@@ -62,6 +62,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let prj = '';
+let view_id = winurlparams.get('view') || 'all';
 //let p_per_page = winurlparams.get('per_page') || 200;
 //let p_page = winurlparams.get('page') || 1;
 let p_options = winurlparams.get('options') || [];
@@ -205,16 +206,47 @@ function fresults(xobj) {
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
-      let labels = [
-         {innerText:'#'},
-         {innerText:'Photo'},
-         {innerText:'Name'},
-         {innerText:'Common Name'},
-         {innerText:'User Photo'},
-         {innerText:'User Login'},
-         {innerText:'Rank'},
-         {innerText:'Rank Level'},
-      ];
+
+      let labels = [];
+
+      if( view_id === 'nectaring' ){      
+         let labels = [
+            {innerText:'#'},   
+            {innerText:'Photo'},
+            {innerText:'Name'},
+            {innerText:'Common Name'},
+            {innerText:'User Photo'},
+            {innerText:'User Login'},   
+            {innerText:'Nectaring'},
+            {innerText:'Rank'},
+            {innerText:'Rank Level'},
+         ];
+      } else if (view_id === 'visiting' ){
+         let labels = [
+            {innerText:'#'},   
+            {innerText:'Photo'},
+            {innerText:'Name'},
+            {innerText:'Common Name'},
+            {innerText:'User Photo'},
+            {innerText:'User Login'},   
+            {innerText:'Visiting'},
+            {innerText:'Rank'},
+            {innerText:'Rank Level'},
+         ];      
+      } else {
+         let labels = [
+            {innerText:'#'},   
+            {innerText:'Photo'},
+            {innerText:'Name'},
+            {innerText:'Common Name'},
+            {innerText:'User Photo'},
+            {innerText:'User Login'},   
+            {innerText:'Visiting'},
+            {innerText:'Nectaring'},
+            {innerText:'Rank'},
+            {innerText:'Rank Level'},
+         ];
+      }
       if (p_options.includes('idextra')) {
          let labels_id = [
             {classList:'tar',innerText:'ID Count'},
