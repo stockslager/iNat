@@ -465,14 +465,13 @@ function fresults(xobj) {
             let ancestors = fObsTaxonAncestors(rec);
             let ancestor;
             let values_ancestors = [
-                                                                                                            //(rec.taxon?.name||'unknown')               
-               {innerHTML: (ancestor = ancestors?.find(a => a.rank === 'kingdom')) ? furl(inat_taxa+ancestor.id,(ancestor?.name||'unknown')) : null},
-               {innerHTML: (ancestor = ancestors?.find(a => a.rank === 'phylum')) ? furl(inat_taxa+ancestor.id,(ancestor?.name||'unknown')) : null},
-               {innerHTML: (ancestor = ancestors?.find(a => a.rank === 'class')) ? furl(inat_taxa+ancestor.id,(ancestor?.name||'unknown')) : null},
-               {innerHTML: (ancestor = ancestors?.find(a => a.rank === 'order')) ? furl(inat_taxa+ancestor.id,(ancestor?.name||'unknown')) : null},
-               {innerHTML: (ancestor = ancestors?.find(a => a.rank === 'family')) ? furl(inat_taxa+ancestor.id,(ancestor?.name||'unknown')) : null},
-               {innerHTML: (ancestor = ancestors?.find(a => a.rank === 'genus')) ? furl(inat_taxa+ancestor.id,(ancestor?.name||'unknown')) : null},
-               {innerHTML: (ancestor = ancestors?.find(a => a.rank === 'species')) ? furl(inat_taxa+ancestor.id,(ancestor?.name||'unknown')) : null},
+               {innerHTML: (ancestor = ancestors?.find(a => a.rank === 'kingdom')) ? furl(inat_taxa+ancestor.id,ancestor.name) : null},
+               {innerHTML: (ancestor = ancestors?.find(a => a.rank === 'phylum')) ? furl(inat_taxa+ancestor.id,ancestor.name) : null},
+               {innerHTML: (ancestor = ancestors?.find(a => a.rank === 'class')) ? furl(inat_taxa+ancestor.id,ancestor.name) : null},
+               {innerHTML: (ancestor = ancestors?.find(a => a.rank === 'order')) ? furl(inat_taxa+ancestor.id,ancestor.name) : null},
+               {innerHTML: (ancestor = ancestors?.find(a => a.rank === 'family')) ? furl(inat_taxa+ancestor.id,ancestor.name) : null},
+               {innerHTML: (ancestor = ancestors?.find(a => a.rank === 'genus')) ? furl(inat_taxa+ancestor.id,ancestor.name) : null},
+               {innerHTML: (ancestor = ancestors?.find(a => a.rank === 'species')) ? furl(inat_taxa+ancestor.id,ancestor.name) : null},
             ];
             values = [...values.slice(0,2),...values_ancestors,...values.slice(2)];
          };
