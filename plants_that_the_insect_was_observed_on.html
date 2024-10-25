@@ -252,8 +252,9 @@ function fresults(xobj) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
     
-      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)});
-      faddelem('p',document.body,{innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=500&page=1&target_plant='+p_target_plant+'&taxon_id='+p_taxon_id+'&nn='+nnn+'&view=all&visitor_taxon_id='+p_visitor_taxon_id,'other plants visited by a '+nnn)});
+      //faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)});
+      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=500&page=1&target_plant='+p_target_plant+'&taxon_id='+p_taxon_id+'&nn='+nnn+'&view=all&visitor_taxon_id='+p_visitor_taxon_id,'other plants visited by a '+nnn)});
+      //faddelem('p',document.body,{innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=500&page=1&target_plant='+p_target_plant+'&taxon_id='+p_taxon_id+'&nn='+nnn+'&view=all&visitor_taxon_id='+p_visitor_taxon_id,'other plants visited by a '+nnn)});
       faddelem('p',document.body,{innerHTML:'<br />'
          +'per page: '+fcomnum(per_page)+'<br />'
          +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
