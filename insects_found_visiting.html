@@ -67,6 +67,8 @@ let p_options = winurlparams.get('options') || [];
 let p_action = winurlparams.get('action') || [];
 let nnn = winurlparams.get('nn') || '';
 let p_view = winurlparams.get('view') || 'visiting';
+winurlparams.delete('per_page');
+winurlparams.append('per_page','100');
 winurlparams.delete('options');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa');
@@ -261,7 +263,7 @@ function fresults(xobj) {
                {innerText:rec.taxon.preferred_common_name||''},
                {innerText:rec.taxon.name||''},
                {innerText:recCount||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=500&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&target_plant='+nnn+'&view='+p_view+'&visitor_taxon_id='+p_visitor_taxon_id,ss)},
+               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=100&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&target_plant='+nnn+'&view='+p_view+'&visitor_taxon_id='+p_visitor_taxon_id,ss)},
                {innerText:rec.taxon.rank||''},
             ];
          } else {
@@ -273,7 +275,7 @@ function fresults(xobj) {
                {innerText:rec.taxon.preferred_common_name||''},
                {innerText:rec.taxon.name||''},
                {innerText:recCount||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=500&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&target_plant='+nnn+'&view='+p_view+'&visitor_taxon_id='+p_visitor_taxon_id,ss)},
+               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=100&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&target_plant='+nnn+'&view='+p_view+'&visitor_taxon_id='+p_visitor_taxon_id,ss)},
                {innerText:rec.taxon.rank||''},
             ];
          }
