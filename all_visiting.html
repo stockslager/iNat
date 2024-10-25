@@ -207,7 +207,6 @@ function fresults(xobj) {
       let hrow = faddelem('tr',thead);
       let labels = [
          {innerText:'#'},
-         {innerText:'ID'},
          {innerText:'Photo'},
          {innerText:'Name'},
          {innerText:'Common Name'},
@@ -263,8 +262,7 @@ function fresults(xobj) {
          let rec = results[i];
          let values = [
             {innerText:i+1},
-            {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
-            {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
+            {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'}
             {innerHTML:rec.taxon?furl(inat_taxa+rec.taxon.id,rec.taxon.name):''},
             {innerText:rec.taxon?(rec.taxon.preferred_common_name||''):''},
             {innerText:rec.taxon?rec.taxon.rank:''},
