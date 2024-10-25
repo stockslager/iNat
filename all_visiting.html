@@ -383,7 +383,7 @@ if (winurlsearchstr==='') {
    faddelems('p',document.body,instructions);
 }
 else {
-   faddelem('p',document.body,{innerHTML:'This is the base query: '+furl(famp(apiurl))+'. (This page will accept most parameters from the '+apiref+' API endpoint.)'});
+   faddelem('p',document.body,{innerHTML:'List of plant species with a link to the organisms observed nectaring or visiting those plants.  Relies on the \"Plant that the organism was found on\" and \"Nectar Plant\" observation fields.'});
    fetch(apiurl)
    .then((response) => {
       if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
