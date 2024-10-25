@@ -77,6 +77,50 @@ winurlparams.delete('idextra_user_id');
 let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
 winurlparams.delete('photo_curl_filename_prefix');
 
+// move up....
+let apibase = 'https://api.inaturalist.org/v1/observations';
+let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
+
+//let apirefname = nnn;
+let apirefname = p_plant_name;
+if( p_view === 'nectaring' ){
+   apirefname += ' Nectaring On...';
+} else {
+   apirefname += ' Found On...';
+   apirefname += p_plant_name;
+}
+//let apirefname = nnn;
+//apirefname += ' Found On...";
+
+let apiref = furl(apirefurl,apirefname);
+   
+faddelem('h2',document.body,{innerText:apirefname});
+
+if (winurlsearchstr==='') {
+   let instructions = [
+      {innerHTML:'This page displays the response from the '+apiref+' API endpoint in a human-readable format. To use this page, add at least one query parameter to the URL. See '+furl(apirefurl)+' for available query parameters.'},
+      {innerHTML:'Suppose the address of this page is '+winurlexsearchstr+', <br />and you want to see the results of '+furl(famp(apibase+'?user_id=bob&per_page=200'))+' in a friendly format, <br />then you would open '+furl(famp(winurlexsearchstr+'?user_id=bob&per_page=200'))+' in your browser.'},
+      {innerHTML:'The max records per page for this endpoint is 200. Note that the API will not return records beyond the 10,000th record for a given set of parameters, but you can work around this by using the id_above and id_below parameters.'},
+      {innerHTML:'This page can display extra columns based on a special options parameter. Adding &options=idextra to the parameter list will display some columns that provide extra information about IDs added to each observation. Adding &options=coreancestors will display some columns for kingdom, phylum, class, order, family, genus, and species. Adding &options=photourl to the parameter list will display a column that includes URLs for all photos in each observation. Adding &options=photourl to the parameter list will display a column that includes cURL commands to download all photos in each observation. All options can be invoked together like this: '+furl(famp(winurlexsearchstr+'?user_id=bob&per_page=200&options=idextra,coreancestors,photourl,photocurl'))+'. '},
+      {innerHTML:'When &options=idextra is invoked, an optional idextra_user_id parameter can also be used to get additional information about the IDs by a specific user (or lists of users, separated by commas). For example: '+furl(famp(winurlexsearchstr+'?user_id=bob&per_page=200&options=idextra&idextra_user_id=bob,jane'))+'. '},
+      {innerHTML:'When &options=photocurl is invoked, an optional photo_curl_filename_prefix parameter can also be set to one or more of 9 values -- photo_id, photo_license, obs_id, obs_seq, obs_date, taxon_id, taxon_name, user_id, user_login. By default, the destination filename in the curl commands will be prefixed with only photo id, but you can override this behavior by specifying the a comma-separated list of the values that you wish to include, in the order that you wish for them to be added. For example, this will prefix the destination filenames with obs id, obs seq, and photo id: '+furl(famp(winurlexsearchstr+'?user_id=bob&options=photocurl&photo_curl_filename_prefix=obs_id,obs_seq,photo_id'))+'. '},
+   ];
+   faddelems('p',document.body,instructions);
+}
+else {
+   fetch(apiurl)
+   .then((response) => {
+      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+      return response.json();
+   })
+   .then((data) => { fresults(data); })
+   .catch((err) => {
+      console.error(err.message);
+      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+   });
+};
+
 function fdate(str,dateonly=false) {
    str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
    if (dateonly) { str = str.split(' ')[0]; }
@@ -313,7 +357,6 @@ function fresults(xobj) {
             tax_photo = ';o)';
          }
 
-         p_plant_name = pref_tax_name;
          let values = [];
 
          if( p_view === 'nectaring' && foundNectaring === 'yes' ){
@@ -433,48 +476,6 @@ function fresults(xobj) {
       (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); };
-};
-let apibase = 'https://api.inaturalist.org/v1/observations';
-let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
-
-//let apirefname = nnn;
-let apirefname = p_plant_name;
-if( p_view === 'nectaring' ){
-   apirefname += ' Nectaring On...';
-} else {
-   apirefname += ' Found On...';
-   apirefname += p_plant_name;
-}
-//let apirefname = nnn;
-//apirefname += ' Found On...";
-
-let apiref = furl(apirefurl,apirefname);
-   
-faddelem('h2',document.body,{innerText:apirefname});
-
-if (winurlsearchstr==='') {
-   let instructions = [
-      {innerHTML:'This page displays the response from the '+apiref+' API endpoint in a human-readable format. To use this page, add at least one query parameter to the URL. See '+furl(apirefurl)+' for available query parameters.'},
-      {innerHTML:'Suppose the address of this page is '+winurlexsearchstr+', <br />and you want to see the results of '+furl(famp(apibase+'?user_id=bob&per_page=200'))+' in a friendly format, <br />then you would open '+furl(famp(winurlexsearchstr+'?user_id=bob&per_page=200'))+' in your browser.'},
-      {innerHTML:'The max records per page for this endpoint is 200. Note that the API will not return records beyond the 10,000th record for a given set of parameters, but you can work around this by using the id_above and id_below parameters.'},
-      {innerHTML:'This page can display extra columns based on a special options parameter. Adding &options=idextra to the parameter list will display some columns that provide extra information about IDs added to each observation. Adding &options=coreancestors will display some columns for kingdom, phylum, class, order, family, genus, and species. Adding &options=photourl to the parameter list will display a column that includes URLs for all photos in each observation. Adding &options=photourl to the parameter list will display a column that includes cURL commands to download all photos in each observation. All options can be invoked together like this: '+furl(famp(winurlexsearchstr+'?user_id=bob&per_page=200&options=idextra,coreancestors,photourl,photocurl'))+'. '},
-      {innerHTML:'When &options=idextra is invoked, an optional idextra_user_id parameter can also be used to get additional information about the IDs by a specific user (or lists of users, separated by commas). For example: '+furl(famp(winurlexsearchstr+'?user_id=bob&per_page=200&options=idextra&idextra_user_id=bob,jane'))+'. '},
-      {innerHTML:'When &options=photocurl is invoked, an optional photo_curl_filename_prefix parameter can also be set to one or more of 9 values -- photo_id, photo_license, obs_id, obs_seq, obs_date, taxon_id, taxon_name, user_id, user_login. By default, the destination filename in the curl commands will be prefixed with only photo id, but you can override this behavior by specifying the a comma-separated list of the values that you wish to include, in the order that you wish for them to be added. For example, this will prefix the destination filenames with obs id, obs seq, and photo id: '+furl(famp(winurlexsearchstr+'?user_id=bob&options=photocurl&photo_curl_filename_prefix=obs_id,obs_seq,photo_id'))+'. '},
-   ];
-   faddelems('p',document.body,instructions);
-}
-else {
-   fetch(apiurl)
-   .then((response) => {
-      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-      return response.json();
-   })
-   .then((data) => { fresults(data); })
-   .catch((err) => {
-      console.error(err.message);
-      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-   });
 };
 </script>
 </body>
