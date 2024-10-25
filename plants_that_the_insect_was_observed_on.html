@@ -328,9 +328,16 @@ function fresults(xobj) {
                   if(rec.ofvs[j].field_id===498){
                      // 498 == Nectar Plant.
                      if( rec.ofvs[j].taxon_id === p_visitor_taxon_id ){
-                        tax_name = rec.ofvs[j].taxon.name;
-                        pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
-                        tax_photo = rec.ofvs[j].taxon.default_photo.url;
+                                                
+                        if( rec.ofvs[j].taxon == null ){
+                           tax_name = rec.ofvs[j].value;
+                           pref_tax_name = rec.ofvs[j].value_ci;
+                           tax_photo = ';o)';
+                        } else {
+                           tax_name = rec.ofvs[j].taxon.name;
+                           pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
+                           tax_photo = rec.ofvs[j].taxon.default_photo.url;                     
+                        }
                         foundNectaring = 'yes';
                         displayCount++;
                         j=rec.ofvs.length;
@@ -340,9 +347,15 @@ function fresults(xobj) {
                   if(rec.ofvs[j].field_id===7623){
                      if( rec.ofvs[j].taxon_id === p_visitor_taxon_id ){
                         // 7623 == Plant that the organism was found on.
-                        tax_name = rec.ofvs[j].taxon.name;
-                        pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
-                        tax_photo = rec.ofvs[j].taxon.default_photo.url;
+                        if( rec.ofvs[j].taxon == null ){
+                           tax_name = rec.ofvs[j].value;
+                           pref_tax_name = rec.ofvs[j].value_ci;
+                           tax_photo = ';o)';
+                        } else {
+                           tax_name = rec.ofvs[j].taxon.name;
+                           pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
+                           tax_photo = rec.ofvs[j].taxon.default_photo.url;                     
+                        }
                         foundVisiting = 'yes';
                         displayCount++;
                         j=rec.ofvs.length;
@@ -350,10 +363,16 @@ function fresults(xobj) {
                   }
                } else if(p_view === 'all' ){
                      if(rec.ofvs[j].field_id===7623 || rec.ofvs[j].field_id===498){
+                        if( rec.ofvs[j].taxon == null ){
+                           tax_name = rec.ofvs[j].value;
+                           pref_tax_name = rec.ofvs[j].value_ci;
+                           tax_photo = ';o)';
+                        } else {
                            tax_name = rec.ofvs[j].taxon.name;
                            pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
-                           tax_photo = rec.ofvs[j].taxon.default_photo.url;  
-                           j=rec.ofvs.length;
+                           tax_photo = rec.ofvs[j].taxon.default_photo.url;                     
+                        }
+                        j=rec.ofvs.length;
                      } else {
                         tax_name = '**Unknown Plant**';
                         pref_tax_name = '**Unknown Plant**';
