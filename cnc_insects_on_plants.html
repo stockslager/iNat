@@ -68,6 +68,8 @@ let p_visitor_taxon_id = winurlparams.get('plant_id') || 0;
 
 // set defaults for cnc...
 let p_plant_id = winurlparams.get('plant_id') || [];
+winurlparams.delete('taxon_id');
+winurlparams.append(p_taxon_id);
 winurlparams.delete('project_id');
 winurlparams.append('project_id','220623');
 winurlparams.delete('per_page');
