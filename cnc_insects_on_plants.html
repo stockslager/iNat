@@ -62,7 +62,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_plant_name = winurlparams.get('plant_name') || '';
-let p_target_plant = winurlparams.get('target_plant') || '';
+let p_insect_name = winurlparams.get('insect_name') || '';
 let p_taxon_id = winurlparams.get('insect_id') || '';
 let p_visitor_taxon_id = winurlparams.get('plant_id') || 0;
 
@@ -119,22 +119,19 @@ else {
    });
 };
 
-//to here
 let apirefname = '';
 if( p_view === 'nectaring' ){
-   apirefname += p_plant_name;
+   apirefname += p_insect_name;
    apirefname += ' Nectaring At ';
-   apirefname += p_target_plant;
-} else if ( p_view === 'visiting' ){
    apirefname += p_plant_name;
+} else if ( p_view === 'visiting' ){
+   apirefname += p_insect_name;
    apirefname += ' Visiting ';
-   apirefname += p_target_plant;
+   apirefname += p_plant_name;
 } else {
    apirefname += 'All the plants visited by a ';
-   apirefname += p_plant_name;
+   apirefname += p_insect_name;
 }
-//let apirefname = p_plant_name;
-//apirefname += ' Found On...";
 
 let apiref = furl(apirefurl,apirefname);
    
