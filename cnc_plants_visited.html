@@ -65,11 +65,21 @@ let per_page = 100; //winurlparams.get('per_page') || 30;
 let p_options = winurlparams.get('options') || [];
 let prj = '';
 let view_id = winurlparams.get('view') || 'all';
+
+// set defaults for cnc...
+winurlparams.delete('project_id');
+winurlparams.delete('place_id');
+winurlparams.append('place_id', '128707');
+winurlparams.delete('view');
+winurlparams.append('view', 'visiting');
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
-winurlparams.delete('options');
 winurlparams.delete('iconic_taxa');
-winurlparams.append('iconic_taxa','Plantae');
+winurlparams.append('iconic_taxa','Plantae');   
+winurlparams.delete('list_id');
+winurlparams.append('list_id', '4484190');        // default to species list
+   
+winurlparams.delete('options');
 
 let prj_id = winurlparams.get('project_id') || [];
 if(prj_id === 'cincinnati-nature-center-pollinator-garden' || prj_id === 220623){
