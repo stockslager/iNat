@@ -198,7 +198,9 @@ function fresults(xobj) {
          refn += 'Visiting ';
          refn += nnn;
       }
+      
       faddelem('h2',document.body,{innerText:refn});
+      faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants those organisms visited.  Relies on the \"Plant that the organism was found on\" observation field.'});
       
       faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' <br />'
          //+'[<span id="export"><a href="javascript:fexport('+total_results+');">export</a></span>]<br />'
@@ -206,8 +208,6 @@ function fresults(xobj) {
          +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
          +'<br />'
          });
-
-      //faddelem('p',document.body,{innerHTML:furl('https://www.inaturalist.org/observations?project_id='+winurlparams.get('project_id')+'&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa'+'&subview=map&without_field=Plant%20that%20the%20organism%20was%20found%20on','Organisms attracted to the project area but not observed on any particular plant...')});
 
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
@@ -310,19 +310,7 @@ let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
 let apirefname = '';
 
-   /*
-   apirefname += 'Visiting ';
-   apirefname += nnn;
-} else if( p_view === 'nectaring' ){
-   apirefname += 'Nectaring at ';
-   apirefname += nnn;
-} else {
-   apirefname += 'Visiting ';
-   apirefname += nnn;
-}
-*/
 let apiref = furl(apirefurl,apirefname);
-//faddelem('h2',document.body,{innerText:apirefname});
 
 if (winurlsearchstr==='') {
    let instructions = [
@@ -334,7 +322,6 @@ if (winurlsearchstr==='') {
    faddelems('p',document.body,instructions);
 }
 else {
-   faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants those organisms visited.  Relies on the \"Plant that the organism was found on\" observation field.'});
    fetch(apiurl)
    .then((response) => {
       if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
