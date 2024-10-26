@@ -62,14 +62,14 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let per_page = winurlparams.get('per_page') || 100;
 let p_options = winurlparams.get('options') || [];
-let nnn = winurlparams.get('nn') || '';
+let p_plant_name = winurlparams.get('plant_name') || '';
 let p_view = winurlparams.get('view') || 'visiting';
 winurlparams.delete('options');
 
 // set defaults for cnc...
-let p_chosen_plant_id = winurlparams.get('chosen_plant_id') || [];
+let p_plant_id = winurlparams.get('plant_id') || [];
 winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
-winurlparams.append('field:Plant%20that%20the%20organism%20was%20found%20on', p_chosen_plant_id);
+winurlparams.append('field:Plant%20that%20the%20organism%20was%20found%20on', p_plant_id);
 winurlparams.delete('project_id');
 winurlparams.append('project_id','220623');
 winurlparams.delete('per_page');
@@ -190,13 +190,13 @@ function fresults(xobj) {
 
       if( p_view == 'visiting' ){
          refn += 'Visiting ';
-         refn += nnn;
+         refn += p_plant_name;
       } else if( p_view === 'nectaring' ){
          refn += 'Nectaring at ';
-         refn += nnn;
+         refn += p_plant_name;
       } else {
          refn += 'Visiting ';
-         refn += nnn;
+         refn += p_plant_name;
       }
 
       faddelem('h2',document.body,{innerText:refn});
@@ -277,7 +277,7 @@ function fresults(xobj) {
                {innerText:rec.taxon.preferred_common_name||''},
                {innerText:rec.taxon.name||''},
                {innerText:recCount||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=100&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&target_plant='+nnn+'&view='+p_view+'&chosen_plant_id='+p_chosen_plant_id,ss)},
+               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=100&page=1&taxon_id='+rec.taxon.id+'&plant_name'+ins_name+'&target_plant='+p_plant_name+'&view='+p_view+'&plant_id='+p_plant_id,ss)},
                {innerText:rec.taxon.rank||''},
             ];
          } else {
@@ -289,7 +289,7 @@ function fresults(xobj) {
                {innerText:rec.taxon.preferred_common_name||''},
                {innerText:rec.taxon.name||''},
                {innerText:recCount||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=100&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&target_plant='+nnn+'&view='+p_view+'&chosen_plant_id='+p_chosen_plant_id,ss)},
+               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=100&page=1&taxon_id='+rec.taxon.id+'&plant_name'+ins_name+'&target_plant='+p_plant_name+'&view='+p_view+'&plant_id='+p_plant_id,ss)},
                {innerText:rec.taxon.rank||''},
             ];
          }
