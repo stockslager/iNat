@@ -73,7 +73,7 @@ winurlparams.append('taxon_id', p_taxon_id);
 winurlparams.delete('project_id');
 winurlparams.append('project_id','220623');
 winurlparams.delete('per_page');
-winurlparams.append('per_page','100');
+winurlparams.append('per_page','200');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa');
    
@@ -262,7 +262,7 @@ function fresults(xobj) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' ('
-         +furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=100&page=1&target_plant='+p_target_plant+'&taxon_id='+p_taxon_id+'&nn='+p_plant_name+'&view=all&visitor_taxon_id='+p_visitor_taxon_id,'show all')
+         +furl('https://stockslager.github.io/iNat/cnc_insects_on_plants.html?insect_id='+p_taxon_id+'&plant_id='+p_visitor_taxon_id+'&plant_name='+p_plant_name,'show all')
          +')'+'<br />'
          +'per page: '+fcomnum(per_page)+'<br />'
          +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});
