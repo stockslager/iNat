@@ -190,12 +190,12 @@ function fresults(xobj) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
       if( winurlparams.get('list_id') === '4484190' ) {
-         faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+'<div align="right">('
+         faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
             +furl('https://stockslager.github.io/iNat/cnc_plants_visited.html?lrank=genus&list_id=4484232','show visited plants id\'d to genus')
-            +')</div>'+' <br />'
+            +')'+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
-            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
-            +'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max) 
+            +'<span align="right">test</span><br />'
          });
       } else if( winurlparams.get('list_id') === '4484232' ) { 
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
