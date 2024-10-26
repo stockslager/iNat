@@ -77,10 +77,8 @@ winurlparams.append('per_page','200');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa');
    
-let p_view = winurlparams.get('view') || 'all';
-if( p_view != 'all' && p_view != 'nectaring' && p_view != 'visiting' ){
-   p_view = 'all';
-}
+let p_view = winurlparams.get('view') || '';
+
 let p_options = winurlparams.get('options') || [];
 winurlparams.delete('options');
 let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
