@@ -188,8 +188,16 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' <br />'
-         //+'[<span id="export"><a href="javascript:fexport('+total_results+');">export</a></span>]<br />'
+
+      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' ('
+         +furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=100&page=1&target_plant='+p_target_plant+'&taxon_id='+p_taxon_id+'&nn='+nnn+'&view=all&visitor_taxon_id='+p_visitor_taxon_id,'show all')
+         +')'+'<br />'
+         +'per page: '+fcomnum(per_page)+'<br />'
+         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});
+      
+      faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
+         +furl('https://stockslager.github.io/iNat/cnc_plants_visited.html?lrank=genus','show visited plants id\'d to genus')
+         +')'+' <br />'
          +'per page: '+fcomnum(per_page)+'<br />'
          +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
          +'<br />'
