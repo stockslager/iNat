@@ -74,8 +74,8 @@ winurlparams.delete('photo_curl_filename_prefix');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Plantae');
 
-let prj_id = winurlparams.get('project_id') || 152539;
-if(prj_id === 'cincinnati-nature-center-pollinator-garden' || prj_id === 220623){
+let target_project_id = winurlparams.get('target_project_id') || 152539;
+if(target_project_id === 'cincinnati-nature-center-pollinator-garden' || prj_id === 220623){
    prj += 'Cincinnati Nature Center Pollinator Garden';
 } else if( prj_id === 'cincinnati-re-wild-backyard-ecological-restoration-umbrella' || prj_id === 152539 ){
    prj += 'Cincinnati Re-Wild';
@@ -294,7 +294,7 @@ function fresults(xobj) {
                      : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},            
                {innerHTML:rec.taxon?furl(inat_taxa+rec.taxon.id,rec.taxon.name):''},
                {innerText:rec.taxon?(rec.taxon.preferred_common_name||''):''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/insects_found_visiting.html?project_id='+winurlparams.get('project_id')+'&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa&field:Nectar%20Plant='+rec.taxon.id+'&per_page=100&page=1&action=Nectaring%20at&nn='+rec.taxon.preferred_common_name+'&visitor_taxon_id='+rec.taxon.id+'&view=nectaring','Nectaring Organisms...')},
+               {innerHTML:furl('https://stockslager.github.io/iNat/insects_found_visiting.html?project_id='+target_project_id+'&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa&field:Nectar%20Plant='+rec.taxon.id+'&per_page=100&page=1&action=Nectaring%20at&nn='+rec.taxon.preferred_common_name+'&visitor_taxon_id='+rec.taxon.id+'&view=nectaring','Nectaring Organisms...')},
                {innerText:rec.taxon.rank||''},
                {innerText:rec.taxon.rank_level||''},         
             ];
@@ -306,7 +306,7 @@ function fresults(xobj) {
                      : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},            
                {innerHTML:rec.taxon?furl(inat_taxa+rec.taxon.id,rec.taxon.name):''},
                {innerText:rec.taxon?(rec.taxon.preferred_common_name||''):''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/insects_found_visiting.html?project_id='+winurlparams.get('project_id')+'&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa&field:Plant%20that%20the%20organism%20was%20found%20on='+rec.taxon.id+'&per_page=100&page=1&action=Visiting&nn='+rec.taxon.preferred_common_name+'&visitor_taxon_id='+rec.taxon.id,'Visiting Organisms...')},
+               {innerHTML:furl('https://stockslager.github.io/iNat/insects_found_visiting.html?project_id='+target_project_id+'&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa&field:Plant%20that%20the%20organism%20was%20found%20on='+rec.taxon.id+'&per_page=100&page=1&action=Visiting&nn='+rec.taxon.preferred_common_name+'&visitor_taxon_id='+rec.taxon.id,'Visiting Organisms...')},
                {innerText:rec.taxon.rank||''},
                {innerText:rec.taxon.rank_level||''},         
             ];
@@ -318,8 +318,8 @@ function fresults(xobj) {
                      : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},            
                {innerHTML:rec.taxon?furl(inat_taxa+rec.taxon.id,rec.taxon.name):''},
                {innerText:rec.taxon?(rec.taxon.preferred_common_name||''):''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/insects_found_visiting.html?project_id='+winurlparams.get('project_id')+'&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa&field:Plant%20that%20the%20organism%20was%20found%20on='+rec.taxon.id+'&per_page=100&page=1&action=Visiting&nn='+rec.taxon.preferred_common_name+'&visitor_taxon_id='+rec.taxon.id,'Visiting Organisms...')},
-               {innerHTML:furl('https://stockslager.github.io/iNat/insects_found_visiting.html?project_id='+winurlparams.get('project_id')+'&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa&field:Nectar%20Plant='+rec.taxon.id+'&per_page=100&page=1&action=Nectaring%20at&nn='+rec.taxon.preferred_common_name+'&visitor_taxon_id='+rec.taxon.id+'&view=nectaring','Nectaring Organisms...')},
+               {innerHTML:furl('https://stockslager.github.io/iNat/insects_found_visiting.html?project_id='+target_project_id+'&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa&field:Plant%20that%20the%20organism%20was%20found%20on='+rec.taxon.id+'&per_page=100&page=1&action=Visiting&nn='+rec.taxon.preferred_common_name+'&visitor_taxon_id='+rec.taxon.id,'Visiting Organisms...')},
+               {innerHTML:furl('https://stockslager.github.io/iNat/insects_found_visiting.html?project_id='+target_project_id+'&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa&field:Nectar%20Plant='+rec.taxon.id+'&per_page=100&page=1&action=Nectaring%20at&nn='+rec.taxon.preferred_common_name+'&visitor_taxon_id='+rec.taxon.id+'&view=nectaring','Nectaring Organisms...')},
                {innerText:rec.taxon.rank||''},
                {innerText:rec.taxon.rank_level||''},         
             ];
