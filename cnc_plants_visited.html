@@ -312,37 +312,21 @@ function fresults(xobj) {
 let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
-let apirefname = 'Plants Visited ';
-if( prj != ''){
-   apirefname += '@ ';
-   apirefname += prj;
-}
-let apiref = furl(apirefurl,apirefname);
-//faddelem('h1',document.body,{innerText:prj});
-faddelem('h2',document.body,{innerText:apirefname});
 
-/*if (winurlsearchstr==='') {
-   let instructions = [
-      {innerHTML:'This page displays the response from the '+apiref+' API endpoint in a human-readable format. To use this page, add at least one query parameter to the URL. See '+furl(apirefurl)+' for available query parameters.'},
-      {innerHTML:'Suppose the address of this page is '+winurlexsearchstr+', <br />and you want to see the results of '+furl(famp(apibase+'?user_id=bob'))+' in a friendly format, <br />then you would open '+furl(famp(winurlexsearchstr+'?user_id=bob'))+' in your browser.'},
-      {innerHTML:'You can also invoke a few extra options. Adding &options=ancestry to the URL parameter list will include a column with taxon ancestry in the results. Adding &options=bigger_image will display a larger version of the taxon photo. Adding &options=unlimitedexport will allow you export a lot of records. To invoke multiple options, use a comma-separated value list for the parameter (ex. &options=ancestry,bigger_image,unlimitedexport).'},
-      {innerHTML:'Note that the counts returned by this page vs the '+furl('https://www.inaturalist.org/observations','Explore page')+' in iNaturalist may not tie exactly because the Explore page will always filter out spam observations. Also, if you filter for a subspecies taxon on this page, the taxon shown here will be the species level, but the count will reflect the subspecies count, and the link to the Explore page will take you to the species level.'},
-   ];
-   faddelems('p',document.body,instructions);
-}
-else {*/
-   faddelem('p',document.body,{innerHTML:'List of plant species with a link to the organisms observed visiting those plants.  Relies on the \"Plant that the organism was found on\" observation field.'});
+let apiref = furl(apirefurl,apirefname);
+faddelem('h2',document.body,{innerText:'Plants Visited @ Cincinnati Nature Center Pollinator Garden'});
+
+faddelem('p',document.body,{innerHTML:'List of plant species with a link to the organisms observed visiting those plants.  Relies on the \"Plant that the organism was found on\" observation field.'});
       fetch(apiurl)
       .then((response) => {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
-   })
+})
    .then((data) => { fresults(data); })
    .catch((err) => {
       console.error(err.message);
       faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-   });
-//};
+});
 </script>
 </body>
 
