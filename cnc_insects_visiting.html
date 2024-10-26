@@ -190,24 +190,11 @@ function fresults(xobj) {
 
       if( p_view == 'visiting' ){
          refn += 'Visiting ';
-         refn += nnn;
       } else if( p_view === 'nectaring' ){
          refn += 'Nectaring at ';
-         refn += nnn;
       } else {
          refn += 'Visiting ';
-         refn += nnn;
       }
-      
-      faddelem('h2',document.body,{innerText:refn});
-      faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants those organisms visited.  Relies on the \"Plant that the organism was found on\" observation field.'});
-      
-      faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' <br />'
-         //+'[<span id="export"><a href="javascript:fexport('+total_results+');">export</a></span>]<br />'
-         +'per page: '+fcomnum(per_page)+'<br />'
-         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
-         +'<br />'
-         });
 
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
@@ -243,6 +230,17 @@ function fresults(xobj) {
       for (let i=0; i<results.length; i++) {
          let brow = faddelem('tr',tbody);
          let rec = results[i];
+         let ins_name = rec.taxon.preferred_common_name || rec.taxon.name || '';         
+         
+         refn += ins_name;
+         faddelem('h2',document.body,{innerText:refn});
+         faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants those organisms visited.  Relies on the \"Plant that the organism was found on\" observation field.'});
+      
+         faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' <br />'
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
+            +'<br />'
+            });         
          
          // this section sets up parameters for hyperlinks to Explore page
          // won't be able properly to handle situations where user inputs subspecies in URL parameters
@@ -264,7 +262,7 @@ function fresults(xobj) {
          } else {
             ss += 'Plants Visited';
          }
-         let ins_name = rec.taxon.preferred_common_name || rec.taxon.name || '';
+         
          let values = [];
 
          if( p_view != null && p_view === 'nectaring'){
