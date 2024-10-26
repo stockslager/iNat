@@ -61,15 +61,13 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let per_page = winurlparams.get('per_page') || 100;
-//let p_page = winurlparams.get('page') || 1;
-let p_visitor_taxon_id = winurlparams.get('visitor_taxon_id') || [];
 let p_options = winurlparams.get('options') || [];
-let p_action = winurlparams.get('action') || [];
 let nnn = winurlparams.get('nn') || '';
 let p_view = 'visiting';
 winurlparams.delete('options');
 
 // set defaults for cnc...
+let p_bug_id = winurlparams.get('bug_id') || [];
 winurlparams.delete('project_id');
 winurlparams.append('project_id','220623');
 winurlparams.delete('per_page');
@@ -262,7 +260,7 @@ function fresults(xobj) {
                {innerText:rec.taxon.preferred_common_name||''},
                {innerText:rec.taxon.name||''},
                {innerText:recCount||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=100&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&target_plant='+nnn+'&view='+p_view+'&visitor_taxon_id='+p_visitor_taxon_id,ss)},
+               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=100&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&target_plant='+nnn+'&view='+p_view+'&bug_id='+p_bug_id,ss)},
                {innerText:rec.taxon.rank||''},
             ];
          } else {
@@ -274,7 +272,7 @@ function fresults(xobj) {
                {innerText:rec.taxon.preferred_common_name||''},
                {innerText:rec.taxon.name||''},
                {innerText:recCount||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=100&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&target_plant='+nnn+'&view='+p_view+'&visitor_taxon_id='+p_visitor_taxon_id,ss)},
+               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=100&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&target_plant='+nnn+'&view='+p_view+'&bug_id='+p_bug_id,ss)},
                {innerText:rec.taxon.rank||''},
             ];
          }
@@ -294,11 +292,16 @@ function fresults(xobj) {
 let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
-let apirefname = 'Organisms ';
-apirefname += p_action;
-apirefname += ' ';
-apirefname += nnn;
-//apirefname += " ~ CNC Pollinator Garden';
+let apirefname = '';
+
+if( p_view == 'visiting' ){
+   apirefname += 'Visiting ';
+   apirefname += nnn;
+} else if( p_view === 'nectaring' ){
+   apirefname += 'Nectaring at ';
+   apirefname += nnn;
+}
+   
 let apiref = furl(apirefurl,apirefname);
 faddelem('h2',document.body,{innerText:apirefname});
 
