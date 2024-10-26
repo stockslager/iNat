@@ -67,7 +67,7 @@ let p_view = 'visiting';
 winurlparams.delete('options');
 
 // set defaults for cnc...
-let p_bug_id = winurlparams.get('bug_id') || [];
+let p_chosen_plant_id = winurlparams.get('chosen_plant_id') || [];
 winurlparams.delete('project_id');
 winurlparams.append('project_id','220623');
 winurlparams.delete('per_page');
@@ -260,7 +260,7 @@ function fresults(xobj) {
                {innerText:rec.taxon.preferred_common_name||''},
                {innerText:rec.taxon.name||''},
                {innerText:recCount||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=100&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&target_plant='+nnn+'&view='+p_view+'&bug_id='+p_bug_id,ss)},
+               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=100&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&target_plant='+nnn+'&view='+p_view+'&chosen_plant_id='+p_chosen_plant_id,ss)},
                {innerText:rec.taxon.rank||''},
             ];
          } else {
@@ -272,7 +272,7 @@ function fresults(xobj) {
                {innerText:rec.taxon.preferred_common_name||''},
                {innerText:rec.taxon.name||''},
                {innerText:recCount||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=100&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&target_plant='+nnn+'&view='+p_view+'&bug_id='+p_bug_id,ss)},
+               {innerHTML:furl('https://stockslager.github.io/iNat/plants_that_the_insect_was_observed_on.html?project_id='+winurlparams.get('project_id')+'&per_page=100&page=1&taxon_id='+rec.taxon.id+'&nn='+ins_name+'&target_plant='+nnn+'&view='+p_view+'&chosen_plant_id='+p_chosen_plant_id,ss)},
                {innerText:rec.taxon.rank||''},
             ];
          }
