@@ -65,7 +65,7 @@ let per_page = 100; //winurlparams.get('per_page') || 30;
 let p_options = winurlparams.get('options') || [];
 let view_id = 'visiting';
 
-// set defaults for cnc...
+// set defaults for re-wild...
 winurlparams.delete('place_id');
 winurlparams.append('place_id', '3059');
 winurlparams.delete('view');
@@ -189,17 +189,17 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      if( winurlparams.get('list_id') === '4484190' ) {
+      if( winurlparams.get('list_id') === '4484172' ) {
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/cnc_plants_visited.html?lrank=genus&list_id=4484232','show visited plants id\'d to genus')
+            +furl('https://stockslager.github.io/iNat/rewild_plants_visited.html?lrank=genus&list_id=4484313','show visited plants id\'d to genus')
             +')'+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max) 
             +'<br />'
          });
-      } else if( winurlparams.get('list_id') === '4484232' ) { 
+      } else if( winurlparams.get('list_id') === '4484313' ) { 
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/cnc_plants_visited.html?lrank=species&list_id=4484190','show visited plants id\'d to species')
+            +furl('https://stockslager.github.io/iNat/rewild_plants_visited.html?lrank=species&list_id=4484172','show visited plants id\'d to species')
             +')'+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
@@ -207,7 +207,7 @@ function fresults(xobj) {
          });
       } else {
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/cnc_plants_visited.html?lrank=genus&list_id=4484232','show visited plants id\'d to genus')
+            +furl('https://stockslager.github.io/iNat/rewild_plants_visited.html?lrank=genus&list_id=4484313','show visited plants id\'d to genus')
             +')'+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
