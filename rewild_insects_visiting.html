@@ -212,13 +212,28 @@ function fresults(xobj) {
 
       faddelem('h2',document.body,{innerText:refn});
       faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants those organisms visited.  Relies on the \"Plant that the organism was found on\" observation field.'});
+
       
-      faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' <br />'
+      if( p_view === 'visiting' ){
+         faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' ('
+            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&insect_id='+p_taxon_id+'&plant_id='+p_visitor_taxon_id+'&plant_name='+p_plant_name+'&insect_name='+p_insect_name+'&view=nectaring','nectaring?')
+            +')'+'<br />'
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});
+      } else {
+         faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' ('
+            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&insect_id='+p_taxon_id+'&plant_id='+p_visitor_taxon_id+'&plant_name='+p_plant_name+'&insect_name='+p_insect_name+'&view=visiting','visiting?')
+            +')'+'<br />'
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});
+      }
+      
+      /*faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' <br />'
          //+'[<span id="export"><a href="javascript:fexport('+total_results+');">export</a></span>]<br />'
          +'per page: '+fcomnum(per_page)+'<br />'
          +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
          +'<br />'
-         });
+         }); */
       
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
