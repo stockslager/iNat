@@ -260,25 +260,12 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      if( p_view === 'visiting' ){
-         faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/rewild_insects_on_plants.html?project_id='+p_project_id+'&insect_id='+p_taxon_id+'&plant_id='+p_visitor_taxon_id+'&plant_name='+p_plant_name+'&insect_name='+p_insect_name+'&view=nectaring','nectaring?')
-            +')'+'<br />'
-            +'per page: '+fcomnum(per_page)+'<br />'
-            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});
-      } else {
-         faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/rewild_insects_on_plants.html?project_id='+p_project_id+'&insect_id='+p_taxon_id+'&plant_id='+p_visitor_taxon_id+'&plant_name='+p_plant_name+'&insect_name='+p_insect_name+'&view=visiting','visiting?')
-            +')'+'<br />'
-            +'per page: '+fcomnum(per_page)+'<br />'
-            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});
-      }
       
- /*     faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' ('
+      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' ('
          +furl('https://stockslager.github.io/iNat/rewild_insects_on_plants.html?project_id='+p_project_id+'&insect_id='+p_taxon_id+'&plant_id='+p_visitor_taxon_id+'&plant_name='+p_plant_name+'&insect_name='+p_insect_name+'&view=all','show all')
          +')'+'<br />'
          +'per page: '+fcomnum(per_page)+'<br />'
-         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});   */
+         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});   
                
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
