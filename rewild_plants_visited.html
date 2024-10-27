@@ -66,17 +66,21 @@ let p_options = winurlparams.get('options') || [];
 let view_id = 'visiting';
 
 // set defaults for re-wild...
+winurlparams.delete('place_id');
+winurlparams.append('place_id', '3059');
 winurlparams.delete('view');
 winurlparams.append('view', 'visiting');
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Plantae'); 
-winurlparams.delete('place_id');
-winurlparams.append('place_id', '3059');
-winurlparams.append('list_id', '4484172');        // default to species list if null
 
-/*let p_project_id = winurlparams.get('project_id') || [];
+// default project to species list if null
+if( winurlparams.get('list_id') === null ){
+   winurlparams.delete('list_id');
+   winurlparams.append('list_id', '4484172');        // default to species list if null
+}
+   /*let p_project_id = winurlparams.get('project_id') || [];
 if( winurlparams.get('project_id' === null || winurlparams.get('project_id' === '' ){
    p_project_id = '152539';  // cincinnati rewild
 }*/
