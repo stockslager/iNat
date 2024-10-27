@@ -68,12 +68,21 @@ let p_project_id = '';
 winurlparams.delete('options');
 
 let p_plant_id = winurlparams.get('plant_id') || [];
-winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
-winurlparams.append('field:Plant%20that%20the%20organism%20was%20found%20on', p_plant_id);
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa');
+
+if( p_view === 'visiting' ){
+   winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
+   winurlparams.append('field:Plant%20that%20the%20organism%20was%20found%20on', p_plant_id);
+} else if( p_view === 'nectaring' ){
+   winurlparams.delete('field:Nectar%20Plant');
+   winurlparams.append('field:Nectar%20Plant', p_plant_id);
+} else {
+   winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
+   winurlparams.append('field:Plant%20that%20the%20organism%20was%20found%20on', p_plant_id);
+}
 
 if( winurlparams.get('project_id') == null ){
    throw new Error(response.status+': '+'A project_id parameter was not specified in the url.  Please add a &project_id=?????');
