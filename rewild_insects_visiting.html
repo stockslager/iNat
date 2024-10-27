@@ -215,25 +215,17 @@ function fresults(xobj) {
 
       
       if( p_view === 'visiting' ){
-         faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' ('
+         faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
             +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring?')
             +')'+'<br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});
       } else {
-         faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=visiting','visiting?')
+         faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
             +')'+'<br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});
       }
-      
-      /*faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' <br />'
-         //+'[<span id="export"><a href="javascript:fexport('+total_results+');">export</a></span>]<br />'
-         +'per page: '+fcomnum(per_page)+'<br />'
-         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
-         +'<br />'
-         }); */
       
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
