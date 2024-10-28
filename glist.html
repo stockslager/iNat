@@ -341,9 +341,10 @@ let apiref = furl(apirefurl,apirefname);
 
 if (rw_user_id != '' && (rw_g_list == '' || rw_s_list == '') ) {
    let instructions = [
-      {innerHTML:'A custom species and genera list needs to be passed in when &user_id is specified.  Please add url parameters for your custom genera and species lists.'},
+      {innerHTML:'A custom species and genera list needs to be passed in when <b>&user_id</b> is specified.  Please add url parameters (<b>&g_list</b> and <b>&s_list</b>) for your custom genera and species lists.'},
    ];
-   faddelems('p',document.body,instructions);
+   faddelem('h2',document.body,{innerText:'Error ~ Invalid URL Parameters'});
+   faddelem('p',document.body,instructions);
 } else {
    faddelem('h2',document.body,{innerText:apirefname});
    faddelem('p',document.body,{innerHTML:'List of plant species with a link to the organisms observed visiting those plants.'});
