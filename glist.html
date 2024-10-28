@@ -204,15 +204,7 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      if( winurlparams.get('list_id') === '4484172' ) {
-         faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/glist.html?lrank=genus&list_id='+winurlparams.get('list_id'),'show visited plants id\'d to genus')
-            +')'+' <br />'
-            +'per page: '+fcomnum(per_page)+'<br />'
-            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max) 
-            +'<br />'
-         });
-      } else if( winurlparams.get('list_id') === '4484313' ) { 
+      if( winurlparams.get('lrank') === 'genus' ) {
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
             +furl('https://stockslager.github.io/iNat/glist.html?lrank=species&list_id='+winurlparams.get('list_id'),'show visited plants id\'d to species')
             +')'+' <br />'
