@@ -229,11 +229,12 @@ function fresults(xobj) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let args = '';
 
+      if( rw_view != '' ){
+         args += '&view=' + rw_view;
+      }
+      
       if( rw_g_list != '' && rw_s_list != '' ){
          args += '&g_list='+rw_g_list+'&s_list='+rw_s_list;
-         if( rw_view != '' ){
-            args += '&view=' + rw_view;
-         }
       }
 
       if( winurlparams.get('lrank') === 'genus' ) {
