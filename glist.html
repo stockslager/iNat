@@ -67,10 +67,8 @@ let p_project_id = '';
 let view_id = 'visiting';
 
 // set defaults for re-wild...
-//winurlparams.delete('place_id');
-//winurlparams.append('place_id', '3059');
-winurlparams.delete('project_id');
-winurlparams.append('project_id', '152539');
+winurlparams.delete('place_id');
+winurlparams.append('place_id', '3059');
 p_project_id += winurlparams.get('project_id');
 winurlparams.delete('view');
 winurlparams.append('view', 'visiting');
@@ -208,7 +206,6 @@ function fexport(count=0) {
 };
 function fresults(xobj) {
    //faddelem('p',document.body,{innerHTML:furl(famp(apiurl))});
-   winurlparams.delete('project_id');
    
    let results = xobj.results;
    if (results) {
