@@ -60,6 +60,7 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+faddelems('p',document.body,winurlparams);
 let p_options = winurlparams.get('options') || [];
 
 // set defaults for re-wild...
