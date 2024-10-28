@@ -64,9 +64,6 @@ let per_page = 100; //winurlparams.get('per_page') || 30;
 //let p_page = winurlparams.get('page') || 1;
 let p_options = winurlparams.get('options') || [];
 let view_id = 'visiting';
-let p_glist = '';
-let p_slist = '';
-let p_action_default = '';
 
 // set defaults for re-wild...
 winurlparams.delete('place_id');
@@ -79,8 +76,6 @@ winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Plantae'); 
 
 if( winurlparams.get('g_list') !== null && winurlparams.get('s_list') !== null ){
-   p_slist += winurlparams.get('s_list');
-   p_glist += winurlparams.get('g_list');
    if( winurlparams.get('lrank')  !== null ){
       if( winurlparams.get('lrank' === 'species' ){
          winurlparams.delete('list_id');
@@ -99,18 +94,6 @@ if( winurlparams.get('g_list') !== null && winurlparams.get('s_list') !== null )
    winurlparams.delete('list_id');
    winurlparams.append('list_id', '4484172');      // default to project species list 
 }
-
-if( winurlparams.get('hrank') === null ){
-   
-}
-
-if( winurlparams.get('default_action') === null ){
-  winurlparams.delete('default_action');
-  winurlparams.append('default_action', 'visiting');
-  p_default_action += winurlparams.get('default_action');
-} else {
-   p_default_action += 'visiting';
-}   
    
 winurlparams.delete('options');
 
