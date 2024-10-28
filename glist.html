@@ -71,10 +71,17 @@ winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Plantae'); 
    
 // set rw_win_options defaults for re-wild...
+let rw_view = '';
 let rw_g_list = '';
 let rw_s_list = '';
-let p_project_id = '152539';
-   
+let rw_project_id = '152539';
+
+// if &view was passed in, pass it along for the display on the next table.
+if( winurlparams.get('view') !== null ){
+   rw_view += winurlparams.get('view');
+}
+
+// set rw_g_list (genera list) and rw_s_list (species list) for re-wild...
 if( winurlparams.get('g_list') !== null && winurlparams.get('s_list') !== null ){
    rw_g_list += winurlparams.get('g_list');
    rw_s_list += winurlparams.get('s_list');
@@ -107,8 +114,11 @@ if( winurlparams.get('g_list') !== null && winurlparams.get('s_list') !== null )
 }
    
 winurlparams.delete('options');
+
+// clean up the params for rw table control so they aren't passed to api
 winurlparams.delete('s_list');
 winurlparams.delete('g_list');
+winurlparams.delete('view');
 
 function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
 function famp(str) { return str.replace(/&/g,'&amp;'); };
@@ -280,7 +290,7 @@ function fresults(xobj) {
                : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
                   {innerText:rec.taxon.name||''},
                   {innerText:rec.taxon.preferred_common_name||''},
-                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name,'Visiting Organisms...')},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+rw_project_id+'&view='+rw_view+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name,'Visiting Organisms...')},
                   {innerText:rec.taxon.rank||''},
                   {innerText:rec.taxon.rank_level||''},
          ];         
