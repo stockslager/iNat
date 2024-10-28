@@ -64,6 +64,7 @@ let per_page = 100; //winurlparams.get('per_page') || 30;
 //let p_page = winurlparams.get('page') || 1;
 let p_options = winurlparams.get('options') || [];
 let view_id = 'visiting';
+let glist = '';
 
 // set defaults for re-wild...
 winurlparams.delete('place_id');
@@ -83,7 +84,10 @@ if( winurlparams.get('list_id') === null ){
 
 if( winurlparams.get('glist') === null ){
   winurlparams.delete('glist');
-  winurlparams.append('glist', '4484507')
+  winurlparams.append('glist', '4484507');
+  glist += winurlparams.get('glist');
+} else {
+   glist += '4484313';
 }
   
    /*let p_project_id = winurlparams.get('project_id') || [];
@@ -202,7 +206,7 @@ function fresults(xobj) {
 
       if( winurlparams.get('list_id') === '4484172' ) {
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/rewild_plants_visited.html?lrank=genus&list_id=4484313','show visited plants id\'d to genus')
+            +furl('https://stockslager.github.io/iNat/rewild_plants_visited.html?lrank=genus&list_id='+glist+','show visited plants id\'d to genus')
             +')'+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max) 
@@ -218,7 +222,7 @@ function fresults(xobj) {
          });
       } else {
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/rewild_plants_visited.html?lrank=genus&list_id=4484313','show visited plants id\'d to genus')
+            +furl('https://stockslager.github.io/iNat/rewild_plants_visited.html?lrank=genus&list_id='+glist+','show visited plants id\'d to genus')
             +')'+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
