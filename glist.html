@@ -63,8 +63,7 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_options = winurlparams.get('options') || [];
 
 // set defaults for re-wild...
-// dump
-let params2 = new URLSearchParams("?place_id=&per_page=100&iconic_taxa=Plantae");
+let api_params = new URLSearchParams("?place_id=3059&per_page=100&iconic_taxa=Plantae");
 /*winurlparams.delete('place_id');
 winurlparams.append('place_id', '3059');
 winurlparams.delete('per_page');
@@ -124,8 +123,13 @@ if( winurlparams.get('g_list') !== null && winurlparams.get('s_list') !== null )
    }
 }
 
-// dump
-params2.append('list_id', winurlparams.get('list_id'));
+// set defaults for re-wild.  these are only for the api call... 
+//let api_params = new URLSearchParams("?place_id=3059&per_page=100&iconic_taxa=Plantae");
+let api_params = new URLSearchParams('');
+api_params.append('place_id', '3059');
+api_params.append('per_page','100');
+api_params.append('iconic_taxa','Plantae'); 
+api_params.append('list_id', winurlparams.get('list_id'));  
    
 winurlparams.delete('options');
 
@@ -335,7 +339,7 @@ function fresults(xobj) {
 };
 let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
 
-let apiurl = apibase+((params2!='')?('?'+params2):'');
+let apiurl = apibase+((api_params!='')?('?'+api_params):'');
 //let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
 
