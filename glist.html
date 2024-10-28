@@ -63,11 +63,15 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let per_page = 100; //winurlparams.get('per_page') || 30;
 //let p_page = winurlparams.get('page') || 1;
 let p_options = winurlparams.get('options') || [];
+let p_project_id = '';
 let view_id = 'visiting';
 
 // set defaults for re-wild...
-winurlparams.delete('place_id');
-winurlparams.append('place_id', '3059');
+//winurlparams.delete('place_id');
+//winurlparams.append('place_id', '3059');
+winurlparams.delete('project_id');
+winurlparams.append('project_id', '152539');
+p_project_id += winurlparams.get('project_id');
 winurlparams.delete('view');
 winurlparams.append('view', 'visiting');
 winurlparams.delete('per_page');
@@ -300,7 +304,7 @@ function fresults(xobj) {
                   : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
                {innerText:rec.taxon.name||''},
                {innerText:rec.taxon.preferred_common_name||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id=152539&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name,'Nectaring Organisms...')},
+               {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name,'Nectaring Organisms...')},
                {innerText:rec.taxon.rank||''},
                {innerText:rec.taxon.rank_level||''},
             ];
@@ -312,7 +316,7 @@ function fresults(xobj) {
                   : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
                {innerText:rec.taxon.name||''},
                {innerText:rec.taxon.preferred_common_name||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id=152539&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name,'Visiting Organisms...')},
+               {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name,'Visiting Organisms...')},
                {innerText:rec.taxon.rank||''},
                {innerText:rec.taxon.rank_level||''},
             ];         
@@ -324,8 +328,8 @@ function fresults(xobj) {
                   : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
                {innerText:rec.taxon.name||''},
                {innerText:rec.taxon.preferred_common_name||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id=152539&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name,'Visiting Organisms...')},
-               {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id=152539&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name,'Nectaring Organisms...')},
+               {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name,'Visiting Organisms...')},
+               {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name,'Nectaring Organisms...')},
                {innerText:rec.taxon.rank||''},
                {innerText:rec.taxon.rank_level||''},
             ];
