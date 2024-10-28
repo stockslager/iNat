@@ -75,12 +75,20 @@ let rw_view = '';
 let rw_g_list = '';
 let rw_s_list = '';
 let rw_project_id = '152539';
+let rw_user_id = '';
 
 // if &view was passed in, pass it along for the display on the next table.
 if( winurlparams.get('view') !== null ){
    rw_view += winurlparams.get('view');
 } else {
    rw_view += 'visiting';
+}
+
+// if &user_id was passed in, pass it along for the three displays.
+if( winurlparams.get('user_id') !== null ){
+   rw_user_id += winurlparams.get('user_id');
+} else {
+   winurlparams.delete('user_id');
 }
 
 // set rw_g_list (genera list) and rw_s_list (species list) for re-wild...
@@ -234,6 +242,10 @@ function fresults(xobj) {
       if( rw_view != '' ){
          args += '&view=' + rw_view;
       }
+
+      if( rw_user_id != ''){
+         args += '&user_id=' + rw_user_id;
+      }
       
       if( rw_g_list != '' && rw_s_list != '' ){
          args += '&g_list='+rw_g_list+'&s_list='+rw_s_list;
@@ -296,7 +308,7 @@ function fresults(xobj) {
                : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
                   {innerText:rec.taxon.name||''},
                   {innerText:rec.taxon.preferred_common_name||''},
-                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+rw_project_id+'&view='+rw_view+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name,'Visiting Organisms...')},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+rw_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Visiting Organisms...')},
                   {innerText:rec.taxon.rank||''},
                   {innerText:rec.taxon.rank_level||''},
          ];         
