@@ -345,6 +345,12 @@ if (rw_user_id != '' && (rw_g_list == '' || rw_s_list == '') ) {
    ];
    faddelem('h2',document.body,{innerText:'Error ~ Invalid URL Parameters'});
    faddelems('p',document.body,instructions);
+} else if ( (rw_glist === '' && rw_slist != '') || (rw_glist != '' && rw_slist === '') ){
+   let instructions = [
+      {innerHTML:'Custom species list missing from url parameters.  If custom species lists are passed in, they both need to be specified.  Please specify both url parameters (<b>&g_list</b> and <b>&s_list</b>).'},
+   ];
+   faddelem('h2',document.body,{innerText:'Error ~ Invalid URL Parameters'});
+   faddelems('p',document.body,instructions);
 } else {
    faddelem('h2',document.body,{innerText:apirefname});
    faddelem('p',document.body,{innerHTML:'List of plant species with a link to the organisms observed visiting those plants.'});
