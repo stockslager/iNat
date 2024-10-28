@@ -59,9 +59,17 @@
 let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
-let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-faddelems('p',document.body,winurlparams.values());
+let winurlparams = new URLSearchParams('');
+let winurlparams_copy = new URLSearchParams(winurlsearchstr.substring(1));
 let p_options = winurlparams.get('options') || [];
+
+// copy over only the search parameters that are relevant to the three re-wild tables
+winurlparams.append('g_list', winurlparams_copy.get('g_list');
+winurlparams.append('s_list', winurlparams_copy.get('s_list');
+winurlparams.append('view', winurlparams_copy.get('view');
+winurlparams.append('lrank', winurlparams_copy.get('lrank');
+winurlparams.append('user_id', winurlparams_copy.get('user_id');
+winurlparams.append('list_id', winurlparams_copy.get('list_id');
 
 // set defaults for re-wild...
 winurlparams.delete('place_id');
@@ -345,7 +353,6 @@ if (rw_user_id != '' && (rw_g_list == '' || rw_s_list == '') ) {
    ];
    faddelem('h2',document.body,{innerText:'Error ~ Invalid URL Parameters'});
    faddelems('p',document.body,instructions);
-   faddelems('p',document.body,winurlparams);
 } else if ( (rw_g_list === '' && rw_s_list != '') || (rw_g_list != '' && rw_s_list === '') ){
    let instructions = [
       {innerHTML:'Custom species list missing from url parameters.  If custom species lists are passed in, they both need to be specified.  Please specify both url parameters (<b>&g_list</b> and <b>&s_list</b>).'},
