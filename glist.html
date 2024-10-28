@@ -60,24 +60,23 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let per_page = 100; //winurlparams.get('per_page') || 30;
-//let p_page = winurlparams.get('page') || 1;
 let p_options = winurlparams.get('options') || [];
-let p_project_id = '';
-let view_id = 'visiting';
 
 // set defaults for re-wild...
 winurlparams.delete('place_id');
 winurlparams.append('place_id', '3059');
-p_project_id += winurlparams.get('project_id');
-winurlparams.delete('view');
-winurlparams.append('view', 'visiting');
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Plantae'); 
-
+   
+// set rw_win_options defaults for re-wild...
+let rw_g_list = '';
+let rw_s_list = '';
+   
 if( winurlparams.get('g_list') !== null && winurlparams.get('s_list') !== null ){
+   rw_g_list += winurlparams.get('g_list');
+   rw_s_list += winurlparams.get('s_list');
    if( winurlparams.get('lrank')  !== null ){
       if( winurlparams.get('lrank') === 'species' ){
          winurlparams.delete('list_id');
@@ -107,6 +106,8 @@ if( winurlparams.get('g_list') !== null && winurlparams.get('s_list') !== null )
 }
    
 winurlparams.delete('options');
+winurlparams.delete('s_list');
+winurlparams.delete('g_list');
 
 function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
 function famp(str) { return str.replace(/&/g,'&amp;'); };
@@ -217,7 +218,7 @@ function fresults(xobj) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let args = '';
 
-      if( winurlparams.get('g_list') != null && winurlparams.get('s_list') != null ){
+      if( rw_g_list != '' && rw_s_list != '' ){
          args += '&g_list='+winurlparams.get('g_list')+'&s_list='+winurlparams.get('s_list');
       }
 
@@ -242,19 +243,7 @@ function fresults(xobj) {
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
-      let labels = [];
-      if( view_id === 'nectaring' ){
-         labels = [
-            {innerText:'#'},
-            {innerText:'Photo'},   
-            {innerText:'Name'},
-            {innerText:'Common Name'},
-            {innerText:'Nectaring'},
-            {innerText:'Rank'},
-            {innerText:'Rank Level'},
-         ];      
-      } else if( view_id === 'visiting' ){ 
-         labels = [
+      let labels = [
             {innerText:('#')},
             {innerText:'Photo'},   
             {innerText:'Name'},
@@ -262,19 +251,8 @@ function fresults(xobj) {
             {innerText:'Visiting'},
             {innerText:'Rank'},
             {innerText:'Rank Level'},
-         ];
-      } else {
-         labels = [
-            {innerText:('#')},
-            {innerText:'Photo'},   
-            {innerText:'Name'},
-            {innerText:'Common Name'},
-            {innerText:'Visiting'},
-            {innerText:'Nectaring'},
-            {innerText:'Rank'},
-            {innerText:'Rank Level'},
-         ];
-      }
+      ];
+      
       if (p_options.includes('ancestry')) { labels.splice(7,0,{innerText:'Ancestry'}); };
       faddelems('th',hrow,labels);
 
@@ -294,45 +272,18 @@ function fresults(xobj) {
          let url_explore = 'https://www.inaturalist.org/observations?taxon_id='+rec.taxon.id
          let obsparam_verifiable = (obsparams.get('verifiable')===null)?'&verifiable=any':('&verifiable='+obsparams.get('verifiable'));
          obsparams.delete('verifiable');
-         let values = [];
-         if(view_id === 'nectaring'){
-            values = [
-               {innerText:i+1},
-               (p_options.includes('bigger_image'))
-                  ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
-                  : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-               {innerText:rec.taxon.name||''},
-               {innerText:rec.taxon.preferred_common_name||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name,'Nectaring Organisms...')},
-               {innerText:rec.taxon.rank||''},
-               {innerText:rec.taxon.rank_level||''},
-            ];
-         } else if( view_id === 'visiting' ){
-            values = [
-               {innerText:i+1},
-               (p_options.includes('bigger_image'))
-                  ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
-                  : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-               {innerText:rec.taxon.name||''},
-               {innerText:rec.taxon.preferred_common_name||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name,'Visiting Organisms...')},
-               {innerText:rec.taxon.rank||''},
-               {innerText:rec.taxon.rank_level||''},
-            ];         
-         } else {   
-            values = [
-               {innerText:i+1},
-               (p_options.includes('bigger_image'))
-                  ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
-                  : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-               {innerText:rec.taxon.name||''},
-               {innerText:rec.taxon.preferred_common_name||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name,'Visiting Organisms...')},
-               {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name,'Nectaring Organisms...')},
-               {innerText:rec.taxon.rank||''},
-               {innerText:rec.taxon.rank_level||''},
-            ];
-         }
+         let values = [
+            {innerText:i+1},
+            (p_options.includes('bigger_image'))
+               ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
+               : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
+                  {innerText:rec.taxon.name||''},
+                  {innerText:rec.taxon.preferred_common_name||''},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name,'Visiting Organisms...')},
+                  {innerText:rec.taxon.rank||''},
+                  {innerText:rec.taxon.rank_level||''},
+         ];         
+         
          if (p_options.includes('ancestry')) { values.splice(7,0,{innerHTML:rec.taxon.ancestor_ids.map(function(e){return furl('http://www.inaturalist.org/taxa/'+e,e)}).join('/')||''}); };
          faddelems('td',brow,values);
       };
