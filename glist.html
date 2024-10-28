@@ -92,7 +92,13 @@ if( winurlparams.get('g_list') !== null && winurlparams.get('s_list') !== null )
    winurlparams.delete('g_list');
    winurlparams.delete('s_list');
    winurlparams.delete('list_id');
-   winurlparams.append('list_id', '4484172');      // default to project species list 
+   if( winurlparams.get('lrank') === null ){
+      winurlparams.append('list_id', '4484172');         // default to project species list 
+   } else if( winurlparams.get('lrank') === 'genus' ){
+      winurlparams.append('list_id', '4484313');         // default to project genera list   
+   } else {
+      winurlparams.append('list_id', '4484172');         // default to project species list   
+   }
 }
    
 winurlparams.delete('options');
