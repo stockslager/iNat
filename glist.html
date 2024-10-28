@@ -339,12 +339,12 @@ let apiref = furl(apirefurl,apirefname);
 
 
 
-/*if (winurlparams.get('user_id') != null && (winurlparams.get('g_list') == null || winurlparams.get('s_list') == null ) {
+if (winurlparams.get('user_id') != null && (winurlparams.get('g_list') == null || winurlparams.get('s_list')) == null ) {
    let instructions = [
       {innerHTML:'A custom species and genera list needs to be passed in when &user_id is specified.  Please add url parameters for your custom genera and species lists.'},
    ];
    faddelems('p',document.body,instructions);
-} else {*/
+} else {
    faddelem('h2',document.body,{innerText:apirefname});
    faddelem('p',document.body,{innerHTML:'List of plant species with a link to the organisms observed visiting those plants.'});
    fetch(apiurl)
@@ -356,8 +356,8 @@ let apiref = furl(apirefurl,apirefname);
       .catch((err) => {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-      });
-//};
+      })
+};
 
 </script>
 </body>
