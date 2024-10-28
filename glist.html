@@ -253,9 +253,9 @@ function fresults(xobj) {
          toggle_args += '&g_list='+rw_g_list+'&s_list='+rw_s_list;
       }
 
-      if( p_lrank === 'genus' ) {
+      if( winurlparams.get('lrank') === 'genus' ) {
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/glist.html?lrank=species&list_id='+p_list_id+toggle_args,'show visited plants id\'d to species')
+            +furl('https://stockslager.github.io/iNat/glist.html?lrank=species&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to species')
             +')'+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
@@ -263,7 +263,7 @@ function fresults(xobj) {
          });
       } else {
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/glist.html?lrank=genus&list_id='+p_list_id+toggle_args,'show visited plants id\'d to genus')
+            +furl('https://stockslager.github.io/iNat/glist.html?lrank=genus&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to genus')
             +')'+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
