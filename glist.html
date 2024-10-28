@@ -60,28 +60,7 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let winurlparams_copy = new URLSearchParams(winurlsearchstr.substring(1));
 let p_options = winurlparams.get('options') || [];
-
-// copy over only the search parameters that are relevant to the three re-wild tables
-winurlparams.delete('g_list');
-/*winurlparams.delete('s_list');
-winurlparams.delete('view');
-winurlparams.delete('lrank');
-winurlparams.delete('user_id');
-winurlparams.delete('list_id');*/
-let rw_g_list = winurlparams_copy.get('g_list') || '';
-let rw_s_list = winurlparams_copy.get('s_list') || '';
-let rw_view = winurlparams_copy.get('view') || '';
-let rw_lrank = winurlparams_copy.get('lrank') || '';
-let rw_user_id = winurlparams_copy.get('user_id') || '';
-let rw_list_id = winurlparams_copy.get('list_id') || '';
-winurlparams.append('g_list', rw_g_list);
-winurlparams.append('s_list', rw_s_list);
-winurlparams.append('view', rw_view);
-winurlparams.append('lrank', rw_lrank);
-winurlparams.append('user_id', rw_user_id);
-winurlparams.append('list_id', rw_list_id);
 
 // set defaults for re-wild...
 winurlparams.delete('place_id');
@@ -90,21 +69,23 @@ winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Plantae'); 
-   
+
 // set rw_win_options defaults for re-wild...
 let rw_view = '';
+let rw_g_list = winurlparams.get('g_list') || '';
+let rw_s_list = winurlparams.get('s_list') || '';
 let rw_project_id = '152539';
 let rw_user_id = '';
 
 // if &view was passed in, pass it along for the display on the next table.
-if( winurlparams.get('view') !== '' ){
+if( winurlparams.get('view') !== null ){
    rw_view += winurlparams.get('view');
 } 
 
 // if &user_id was passed in, pass it along for the three displays.
 // user id should not be passed to this api since we want see plants all the plants in the user's custom list.
 // passing in a user_id implies that they've also passed in a custom list.
-if( winurlparams.get('user_id') !== '' ){
+if( winurlparams.get('user_id') !== null ){
    rw_user_id += winurlparams.get('user_id');
    winurlparams.delete('user_id');
 } else {
@@ -112,8 +93,8 @@ if( winurlparams.get('user_id') !== '' ){
 }
 
 // set rw_g_list (genera list) and rw_s_list (species list) for re-wild...
-if( winurlparams.get('g_list') !== '' && winurlparams.get('s_list') !== '' ){
-   if( winurlparams.get('lrank')  !== '' ){
+if( winurlparams.get('g_list') !== null && winurlparams.get('s_list') !== null ){
+   if( winurlparams.get('lrank')  !== null ){
       if( winurlparams.get('lrank') === 'species' ){
          winurlparams.delete('list_id');
          winurlparams.append('list_id', winurlparams.get('s_list'));
@@ -132,7 +113,7 @@ if( winurlparams.get('g_list') !== '' && winurlparams.get('s_list') !== '' ){
    winurlparams.delete('g_list');
    winurlparams.delete('s_list');
    winurlparams.delete('list_id');
-   if( winurlparams.get('lrank') === '' ){
+   if( winurlparams.get('lrank') === null ){
       winurlparams.append('list_id', '4484172');         // default to project species list 
    } else if( winurlparams.get('lrank') === 'genus' ){
       winurlparams.append('list_id', '4484313');         // default to project genera list   
@@ -140,7 +121,7 @@ if( winurlparams.get('g_list') !== '' && winurlparams.get('s_list') !== '' ){
       winurlparams.append('list_id', '4484172');         // default to project species list   
    }
 }
-   
+
 winurlparams.delete('options');
 
 // clean up the params for rw table control so they aren't passed to api
