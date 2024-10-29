@@ -361,7 +361,8 @@ function fresults(xobj) {
             ss += 'Plants Visited';
          }
 
-         let ins_name = rec.taxon.preferred_common_name || rec.taxon.name || '';         
+         let ins_name = rec.taxon.preferred_common_name || rec.taxon.name || '';    
+         let c_status = rec.taxon.conservation_status || rec.taxon.conservation_status.name || '';
          let values = [];
 
          values = [
@@ -371,7 +372,7 @@ function fresults(xobj) {
                   : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
                {innerText:rec.taxon.preferred_common_name||''},
                {innerText:rec.taxon.name||''},
-               {innerText:rec.taxon.conservation_status.status_name||''},
+               {innerText:c_status||''},
                {innerText:recCount||''},
                {innerHTML:furl('https://stockslager.github.io/iNat/onplants2.html?project_id='+p_project_id+'&insect_id='+rec.taxon.id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&insect_name='+ins_name+'&view='+p_view,ss)},
                {innerText:rec.taxon.rank||''},
