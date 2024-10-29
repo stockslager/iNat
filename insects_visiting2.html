@@ -225,13 +225,21 @@ function fresults(xobj) {
       }
 
       faddelem('h2',document.body,{innerText:refn});
+
+      let relies = [];
+      relies += ' ~ <table><tr><td>Relies on observation fields:</td></tr>' +
+                           '<tr><td>\"Plant that the organism was found on\"</td></tr>' +
+                           '<tr><td>\"Nectar Plant\"</td></tr>' +
+                           '<tr><td>\"Nectar / Pollen delivering plant\"</td></tr>' +
+                           '<tr><td>\"Name of Associated Plant\"</td></tr>'</table>';
       
       if( p_view === 'visiting' ){
          faddelem('p',document.body,{innerHTML:' (visiting, '
             +furl('https://stockslager.github.io/iNat/insects_visiting2.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring') + ', '
             +furl('https://stockslager.github.io/iNat/insects_visiting2.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollinating','pollinating') + ', '
             +furl('https://stockslager.github.io/iNat/insects_visiting2.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=associating','associating') + ')'
-            +' ~ Relies on observation fields (\"Plant that the organism was found on\" and "\Nectar Plant\")'
+            //+' ~ Relies on observation fields (\"Plant that the organism was found on\" and "\Nectar Plant\")'
+            + relies
             + '<br />'});
       } else if( p_view === 'pollinating' ){
          faddelem('p',document.body,{innerHTML:' ('
@@ -239,7 +247,8 @@ function fresults(xobj) {
             +furl('https://stockslager.github.io/iNat/insects_visiting2.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring') + ', '
             +'pollinating, '
             +furl('https://stockslager.github.io/iNat/insects_visiting2.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=associating','associating') + ')'
-            +' ~ Relies on observation fields (\"Plant org was found on\", "\Nectar Plant\", etc.)'
+            //+' ~ Relies on observation fields (\"Plant org was found on\", "\Nectar Plant\", etc.)'
+            + relies
             +'<br />'});
       } else if( p_view === 'nectaring' ){
          faddelem('p',document.body,{innerHTML:' ('
@@ -247,7 +256,8 @@ function fresults(xobj) {
             +'nectaring, '
             +furl('https://stockslager.github.io/iNat/insects_visiting2.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollinating','pollinating') + ', '
             +furl('https://stockslager.github.io/iNat/insects_visiting2.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=associating','associating') + ')'
-            +' ~ Relies on observation fields (\"Plant org was found on\", "\Nectar Plant\", etc.)'
+            //+' ~ Relies on observation fields (\"Plant org was found on\", "\Nectar Plant\", etc.)'
+            + relies
             +'<br />'});
       } else if( p_view === 'associating' ){
          faddelem('p',document.body,{innerHTML:' ('
@@ -255,7 +265,8 @@ function fresults(xobj) {
             +furl('https://stockslager.github.io/iNat/insects_visiting2.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring') + ', '
             +furl('https://stockslager.github.io/iNat/insects_visiting2.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollinating','pollinating') + ', '
             +'associating)'
-            +' ~ Relies on observation fields (\"Plant org was found on\", "\Nectar Plant\", etc.)'
+            //+' ~ Relies on observation fields (\"Plant org was found on\", "\Nectar Plant\", etc.)'
+            + relies
             +'<br />'});
       } else {
          faddelem('p',document.body,{innerHTML:' ('
