@@ -240,10 +240,44 @@ function fresults(xobj) {
 
       faddelem('h2',document.body,{innerText:refn});
 
+      let menu = faddelem('table',document.body,{id:'key'});
+      let menu_body = faddelem('tbody',menu);
+      let menu_row = faddelem('tr',menu_body);
+      let row_0 = [];
+      row_0 = [
+               {innerText:''},
+               {innerText:'Relies on observation fields:'}
+      ];      
+      faddelems('td',menu_row,row_0);
+      let row_1 = [];
+      row_1 = [
+               {innerText:''},
+               {innerText:'\"Plant that the organism was found on\"'}
+      ];      
+      faddelems('td',menu_row,row_1);
+      let row_2 = [];
+      row_2 = [
+               {innerText:''},
+               {innerText:'\"Nectar Plant\"'}
+      ];      
+      faddelems('td',menu_row,row_2);
+      let row_3 = [];
+      row_3 = [
+               {innerText:''},
+               {innerText:'\"Nectar / Pollen delivering plant\"'}
+      ];      
+      faddelems('td',menu_row,row_3);
+      let row_4 = [];
+      row_4 = [
+               {innerText:''},
+               {innerText:'\"Name of Associated Plant\"'}
+      ];      
+      faddelems('td',menu_row,row_4);
+      
       let relies = [];
-      relies += (' ~ <table id=\"key\"><tr id=\"key\"><td>Relies on observation fields:</td></tr>' +
-                           '<tr id=\"key\"><td>\"Plant that the organism was found on\"</td></tr>' +
-                           '<tr id=\"key\"><td>\"Nectar Plant\"</td></tr>' +
+      relies += (' ~ <table id=\"key\"><tr><td>Relies on observation fields:</td></tr>' +
+                           '<tr><td>\"Plant that the organism was found on\"</td></tr>' +
+                           '<tr><td>\"Nectar Plant\"</td></tr>' +
                            '<tr><td>\"Nectar / Pollen delivering plant\"</td></tr>' +
                            '<tr><td>\"Name of Associated Plant\"</td></tr></table></div>');
       //relies += (' ~ Relies on observation fields (Plant that the organism was found on\", \"Nectar Plant\", \"Nectar / Pollen delivering plant\", \"Name of Associated Plant\")');
