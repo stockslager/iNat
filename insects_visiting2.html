@@ -371,7 +371,7 @@ function fresults(xobj) {
                   : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
                {innerText:rec.taxon.preferred_common_name||''},
                {innerText:rec.taxon.name||''},
-               {innerText:rec.threatened||''},
+               {innerText:rec.taxon.conservation_status.status_name||''},
                {innerText:recCount||''},
                {innerHTML:furl('https://stockslager.github.io/iNat/onplants2.html?project_id='+p_project_id+'&insect_id='+rec.taxon.id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&insect_name='+ins_name+'&view='+p_view,ss)},
                {innerText:rec.taxon.rank||''},
