@@ -89,13 +89,19 @@ if( p_view === 'visiting' ){
 } else if( p_view === 'nectaring' ){
    winurlparams.delete('field:Nectar%20Plant');
    winurlparams.append('field:Nectar%20Plant', p_plant_id);
-} else if( p_view === 'pollen' ){
-   winurlparams.delete('&field:Nectar%20%2F%20Pollen%20delivering%20plant=');
-   winurlparams.append('&field:Nectar%20%2F%20Pollen%20delivering%20plant=', p_plant_id);
+} else if( p_view === 'pollinating' ){
+   winurlparams.delete('field:Nectar+/+Pollen+delivering+plant');
+   winurlparams.append('field:Nectar+/+Pollen+delivering+plant', p_plant_id);
+   //winurlparams.delete('field:Nectar%20%2F%20Pollen%20delivering%20plant');
+   //winurlparams.append('field:Nectar%20%2F%20Pollen%20delivering%20plant', p_plant_id);
+} else if( p_view === 'associating' ){
+   winurlparams.delete('field:Name%20of%20Associated%20Plant');
+   winurlparams.append('field:Name%20of%20Associated%20Plant', p_plant_id);
 } else if( p_view === 'all' ){
    winurlparams.delete('field:Nectar%20Plant');
-   winurlparams.delete('&field:Nectar%20%2F%20Pollen%20delivering%20plant=');
+   winurlparams.delete('field:Nectar%20%2F%20Pollen%20delivering%20plant');
    winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
+   winurlparams.delete('field:Name%20of%20Associated%20Plant');
 } else {
    winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
    winurlparams.append('field:Plant%20that%20the%20organism%20was%20found%20on', p_plant_id);
@@ -148,9 +154,13 @@ if( p_view === 'nectaring' ){
    apirefname += p_insect_name;
    apirefname += ' Visiting ';
    apirefname += p_plant_name;
-} else if ( p_view === 'pollen' ){
+} else if ( p_view === 'pollinating' ){
    apirefname += p_insect_name;
    apirefname += ' Pollinating ';
+   apirefname += p_plant_name;
+} else if ( p_view === 'associating' ){
+   apirefname += p_insect_name;
+   apirefname += ' Associated With ';
    apirefname += p_plant_name;
 } else {
    apirefname += 'All the plants visited by a ';
@@ -350,6 +360,7 @@ function fresults(xobj) {
          let foundNectaring = '';
          let foundVisiting = '';
          let foundPollinating = '';
+         let foundAssociated = '';
 
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
@@ -393,7 +404,7 @@ function fresults(xobj) {
                         j=rec.ofvs.length;
                      }
                   }
-               } else if( p_view === 'pollen' ){
+               } else if( p_view === 'pollinating' ){
                   if(rec.ofvs[j].field_id===4935){
                      if( rec.ofvs[j].taxon_id === p_visitor_taxon_id ){
                         // 4935 == Nectar / pollen delivering plant.
@@ -406,7 +417,25 @@ function fresults(xobj) {
                            pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
                            tax_photo = rec.ofvs[j].taxon.default_photo.url;                     
                         }
-                        foundVisiting = 'yes';
+                        foundPollinating = 'yes';
+                        displayCount++;
+                        j=rec.ofvs.length;
+                     }
+                  }
+               } else if( p_view === 'associating' ){
+                  if(rec.ofvs[j].field_id===7807){
+                     if( rec.ofvs[j].taxon_id === p_visitor_taxon_id ){
+                        // 7807 == Name of associated plant.
+                        if( rec.ofvs[j].taxon == null ){
+                           tax_name = rec.ofvs[j].value;
+                           pref_tax_name = rec.ofvs[j].value_ci;
+                           tax_photo = ';o)';
+                        } else {
+                           tax_name = rec.ofvs[j].taxon.name;
+                           pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
+                           tax_photo = rec.ofvs[j].taxon.default_photo.url;                     
+                        }
+                        foundAssociated = 'yes';
                         displayCount++;
                         j=rec.ofvs.length;
                      }
@@ -451,6 +480,30 @@ function fresults(xobj) {
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
                ];            
          } else if( p_view === 'visiting' && foundVisiting === 'yes'){
+               values = [
+                  {innerText:displayCount},
+                  {innerHTML:'<img class="icon" src="'+tax_photo+'" />'},
+                  {innerText:pref_tax_name},
+                  {innerText:tax_name},
+                  {innerText:rec.quality_grade}, 
+                  {innerHTML:'<img class="icon" src="'+((rec.user.icon)?rec.user.icon:' ')+'" />'},
+                  {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
+                  {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
+                  {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
+               ];            
+         } else if( p_view === 'pollinating' && foundPollinating === 'yes'){
+               values = [
+                  {innerText:displayCount},
+                  {innerHTML:'<img class="icon" src="'+tax_photo+'" />'},
+                  {innerText:pref_tax_name},
+                  {innerText:tax_name},
+                  {innerText:rec.quality_grade}, 
+                  {innerHTML:'<img class="icon" src="'+((rec.user.icon)?rec.user.icon:' ')+'" />'},
+                  {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
+                  {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
+                  {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
+               ];            
+         } else if( p_view === 'associating' && foundAssociated === 'yes'){
                values = [
                   {innerText:displayCount},
                   {innerHTML:'<img class="icon" src="'+tax_photo+'" />'},
