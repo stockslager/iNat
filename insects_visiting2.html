@@ -52,11 +52,6 @@
    .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
    .button { background:var(--color-alt); }
    .button_inactive { background:none; color:var(--color-border); }
-
-   #key { width:50%; }
-   #trkey { border-width:0px 0px; border-style:solid; }
-   trkey:nth-child(even) { background:var(--color-base); }
-   trkey:nth-child(odd) { background:var(--color-base); }
    
 </style>
 </head>
@@ -233,52 +228,7 @@ function fresults(xobj) {
 
       faddelem('h2',document.body,{innerText:refn});
 
-      let menu = faddelem('table',document.body,{id:'key'});
-      let menu_body = faddelem('tbody',menu);
-      let menu_row1 = faddelem('tr',menu_body,{id:'trkey'});
-
-      let cell_values =[]
-      cell_values1 = [
-               {innerText:''},
-               {innerText:'Relies on observation fields:'}
-      ];      
-      faddelems('td',menu_row1,cell_values1);
-      let menu_row2 = faddelem('tr',menu_body,{id:'trkey'});
-      let cell_values2 = [];
-      cell_values2 = [
-               {innerText:''},
-               {innerText:'\"Plant that the organism was found on\"'}
-      ];      
-      faddelems('td',menu_row2,cell_values2);
-      let menu_row3 = faddelem('tr',menu_body,{id:'trkey'});
-      let cell_values3 = [];
-      cell_values3 = [
-               {innerText:''},
-               {innerText:'\"Plant that the organism was found on\"'}
-      ];      
-      faddelems('td',menu_row3,cell_values3);
-      let menu_row4 = faddelem('tr',menu_body,{id:'trkey'});
-      let cell_values4 = [];
-      cell_values4 = [
-               {innerText:''},
-               {innerText:'\"Plant that the organism was found on\"'}
-      ];      
-      faddelems('td',menu_row4,cell_values4);
-      let menu_row5 = faddelem('tr',menu_body,{id:'trkey'});
-      let cell_values5 = [];
-      cell_values5 = [
-               {innerText:''},
-               {innerText:'\"Plant that the organism was found on\"'}
-      ];      
-      faddelems('td',menu_row5,cell_values5);
-      
-      let relies = [];
-      relies += (' ~ <table id=\"key\"><tr><td>Relies on observation fields:</td></tr>' +
-                           '<tr><td>\"Plant that the organism was found on\"</td></tr>' +
-                           '<tr><td>\"Nectar Plant\"</td></tr>' +
-                           '<tr><td>\"Nectar / Pollen delivering plant\"</td></tr>' +
-                           '<tr><td>\"Name of Associated Plant\"</td></tr></table></div>');
-      //relies += (' ~ Relies on observation fields (Plant that the organism was found on\", \"Nectar Plant\", \"Nectar / Pollen delivering plant\", \"Name of Associated Plant\")');
+      relies += (' ~ Relies on observation fields (Plant that the organism was found on\", \"Nectar Plant\", \"Nectar / Pollen delivering plant\", \"Name of Associated Plant\")');
       
       if( p_view === 'visiting' ){
          faddelem('p',document.body,{innerHTML:' (visiting, '
