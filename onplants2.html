@@ -89,10 +89,10 @@ if( p_view === 'visiting' ){
 } else if( p_view === 'nectaring' ){
    winurlparams.delete('field:Nectar%20Plant');
    winurlparams.append('field:Nectar%20Plant', p_plant_id);
-} else if( p_view === 'pollen' ){
+} else if( p_view === 'pollinating' ){
    winurlparams.delete('&field:Nectar%20%2F%20Pollen%20delivering%20plant=');
    winurlparams.append('&field:Nectar%20%2F%20Pollen%20delivering%20plant=', p_plant_id);
-} else if( p_view === 'associated' ){
+} else if( p_view === 'associating' ){
    winurlparams.delete('&field:Name%20of%20Associated%20Plant=');
    winurlparams.append('&field:Name%20of%20Associated%20Plant=', p_plant_id);
 } else if( p_view === 'all' ){
@@ -151,11 +151,11 @@ if( p_view === 'nectaring' ){
    apirefname += p_insect_name;
    apirefname += ' Visiting ';
    apirefname += p_plant_name;
-} else if ( p_view === 'pollen' ){
+} else if ( p_view === 'pollinating' ){
    apirefname += p_insect_name;
    apirefname += ' Pollinating ';
    apirefname += p_plant_name;
-} else if ( p_view === 'associated' ){
+} else if ( p_view === 'associating' ){
    apirefname += p_insect_name;
    apirefname += ' Associated With ';
    apirefname += p_plant_name;
@@ -401,7 +401,7 @@ function fresults(xobj) {
                         j=rec.ofvs.length;
                      }
                   }
-               } else if( p_view === 'pollen' ){
+               } else if( p_view === 'pollinating' ){
                   if(rec.ofvs[j].field_id===4935){
                      if( rec.ofvs[j].taxon_id === p_visitor_taxon_id ){
                         // 4935 == Nectar / pollen delivering plant.
@@ -419,7 +419,7 @@ function fresults(xobj) {
                         j=rec.ofvs.length;
                      }
                   }
-               } else if( p_view === 'associated' ){
+               } else if( p_view === 'associating' ){
                   if(rec.ofvs[j].field_id===7807){
                      if( rec.ofvs[j].taxon_id === p_visitor_taxon_id ){
                         // 7807 == Name of associated plant.
@@ -500,7 +500,7 @@ function fresults(xobj) {
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
                ];            
-         } else if( p_view === 'associated' && foundAssociated === 'yes'){
+         } else if( p_view === 'associating' && foundAssociated === 'yes'){
                values = [
                   {innerText:displayCount},
                   {innerHTML:'<img class="icon" src="'+tax_photo+'" />'},
