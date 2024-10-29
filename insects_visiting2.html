@@ -54,16 +54,9 @@
    .button_inactive { background:none; color:var(--color-border); }
 
    #key { width:50%; }
-   table, td, th { border-collapse:collapse; margin:0; padding:0px; }
-   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
-   tbody>tr { border-width:0px 0px; border-style:solid; }
-   tr:nth-child(even) { background:var(--color-base); }
-   tr:nth-child(odd) { background:var(--color-base); }
-   .tar { text-align:right; }
-   a { text-decoration:none; color:var(--color-text-link); }
-   a:hover { background:var(--color-hover); }
-   #nav { margin-left:-8px; position:-webkit-sticky /*Safari*/; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
-   @media print { #nav { display:none; } } 
+   #trkey { border-width:0px 0px; border-style:solid; }
+   trkey:nth-child(even) { background:var(--color-base); }
+   trkey:nth-child(odd) { background:var(--color-base); }
    
 </style>
 </head>
@@ -242,7 +235,7 @@ function fresults(xobj) {
 
       let menu = faddelem('table',document.body,{id:'key'});
       let menu_body = faddelem('tbody',menu);
-      let menu_row1 = faddelem('tr',menu_body);
+      let menu_row1 = faddelem('tr',menu_body,{id:'trkey'});
 
       let cell_values =[]
       cell_values1 = [
@@ -250,28 +243,28 @@ function fresults(xobj) {
                {innerText:'Relies on observation fields:'}
       ];      
       faddelems('td',menu_row1,cell_values1);
-      let menu_row2 = faddelem('tr',menu_body);
+      let menu_row2 = faddelem('tr',menu_body,{id:'trkey'});
       let cell_values2 = [];
       cell_values2 = [
                {innerText:''},
                {innerText:'\"Plant that the organism was found on\"'}
       ];      
       faddelems('td',menu_row2,cell_values2);
-      let menu_row3 = faddelem('tr',menu_body);
+      let menu_row3 = faddelem('tr',menu_body,{id:'trkey'});
       let cell_values3 = [];
       cell_values3 = [
                {innerText:''},
                {innerText:'\"Plant that the organism was found on\"'}
       ];      
       faddelems('td',menu_row3,cell_values3);
-      let menu_row4 = faddelem('tr',menu_body);
+      let menu_row4 = faddelem('tr',menu_body,{id:'trkey'});
       let cell_values4 = [];
       cell_values4 = [
                {innerText:''},
                {innerText:'\"Plant that the organism was found on\"'}
       ];      
       faddelems('td',menu_row4,cell_values4);
-      let menu_row5 = faddelem('tr',menu_body);
+      let menu_row5 = faddelem('tr',menu_body,{id:'trkey'});
       let cell_values5 = [];
       cell_values5 = [
                {innerText:''},
