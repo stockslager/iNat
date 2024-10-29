@@ -227,7 +227,12 @@ function fresults(xobj) {
       faddelem('h2',document.body,{innerText:refn});
 
       let relies = [];
-      relies += (' ~ Relies on observation fields (Plant that the organism was found on\", \"Nectar Plant\", \"Nectar / Pollen delivering plant\", \"Name of Associated Plant\")');
+      relies += (' ~ <div><table style=\"nostyle\"><tr><td>Relies on observation fields:</td></tr>' +
+                           '<tr><td>\"Plant that the organism was found on\"</td></tr>' +
+                           '<tr><td>\"Nectar Plant\"</td></tr>' +
+                           '<tr><td>\"Nectar / Pollen delivering plant\"</td></tr>' +
+                           '<tr><td>\"Name of Associated Plant\"</td></tr></table></div>');
+      //relies += (' ~ Relies on observation fields (Plant that the organism was found on\", \"Nectar Plant\", \"Nectar / Pollen delivering plant\", \"Name of Associated Plant\")');
       
       if( p_view === 'visiting' ){
          faddelem('p',document.body,{innerHTML:' (visiting, '
