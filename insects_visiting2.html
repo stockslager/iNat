@@ -79,10 +79,13 @@ if( p_view === 'visiting' ){
 } else if( p_view === 'nectaring' ){
    winurlparams.delete('field:Nectar%20Plant');
    winurlparams.append('field:Nectar%20Plant', p_plant_id);
-} else if( p_view === 'pollen' ){
+} else if( p_view === 'pollinating' ){
    winurlparams.delete('&field:Nectar%20%2F%20Pollen%20delivering%20plant=');
    winurlparams.append('&field:Nectar%20%2F%20Pollen%20delivering%20plant=', p_plant_id);
-} else {
+} else if( p_view === 'associating' ){
+   winurlparams.delete('&field:Name%20of%20Associated%20Plant=');
+   winurlparams.append('&field:Name%20of%20Associated%20Plant=', p_plant_id);
+}  else {
    winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
    winurlparams.append('field:Plant%20that%20the%20organism%20was%20found%20on', p_plant_id);
 }   
@@ -208,8 +211,11 @@ function fresults(xobj) {
       } else if( p_view === 'nectaring' ){
          refn += 'Nectaring at ';
          refn += p_plant_name;
-      } else if( p_view === 'pollen' ){
+      } else if( p_view === 'pollinating' ){
          refn += 'Pollinating ';
+         refn += p_plant_name;
+      } else if( p_view === 'associating' ){
+         refn += 'Associating With ';
          refn += p_plant_name;
       } else {
          refn += 'Visiting ';
@@ -220,20 +226,38 @@ function fresults(xobj) {
       
       if( p_view === 'visiting' ){
          faddelem('p',document.body,{innerHTML:' (visiting, '
-            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring')
-//            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollen','pollinating')
-            +')'+' ~ Relies on observation fields (\"Plant that the organism was found on\" and "\Nectar Plant\")'
+            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring') + ', '
+            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollinating','pollinating') + ', '
+            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=associating','associating') 
+            +' ~ Relies on observation fields (\"Plant that the organism was found on\" and "\Nectar Plant\")'
             + '<br />'});
-      } else if( p_view === 'pollen' ){
+      } else if( p_view === 'pollinating' ){
          faddelem('p',document.body,{innerHTML:' ('
             +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=visiting','visiting') + ', '
-//            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring') + ', pollinating'
-            +')'+' ~ Relies on observation fields (\"Plant org was found on\", "\Nectar Plant\", etc.)'
+            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring') + ', '
+            +'pollinating, '
+            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=associating','associating') + ')'
+            +' ~ Relies on observation fields (\"Plant org was found on\", "\Nectar Plant\", etc.)'
+            +'<br />'});
+      } else if( p_view === 'nectaring' ){
+         faddelem('p',document.body,{innerHTML:' ('
+            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=visiting','visiting') + ', '
+            +'nectaring, '
+            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollinating','pollinating') + ', '
+            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=associating','associating') + ')'
+            +' ~ Relies on observation fields (\"Plant org was found on\", "\Nectar Plant\", etc.)'
+            +'<br />'});
+      } else if( p_view === 'associating' ){
+         faddelem('p',document.body,{innerHTML:' ('
+            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=visiting','visiting') + ', '
+            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring') + ', '
+            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollinating','pollinating') + ', '
+            +'associating)'
+            +' ~ Relies on observation fields (\"Plant org was found on\", "\Nectar Plant\", etc.)'
             +'<br />'});
       } else {
          faddelem('p',document.body,{innerHTML:' ('
-            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=visiting','visiting') + ', nectaring'
-   //         +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollen','pollinating') 
+            +furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=visiting','nectaring') + ', nectaring'
             +')'+' ~ Relies on observation fields (\"Plant org was found on\", "\Nectar Plant\", etc.)'});
       }
 
@@ -257,7 +281,7 @@ function fresults(xobj) {
             {innerText:'Nectaring Visits'},
             {innerText:'Rank'},
          ];
-      } else if( p_view === 'pollen' ){
+      } else if( p_view === 'pollinating' ){
          labels = [
             {innerText:'#'},
             {innerText:'Photo'},
@@ -265,6 +289,16 @@ function fresults(xobj) {
             {innerText:'Name'},
             {innerText:'Occurrences'},
             {innerText:'Pollinating Visits'},
+            {innerText:'Rank'},     
+         ];
+      } else if( p_view === 'associating' ){
+         labels = [
+            {innerText:'#'},
+            {innerText:'Photo'},
+            {innerText:'Common Name'},
+            {innerText:'Name'},
+            {innerText:'Occurrences'},
+            {innerText:'Associated With'},
             {innerText:'Rank'},     
          ];
       } else {
@@ -304,8 +338,10 @@ function fresults(xobj) {
          let ss = '';
          if( p_view === 'nectaring' ){
             ss += 'Nectaring visits';
-         } else if( p_view === 'pollen' ){
+         } else if( p_view === 'pollinating' ){
             ss += 'Pollinating visits';
+         } else if( p_view === 'associating' ){
+            ss += 'Associating plants';
          } else {
             ss += 'Plants Visited';
          }
@@ -313,32 +349,7 @@ function fresults(xobj) {
          let ins_name = rec.taxon.preferred_common_name || rec.taxon.name || '';         
          let values = [];
 
-         if( p_view != null && p_view === 'nectaring'){
-            values = [
-               {innerText:i+1},
-               (p_options.includes('bigger_image'))
-                  ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
-                  : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-               {innerText:rec.taxon.preferred_common_name||''},
-               {innerText:rec.taxon.name||''},
-               {innerText:recCount||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/onplants2.html?project_id='+p_project_id+'&insect_id='+rec.taxon.id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&insect_name='+ins_name+'&view=nectaring',ss)},
-               {innerText:rec.taxon.rank||''},
-            ];
-         } else if( p_view != null && p_view === 'pollen'){
-            values = [
-               {innerText:i+1},
-               (p_options.includes('bigger_image'))
-                  ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
-                  : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-               {innerText:rec.taxon.preferred_common_name||''},
-               {innerText:rec.taxon.name||''},
-               {innerText:recCount||''},
-               {innerHTML:furl('https://stockslager.github.io/iNat/onplants2.html?project_id='+p_project_id+'&insect_id='+rec.taxon.id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&insect_name='+ins_name+'&view=pollen',ss)},
-               {innerText:rec.taxon.rank||''},
-            ];
-         } else {
-            values = [
+         values = [
                {innerText:i+1},
                (p_options.includes('bigger_image'))
                   ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
@@ -349,7 +360,7 @@ function fresults(xobj) {
                {innerHTML:furl('https://stockslager.github.io/iNat/onplants2.html?project_id='+p_project_id+'&insect_id='+rec.taxon.id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&insect_name='+ins_name+'&view='+p_view,ss)},
                {innerText:rec.taxon.rank||''},
             ];
-         }
+         
          if (p_options.includes('ancestry')) { values.splice(7,0,{innerHTML:rec.taxon.ancestor_ids.map(function(e){return furl('http://www.inaturalist.org/taxa/'+e,e)}).join('/')||''}); };
          faddelems('td',brow,values);
       };
