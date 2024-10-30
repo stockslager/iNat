@@ -154,7 +154,7 @@ function fresults(xobj) {
          let target_url = '';     
          let brow = faddelem('tr',tbody);
          let rec = results[i];
-         let truncatedText = truncate((rec.title||'no title'), 50);
+         let truncatedText = truncate((rec.description||''), 50);
          
          if( rec.id === 220623 ){
             target_url += 'https://stockslager.github.io/iNat/cnc_plants_visited.html';
@@ -165,8 +165,8 @@ function fresults(xobj) {
          let values = [
             //{innerHTML:furl('https://www.inaturalist.org/projects/'+rec.slug,rec.slug)},
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
-            {innerHTML:furl(target_url, truncatedText)},
-            {innerText:rec.description||''},
+            {innerHTML:furl(target_url, (rec.title||'no title'))},
+            {innerText:truncatedText},
             //{innerText:rec.terms||''},
          ];
          faddelems('td',brow,values);
