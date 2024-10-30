@@ -146,15 +146,16 @@ function fresults(xobj) {
       
       let tbody = faddelem('tbody',table);
       for (let i=0; i<results.length; i++) {
-         let target_url = '';
+         let target_url = '';     
+         let brow = faddelem('tr',tbody);
+         let rec = results[i];
          
          if( rec.id === '220623' ){
             target_url += 'https://stockslager.github.io/iNat/cnc_plants_visited.html';
          } else {
             target_url += 'https://stockslager.github.io/iNat/rewild_plants_visited.html?project_id='+rec.id;
-         }        
-         let brow = faddelem('tr',tbody);
-         let rec = results[i];
+         } 
+         
          let values = [
             {innerText:i+1},
             //{innerHTML:furl('https://www.inaturalist.org/projects/'+rec.slug,rec.slug)},
