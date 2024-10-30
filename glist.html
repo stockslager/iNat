@@ -74,8 +74,15 @@ winurlparams.append('iconic_taxa','Plantae');
 let rw_view = '';
 let rw_g_list = winurlparams.get('g_list') || '';
 let rw_s_list = winurlparams.get('s_list') || '';
-let rw_project_id = '152539';
+let rw_project_id = '';
 let rw_user_id = '';
+
+// if project id is passed in, save it to pass to the next table
+if( winurlparams.get('project_id') != null && winurlparams.get('project_id') != '' ) {
+   rw_project_id += winurlparams.get('project_id');
+} else {
+   rw_project_id += '152539';  // default to rewild if null.
+}
 
 // if &view was passed in, pass it along for the display on the next table.
 if( winurlparams.get('view') !== null ){
@@ -256,7 +263,7 @@ function fresults(xobj) {
 
       if( winurlparams.get('lrank') === 'genus' ) {
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/glist.html?lrank=species&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to species')
+            +furl('https://stockslager.github.io/iNat/glist.html?lrank=species&project_id='+rw_project_id+'&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to species')
             +')'+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
@@ -264,7 +271,7 @@ function fresults(xobj) {
          });
       } else {
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/glist.html?lrank=genus&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to genus')
+            +furl('https://stockslager.github.io/iNat/glist.html?lrank=genus&project_id='+rw_project_id+'&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to genus')
             +')'+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
