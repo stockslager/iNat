@@ -157,7 +157,7 @@ function fresults(xobj) {
          let values = [
             //{innerHTML:furl('https://www.inaturalist.org/projects/'+rec.slug,rec.slug)},
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
-            {innerHTML:rec.title||'no title', target_url},
+            {innerHTML:furl(target_url, rec.title||'no title')},
             {innerText:rec.description||''},
             //{innerText:rec.terms||''},
          ];
