@@ -135,16 +135,11 @@ function fresults(xobj) {
       let hrow = faddelem('tr',thead);
       let labels = [
          {innerText:'#'},
-         {innerText:'ID'},
          //{innerText:'Slug'},
          {innerText:'Icon'},
          {innerText:'Title'},
          {innerText:'Type'},
          {innerText:'Description'},
-         {innerText:'Created'},
-         {innerText:'Updated'},
-         {innerText:'Latitude'},
-         {innerText:'Longitude'},
          //{innerText:'Terms'},
       ];
       faddelems('th',hrow,labels);
@@ -155,16 +150,11 @@ function fresults(xobj) {
          let rec = results[i];
          let values = [
             {innerText:i+1},
-            {innerHTML:furl('https://www.inaturalist.org/projects/'+rec.id,rec.id)},
             //{innerHTML:furl('https://www.inaturalist.org/projects/'+rec.slug,rec.slug)},
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
             {innerHTML:furl('https://www.inaturalist.org/projects/'+rec.slug,rec.title)},
             {innerText:rec.project_type||''},
             {innerText:rec.description||''},
-            {innerText:fdate(rec.created_at)||''},
-            {innerText:fdate(rec.updated_at)||''},
-            {innerText:rec.latitude?fround(rec.latitude,4):''},
-            {innerText:rec.longitude?fround(rec.longitude,4):''},
             //{innerText:rec.terms||''},
          ];
          faddelems('td',brow,values);
