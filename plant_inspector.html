@@ -63,6 +63,8 @@ winurlparams.delete('id');
 winurlparams.append('id', '152539,130249,220623');
 //let p_per_page = winurlparams.get('per_page') || 200;
 //let p_page = winurlparams.get('page') || 1;
+let g_list = winurlparams.get('g_list') || '';
+let s_list = winurlparams.get('s_list') || '';
 
 function fdate(str,dateonly=false) {
    str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
@@ -155,11 +157,16 @@ function fresults(xobj) {
          let brow = faddelem('tr',tbody);
          let rec = results[i];
          let truncatedText = truncate((rec.description||''), 500);
+         let lists = '';
+
+         if( g_list != '' && s_list != '' ){
+            lists += '&g_list='+g_list+'&s_list='+s_list;
+         }
          
          if( rec.id === 220623 ){
             target_url += 'https://stockslager.github.io/iNat/cnc_plants_visited.html';
          } else {
-            target_url += 'https://stockslager.github.io/iNat/glist.html?project_id='+rec.id;
+            target_url += 'https://stockslager.github.io/iNat/glist.html?project_id='+rec.id+lists;
          } 
          
          let values = [
