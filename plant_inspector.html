@@ -134,10 +134,10 @@ function fresults(xobj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
       let labels = [
-         {innerText:'#'},
          //{innerText:'Slug'},
          {innerText:'Icon'},
          {innerText:'Title'},
+         {innerText:''},
          {innerText:'Description'},
          //{innerText:'Terms'},
       ];
@@ -156,10 +156,10 @@ function fresults(xobj) {
          } 
          
          let values = [
-            {innerText:i+1},
             //{innerHTML:furl('https://www.inaturalist.org/projects/'+rec.slug,rec.slug)},
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
-            {innerHTML:furl(target_url, rec.title)},
+            {innerHTML:rec.title||''},
+            {innerHTML:furl(target_url, Plant List)},
             {innerText:rec.description||''},
             //{innerText:rec.terms||''},
          ];
