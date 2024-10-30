@@ -143,9 +143,16 @@ function fresults(xobj) {
          //{innerText:'Terms'},
       ];
       faddelems('th',hrow,labels);
-
+      
       let tbody = faddelem('tbody',table);
       for (let i=0; i<results.length; i++) {
+         let target_url = '';
+         
+         if( rec.id === '220623' ){
+            target_url += 'https://stockslager.github.io/iNat/cnc_plants_visited.html';
+         } else {
+            target_url += 'https://stockslager.github.io/iNat/rewild_plants_visited.html?project_id='+rec.id;
+         }        
          let brow = faddelem('tr',tbody);
          let rec = results[i];
          let values = [
@@ -172,11 +179,11 @@ function fresults(xobj) {
 let apibase = 'https://api.inaturalist.org/v1/projects';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
-let apirefname = 'iNaturalist Projects';
+let apirefname = 'Cincinnati Plant Inspector';
 let apiref = furl(apirefurl,apirefname);
 faddelem('h1',document.body,{innerText:apirefname});
 
-faddelem('p',document.body,{innerHTML:'This is the base query: '+furl(famp(apiurl))+'. (This page will accept most parameters from the '+apiref+' API endpoint.)'});
+faddelem('p',document.body,{innerHTML:'To see what\'s been been visiting the plants at each location.'});
 
 fetch(apiurl)
    .then((response) => {
