@@ -35,7 +35,7 @@
       }
    }
    #main { width:100%; }
-   table, td, th { border-collapse:collapse; margin:0; padding:4px; }
+   table, td, th { border-collapse:collapse; margin:0; padding:30px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
    tr:nth-child(even) { background:var(--color-base); }
@@ -134,11 +134,10 @@ function fresults(xobj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
       let labels = [
-         {innerText:'#   '},
+         {innerText:'#'},
          //{innerText:'Slug'},
-         {innerText:'Icon   '},
+         {innerText:'Icon'},
          {innerText:'Title'},
-         {innerText:'Type          '},
          {innerText:'Description'},
          //{innerText:'Terms'},
       ];
@@ -161,7 +160,6 @@ function fresults(xobj) {
             //{innerHTML:furl('https://www.inaturalist.org/projects/'+rec.slug,rec.slug)},
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
             {innerHTML:furl(target_url, rec.title)},
-            {innerText:rec.project_type||''},
             {innerText:rec.description||''},
             //{innerText:rec.terms||''},
          ];
