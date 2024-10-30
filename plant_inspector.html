@@ -150,7 +150,7 @@ function fresults(xobj) {
          let brow = faddelem('tr',tbody);
          let rec = results[i];
          
-         if( rec.id === '220623' ){
+         if( rec.id === 220623 ){
             target_url += 'https://stockslager.github.io/iNat/cnc_plants_visited.html';
          } else {
             target_url += 'https://stockslager.github.io/iNat/rewild_plants_visited.html?project_id='+rec.id;
@@ -160,7 +160,7 @@ function fresults(xobj) {
             {innerText:i+1},
             //{innerHTML:furl('https://www.inaturalist.org/projects/'+rec.slug,rec.slug)},
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
-            {innerHTML:furl(target_url)},
+            {innerHTML:furl(target_url, rec.project_title)},
             {innerText:rec.project_type||''},
             {innerText:rec.description||''},
             //{innerText:rec.terms||''},
