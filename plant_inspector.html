@@ -60,7 +60,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 winurlparams.delete('id');
-winurlparams.append('id', '220623,152539');
+winurlparams.append('id', '220623,152539,86532');
 //let p_per_page = winurlparams.get('per_page') || 200;
 //let p_page = winurlparams.get('page') || 1;
 
@@ -180,7 +180,7 @@ let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
 let apirefname = 'What\'s Visiting?';
 let apiref = furl(apirefurl,apirefname);
-faddelem('h1',document.body,{innerText:apirefname});
+faddelem('h2',document.body,{innerText:apirefname});
 
 faddelem('p',document.body,{innerHTML:'To see what\'s visiting each plant in each garden.'});
 
