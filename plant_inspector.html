@@ -114,6 +114,13 @@ function ffetch(url) {
    })
    .catch((err) => { console.error(err); });
 };
+function truncate(str, maxLength) {
+  if (str.length <= maxLength) {
+    return str;
+  } else {
+    return str.substring(0, maxLength) + "...";
+  }
+};
 function fresults(xobj) {
    //faddelem('p',document.body,{innerHTML:furl(famp(apiurl))});
    let results = xobj.results;
@@ -147,6 +154,7 @@ function fresults(xobj) {
          let target_url = '';     
          let brow = faddelem('tr',tbody);
          let rec = results[i];
+         let truncatedText = truncate((rec.title||'no title'), 50);
          
          if( rec.id === 220623 ){
             target_url += 'https://stockslager.github.io/iNat/cnc_plants_visited.html';
@@ -157,7 +165,7 @@ function fresults(xobj) {
          let values = [
             //{innerHTML:furl('https://www.inaturalist.org/projects/'+rec.slug,rec.slug)},
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
-            {innerHTML:furl(target_url, rec.title||'no title')},
+            {innerHTML:furl(target_url, truncatedText)},
             {innerText:rec.description||''},
             //{innerText:rec.terms||''},
          ];
