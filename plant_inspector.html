@@ -125,14 +125,15 @@ function truncate(str, maxLength) {
      return (str.substring(0, maxLength) + '...');
   }
 };
-function setupLists(recId, list){
-   if( recId === '152539' ) {          // rewild
+function setupLists(str){
+   let list = '';
+   if( str === '152539' ) {          // rewild
       list += '&g_list=4484313';
       list += '&s_list=4484172';
-   } else if ( recId === '130249' ){   // nku refs
+   } else if ( str === '130249' ){   // nku refs
       list += '&g_list=4484894';
       list += '&s_list=4484895';
-   } else if ( recId === '221779' ){   // glenwood gardens
+   } else if ( str === '221779' ){   // glenwood gardens
       list += '&g_list=4484950';
       list += '&s_list=4484949';
    }
@@ -177,7 +178,7 @@ function fresults(xobj) {
          let truncatedText = truncate(longText, 500);
          let lists = '';
 
-         lists += setupLists(rec.id,lists);
+         lists += setupLists(rec.id);
 
          if( view != '' ){
             lists += '&view='+view;
