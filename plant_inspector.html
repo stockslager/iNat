@@ -119,8 +119,6 @@ function ffetch(url) {
    .catch((err) => { console.error(err); });
 };
 function truncate(str, maxLength) {
-  
-   
   if (str.length <= maxLength) {
     return str;
   } else {
@@ -177,7 +175,7 @@ function fresults(xobj) {
             //{innerHTML:furl('https://www.inaturalist.org/projects/'+rec.slug,rec.slug)},
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
             {innerHTML:furl(target_url, (rec.title||'no title'))},
-            {innerText:truncatedText},
+            {innerHTML:truncatedText},
             //{innerText:rec.terms||''},
          ];
          faddelems('td',brow,values);
