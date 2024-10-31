@@ -36,7 +36,7 @@
    }
    .hide { display: none; }
    .myDIV:hover + .hide { display: block; }   
-   #main { width:90%; }
+   #main { width:100%; }
    table, td, th { border-collapse:collapse; margin:0px; padding:5px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
@@ -122,7 +122,7 @@ function truncate(str, maxLength) {
   if (str.length <= maxLength) {
     return str;
   } else {
-     return ('<div class\'myDiv\'>' + str.substring(0, maxLength) + '...' + '<div class=\'hide\'>' + str + '</div>');
+     return ('<div class\'myDiv\'>' + str.substring(0, maxLength) + '...' + '</div><div class=\'hide\'>' + str + '</div>');
   }
 };
 function fresults(xobj) {
