@@ -50,8 +50,8 @@
    .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
    .button { background:var(--color-alt); }
    .button_inactive { background:none; color:var(--color-border); }
-   .hide { display: none; }
-   .myDIV:hover + .hide { display: block; } 
+   .hideLongDesc { display: none; }
+   .showLongDesc:hover + .hide { display: block; } 
 </style>
 </head>
 
@@ -176,7 +176,7 @@ function fresults(xobj) {
             //{innerHTML:furl('https://www.inaturalist.org/projects/'+rec.slug,rec.slug)},
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
             {innerHTML:furl(target_url, (rec.title||'no title'))},
-            {innerHTML:'<div class="myDiv">' + truncatedText + '</div><div class="hide">' + longText + '</div>'},
+            {innerHTML:'<div class="showLongDesc">' + truncatedText + '</div><div class="hideLongDesc">' + longText + '</div>'},
             //{innerText:rec.terms||''},
          ];
          faddelems('td',brow,values);
