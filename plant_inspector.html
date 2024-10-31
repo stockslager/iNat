@@ -66,6 +66,8 @@ winurlparams.append('id', '152539,130249,220623');
 //let p_page = winurlparams.get('page') || 1;
 let g_list = winurlparams.get('g_list') || '';
 let s_list = winurlparams.get('s_list') || '';
+let user_id = winurlparams.get('user_id') || '';
+let view = winurlparams.get('view') || '';
 
 function fdate(str,dateonly=false) {
    str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
@@ -163,6 +165,14 @@ function fresults(xobj) {
 
          if( g_list != '' && s_list != '' ){
             lists += '&g_list='+g_list+'&s_list='+s_list;
+         }
+
+         if( view != '' ){
+            lists += '&view='+view;
+         }
+
+         if( user_id != '' ){
+            lists += '&user_id='+user_id;
          }
          
          if( rec.id === 220623 ){
