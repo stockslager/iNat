@@ -127,17 +127,23 @@ function truncate(str, maxLength) {
 };
 function setupLists(str){
    let list = '';
-   if( str === '152539' ) {          // rewild
+   if( str === 152539 ) {          // rewild
       list += '&g_list=4484313';
       list += '&s_list=4484172';
-   } else if ( str === '130249' ){   // nku refs
+   } else if ( str === 130249 ){   // nku refs
       list += '&g_list=4484894';
       list += '&s_list=4484895';
    } else if ( str === 221779 ){   // glenwood gardens
+      if( view === '' ){
+         list += '&list=nectaring';
+      }
       list += '&g_list=4484950';
       list += '&s_list=4484949';
    }
 
+   if( view != '' ){
+      list += '&view='+view;
+   }
    // if it falls through it returns an empty list for cnc poll garden.
    return list;
 };
@@ -179,10 +185,6 @@ function fresults(xobj) {
          let lists = '';
 
          lists += setupLists(rec.id);
-
-         if( view != '' ){
-            lists += '&view='+view;
-         }
          
          if( rec.id === 220623 ){
             target_url += 'https://stockslager.github.io/iNat/cnc_plants_visited.html';
