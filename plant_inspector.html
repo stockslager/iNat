@@ -61,13 +61,13 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 winurlparams.delete('id');
-winurlparams.append('id', '152539,130249,220623');
+winurlparams.append('id', '152539,130249,220623,221779');
 //let p_per_page = winurlparams.get('per_page') || 200;
 //let p_page = winurlparams.get('page') || 1;
 let g_list = winurlparams.get('g_list') || '';
 let s_list = winurlparams.get('s_list') || '';
 let view = winurlparams.get('view') || '';
-
+   
 function fdate(str,dateonly=false) {
    str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
    if (dateonly) { str = str.split(' ')[0]; }
@@ -125,6 +125,21 @@ function truncate(str, maxLength) {
      return (str.substring(0, maxLength) + '...');
   }
 };
+function setupLists(recId, list){
+   if( recId === '152539' ) {          // rewild
+      list += '&g_list=4484313';
+      list += '&s_list=4484172';
+   } else if ( recId === '130249' ){   // nku refs
+      list += '&g_list=4484894';
+      list += '&s_list=4484895';
+   } else if ( recId === '221779' ){   // glenwood gardens
+      list += '&g_list=4484950';
+      list += '&s_list=4484949';
+   }
+
+   // if it falls through it returns an empty list for cnc poll garden.
+   return list;
+};
 function fresults(xobj) {
    //faddelem('p',document.body,{innerHTML:furl(famp(apiurl))});
    let results = xobj.results;
@@ -162,9 +177,7 @@ function fresults(xobj) {
          let truncatedText = truncate(longText, 500);
          let lists = '';
 
-         if( g_list != '' && s_list != '' ){
-            lists += '&g_list='+g_list+'&s_list='+s_list;
-         }
+         setupLists(rec.id,lists);
 
          if( view != '' ){
             lists += '&view='+view;
