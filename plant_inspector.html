@@ -68,23 +68,7 @@ let g_list = winurlparams.get('g_list') || '';
 let s_list = winurlparams.get('s_list') || '';
 let view = winurlparams.get('view') || '';
    
-function fdate(str,dateonly=false) {
-   str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
-   if (dateonly) { str = str.split(' ')[0]; }
-   else {
-      str = str.replace(/([+-]\d{2}\:?\d{2})/,' ($1)'); //puts parenthesis around time zone offset
-      str = str.replace(/z/i,' (+00:00)'); //replaces Z (case insensitve) with UTC
-      str = str.replace('+00:00','±00:00');
-   };
-   return str;
-};
-function fround(num,places) {
-   let n = num*1;
-   return n.toFixed(places); 
-};
 function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
-function famp(str) { return str.replace(/&/g,'&amp;'); };
-function fcomnum(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') };
 function faddelem(etype,eparent=null,eattributes={}) {
    let eobj = document.createElement(etype);
    for (let [key,value] of Object.entries(eattributes)) {
@@ -151,7 +135,6 @@ function setupLists(str){
    return list;
 };
 function fresults(xobj) {
-   //faddelem('p',document.body,{innerHTML:furl(famp(apiurl))});
    let results = xobj.results;
    if (results) {
       let total_results = xobj.total_results;
@@ -197,7 +180,6 @@ function fresults(xobj) {
          } 
          
          let values = [
-            //{innerHTML:furl('https://www.inaturalist.org/projects/'+rec.slug,rec.slug)},
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
             {innerHTML:furl(target_url, (rec.title||'no title'))},
             {innerText:truncatedText},
