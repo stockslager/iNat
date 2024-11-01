@@ -740,17 +740,17 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-var taxon_id = winurlparams.get('taxon_id');
+var taxon_id = '47158';  // insecta
 taxon_id = (taxon_id===null?null:taxon_id.split(',')[0]);
-var place_id = '3059';
-var centerlat = winurlparams.get('centerlat');
-var centerlng = winurlparams.get('centerlng');
-var defaultzoom = winurlparams.get('defaultzoom');
+var place_id = '3059';  // hamilton county
+var centerlat = '39.103119';
+var centerlng = '-84.512016');
+var defaultzoom = '9';
 var showtaxonplace = winurlparams.get('showtaxonplace') || 'false';
 var showtaxonrange = winurlparams.get('showtaxonrange') || 'false';
 var showexpectednearby = winurlparams.get('showexpectednearby') || 'false';
 var showplace = winurlparams.get('showplace') || 'false';
-var view = winurlparams.get('view') || 'default';
+var view = 'heatmap';
 var compexclparam = winurlparams.get('compare_exclude_param');
 var thresholded = winurlparams.get('thresholded') || 'true'; // even though the default in the API is false, set the default to true, since we're going to usually want to see Expected Nearby rather than Unthresholded
 
@@ -1254,8 +1254,8 @@ else {
    .then((bbox) => {
       // create map, and set default center coordinates, zoom level, and layers
       mymap = L.map('mapid', {
-         center: [centerlat||39.103119,centerlng||-84.512016], // default to lat 0, long 0
-         zoom: defaultzoom??9, // iNat defaults to zoom level 2
+         center: [centerlat||0,centerlng||0], // default to lat 0, long 0
+         zoom: defaultzoom??2, // iNat defaults to zoom level 2
          layers: defaultlayers,
          doubleClickZoom: false
       });
