@@ -101,13 +101,13 @@ if( winurlparams.get('view') !== null ){
 // if &user_id was passed in, pass it along for the three displays.
 // user id should not be passed to this api since we want see all the plants in the user's custom list.
 // passing in a user_id implies that they've also passed in a custom list.
-/*if( winurlparams.get('user_id') !== null ){
+if( winurlparams.get('user_id') !== null ){
    window.sessionStorage.removeItem('user_id');
    window.sessionStorage.setItem('user_id', winurlparams.get('user_id'));
    winurlparams.delete('user_id');
 } else {
    winurlparams.delete('user_id');
-}*/
+}
 
 // set rw_g_list (genera list) and rw_s_list (species list) for re-wild...
 if( winurlparams.get('g_list') !== null && winurlparams.get('s_list') !== null ){
@@ -364,7 +364,7 @@ let apiref = furl(apirefurl,apirefname);
 
 
 
-if (rw_user_id != '' && (rw_g_list == '' || rw_s_list == '') ) {
+if (window.sessionStorage.getItem('user_id') !== '' && (rw_g_list == '' || rw_s_list == '') ) {
    let instructions = [
       {innerHTML:'A custom species and genera list needs to be passed in when <b>&user_id</b> is specified.  Please add url parameters (<b>&g_list</b> and <b>&s_list</b>) for your custom genera and species lists.'},
    ];
