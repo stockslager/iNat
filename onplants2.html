@@ -81,16 +81,6 @@ winurlparams.append('per_page','200');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa');
 
-// delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
-// the creation of local projects / places for restoration sites  and/or pollinator gardens.
-winurlparams.delete('lat');
-winurlparams.delete('lng');
-winurlparams.delete('radius');
-winurlparams.delete('nelng');
-winurlparams.delete('nelat');
-winurlparams.delete('swlng');
-winurlparams.delete('swlat');
-   
 let p_view = winurlparams.get('view') || 'visiting';
 
 if( p_view === 'visiting' ){
@@ -303,7 +293,7 @@ function fresults(xobj) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' ('
-         +furl('https://stockslager.github.io/iNat/onplants2.html?project_id='+p_project_id+'&insect_id='+p_taxon_id+'&plant_id='+p_visitor_taxon_id+'&plant_name='+p_plant_name+'&insect_name='+p_insect_name+'&view=all','show all')
+         +furl('https://stockslager.github.io/iNat/rewild_insects_on_plants.html?project_id='+p_project_id+'&insect_id='+p_taxon_id+'&plant_id='+p_visitor_taxon_id+'&plant_name='+p_plant_name+'&insect_name='+p_insect_name+'&view=all','show all')
          +')'+'<br />'
          +'per page: '+fcomnum(per_page)+'<br />'
          +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});   
@@ -319,8 +309,7 @@ function fresults(xobj) {
          {innerText:'Grade'},
          {innerText:'User Photo'},
          {innerText:'User Login'},
-         {innerText:'Obs Photo'},
-         {innerHTML:'Revisit'},
+         {innerText:'Observation Photo'},
          {innerText:'Observation ID'},
       ];
       if (p_options.includes('idextra')) {
@@ -488,7 +477,6 @@ function fresults(xobj) {
                   {innerHTML:'<img class="icon" src="'+((rec.user.icon)?rec.user.icon:' ')+'" />'},
                   {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
-                  {innerHTML:furl('https://www.inaturalist.org/observations/identify?quality_grade=needs_id%2Cresearch%2Ccasual&id='+rec.id,'Revisit?')},              
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
                ];            
          } else if( p_view === 'visiting' && foundVisiting === 'yes'){
@@ -501,7 +489,6 @@ function fresults(xobj) {
                   {innerHTML:'<img class="icon" src="'+((rec.user.icon)?rec.user.icon:' ')+'" />'},
                   {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
-                  {innerHTML:furl('https://www.inaturalist.org/observations/identify?quality_grade=needs_id%2Cresearch%2Ccasual&id='+rec.id,'Revisit?')},              
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
                ];            
          } else if( p_view === 'pollinating' && foundPollinating === 'yes'){
@@ -514,7 +501,6 @@ function fresults(xobj) {
                   {innerHTML:'<img class="icon" src="'+((rec.user.icon)?rec.user.icon:' ')+'" />'},
                   {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
-                  {innerHTML:furl('https://www.inaturalist.org/observations/identify?quality_grade=needs_id%2Cresearch%2Ccasual&id='+rec.id,'Revisit?')},              
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
                ];            
          } else if( p_view === 'associating' && foundAssociated === 'yes'){
@@ -527,7 +513,6 @@ function fresults(xobj) {
                   {innerHTML:'<img class="icon" src="'+((rec.user.icon)?rec.user.icon:' ')+'" />'},
                   {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
-                  {innerHTML:furl('https://www.inaturalist.org/observations/identify?quality_grade=needs_id%2Cresearch%2Ccasual&id='+rec.id,'Revisit?')},              
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
                ];            
          } else if( p_view === 'all' ){
@@ -540,7 +525,6 @@ function fresults(xobj) {
                   {innerHTML:'<img class="icon" src="'+((rec.user.icon)?rec.user.icon:' ')+'" />'},
                   {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
-                  {innerHTML:furl('https://www.inaturalist.org/observations/identify?quality_grade=needs_id%2Cresearch%2Ccasual&id='+rec.id,'Revisit?')},              
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
                ];        
          }
