@@ -68,6 +68,11 @@ winurlparams.append('id', '152539,130249,220623,221779');
 // default the place to hamilton county and store in the session for 
 // use by the tables.
 window.sessionStorage.setItem('place_id', '3059');   // hamilton county, oh
+
+// if userId is passed in, set it in the session for use filtering on other tables.
+// passing in a userId *might* cause filtration issues on future tables but the 
+// assumption is they can pass in custom g_list and s_list along with userId.
+window.sessionStorage.setItem('user_id', winurlparams.get('user_id') || '');
    
 //let p_per_page = winurlparams.get('per_page') || 200;
 //let p_page = winurlparams.get('page') || 1;
