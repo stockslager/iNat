@@ -70,12 +70,6 @@ winurlparams.append('per_page','100');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Plantae'); 
 
-// set rw_win_options defaults for re-wild...
-let rw_view = '';
-let rw_g_list = winurlparams.get('g_list') || '';
-let rw_s_list = winurlparams.get('s_list') || '';
-let rw_project_id = '';
-
 // delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
 // the creation of local projects / places for restoration sites  and/or pollinator gardens.
 winurlparams.delete('lat');
@@ -85,6 +79,14 @@ winurlparams.delete('nelng');
 winurlparams.delete('nelat');
 winurlparams.delete('swlng');
 winurlparams.delete('swlat');
+   
+// set rw_win_options defaults for re-wild...
+let rw_view = '';
+let rw_g_list = winurlparams.get('g_list') || '';
+let rw_s_list = winurlparams.get('s_list') || '';
+let rw_project_id = '';
+let rw_user_id = '';
+let rw_project_title = winurlparams.get('project_title') || '';
 
 // if project id is passed in, save it to pass to the next table
 if( winurlparams.get('project_id') != null && winurlparams.get('project_id') != '' ) {
@@ -99,15 +101,14 @@ if( winurlparams.get('view') !== null ){
 } 
 
 // if &user_id was passed in, pass it along for the three displays.
-// user id should not be passed to this api since we want see all the plants in the user's custom list.
+// user id should not be passed to this api since we want see plants all the plants in the user's custom list.
 // passing in a user_id implies that they've also passed in a custom list.
-/*if( winurlparams.get('user_id') !== null ){
-   window.sessionStorage.removeItem('user_id');
-   window.sessionStorage.setItem('user_id', winurlparams.get('user_id'));
+if( winurlparams.get('user_id') !== null ){
+   rw_user_id += winurlparams.get('user_id');
    winurlparams.delete('user_id');
 } else {
    winurlparams.delete('user_id');
-}*/
+}
 
 // set rw_g_list (genera list) and rw_s_list (species list) for re-wild...
 if( winurlparams.get('g_list') !== null && winurlparams.get('s_list') !== null ){
@@ -145,7 +146,7 @@ winurlparams.delete('options');
 winurlparams.delete('s_list');
 winurlparams.delete('g_list');
 winurlparams.delete('view');
-winurlparams.delete('project_id');  // plant only needs to be on the list and in hamilton county doesn't need to be in prj.
+winurlparams.delete('project_id');
 
 function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
 function famp(str) { return str.replace(/&/g,'&amp;'); };
@@ -262,10 +263,10 @@ function fresults(xobj) {
          toggle_args += '&view=' + rw_view;
       }
 
- /*     if( window.sessionStorage.getItem('user_id') !== null && windowSessionStorage.getItem('user_id') !== '' ){
-         args += '&user_id=' + window.sessionStorage.getItem('user_id');
-         toggle_args += '&user_id=' + window.sessionStorage.getItem('user_id');
-      }*/
+      if( rw_user_id != ''){
+         args += '&user_id=' + rw_user_id;
+         toggle_args += '&user_id=' + rw_user_id;
+      }
       
       if( rw_g_list != '' && rw_s_list != '' ){
          toggle_args += '&g_list='+rw_g_list+'&s_list='+rw_s_list;
@@ -273,7 +274,7 @@ function fresults(xobj) {
 
       if( winurlparams.get('lrank') === 'genus' ) {
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/glist.html?lrank=species&project_id='+rw_project_id+'&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to species')
+            +furl('https://stockslager.github.io/iNat/rewild_plants_visited.html?lrank=species&project_id='+rw_project_id+'&project_title='+rw_project_title+'&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to species')
             +')'+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
@@ -281,7 +282,7 @@ function fresults(xobj) {
          });
       } else {
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/glist.html?lrank=genus&project_id='+rw_project_id+'&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to genus')
+            +furl('https://stockslager.github.io/iNat/rewild_plants_visited.html?lrank=genus&project_id='+rw_project_id+'&project_title='+rw_project_title+'&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to genus')
             +')'+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
@@ -328,7 +329,7 @@ function fresults(xobj) {
                : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
                   {innerText:rec.taxon.name||''},
                   {innerText:rec.taxon.preferred_common_name||''},
-                  {innerHTML:furl('https://stockslager.github.io/iNat/insects_visiting2.html?project_id='+rw_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Visiting Organisms...')},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+rw_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Visiting Organisms...')},
                   {innerText:rec.taxon.rank||''},
                   {innerText:rec.taxon.rank_level||''},
          ];         
@@ -362,7 +363,9 @@ if( winurlparams.get('project_title') === '' || winurlparams.get('project_title'
    
 let apiref = furl(apirefurl,apirefname);
 
-//if (window.sessionStorage.getItem('user_id') !== '' && (rw_g_list == '' || rw_s_list == '') ) {
+
+
+if (rw_user_id != '' && (rw_g_list == '' || rw_s_list == '') ) {
    let instructions = [
       {innerHTML:'A custom species and genera list needs to be passed in when <b>&user_id</b> is specified.  Please add url parameters (<b>&g_list</b> and <b>&s_list</b>) for your custom genera and species lists.'},
    ];
