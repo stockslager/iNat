@@ -281,52 +281,28 @@ function fresults(xobj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
       let labels = [];
-      
+      let viewColumn = '';
+
       if( p_view === 'nectaring' ){
-         labels = [
-            {innerText:'#'},
-            {innerText:'Photo'},
-            {innerText:'Common Name'},
-            {innerText:'Name'},
-            {innerText:'Threatened'},
-            {innerText:'Occurrences'},
-            {innerText:'Nectaring Visits'},
-            {innerText:'Rank'},
-         ];
+         viewColumn += 'Nectaring Visits';
       } else if( p_view === 'pollinating' ){
-         labels = [
-            {innerText:'#'},
-            {innerText:'Photo'},
-            {innerText:'Common Name'},
-            {innerText:'Name'},
-            {innerText:'Threatened'},
-            {innerText:'Occurrences'},
-            {innerText:'Pollinating Visits'},
-            {innerText:'Rank'},     
-         ];
+         viewColumn += 'Pollinating Visits';
       } else if( p_view === 'associating' ){
-         labels = [
-            {innerText:'#'},
-            {innerText:'Photo'},
-            {innerText:'Common Name'},
-            {innerText:'Name'},
-            {innerText:'Threatened'},
-            {innerText:'Occurrences'},
-            {innerText:'Associated With'},
-            {innerText:'Rank'},     
-         ];
+         viewColumn += 'Associated With'; 
       } else {
-         labels = [
-            {innerText:'#'},
-            {innerText:'Photo'},
-            {innerText:'Common Name'},
-            {innerText:'Name'},
-            {innerText:'Threatened'},
-            {innerText:'Occurrences'},
-            {innerText:'Plants Visited'},
-            {innerText:'Rank'},
-         ];
+         viewColumn += 'Plants Visited';
       }
+      
+      labels = [
+         {innerText:'#'},
+         {innerText:'Photo'},
+         {innerText:'Common Name'},
+         {innerText:'Name'},
+         {innerText:'Status'},
+         {innerText:'Occurrences'},
+         {innerText:viewColumn},
+         {innerText:'Rank'},
+      ];
       
       if (p_options.includes('ancestry')) { labels.splice(7,0,{innerText:'Ancestry'}); };
       faddelems('th',hrow,labels);
