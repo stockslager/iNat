@@ -75,7 +75,6 @@ let rw_view = '';
 let rw_g_list = winurlparams.get('g_list') || '';
 let rw_s_list = winurlparams.get('s_list') || '';
 let rw_project_id = '';
-let rw_user_id = '';
 
 // delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
 // the creation of local projects / places for restoration sites  and/or pollinator gardens.
@@ -100,10 +99,11 @@ if( winurlparams.get('view') !== null ){
 } 
 
 // if &user_id was passed in, pass it along for the three displays.
-// user id should not be passed to this api since we want see plants all the plants in the user's custom list.
+// user id should not be passed to this api since we want see all the plants in the user's custom list.
 // passing in a user_id implies that they've also passed in a custom list.
 if( winurlparams.get('user_id') !== null ){
-   rw_user_id += winurlparams.get('user_id');
+   window.sessionStorage.removeItem('user_id');
+   window.sessionStorage.setItem('user_id', winurlparams.get('user_id'));
    winurlparams.delete('user_id');
 } else {
    winurlparams.delete('user_id');
@@ -262,9 +262,9 @@ function fresults(xobj) {
          toggle_args += '&view=' + rw_view;
       }
 
-      if( rw_user_id != ''){
-         args += '&user_id=' + rw_user_id;
-         toggle_args += '&user_id=' + rw_user_id;
+      if( window.sessionStorage.getItem('user_id') !== null && windowSessionStorage.getItem('user_id') !== '' ){
+         args += '&user_id=' + window.sessionStorage.getItem('user_id');
+         toggle_args += '&user_id=' + window.sessionStorage.getItem('user_id');
       }
       
       if( rw_g_list != '' && rw_s_list != '' ){
