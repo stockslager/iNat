@@ -76,7 +76,7 @@ faddelem('p',document.body,{innerHTML:'These tables rely on iNat data to functio
   + 'the tables.<br><br>1) Place ~ The place is a hard-coded default and defaults to Hamilton County, Ohio.  The first '
   + 'table uses this place (Hamilton County) to limit the number of plants returned by the species count api.  The data '
   + 'returned is also limited by a "list".  The first table will only display plants that exist in Hamilton County and '
-  + 'also in a user defined list (g_list or s_list).<br><br>' +
+  + 'also in a user defined list (g_list or s_list).<br><br>' 
   + '2) g_list ~  A numeric id that uniquely identifies a user-defined "list" within iNat.  The "g" is for Genera.  This ' 
   + 'list should only contain taxons that have a rank of genus.  Before a project is added to plant_inspector, the owner '
   + 'of the project should build a g_list for that project.  A g_list is a list of genera that will be displayed in the '
@@ -85,24 +85,24 @@ faddelem('p',document.body,{innerHTML:'These tables rely on iNat data to functio
   + 'The g_list is used by the first table to limit the results returned by the species counts api to taxa of type Plantae '
   + 'that have been observed in Hamilton County and also exist on the project\'s g_list. (An interested user could build a '
   + 'custom g_list that is a subset of the project\'s g_list that could be passed along to the tables to limit the display '
-  + 'to particular genera.)<br>' 
+  + 'to particular genera.)<br><br>' 
   + '3) s_list ~ A numeric id that uniquely identifies a user-defined list within iNat.  The "s" denotes species.  An s_list '
   + 'is used in the same way as the g_list but is meant to contain only plants at the species rank.  The s_list is also used '
   + 'by the first table to limit the results returned by the species counts api to taxa of type Plantae that have been '
   + 'observed in Hamilton County and also exist on the project\'s s_list.***  '
   + '(An interested user could build a custom s_list that is a subset of the project\'s s_list that could be passed along '
-  + 'to the tables to limit the display to particular species.)'
+  + 'to the tables to limit the display to particular species.)<br><br>'
   + '4) Project ~ Each garden listed by plant_inspector on the main "What\'s Visiting" page is a project that exists in iNat.  '
   + 'When a project is chosen from the list, the project_id (a numerical value that uniquely identifies the project within iNat) '
   + 'is passed along to each subsequent table.  It ist\'t used until the 2nd and 3rd tables where it is used to filter the '
-  + 'results from the species counts and observations api\'s respectively.<br>'
+  + 'results from the species counts and observations api\'s respectively.<br><br>'
   + 'Heat map of insect observations around Cincinnati where the "Name of Associated Plant" observation field was recorded by '
   + 'the observer.  The point of the project is to influence people to plant better plants, record better data, and turn the '
   + 'map red.'});
 
 faddelem('p',document.body,{innerHTML:furl('https://jumear.github.io/stirfry/iNat_map?view=heatmap&place_id=3059&iconic_taxa=insecta&field:name%20of%20associated%20plant=&defaultzoom=9&centerlng=-84.512016&centerlat=39.103119')});
 
-faddelem('p',document.body,{innerHTML:'*** There is the possibility that a species of plant added to the s_list will not appear '
+faddelem('p',document.body,{innerHTML:'<br><br>*** There is the possibility that a species of plant added to the s_list will not appear '
   + 'in the table because there have been no observations of that plant in Hamilton County.  This is intentional and is a '
   + 'subtle hint that Hamilton County doesn\'t necessarily benefit from increased species introduction from outside the County.  '
   + 'An incredible amount of cosmopolitan plants from all over the world already exist here.  If you are the first observer of '
