@@ -81,6 +81,16 @@ winurlparams.append('per_page','200');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa');
 
+// delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
+// the creation of local projects / places for restoration sites  and/or pollinator gardens.
+winurlparams.delete('lat');
+winurlparams.delete('lng');
+winurlparams.delete('radius');
+winurlparams.delete('nelng');
+winurlparams.delete('nelat');
+winurlparams.delete('swlng');
+winurlparams.delete('swlat');
+   
 let p_view = winurlparams.get('view') || 'visiting';
 
 if( p_view === 'visiting' ){
