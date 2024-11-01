@@ -60,8 +60,15 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+
+// default the id's of the projects to be passed in to the projects api.
 winurlparams.delete('id');
 winurlparams.append('id', '152539,130249,220623,221779');
+
+// default the place to hamilton county and store in the session for 
+// use by the tables.
+window.sessionStorage.setItem('place_id', '3059');   // hamilton county, oh
+   
 //let p_per_page = winurlparams.get('per_page') || 200;
 //let p_page = winurlparams.get('page') || 1;
 let g_list = winurlparams.get('g_list') || '';
@@ -127,7 +134,7 @@ function setupLists(str){
       if( view === '' ){
          list += '&view=nectaring';
       }
-   }
+   } 
 
    if( view != '' ){
       list += '&view='+view;
@@ -154,11 +161,9 @@ function fresults(xobj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
       let labels = [
-         //{innerText:'Slug'},
          {innerText:'Icon'},
          {innerText:'Title'},
          {innerText:'Description'},
-         //{innerText:'Terms'},
       ];
       faddelems('th',hrow,labels);
       
@@ -177,14 +182,14 @@ function fresults(xobj) {
          if( rec.id === 220623 ){
             target_url += 'https://stockslager.github.io/iNat/cnc_plants_visited.html';
          } else {
-            target_url += 'https://stockslager.github.io/iNat/rewild_plants_visited.html?project_id='+rec.id+lists;
+            window.session
+            target_url += 'https://stockslager.github.io/iNat/glist.html?project_id='+rec.id+lists;
          } 
          
          let values = [
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
             {innerHTML:furl(target_url, (rec.title||'no title'))},
             {innerText:truncatedText},
-            //{innerText:rec.terms||''},
          ];
          faddelems('td',brow,values);
       };
