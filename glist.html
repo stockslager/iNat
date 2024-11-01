@@ -74,11 +74,14 @@ winurlparams.append('iconic_taxa','Plantae');
 let rw_view = '';
 let rw_g_list = winurlparams.get('g_list') || '';
 let rw_s_list = winurlparams.get('s_list') || '';
+let rw_project_id = '';
 let rw_user_id = '';
 
 // if project id is passed in, save it to pass to the next table
-if( window.sessionStorage.getItem('project_id') === null && window.sessionStorage.getItem('project_id') === '' ) {
-   window.sessionStorage.setItem('152539');  // default to rewild if null.
+if( winurlparams.get('project_id') != null && winurlparams.get('project_id') != '' ) {
+   rw_project_id += winurlparams.get('project_id');
+} else {
+   rw_project_id += '152539';  // default to rewild if null.
 }
 
 // if &view was passed in, pass it along for the display on the next table.
@@ -260,7 +263,7 @@ function fresults(xobj) {
 
       if( winurlparams.get('lrank') === 'genus' ) {
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/glist.html?lrank=species&project_id='+window.sessionStorage.getItem('project_id')+'&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to species')
+            +furl('https://stockslager.github.io/iNat/glist.html?lrank=species&project_id='+rw_project_id+'&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to species')
             +')'+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
@@ -268,7 +271,7 @@ function fresults(xobj) {
          });
       } else {
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +furl('https://stockslager.github.io/iNat/glist.html?lrank=genus&project_id='+window.sessionStorage.getItem('project_id')+'&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to genus')
+            +furl('https://stockslager.github.io/iNat/glist.html?lrank=genus&project_id='+rw_project_id+'&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to genus')
             +')'+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
@@ -315,7 +318,7 @@ function fresults(xobj) {
                : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
                   {innerText:rec.taxon.name||''},
                   {innerText:rec.taxon.preferred_common_name||''},
-                  {innerHTML:furl('https://stockslager.github.io/iNat/insects_visiting2.html?project_id='+window.sessionStorage.getItem('project_id')+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Visiting Organisms...')},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/insects_visiting2.html?project_id='+rw_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Visiting Organisms...')},
                   {innerText:rec.taxon.rank||''},
                   {innerText:rec.taxon.rank_level||''},
          ];         
