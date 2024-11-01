@@ -77,6 +77,16 @@ let rw_s_list = winurlparams.get('s_list') || '';
 let rw_project_id = '';
 let rw_user_id = '';
 
+// delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
+// the creation of local projects / places for restoration sites  and/or pollinator gardens.
+winurlparams.delete('lat');
+winurlparams.delete('lng');
+winurlparams.delete('radius');
+winurlparams.delete('nelng');
+winurlparams.delete('nelat');
+winurlparams.delete('swlng');
+winurlparams.delete('swlat');
+
 // if project id is passed in, save it to pass to the next table
 if( winurlparams.get('project_id') != null && winurlparams.get('project_id') != '' ) {
    rw_project_id += winurlparams.get('project_id');
@@ -135,7 +145,7 @@ winurlparams.delete('options');
 winurlparams.delete('s_list');
 winurlparams.delete('g_list');
 winurlparams.delete('view');
-winurlparams.delete('project_id');
+winurlparams.delete('project_id');  // plant only needs to be on the list and in hamilton county doesn't need to be in prj.
 
 function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
 function famp(str) { return str.replace(/&/g,'&amp;'); };
