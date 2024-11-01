@@ -1255,7 +1255,7 @@ else {
       // create map, and set default center coordinates, zoom level, and layers
       mymap = L.map('mapid', {
          center: [centerlat||0,centerlng||0], // default to lat 0, long 0
-         zoom: ??2, // iNat defaults to zoom level 2
+         zoom: defaultzoom??2, // iNat defaults to zoom level 2
          layers: defaultlayers,
          doubleClickZoom: false
       });
@@ -1265,8 +1265,8 @@ else {
          mymap.fitBounds(bounds,padding);
       };
       // add a layer selector control and scale bar
-      L.control.layers(basemaps, overlaymaps).addTo(mymap);
-      L.control.scale().addTo(mymap);
+      //L.control.layers(basemaps, overlaymaps).addTo(mymap);
+      //L.control.scale().addTo(mymap);
    });
 };
 
