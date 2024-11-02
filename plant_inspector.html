@@ -63,7 +63,7 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 
 // default the id's of the projects to be passed in to the projects api.
 winurlparams.delete('id');
-winurlparams.append('id', '152539,130249,220623,221779');
+winurlparams.append('id', '152539,130249,220623,221779,22503');
 
 // default the place to hamilton county and store in the session for 
 // use by the tables.
@@ -124,7 +124,7 @@ function truncate(str, maxLength) {
 };
 function setupLists(str){
    let list = '';
-   if( str === 152539 ) {          // rewild
+   if( str === 152539 || str === 22503) {          // rewild or biodiversity of indiana
       list += '&g_list=4484313';
       list += '&s_list=4484172';
    } else if ( str === 130249 ){   // nku refs
