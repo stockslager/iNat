@@ -413,9 +413,9 @@ if (winurlsearchstr==='') {
    faddelems('p',document.body,instructions);
 }
 else {
-   //if( window.sessionStorage.getItem('xobj') != null ){
-   //    fresults(window.sessionStorage.getItem('xobj');
-   //} else {
+   if( window.sessionStorage.getItem('xobj') != null ){
+       fresults(window.sessionStorage.getItem('xobj');
+   } else {
    //   window.sessionStorage.setItem('xobj', xobj);   
       fetch(apiurl)
       .then((response) => {
@@ -428,7 +428,7 @@ else {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
       });
-   //}
+   }
 };
 </script>
 </body>
