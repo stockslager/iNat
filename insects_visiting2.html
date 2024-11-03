@@ -209,6 +209,7 @@ function fexport(count=0) {
 function fresults(xobj) {
    //faddelem('p',document.body,{innerHTML:furl(famp(apiurl))});
    let results = xobj.results;
+   
    if (results) {
       let total_results = xobj.total_results;
       let per_page = xobj.per_page;
@@ -412,16 +413,22 @@ if (winurlsearchstr==='') {
    faddelems('p',document.body,instructions);
 }
 else {
-   fetch(apiurl)
-   .then((response) => {
-      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-      return response.json();
-   })
-   .then((data) => { fresults(data); })
-   .catch((err) => {
-      console.error(err.message);
-      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-   });
+   if( window.sessionStorage.getItem('xobj') != null ){
+       fresults(window.sessionStorage.getItem('xobj');
+   } else {
+      window.sessionStorage.setItem('xobj', xobj);   
+      fetch(apiurl)
+      .then((response) => {
+         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+            return response.json();
+         })
+      .then((data) => { window.sessionStorage.setItem('xobj', data);
+                        fresults(data); })
+      .catch((err) => {
+         console.error(err.message);
+         faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+      });
+   }
 };
 </script>
 </body>
