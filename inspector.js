@@ -1,12 +1,3 @@
-let winurlstr = window.location.href;
-let winurlsearchstr = window.location.search;
-let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
-let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-
-// default the id's of the projects to be passed in to the projects api.
-winurlparams.delete('id');
-winurlparams.append('id', '152539,145049,220623,221779,22501');
-
 // default the place to hamilton county and store in the session for 
 // use by the tables.
 window.sessionStorage.setItem('place_id', '3059');   // hamilton county, oh
