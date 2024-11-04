@@ -94,8 +94,6 @@ if( p_view === 'visiting' ){
 } else if( p_view === 'pollinating' ){
    winurlparams.delete('field:Nectar+/+Pollen+delivering+plant');
    winurlparams.append('field:Nectar+/+Pollen+delivering+plant', p_plant_id);
-   //winurlparams.delete('field:Nectar%20%2F%20Pollen%20delivering%20plant');
-   //winurlparams.append('field:Nectar%20%2F%20Pollen%20delivering%20plant', p_plant_id);
 } else if( p_view === 'associating' ){
    winurlparams.delete('field:Name%20of%20Associated%20Plant');
    winurlparams.append('field:Name%20of%20Associated%20Plant', p_plant_id);
@@ -413,29 +411,22 @@ if (winurlsearchstr==='') {
    faddelems('p',document.body,instructions);
 }
 else {
-   //var user = {'name':'John'};
-   //window.sessionStorage.setItem('user', JSON.stringify(user));   //const xobj2 = JSON.parse((window.sessionStorage.getItem('xobj') || ""));
-   if( window.sessionStorage.getItem('xobj') ){
-      
-      let res2 = JSON.parse(window.sessionStorage.getItem('xobj'));
-      fresults(res2);
-   } else {
-   //if( xobj2 != null ){
- //      fresults(JSON.parse(window.sessionStorage.getItem('xobj')));
- //  } else {
-      //window.sessionStorage.setItem('xobj', xobj);   
+   //if( window.sessionStorage.getItem('xobj') ){
+   //   let res2 = JSON.parse(window.sessionStorage.getItem('xobj'));
+   //   fresults(res2);
+   //} else {
       fetch(apiurl)
       .then((response) => {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
             return response.json();
          })
-      .then((data) => { window.sessionStorage.setItem('xobj', JSON.stringify(data));
+      .then((data) => { //window.sessionStorage.setItem('xobj', JSON.stringify(data));
                         fresults(data); })
       .catch((err) => {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
       });
-   }
+ //  }
 };
 </script>
 </body>
