@@ -418,7 +418,8 @@ else {
    if( window.sessionStorage.getItem('xobj') ){
       
       let res2 = JSON.parse(window.sessionStorage.getItem('xobj'));
-   }
+      fresults(res2);
+   } else {
    //if( xobj2 != null ){
  //      fresults(JSON.parse(window.sessionStorage.getItem('xobj')));
  //  } else {
@@ -434,7 +435,7 @@ else {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
       });
-  // }
+   }
 };
 </script>
 </body>
