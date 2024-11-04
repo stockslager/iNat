@@ -72,7 +72,13 @@ function setupLists(str){
       if( view === '' ){
          list += '&view=nectaring';
       }
-   } 
+   } else if( str === 132541 ){
+      list += '&g_list=4485468';
+      list += '&s_list=4485467';
+      if( view === '' ){
+         list += '&view=nectaring';
+      }
+   }
 
    if( view != '' ){
       list += '&view='+view;
