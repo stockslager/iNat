@@ -424,7 +424,7 @@ else {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
             return response.json();
          })
-      .then((data) => { //window.sessionStorage.setItem('xobj', JSON.stringify(data));
+      .then((data) => { window.sessionStorage.setItem('xobj', JSON.stringify(data));
                         fresults(data); })
       .catch((err) => {
          console.error(err.message);
