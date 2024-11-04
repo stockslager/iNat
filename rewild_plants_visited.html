@@ -70,6 +70,16 @@ winurlparams.append('per_page','100');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Plantae'); 
 
+// delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
+// the creation of local projects / places for restoration sites  and/or pollinator gardens.
+winurlparams.delete('lat');
+winurlparams.delete('lng');
+winurlparams.delete('radius');
+winurlparams.delete('nelng');
+winurlparams.delete('nelat');
+winurlparams.delete('swlng');
+winurlparams.delete('swlat');
+   
 // set rw_win_options defaults for re-wild...
 let rw_view = '';
 let rw_g_list = winurlparams.get('g_list') || '';
