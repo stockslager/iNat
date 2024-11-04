@@ -81,6 +81,16 @@ winurlparams.append('per_page','30');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa');
 
+// delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
+// the creation of local projects / places for restoration sites  and/or pollinator gardens.
+winurlparams.delete('lat');
+winurlparams.delete('lng');
+winurlparams.delete('radius');
+winurlparams.delete('nelng');
+winurlparams.delete('nelat');
+winurlparams.delete('swlng');
+winurlparams.delete('swlat');
+   
 let p_view = winurlparams.get('view') || 'visiting';
 
 if( p_view === 'visiting' ){
@@ -92,8 +102,6 @@ if( p_view === 'visiting' ){
 } else if( p_view === 'pollinating' ){
    winurlparams.delete('field:Nectar+/+Pollen+delivering+plant');
    winurlparams.append('field:Nectar+/+Pollen+delivering+plant', p_plant_id);
-   //winurlparams.delete('field:Nectar%20%2F%20Pollen%20delivering%20plant');
-   //winurlparams.append('field:Nectar%20%2F%20Pollen%20delivering%20plant', p_plant_id);
 } else if( p_view === 'associating' ){
    winurlparams.delete('field:Name%20of%20Associated%20Plant');
    winurlparams.append('field:Name%20of%20Associated%20Plant', p_plant_id);
