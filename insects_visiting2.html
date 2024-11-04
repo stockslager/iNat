@@ -413,23 +413,23 @@ if (winurlsearchstr==='') {
    faddelems('p',document.body,instructions);
 }
 else {
-  // let xobj2 = window.sessionStorage.getItem('xobj') || '';
-   //if( xobj2 != '' ){
-   //    fresults(window.sessionStorage.getItem('xobj'));
-   //} else {
-   //   window.sessionStorage.setItem('xobj', xobj);   
+   var xobj2 = JSON.parse(window.sessionStorage.getItem('xobj'));
+   if( xobj2 != null ){
+       fresults(JSON.parse(window.sessionStorage.getItem('xobj')));
+   } else {
+      //window.sessionStorage.setItem('xobj', xobj);   
       fetch(apiurl)
       .then((response) => {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
             return response.json();
          })
-      .then((data) => { window.sessionStorage.setItem('xobj', data);
+      .then((data) => { window.sessionStorage.setItem('xobj', JSON.stringify(data));
                         fresults(data); })
       .catch((err) => {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
       });
-   //}
+   }
 };
 </script>
 </body>
