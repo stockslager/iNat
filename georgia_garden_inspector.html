@@ -64,10 +64,53 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 // default the id's of the projects to be passed in to the projects api.
 winurlparams.delete('id');
 winurlparams.append('id', '46531');
-
+   
+let g_list = winurlparams.get('g_list') || '';
+let s_list = winurlparams.get('s_list') || '';
+let view = winurlparams.get('view') || '';
 </script>
    
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/inspectorV3.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v1.js"></script>
+
+<script>
+// no user defined meta data fields on project so i can't filter on projects to display in table.
+// am using hard coding of project number, genera list, and species list.
+// the species and general lists should be stored on the place associated with the respective 
+// project when possible.
+function setupLists(str){
+   let list = '';
+   if( str === 152539 || str === 22501) {          // rewild or biodiversity of indiana
+      list += '&g_list=4484313';
+      list += '&s_list=4484172';
+   } else if ( str === 145049 ){   // life at nku
+      list += '&g_list=4485180';
+      list += '&s_list=4485179';
+      if( view === '' ){
+         list += '&view=nectaring';
+      }
+   } else if ( str === 221779 ){   // glenwood gardens
+      list += '&g_list=4484950';
+      list += '&s_list=4484949';
+      if( view === '' ){
+         list += '&view=nectaring';
+      }
+   } else if( str === 46531 ){    // athens ga
+      list += '&g_list=4485468';
+      list += '&s_list=4485467';
+      if( view === '' ){
+         list += '&view=nectaring';
+      }
+   }
+
+   if( view != '' ){
+      list += '&view='+view;
+   }
+   // if it falls through it returns an empty list for cnc poll garden.
+   return list;
+};
+</script>
+  
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_plant_inspector_results_v1.js"></script>
 </body>
 
 </html>
