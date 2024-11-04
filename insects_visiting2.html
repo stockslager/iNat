@@ -413,7 +413,8 @@ if (winurlsearchstr==='') {
    faddelems('p',document.body,instructions);
 }
 else {
-   const xobj2 = JSON.parse((window.sessionStorage.getItem('xobj') || ""));
+   var user = {'name':'John'};
+   window.sessionStorage.setItem('user', JSON.stringify(user));   //const xobj2 = JSON.parse((window.sessionStorage.getItem('xobj') || ""));
    //if( xobj2 != null ){
  //      fresults(JSON.parse(window.sessionStorage.getItem('xobj')));
  //  } else {
