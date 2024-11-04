@@ -413,10 +413,10 @@ if (winurlsearchstr==='') {
    faddelems('p',document.body,instructions);
 }
 else {
-   let xobj2 = window.sessionStorage.getItem('xobj') || '';
-   if( xobj2 != '' ){
-       fresults(window.sessionStorage.getItem('xobj'));
-   } else {
+  // let xobj2 = window.sessionStorage.getItem('xobj') || '';
+   //if( xobj2 != '' ){
+   //    fresults(window.sessionStorage.getItem('xobj'));
+   //} else {
    //   window.sessionStorage.setItem('xobj', xobj);   
       fetch(apiurl)
       .then((response) => {
@@ -429,7 +429,7 @@ else {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
       });
-   }
+   //}
 };
 </script>
 </body>
