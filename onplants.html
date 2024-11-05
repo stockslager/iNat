@@ -373,7 +373,8 @@ function fresults(xobj) {
          if( (p_view === 'nectaring' && foundNectaring === 'yes') ||
              ( p_view === 'visiting' && foundVisiting === 'yes') ||
              ( p_view === 'pollinating' && foundPollinating === 'yes') ||
-             ( p_view === 'associating' && foundAssociated === 'yes') )        
+             ( p_view === 'associating' && foundAssociated === 'yes') ||
+             ( p_view === 'all ) )        
          {
                values = [
                   {innerText:i+1},
@@ -386,20 +387,7 @@ function fresults(xobj) {
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
                ];             
-         } else if( p_view === 'all' ){
-               values = [
-                  //{innerText:i+1},
-                  {innerText:i+1},
-                  {innerHTML:'<img class="icon" src="'+tax_photo+'" />'},
-                  {innerText:pref_tax_name},
-                  {innerText:tax_name},
-                  {innerText:rec.quality_grade}, 
-                  {innerHTML:'<img class="icon" src="'+((rec.user.icon)?rec.user.icon:' ')+'" />'},
-                  {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
-                  {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
-                  {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
-               ];        
-         }
+         }  
 
          faddelems('td',brow,values);
       };
