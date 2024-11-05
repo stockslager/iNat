@@ -301,11 +301,12 @@ function fresults(xobj) {
                         if( rec.ofvs[j].taxon == null ){
                            tax_name = rec.ofvs[j].value;
                            pref_tax_name = rec.ofvs[j].value_ci;
-                           tax_photo = ';o)';
+                           tax_photo = '&#127807';
                         } else {
                            tax_name = rec.ofvs[j].taxon.name;
                            pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
-                           tax_photo = rec.ofvs[j].taxon.default_photo.url;                     
+                           tax_photo = '<img class="icon" src="'+rec.ofvs[j].taxon.default_photo.url+'" />';                     
+                           //tax_photo = rec.ofvs[j].taxon.default_photo.url;                     
                         }
                         foundRec = 'yes';
                         displayCount++;
@@ -334,24 +335,27 @@ function fresults(xobj) {
                         if( rec.ofvs[j].taxon == null ){
                            tax_name = rec.ofvs[j].value;
                            pref_tax_name = rec.ofvs[j].value_ci;
-                           tax_photo = ';o)';
+                           tax_photo = '&#127807';
+                           //tax_photo = ';o)';
                         } else {
                            tax_name = rec.ofvs[j].taxon.name;
                            pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
-                           tax_photo = rec.ofvs[j].taxon.default_photo.url;                     
+                           tax_photo = '<img class="icon" src="'+rec.ofvs[j].taxon.default_photo.url+'" />';                     
                         }
                         // j=rec.ofvs.length;  (let it loop through all of them to build activity_found list.
                      } else {
                         tax_name = 'Unspecified Plant';
                         pref_tax_name = 'Unspecified Plant';
-                        tax_photo = ';o)';
+                        tax_photo = '&#127807';
+                        //tax_photo = ';o)';
                      }
                }
             }
          } else { 
             tax_name = 'Unspecified Plant';
             pref_tax_name = 'Unspecified Plant';
-            tax_photo = ';o)';
+            tax_photo = '&#127807';
+            //tax_photo = ';o)';
          }
 
          let values = [];
@@ -363,7 +367,7 @@ function fresults(xobj) {
          {
                values = [
                   {innerText:i+1},
-                  {innerHTML:'<img class="icon" src="'+tax_photo+'" />'},
+                  {innerHTML:tax_photo},
                   {innerText:pref_tax_name},
                   {innerText:tax_name},
                   {innerText:rec.quality_grade}, 
@@ -375,7 +379,7 @@ function fresults(xobj) {
          } else if( p_view === 'all' ){
             values = [
                   {innerText:i+1},
-                  {innerHTML:'<img class="icon" src="'+tax_photo+'" />'},
+                  {innerHTML:tax_photo},
                   {innerText:pref_tax_name},
                   {innerText:tax_name},
                   {innerText:activity_found},
