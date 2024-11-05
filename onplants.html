@@ -306,22 +306,24 @@ function fresults(xobj) {
                      }
                   }               
                } else if(p_view === 'all' ){
-                     if( rec.ofvs[j].field_id===7623 ){
-                        activity_found += 'visiting ';
-                     }
-                     if( rec.ofvs[j].field_id===498 ){
-                        activity_found += 'nectaring ';
-                     }
-                     if( rec.ofvs[j].feild_id===7807 ){
-                        activity_found += 'associating ';
-                     }
-                     if( rec.ofvs[j].field_id===4935 ){
-                        activity_found += 'pollinating ';
-                     }
+                     
                      if( rec.ofvs[j].field_id===7623 || 
                          rec.ofvs[j].field_id===498  ||
                          rec.ofvs[j].feild_id===7807 ||
-                         rec.ofvs[j].field_id===4935 ){
+                         rec.ofvs[j].field_id===4935 ) 
+                     {
+                        if( rec.ofvs[j].field_id===7623 ){
+                           activity_found += 'visiting ';
+                        }
+                        if( rec.ofvs[j].field_id===498 ){
+                           activity_found += 'nectaring ';
+                        }
+                        if( rec.ofvs[j].feild_id===7807 ){
+                           activity_found += 'associating ';
+                        }
+                        if( rec.ofvs[j].field_id===4935 ){
+                           activity_found += 'pollinating ';
+                        }                        
                         if( rec.ofvs[j].taxon == null ){
                            tax_name = rec.ofvs[j].value;
                            pref_tax_name = rec.ofvs[j].value_ci;
