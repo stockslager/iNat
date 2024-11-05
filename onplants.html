@@ -280,7 +280,10 @@ function fresults(xobj) {
             for (let j=0; j<rec.ofvs.length; j++){
 
                foundRec = '';
-               if( p_view === 'nectaring' ){
+               if( (p_view === 'nectaring') ||
+                   (p_view === 'pollinating') ||
+                   (p_view === 'visiting') ||
+                   (p_view === 'associating') ){
                   if( (rec.ofvs[j].field_id===498) ||    // 498 = nectar plant
                       (rec.ofvs[j].field_id===7623) ||   // 7623 = plant that the organism was found on
                       (rec.ofvs[j].field_id===4935) ||   // 4935 = nectar / pollen delivering plant
