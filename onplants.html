@@ -35,7 +35,7 @@
       }
    }
    #main { width:100%; }
-   table, td { text-align: center; }, th { border-collapse:collapse; margin:0; padding:4px; }
+   table, td, th { border-collapse:collapse; margin:0; padding:4px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
    tr:nth-child(even) { background:var(--color-base); }
@@ -301,7 +301,8 @@ function fresults(xobj) {
                         if( rec.ofvs[j].taxon == null ){
                            tax_name = rec.ofvs[j].value;
                            pref_tax_name = rec.ofvs[j].value_ci;
-                           tax_photo = '&#127807';
+                           //tax_photo = '&#127807';
+                           tax_photo = '<div class="icon">&#127807</div>';
                         } else {
                            tax_name = rec.ofvs[j].taxon.name;
                            pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
@@ -335,8 +336,8 @@ function fresults(xobj) {
                         if( rec.ofvs[j].taxon == null ){
                            tax_name = rec.ofvs[j].value;
                            pref_tax_name = rec.ofvs[j].value_ci;
-                           tax_photo = '&#127807';
-                           //tax_photo = ';o)';
+                           //tax_photo = '&#127807';
+                           tax_photo = '<div class="icon">&#127807</div>';
                         } else {
                            tax_name = rec.ofvs[j].taxon.name;
                            pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
@@ -346,16 +347,16 @@ function fresults(xobj) {
                      } else {
                         tax_name = 'Unspecified Plant';
                         pref_tax_name = 'Unspecified Plant';
-                        tax_photo = '&#127807';
-                        //tax_photo = ';o)';
+                       // tax_photo = '&#127807';
+                        tax_photo = '<div class="icon">&#127807</div>';
                      }
                }
             }
          } else { 
             tax_name = 'Unspecified Plant';
             pref_tax_name = 'Unspecified Plant';
-            tax_photo = '&#127807';
-            //tax_photo = ';o)';
+            //tax_photo = '&#127807';
+            tax_photo = '<div class="icon">&#127807</div>';
          }
 
          let values = [];
