@@ -79,29 +79,41 @@ let view = winurlparams.get('view') || '';
 // project when possible.
 function setupLists(str){
    let list = '';
-   if( str === 152539 || str === 22501) {          // rewild or biodiversity of indiana
-      list += '&g_list=4484313';
-      list += '&s_list=4484172';
-   } else if ( str === 145049 ){   // life at nku
-      list += '&g_list=4485180';
-      list += '&s_list=4485179';
+
+   if( g_list !== '' && s_list !== '' ){
+      list += '&g_list=' + g_list;
+      list += '&s_list=' + s_list;
+   } else {
+      if( str === 152539 || str === 22501) {          // rewild or biodiversity of indiana
+         list += '&g_list=4484313';
+         list += '&s_list=4484172';
+      } else if ( str === 145049 ){   // life at nku
+         list += '&g_list=4485180';
+         list += '&s_list=4485179';
+      } else if ( str === 221779 ){   // glenwood gardens
+         list += '&g_list=4484950';
+         list += '&s_list=4484949';
+      } else if( str === 46531 ){    // athens ga
+         list += '&g_list=4485468';
+         list += '&s_list=4485467';
+      }
+   }
+
+   // view...
+   if ( str === 145049 ){   // life at nku
       if( view === '' ){
          list += '&view=nectaring';
       }
    } else if ( str === 221779 ){   // glenwood gardens
-      list += '&g_list=4484950';
-      list += '&s_list=4484949';
       if( view === '' ){
          list += '&view=nectaring';
       }
    } else if( str === 46531 ){    // athens ga
-      list += '&g_list=4485468';
-      list += '&s_list=4485467';
       if( view === '' ){
          list += '&view=nectaring';
       }
    }
-
+   
    if( view != '' ){
       list += '&view='+view;
    }
@@ -110,7 +122,7 @@ function setupLists(str){
 };
 </script>
   
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_plant_inspector_results_v1.js"></script>
-</body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_plant_inspector_results_v2.js"></script>
 
+</body>
 </html>
