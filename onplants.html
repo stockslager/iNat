@@ -231,18 +231,34 @@ function fresults(xobj) {
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
+      let labels = [];
 
-      let labels = [
-            {innerText:'#'},
-            {innerText:'Photo'},
-            {innerText:'Common Name'}, 
-            {innerText:'Name'},
-            {innerText:'Grade'},
-            {innerText:'User Photo'},
-            {innerText:'User Login'},
-            {innerText:'Observation Photo'},
-            {innerText:'Observation ID'},
-      ];      
+      if( p_view === 'all ){
+          labels = [
+               {innerText:'#'},
+               {innerText:'Photo'},
+               {innerText:'Common Name'}, 
+               {innerText:'Name'},
+               {innerText:'Activity Found'},
+               {innerText:'Grade'},
+               {innerText:'User Photo'},
+               {innerText:'User Login'},
+               {innerText:'Observation Photo'},
+               {innerText:'Observation ID'},
+            ];         
+      } else {
+            labels = [
+               {innerText:'#'},
+               {innerText:'Photo'},
+               {innerText:'Common Name'}, 
+               {innerText:'Name'},
+               {innerText:'Grade'},
+               {innerText:'User Photo'},
+               {innerText:'User Login'},
+               {innerText:'Observation Photo'},
+               {innerText:'Observation ID'},
+            ];    
+      }
       
       faddelems('th',hrow,labels);
 
@@ -258,6 +274,7 @@ function fresults(xobj) {
          let pref_tax_name = '';
          let tax_photo = '';
          let foundRec = '';
+         let activiy_found = '';
 
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
@@ -286,6 +303,18 @@ function fresults(xobj) {
                      }
                   }               
                } else if(p_view === 'all' ){
+                     if( rec.ofvs[j].field_id===7623 ){
+                        activity_found += 'visiting ';
+                     }
+                     if( rec.ofvs[j].field_id===498 ){
+                        activity_found += 'nectaring ';
+                     }
+                     if( rec.ofvs[j].feild_id===7807 ){
+                        activity_found += 'associating ';
+                     }
+                     if( rec.ofvs[j].field_id===4935 ){
+                        activity_found += 'pollinating ';
+                     }
                      if( rec.ofvs[j].field_id===7623 || 
                          rec.ofvs[j].field_id===498  ||
                          rec.ofvs[j].feild_id===7807 ||
@@ -301,8 +330,7 @@ function fresults(xobj) {
                         }
                         j=rec.ofvs.length;
                      } else {
-                        tax_name += '***';
-                        tax_name += 'Unspecified Plant';
+                        tax_name = 'Unspecified Plant';
                         pref_tax_name = 'Unspecified Plant';
                         tax_photo = ';o)';
                      }
