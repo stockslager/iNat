@@ -232,24 +232,7 @@ function fresults(xobj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
 
-      let labels = [];
-      
-      // add action column for "show all" 
-      if( p_view === 'all' ){
-         labels = [
-            {innerText:'#'},
-            {innerText:'Photo'},
-            {innerText:'Common Name'}, 
-            {innerText:'Name'},
-            {innerText:'Action'},
-            {innerText:'Grade'},
-            {innerText:'User Photo'},
-            {innerText:'User Login'},
-            {innerText:'Observation Photo'},
-            {innerText:'Observation ID'},
-         ];      
-      } else {
-         labels = [
+      let labels = [
             {innerText:'#'},
             {innerText:'Photo'},
             {innerText:'Common Name'}, 
@@ -259,8 +242,7 @@ function fresults(xobj) {
             {innerText:'User Login'},
             {innerText:'Observation Photo'},
             {innerText:'Observation ID'},
-         ];
-      }
+      ];      
       
       faddelems('th',hrow,labels);
 
@@ -279,7 +261,6 @@ function fresults(xobj) {
          let foundVisiting = '';
          let foundPollinating = '';
          let foundAssociated = '';
-         let insect_action = '';
 
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
@@ -360,19 +341,6 @@ function fresults(xobj) {
                      }
                   }
                } else if(p_view === 'all' ){
-                     insect_action = '';
-                     if( rec.ofvs[j].field_id===7623 ){
-                        insect_action = 'visiting';
-                     } 
-                     if( rec.ofvs[j].field_id===498 ) {
-                        insect_action = 'nectaring';
-                     }
-                     if( rec.ofvs[j].feild_id===7807 ) {
-                        insect_action = 'associating';
-                     }
-                     if( rec.ofvs[j].field_id===4935 ) {
-                        insect_action = 'pollinating';
-                     }
                      if( rec.ofvs[j].field_id===7623 || 
                          rec.ofvs[j].field_id===498  ||
                          rec.ofvs[j].feild_id===7807 ||
@@ -420,11 +388,11 @@ function fresults(xobj) {
                ];             
          } else if( p_view === 'all' ){
                values = [
-                  {innerText:i+1},
+                  //{innerText:i+1},
+                  {innerText:displayCount},
                   {innerHTML:'<img class="icon" src="'+tax_photo+'" />'},
                   {innerText:pref_tax_name},
                   {innerText:tax_name},
-                  {innerText:insect_action},
                   {innerText:rec.quality_grade}, 
                   {innerHTML:'<img class="icon" src="'+((rec.user.icon)?rec.user.icon:' ')+'" />'},
                   {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
