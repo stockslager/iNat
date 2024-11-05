@@ -231,17 +231,36 @@ function fresults(xobj) {
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
-      let labels = [
-         {innerText:'#'},
-         {innerText:'Photo'},
-         {innerText:'Common Name'}, 
-         {innerText:'Name'},
-         {innerText:'Grade'},
-         {innerText:'User Photo'},
-         {innerText:'User Login'},
-         {innerText:'Observation Photo'},
-         {innerText:'Observation ID'},
-      ];
+
+      let labels = [];
+      
+      // add action column for "show all" 
+      if( p_view === 'all' ){
+         labels = [
+            {innerText:'#'},
+            {innerText:'Photo'},
+            {innerText:'Common Name'}, 
+            {innerText:'Name'},
+            {innerText:'Action'},
+            {innerText:'Grade'},
+            {innerText:'User Photo'},
+            {innerText:'User Login'},
+            {innerText:'Observation Photo'},
+            {innerText:'Observation ID'},
+         ];      
+      } else {
+         labels = [
+            {innerText:'#'},
+            {innerText:'Photo'},
+            {innerText:'Common Name'}, 
+            {innerText:'Name'},
+            {innerText:'Grade'},
+            {innerText:'User Photo'},
+            {innerText:'User Login'},
+            {innerText:'Observation Photo'},
+            {innerText:'Observation ID'},
+         ];
+      }
       
       faddelems('th',hrow,labels);
 
@@ -260,6 +279,7 @@ function fresults(xobj) {
          let foundVisiting = '';
          let foundPollinating = '';
          let foundAssociated = '';
+         let insectAction = '';
 
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
@@ -340,6 +360,18 @@ function fresults(xobj) {
                      }
                   }
                } else if(p_view === 'all' ){
+                     if( rec.ofvs[j].field_id===7623 ){
+                        insect_action = 'visiting';
+                     } 
+                     if( rec.ofvs[j].field_id===498 ) {
+                        insect_action = 'nectaring';
+                     }
+                     if( rec.ofvs[j].feild_id===7807 ) {
+                        insect_action = 'associating';
+                     }
+                     if( rec.ofvs[j].field_id===4935 ) {
+                        insect_action = 'pollinating';
+                     }
                      if( rec.ofvs[j].field_id===7623 || 
                          rec.ofvs[j].field_id===498  ||
                          rec.ofvs[j].feild_id===7807 ||
@@ -355,15 +387,16 @@ function fresults(xobj) {
                         }
                         j=rec.ofvs.length;
                      } else {
-                        tax_name = '**Unknown Plant**';
-                        pref_tax_name = '**Unknown Plant**';
+                        insect_action = 'unknown motives';
+                        tax_name = 'Unspecified Plant';
+                        pref_tax_name = 'Unspecified Plant';
                         tax_photo = ';o)';
                      }
                }
             }
          } else { 
-            tax_name = '**Unknown Plant**';
-            pref_tax_name = '**Unknown Plant**';
+            tax_name = 'Unspecified Plant';
+            pref_tax_name = 'Unspecified Plant';
             tax_photo = ';o)';
          }
 
