@@ -103,19 +103,19 @@ winurlparams.delete('swlat');
 let p_view = winurlparams.get('view') || 'visiting';
 
 if( p_view === 'visiting' ){
-   p_field_param += ('field:Plant%20that%20the%20organism%20was%20found%20on=' + p_plant_id);
+   p_field_param += ('&field:Plant%20that%20the%20organism%20was%20found%20on=' + p_plant_id);
    winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
    winurlparams.append('field:Plant%20that%20the%20organism%20was%20found%20on', p_plant_id);
 } else if( p_view === 'nectaring' ){
-   p_field_param += ('field:Nectar%20Plant' + p_plant_id);
+   p_field_param += ('&field:Nectar%20Plant=' + p_plant_id);
    winurlparams.delete('field:Nectar%20Plant');
    winurlparams.append('field:Nectar%20Plant', p_plant_id);
 } else if( p_view === 'pollinating' ){
-   p_field_param += ('field:Nectar+/+Pollen+delivering+plant' + p_plant_id);
+   p_field_param += ('&field:Nectar+/+Pollen+delivering+plant=' + p_plant_id);
    winurlparams.delete('field:Nectar+/+Pollen+delivering+plant');
    winurlparams.append('field:Nectar+/+Pollen+delivering+plant', p_plant_id);
 } else if( p_view === 'associating' ){
-   p_field_param += ('field:Name%20of%20Associated%20Plant' + p_plant_id);
+   p_field_param += ('&field:Name%20of%20Associated%20Plant=' + p_plant_id);
    winurlparams.delete('field:Name%20of%20Associated%20Plant');
    winurlparams.append('field:Name%20of%20Associated%20Plant', p_plant_id);
 } else if( p_view === 'all' ){
@@ -125,7 +125,7 @@ if( p_view === 'visiting' ){
    winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
    winurlparams.delete('field:Name%20of%20Associated%20Plant');
 } else {
-   p_field_param += ('field:Plant%20that%20the%20organism%20was%20found%20on' + p_plant_id);
+   p_field_param += ('&field:Plant%20that%20the%20organism%20was%20found%20on=' + p_plant_id);
    winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
    winurlparams.append('field:Plant%20that%20the%20organism%20was%20found%20on', p_plant_id);
 }   
