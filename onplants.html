@@ -36,12 +36,12 @@
    }
    #main { width:100%; }
    dl { display: grid; grid-gap: 4px 16px; grid-template-columns: max-content; }
-   dt { font-weight: bold; }
+   dt {  }
    dd { margin: 0; grid-column-start: 2;}   
    table, td, th { border-collapse:collapse; margin:0; padding:4px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 10px 0px 0px 0px; }
-   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 0px 10px 0px; }
+   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 10px 0px 0px; }
    tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
    tr:nth-child(even) { background:var(--color-base); }
    .tar { text-align:right; }
@@ -183,8 +183,8 @@ let apiref = furl(apirefurl,apirefname);
 // only display the key when the view is "all" (show all).
 /*font-family:courier;*/
 if( p_view === 'all' ){
-   faddelem('p',document.body,{innerHTML:'<div style=" float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px; border: 1px solid forestgreen; border-radius: 5px;">'
-     + '<dl><dt><span style="color:cornflowerblue; font-weight:bold; ">Activity Observed..:</dt> <dd>Observation Field..:</dd></span>'
+   faddelem('p',document.body,{innerHTML:'<div style=" float:right; padding-left: 5px; padding-right: 5px; padding-top:3px; padding-bottom:3px; border: 1px solid forestgreen; border-radius: 5px;">'
+     + '<dl><dt><span style="color:cornflowerblue; ">Activity Observed..:</span></dt> <dd><span style="color:cornflowerblue; ">Observation Field..:</span></dd>'
      + '<dt>visiting...........:</dt> <dd>Plant that the organism was found on</dd>'
      + '<dt>nectaring..........:</dt> <dd>Nectar Plant</dd>'
      + '<dt>pollinating........:</dt> <dd>Nectar / Pollen delivering plant</dd>'
