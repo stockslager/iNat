@@ -36,7 +36,7 @@
    }
    #main { width:100%; }
    table, td, th { border-collapse:collapse; margin:0; padding:4px; }
-   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
+   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; border: 0px solid red; border-radius: 5px; }
    tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
    tr:nth-child(even) { background:var(--color-base); }
    .tar { text-align:right; }
@@ -176,9 +176,10 @@ let apiref = furl(apirefurl,apirefname);
 
 // display the "key" associating observation fields to the values in the "activity observed" column in the table.
 // only display the key when the view is "all" (show all).
+/*font-family:courier;*/
 if( p_view === 'all' ){
-   faddelem('p',document.body,{innerHTML:'<div style="font-family:courier; float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
-     + '<span style="color:cornflowerblue; font-weight:bold;">Activity Observed..: Observation Field..:</span><br>'
+   faddelem('p',document.body,{innerHTML:'<div style=" float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
+     + '<span style="color:cornflowerblue; font-weight:bold;  border: 1px solid forestgreen; border-radius: 5px;">Activity Observed..: Observation Field..:</span><br>'
      + 'visiting...........: Plant that the organism was found on<br>'
      + 'nectaring..........: Nectar Plant<br>'
      + 'pollinating........: Nectar / Pollen delivering plant<br>'
