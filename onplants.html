@@ -295,6 +295,7 @@ function fresults(xobj) {
          let tax_photo = '';
          let foundRec = '';
          let activity_found = '';
+         let foundRecWTaxon = '';
 
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
@@ -334,7 +335,6 @@ function fresults(xobj) {
                          (rec.ofvs[j].field_id===7807) ||
                          (rec.ofvs[j].field_id===4935) ) 
                      {
-                        foundRec = 'yes';
                         if( rec.ofvs[j].field_id===7623 ){
                            activity_found += 'visiting ';
                         }
@@ -353,13 +353,14 @@ function fresults(xobj) {
                            //tax_photo = '&#127807';
                            tax_photo = '<div class="clipart">&#127807</div>';
                         } else {
+                           foundRecWTaxon = 'yes';
                            tax_name = rec.ofvs[j].taxon.name;
                            pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
                            tax_photo = '<img class="icon" src="'+rec.ofvs[j].taxon.default_photo.url+'" />';                     
                         }
                         // j=rec.ofvs.length;  (let it loop through all of them to build activity_found list.
                      } else {
-                        if( foundRec === '' ){
+                        if( foundRecWTaxon === '' ){
                             tax_name = 'Unspecified Plant';
                             pref_tax_name = 'Unspecified Plant';
                             tax_photo = '<div class="clipart">&#127807</div>';
