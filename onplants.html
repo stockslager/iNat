@@ -195,9 +195,10 @@ if( p_view === 'all' ){
      + '<dt>pollinating</dt> <dd>nectar / pollen delivering plant</dd>'
      + '<dt>associating</dt> <dd>name of associated plant</dd></dl>'});
 } else {
-  faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">'
-     + '<a href="https://www.inaturalist.org/observations/identify?quality_grade=needs_id%2Cresearch%2Ccasual&taxon_id='+p_taxon_id+'&project_id='+p_project_id+p_field_param+'">revisit secondary plant id</a>'
-     + '</span></dt>'
+  faddelem('p',document.body,{innerHTML:'<dl><dt>'}
+     + {innerHTML:furl('https://www.inaturalist.org/observations/identify?quality_grade=needs_id%2Cresearch%2Ccasual&taxon_id='+p_taxon_id+'&project_id='+p_project_id+p_field_param),"revisit secondary plant id's"}
+   //  + '<a href="https://www.inaturalist.org/observations/identify?quality_grade=needs_id%2Cresearch%2Ccasual&taxon_id='+p_taxon_id+'&project_id='+p_project_id+p_field_param+'">revisit secondary plant id</a>'
+     + '</dt>'
      + '</dl>'});
 }
    
