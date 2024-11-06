@@ -35,7 +35,7 @@
       }
    }
    #main { width:100%; }
-   dl { display: grid; grid-gap: 4px 4px; grid-template-columns: max-content; }
+   dl { display: grid; grid-gap: 4px 10px; grid-template-columns: max-content; }
    dt {  }
    dd { margin: 0; grid-column-start: 2;}   
    table, td, th { border-collapse:collapse; margin:0; padding:4px; }
@@ -183,12 +183,12 @@ let apiref = furl(apirefurl,apirefname);
 // only display the key when the view is "all" (show all).
 /*font-family:courier;*/
 if( p_view === 'all' ){
-   faddelem('p',document.body,{innerHTML:'<div style=" float:right; padding-left: 5px; padding-right: 5px; padding-top:3px; padding-bottom:3px; border: 1px solid forestgreen; border-radius: 5px;">'
-     + '<dl><dt><span style="color:cornflowerblue; ">Activity Observed..:</span></dt> <dd><span style="color:cornflowerblue; ">Observation Field..:</span></dd>'
-     + '<dt>visiting...........:</dt> <dd>Plant that the organism was found on</dd>'
-     + '<dt>nectaring..........:</dt> <dd>Nectar Plant</dd>'
-     + '<dt>pollinating........:</dt> <dd>Nectar / Pollen delivering plant</dd>'
-     + '<dt>associating........:</dt> <dd>Name of Associated Plant</dd></dl></div>'});
+   faddelem('p',document.body,{innerHTML:'<div style=" float:right; padding-left: 0px; padding-right: 0px; padding-top:0px; padding-bottom:0px; border: 1px solid forestgreen; border-radius: 5px;">'
+     + '<dl><dt><span style="color:cornflowerblue; ">Activity Observed</span></dt> <dd><span style="color:cornflowerblue; ">Observation Field</span></dd>'
+     + '<dt>visiting ~</dt> <dd>Plant that the organism was found on</dd>'
+     + '<dt>nectaring ~</dt> <dd>Nectar Plant</dd>'
+     + '<dt>pollinating ~<dt> <dd>Nectar / Pollen delivering plant</dd>'
+     + '<dt>associating ~</dt> <dd>Name of Associated Plant</dd></dl></div>'});
 }
    
 faddelem('h2',document.body,{innerText:apirefname});
