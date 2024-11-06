@@ -35,13 +35,13 @@
       }
    }
    #main { width:100%; }
-   dl { display: grid; grid-gap: 4px 10px; grid-template-columns: max-content; }
+   dl { display: grid; grid-gap: 0px 10px; grid-template-columns: max-content; }
    dt {  }
    dd { margin: 0; grid-column-start: 2;}   
    table, td, th { border-collapse:collapse; margin:0; padding:4px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
-   th:first-child{ border: 0px solid forestgreen; border-radius: 10px 0px 0px 0px; }
-   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 10px 0px 0px; }
+   th:first-child{ border: 0px solid forestgreen; border-radius: 7px 0px 0px 0px; }
+   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 7px 0px 0px; }
    tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
    tr:nth-child(even) { background:var(--color-base); }
    .tar { text-align:right; }
@@ -184,11 +184,11 @@ let apiref = furl(apirefurl,apirefname);
 /*font-family:courier;*/
 if( p_view === 'all' ){
    faddelem('p',document.body,{innerHTML:'<div style=" float:right; padding-left: 0px; padding-right: 0px; padding-top:0px; padding-bottom:0px; border: 1px solid forestgreen; border-radius: 5px;">'
-     + '<dl><dt><span style="color:cornflowerblue; ">Activity Observed</span></dt> <dd><span style="color:cornflowerblue; ">Observation Field</span></dd>'
-     + '<dt>visiting ~</dt> <dd>Plant that the organism was found on</dd>'
-     + '<dt>nectaring ~</dt> <dd>Nectar Plant</dd>'
-     + '<dt>pollinating ~<dt> <dd>Nectar / Pollen delivering plant</dd>'
-     + '<dt>associating ~</dt> <dd>Name of Associated Plant</dd></dl></div>'});
+     + '<dl><dt><span style="color:cornflowerblue; ">Activity:</span></dt> <dd><span style="color:cornflowerblue; ">Observation Field:</span></dd>'
+     + '<dt>visiting</dt> <dd>Plant that the organism was found on</dd>'
+     + '<dt>nectaring</dt> <dd>Nectar Plant</dd>'
+     + '<dt>pollinating</dt> <dd>Nectar / Pollen delivering plant</dd>'
+     + '<dt>associating</dt> <dd>Name of Associated Plant</dd></dl></div>'});
 }
    
 faddelem('h2',document.body,{innerText:apirefname});
