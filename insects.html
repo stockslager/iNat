@@ -287,7 +287,8 @@ function fresults(xobj) {
 
       // if single view show descriptive line since there is no key.
       if( p_single_view === 'yes' ){
-        if( p_view === 'visiting' ){
+        
+        if( p_view === 'visiting' ){          
            faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants those organisms visited. Relies on the \"Plant that the organism was found on\" observation field.'});
         } else if( p_view === 'pollinating' ){
            faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants whose nectar or pollen was delivered. Relies on the \"Nectar / Pollen delivering plant\" observation field.'});
@@ -296,6 +297,11 @@ function fresults(xobj) {
         } else if( p_view === 'associating' ){
            faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants those organisms are associated with. Relies on the \"Name of Associated Plant\" observation field.'});
         }
+        faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)            
+            +'<br />'
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});
+         
       } else { 
          if( p_view === 'visiting' ){
            faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' (visiting, '
