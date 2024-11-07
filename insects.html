@@ -299,11 +299,13 @@ function fresults(xobj) {
                                                    + '<dt>the ' + furl(pollinatingURL, 'nectar / pollen delivering plant')
                                                    + '</dt><dt>observation field.</dt></dl>'});
         } else if( p_view === 'nectaring' ){
-           faddelem('p',document.body,{innerHTML:'<dl><dt>List of organisms with a link to the plants '
-                                                   + 'those organisms nectared at. Relies on the '
-                                                   + furl(nectaringURL, 'Nectar Plant') + ' observation field.</dt></dl>'});
+           faddelem('p',document.body,{innerHTML:'<dl><dt>List of organisms with a link to the plants </dt>'
+                                                   + '<dt>those organisms nectared at. Relies on the </dt><dt>'
+                                                   + furl(nectaringURL, 'nectar plant') + ' observation field.</dt></dl>'});
         } else if( p_view === 'associating' ){
-           faddelem('p',document.body,{innerHTML:'<dl>List of organisms with a link to the plants those organisms are associated with. Relies on the \"Name of Associated Plant\" observation field.</dl>'});
+           faddelem('p',document.body,{innerHTML:'<dl><dt>List of organisms with a link to the plants </dt>'
+                                                   + '<dt>those organisms are associated with. Relies on </dt>'
+                                                   + '<dt>the ' + furl(associatingURL, 'name of associated plant') + ' observation field.</dt></dl>'});
         }
         faddelem('p',document.body,{innerHTML:'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});
