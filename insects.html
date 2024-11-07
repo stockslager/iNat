@@ -262,25 +262,25 @@ function fresults(xobj) {
 
       faddelem('h2',document.body,{innerText:refn});
 
-      let visitingURL     = 'furl("https://www.inaturalist.org/observation_fields/7623", "Plant that the organism was found on")';   
-      let nectaringURL    = 'furl("https://www.inaturalist.org/observation_fields/498", "Nectar Plant")';
-      let associatingURL  = 'https://www.inaturalist.org/observation_fields/7807", "Name of Associated Plant")';   
-      let pollinatingURL  = 'furl("https://www.inaturalist.org/observation_fields/4935", "Nectar / Pollen delivering plant")';
+      let visitingURL     = 'https://www.inaturalist.org/observation_fields/7623';   
+      let nectaringURL    = 'https://www.inaturalist.org/observation_fields/498';
+      let associatingURL  = 'https://www.inaturalist.org/observation_fields/7807';   
+      let pollinatingURL  = 'https://www.inaturalist.org/observation_fields/4935';
       
       let relies = '';
       
       if( p_single_view === 'yes' ){
         if( p_view === 'visiting' ){
-           faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants those organisms visited. Relies on the \"'+visitingURL+'\" observation field.'});
+           faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants those organisms visited. Relies on the \"'+furl(visitingURL,'Plant that the organism was found on')+'\" observation field.'});
         } else if( p_view === 'pollinating' ){
-           faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants whose nectar or pollen was delivered. Relies on the \"'+pollinatingURL+'\" observation field.'});
+           faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants whose nectar or pollen was delivered. Relies on the \"'+furl(pollinatingURL, 'Nectar / Pollen delivering plant')+'\" observation field.'});
         } else if( p_view === 'nectaring' ){
-           faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants those organisms nectared at. Relies on the \"'+nectaringURL+'\" observation field.'});
+           faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants those organisms nectared at. Relies on the \"'+furl(nectaringURL,'Nectar Plant')+'\" observation field.'});
         } else if( p_view === 'associating' ){
-           faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants those organisms are associated with. Relies on the \"'+associatingURL+'\" observation field.'});
+           faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants those organisms are associated with. Relies on the \"'+furl(associatingURL,'Name of Associated Plant')+'\" observation field.'});
         }
       } else {
-        relies += (' ~ Relies on observation fields (\"'+visitingURL+'\", \"'+nectaringURL+'\", \"'+pollinatingURL+'\", \"'+associatingURL+'\")');
+        relies += (' ~ Relies on observation fields (\"'+furl(visitingURL,'Plant that the organism was found on')+'\", \"'+furl(nectaringURL,'Nectar Plant')+'\", \"'+furl(pollinatingURL,'Nectar / Pollen delivering plant')+'\", \"'+furl(associatingURL,'Name of Associated Plant'+'\")');
       
         if( p_view === 'visiting' ){
            faddelem('p',document.body,{innerHTML:' (visiting, '
