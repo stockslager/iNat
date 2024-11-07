@@ -37,7 +37,7 @@
    
    #key { font-weight: bold; text-decoration-line: underline; text-decoration-thickness: 1px; }
    #main { width:100%; }
-   dl { float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
+   dl { max-width: 25%; float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
    dt { }
    dd { margin: 0; grid-column-start: 2;}   
    table, td, th { border-collapse:collapse; margin:0; padding:4px; }
@@ -289,13 +289,14 @@ function fresults(xobj) {
       if( p_single_view === 'yes' ){
         
         if( p_view === 'visiting' ){          
-           faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants those organisms visited. Relies on the \"Plant that the organism was found on\" observation field.'});
+           faddelem('p',document.body,{innerHTML:'<dl>List of organisms with a link to the plants those organisms visited. Relies on the \"'
+                  + furl(visitingURL,'plant that the organism was found on') + '\" observation field.</dl>'});
         } else if( p_view === 'pollinating' ){
-           faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants whose nectar or pollen was delivered. Relies on the \"Nectar / Pollen delivering plant\" observation field.'});
+           faddelem('p',document.body,{innerHTML:'<dl>List of organisms with a link to the plants whose nectar or pollen was delivered. Relies on the \"Nectar / Pollen delivering plant\" observation field.</dl>'});
         } else if( p_view === 'nectaring' ){
-           faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants those organisms nectared at. Relies on the \"Nectar Plant\" observation field.'});
+           faddelem('p',document.body,{innerHTML:'<dl>List of organisms with a link to the plants those organisms nectared at. Relies on the \"Nectar Plant\" observation field.</dl>'});
         } else if( p_view === 'associating' ){
-           faddelem('p',document.body,{innerHTML:'List of organisms with a link to the plants those organisms are associated with. Relies on the \"Name of Associated Plant\" observation field.'});
+           faddelem('p',document.body,{innerHTML:'<dl>List of organisms with a link to the plants those organisms are associated with. Relies on the \"Name of Associated Plant\" observation field.</dl>'});
         }
         faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)            
             +'<br />'
