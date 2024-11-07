@@ -78,20 +78,24 @@ winurlparams.append('per_page','100');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa');
 
-// remove the toggels if the project is only allowing observations with one obs field.
+// remove the toggles if the project is only allowing observations with one obs field.
 if ( p_view === 'visitingonly' ){
    winurlparams.delete('view');
    winurlparams.append('view', 'visiting');
+   p_view = 'visiting';
    p_single_view = 'yes';
 } else if( p_view === 'nectaringonly' ){
    winurlparams.delete('view');
    winurlparams.append('view', 'nectaring');
+   p_view = 'nectaring';
    p_single_view = 'yes';
 } else if( p_view === 'associatingonly' ){
+   p_view = 'associating';
    winurlparams.delete('view');
    winurlparams.append('view', 'associating');
    p_single_view = 'yes';
 } else if( p_view === 'pollinatingonly' ){
+   p_view = 'pollinating';
    winurlparams.delete('view');
    winurlparams.append('view', 'pollinating');
    p_single_view = 'yes';
