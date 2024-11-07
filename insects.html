@@ -300,14 +300,16 @@ function fresults(xobj) {
                                                    + '</dt><dt>observation field.</dt></dl>'});
         } else if( p_view === 'nectaring' ){
            faddelem('p',document.body,{innerHTML:'<dl><dt>List of organisms with a link to the plants </dt>'
-                                                   + '<dt>those organisms nectared at. Relies on the </dt><dt>'
-                                                   + furl(nectaringURL, 'nectar plant') + ' observation field.</dt></dl>'});
+                                                   + '<dt>those organisms nectared at. Relies on </dt><dt>'
+                                                   + 'the ' + furl(nectaringURL, 'nectar plant') + ' observation field.</dt></dl>'});
         } else if( p_view === 'associating' ){
            faddelem('p',document.body,{innerHTML:'<dl><dt>List of organisms with a link to the plants </dt>'
-                                                   + '<dt>those organisms are associated with. Relies on </dt>'
+                                                   + '<dt>they are associated with. Relies on </dt>'
                                                    + '<dt>the ' + furl(associatingURL, 'name of associated plant') + ' observation field.</dt></dl>'});
         }
-        faddelem('p',document.body,{innerHTML:'per page: '+fcomnum(per_page)+'<br />'
+        faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)            
+            +'<br />'
+            +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});
          
       } else { 
