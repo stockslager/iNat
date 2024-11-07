@@ -68,7 +68,7 @@ let per_page = winurlparams.get('per_page') || 100;
 let p_options = winurlparams.get('options') || [];
 let p_plant_name = winurlparams.get('plant_name') || '';
 let p_view = winurlparams.get('view') || 'visiting';
-let p_single_view = winurlparams.get('single_view') || '';
+let p_single_view = '';
 let p_project_id = '';
 winurlparams.delete('options');
 
@@ -77,6 +77,25 @@ winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa');
+
+// remove the toggels if the project is only allowing observations with one obs field.
+if ( p_view === 'visitingonly' ){
+   winurlparams.delete('view');
+   winurlparams.append('view', 'visiting');
+   p_single_view = 'yes';
+} else if( p_view === 'nectaringonly' ){
+   winurlparams.delete('view');
+   winurlparams.append('view', 'nectaring');
+   p_single_view = 'yes';
+} else if( p_view === 'associatingonly' ){
+   winurlparams.delete('view');
+   winurlparams.append('view', 'associating');
+   p_single_view = 'yes';
+} else if( p_view === 'pollinatingonly' ){
+   winurlparams.delete('view');
+   winurlparams.append('view', 'pollinating');
+   p_single_view = 'yes';
+}
 
 // delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
 // the creation of local projects / places for restoration sites  and/or pollinator gardens.
