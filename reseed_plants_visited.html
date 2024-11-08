@@ -214,10 +214,11 @@ function fresults(xobj) {
                {innerText:'Photo'},
                {innerText:'Common Name'}, 
                {innerText:'Name'},
-               {innerText:'Grade'},
-               {innerText:'Visiting Organisms'},
+               {innerText:'Seed Status'},
+               {innerText:'Wildlife Value'},
                {innerText:'Donor Photo'},
                {innerText:'Donor Login'},
+               {innerText:'Grade'},
                {innerText:'Observation Photo'},
    //            {innerText:'Observation ID'},
       ];         
@@ -233,16 +234,32 @@ function fresults(xobj) {
          let brow = faddelem('tr',tbody);
          let rec = results[i];
          let tax_name = '';
-         let pref_tax_name = '';
+         let pref_tax_name = '';  
          let tax_photo = '';
          let foundRec = '';
          let activity_found = '';
          let foundRecWTaxon = '';
+         let availability = '';
 
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
 
                foundRec = '';
+               if( rec.ofvs[j].field_id === 18497 ){   // "seeds available in library" observation field.   
+                   foundRec = 'yes';
+                   j=rec.ofvs.length;
+                   if( rec.ofvs[j].value === 'yes' || rec.ofvs[j].value === 'Yes' ){
+                       availability = 'Available Now';
+                   } else {
+                       availability = 'Out of Stock';
+                   }
+               }
+
+               if( rec.ofvs[j].field_id === 18295 ){   // "availability" observation field.
+                   roundRec = 'yes';
+                   availability = rec.ofvs[j].value || 'Out of Stock';
+                   j=rec.ofvs.length;
+               }
             }
          }
 
@@ -257,16 +274,18 @@ function fresults(xobj) {
             user_icon += '<div class="npcicon">&#x1F464;</div>';
          } else {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
-         } 
+         }          
+       
          values = [
                   {innerText:i+1},
                   {innerHTML:tax_photo},
                   {innerText:pref_tax_name},
                   {innerText:tax_name},
-                  {innerText:rec.quality_grade}, 
-                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Visiting Organisms...')},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args, availability )},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'activity...')},
                   {innerHTML:user_icon},
                   {innerHTML:rec.user.login},
+                  {innerText:rec.quality_grade}, 
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
                  // {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
          ];             
