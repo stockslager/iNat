@@ -187,10 +187,11 @@ function fresults(xobj) {
                {innerText:'Common Name'}, 
                {innerText:'Name'},
                {innerText:'Grade'},
-               {innerText:'User Photo'},
-               {innerText:'User Login'},
+               {innerText:'Visiting Organisms'},
+               {innerText:'Donor Photo'},
+               {innerText:'Donor Login'},
                {innerText:'Observation Photo'},
-               {innerText:'Observation ID'},
+   //            {innerText:'Observation ID'},
       ];         
       
       faddelems('th',hrow,labels);
@@ -235,10 +236,11 @@ function fresults(xobj) {
                   {innerText:pref_tax_name},
                   {innerText:tax_name},
                   {innerText:rec.quality_grade}, 
+                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Visiting Organisms...')},
                   {innerHTML:user_icon},
-                  {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
+                  {innerHTML:rec.user.login},
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
-                  {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
+                 // {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
          ];             
 
          faddelems('td',brow,values);
