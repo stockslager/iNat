@@ -71,6 +71,17 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
 
+// set rw_win_options defaults for re-seed...
+let rw_view = '';
+let rw_g_list = winurlparams.get('g_list') || '';
+let rw_s_list = winurlparams.get('s_list') || '';
+let rw_user_id = '';
+
+// if &view was passed in, pass it along for the display on the next table.
+if( winurlparams.get('view') !== null ){
+   rw_view += winurlparams.get('view');
+} 
+ 
 winurlparams.delete('taxon_id');
 winurlparams.delete('per_page');
 winurlparams.append('per_page','30');
@@ -171,7 +182,23 @@ function fresults(xobj) {
       let page_max = Math.ceil(total_results/per_page);
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
+      let toggle_args = '';
+      let args = '';
+
+      if( rw_view != '' ){
+         args += '&view=' + rw_view;
+         toggle_args += '&view=' + rw_view;
+      }
+
+      if( rw_user_id != ''){
+         args += '&user_id=' + rw_user_id;
+         toggle_args += '&user_id=' + rw_user_id;
+      }
       
+      if( rw_g_list != '' && rw_s_list != '' ){
+         toggle_args += '&g_list='+rw_g_list+'&s_list='+rw_s_list;
+      }      
+    
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+'<br />'
          +'per page: '+fcomnum(per_page)+'<br />'
          +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});   
