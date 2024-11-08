@@ -143,7 +143,6 @@ function fpushifnew(ary,value) {
 };
 
 function fresults(xobj) {
-          faddelem('h2',document.body,{innerText:'asdfa'});  
    let results = xobj.results;
    if (results) {
       let total_results = xobj.total_results;
@@ -153,27 +152,33 @@ function fresults(xobj) {
          let tax_name = '';
          let pref_tax_name = '';  
          let tax_photo = '';
-         let foundRec = '';
-         let activity_found = '';
-         let foundRecWTaxon = '';
          let availability = 'Out of Stock';
+         let quantity_available = '';
+         let seed_hub = '';
 
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
 
-               foundRec = '';
+               if( rec.ofvs[j].field_id === 17234 ){   // Quantity Available
+                   if( rec.ofvs[j].value ){
+                       quantity_available = rec.ofvs[j].value;
+                   } 
+               }
+             
+               if( rec.ofvs[j].field_id === 17434 ){   // Seed Hub
+                   if( rec.ofvs[j].value ){
+                       seed_hub = rec.ofvs[j].value;
+                   } 
+               }    
+             
                if( rec.ofvs[j].field_id === 18497 ){   // "seeds available in library" observation field.   
-                   foundRec = 'yes';
                    if( rec.ofvs[j].value === 'yes' ){
                        availability = 'Available Now';
                    } 
-                   break;
                }
 
                if( rec.ofvs[j].field_id === 18295 ){   // "availability" observation field.
-                   foundRec = 'yes';
                    availability = rec.ofvs[j].value || 'Out of Stock';
-                   break;
                }
             }
          }
@@ -184,17 +189,9 @@ function fresults(xobj) {
         // let tax_name = rec.taxon.name || '';
    
         faddelem('h2',document.body,{innerText:header_row});  
-         //faddelem('p',document.body,{innerText:'Name: ' + tax_name});
-         
-         //tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';                     
-
-         /*let user_icon = rec.user.icon || '';
-         
-         if( user_icon === '' ){
-            user_icon += '<div class="npcicon">&#x1F464;</div>';
-         } else {
-            user_icon = '<img class="icon" src="'+user_icon+'" />';
-         }*/
+        faddelem('p',document.body,{innerText:'Availability:'+availability});
+        faddelem('p',document.body,{innerText:'Quantity Available:'+quantity_available});
+        faddelem('p',document.body,{innerText:'Availability:'+seed_hub});
       };
    }
 };
