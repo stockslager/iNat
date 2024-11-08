@@ -69,8 +69,6 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let p_project_id = winurlparams.get('project_id') || '';
-let p_donor_project_id = winurlparams.get('donor_project_id') || '';
 
 // set rw_win_options defaults for re-seed...
 let p_obs_id = winurlparams.get('obs_id') || '';
@@ -137,7 +135,7 @@ function fpushifnew(ary,value) {
 };
 
 function fresults(xobj) {
-   let results = xobj.results;
+/*   let results = xobj.results;
    if (results) {
       let total_results = xobj.total_results;
                
@@ -190,7 +188,7 @@ function fresults(xobj) {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }          
       };
-   }
+   }*/
 };
 </script>
 </body>
