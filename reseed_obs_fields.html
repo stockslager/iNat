@@ -157,6 +157,8 @@ function fresults(xobj) {
          let seed_hub = '';
          let pickup_info = '';
          let wild_parent = '';
+         let prop_by = '';
+         let parent_col = '';
 
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
@@ -196,6 +198,18 @@ function fresults(xobj) {
                        availability = rec.ofvs[j].value || 'Out of Stock';
                    }
                }
+ 
+               if( rec.ofvs[j].field_id === 16769 ){   // "propagated by" observation field.
+                   if( rec.ofvs[j].value ){
+                       prop_by = rec.ofvs[j].value || '';
+                   }
+               }           
+
+               if( rec.ofvs[j].field_id === 16628 ){   // "parent colony" observation field.
+                   if( rec.ofvs[j].value ){
+                       parent_col = rec.ofvs[j].value || '';
+                   }
+               }   
             }
          }
 
@@ -211,6 +225,8 @@ function fresults(xobj) {
            + '<dt>quantity available</dt> <dd>'+quantity_available.toLowerCase()+'</dd>'
            + '<dt>seed hub</dt> <dd>'+seed_hub.toLowerCase()+'</dd>'
            + '<dt>seed hub info</dt> <dd>'+pickup_info.toLowerCase()+'</dd>'
+           + '<dt>propagated by</dt> <dd>'+prop_by.toLowerCase()+'</dd>'
+           + '<dt>parent colony</dt> <dd>'+parent_col.toLowerCase()+'</dd>'
            + '<dt>wild ancestral colony</dt> <dd>'+wild_parent.toLowerCase()+'</dd></dl>'});
       };
    }
