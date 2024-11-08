@@ -69,10 +69,6 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let p_plant_name = winurlparams.get('plant_name') || '';
-let p_insect_name = winurlparams.get('insect_name') || '';
-let p_taxon_id = winurlparams.get('insect_id') || '';
-let p_visitor_taxon_id = winurlparams.get('plant_id') || 0;
 let p_project_id = '';
 
 if( winurlparams.get('project_id') == null ){
@@ -81,13 +77,12 @@ if( winurlparams.get('project_id') == null ){
    p_project_id += winurlparams.get('project_id');
 }
 
-let p_plant_id = winurlparams.get('plant_id') || [];
 winurlparams.delete('taxon_id');
 winurlparams.append('taxon_id', p_taxon_id);
 winurlparams.delete('per_page');
 winurlparams.append('per_page','30');
 winurlparams.delete('iconic_taxa');
-winurlparams.append('iconic_taxa','Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa');
+winurlparams.append('iconic_taxa','Plantae');
 
 // delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
 // the creation of local projects / places for restoration sites  and/or pollinator gardens.
@@ -100,45 +95,18 @@ winurlparams.delete('swlng');
 winurlparams.delete('swlat');
    
 let p_view = winurlparams.get('view') || 'visiting';
-
-if( p_view === 'visiting' ){
-   winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
-   winurlparams.append('field:Plant%20that%20the%20organism%20was%20found%20on', p_plant_id);
-} else if( p_view === 'nectaring' ){
-   winurlparams.delete('field:Nectar%20Plant');
-   winurlparams.append('field:Nectar%20Plant', p_plant_id);
-} else if( p_view === 'pollinating' ){
-   winurlparams.delete('field:Nectar+/+Pollen+delivering+plant');
-   winurlparams.append('field:Nectar+/+Pollen+delivering+plant', p_plant_id);
-} else if( p_view === 'associating' ){
-   winurlparams.delete('field:Name%20of%20Associated%20Plant');
-   winurlparams.append('field:Name%20of%20Associated%20Plant', p_plant_id);
-} else if( p_view === 'all' ){
-   // delete everything for "show all" so it doesn't filter on an obs field.
-   winurlparams.delete('field:Nectar%20Plant');
-   winurlparams.delete('field:Nectar+/+Pollen+delivering+plant');
-   winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
-   winurlparams.delete('field:Name%20of%20Associated%20Plant');
-} else {
-   winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
-   winurlparams.append('field:Plant%20that%20the%20organism%20was%20found%20on', p_plant_id);
-}   
    
 winurlparams.delete('options');
-let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
 winurlparams.delete('idextra_user_id');
-let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
 winurlparams.delete('photo_curl_filename_prefix');
 
 let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
+let apirefurl = 'https://stockslager.github.io/iNat/reseed_plant_inspector.html';
    
 if (winurlsearchstr==='') {
    let instructions = [
-      {innerHTML:'This page displays the response from the '+apiref+' API endpoint in a human-readable format. To use this page, add at least one query parameter to the URL. See '+furl(apirefurl)+' for available query parameters.'},
-      {innerHTML:'Suppose the address of this page is '+winurlexsearchstr+', <br />and you want to see the results of '+furl(famp(apibase+'?user_id=bob&per_page=200'))+' in a friendly format, <br />then you would open '+furl(famp(winurlexsearchstr+'?user_id=bob&per_page=200'))+' in your browser.'},
-      {innerHTML:'The max records per page for this endpoint is 200. Note that the API will not return records beyond the 10,000th record for a given set of parameters, but you can work around this by using the id_above and id_below parameters.'},
+      {innerHTML:'Invalid parameter list.  Please access via '+furl(apirefurl)+'.'},
    ];
    faddelems('p',document.body,instructions);
 }
@@ -157,38 +125,7 @@ else {
 
 let apirefname = '';
    
-if( p_view === 'nectaring' ){
-   apirefname += p_insect_name;
-   apirefname += ' Nectaring At ';
-   apirefname += p_plant_name;
-} else if ( p_view === 'visiting' ){
-   apirefname += p_insect_name;
-   apirefname += ' Visiting ';
-   apirefname += p_plant_name;
-} else if ( p_view === 'pollinating' ){
-   apirefname += p_insect_name;
-   apirefname += ' Pollinating ';
-   apirefname += p_plant_name;
-} else if ( p_view === 'associating' ){
-   apirefname += p_insect_name;
-   apirefname += ' Associated With ';
-   apirefname += p_plant_name;
-} else {
-   apirefname += 'All the plants visited by a ';
-   apirefname += p_insect_name;
-}
-
 let apiref = furl(apirefurl,apirefname);
-
-// display the "key" associating observation fields to the values in the "activity observed" column in the table.
-// only display the key when the view is "all" (show all).
-if( p_view === 'all' ){
-   faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">activity:</span></dt> <dd><span id="key">observation field:</span></dd>'
-     + '<dt>visiting</dt> <dd>plant that the organism was found on</dd>'
-     + '<dt>nectaring</dt> <dd>nectar plant</dd>'
-     + '<dt>pollinating</dt> <dd>nectar / pollen delivering plant</dd>'
-     + '<dt>associating</dt> <dd>name of associated plant</dd></dl>'});
-}
    
 faddelem('h2',document.body,{innerText:apirefname});
 
@@ -251,21 +188,7 @@ function fresults(xobj) {
       let hrow = faddelem('tr',thead);
       let labels = [];
 
-      if( p_view === 'all' ){
-          labels = [
-               {innerText:'#'},
-               {innerText:'Photo'},
-               {innerText:'Common Name'}, 
-               {innerText:'Name'},
-               {innerText:'Activity Observed'},
-               {innerText:'Grade'},
-               {innerText:'User Photo'},
-               {innerText:'User Login'},
-               {innerText:'Observation Photo'},
-               {innerText:'Observation ID'},
-            ];         
-      } else {
-            labels = [
+      labels = [
                {innerText:'#'},
                {innerText:'Photo'},
                {innerText:'Common Name'}, 
@@ -275,8 +198,7 @@ function fresults(xobj) {
                {innerText:'User Login'},
                {innerText:'Observation Photo'},
                {innerText:'Observation ID'},
-            ];    
-      }
+      ];         
       
       faddelems('th',hrow,labels);
 
@@ -299,76 +221,12 @@ function fresults(xobj) {
             for (let j=0; j<rec.ofvs.length; j++){
 
                foundRec = '';
-               if( (p_view === 'nectaring') ||
-                   (p_view === 'pollinating') ||
-                   (p_view === 'visiting') ||
-                   (p_view === 'associating') ){
-                  if( (rec.ofvs[j].field_id===498) ||    // 498 = nectar plant
-                      (rec.ofvs[j].field_id===7623) ||   // 7623 = plant that the organism was found on
-                      (rec.ofvs[j].field_id===4935) ||   // 4935 = nectar / pollen delivering plant
-                      (rec.ofvs[j].field_id===7807) ) {  // 7807 = name of associated plant
-                     // 498 == Nectar Plant.
-                     if( rec.ofvs[j].taxon_id === p_visitor_taxon_id ){
-                                                
-                        if( rec.ofvs[j].taxon == null ){
-                           tax_name = rec.ofvs[j].value;
-                           pref_tax_name = rec.ofvs[j].value_ci;
-                           //tax_photo = '&#127807';
-                           tax_photo = '<div class="clipart">&#127807</div>';
-                        } else {
-                           tax_name = rec.ofvs[j].taxon.name;
-                           pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
-                           tax_photo = '<img class="icon" src="'+rec.ofvs[j].taxon.default_photo.url+'" />';                     
-                        }
-                        foundRec = 'yes';
-                        displayCount++;
-                        j=rec.ofvs.length;
-                     }
-                  }               
-               } else if(p_view === 'all' ){
-                     
-                     if( (rec.ofvs[j].field_id===7623) || 
-                         (rec.ofvs[j].field_id===498)  ||
-                         (rec.ofvs[j].field_id===7807) ||
-                         (rec.ofvs[j].field_id===4935) ) 
-                     {
-                        if( rec.ofvs[j].field_id===7623 ){
-                           activity_found += 'visiting ';
-                        }
-                        if( rec.ofvs[j].field_id===498 ){
-                           activity_found += 'nectaring ';
-                        }
-                        if( rec.ofvs[j].field_id===7807 ){
-                           activity_found += 'associating ';
-                        }
-                        if( rec.ofvs[j].field_id===4935 ){
-                           activity_found += 'pollinating ';
-                        }                        
-                        if( rec.ofvs[j].taxon == null ){
-                           tax_name = rec.ofvs[j].value;
-                           pref_tax_name = rec.ofvs[j].value_ci;
-                           tax_photo = '<div class="clipart">&#127807</div>';
-                        } else {
-                           foundRecWTaxon = 'yes';
-                           tax_name = rec.ofvs[j].taxon.name;
-                           pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
-                           tax_photo = '<img class="icon" src="'+rec.ofvs[j].taxon.default_photo.url+'" />';                     
-                        }
-                        // j=rec.ofvs.length;  (let it loop through all of them to build activity_found list.
-                     } else {
-                        if( foundRecWTaxon === '' ){
-                            tax_name = 'Unspecified Plant';
-                            pref_tax_name = 'Unspecified Plant';
-                            tax_photo = '<div class="clipart">&#127807</div>';
-                        }
-                     }
-               }
             }
-         } else { 
-            tax_name = 'Unspecified Plant';
-            pref_tax_name = 'Unspecified Plant';
-            tax_photo = '<div class="clipart">&#127807</div>';
          }
+
+         tax_name = rec.taxon.name || '';
+         pref_tax_name = rec.taxon.preferred_common_name || '';
+         tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';                     
 
          let values = [];
          let user_icon = rec.user.icon || '';
@@ -377,14 +235,8 @@ function fresults(xobj) {
             user_icon += '<div class="npcicon">&#x1F464;</div>';
          } else {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
-         }
-         
-         if( (p_view === 'nectaring' && foundRec === 'yes') ||
-             ( p_view === 'visiting' && foundRec === 'yes') ||
-             ( p_view === 'pollinating' && foundRec === 'yes') ||
-             ( p_view === 'associating' && foundRec === 'yes') )
-         {
-               values = [
+         } 
+         values = [
                   {innerText:i+1},
                   {innerHTML:tax_photo},
                   {innerText:pref_tax_name},
@@ -394,21 +246,7 @@ function fresults(xobj) {
                   {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
-               ];             
-         } else if( p_view === 'all' ){
-            values = [
-                  {innerText:i+1},
-                  {innerHTML:tax_photo},
-                  {innerText:pref_tax_name},
-                  {innerText:tax_name},
-                  {innerText:activity_found},
-                  {innerText:rec.quality_grade}, 
-                  {innerHTML:user_icon},
-                  {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
-                  {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
-                  {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
-               ];             
-         }     
+         ];             
 
          faddelems('td',brow,values);
       };
