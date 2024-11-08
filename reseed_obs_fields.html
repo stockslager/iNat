@@ -73,7 +73,15 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 // set rw_win_options defaults for re-seed...
 let p_obs_id = winurlparams.get('obs_id') || '';
 
+// set id to the obs_id passed in for call to api...
+winurlparams.delete('id');
+winurlparams.append('id', p_obs_id);
+
+winurlparams.delete('per_page');
+winurlparams.append('per_page','30');
+ 
 let apibase = 'https://api.inaturalist.org/v1/observations';
+ 
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://stockslager.github.io/iNat/reseed_plant_inspector.html';
 
