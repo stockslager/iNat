@@ -36,7 +36,7 @@
    }
    #key { color:var(--color-text-link); }
    #main { width:100%; }
-   dl { float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
+   dl { display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; }
    dt {  }
    dd { margin: 0; grid-column-start: 2;}   
    table, td, th { border-collapse:collapse; margin:0; padding:4px; }
@@ -155,6 +155,7 @@ function fresults(xobj) {
          let availability = 'Out of Stock';
          let quantity_available = '';
          let seed_hub = '';
+         let pickup_info = '';
 
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
@@ -162,6 +163,12 @@ function fresults(xobj) {
                if( rec.ofvs[j].field_id === 17234 ){   // Quantity Available
                    if( rec.ofvs[j].value ){
                        quantity_available = rec.ofvs[j].value;
+                   } 
+               }
+             
+              if( rec.ofvs[j].field_id === 18298 ){   // Seed Hub location and pick-up info
+                   if( rec.ofvs[j].value ){
+                       pickup_info = rec.ofvs[j].value;
                    } 
                }
              
@@ -192,13 +199,9 @@ function fresults(xobj) {
 
         faddelem('p',document.body,{innerHTML:'<dl>'
            + '<dt>availability</dt> <dd>'+availability.toLowerCase()+'</dd>'
-           + '<dt>nectaring</dt> <dd>nectar plant</dd>'
-           + '<dt>pollinating</dt> <dd>nectar / pollen delivering plant</dd>'
-           + '<dt>associating</dt> <dd>name of associated plant</dd></dl>'});
-
-        faddelem('p',document.body,{innerText:'availability:'+availability.toLowerCase()});
-        faddelem('p',document.body,{innerText:'quantity available:'+quantity_available.toLowerCase()});
-        faddelem('p',document.body,{innerText:'availability:'+seed_hub.toLowerCase()});
+           + '<dt>quantity available</dt> <dd>'+quantity_available.toLowerCase()+'</dd>'
+           + '<dt>seed hub</dt> <dd>'+seed_hub.toLowerCase()+'</dd>'
+           + '<dt>seed hub info</dt> <dd>'+pickup_info.toLowerCase()+'</dd></dl>'});
       };
    }
 };
