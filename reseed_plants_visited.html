@@ -70,6 +70,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
+let p_donor_project_id = winurlparams.get('donor_project_id') || '';
 
 // set rw_win_options defaults for re-seed...
 let rw_view = '';
@@ -263,7 +264,7 @@ function fresults(xobj) {
                   {innerText:pref_tax_name},
                   {innerText:tax_name},
                   {innerText:rec.quality_grade}, 
-                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Visiting Organisms...')},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Visiting Organisms...')},
                   {innerHTML:user_icon},
                   {innerHTML:rec.user.login},
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
