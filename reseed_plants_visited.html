@@ -69,20 +69,14 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let p_project_id = '';
- 
-if( winurlparams.get('project_id') == null ){
-   throw new Error(response.status+': '+'A project_id parameter was not specified in the url.  Please add a &project_id=?????');
-} else {
-   p_project_id += winurlparams.get('project_id');
-}
+let p_project_id = winurlparams.get('project_id') || '';
 
 winurlparams.delete('taxon_id');
 winurlparams.delete('per_page');
 winurlparams.append('per_page','30');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Plantae');
-/*
+
 // delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
 // the creation of local projects / places for restoration sites  and/or pollinator gardens.
 winurlparams.delete('lat');
@@ -103,7 +97,6 @@ let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://stockslager.github.io/iNat/reseed_plant_inspector.html';
 
-   */
 /*if (winurlsearchstr==='') {
    let instructions = [
       {innerHTML:'Invalid parameter list.  Please access via '+furl(apirefurl)+'.'},
