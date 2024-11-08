@@ -359,48 +359,28 @@ function fresults(xobj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
       let labels = [];
+      let action = '';
 
       if( p_view === 'nectaring' ){
-         labels = [
-            {innerText:'#'},
-            {innerText:'Photo'},
-            {innerText:'Common Name'},
-            {innerText:'Name'},
-            {innerText:'Occurrences'},
-            {innerText:'Nectaring Visits'},
-            {innerText:'Rank'},
-         ];
+          action = 'Nectaring Visits';
       } else if( p_view === 'pollinating' ){
-         labels = [
-            {innerText:'#'},
-            {innerText:'Photo'},
-            {innerText:'Common Name'},
-            {innerText:'Name'},
-            {innerText:'Occurrences'},
-            {innerText:'Pollinating Visits'},
-            {innerText:'Rank'},     
-         ];
+          action = 'Pollinating Visits';
       } else if( p_view === 'associating' ){
-         labels = [
-            {innerText:'#'},
-            {innerText:'Photo'},
-            {innerText:'Common Name'},
-            {innerText:'Name'},
-            {innerText:'Occurrences'},
-            {innerText:'Associated With'},
-            {innerText:'Rank'},     
-         ];
+          action = 'Associated With';
       } else {
-         labels = [
+          action = 'Plants Visited';
+      }
+      
+      labels = [
             {innerText:'#'},
             {innerText:'Photo'},
             {innerText:'Common Name'},
             {innerText:'Name'},
+            {innerText:'Conservation Status'},
             {innerText:'Occurrences'},
-            {innerText:'Plants Visited'},
+            {innerText:action},
             {innerText:'Rank'},
-         ];
-      }
+      ];
       
       if (p_options.includes('ancestry')) { labels.splice(7,0,{innerText:'Ancestry'}); };
       faddelems('th',hrow,labels);
@@ -437,6 +417,11 @@ function fresults(xobj) {
 
          let ins_name = rec.taxon.preferred_common_name || rec.taxon.name || '';         
          let values = [];
+         let cons_status = '';
+
+         if( rec.taxon.conservation_status ){
+            cons_status = (rec.taxon.conservation_status.status || '');
+         }
 
          values = [
                {innerText:i+1},
@@ -445,6 +430,7 @@ function fresults(xobj) {
                   : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
                {innerText:rec.taxon.preferred_common_name||''},
                {innerText:rec.taxon.name||''},
+               {innerText:cons_status},
                {innerText:recCount||''},
                {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_on_plants.html?project_id='+p_project_id+'&insect_id='+rec.taxon.id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&insect_name='+ins_name+'&view='+p_view,ss)},
                {innerText:rec.taxon.rank||''},
