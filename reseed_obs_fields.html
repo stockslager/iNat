@@ -185,14 +185,16 @@ function fresults(xobj) {
                    } 
                }
 
-               if( rec.ofvs[j].field_id === 18497 ){   // "wild ancestral colony" observation field.   
-                   if( rec.ofvs[j].value === 'yes' ){
+               if( rec.ofvs[j].field_id === 17383 ){   // "wild ancestral colony" observation field.   
+                   if( rec.ofvs[j].value ){
                        wild_parent = rec.ofvs[j].value;
                    } 
                }
 
                if( rec.ofvs[j].field_id === 18295 ){   // "availability" observation field.
-                   availability = rec.ofvs[j].value || 'Out of Stock';
+                   if( rec.ofvs[j].value ){
+                       availability = rec.ofvs[j].value || 'Out of Stock';
+                   }
                }
             }
          }
