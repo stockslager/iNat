@@ -145,18 +145,11 @@ function fresults(xobj) {
          let longText = rec.description||'';
          let truncatedText = truncate(longText, 500);
          let lists = '';
-         let prj_id = '';
 
          lists += setupLists(rec.id);
          lists += '&project_title=' + rec.title||'';
-
-         if( rec.id === 211197 ){   
-            prj_id = 'project_id=186908,133007';
-         } else if( rec.id === 218728 ){
-            prj_id = 'project_id=135795';
-         }
          
-         target_url += 'https://stockslager.github.io/iNat/rewild_plants_visited.html?'+prj_id+lists;
+         target_url += 'https://stockslager.github.io/iNat/rewild_plants_visited.html?project_id='+rec.id+lists;
          
          let values = [
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
