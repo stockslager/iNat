@@ -184,7 +184,7 @@ let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
 let apirefname = 'Cincinnati Seed Libraries';
 let apiref = furl(apirefurl,apirefname);
 
-if( activity_data === 'state' ){
+if( activity_data === 'local' ){
    faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">toggle:</span></dt> <dd><span id="key">result:</span></dd>'
         + '<dt>use state activity data</dt> <dd>causes subsequent tables to <br>display state-wide data of <br>wildlife visiting species offered <br>by the libraries</dd>'
         + '</dl>'});
@@ -193,8 +193,7 @@ if( activity_data === 'state' ){
         + '<dt>use local activity data</dt> <dd>causes subsequent tables to <br>display local data, collected by <br>library donors, of wildlife visiting <br>species offered by the libraries</dd>'
         + '</dl>'});
 }
-//faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
-  //+ '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});
+
 faddelem('h2',document.body,{innerText:apirefname});
 
 fetch(apiurl)
