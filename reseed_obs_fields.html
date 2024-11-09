@@ -233,15 +233,77 @@ function fresults(xobj) {
    
         faddelem('h2',document.body,{innerText:header_row.toLowerCase()});  
 
-        faddelem('p',document.body,{innerHTML:'<dl>'
+        let table = faddelem('table',document.body,{id:'main'});
+        let thead = faddelem('thead',table);
+        let hrow = faddelem('tr',thead);
+
+        let labels = [ {innerText:'observation field'},
+                       {innerText:'value'},
+                       {innerText:'description'}, ];
+      
+        faddelems('th',hrow,labels);
+
+        let tbody = faddelem('tbody',table);
+
+        let brow = faddelem('tr',tbody);
+        let avail = [
+                  {innerText:'availability'},
+                  {innerHTML:availability.toLowerCase()},
+                  {innerText:' '},];        
+
+       faddelems('td',brow, avail);
+
+       let quant = [
+                  {innerText:'quantity available'},
+                  {innerHTML:quantity_available.toLowerCase()},
+                  {innerText:quantity_available_desc.toLowerCase()},];        
+
+       faddelems('td',brow, quant);
+
+       let shub = [
+                  {innerText:'seed hub'},
+                  {innerHTML:seed_hub.toLowerCase()},
+                  {innerText:seed_hub_desc.toLowerCase()},];        
+
+       faddelems('td',brow, shub);
+
+       let shub_info = [
+                  {innerText:'seed hub info'},
+                  {innerHTML:pickup_info.toLowerCase()},
+                  {innerText:pickup_info_desc.toLowerCase()},];        
+
+       faddelems('td',brow, shub_info);
+
+       let prop = [
+                  {innerText:'propagated by'},
+                  {innerHTML:prop_by.toLowerCase()},
+                  {innerText:prop_by_desc.toLowerCase()},];        
+
+       faddelems('td',brow, prop);      
+
+       let par = [
+                  {innerText:'parent colony'},
+                  {innerHTML:parent_col.toLowerCase()},
+                  {innerText:parent_col_desc.toLowerCase()},];        
+
+       faddelems('td',brow, par);  
+
+       let wild = [
+                  {innerText:'wild ancestral colony'},
+                  {innerHTML:wild_parent.toLowerCase()},
+                  {innerText:wild_parent_desc.toLowerCase()},];        
+
+       faddelems('td',brow, wild); 
+       
+/*       faddelem('p',document.body,{innerHTML:'<dl>'
            + '<dt>availability</dt> <dd>'+availability.toLowerCase()+'</dd>'
            + '<dt>quantity available</dt> <dd><span class="key">'+quantity_available.toLowerCase()+'</span> ~ '+quantity_available_desc.toLowerCase()+'</dd>'
            + '<dt>seed hub</dt> <dd>'+seed_hub.toLowerCase()+' ~ '+seed_hub_desc.toLowerCase()+'</dd>'
            + '<dt>seed hub info</dt> <dd>'+pickup_info.toLowerCase()+' ~ '+pickup_info_desc.toLowerCase()+'</dd>'
            + '<dt>propagated by</dt> <dd>'+prop_by.toLowerCase()+' ~ '+prop_by_desc.toLowerCase()+'</dd>'
            + '<dt>parent colony</dt> <dd>'+parent_col.toLowerCase()+' ~ '+parent_col_desc.toLowerCase()+'</dd>'
-           + '<dt>wild ancestral colony</dt> <dd>'+wild_parent.toLowerCase()+' ~ '+wild_parent_desc.toLowerCase()+'</dd></dl>'});
-      };
+           + '<dt>wild ancestral colony</dt> <dd>'+wild_parent.toLowerCase()+' ~ '+wild_parent_desc.toLowerCase()+'</dd></dl>'});  */
+      };    
    }
 };
 </script>
