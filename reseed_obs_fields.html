@@ -208,6 +208,7 @@ function fresults(xobj) {
                if( rec.ofvs[j].field_id === 16628 ){   // "parent colony" observation field.
                    if( rec.ofvs[j].value ){
                        parent_col = rec.ofvs[j].value || '';
+                       parent_col_desc = rec.ofvs[j].observation_field.description || '';
                    }
                }   
             }
@@ -226,7 +227,7 @@ function fresults(xobj) {
            + '<dt>seed hub</dt> <dd>'+seed_hub.toLowerCase()+'</dd>'
            + '<dt>seed hub info</dt> <dd>'+pickup_info.toLowerCase()+'</dd>'
            + '<dt>propagated by</dt> <dd>'+prop_by.toLowerCase()+'</dd>'
-           + '<dt>parent colony</dt> <dd>'+parent_col.toLowerCase()+'</dd>'
+           + '<dt>parent colony</dt> <dd>'+parent_col.toLowerCase()+'</dd><dd>'+parent_col_desc.toLowerCase()+'</dd>'
            + '<dt>wild ancestral colony</dt> <dd>'+wild_parent.toLowerCase()+'</dd></dl>'});
       };
    }
