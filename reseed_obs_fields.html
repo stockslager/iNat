@@ -159,8 +159,11 @@ function fresults(xobj) {
          let seed_hub = '';
          let seed_hub_desc = '';
          let pickup_info = '';
+         let pickup_info_desc = '';
          let wild_parent = '';
+         let wild_parent_desc = '';
          let prop_by = '';
+         let prop_by_desc = '';
          let parent_col = '';
          let parent_col_desc = '';
 
@@ -170,13 +173,14 @@ function fresults(xobj) {
                if( rec.ofvs[j].field_id === 17234 ){   // Quantity Available
                    if( rec.ofvs[j].value ){
                        quantity_available = rec.ofvs[j].value;
-                     //  quantity_available_desc = rec.ofvs[j].observation_field.description || '';
+                       quantity_available_desc = rec.ofvs[j].observation_field.description || '';
                    } 
                }
              
               if( rec.ofvs[j].field_id === 18298 ){   // Seed Hub location and pick-up info
                    if( rec.ofvs[j].value ){
                        pickup_info = rec.ofvs[j].value;
+                       pickup_info_desc = rec.ofvs[j].observation_field.description || '';
                    } 
                }
              
@@ -196,6 +200,7 @@ function fresults(xobj) {
                if( rec.ofvs[j].field_id === 17383 ){   // "wild ancestral colony" observation field.   
                    if( rec.ofvs[j].value ){
                        wild_parent = rec.ofvs[j].value;
+                       wild_parent_desc = rec.ofvs[j].observation_field.description || '';
                    } 
                }
 
@@ -208,6 +213,7 @@ function fresults(xobj) {
                if( rec.ofvs[j].field_id === 16769 ){   // "propagated by" observation field.
                    if( rec.ofvs[j].value ){
                        prop_by = rec.ofvs[j].value || '';
+                       prop_by_desc = rec.ofvs[j].observation_field.description || '';
                    }
                }           
 
@@ -231,10 +237,10 @@ function fresults(xobj) {
            + '<dt>availability</dt> <dd>'+availability.toLowerCase()+'</dd>'
            + '<dt>quantity available</dt> <dd>'+quantity_available.toLowerCase()+'</dd><dd>'+quantity_available_desc.toLowerCase()+'</dd>'
            + '<dt>seed hub</dt> <dd>'+seed_hub.toLowerCase()+'</dd><dd>'+seed_hub_desc.toLowerCase()+'</dd>'
-           + '<dt>seed hub info</dt> <dd>'+pickup_info.toLowerCase()+'</dd>'
-           + '<dt>propagated by</dt> <dd>'+prop_by.toLowerCase()+'</dd>'
+           + '<dt>seed hub info</dt> <dd>'+pickup_info.toLowerCase()+'</dd><dd>'+pickup_info_desc.toLowerCase()+'</dd>'
+           + '<dt>propagated by</dt> <dd>'+prop_by.toLowerCase()+'</dd><dd>'+prop_by_desc.toLowerCase()+'</dd>'
            + '<dt>parent colony</dt> <dd>'+parent_col.toLowerCase()+'</dd><dd>'+parent_col_desc.toLowerCase()+'</dd>'
-           + '<dt>wild ancestral colony</dt> <dd>'+wild_parent.toLowerCase()+'</dd></dl>'});
+           + '<dt>wild ancestral colony</dt> <dd>'+wild_parent.toLowerCase()+'</dd><dd>'+wild_parent_desc.toLowerCase()+'</dd></dl>'});
       };
    }
 };
