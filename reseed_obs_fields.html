@@ -154,6 +154,7 @@ function fresults(xobj) {
          let tax_photo = '';
          let availability = 'Out of Stock';
          let quantity_available = '';
+         let quantity_available_desc = '';
          let seed_hub = '';
          let seed_hub_desc = '';
          let pickup_info = '';
@@ -168,6 +169,7 @@ function fresults(xobj) {
                if( rec.ofvs[j].field_id === 17234 ){   // Quantity Available
                    if( rec.ofvs[j].value ){
                        quantity_available = rec.ofvs[j].value;
+                       quantity_available_desc = rec.ofvs[j].observation_field.description || '';
                    } 
                }
              
@@ -180,7 +182,7 @@ function fresults(xobj) {
                if( rec.ofvs[j].field_id === 17434 ){   // Seed Hub
                    if( rec.ofvs[j].value ){
                        seed_hub = rec.ofvs[j].value;
-                       seed_hub_desc = rec.ofvs[j].observation_field.description || '';
+                      // seed_hub_desc = rec.ofvs[j].observation_field.description || '';
                    } 
                }    
              
@@ -226,7 +228,7 @@ function fresults(xobj) {
 
         faddelem('p',document.body,{innerHTML:'<dl>'
            + '<dt>availability</dt> <dd>'+availability.toLowerCase()+'</dd>'
-           + '<dt>quantity available</dt> <dd>'+quantity_available.toLowerCase()+'</dd>'
+           + '<dt>quantity available</dt> <dd>'+quantity_available.toLowerCase()+'</dd><dd>'+quantity_available_desc.toLowerCase()+'</dd>'
            + '<dt>seed hub</dt> <dd>'+seed_hub.toLowerCase()+'</dd><dd>'+seed_hub_desc.toLowerCase()+'</dd>'
            + '<dt>seed hub info</dt> <dd>'+pickup_info.toLowerCase()+'</dd>'
            + '<dt>propagated by</dt> <dd>'+prop_by.toLowerCase()+'</dd>'
