@@ -39,9 +39,9 @@
    dl { display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; }
    dt {  }
    dd { margin: 0; grid-column-start: 2;}   
-   table{ border: 1px solid lightgray; border-radius: 5px 5px 5px 5px; }, td{ }, th { border-collapse:collapse; margin:0; }
+   table{ border: 1px solid forestgreen; border-radius: 5px 5px 5px 5px; }, td{ }, th { border-collapse:collapse; margin:0; }
    td { padding:5px; }
-   th { padding:5px; top:0; font-weight:400; text-align:left; vertical-align:bottom; text-decoration:underline; }
+   th { padding:5px; top:0; font-weight:500; text-align:left; vertical-align:bottom; text-decoration:underline; }
    tbody>tr { }
    .tar { text-align:right; }
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
@@ -246,7 +246,7 @@ function fresults(xobj) {
         let brow = faddelem('tr',tbody);
         let avail = [
                   {innerText:'availability'},
-                  {innerHTML:availability.toLowerCase()},
+                  {innerHTML:'<span class="key">'+availability.toLowerCase()+'</span>'},
                   {innerText:' '},];        
 
        faddelems('td',brow, avail);
@@ -254,7 +254,7 @@ function fresults(xobj) {
        let brow2 = faddelem('tr',tbody);
        let quant = [
                   {innerText:'quantity available'},
-                  {innerHTML:quantity_available.toLowerCase()},
+                  {innerHTML:'<span class="key">'+quantity_available.toLowerCase()+'</span>'},
                   {innerText:quantity_available_desc.toLowerCase()},];        
 
        faddelems('td',brow2, quant);
@@ -262,7 +262,7 @@ function fresults(xobj) {
        let brow3 = faddelem('tr',tbody);
        let shub = [
                   {innerText:'seed hub'},
-                  {innerHTML:seed_hub.toLowerCase()},
+                  {innerHTML:'<span class="key">'+seed_hub.toLowerCase()+'</span>'},
                   {innerText:seed_hub_desc.toLowerCase()},];        
 
        faddelems('td',brow3, shub);
@@ -270,7 +270,7 @@ function fresults(xobj) {
        let brow4 = faddelem('tr',tbody);
        let shub_info = [
                   {innerText:'seed hub info'},
-                  {innerHTML:pickup_info.toLowerCase()},
+                  {innerHTML:'<span class="key">'+pickup_info.toLowerCase()+'</span>'},
                   {innerText:pickup_info_desc.toLowerCase()},];        
 
        faddelems('td',brow4, shub_info);
@@ -278,7 +278,7 @@ function fresults(xobj) {
        let brow5 = faddelem('tr',tbody);
        let prop = [
                   {innerText:'propagated by'},
-                  {innerHTML:prop_by.toLowerCase()},
+                  {innerHTML:'<span class="key">'+prop_by.toLowerCase()+'</span>'},
                   {innerText:prop_by_desc.toLowerCase()},];        
 
        faddelems('td',brow5, prop);      
@@ -286,7 +286,7 @@ function fresults(xobj) {
        let brow6 = faddelem('tr',tbody);
        let par = [
                   {innerText:'parent colony'},
-                  {innerHTML:parent_col.toLowerCase()},
+                  {innerHTML:'<span class="key">'+parent_col.toLowerCase()+'</span>'},
                   {innerText:parent_col_desc.toLowerCase()},];        
 
        faddelems('td',brow6, par);  
@@ -294,7 +294,7 @@ function fresults(xobj) {
        let brow7 = faddelem('tr',tbody);
        let wild = [
                   {innerText:'wild ancestral colony'},
-                  {innerHTML:wild_parent.toLowerCase()},
+                  {innerHTML:'<span class="key">'+wild_parent.toLowerCase()+'</span>'},
                   {innerText:wild_parent_desc.toLowerCase()},];        
 
        faddelems('td',brow7, wild); 
