@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
 <meta name="description" content="Cincinnati Seed Libraries" />
-<title>Cincinnati Seed Libraries</title>
+<title>Seeds</title>
 <style>
    :root {
       background: var(--color-base); 
@@ -174,7 +174,7 @@ function fresults(xobj) {
 let apibase = 'https://api.inaturalist.org/v1/projects';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
-let apirefname = 'What\'s Visiting?';
+let apirefname = 'Cincinnati Seed Libraries';
 let apiref = furl(apirefurl,apirefname);
 faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
   + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});
@@ -191,8 +191,6 @@ if ( (rw_g_list === '' && rw_s_list != '') || (rw_g_list != '' && rw_s_list === 
    faddelems('p',document.body,instructions);
    throw('');
 }
-
-faddelem('p',document.body,{innerHTML:'To see what\'s visiting the plants in each garden.'});
 
 fetch(apiurl)
    .then((response) => {
