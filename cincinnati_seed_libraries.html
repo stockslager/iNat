@@ -70,6 +70,7 @@ winurlparams.append('id', '218728,211197');
 let g_list = winurlparams.get('g_list') ||'';
 let s_list = winurlparams.get('s_list') || '';
 let view = winurlparams.get('view') || '';
+let activity_data = winurlparams.get('activity_data') || 'local';
 </script>
    
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v1.js"></script>
@@ -81,19 +82,6 @@ let view = winurlparams.get('view') || '';
 // project when possible.
 function setupLists(str){
    let list = '';
-
-   if( g_list !== '' && s_list !== '' ){
-      list += '&g_list=' + g_list;
-      list += '&s_list=' + s_list;
-   } else {
-      if( str === 211197 ) {          // seed library at the grail
-         list += '&g_list=4486102';
-         list += '&s_list=4486099';
-      } else if ( str === 218728 ){   // grovedale seed library
-         list += '&g_list=4486069';
-         list += '&s_list=4486070';
-      } 
-   }
 
    // view & donor project id
    if ( str === 218728 )  // grovedale
@@ -108,6 +96,12 @@ function setupLists(str){
          list += '&view=associating';
       }
    } 
+
+   // if they want to use state activity data, override donor_project with  
+   // the "biodiveristy of ohio" project_id.
+   if( activity_data === 'state' ){
+      list = '&donor_project_id=22501';
+   }
    
    if( view != '' ){
       list += '&view='+view;
@@ -125,10 +119,20 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      faddelem('p',document.body,{innerHTML:'total projects: '+fcomnum(total_results)+'<br />' 
-         +'per page: '+fcomnum(per_page)+'<br />'
-         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
-         });
+      let state_url += 'https://stockslager.github.io/iNat/reseed_plants_visited.html?activity_data=state';
+      let local_url += 'https://stockslager.github.io/iNat/reseed_plants_visited.html?activity_data=local';
+
+      if( activity_data === 'local' ){
+         faddelem('p',document.body,{innerHTML:'total projects: '+fcomnum(total_results)+'('+furl(state_url,'use state activity data')<br />' 
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
+            });
+      } else {
+         faddelem('p',document.body,{innerHTML:'total projects: '+fcomnum(total_results)+'('+furl(state_url,'use local activity data')<br />' 
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
+            });
+      }
 
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
