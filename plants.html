@@ -290,16 +290,16 @@ function fresults(xobj) {
          }
 
          // determine plant_status
-         if( rec.taxon.introduced ){
-          if( rec.quality_grade === 'research' || rec.quality_grade === 'needs_id' ){
-             plant_status = 'wild';
-          } else {
-             if( wild_ancestral_colony !== '' ){
-               plant_status = 'restorative';
-             } else {
+         if( !rec.taxon.introduced ){
+            if( rec.quality_grade === 'research' || rec.quality_grade === 'needs_id' ){
                plant_status = 'wild';
-             }
-          }
+            } else {
+               if( wild_ancestral_colony !== '' ){
+                  plant_status = 'restorative';
+               } else {
+                  plant_status = 'wild';
+               }
+            }
          } else {
               plant_status = 'cosmopolitan';
          }
