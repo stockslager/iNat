@@ -305,15 +305,15 @@ function fresults(xobj) {
        
          values = [
                   {innerText:i+1},
-                  {innerHTML:tax_photo.toLowerCase()},
+                  {innerHTML:tax_photo},
                   {innerText:pref_tax_name.toLowerCase()},
                   {innerText:tax_name.toLowerCase()},
-                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Observed Activity...')},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'observed activity...')},
                   {innerHTML:user_icon},
                   {innerHTML:rec.user.login.toLowerCase()},
                   {innerText:rec.quality_grade.toLowerCase()}, 
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
-                  {innerHTML:furl('https://stockslager.github.io/iNat/reseed_obs_fields.html?obs_id='+rec.id,availability)},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/reseed_obs_fields.html?obs_id='+rec.id,availability.toLowerCase())},
                   //{innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args, availability )},
                  // {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
          ];             
