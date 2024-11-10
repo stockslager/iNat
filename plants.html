@@ -71,9 +71,9 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
 let p_donor_project_id = winurlparams.get('donor_project_id') || '';
-let p_show_all = winurlparams.get('in_lib') || 'yes';
+let p_in_lib = winurlparams.get('in_lib') || 'yes';
 
-if( in_lib === 'yes' ){
+if( p_in_lib === 'yes' ){
   if( p_donor_project_id === 135795 ){   // grovedale uses a different obs field for availability
     winurlparams.append('field:seeds+available+in+library?=yes');
   } else {
