@@ -142,7 +142,17 @@ let apirefname = '';
 apirefname += winurlparams.get('project_title');
  
 let apiref = furl(apirefurl,apirefname);
-   
+
+if( p_in_lib === 'yes' ){
+   faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">toggle:</span></dt> <dd><span id="key">results:</span></dd>'
+        + '<dt>show all</dt> <dd>currently displaying only those<br>species currently available in the <br>library.  the \"show all\" toggle<br> includes species <br>with a status other than \"available\".</dd>'
+        + '</dl>'});
+} else {
+   faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">toggle:</span></dt> <dd><span id="key">results:</span></dd>'
+        + '<dt>show available</dt> <dd>currently displaying all species <br>with any status. the \"show available\" toggle<br> includes only species with a status of \"available\".</dd>'
+        + '</dl>'});
+}   
+ 
 faddelem('h2',document.body,{innerText:apirefname});
 
 function fdate(str,dateonly=false) {
