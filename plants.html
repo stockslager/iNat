@@ -75,9 +75,9 @@ let p_in_lib = winurlparams.get('in_lib') || 'yes';
 
 if( p_in_lib === 'yes' ){
   if( p_donor_project_id === '135795' ){   // grovedale uses a different obs field for availability
-    //winurlparams.append('field:seeds+available+in+library?=yes');
+    winurlparams.append('field:seeds+available+in+library?', 'yes');
   } else {
-   // winurlparams.append('field:availability=available+now');
+    winurlparams.append('field:availability', 'available+now');
   }
 }
    
