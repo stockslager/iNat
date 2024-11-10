@@ -208,10 +208,20 @@ function fresults(xobj) {
       if( rw_g_list != '' && rw_s_list != '' ){
          toggle_args += '&g_list='+rw_g_list+'&s_list='+rw_s_list;
       }      
+
+      let this_url = 'https://stockslager.github.io/iNat/plants.html?project_id='+p_project_id+'&donor_project_id='+p_donor_project_id+'&view='+p_view+'&project_title='+winurlparams.get('project_title');
     
-      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+'<br />'
-         +'per page: '+fcomnum(per_page)+'<br />'
-         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});   
+      if( p_in_lib === 'yes' ){
+         faddelem('p',document.body,{innerHTML:'total projects: '+fcomnum(total_results)+' ('+furl((this_url+'&in_lib=all'+),'show all')+')<br />' 
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
+            });
+      } else {
+         faddelem('p',document.body,{innerHTML:'total projects: '+fcomnum(total_results)+' ('+furl(this_url,'show available')+')<br />' 
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
+            });
+      }   
                
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
