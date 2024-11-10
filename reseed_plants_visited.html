@@ -71,7 +71,16 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
 let p_donor_project_id = winurlparams.get('donor_project_id') || '';
+let p_in_lib = winurlparams.get('in_lib') || 'yes';
 
+if( p_in_lib === 'yes' ){
+  if( p_donor_project_id === '135795' ){   // grovedale uses a different obs field for availability
+    winurlparams.append('field:seeds+available+in+library?', 'yes');
+  } else {
+    winurlparams.append('field:availability', 'available now');
+  }
+}
+   
 // set rw_win_options defaults for re-seed...
 let rw_view = '';
 let rw_g_list = winurlparams.get('g_list') || '';
@@ -133,7 +142,17 @@ let apirefname = '';
 apirefname += winurlparams.get('project_title');
  
 let apiref = furl(apirefurl,apirefname);
-   
+
+if( p_in_lib === 'yes' ){
+   faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">toggle:</span></dt> <dd><span id="key">results:</span></dd>'
+        + '<dt>show all</dt> <dd>clicking the \"show all\" toggle will include <br>species with a status other than \"available now\".</dd>'
+        + '</dl>'});
+} else {
+   faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">toggle:</span></dt> <dd><span id="key">results:</span></dd>'
+        + '<dt>show available</dt> <dd>clicking the \"show available\" toggle will include <br>only those species with a status of \"available now\".</dd>'
+        + '</dl>'});
+}   
+ 
 faddelem('h2',document.body,{innerText:apirefname});
 
 function fdate(str,dateonly=false) {
@@ -199,10 +218,20 @@ function fresults(xobj) {
       if( rw_g_list != '' && rw_s_list != '' ){
          toggle_args += '&g_list='+rw_g_list+'&s_list='+rw_s_list;
       }      
+
+      let this_url = 'https://stockslager.github.io/iNat/reseed_plants_visited.html?project_id='+p_project_id+'&donor_project_id='+p_donor_project_id+'&view='+p_view+'&project_title='+winurlparams.get('project_title');
     
-      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+'<br />'
-         +'per page: '+fcomnum(per_page)+'<br />'
-         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});   
+      if( p_in_lib === 'yes' ){
+         faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( '+furl((this_url+'&in_lib=all'),'show all')+' )<br />' 
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
+            });
+      } else {
+         faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( '+furl(this_url,'show available')+' )<br />' 
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
+            });
+      }   
                
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
@@ -277,14 +306,14 @@ function fresults(xobj) {
          values = [
                   {innerText:i+1},
                   {innerHTML:tax_photo},
-                  {innerText:pref_tax_name},
-                  {innerText:tax_name},
-                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Observed Activity...')},
+                  {innerText:pref_tax_name.toLowerCase()},
+                  {innerText:tax_name.toLowerCase()},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'observed activity...')},
                   {innerHTML:user_icon},
-                  {innerHTML:rec.user.login},
-                  {innerText:rec.quality_grade}, 
+                  {innerHTML:rec.user.login.toLowerCase()},
+                  {innerText:rec.quality_grade.toLowerCase()}, 
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
-                  {innerHTML:furl('https://stockslager.github.io/iNat/reseed_obs_fields.html?obs_id='+rec.id,availability)},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/reseed_obs_fields.html?obs_id='+rec.id,availability.toLowerCase())},
                   //{innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args, availability )},
                  // {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
          ];             
