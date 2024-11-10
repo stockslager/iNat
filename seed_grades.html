@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Do What Now?" />
+<title>Understanding These Tables...</title>
+<style>
+   :root {
+      background: var(--color-base);
+      color: var(--color-text);
+      font: 14px Sans-Serif;
+      --color-base: white;
+      --color-alt: whitesmoke;
+      --color-brand: forestgreen;
+      --color-text: black;
+      --color-text-invert: white;
+      --color-text-link: royalblue;
+      --color-border: lightgray;
+      --color-hover: lightgray;
+      --color-base-translucent: rgba(255,255,255,0.85);
+   }
+   @media (prefers-color-scheme: dark) {
+      :root {
+         --color-base: black;
+         --color-alt: #171717;
+         --color-brand: forestgreen;
+         --color-text: #bababa;
+         --color-text-invert: black;
+         --color-text-link: cornflowerblue;
+         --color-border: #444;
+         --color-hover: #444;
+         --color-base-translucent: rgba(0,0,0,0.85);
+      }
+   }  
+   #key { color:var(--color-text-link); }
+   #main { width:100%; }
+   dl { float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
+   dt {  }
+   dd { margin: 0; grid-column-start: 2;}   
+   table, td, th { border-collapse:collapse; margin:0px; padding:5px; }
+   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
+   tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
+   tr:nth-child(even) { background:var(--color-base); }
+   .tar { text-align:right; }
+   .icon { height:48px; width:48px; border-radius:50%; }
+   .photo { height:64px; width:64px; }
+   img { margin:0; padding:0; border:0; }
+   a { text-decoration:none; color:var(--color-text-link); }
+   a:hover { background:var(--color-hover); }
+   #nav { margin-left:-8px; position:-webkit-sticky /*Safari*/; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
+   @media print { #nav { display:none; } } 
+   .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
+   .button { background:var(--color-alt); }
+   .button_inactive { background:none; color:var(--color-border); }
+
+</style>
+</head>
+
+<body>
+<script>
+function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
+function faddelem(etype,eparent=null,eattributes={}) {
+   let eobj = document.createElement(etype);
+   for (let [key,value] of Object.entries(eattributes)) {
+      if ( typeof value === 'object' && value !== null ) {
+         for (let [subkey,subvalue] of Object.entries(value)) { eobj[key][subkey] = subvalue; };
+      }
+      else { eobj[key] = value; };
+    };
+   if (eparent) { eparent.appendChild(eobj); };
+   return eobj;
+};
+function faddelems(etype,eparent=null,eattributes=[]) { for (let e of eattributes) { faddelem(etype,eparent,e); }; };
+   
+faddelem('h2',document.body,{innerHTML:'Understanding Seed Grade Labels...'});
+
+faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">grade:</span></dt> <dd><span id="key">grade description:</span></dd>'
+     + '<dt>wild</dt> <dd>seed supplying plant is native and descends from a wild local plant.</dd>'
+     + '<dt>restorative</dt> <dd>seed supplying plant is native and descends from a plant at an unknown location.</dd>'
+     + '<dt>cosmopolitan</dt> <dd>seed supplying plant is not native to this area.</dd>'});
+
+faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">grade:</span></dt> <dd><span id="key">data mapping from inat:</span></dd>'
+     + '<dt>wild</dt> <dd>native | research | wild ancestral colony populated</dd>'
+     + '<dt></dt>     <dd>native | needs_id | wild ancestral colony populated</dd>'
+     + '<dt></dt>     <dd>native | research |  </dd>'
+     + '<dt></dt>     <dd>native | needs_id |  </dd>'
+     + '<dt></dt>     <dd>native | casual | </dd>'});
+
+</script>
+</body>
+
+</html>
