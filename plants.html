@@ -145,11 +145,11 @@ let apiref = furl(apirefurl,apirefname);
 
 if( p_in_lib === 'yes' ){
    faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">toggle:</span></dt> <dd><span id="key">results:</span></dd>'
-        + '<dt>show all</dt> <dd>currently displaying only those<br>species currently available in the <br>library.  the \"show all\" toggle<br> includes species <br>with a status other than \"available\".</dd>'
+        + '<dt>show all</dt> <dd>the \"show all\" toggle includes <br>species with a status other <br>than \"available\".</dd>'
         + '</dl>'});
 } else {
    faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">toggle:</span></dt> <dd><span id="key">results:</span></dd>'
-        + '<dt>show available</dt> <dd>currently displaying all species <br>with any status. the \"show available\" toggle<br> includes only species with a status of \"available\".</dd>'
+        + '<dt>show available</dt> <dd>the \"show available\" toggle includes <br>only species with a status of \"available now\".</dd>'
         + '</dl>'});
 }   
  
@@ -222,12 +222,12 @@ function fresults(xobj) {
       let this_url = 'https://stockslager.github.io/iNat/plants.html?project_id='+p_project_id+'&donor_project_id='+p_donor_project_id+'&view='+p_view+'&project_title='+winurlparams.get('project_title');
     
       if( p_in_lib === 'yes' ){
-         faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ('+furl((this_url+'&in_lib=all'),'show all')+')<br />' 
+         faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( '+furl((this_url+'&in_lib=all'),'show all')+' )<br />' 
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });
       } else {
-         faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ('+furl(this_url,'show available')+')<br />' 
+         faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( '+furl(this_url,'show available')+' )<br />' 
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });
@@ -305,13 +305,13 @@ function fresults(xobj) {
        
          values = [
                   {innerText:i+1},
-                  {innerHTML:tax_photo},
-                  {innerText:pref_tax_name},
-                  {innerText:tax_name},
+                  {innerHTML:tax_photo.toLowerCase()},
+                  {innerText:pref_tax_name.toLowerCase()},
+                  {innerText:tax_name.toLowerCase()},
                   {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Observed Activity...')},
                   {innerHTML:user_icon},
-                  {innerHTML:rec.user.login},
-                  {innerText:rec.quality_grade}, 
+                  {innerHTML:rec.user.login.toLowerCase()},
+                  {innerText:rec.quality_grade.toLowerCase()}, 
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
                   {innerHTML:furl('https://stockslager.github.io/iNat/reseed_obs_fields.html?obs_id='+rec.id,availability)},
                   //{innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args, availability )},
