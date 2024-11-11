@@ -84,30 +84,6 @@ faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">grade:</span></dt>
      + '<dt>restorative</dt> <dd>seed supplying plant is native and descends from a plant at an unprovided location. <br>an example would be seeds donated from a plant that was itself grown <br>from prairie moon seeds.</dd>'
      + '<dt>cosmopolitan</dt> <dd>seed supplying plant is not native to this area. an example would be a plant from <br>outside this region that is being shared for it\'s perceived wildlife value.</dd>'
      + '<dt>needs id</dt> <dd>seed supplying plant requires additional supporting identifications in inaturalist to receive grading.</dd></dl>'});
-
-faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key2">'
-     + '// determine seed_status based on inat plant observation <br>'
-     + 'if( rec.quality_grade === \'needs_id\' ){<br>'
-     + '    plant_status = \'needs id\';                          // needs to be id\'d to receive grading<br>'
-     + '} else {<br>'
-     + '     if( rec.taxon.introduced ){<br>'
-     + '         plant_status = \'cosmopolitan\';                  // non-local plant of an introduced species<br>'
-     + '     } else {<br>'
-     + '         if( rec.quality_grade === \'research\' ){<br>'
-     + '             plant_status = \'wild\';                      // a local wild plant w/ id confirmation that is not of an introduced species (locally adapted)<br>'
-     + '         } else {<br>'                               
-     + '             if( !rec.identifications_some_agree ){<br>'
-     + '                 plant_status = \'needs id\';              // cultivated (non-wild) plant with no id confirmation on inat that is a resident species<br>'
-     + '             } else {<br>'
-     + '                 if( wild_ancestral_colony === \'\' ){<br>'
-     + '                     plant_status = \'restorative\';       // planted, has id confirmation, but may have descended from a non-local plant that is a resident species (prairie moon)<br>'
-     + '                 } else {<br>'
-     + '                     plant_status = \'wild\';              // planted, has id confirmation, and descended from a from a local plant that is a resident species (locally adapted)<br>'
-     + '                 }<br>'
-     + '             }<br>'
-     + '         }<br>'
-     + '     }<br>'
-     + ' }</span></dt></dl>'});
      
 </script>
 </body>
