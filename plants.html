@@ -290,11 +290,11 @@ function fresults(xobj) {
          }
 
          // determine seed_status based on inat plant observation 
-         if( rec.quality_grade === 'needs_id' ){
-             plant_status = 'needs id';                          // needs to be id'd to receive grading
+         if( rec.taxon.introduced ){
+             plant_status = 'cosmopolitan';                      // non-local plant of an introduced species
          } else {
-             if( rec.taxon.introduced ){
-                 plant_status = 'cosmopolitan';                  // non-local plant of an introduced species
+             if( rec.quality_grade === 'needs_id' ){
+                 plant_status = 'needs id';                      // needs to be id'd to receive grading
              } else {
                  if( rec.quality_grade === 'research' ){
                      plant_status = 'wild';                      // a local wild plant w/ id confirmation that is not of an introduced species (locally adapted)
