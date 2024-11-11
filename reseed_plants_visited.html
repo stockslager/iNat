@@ -219,7 +219,7 @@ function fresults(xobj) {
          toggle_args += '&g_list='+rw_g_list+'&s_list='+rw_s_list;
       }      
 
-      let this_url = 'https://stockslager.github.io/iNat/reseed_plants_visited.html?project_id='+p_project_id+'&donor_project_id='+p_donor_project_id+'&view='+p_view+'&project_title='+winurlparams.get('project_title');
+      let this_url = 'https://stockslager.github.io/iNat/plants.html?project_id='+p_project_id+'&donor_project_id='+p_donor_project_id+'&view='+p_view+'&project_title='+winurlparams.get('project_title');
     
       if( p_in_lib === 'yes' ){
          faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( '+furl((this_url+'&in_lib=all'),'show all')+' )<br />' 
@@ -265,31 +265,53 @@ function fresults(xobj) {
          let tax_name = '';
          let pref_tax_name = '';  
          let tax_photo = '';
-         let foundRec = '';
          let activity_found = '';
-         let foundRecWTaxon = '';
          let availability = 'Out of Stock';
+         let plant_status = '';
+         let wild_ancestral_colony = '';
 
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
 
-               foundRec = '';
                if( rec.ofvs[j].field_id === 18497 ){   // "seeds available in library" observation field.   
-                   foundRec = 'yes';
                    if( rec.ofvs[j].value === 'yes' ){
                        availability = 'Available Now';
                    } 
-                   break;
                }
 
                if( rec.ofvs[j].field_id === 18295 ){   // "availability" observation field.
-                   foundRec = 'yes';
                    availability = rec.ofvs[j].value || 'Out of Stock';
-                   break;
+               }
+
+               if( rec.ofvs[j].field_id === 17383 ){   // "wild ancestral colony" observation field.
+                   wild_ancestral_colony = rec.ofvs[j].value || '';
                }
             }
          }
 
+         // determine seed_status based on inat plant observation 
+         if( rec.quality_grade === 'needs_id' ){
+             plant_status = 'needs id';                          // needs to be id'd to receive grading
+         } else {
+             if( rec.taxon.introduced ){
+                 plant_status = 'cosmopolitan';                  // non-local plant of an introduced species
+             } else {
+                 if( rec.quality_grade === 'research' ){
+                     plant_status = 'wild';                      // a local wild plant w/ id confirmation that is not of an introduced species (locally adapted)
+                 } else {                                  
+                     if( !rec.identifications_some_agree ){
+                         plant_status = 'needs id';              // cultivated (non-wild) plant with no id confirmation on inat that is a resident species   
+                     } else {
+                         if( wild_ancestral_colony === '' ){
+                             plant_status = 'restorative';       // planted, has id confirmation, but may have descended from a non-local plant that is a resident species (prairie moon)
+                         } else {
+                             plant_status = 'wild';              // planted, has id confirmation, and descended from a from a local plant that is a resident species (locally adapted)
+                         }
+                     }
+                 }
+             }
+         }
+       
          tax_name = rec.taxon.name || '';
          pref_tax_name = rec.taxon.preferred_common_name || '';
          tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';                     
@@ -308,11 +330,11 @@ function fresults(xobj) {
                   {innerHTML:tax_photo},
                   {innerText:pref_tax_name.toLowerCase()},
                   {innerText:tax_name.toLowerCase()},
-                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'observed activity...')},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'observed activity')},
                   {innerHTML:user_icon},
-                  {innerHTML:rec.user.login.toLowerCase()},
-                  {innerText:rec.quality_grade.toLowerCase()}, 
-                  {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
+                  {innerText:rec.user.login.toLowerCase()},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/seed_grades.html',plant_status)}, 
+                  {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:furl('https://stockslager.github.io/iNat/reseed_obs_fields.html?obs_id='+rec.id,availability.toLowerCase())},
                   //{innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args, availability )},
                  // {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
