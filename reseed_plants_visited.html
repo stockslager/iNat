@@ -241,13 +241,13 @@ function fresults(xobj) {
       labels = [
                {innerText:'#'},
                {innerText:'Photo'},
-               {innerText:'Common Name'}, 
-               {innerText:'Name'},
+               {innerText:'Name'}, 
                {innerText:'Wildlife Value'},
                {innerText:'Donor Photo'},
-               {innerText:'Donor Login'},
+               {innerText:'Donor'},
+               {innerText:'iNat Grade'},
                {innerText:'Seed Grade'},
-               {innerText:'Observation Photo'},
+               {innerText:'Obs. Photo'},
                {innerText:'Seed Status'},
    //            {innerText:'Observation ID'},
       ];         
@@ -290,16 +290,17 @@ function fresults(xobj) {
          }
 
          // determine seed_status based on inat plant observation 
-         if( rec.quality_grade === 'needs_id' ){
-             plant_status = 'needs id';                          // needs to be id'd to receive grading
+         if( rec.taxon.introduced ){
+             plant_status = 'cosmopolitan';                      // non-local plant of an introduced species
          } else {
-             if( rec.taxon.introduced ){
-                 plant_status = 'cosmopolitan';                  // non-local plant of an introduced species
+             if( rec.quality_grade === 'needs_id' ){
+                 plant_status = 'needs id';                      // needs to be id'd to receive grading
              } else {
                  if( rec.quality_grade === 'research' ){
                      plant_status = 'wild';                      // a local wild plant w/ id confirmation that is not of an introduced species (locally adapted)
                  } else {                                  
-                     if( !rec.identifications_some_agree ){
+                     if( (!rec.community_taxon_id) ||
+                         (rec.taxon.rank_level.valueOf() > '10') ) {
                          plant_status = 'needs id';              // cultivated (non-wild) plant with no id confirmation on inat that is a resident species   
                      } else {
                          if( wild_ancestral_colony === '' ){
@@ -328,11 +329,11 @@ function fresults(xobj) {
          values = [
                   {innerText:i+1},
                   {innerHTML:tax_photo},
-                  {innerText:pref_tax_name.toLowerCase()},
-                  {innerText:tax_name.toLowerCase()},
+                  {innerHTML:'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>'},
                   {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'observed activity')},
                   {innerHTML:user_icon},
                   {innerText:rec.user.login.toLowerCase()},
+                  {innerText:rec.quality_grade.toLowerCase()},
                   {innerHTML:furl('https://stockslager.github.io/iNat/seed_grades.html',plant_status)}, 
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:furl('https://stockslager.github.io/iNat/reseed_obs_fields.html?obs_id='+rec.id,availability.toLowerCase())},
