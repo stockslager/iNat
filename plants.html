@@ -289,20 +289,24 @@ function fresults(xobj) {
             }
          }
 
-         // determine plant_status
+         // determine seed_status based on inat plant observation 
          if( rec.quality_grade === 'needs_id' ){
-             plant_status = 'needs id';                  // needs to be id'd to receive grading
+             plant_status = 'needs id';                          // needs to be id'd to receive grading
          } else {
              if( rec.taxon.introduced ){
-                 plant_status = 'cosmopolitan';          // non-local plant of an introduced species
+                 plant_status = 'cosmopolitan';                  // non-local plant of an introduced species
              } else {
                  if( rec.quality_grade === 'research' ){
-                     plant_status = 'wild';              // a local wild plant that was not an introduced species
-                 } else {
-                     if( wild_ancestral_colony === '' ){
-                         plant_status = 'restorative';   // planted but may have descended from a non-local plant
+                     plant_status = 'wild';                      // a local wild plant w/ id confirmation that is not of an introduced species (locally adapted)
+                 } else {                                  
+                     if( rec.identifications_some_agree === 'false' ){
+                         plant_status = 'needs id';              // cultivated (non-wild) plant with no id confirmation on inat that is a resident species   
                      } else {
-                         plant_status = 'wild';          // planted and descended from a from a local plant
+                         if( wild_ancestral_colony === '' ){
+                             plant_status = 'restorative';       // planted, has id confirmation, but may have descended from a non-local plant that is a resident species (prairie moon)
+                         } else {
+                             plant_status = 'wild';              // planted, has id confirmation, and descended from a from a local plant that is a resident species (locally adapted)
+                         }
                      }
                  }
              }
