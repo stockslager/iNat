@@ -300,7 +300,7 @@ function fresults(xobj) {
                      plant_status = 'wild';                      // a local wild plant w/ id confirmation that is not of an introduced species (locally adapted)
                  } else {                                  
                      if( (!rec.community_taxon_id) ||
-                         (rec.taxon.rank_level > '10') ) {
+                         (rec.taxon.rank_level.valueOf() > '10') ) {
                          plant_status = 'needs id';              // cultivated (non-wild) plant with no id confirmation on inat that is a resident species   
                      } else {
                          if( wild_ancestral_colony === '' ){
