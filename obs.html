@@ -169,7 +169,8 @@ function fresults(xobj) {
          let prop_by_desc = '';
          let parent_col = '';
          let parent_col_desc = '';
-
+         let map_url = root_observations + '?lat=39.10105356759983&lng=-84.50423534176961&radius=128.92114430188596&subview=map&verifiable=any&' + rec.id;
+       
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
 
@@ -203,6 +204,7 @@ function fresults(xobj) {
                if( rec.ofvs[j].field_id === 17383 ){   // "wild ancestral colony" observation field.   
                    if( rec.ofvs[j].value ){
                        wild_parent = rec.ofvs[j].value;
+                       map_url += (',' + (rec.ofvs[j].value || ''));
                        wild_parent_desc = rec.ofvs[j].observation_field.description || '';
                    } 
                }
@@ -223,6 +225,7 @@ function fresults(xobj) {
                if( rec.ofvs[j].field_id === 16628 ){   // "parent colony" observation field.
                    if( rec.ofvs[j].value ){
                        parent_col = rec.ofvs[j].value || '';
+                       map_url += (',' + (rec.ofvs[j].value || ''));
                        parent_col_desc = rec.ofvs[j].observation_field.description || '';
                    }
                }   
@@ -307,7 +310,8 @@ function fresults(xobj) {
          let brow8 = faddelem('tr',tbody);
          let wild = [
                   {innerText:'wild ancestral colony'},
-                  {innerHTML:'<span id="key">'+furl(root_observations+wild_parent.toLowerCase(),wild_parent)+'</span>'},
+                  {innerHTML:'<span id="key">'+furl(root_observations+wild_parent.toLowerCase(),wild_parent)+'</span><br>'
+                             + ' ' + furl(map_url, 'map ancestry')},
                   {innerText:wild_parent_desc.toLowerCase()},];        
 
          faddelems('td',brow8, wild); 
