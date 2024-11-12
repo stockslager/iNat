@@ -45,13 +45,8 @@
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
    th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }
    tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt); }
-   tr:nth-last-child(-n+1) { border-width:1px 0px; border-style:solid; border-color:forestgreen; background:var(--color-alt); border-radius: 0px 5px 0px 0px; }
+   tr:nth-last-child(-n+1) { border-width:1px 0px; border-style:solid; border-color:forestgreen; background:var(--color-alt); }
  
-   /*table{ border: 1px solid forestgreen; border-radius: 5px 5px 5px 5px; }, td{ }, th { margin:0; }
-   td { padding:5px; }
-   th { padding:5px; top:0; background:var(--color-brand); color:var(--color-text-invert); font-weight:600; text-align:left; vertical-align:bottom; }   
-   tbody>tr { border-width:0px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt); }
-   */
    .tar { text-align:right; }
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
    .icon { height:48px; width:48px; border-radius:50%; }
@@ -309,7 +304,7 @@ function fresults(xobj) {
          faddelems('td',brow7, wild); 
 
          if( rec.description ){
-             faddelem('p',document.body,{innerHTML:'<dl>'
+             faddelem('p',document.body,{innerHTML:'<br><dl>'
                             + '<dt></dt><span id="key"><dd>notes ~ </dd></span>'
                             + '<dt></dt><dd>'+rec.description.toLowerCase()+'</dd>'
                             + '</dl>'});       
