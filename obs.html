@@ -36,11 +36,11 @@
    }
    #key { color:var(--color-text-link); }
    #main { width:100%; }
-   dl { display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }
+   dl { background:var(--color-alt); display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }
    dt {  }
    dd { margin: 0; grid-column-start: 2;}   
    table{ border: 1px solid forestgreen; border-radius: 5px 5px 5px 5px; }, td{ }, th { border-collapse:collapse; margin:0; }
-   td { padding:5px; }
+   td { padding:5px; border-collapse:collapse; }
    th { padding:5px; top:0; background:var(--color-brand); color:var(--color-text-invert); font-weight:600; text-align:left; vertical-align:bottom; }   
    tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt); }
    .tar { text-align:right; }
@@ -299,10 +299,9 @@ function fresults(xobj) {
 
          faddelems('td',brow7, wild); 
 
-
          if( rec.description ){
              faddelem('p',document.body,{innerHTML:'<dl>'
-                            + '<dt></dt><span id="key"><dd>notes ~ <br></dd></span>'
+                            + '<dt></dt><span id="key"><dd>notes ~ </dd></span>'
                             + '<dt></dt><dd>'+rec.description.toLowerCase()+'</dd>'
                             + '</dl>'});       
          }
