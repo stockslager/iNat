@@ -36,13 +36,17 @@
    }
    #key { color:var(--color-text-link); }
    #main { width:100%; }
-   dl { display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; }
+   dl { background:var(--color-alt); display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }
    dt {  }
    dd { margin: 0; grid-column-start: 2;}   
-   table{ border: 1px solid forestgreen; border-radius: 5px 5px 5px 5px; }, td{ }, th { border-collapse:collapse; margin:0; }
-   td { padding:5px; }
-   th { padding:5px; top:0; background:var(--color-brand); color:var(--color-text-invert); font-weight:600; text-align:left; vertical-align:bottom; }   
+ 
+   table, td, th { border-collapse:collapse; margin:0; padding:4px; }
+   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
+   th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
+   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }
    tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt); }
+   /*tr:nth-last-child(-n+1) { border-width:1px 0px; border-style:solid; border-color:forestgreen; background:var(--color-alt); }*/
+ 
    .tar { text-align:right; }
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
    .icon { height:48px; width:48px; border-radius:50%; }
@@ -62,6 +66,7 @@
 </head>
 
 <body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params.js"></script>
 <script>
 let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
@@ -164,7 +169,8 @@ function fresults(xobj) {
          let prop_by_desc = '';
          let parent_col = '';
          let parent_col_desc = '';
-
+         //let map_url = root_observations + '?subview=map&verifiable=any&id=' + rec.id;
+       
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
 
@@ -198,6 +204,7 @@ function fresults(xobj) {
                if( rec.ofvs[j].field_id === 17383 ){   // "wild ancestral colony" observation field.   
                    if( rec.ofvs[j].value ){
                        wild_parent = rec.ofvs[j].value;
+                       //map_url += (',' + (rec.ofvs[j].value || ''));
                        wild_parent_desc = rec.ofvs[j].observation_field.description || '';
                    } 
                }
@@ -218,6 +225,7 @@ function fresults(xobj) {
                if( rec.ofvs[j].field_id === 16628 ){   // "parent colony" observation field.
                    if( rec.ofvs[j].value ){
                        parent_col = rec.ofvs[j].value || '';
+                       //map_url += (',' + (rec.ofvs[j].value || ''));
                        parent_col_desc = rec.ofvs[j].observation_field.description || '';
                    }
                }   
@@ -249,64 +257,71 @@ function fresults(xobj) {
                   {innerHTML:'<span id="key">'+availability.toLowerCase()+'</span>'},
                   {innerText:' '},];        
 
-       faddelems('td',brow, avail);
+         faddelems('td',brow, avail);
 
-       let brow2 = faddelem('tr',tbody);
-       let quant = [
+         let brow2 = faddelem('tr',tbody);
+         let quant = [
                   {innerText:'quantity available'},
                   {innerHTML:'<span id="key">'+quantity_available.toLowerCase()+'</span>'},
                   {innerText:quantity_available_desc.toLowerCase()},];        
 
-       faddelems('td',brow2, quant);
+         faddelems('td',brow2, quant);
 
-       let brow3 = faddelem('tr',tbody);
-       let shub = [
+         let brow3 = faddelem('tr',tbody);
+         let shub = [
                   {innerText:'seed hub'},
                   {innerHTML:'<span id="key">'+seed_hub.toLowerCase()+'</span>'},
                   {innerText:seed_hub_desc.toLowerCase()},];        
 
-       faddelems('td',brow3, shub);
+         faddelems('td',brow3, shub);
 
-       let brow4 = faddelem('tr',tbody);
-       let shub_info = [
+         let brow4 = faddelem('tr',tbody);
+         let shub_info = [
                   {innerText:'seed hub info'},
                   {innerHTML:'<span id="key">'+pickup_info.toLowerCase()+'</span>'},
                   {innerText:pickup_info_desc.toLowerCase()},];        
 
-       faddelems('td',brow4, shub_info);
+         faddelems('td',brow4, shub_info);
 
-       let brow5 = faddelem('tr',tbody);
-       let prop = [
+         let brow5 = faddelem('tr',tbody);
+         let prop = [
                   {innerText:'propagated by'},
                   {innerHTML:'<span id="key">'+prop_by.toLowerCase()+'</span>'},
                   {innerText:prop_by_desc.toLowerCase()},];        
 
-       faddelems('td',brow5, prop);      
+         faddelems('td',brow5, prop);    
 
-       let brow6 = faddelem('tr',tbody);
-       let par = [
+         let brow6 = faddelem('tr',tbody);
+         let donor = [
+                  {innerText:'donor plant'},
+                  {innerHTML:'<span id="key">'+furl(root_observations+rec.id,rec.id)+'</span>'},
+                  {innerText:'plant that the seeds were collected from.'},];        
+
+         faddelems('td',brow6, donor);  
+
+         let brow7 = faddelem('tr',tbody);
+         let par = [
                   {innerText:'parent colony'},
                   {innerHTML:'<span id="key">'+parent_col.toLowerCase()+'</span>'},
                   {innerText:parent_col_desc.toLowerCase()},];        
 
-       faddelems('td',brow6, par);  
+         faddelems('td',brow7, par);  
 
-       let brow7 = faddelem('tr',tbody);
-       let wild = [
+         let brow8 = faddelem('tr',tbody);
+         let wild = [
                   {innerText:'wild ancestral colony'},
-                  {innerHTML:'<span id="key">'+wild_parent.toLowerCase()+'</span>'},
+                  {innerHTML:'<span id="key">'+furl(root_observations+wild_parent.toLowerCase(),wild_parent)+'</span><br>'},
+                           //  + ' ' + furl(map_url, 'map ancestry')},
                   {innerText:wild_parent_desc.toLowerCase()},];        
 
-       faddelems('td',brow7, wild); 
-       
-/*       faddelem('p',document.body,{innerHTML:'<dl>'
-           + '<dt>availability</dt> <dd>'+availability.toLowerCase()+'</dd>'
-           + '<dt>quantity available</dt> <dd><span class="key">'+quantity_available.toLowerCase()+'</span> ~ '+quantity_available_desc.toLowerCase()+'</dd>'
-           + '<dt>seed hub</dt> <dd>'+seed_hub.toLowerCase()+' ~ '+seed_hub_desc.toLowerCase()+'</dd>'
-           + '<dt>seed hub info</dt> <dd>'+pickup_info.toLowerCase()+' ~ '+pickup_info_desc.toLowerCase()+'</dd>'
-           + '<dt>propagated by</dt> <dd>'+prop_by.toLowerCase()+' ~ '+prop_by_desc.toLowerCase()+'</dd>'
-           + '<dt>parent colony</dt> <dd>'+parent_col.toLowerCase()+' ~ '+parent_col_desc.toLowerCase()+'</dd>'
-           + '<dt>wild ancestral colony</dt> <dd>'+wild_parent.toLowerCase()+' ~ '+wild_parent_desc.toLowerCase()+'</dd></dl>'});  */
+         faddelems('td',brow8, wild); 
+
+         if( rec.description ){
+             faddelem('p',document.body,{innerHTML:'<br><dl>'
+                            + '<dt></dt><span id="key"><dd>notes ~ </dd></span>'
+                            + '<dt></dt><dd>'+rec.description.toLowerCase()+'</dd>'
+                            + '</dl>'});       
+         }
       };    
    }
 };
