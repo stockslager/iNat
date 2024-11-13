@@ -38,7 +38,7 @@
    #key2 { font-family: monospace; }
    #main { width:100%; }
    dl { width:fit-content; display: grid; grid-gap: 7px 12px; grid-template-columns: max-content; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; }
-   dt {  }
+   #dt2 { padding-left:10px; }
    dd { margin: 0; grid-column-start: 2;}   
    table, td, th { border-collapse:collapse; margin:0px; padding:5px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
@@ -77,13 +77,13 @@ function faddelems(etype,eparent=null,eattributes=[]) { for (let e of eattribute
    
 faddelem('h2',document.body,{innerHTML:'Understanding Seed Grade Labels...'});
 
-faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">seed grade:</span></dt> <dd><span id="key">seed grade description:</span></dd>'
-     + '<dt>wild</dt> <dd>seed supplying plant is of a resident species and descends from a wild local plant whose observation '
+faddelem('p',document.body,{innerHTML:'<dl><dt id="dt2"><span id="key">seed grade:</span></dt> <dd><span id="key">seed grade description:</span></dd>'
+     + '<dt id="dt2">wild</dt> <dd>seed supplying plant is of a resident species and descends from a wild local plant whose observation '
                    + '<br>can be found in the \"wild ancestral colony\" observation field.  -or- seed supplying '
                    + '<br>plant is itself a wild plant of a resident species.</dd>'
-     + '<dt>restorative</dt> <dd>seed supplying plant is of a resident species and descends from a plant at an unprovided location. <br>an example would be seeds donated from a plant that would otherwise be labled \"wild\", but <br>was itself grown from prairie moon seeds.</dd>'
-     + '<dt>introduced</dt> <dd>seed supplying plant species was introduced to this area. an example would be a plant of a species from <br>outside this region that is being shared for it\'s perceived wildlife value.</dd>'
-     + '<dt>needs id</dt> <dd>seed supplying plant requires additional supporting identifications in inaturalist to receive library <br>grading.</dd></dl>'});
+     + '<dt id="dt2">restorative</dt> <dd>seed supplying plant is of a resident species and descends from a plant at an unprovided location. <br>an example would be seeds donated from a plant that would otherwise be labled \"wild\", but <br>was itself grown from prairie moon seeds.</dd>'
+     + '<dt id="dt2">introduced</dt> <dd>seed supplying plant species was introduced to this area. an example would be a plant of a species from <br>outside this region that is being shared for it\'s perceived wildlife value.</dd>'
+     + '<dt id="dt2>needs id</dt> <dd>seed supplying plant requires additional supporting identifications in inaturalist to receive library <br>grading.</dd></dl>'});
 
 faddelem('p',document.body,{innerHTML:'<dl>'
               + '<dt></dt><span id="key"><dd>but it\'s casual in inat?</dd></span>'
