@@ -72,6 +72,7 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
 let p_donor_project_id = winurlparams.get('donor_project_id') || '';
 let p_in_lib = winurlparams.get('in_lib') || 'yes';
+let p_inat_grade = winurlparams.get('inat_grade') || 'no';
 
 if( p_in_lib === 'yes' ){
   if( p_donor_project_id === '135795' ){   // grovedale uses a different obs field for availability
@@ -240,7 +241,8 @@ function fresults(xobj) {
       let hrow = faddelem('tr',thead);
       let labels = [];
 
-      labels = [
+      if( p_inat_grade === 'yes' ){
+          labels = [
                {innerText:'#'},
                {innerText:'Photo'},
                {innerText:'Name'}, 
@@ -251,8 +253,22 @@ function fresults(xobj) {
                {innerText:'Seed Grade'},
                {innerText:'Obs. Photo'},
                {innerText:'Seed Status'},
-   //            {innerText:'Observation ID'},
-      ];         
+           //  {innerText:'Observation ID'},
+          ];
+      } else {
+          labels = [
+               {innerText:'#'},
+               {innerText:'Photo'},
+               {innerText:'Name'}, 
+               {innerText:'Wildlife Value'},
+               {innerText:'Donor Photo'},
+               {innerText:'Donor'},
+               {innerText:'Seed Grade'},
+               {innerText:'Obs. Photo'},
+               {innerText:'Seed Status'},
+           //  {innerText:'Observation ID'},
+          ];
+      {
       
       faddelems('th',hrow,labels);
 
@@ -327,8 +343,9 @@ function fresults(xobj) {
          } else {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }          
-       
-         values = [
+
+         if( p_inat_grade === 'yes' ) {
+             values = [
                   {innerText:i+1},
                   {innerHTML:tax_photo},
                   {innerHTML:'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>'},
@@ -339,9 +356,22 @@ function fresults(xobj) {
                   {innerHTML:furl('https://stockslager.github.io/iNat/seed_grades.html',plant_status)}, 
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:furl('https://stockslager.github.io/iNat/reseed_obs_fields.html?obs_id='+rec.id,availability.toLowerCase())},
-                  //{innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args, availability )},
                  // {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
-         ];             
+             ];           
+         } else {
+             values = [
+                  {innerText:i+1},
+                  {innerHTML:tax_photo},
+                  {innerHTML:'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>'},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+p_donor_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'observed activity')},
+                  {innerHTML:user_icon},
+                  {innerText:rec.user.login.toLowerCase()},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/seed_grades.html',plant_status)}, 
+                  {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/reseed_obs_fields.html?obs_id='+rec.id,availability.toLowerCase())},
+                 // {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
+             ];
+         }
 
          faddelems('td',brow,values);
       };
