@@ -37,8 +37,7 @@
    #key { color:var(--color-text-link); font: 14px Sans-Serif; }
    #key2 { font-family: monospace; }
    #main { width:100%; }
-   #dl1 { width:55%; display: grid; grid-gap: 7px 12px; grid-template-columns: max-content; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; }
-   #dl2 { width:80%; display: grid; grid-gap: 7px 12px; grid-template-columns: max-content; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; }
+   dl { width:fit-width; display: grid; grid-gap: 7px 12px; grid-template-columns: max-content; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; }
    dt {  }
    dd { margin: 0; grid-column-start: 2;}   
    table, td, th { border-collapse:collapse; margin:0px; padding:5px; }
@@ -78,15 +77,15 @@ function faddelems(etype,eparent=null,eattributes=[]) { for (let e of eattribute
    
 faddelem('h2',document.body,{innerHTML:'Understanding Seed Grade Labels...'});
 
-faddelem('p',document.body,{innerHTML:'<dl id="dl1"><dt><span id="key">seed grade:</span></dt> <dd><span id="key">seed grade description:</span></dd>'
+faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">seed grade:</span></dt> <dd><span id="key">seed grade description:</span></dd>'
      + '<dt>wild</dt> <dd>seed supplying plant is of a resident species and descends from a wild local plant whose observation '
-                   + 'can be found in the \"wild ancestral colony\" observation field.  -or- seed supplying '
-                   + 'plant is itself a wild plant of a resident species.</dd>'
+                   + '<br>can be found in the \"wild ancestral colony\" observation field.  -or- seed supplying '
+                   + '<br>plant is itself a wild plant of a resident species.</dd>'
      + '<dt>restorative</dt> <dd>seed supplying plant is of a resident species and descends from a plant at an unprovided location. an example would be seeds donated from a plant that would otherwise be labled \"wild\", but was itself grown from prairie moon seeds.</dd>'
      + '<dt>introduced</dt> <dd>seed supplying plant species was introduced to this area. an example would be a plant of a species from outside this region that is being shared for it\'s perceived wildlife value.</dd>'
      + '<dt>needs id</dt> <dd>seed supplying plant requires additional supporting identifications in inaturalist to receive library grading.</dd></dl>'});
 
-faddelem('p',document.body,{innerHTML:'<dl id="dl2">'
+faddelem('p',document.body,{innerHTML:'<dl>'
               + '<dt></dt><span id="key"><dd>but it\'s casual in inat?</dd></span>'
               + '<dt></dt><dd>the logic behind these tables is specific to a single iconic taxa... plantae.   '
               + 'the "casual" inat "quality grade", while appropriate in inat, is less appropriate for seed libraries.  '
