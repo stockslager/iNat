@@ -86,7 +86,7 @@
  
    #key { font-weight: bold; text-decoration-line: underline; text-decoration-thickness: 1px; }
    #main { width:100%; }
-   dl { float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
+   dl { position:absolute; background:var(--color-alt); display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }
    dt {  }
    dd { margin: 0; grid-column-start: 2;}   
    table, td, th { border-collapse:collapse; margin:0; padding:4px; }
@@ -168,34 +168,12 @@ faddelem('h2',document.body,{innerText:title});
 
 let configURL     = 'https://stockslager.github.io/iNat/interactions_config.html?project_id='+p_project_id;   
  
-if( p_field1 === '' &&
-    p_field2 === '' &&
-    p_field3 === '' &&
-    p_field4 === '' ){
-    faddelem('p',document.body,{innerHTML:'<dl><dt>'+furl(configURL,'configure observation fields')+'</dt> <dd></dd>'
-           + '<span id="key"><dt>observation field</dt></span><span id="key"> <dd>description</dd></span>'
-           + '<dt></dt> <dd></dd>'
-           + '<dt></dt> <dd></dd>'
-           + '<dt></dt> <dd></dd>'
-           + '<dt></dt> <dd></dd>'
-           + '</dl>'});
-} else {
-    faddelem('p',document.body,{innerHTML:'<dl><dt>'+furl(configURL,'configure observation fields')+'</dt><dd></dd>'
-           + '<span id="key">observation field</span></dt> <dd></dd>'
-           + '<dt>'+p_f1+'</dt> <dd></dd>'
-           + '<dt>'+p_f2+'</dt> <dd></dd>'
-          // + furl(nectaringURL, 'p_f2_desc') + '</dd>'
-           + '<dt>'+p_f3+'</dt> <dd></dd>'
-           + '<dt>'+p_f4+'</dt> <dd></dd>'
-           + '</dl>'});
-}
-
 faddelem('p',document.body,{innerText:'Allows the configuration of up to four observation fields.'});
 
 faddelem('p',document.body,{innerHTML:'<dl>'
    + '<dt>Observation Field 1</dt><dd></dd>'
-   + '<dt><input type="text" id="field1Input" placeholder="observation field id">'
-   + '<button class="btn-1" onclick="getField(1)">Configure</button>'});
+   + '<dt><input type="text" id="field1Input" placeholder="observation field id"></dt><dd></dd>'
+   + '<dt><button class="btn-1" onclick="getField(1)">Configure</button></dt><dd></dd></dl>'});
 
 faddelem('p',document.body,{innerText:'Observation Field 2.'});
 faddelem('p',document.body,{innerHTML:'<input type="text" id="field2Input" placeholder="observation field id">'});
