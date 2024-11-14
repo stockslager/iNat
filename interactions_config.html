@@ -77,7 +77,8 @@
 .btn-1 {
   border-radius: 99rem;
   border-width: 2px;
-  padding: 0.8rem 3rem;
+  /*padding: 0.8rem 3rem;*/
+   padding: 0.4rem 1rem;
 }
 .btn-1:hover {
   color: #999;
@@ -190,9 +191,11 @@ if( p_field1 === '' &&
 }
 
 faddelem('p',document.body,{innerText:'Allows the configuration of up to four observation fields.'});
-faddelem('p',document.body,{innerText:'Observation Field 1.'});
-faddelem('p',document.body,{innerHTML:'<input type="text" id="field1Input" placeholder="observation field id">'});
-faddelem('p',document.body,{innerHTML:'<button class="btn-1" onclick="getField(1)">Configure</button>'});
+
+faddelem('p',document.body,{innerHTML:'<dl>'
+   + '<dt>Observation Field 1</dt><dd></dd>'
+   + '<dt><input type="text" id="field1Input" placeholder="observation field id">'
+   + '<button class="btn-1" onclick="getField(1)">Configure</button>'});
 
 faddelem('p',document.body,{innerText:'Observation Field 2.'});
 faddelem('p',document.body,{innerHTML:'<input type="text" id="field2Input" placeholder="observation field id">'});
