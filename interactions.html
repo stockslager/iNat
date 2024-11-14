@@ -34,7 +34,7 @@
          --color-base-translucent: rgba(0,0,0,0.85);
       }
    }
-   #key { color:var(--color-text-link); }
+   #key { font-weight: bold; text-decoration-line: underline; text-decoration-thickness: 1px; }
    #main { width:100%; }
    dl { float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
    dt {  }
@@ -124,13 +124,18 @@ title += winurlparams.get('project_title') || '';
   
 faddelem('h2',document.body,{innerText:title});
 
-let configURL     = 'https://stockslager.github.io/iNat/interactions.html?project_id='+p_project_id+'&configure=yes';   
+let configURL     = 'https://stockslager.github.io/iNat/interactions_config.html?project_id='+p_project_id;   
  
 if( p_field1 === '' &&
     p_field2 === '' &&
     p_field3 === '' &&
     p_field4 === '' ){
     faddelem('p',document.body,{innerHTML:'<dl><dt>'+furl(configURL,'configure observation fields')+'</dt> <dd></dd>'
+           + '<span id="key"><dt>observation field:</dt></span><span id="key"> <dd>description:</dd></span>'
+           + '<dt></dt> <dd></dd>'
+           + '<dt></dt> <dd></dd>'
+           + '<dt></dt> <dd></dd>'
+           + '<dt></dt> <dd></dd>'
            + '</dl>'});
 } else {
     faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">field:</span></dt> <dd><span id="key">field description:</span></dd>'
