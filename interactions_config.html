@@ -140,14 +140,26 @@ if( p_field1 === '' &&
            + '</dl>'});
 }
 
-faddelem('p',document.body,{innerHTML:'<input type="text" id="myInput" placeholder="Enter text">'});
-faddelem('p',document.body,{innerHTML:'<button onclick="getValue()">Get Value</button>'});
+faddelem('p',document.body,{innerText:'Allows the configuration of up to four observation fields.'});
+faddelem('p',document.body,{innerText:'Observation Field 1.'});
+faddelem('p',document.body,{innerHTML:'<input type="text" id="field1Input" placeholder="observation field id">'});
+faddelem('p',document.body,{innerHTML:'<button onclick="getField(1)">Configure</button>'});
 
-faddelem('p',document.body,{innerTExt:'Interactions that have at least one observation field of type \"taxon\".'});
+faddelem('p',document.body,{innerText:'Observation Field 2.'});
+faddelem('p',document.body,{innerHTML:'<input type="text" id="field2Input" placeholder="observation field id">'});
+faddelem('p',document.body,{innerHTML:'<button onclick="getField(2)">Configure</button>'});
 
-function getValue() {
+faddelem('p',document.body,{innerText:'Observation Field 3.'});
+faddelem('p',document.body,{innerHTML:'<input type="text" id="field3Input" placeholder="observation field id">'});
+faddelem('p',document.body,{innerHTML:'<button onclick="getField(3)">Configure</button>'});
+
+faddelem('p',document.body,{innerText:'Observation Field 4.'});
+faddelem('p',document.body,{innerHTML:'<input type="text" id="field4Input" placeholder="observation field id">'});
+faddelem('p',document.body,{innerHTML:'<button onclick="getField(4)">Configure</button>'});
+ 
+function getField(arg) {
   // Get the input element by its ID
-  let inputField = document.getElementById("myInput");
+  let inputField = document.getElementById("field"+arg+"Input");
   
   // Get the value of the input field
   let value = inputField.value;
@@ -196,7 +208,10 @@ function fpushifnew(ary,value) {
 
 function fresults(xobj) {
    let results = xobj.results;
-   getValue();
+   getField(1);
+   getField(2);
+   getField(3);
+   getField(4);
  /*  if (results) {
       let total_results = xobj.total_results;
       let per_page = xobj.per_page;
