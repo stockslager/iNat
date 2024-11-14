@@ -80,13 +80,16 @@ winurlparams.delete('options');
 winurlparams.delete('idextra_user_id');
 winurlparams.delete('photo_curl_filename_prefix');
 
-let apibase = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
+let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-let apirefurl = 'https://stockslager.github.io/iNat/reseed_plant_inspector.html';
+let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
+let apirefname = '';
+
+let apiref = furl(apirefurl,apirefname);
 
 if (winurlsearchstr==='') {
    let instructions = [
-      {innerHTML:'Invalid parameter list.  Please access via '+furl(apirefurl)+'.'},
+      {innerText:'This page requires a project_id argument.  Add ?project_id=12345678 to the end of the url.'},
    ];
    faddelems('p',document.body,instructions);
 }
@@ -103,14 +106,12 @@ else {
    });
 };
 
-let apirefname = '';
+let title = 'Interactions ';
 
-apirefname += winurlparams.get('project_title');
+title += winurlparams.get('project_title');
+  
+faddelem('h2',document.body,{innerText:title});
  
-let apiref = furl(apirefurl,apirefname);
- 
-faddelem('h2',document.body,{innerText:apirefname});
-
 function fdate(str,dateonly=false) {
    str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
    if (dateonly) { str = str.split(' ')[0]; }
