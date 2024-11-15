@@ -146,6 +146,14 @@ function fpushifnew(ary,value) {
    return ary.length;
 };
 
+function getFormattedDate(date) {
+    let year = date.getFullYear();
+    let month = (1 + date.getMonth()).toString().padStart(2, '0');
+    let day = date.getDate().toString().padStart(2, '0');
+  
+    return month + '-' + day + '-' + year;
+}
+  
 function fresults(xobj) {
    let results = xobj.results;
    if (results) {
@@ -237,6 +245,9 @@ function fresults(xobj) {
                        deposit_date = rec.ofvs[j].value || '';
                        //map_url += (',' + (rec.ofvs[j].value || ''));
                        deposit_date_desc = rec.ofvs[j].observation_field.description || '';
+                       if( deposit_date !== '' ){
+                           deposit_date = getFormattedDate(deposit_date);
+                       }
                    }
                }   
             }
