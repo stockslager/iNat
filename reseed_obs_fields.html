@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+  
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
@@ -36,7 +36,7 @@
    }
    #key { color:var(--color-text-link); }
    #main { width:100%; }
-   dl { position:absolute; background:var(--color-alt); display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }
+   dl { width:fit-content; background:var(--color-alt); display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }
    dt {  }
    dd { margin: 0; grid-column-start: 2;}   
  
@@ -146,6 +146,14 @@ function fpushifnew(ary,value) {
    return ary.length;
 };
 
+function getFormattedDate(date) {
+    let year = date.getFullYear();
+    let month = (1 + date.getMonth()).toString().padStart(2, '0');
+    let day = date.getDate().toString().padStart(2, '0');
+  
+    return month + '-' + day + '-' + year;
+}
+  
 function fresults(xobj) {
    let results = xobj.results;
    if (results) {
@@ -169,6 +177,8 @@ function fresults(xobj) {
          let prop_by_desc = '';
          let parent_col = '';
          let parent_col_desc = '';
+         let deposit_date = '';
+         let deposit_date_desc = '';
          //let map_url = root_observations + '?subview=map&verifiable=any&id=' + rec.id;
        
          if(rec.ofvs&&rec.ofvs.length>0){
@@ -229,6 +239,18 @@ function fresults(xobj) {
                        parent_col_desc = rec.ofvs[j].observation_field.description || '';
                    }
                }   
+
+               if( rec.ofvs[j].field_id === 18706 ){   // "deposit date" observation field.
+                   if( rec.ofvs[j].value ){
+                       deposit_date = rec.ofvs[j].value || '';
+                       //map_url += (',' + (rec.ofvs[j].value || ''));
+                       deposit_date_desc = rec.ofvs[j].observation_field.description || '';
+                       if( deposit_date !== '' ){
+                           const dt = new Date(Date.parse(deposit_date));
+                           deposit_date = getFormattedDate(dt);
+                       }
+                   }
+               }   
             }
          }
 
@@ -266,6 +288,14 @@ function fresults(xobj) {
                   {innerText:quantity_available_desc.toLowerCase()},];        
 
          faddelems('td',brow2, quant);
+
+         let brow2a = faddelem('tr',tbody);
+         let dt = [
+                  {innerText:'deposit date'},
+                  {innerHTML:'<span id="key">'+deposit_date+'</span>'},
+                  {innerText:deposit_date_desc.toLowerCase()},];        
+
+         faddelems('td',brow2a, dt);
 
          let brow3 = faddelem('tr',tbody);
          let shub = [
