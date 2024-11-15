@@ -246,7 +246,8 @@ function fresults(xobj) {
                        //map_url += (',' + (rec.ofvs[j].value || ''));
                        deposit_date_desc = rec.ofvs[j].observation_field.description || '';
                        if( deposit_date !== '' ){
-                           deposit_date = getFormattedDate(Date.parse(deposit_date));
+                           const dt = new Date(Date.parse(deposit_date));
+                           deposit_date = getFormattedDate(dt);
                        }
                    }
                }   
