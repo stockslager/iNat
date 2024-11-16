@@ -82,6 +82,7 @@ let p_f1_desc = winurlparams.get('f1_desc')||'';
 let p_f2_desc = winurlparams.get('f2_desc')||'';
 let p_f3_desc = winurlparams.get('f3_desc')||'';
 let p_f4_desc = winurlparams.get('f4_desc')||'';
+let p_iconic = winurlparams.get('iconic_taxa')||'';
  
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
@@ -200,14 +201,14 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      if( p_view === 'insects' ){
+      if( p_iconic_taxa === 'insects' ){
            faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( insects, '
                  + furl('https://stockslager.github.io/iNat/interactions.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&iconic_taxa=aves','birds') + ', '
                  + furl('https://stockslager.github.io/iNat/interactions.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&iconic_taxa=reptilia,amphibia','herps') + ', '
                  + furl('https://stockslager.github.io/iNat/interactions.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&iconic_taxa=mammalia','mammals') + ' )'
                  + '<br/>per page: '+fcomnum(per_page)+'<br />'
                  + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'}); 
-      } else if( p_view === 'birds' ){
+      } else if( p_iconic_taxa === 'herps' ){
               faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ( '
                  + furl('https://stockslager.github.io/iNat/interactions.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&iconic_taxa=insecta','insects') + ', '
                  + furl('https://stockslager.github.io/iNat/interactions.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&iconic_taxa=aves','birds') + ', '
@@ -215,7 +216,7 @@ function fresults(xobj) {
                  + furl('https://stockslager.github.io/iNat/interactions.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&iconic_taxa=mammalia','mammals' ) + ' )'
                  + '<br/>per page: '+fcomnum(per_page)+'<br />'
                  + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});   
-      } else if( p_view === 'herps' ){
+      } else if( p_iconic_taxa === 'birds' ){
               faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ( '
                  + furl('https://stockslager.github.io/iNat/interactions.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&iconic_taxa=insecta','insects') + ', '
                  + 'birds, '
@@ -223,7 +224,7 @@ function fresults(xobj) {
                  + furl('https://stockslager.github.io/iNat/interactions.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&iconic_taxa=mammalia','mammals') + ' )'
                  + '<br/>per page: '+fcomnum(per_page)+'<br />'
                  + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'}); 
-      } else if( p_view === 'mammals' ){
+      } else if( p_iconic_taxa === 'mammals' ){
               faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ( '
                  + furl('https://stockslager.github.io/iNat/interactions.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&iconic_taxa=insecta','insects') + ', '
                  + furl('https://stockslager.github.io/iNat/interactions.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&iconic_taxa=aves','birds') + ', '
