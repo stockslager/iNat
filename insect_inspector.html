@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
@@ -114,7 +113,7 @@ function fresults(xobj) {
 
          lists += '&project_title=' + rec.title||'';
          
-         target_url += 'https://stockslager.github.io/iNat/rewild_plants_visited.html?project_id='+rec.id+lists;
+         target_url += 'https://stockslager.github.io/iNat/insect_counts.html?project_id='+rec.id+lists;
          
          let values = [
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
@@ -126,7 +125,7 @@ function fresults(xobj) {
          for (let j=0; j<rec.project_observation_rules.length; j++) {
             if( rec.project_observation_rules[j].operator === 'in_project?' ){
                let sub_brow = faddelem('tr',tbody);
-               target_url = 'https://stockslager.github.io/iNat/rewild_plants_visited.html?project_id='+rec.project_observation_rules[j].operand_id+'&project_title='+rec.project_observation_rules[j].project.title||'';
+               target_url = 'https://stockslager.github.io/iNat/insect_counts.html?project_id='+rec.project_observation_rules[j].operand_id+'&project_title='+rec.project_observation_rules[j].project.title||'';
                let sub_values = [
                    {innerHTML:'<img class="photo" src="'+((rec.project_observation_rules[j].project.icon)?rec.project_observation_rules[j].project.icon:'')+'" />'},
                    {innerHTML:furl(target_url, (rec.project_observation_rules[j].project.title||'no title'))},
@@ -151,8 +150,6 @@ let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
 let apirefname = 'What\'s Visiting?';
 let apiref = furl(apirefurl,apirefname);
-faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
-  + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});
 faddelem('h2',document.body,{innerText:apirefname});
 
 faddelem('p',document.body,{innerHTML:'To see what\'s visiting the plants in each garden.'});
