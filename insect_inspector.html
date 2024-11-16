@@ -66,6 +66,10 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 // default the id's of the projects to be passed in to the projects api.
 winurlparams.delete('id');
 winurlparams.append('id', '152539');
+
+// explode the sub-projects...
+winurlparams.delete('rule_details');
+winurlparams.append('rule_details', 'true');
 let view = winurlparams.get('view') || '';
    
 </script>
@@ -118,6 +122,19 @@ function fresults(xobj) {
             {innerText:truncatedText},
          ];
          faddelems('td',brow,values);
+
+         for (let j=0; j<results.length; j++) {
+            if( results.project_observation_rules[j].operator === 'in_project?' ){
+               let sub_brow = faddelem('tr',tbody);
+               target_url = 'https://stockslager.github.io/iNat/rewild_plants_visited.html?project_id='+results.project_observation_rules[j].operand_id+'&project_title='+results.project_observation_rules[j].project.title||'';
+               let sub_values = [
+                   {innerHTML:'<img class="photo" src="'+((results.project_observation_rules[j].icon)?results.project_observation_rules[j].icon:'')+'" />'},
+                   {innerHTML:furl(target_url, (results.project_observation_rules[j].project.title||'no title'))},
+                   {innerText:truncate(results.project_observation_rules[j].project.description||'',500)},
+               ];
+               faddelems('td',sub_brow,sub_values);
+            }
+         }
       };
 
       // buttons to go to prev or next page
