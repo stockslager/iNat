@@ -117,7 +117,7 @@ function fresults(xobj) {
          target_url += 'https://stockslager.github.io/iNat/rewild_plants_visited.html?project_id='+rec.id+lists;
          
          let values = [
-            {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
+            {innerHTML:'<img class="icon" src="'+((rec.icon)?rec.icon:'')+'" />'},
             {innerHTML:furl(target_url, (rec.title||'no title'))},
             {innerText:truncatedText},
          ];
@@ -128,7 +128,7 @@ function fresults(xobj) {
                let sub_brow = faddelem('tr',tbody);
                target_url = 'https://stockslager.github.io/iNat/rewild_plants_visited.html?project_id='+rec.project_observation_rules[j].operand_id+'&project_title='+rec.project_observation_rules[j].project.title||'';
                let sub_values = [
-                   {innerHTML:'<img class="photo" src="'+((rec.project_observation_rules[j].project.icon)?rec.project_observation_rules[j].project.icon:'')+'" />'},
+                   {innerHTML:'<img class="icon" src="'+((rec.project_observation_rules[j].project.icon)?rec.project_observation_rules[j].project.icon:'')+'" />'},
                    {innerHTML:furl(target_url, (rec.project_observation_rules[j].project.title||'no title'))},
                    {innerText:truncate(rec.project_observation_rules[j].project.description||'',200)},
                ];
