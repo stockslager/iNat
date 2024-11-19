@@ -34,6 +34,7 @@
          --color-base-translucent: rgba(0,0,0,0.85);
       }
    }
+   #td_collapse { visibility: collapse; }
    #key { font-weight: bold; text-decoration-line: underline; text-decoration-thickness: 1px; }
    #main { width:100%; }
    dl { float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
@@ -274,7 +275,9 @@ function fresults(xobj) {
 
          tax_name = rec.taxon.name || '';
          pref_tax_name = rec.taxon.preferred_common_name || tax_name;
-         tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';                     
+         if( rec.taxon.default_photo.license_code !== null ){
+         tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';  
+         }
 
          let s = [];
 
