@@ -49,7 +49,7 @@
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
    .icon { height:48px; width:48px; border-radius:50%; }
    .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
-   .photo { height:64px; width:64px; border-radius: 15px 15px 15px 15px; }
+   .photo { height:64px; width:64px; border-radius: 10px 10px 10px 10px; }
    img { margin:0; padding:0; border:0; }
    a { text-decoration:none; color:var(--color-text-link); }
    a:hover { background:var(--color-hover); }
@@ -71,6 +71,8 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
 let p_show_all = winurlparams.get('show_all') || '';
+let p_q = winurlparams.get('q') || '';
+let p_search_on = winurlparams.get('search_on') || '';
  
 winurlparams.delete('taxon_id');
 winurlparams.delete('per_page');
@@ -78,6 +80,20 @@ winurlparams.append('per_page','30');
 winurlparams.delete('iconic_taxa');
 winurlparams.delete('order_by');
 winurlparams.append('order_by', 'updated_at');  // always order by most recently updated observations in the library.
+
+// if query is null, default to 172a0
+if( p_q === '' ){
+    winurlparams.delete('q');
+    winurlparams.append('q','172a0');
+    p_q += '172a0';
+}
+
+// if search on is null, default to tags.
+if( p_search_on === '' ){
+    winurlparams.delete('search_on');
+    winurlparams.append('search_on', 'tags');
+    p_search_on += 'tags';
+}
                     
 // delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
 // the creation of local projects / places for restoration sites  and/or pollinator gardens.
@@ -204,8 +220,8 @@ function fresults(xobj) {
                {innerText:'#'},
                {innerText:'Photo'},
                {innerText:'Name'}, 
-               {innerText:'Donor Photo'},
-               {innerText:'Donor'},
+               {innerText:'Student Icon'},
+               {innerText:'Student Id'},
                {innerText:'Field Notes'},
       ];
       
