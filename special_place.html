@@ -152,6 +152,14 @@ if( p_best_in_class === 'yes' ){
 }   
  
 faddelem('h2',document.body,{innerText:apirefname});
+
+function truncate2(str, maxLength, obs) {
+  if (str.length <= maxLength) {
+    return str;
+  } else {
+     return (str.substring(0, maxLength) + '<a href="https://stockslager.github.io/iNat/special_place.html?obs_id='+obs+'>  more...</a>');
+  }
+};
  
 function fresults(xobj) {
    let results = xobj.results;
@@ -214,7 +222,7 @@ function fresults(xobj) {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }          
 
-         let desc = truncate((rec.description || ''),500);
+         let desc = truncate2((rec.description || ''),500,rec.id);
          desc = stripHtml(desc);
          
          values = [
