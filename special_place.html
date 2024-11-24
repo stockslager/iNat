@@ -141,44 +141,12 @@ if( p_show_all === 'yes' ){
  
 faddelem('h2',document.body,{innerText:apirefname});
 
-function fdate(str,dateonly=false) {
-   str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
-   if (dateonly) { str = str.split(' ')[0]; }
-   else {
-      str = str.replace(/([+-]\d{2}\:?\d{2})/,' ($1)'); //puts parenthesis around time zone offset
-      str = str.replace(/z/i,' (+00:00)'); //replaces Z (case insensitve) with UTC
-      str = str.replace('+00:00','±00:00');
-   };
-   return str;
-};
-function furl(url,txt=url) { return `<a href="${url}">${txt}</a>`; };
-function famp(str) { return str.replace(/&/g,'&amp;'); };
-function fcomnum(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') };
-function faddelem(etype,eparent=null,eattributes={}) {
-   let eobj = document.createElement(etype);
-   for (let [key,value] of Object.entries(eattributes)) {
-      if ( typeof value === 'object' && value !== null ) {
-         for (let [subkey,subvalue] of Object.entries(value)) { eobj[key][subkey] = subvalue; };
-      }
-      else { eobj[key] = value; };
-    };
-   if (eparent) { eparent.appendChild(eobj); };
-   return eobj;
-};
-function faddelems(etype,eparent=null,eattributes=[]) { for (let e of eattributes) { faddelem(etype,eparent,e); }; };
-function fpageurl(urlbase,urlparams,per_page,page) {
-   let params = new URLSearchParams(urlparams);
-   let url_per_page = params.get('per_page');
-   let url_page = params.get('page');
-   (url_per_page===null) ? params.append('per_page',per_page) : params.set('per_page',per_page);
-   (url_page===null) ? params.append('page',page) : params.set('page',page);
-   return urlbase+'?'+params;
-};
-function fpushifnew(ary,value) {
-   if(!ary.includes(value)) { ary.push(value) };
-   return ary.length;
-};
+</script>
+   
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
 
+<script> 
+ 
 function fresults(xobj) {
    let results = xobj.results;
    if (results) {
@@ -239,14 +207,14 @@ function fresults(xobj) {
          } else {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }          
-
+       
          values = [
                   {innerText:i+1},
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>'},
                   {innerHTML:user_icon},
                   {innerText:rec.user.login.toLowerCase()},
-                  {innerHTML:(rec.description||'')},
+                  {innerHTML:(truncate((rec.description||''),500))},
          ];           
      
          faddelems('td',brow,values);
