@@ -35,6 +35,7 @@
       }
    }
    #key { color:var(--color-text-link); }
+   #story { width:fit-content; background:var(--color-alt); display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }   
    #main { width:100%; }
    dl { width:fit-content; background:var(--color-alt); display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }
    dt {  }
@@ -137,10 +138,11 @@ function fresults(xobj) {
          faddelem('p',document.body,{innerHTML:photo_array});  
   
          if( rec.description ){
-              faddelem('p',document.body,{innerHTML:'<br><dl>'
+              faddelem('p',document.body,{innerHTML:'<dl>'
                             + '<dt></dt><span id="key"><dd>notes ~ </dd></span>'
                             + '<dt></dt><dd>'+rec.description+'</dd>'
-                            + '</dl>'});       
+                            + '</dl>'});     
+              faddelem('p',document.body,{innerHTML:'<span id="story">'+rec.description+'</span>'});
          }
       };    
    }
