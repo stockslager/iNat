@@ -71,7 +71,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
-let p_show_all = winurlparams.get('show_all') || '';
+let p_best_in_class = winurlparams.get('best_in_class') || '';
 let p_q = winurlparams.get('q') || '';
 let p_search_on = winurlparams.get('search_on') || '';
  
@@ -96,7 +96,7 @@ if( p_search_on === '' ){
     p_search_on += 'tags';
 }
 
-if( p_show_all === 'yes' ){
+if( p_best_in_class === 'yes' ){
     winurlparams.delete('field:special+place=');
     winurlparams.append('field:special+place=', '');
 } else {
@@ -141,7 +141,7 @@ let apirefname = 'Field Notes from a Special Place';
  
 let apiref = furl(apirefurl,apirefname);
 
-if( p_show_all === 'yes' ){
+if( p_best_in_class === 'yes' ){
    faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">toggle:</span></dt> <dd><span id="key">results:</span></dd>'
         + '<dt>show all</dt> <dd>clicking the \"show all\" toggle will include <br>everything with the hidden key for the class.</dd>'
         + '</dl>'});
@@ -165,13 +165,13 @@ function fresults(xobj) {
 
       let this_url = 'https://stockslager.github.io/iNat/special_place.html';
     
-      if( p_show_all === 'yes' ){
-         faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( '+furl((this_url+'&show_all=yes'),'show all')+' )<br />' 
+      if( p_best_in_class === 'yes' ){
+         faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( '+furl((this_url),'show all')+' )<br />' 
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });
       } else {
-         faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( '+furl(this_url,'best in class')+' )<br />' 
+         faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( '+furl(this_url+'&best_in_class=yes','best in class')+' )<br />' 
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });
