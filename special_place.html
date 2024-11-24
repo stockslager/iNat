@@ -179,11 +179,11 @@ function fresults(xobj) {
 
       labels = [
                {innerText:'#'},
-               {innerText:'Photo'},
-               {innerText:'Main Character'}, 
-               {innerText:'Author'},
-               {innerText:'Author Id'},
-               {innerText:'Field Notes'},
+               {innerText:'photo'},
+               {innerText:'main character'}, 
+               {innerText:'author'},
+               {innerText:'author id'},
+               {innerText:'field notes'},
       ];
       
       faddelems('th',hrow,labels);
@@ -208,14 +208,17 @@ function fresults(xobj) {
          } else {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }          
-       
+
+         let desc = truncate((rec.description || ''),500);
+         desc = stripHtml(desc);
+         
          values = [
                   {innerText:i+1},
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>'},
                   {innerHTML:user_icon},
                   {innerText:rec.user.login.toLowerCase()},
-                  {innerHTML:(truncate((rec.description||''),500))},
+                  {innerHTML:desc},
          ];           
      
          faddelems('td',brow,values);
