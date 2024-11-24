@@ -224,7 +224,7 @@ function fresults(xobj) {
          }          
 
          let desc = stripHtml(rec.description || '');
-         desc = truncate2(desc,500,rec.id);
+         desc = truncate2(desc.toLowerCase(),500,rec.id);
          
          values = [
                   {innerText:i+1},
@@ -232,7 +232,7 @@ function fresults(xobj) {
                   {innerHTML:'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>'},
                   {innerHTML:user_icon},
                   {innerText:rec.user.login.toLowerCase()},
-                  {innerHTML:desc.toLowerCase()},
+                  {innerHTML:desc},
          ];           
      
          faddelems('td',brow,values);
