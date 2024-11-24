@@ -138,14 +138,8 @@ function fresults(xobj) {
          faddelem('p',document.body,{innerHTML:photo_array});  
   
          if( rec.description ){
-              /*faddelem('p',document.body,{innerHTML:'<dl>'
-                            + '<dt></dt><span id="key"><dd>notes ~ </dd></span>'
-                            + '<dt></dt><dd>'+rec.description+'</dd>'
-                            + '</dl>'});*/
-              //faddelem('p',document.body,{innerHTML:'<span id="story">'+rec.description+'</span>'});
-              faddelem('p',document.body,{innerHTML:rec.description});
               faddelem('p',document.body,{innerText:stripHtml(rec.description)});
-              //faddelem('p',document.body,{innerHTML:rec.description});
+              faddelem('p',document.body,{innerHTML:stripHtml(rec.description)});
          }
       };    
    }
