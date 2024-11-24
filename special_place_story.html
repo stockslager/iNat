@@ -134,14 +134,15 @@ function fresults(xobj) {
                  photo_array += '<img class="photo" src="'+rec.photos[j].url+'" /> ';
              }
          }
+
+         faddelem('p',document.body,{innerHTML:photo_array});  
   
          if( rec.description ){
               /*faddelem('p',document.body,{innerHTML:'<dl>'
                             + '<dt></dt><span id="key"><dd>notes ~ </dd></span>'
                             + '<dt></dt><dd>'+rec.description+'</dd>'
                             + '</dl>'});*/
-              faddelem('p',document.body,{innerHTML:'<span id="story">'+photo_array});  
-              faddelem('p',document.body,{innerHTML:rec.description+'</span>'});
+              faddelem('p',document.body,{innerHTML:'<span id="story">'+rec.description+'</span>'});
          }
       };    
    }
