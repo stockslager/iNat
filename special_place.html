@@ -40,7 +40,7 @@
    dt {  }
    dd { margin: 0; grid-column-start: 2;}   
    table, td, th { border-collapse:collapse; margin:0; padding:4px; }
-   td:last-child{ width:50%; }
+   td:last-child{ width:60%; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
    th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }
@@ -95,6 +95,13 @@ if( p_search_on === '' ){
     winurlparams.append('search_on', 'tags');
     p_search_on += 'tags';
 }
+
+if( p_show_all === 'yes' ){
+    winurlparams.delete('field:special+place=');
+    winurlparams.append('field:special+place=', '');
+} else {
+    winurlparams.delete('field:special+place=');
+}
                     
 // delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
 // the creation of local projects / places for restoration sites  and/or pollinator gardens.
@@ -131,8 +138,6 @@ fetch(apiurl)
 });
 
 let apirefname = 'Field Notes from a Special Place';
-
-apirefname += winurlparams.get('project_title');
  
 let apiref = furl(apirefurl,apirefname);
 
@@ -218,7 +223,7 @@ function fresults(xobj) {
                   {innerHTML:'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>'},
                   {innerHTML:user_icon},
                   {innerText:rec.user.login.toLowerCase()},
-                  {innerHTML:desc},
+                  {innerHTML:desc.toLowerCase()},
          ];           
      
          faddelems('td',brow,values);
