@@ -157,7 +157,7 @@ function truncate2(str, maxLength, obs) {
   if (str.length <= maxLength) {
     return str;
   } else {
-     return (str.substring(0, maxLength) + '<a href="https://stockslager.github.io/iNat/special_place.html?obs_id='+obs+'">  more...</a>');
+     return (str.substring(0, maxLength) + '<a href="https://stockslager.github.io/iNat/special_place.html?obs_id='+obs+'">  >>> more >>></a>');
   }
 };
  
@@ -222,8 +222,8 @@ function fresults(xobj) {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }          
 
-         let desc = truncate2((rec.description || ''),500,rec.id);
-         desc = stripHtml(desc);
+         let desc = stripHtml(rec.description || '');
+         desc = truncate2(desc,500,rec.id);
          
          values = [
                   {innerText:i+1},
