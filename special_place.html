@@ -180,32 +180,16 @@ function fresults(xobj) {
       let page_max = Math.ceil(total_results/per_page);
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
-      let toggle_args = '';
-      let args = '';
 
-      if( rw_view != '' ){
-         args += '&view=' + rw_view;
-         toggle_args += '&view=' + rw_view;
-      }
-
-      if( rw_user_id != ''){
-         args += '&user_id=' + rw_user_id;
-         toggle_args += '&user_id=' + rw_user_id;
-      }
-      
-      if( rw_g_list != '' && rw_s_list != '' ){
-         toggle_args += '&g_list='+rw_g_list+'&s_list='+rw_s_list;
-      }      
-
-      let this_url = 'https://stockslager.github.io/iNat/reseed_plants_visited.html?project_id='+p_project_id+'&donor_project_id='+p_donor_project_id+'&view='+p_view+'&project_title='+winurlparams.get('project_title')+'&inat_grade='+p_inat_grade;
+      let this_url = 'https://stockslager.github.io/iNat/special_place.html';
     
       if( p_in_lib === 'yes' ){
-         faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( '+furl((this_url+'&in_lib=all'),'show all')+' )<br />' 
+         faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( '+furl((this_url+'&show_all=yes'),'show all')+' )<br />' 
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });
       } else {
-         faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( '+furl(this_url,'show available')+' )<br />' 
+         faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( '+furl(this_url,'best in class')+' )<br />' 
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });
@@ -228,9 +212,6 @@ function fresults(xobj) {
       faddelems('th',hrow,labels);
 
       let tbody = faddelem('tbody',table);
-      let inat_taxa = 'https://www.inaturalist.org/taxa/';
-
-      let displayCount = 0;
       
       for (let i=0; i<results.length; i++) {
          let brow = faddelem('tr',tbody);
@@ -238,16 +219,11 @@ function fresults(xobj) {
          let tax_name = '';
          let pref_tax_name = '';  
          let tax_photo = '';
-         let activity_found = '';
-         let availability = 'Out of Stock';
-         let plant_status = '';
-         let wild_ancestral_colony = '';
        
          tax_name = rec.taxon.name || '';
          pref_tax_name = rec.taxon.preferred_common_name || '';
          tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';                     
 
-         let s = [];
          let user_icon = rec.user.icon || '';
          
          if( user_icon === '' ){
