@@ -112,14 +112,7 @@ let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://stockslager.github.io/iNat/special_place.html';
 
-if (winurlsearchstr==='') {
-   let instructions = [
-      {innerHTML:'Invalid parameter list.  Please access via '+furl(apirefurl)+'.'},
-   ];
-   faddelems('p',document.body,instructions);
-}
-else {
-   fetch(apiurl)
+fetch(apiurl)
    .then((response) => {
       if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
       return response.json();
@@ -128,8 +121,7 @@ else {
    .catch((err) => {
       console.error(err.message);
       faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-   });
-};
+});
 
 let apirefname = 'Field Notes from a Special Place';
 
