@@ -126,8 +126,7 @@ function fresults(xobj) {
          let header_row = '';
          header_row += ('Starring ~ '+(rec.taxon.preferred_common_name||''));
           
-         faddelem('h2',document.body,{innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'
-                 + header_row.toLowerCase() });  
+         faddelem('h2',document.body,{innerText:header_row.toLowerCase() });  
 
          if( rec.photos && rec.photos.length>0 ){
              for (let j=0; j<rec.photos.length; j++) {
@@ -140,7 +139,7 @@ function fresults(xobj) {
          if( rec.description ){
               faddelem('p',document.body,{innerHTML:'<br><dl>'
                             + '<dt></dt><span id="key"><dd>notes ~ </dd></span>'
-                            + '<dt></dt><dd>'+rec.description.toLowerCase()+'</dd>'
+                            + '<dt></dt><dd>'+rec.description+'</dd>'
                             + '</dl>'});       
          }
       };    
