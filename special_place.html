@@ -151,7 +151,7 @@ let apirefname = 'Field Notes from a Special Place';
  
 let apiref = furl(apirefurl,apirefname);
 
-if( p_best_in_class === 'yes' ){
+/*if( p_best_in_class === 'yes' ){
    faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">toggle:</span></dt> <dd><span id="key">results:</span></dd>'
         + '<dt>show all</dt> <dd>clicking the \"show all\" toggle will include <br>everything with the hidden key for the class.</dd>'
         + '</dl>'});
@@ -159,7 +159,7 @@ if( p_best_in_class === 'yes' ){
    faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">toggle:</span></dt> <dd><span id="key">results:</span></dd>'
         + '<dt>best in class</dt> <dd>clicking the \"best in class\" toggle will include <br>only those observations whose field notes were voted best in class.</dd>'
         + '</dl>'});
-}   
+}   */
  
 faddelem('p',document.body,{innerHTML:'<span id="title">'+apirefname+'</span> ~ '+p_q});
 
@@ -183,7 +183,7 @@ function fresults(xobj) {
 
       let this_url = 'https://stockslager.github.io/iNat/special_place.html';
     
-      if( p_best_in_class === 'yes' ){
+      /*if( p_best_in_class === 'yes' ){
          faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( '+furl((this_url),'show all')+' )<br />' 
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
@@ -193,7 +193,11 @@ function fresults(xobj) {
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });
-      }   
+      }  */ 
+      faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' <br />' 
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
+            });
                
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
