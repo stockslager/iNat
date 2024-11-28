@@ -72,6 +72,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
+let p_user_id = winurlparams.get('user_id') || '';
 let p_best_in_class = winurlparams.get('best_in_class') || '';
 let p_q = winurlparams.get('q') || '';
 let p_search_on = winurlparams.get('search_on') || '';
@@ -84,7 +85,8 @@ winurlparams.delete('iconic_taxa');
 winurlparams.delete('order_by');
 winurlparams.append('order_by', 'updated_at');  // always order by most recently updated observations in the library.
 
-if( p_project_id === '' ){  
+if( p_project_id === '' &&
+    p_user_id === '' ){  
      // if query is null, default to 172a0
      if( p_q === '' ){
          winurlparams.delete('q');
