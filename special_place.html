@@ -161,8 +161,12 @@ let apiref = furl(apirefurl,apirefname);
         + '<dt>best in class</dt> <dd>clicking the \"best in class\" toggle will include <br>only those observations whose field notes were voted best in class.</dd>'
         + '</dl>'});
 }   */
- 
-faddelem('p',document.body,{innerHTML:'<span id="title">'+apirefname+'</span> ~ '+p_q});
+
+if( p_q !== '' ){ 
+    faddelem('p',document.body,{innerHTML:'<span id="title">'+apirefname+'</span> ~ '+p_q});
+} else {
+    faddelem('p',document.body,{innerHTML:'<span id="title">'+apirefname+'</span>});
+}
 
 function truncate2(str, maxLength, obs) {
   if (str.length <= maxLength) {
