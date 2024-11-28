@@ -125,13 +125,13 @@ function fresults(xobj) {
          let photo_array = '';
       
          let header_row = '';
-         header_row += ('Starring ~ '+(rec.taxon.preferred_common_name||''));
+         header_row += ('Field Notes Starring ~ '+(rec.taxon.preferred_common_name||''));
           
          faddelem('h2',document.body,{innerText:header_row.toLowerCase() });  
 
          if( rec.photos && rec.photos.length>0 ){
              for (let j=0; j<rec.photos.length; j++) {
-                 photo_array += 'furl(\'https://www.inaturalist.org/observations/\'+rec.id,<img class="photo" src="'+rec.photos[j].url+'" /> ';
+                 photo_array += 'furl(https://www.inaturalist.org/observations/'+rec.id+',<img class="photo" src="'+rec.photos[j].url+'" /> ';
              }
          }
 
