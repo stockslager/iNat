@@ -75,6 +75,7 @@ let p_project_id = winurlparams.get('project_id') || '';
 let p_best_in_class = winurlparams.get('best_in_class') || '';
 let p_q = winurlparams.get('q') || '';
 let p_search_on = winurlparams.get('search_on') || '';
+let p_qv_length = winurlparams.get('qv_length') || '500';
  
 winurlparams.delete('taxon_id');
 winurlparams.delete('per_page');
@@ -239,7 +240,7 @@ function fresults(xobj) {
          }          
 
          let desc = stripHtml(rec.description || '');
-         desc = truncate2(desc.toLowerCase(),500,rec.id);
+         desc = truncate2(desc.toLowerCase(),p_qv_length,rec.id);
          
          values = [
                   {innerText:i+1},
