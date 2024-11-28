@@ -52,7 +52,7 @@
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
    .icon { height:48px; width:48px; border-radius:50%; }
    .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
-   .photo { height:64px; width:64px; border-radius: 5px 5px 5px 5px; }
+   .photo { text-decoration:none; height:64px; width:64px; border-radius: 5px 5px 5px 5px; }
    img { margin:0; padding:0; border:0; }
    a { /*text-decoration:underline;*/ color:var(--color-text-link); }
    a:hover { background:var(--color-hover); }
@@ -124,9 +124,9 @@ function fresults(xobj) {
          let header_row = '';
          header_row += ('Field Notes Starring ~ '+(rec.taxon.preferred_common_name||''));
 
-         faddelem('p',document.body,{innerHTML:'<dl><dt>observation:</dt> <dd>'+rec.id+'</dd>'
+         faddelem('p',document.body,{innerHTML:'<dl><dt>observation:</dt> <dd>'+furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)+'</dd>'
            + '<dt>author</dt> <dd>' 
-           + rec.user.login.toLowerCase() + '</dd></dl>'});
+           + furl('https://www.inaturalist.org/people/'+rec.user.login.toLowerCase(),rec.user.login.toLowerCase()) + '</dd></dl>'});
   
          faddelem('h2',document.body,{innerText:header_row });  
 
