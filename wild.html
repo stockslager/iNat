@@ -78,6 +78,9 @@ let p_single_view = '';
 let p_project_id = '';
 winurlparams.delete('options');
 
+// default file name
+let fileName = 'wild.html';
+
 //*********** move to default params ****************************
 // root directory for html
 let root = 'https://stockslager.github.io/iNat/';
@@ -439,15 +442,15 @@ function fresults(xobj) {
 
       if( p_term_id !== '' ){
 
-         let adult    = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=2','adult') + ', ');
-         let teneral  = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=3','teneral') + ', ');
-         let pupa     = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=4','pupa') + ', ');
-         let nymph    = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=5','nymph') + ', ');
-         let larva    = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=6','larva') + ', ');
-         let egg      = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=7','egg') + ', ');
-         let juvenile = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=8','juvenile') + ', ');
-         let subimago = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=16','subimago') + ', ');
-         let all      = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=','all') + ', ');
+         let adult    = (furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=2','adult') + ', ');
+         let teneral  = (furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=3','teneral') + ', ');
+         let pupa     = (furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=4','pupa') + ', ');
+         let nymph    = (furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=5','nymph') + ', ');
+         let larva    = (furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=6','larva') + ', ');
+         let egg      = (furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=7','egg') + ', ');
+         let juvenile = (furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=8','juvenile') + ', ');
+         let subimago = (furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=16','subimago') + ', ');
+         let all      = (furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=','all') + ', ');
          
          if( p_term_value_id === defaultAdult ){
              faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ( adult, '
@@ -500,41 +503,41 @@ function fresults(xobj) {
          
          if( p_view === 'visiting' ) {
            faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' (visiting, '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring') + ', '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollinating','pollinating') + ', '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=associating','associating') + ')'
+                 + furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring') + ', '
+                 + furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollinating','pollinating') + ', '
+                 + furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=associating','associating') + ')'
                  + '<br/>per page: '+fcomnum(per_page)+'<br />'
                  + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'}); 
          } else if( p_view === 'pollinating' ){
               faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=visiting','visiting') + ', '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring') + ', '
+                 + furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=visiting','visiting') + ', '
+                 + furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring') + ', '
                  + 'pollinating, '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=associating','associating') + ')'
+                 + furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=associating','associating') + ')'
                  + '<br/>per page: '+fcomnum(per_page)+'<br />'
                  + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});   
          } else if( p_view === 'nectaring' ){
               faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=visiting','visiting') + ', '
+                 + furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=visiting','visiting') + ', '
                  + 'nectaring, '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollinating','pollinating') + ', '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=associating','associating') + ')'
+                 + furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollinating','pollinating') + ', '
+                 + furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=associating','associating') + ')'
                  + '<br/>per page: '+fcomnum(per_page)+'<br />'
                  + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'}); 
          } else if( p_view === 'associating' ){
               faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=visiting','visiting') + ', '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring') + ', '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollinating','pollinating') + ', '
+                 + furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=visiting','visiting') + ', '
+                 + furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring') + ', '
+                 + furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollinating','pollinating') + ', '
                  + 'associating)'
                  + '<br/>per page: '+fcomnum(per_page)+'<br />'
                  + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'}); 
          } else {
               // default to visiting
               faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' (visiting, '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring') + ', '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollinating','pollinating') + ', '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=associating','associating') + ')'
+                 + furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring') + ', '
+                 + furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollinating','pollinating') + ', '
+                 + furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=associating','associating') + ')'
                  + '<br/>per page: '+fcomnum(per_page)+'<br />'
                  + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});        
          }
