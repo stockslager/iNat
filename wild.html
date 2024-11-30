@@ -72,6 +72,7 @@ let per_page = winurlparams.get('per_page') || 100;
 let p_options = winurlparams.get('options') || [];
 let p_plant_name = winurlparams.get('plant_name') || '';
 let p_view = winurlparams.get('view') || 'visiting';
+let p_life_stage = winurlparams.get('life_stage') || '';
 let p_single_view = '';
 let p_project_id = '';
 winurlparams.delete('options');
@@ -83,6 +84,8 @@ let visitingURL     = 'https://www.inaturalist.org/observation_fields/7623';
 let nectaringURL    = 'https://www.inaturalist.org/observation_fields/498';
 let associatingURL  = 'https://www.inaturalist.org/observation_fields/7807';   
 let pollinatingURL  = 'https://www.inaturalist.org/observation_fields/4935';
+let lifeStageTermID = '1';
+let lifeStageAdult  = '2';
 //***************************************************************
 
 let p_plant_id = winurlparams.get('plant_id') || [];
@@ -330,18 +333,8 @@ function buildResultsTable(results){
          faddelems('td',brow,values);
       };
 }
-   
-function fresults(xobj) {
-   //faddelem('p',document.body,{innerHTML:furl(famp(apiurl))});
-   let results = xobj.results;
-   if (results) {
-      let total_results = xobj.total_results;
-      let per_page = xobj.per_page;
-      let page_curr = xobj.page;
-      let page_max = Math.ceil(total_results/per_page);
-      let page_prev = ((page_curr>1)?page_curr-1:null);
-      let page_next = ((page_curr<page_max)?page_curr+1:null);
 
+function buildToggleKey(){
       let refn = '';
 
       if( p_view === 'visiting' ){
@@ -359,7 +352,7 @@ function fresults(xobj) {
       } else {
          refn += 'Visiting ';
          refn += p_plant_name;
-      }
+      }      
    
       // display the "key" associating observation fields to the toggles.
       // hide the key for project only using a single obs field.
@@ -375,7 +368,7 @@ function fresults(xobj) {
            + furl(associatingURL, 'name of associated plant') + '</dd></dl>'});
       }      
       faddelem('h2',document.body,{innerText:refn});
-
+   
       // if single view show descriptive line since there is no key.
       if( p_single_view === 'yes' ){
         
@@ -403,8 +396,39 @@ function fresults(xobj) {
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});
          
-      } else { 
-         if( p_view === 'visiting' ){
+      }   
+}
+   
+function fresults(xobj) {
+   //faddelem('p',document.body,{innerHTML:furl(famp(apiurl))});
+   let results = xobj.results;
+   if (results) {
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+
+      if( p_life_stage !== 'yes' ){
+         buildToggleKey();
+      }
+
+      if( p_life_stage !== '' ){
+
+         // adult
+         if( p_life_stage === lifeStageAdult ){
+             faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' (adult, '
+                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=egg','egg') + ', '
+                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=larva','larva') + ', '
+                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=pupa','pupa') + ')'
+                 + '<br/>per page: '+fcomnum(per_page)+'<br />'
+                 + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'}); 
+         }
+         
+      } else if( p_single_view !== 'yes' ) {
+         
+         if( p_view === 'visiting' ) {
            faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' (visiting, '
                  + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=nectaring','nectaring') + ', '
                  + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&view=pollinating','pollinating') + ', '
