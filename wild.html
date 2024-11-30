@@ -244,7 +244,33 @@ function fexport(count=0) {
    });
 };
 
-function buildToggles(){
+function buildToggles(xobj){
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+
+      let refn = '';
+
+      if( p_view === 'visiting' ){
+         refn += 'Visiting ';
+         refn += p_plant_name;
+      } else if( p_view === 'nectaring' ){
+         refn += 'Nectaring at ';
+         refn += p_plant_name;
+      } else if( p_view === 'pollinating' ){
+         refn += 'Pollinating ';
+         refn += p_plant_name;
+      } else if( p_view === 'associating' ){
+         refn += 'Associated With ';
+         refn += p_plant_name;
+      } else {
+         refn += 'Visiting ';
+         refn += p_plant_name;
+      }
+   
       // display the "key" associating observation fields to the toggles.
       // hide the key for project only using a single obs field.
       if( p_single_view !== 'yes' ){
@@ -335,33 +361,8 @@ function fresults(xobj) {
    //faddelem('p',document.body,{innerHTML:furl(famp(apiurl))});
    let results = xobj.results;
    if (results) {
-      let total_results = xobj.total_results;
-      let per_page = xobj.per_page;
-      let page_curr = xobj.page;
-      let page_max = Math.ceil(total_results/per_page);
-      let page_prev = ((page_curr>1)?page_curr-1:null);
-      let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let refn = '';
-
-      if( p_view === 'visiting' ){
-         refn += 'Visiting ';
-         refn += p_plant_name;
-      } else if( p_view === 'nectaring' ){
-         refn += 'Nectaring at ';
-         refn += p_plant_name;
-      } else if( p_view === 'pollinating' ){
-         refn += 'Pollinating ';
-         refn += p_plant_name;
-      } else if( p_view === 'associating' ){
-         refn += 'Associated With ';
-         refn += p_plant_name;
-      } else {
-         refn += 'Visiting ';
-         refn += p_plant_name;
-      }
-
-      buildToggles();
+      buildToggles(xobj);
             
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
