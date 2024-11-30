@@ -72,7 +72,7 @@ let per_page = winurlparams.get('per_page') || 100;
 let p_options = winurlparams.get('options') || [];
 let p_plant_name = winurlparams.get('plant_name') || '';
 let p_view = winurlparams.get('view') || 'visiting';
-let p_life_stage = winurlparams.get('life_stage') || '';
+let p_term_id = winurlparams.get('term_id') || '';
 let p_single_view = '';
 let p_project_id = '';
 winurlparams.delete('options');
@@ -410,18 +410,21 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      if( p_life_stage !== 'yes' ){
+      if( p_term_id === '' ){
          buildToggleKey();
       }
 
-      if( p_life_stage !== '' ){
+      if( p_term_id !== '' ){
+
+         let egg = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=7','egg') + ', ');
 
          // adult
-         if( p_life_stage === lifeStageAdult ){
+         if( p_term_id === lifeStageAdult ){
              faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' (adult, '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=egg','egg') + ', '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=larva','larva') + ', '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=pupa','pupa') + ')'
+                 + egg
+                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=7','egg') + ', '
+                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=6','larva') + ', '
+                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=4','pupa') + ')'
                  + '<br/>per page: '+fcomnum(per_page)+'<br />'
                  + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'}); 
          }
