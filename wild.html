@@ -73,6 +73,7 @@ let p_options = winurlparams.get('options') || [];
 let p_plant_name = winurlparams.get('plant_name') || '';
 let p_view = winurlparams.get('view') || 'visiting';
 let p_term_id = winurlparams.get('term_id') || '';
+let p_term_value_id = winurlparams.get('term_value_id') || '';
 let p_single_view = '';
 let p_project_id = '';
 winurlparams.delete('options');
@@ -80,12 +81,19 @@ winurlparams.delete('options');
 //*********** move to default params ****************************
 // root directory for html
 let root = 'https://stockslager.github.io/iNat/';
-let visitingURL     = 'https://www.inaturalist.org/observation_fields/7623';   
-let nectaringURL    = 'https://www.inaturalist.org/observation_fields/498';
-let associatingURL  = 'https://www.inaturalist.org/observation_fields/7807';   
-let pollinatingURL  = 'https://www.inaturalist.org/observation_fields/4935';
-let lifeStageTermID = '1';
-let lifeStageAdult  = '2';
+let visitingURL      = 'https://www.inaturalist.org/observation_fields/7623';   
+let nectaringURL     = 'https://www.inaturalist.org/observation_fields/498';
+let associatingURL   = 'https://www.inaturalist.org/observation_fields/7807';   
+let pollinatingURL   = 'https://www.inaturalist.org/observation_fields/4935';
+let defaultLifeStage = '1';  
+let defaultAdult     = '2'; 
+let defaultTeneral   = '3'; 
+let defaultPupa      = '4';
+let defaultNymph     = '5';
+let defaultLarva     = '6';
+let defaultEgg       = '7';
+let defaultJuvenile  = '8';
+let defaultSubimago  = '16';
 //***************************************************************
 
 let p_plant_id = winurlparams.get('plant_id') || [];
@@ -339,20 +347,37 @@ function buildToggleKey(){
 
       if( p_view === 'visiting' ){
          refn += 'Visiting ';
-         refn += p_plant_name;
       } else if( p_view === 'nectaring' ){
          refn += 'Nectaring at ';
-         refn += p_plant_name;
       } else if( p_view === 'pollinating' ){
          refn += 'Pollinating ';
-         refn += p_plant_name;
       } else if( p_view === 'associating' ){
          refn += 'Associated With ';
-         refn += p_plant_name;
+      } else if( p_term_id === defaultLifeStage ){
+         if( p_term_value_id === defaultAdult ){
+            refn += 'Adults on ';
+         } else if( p_term_value_id === defaultTeneral ){
+            refn += 'Tenerals on ';
+         } else if( p_term_value_id === defaultPupa ){
+            refn += 'Pupae on ';
+         } else if( p_term_value_id === defaultNymph ){
+            refn += 'Nymphs on ';
+         } else if( p_term_value_id === defaultLarva ){
+            refn += 'Larvae on ';
+         } else if( p_term_value_id === defaultEgg ){
+            refn += 'Eggs on ';
+         } else if( p_term_value_id === defaultJuvenile ){
+            refn += 'Juveniles on ';
+         } else if( p_term_value_id === defaultSubimago ){
+            refn += 'Subimagoes on ';
+         } else {
+            refn += 'Visiting ';
+         }
       } else {
          refn += 'Visiting ';
-         refn += p_plant_name;
-      }      
+      }   
+   
+      refn += p_plant_name;
    
       // display the "key" associating observation fields to the toggles.
       // hide the key for project only using a single obs field.
@@ -410,21 +435,63 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      if( p_term_id === '' ){
-         buildToggleKey();
-      }
+      buildToggleKey();
 
       if( p_term_id !== '' ){
 
-         let egg = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=7','egg') + ', ');
-
-         // adult
-         if( p_term_id === lifeStageAdult ){
-             faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' (adult, '
-                 + egg
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=7','egg') + ', '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=6','larva') + ', '
-                 + furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=4','pupa') + ')'
+         let adult    = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=2','adult') + ', ');
+         let teneral  = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=3','teneral') + ', ');
+         let pupa     = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=4','pupa') + ', ');
+         let nymph    = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=5','nymph') + ', ');
+         let larva    = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=6','larva') + ', ');
+         let egg      = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=7','egg') + ', ');
+         let juvenile = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=8','juvenile') + ', ');
+         let subimago = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=16','subimago') + ', ');
+         let all      = (furl(root+'rewild_insects_visiting.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=','all') + ', ');
+         
+         if( p_term_value_id === defaultAdult ){
+             faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ( adult, '
+                 + egg + pupa + larva + nymph + juvenile + teneral + subimago + all + ' )'
+                 + '<br/>per page: '+fcomnum(per_page)+'<br />'
+                 + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'}); 
+         } else if ( p_term_value_id === defaultTeneral ) {
+             faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ( '
+                 + adult + egg + pupa + larva + nymph + juvenile + 'teneral, ' + subimago + all + ' )'
+                 + '<br/>per page: '+fcomnum(per_page)+'<br />'
+                 + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'}); 
+         } else if ( p_term_value_id === defaultEgg ) {
+             faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ( '
+                 + adult + 'egg, ' + pupa + larva + nymph + juvenile + teneral + subimago + all + ' )'
+                 + '<br/>per page: '+fcomnum(per_page)+'<br />'
+                 + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'}); 
+         } else if ( p_term_value_id === defaultPupa ) {
+             faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ( '
+                 + adult + egg + 'pupa, ' + larva + nymph + juvenile + teneral + subimago + all + ' )'
+                 + '<br/>per page: '+fcomnum(per_page)+'<br />'
+                 + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'}); 
+         } else if ( p_term_value_id === defaultLarva ) {
+             faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ( '
+                 + adult + egg + pupa + 'larva, ' + nymph + juvenile + teneral + subimago + all + ' )'
+                 + '<br/>per page: '+fcomnum(per_page)+'<br />'
+                 + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'}); 
+         } else if ( p_term_value_id === defaultNymph ) {
+             faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ( '
+                 + adult + egg + pupa + larva + 'nymph, ' + juvenile + teneral + subimago + all + ' )'
+                 + '<br/>per page: '+fcomnum(per_page)+'<br />'
+                 + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'}); 
+         } else if ( p_term_value_id === defaultJuvenile ) {
+             faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ( '
+                 + adult + egg + pupa + larva + nymph + 'juvenile, ' + teneral + subimago + all + ' )'
+                 + '<br/>per page: '+fcomnum(per_page)+'<br />'
+                 + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'}); 
+         } else if ( p_term_value_id === defaultSubimago ) {
+             faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ( '
+                 + adult + egg + pupa + larva + nymph + juvenile + teneral + 'subimago, ' + all + ' )'
+                 + '<br/>per page: '+fcomnum(per_page)+'<br />'
+                 + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'}); 
+         } else {
+             faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ( '
+                 + adult + egg + pupa + larva + nymph + juvenile + teneral + subimago + 'all )'
                  + '<br/>per page: '+fcomnum(per_page)+'<br />'
                  + 'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'}); 
          }
