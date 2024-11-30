@@ -99,6 +99,12 @@ let defaultJuvenile  = '8';
 let defaultSubimago  = '16';
 //***************************************************************
 
+// if term_id is populated, remove view
+if( p_term_id !== '' ){
+   p_view = '';
+   winurlparams.delete('view');
+}
+
 let p_plant_id = winurlparams.get('plant_id') || [];
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
@@ -450,7 +456,7 @@ function fresults(xobj) {
          let egg      = (furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=7','egg') + ', ');
          let juvenile = (furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=8','juvenile') + ', ');
          let subimago = (furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=16','subimago') + ', ');
-         let all      = (furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=','all') + ', ');
+         let all      = (furl(root+fileName+'?project_id='+p_project_id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&term_id=1&term_value_id=','all') + ' )');
          
          if( p_term_value_id === defaultAdult ){
              faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ( adult, '
