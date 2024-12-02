@@ -37,7 +37,6 @@
    #key { color:var(--color-text-link); }
    #main { width:100%; }
    #title { font-size:1.5em; }
-   #trcomm {}
    dl { float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
    dt {  }
    dd { margin: 0; grid-column-start: 2;}   
@@ -166,7 +165,7 @@ function truncate2(str, maxLength, obs) {
   if (str.length <= maxLength) {
     return (str);
   } else {
-     return (str.substring(0, maxLength) + '<a href="https://stockslager.github.io/iNat/special_place_story.html?obs_id='+obs+'">  <br>>>> more >>></a>');
+     return (str.substring(0, maxLength) + '<a href="https://stockslager.github.io/iNat/special_place_story.html?obs_id='+obs+'&show_comments='+p_show_comments+'">  <br>>>> more >>></a>');
   }
 };
  
@@ -253,7 +252,7 @@ function fresults(xobj) {
 
          if( p_show_comments === 'yes' ){
              for( let j=0; j<rec.comments.length; j++) {
-                  let comment_row = faddelem('tr class=\"trcomm\"',tbody);
+                  let comment_row = faddelem('tr',tbody);
                   let comm = stripHtml(rec.comments[j].body || '');
                   comm = truncate2(comm.toLowerCase(),p_qv_length,rec.id);
 
