@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Comment Viewer" />
+<title>Comment Viewer</title>
+<style>
+   :root { 
+      background: var(--color-base);
+      color: var(--color-text);
+      font: 14px Sans-Serif;
+      --color-base: white;
+      --color-alt: whitesmoke;
+      --color-brand: forestgreen;
+      --color-text: black;
+      --color-text-invert: white;
+      --color-text-link: royalblue;
+      --color-border: lightgray;
+      --color-hover: lightgray;
+      --color-base-translucent: rgba(255,255,255,0.85);
+   }
+   @media (prefers-color-scheme: dark) {
+      :root {
+         --color-base: black;
+         --color-alt: #171717;
+         --color-brand: forestgreen;
+         --color-text: #bababa;
+         --color-text-invert: black;
+         --color-text-link: cornflowerblue;
+         --color-border: #444;
+         --color-hover: #444;
+         --color-base-translucent: rgba(0,0,0,0.85);
+      }
+   }
+   #key { color:var(--color-text-link); }
+   #main { width:100%; }
+   #title { font-size:1.5em; }
+   dl { float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
+   dt {  }
+   dd { margin: 0; grid-column-start: 2;}   
+   table, td, th { border-collapse:collapse; margin:0; padding:4px; }
+   td:last-child{ width:60%; }
+   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
+   th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
+   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }
+   tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
+   tr:nth-child(even) { background:var(--color-base); }
+   .tar { text-align:right; }
+   .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
+   .icon { height:48px; width:48px; border-radius:50%; }
+   .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
+   .photo { height:64px; width:64px; border-radius: 5px 5px 5px 5px; }
+   img { margin:0; padding:0; border:0; }
+   a { text-decoration:none; color:var(--color-text-link); }
+   a:hover { background:var(--color-hover); }
+   #nav { margin-left:-8px; position:-webkit-sticky /*Safari*/; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
+   @media print { #nav { display:none; } } 
+   .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
+   .button { background:var(--color-alt); }
+   .button_inactive { background:none; color:var(--color-border); }
+   .bin_true { text-decoration: underline wavy rgba(34,139,34,0.35); }
+   .bin_false { text-decoration: underline wavy rgba(178,34,34,0.35); }
+</style>
+</head>
+
+<body>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let p_project_id = winurlparams.get('project_id') || '';
+let p_user_id = winurlparams.get('user_id') || '';
+let p_best_in_class = winurlparams.get('best_in_class') || '';
+let p_q = winurlparams.get('q') || '';
+let p_search_on = winurlparams.get('search_on') || '';
+let p_qv_length = winurlparams.get('qv_length') || '500';
+let p_show_comments = winurlparams.get('show_comments') || 'no';
+ 
+winurlparams.delete('taxon_id');
+winurlparams.delete('per_page');
+winurlparams.append('per_page','30');
+winurlparams.delete('iconic_taxa');
+winurlparams.delete('order_by');
+winurlparams.append('order_by', 'updated_at');  // always order by most recently updated observations in the library.
+
+if( p_project_id === '' &&
+    p_user_id === '' ){  
+     // if query is null, default to 172a0
+     if( p_q === '' ){
+         winurlparams.delete('q');
+         winurlparams.append('q','172a0');
+         p_q += '172a0';
+     }
+
+     // if search on is null, default to tags.
+     if( p_search_on === '' ){
+         winurlparams.delete('search_on');
+         winurlparams.append('search_on', 'tags');
+         p_search_on += 'tags';
+     }
+} else {
+     winurlparams.delete('order_by');
+     winurlparams.delete('order');
+     winurlparams.append('order_by', 'votes');
+     winurlparams.append('order', 'desc');
+}
+
+if( p_best_in_class === 'yes' ){
+    winurlparams.delete('field:special+place');
+    winurlparams.append('field:special+place', '');
+} else {
+    winurlparams.delete('field:special+place');
+}
+
+
+                    
+// delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
+// the creation of local projects / places for restoration sites  and/or pollinator gardens.
+winurlparams.delete('lat');
+winurlparams.delete('lng');
+winurlparams.delete('radius');
+winurlparams.delete('nelng');
+winurlparams.delete('nelat');
+winurlparams.delete('swlng');
+winurlparams.delete('swlat');   
+winurlparams.delete('options');
+winurlparams.delete('idextra_user_id');
+winurlparams.delete('photo_curl_filename_prefix');
+
+let apibase = 'https://api.inaturalist.org/v1/observations';
+let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+let apirefurl = 'https://stockslager.github.io/iNat/special_place.html';
+
+</script>
+   
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
+
+<script> 
+ 
+fetch(apiurl)
+   .then((response) => {
+      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+      return response.json();
+   })
+   .then((data) => { fresults(data); })
+   .catch((err) => {
+      console.error(err.message);
+      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+});
+
+let apirefname = 'Comment Viewer';
+ 
+let apiref = furl(apirefurl,apirefname);
+
+if( p_q !== '' ){ 
+    faddelem('p',document.body,{innerHTML:'<span id="title">'+apirefname+'</span> ~ '+p_q});
+} else {
+    faddelem('p',document.body,{innerHTML:'<span id="title">'+apirefname+'</span>'});
+}
+
+function truncate2(str, maxLength, obs) {
+  if (str.length <= maxLength) {
+    return (str);
+  } else {
+     return (str.substring(0, maxLength) + '<a href="https://stockslager.github.io/iNat/special_place_story.html?obs_id='+obs+'">  <br>>>> more >>></a>');
+  }
+};
+ 
+function fresults(xobj) {
+   let results = xobj.results;
+   if (results) {
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+
+      let this_url = 'https://stockslager.github.io/iNat/special_place.html';
+    
+      faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' <br />' 
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
+            });
+               
+      let table = faddelem('table',document.body,{id:'main'});
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+      let labels = [];
+
+      if( p_show_comments === 'yes' ){
+          labels = [
+               {innerText:'#'},
+               {innerText:'photo'},
+               {innerText:'main character'}, 
+               {innerText:'author'},
+               {innerText:'author id'},
+               {innerText:'field notes / comments'},
+          ];
+      } else {
+          labels = [
+               {innerText:'#'},
+               {innerText:'photo'},
+               {innerText:'main character'}, 
+               {innerText:'author'},
+               {innerText:'author id'},
+               {innerText:'field notes'},
+          ];
+      }
+      
+      faddelems('th',hrow,labels);
+
+      let tbody = faddelem('tbody',table);
+      
+      for (let i=0; i<results.length; i++) {
+         let brow = faddelem('tr',tbody);
+         let rec = results[i];
+         let tax_name = '';
+         let pref_tax_name = '';  
+         let tax_photo = '';
+
+         if( rec.taxon ){
+             tax_name = rec.taxon.name || '';
+             pref_tax_name = rec.taxon.preferred_common_name || '';
+             tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';                     
+         } 
+       
+         let user_icon = rec.user.icon || '';
+         
+         if( user_icon === '' ){
+            user_icon += '<div class="npcicon">&#x1F464;</div>';
+         } else {
+            user_icon = '<img class="icon" src="'+user_icon+'" />';
+         }          
+
+         let desc = stripHtml(rec.description || '');
+         desc = truncate2(desc.toLowerCase(),p_qv_length,rec.id);
+         
+         values = [
+                  {innerText:i+1},
+                  {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                  {innerHTML:'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>'},
+                  {innerHTML:user_icon},
+                  {innerText:rec.user.login.toLowerCase()},
+                  {innerHTML:desc},
+         ];           
+     
+         faddelems('td',brow,values);
+
+         if( p_show_comments === 'yes' ){
+             for( let j=0; j<rec.comments.length; j++) {
+                  let comment_row = faddelem('tr',tbody);
+                  let comment_values = [
+                        {innerText:''},
+                        {innerHTML:''},
+                        {innerHTML:''},
+                        {innerHTML:rec.comments[j].user.user_icon},
+                        {innerText:rec.comments[j].user.login.toLowerCase()},
+                        {innerHTML:rec.comments[j].body.toLowerCase()},
+                      ];
+                  faddelems('td',comment_row,comment_values);
+             }
+         }
+      };
+
+      // buttons to go to prev or next page
+      let nav = faddelem('div',document.body,{id:'nav'});
+      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
+};
+</script>
+</body>
+
+</html>
