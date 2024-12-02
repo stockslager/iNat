@@ -167,30 +167,30 @@ function fresults(xobj) {
                         {innerText:'author id'},
                         {innerText:'comments'},
                  ];
-             }
-           
-             faddelems('th',hrow,labels);
-             let tbody = faddelem('tbody',table);
-           
-             for( let j=0; j<rec.comments.length; j++) {
-                  let brow = faddelem('tr',tbody);
-                  let comm = stripHtml(rec.comments[j].body || '');
 
-                  let comm_icon = rec.comments[j].user.icon || '';
+                 faddelems('th',hrow,labels);
+                 let tbody = faddelem('tbody',table);
+                      
+                 for( let j=0; j<rec.comments.length; j++) {
+                      let brow = faddelem('tr',tbody);
+                      let comm = stripHtml(rec.comments[j].body || '');
 
-                  if( comm_icon === '' ){
-                      comm_icon += '<div class="npcicon">&#x1F464;</div>';
-                  } else {
-                      comm_icon = '<img class="icon" src="'+comm_icon+'" />';
-                  }          
+                      let comm_icon = rec.comments[j].user.icon || '';
 
-                  values = [
-                      {innerHTML:comm_icon},
-                      {innerText:rec.comments[j].user.login.toLowerCase()},
-                      {innerText:comm.toLowerCase()},
-                  ];           
+                      if( comm_icon === '' ){
+                          comm_icon += '<div class="npcicon">&#x1F464;</div>';
+                      } else {
+                          comm_icon = '<img class="icon" src="'+comm_icon+'" />';
+                      }          
+
+                      values = [
+                          {innerHTML:comm_icon},
+                          {innerText:rec.comments[j].user.login.toLowerCase()},
+                          {innerText:comm.toLowerCase()},
+                      ];           
                
-                  faddelems('td',brow,values);
+                      faddelems('td',brow,values);
+                 }
              }
          }
       };    
