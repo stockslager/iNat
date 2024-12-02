@@ -153,12 +153,12 @@ function fresults(xobj) {
   
          if( rec.description ){
               faddelem('p',document.body,{innerText:stripHtml(rec.description)});
-              faddelem('p',document.body,{innerHTML:'<div id="comments">Comments</div>'});
          }
 
          if( p_show_comments === 'yes' ){
 
              if( rec.comments.length > 0 ){
+                 faddelem('p',document.body,{innerHTML:'<div id="comments">Comments</div>'});
                  let table = faddelem('table',document.body,{id:'main'});
                  let thead = faddelem('thead',table);
                  let hrow = faddelem('tr',thead);
