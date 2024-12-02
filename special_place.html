@@ -77,6 +77,7 @@ let p_best_in_class = winurlparams.get('best_in_class') || '';
 let p_q = winurlparams.get('q') || '';
 let p_search_on = winurlparams.get('search_on') || '';
 let p_qv_length = winurlparams.get('qv_length') || '500';
+let p_show_comments = winurlparams.get('show_comments') || 'no';
  
 winurlparams.delete('taxon_id');
 winurlparams.delete('per_page');
@@ -154,16 +155,6 @@ let apirefname = 'Field Note Viewer';
  
 let apiref = furl(apirefurl,apirefname);
 
-/*if( p_best_in_class === 'yes' ){
-   faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">toggle:</span></dt> <dd><span id="key">results:</span></dd>'
-        + '<dt>show all</dt> <dd>clicking the \"show all\" toggle will include <br>everything with the hidden key for the class.</dd>'
-        + '</dl>'});
-} else {
-   faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">toggle:</span></dt> <dd><span id="key">results:</span></dd>'
-        + '<dt>best in class</dt> <dd>clicking the \"best in class\" toggle will include <br>only those observations whose field notes were voted best in class.</dd>'
-        + '</dl>'});
-}   */
-
 if( p_q !== '' ){ 
     faddelem('p',document.body,{innerHTML:'<span id="title">'+apirefname+'</span> ~ '+p_q});
 } else {
@@ -174,7 +165,7 @@ function truncate2(str, maxLength, obs) {
   if (str.length <= maxLength) {
     return (str);
   } else {
-     return (str.substring(0, maxLength) + '<a href="https://stockslager.github.io/iNat/special_place_story.html?obs_id='+obs+'">  <br>>>> more >>></a>');
+     return (str.substring(0, maxLength) + '<a href="https://stockslager.github.io/iNat/special_place_story.html?obs_id='+obs+'&show_comments='+p_show_comments+'">  <br>>>> more >>></a>');
   }
 };
  
@@ -190,17 +181,6 @@ function fresults(xobj) {
 
       let this_url = 'https://stockslager.github.io/iNat/special_place.html';
     
-      /*if( p_best_in_class === 'yes' ){
-         faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( '+furl((this_url),'show all')+' )<br />' 
-            +'per page: '+fcomnum(per_page)+'<br />'
-            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
-            });
-      } else {
-         faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' ( '+furl(this_url+'?best_in_class=yes','best in class')+' )<br />' 
-            +'per page: '+fcomnum(per_page)+'<br />'
-            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
-            });
-      }  */ 
       faddelem('p',document.body,{innerHTML:'total rows: '+fcomnum(total_results)+' <br />' 
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
@@ -211,14 +191,25 @@ function fresults(xobj) {
       let hrow = faddelem('tr',thead);
       let labels = [];
 
-      labels = [
+      if( p_show_comments === 'yes' ){
+          labels = [
+               {innerText:'#'},
+               {innerText:'photo'},
+               {innerText:'main character'}, 
+               {innerText:'author'},
+               {innerText:'author id'},
+               {innerText:'field notes / comments'},
+          ];
+      } else {
+          labels = [
                {innerText:'#'},
                {innerText:'photo'},
                {innerText:'main character'}, 
                {innerText:'author'},
                {innerText:'author id'},
                {innerText:'field notes'},
-      ];
+          ];
+      }
       
       faddelems('th',hrow,labels);
 
@@ -258,6 +249,32 @@ function fresults(xobj) {
          ];           
      
          faddelems('td',brow,values);
+
+         if( p_show_comments === 'yes' ){
+             for( let j=0; j<rec.comments.length; j++) {
+                  let comment_row = faddelem('tr',tbody);
+                  let comm = stripHtml(rec.comments[j].body || '');
+                  comm = truncate2(comm.toLowerCase(),p_qv_length,rec.id);
+
+                  let comm_icon = rec.comments[j].user.icon || '';
+
+                  if( comm_icon === '' ){
+                      comm_icon += '<div class="npcicon">&#x1F464;</div>';
+                  } else {
+                      comm_icon = '<img class="icon" src="'+comm_icon+'" />';
+                  }          
+              
+                  let comment_values = [
+                        {innerText:''},
+                        {innerHTML:''},
+                        {innerHTML:''},
+                        {innerHTML:comm_icon},
+                        {innerText:rec.comments[j].user.login.toLowerCase()},
+                        {innerHTML:comm},
+                      ];
+                  faddelems('td',comment_row,comment_values);
+             }
+         }
       };
 
       // buttons to go to prev or next page
