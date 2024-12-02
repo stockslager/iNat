@@ -155,7 +155,25 @@ function fresults(xobj) {
          }
 
          if( p_show_comments === 'yes' ){
+
+             if( rec.comments.length > 0 ){
+                 let table = faddelem('table',document.body,{id:'main'});
+                 let thead = faddelem('thead',table);
+                 let hrow = faddelem('tr',thead);
+                 let labels = [];
+
+                 labels = [
+                        {innerText:'author'},
+                        {innerText:'author id'},
+                        {innerText:'comments'},
+                 ];
+             }
+           
+             faddelems('th',hrow,labels);
+             let tbody = faddelem('tbody',table);
+           
              for( let j=0; j<rec.comments.length; j++) {
+                  let brow = faddelem('tr',tbody);
                   let comm = stripHtml(rec.comments[j].body || '');
 
                   let comm_icon = rec.comments[j].user.icon || '';
@@ -165,9 +183,14 @@ function fresults(xobj) {
                   } else {
                       comm_icon = '<img class="icon" src="'+comm_icon+'" />';
                   }          
-              
-                  faddelem('p',document.body,{innerHTML:comm_icon+rec.comments[j].user.login.toLowerCase()});
-                  faddelem('p',document.body,{innerText:comm.toLowerCase()});
+
+                  values = [
+                      {innerHTML:comm_icon},
+                      {innerText:rec.comments[j].user.login.toLowerCase()},
+                      {innerText:comm.toLowerCase()},
+                  ];           
+               
+                  faddelems('td',brow,values);
              }
          }
       };    
