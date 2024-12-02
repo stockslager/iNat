@@ -78,6 +78,9 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 // set rw_win_options defaults for re-seed...
 let p_obs_id = winurlparams.get('obs_id') || '';
 
+// show comments?
+let p_show_comments = winurlparams.get('show_comments') || 'no';
+
 // set id to the obs_id passed in for call to api...
 winurlparams.delete('id');
 winurlparams.append('id', p_obs_id);
@@ -149,6 +152,24 @@ function fresults(xobj) {
   
          if( rec.description ){
               faddelem('p',document.body,{innerText:stripHtml(rec.description)});
+         }
+
+         if( p_show_comments === 'yes' ){
+             for( let j=0; j<rec.comments.length; j++) {
+                  let comm = stripHtml(rec.comments[j].body || '');
+                  comm = truncate2(comm.toLowerCase(),p_qv_length,rec.id);
+
+                  let comm_icon = rec.comments[j].user.icon || '';
+
+                  if( comm_icon === '' ){
+                      comm_icon += '<div class="npcicon">&#x1F464;</div>';
+                  } else {
+                      comm_icon = '<img class="icon" src="'+comm_icon+'" />';
+                  }          
+              
+                  faddelem('p',document.body,{innerHTML:comm_icon+rec.comments[j].user.login.toLowerCase()});
+                  faddelem('p',document.body,{innerText:comm});
+             }
          }
       };    
    }
