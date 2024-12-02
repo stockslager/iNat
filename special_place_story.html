@@ -4,8 +4,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
-<meta name="description" content="Story From a Special Place" />
-<title>Story from a Special Place</title>
+<meta name="description" content="Field Note Viewer" />
+<title>Field Note Viewer</title>
 <style>
    :root { 
       background: var(--color-base);
@@ -37,7 +37,8 @@
    #key { color:var(--color-text-link); }
    #story { /*width:fit-content;*/ background:var(--color-alt); display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }   
    #main { width:100%; }
-  
+   #comments { font: 20px Sans-Serif; padding-top: 15px; }
+
    dl { float: right; display: grid; grid-gap: 1px 12px; background:var(--color-alt); grid-template-columns: max-content; font: 14px Sans-Serif; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; position: absolute; top: 0px; right: 7px; }
    dt {  }
    dd { margin: 0; grid-column-start: 2;}   
@@ -77,6 +78,9 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 
 // set rw_win_options defaults for re-seed...
 let p_obs_id = winurlparams.get('obs_id') || '';
+
+// show comments?
+let p_show_comments = winurlparams.get('show_comments') || 'no';
 
 // set id to the obs_id passed in for call to api...
 winurlparams.delete('id');
@@ -149,6 +153,47 @@ function fresults(xobj) {
   
          if( rec.description ){
               faddelem('p',document.body,{innerText:stripHtml(rec.description)});
+              faddelem('p',document.body,{innerHTML:'<div id="comments">Comments</div>'});
+         }
+
+         if( p_show_comments === 'yes' ){
+
+             if( rec.comments.length > 0 ){
+                 let table = faddelem('table',document.body,{id:'main'});
+                 let thead = faddelem('thead',table);
+                 let hrow = faddelem('tr',thead);
+                 let labels = [];
+
+                 labels = [
+                        {innerText:'author'},
+                        {innerText:'author id'},
+                        {innerText:'comments'},
+                 ];
+
+                 faddelems('th',hrow,labels);
+                 let tbody = faddelem('tbody',table);
+                      
+                 for( let j=0; j<rec.comments.length; j++) {
+                      let brow = faddelem('tr',tbody);
+                      let comm = stripHtml(rec.comments[j].body || '');
+
+                      let comm_icon = rec.comments[j].user.icon || '';
+
+                      if( comm_icon === '' ){
+                          comm_icon += '<div class="npcicon">&#x1F464;</div>';
+                      } else {
+                          comm_icon = '<img class="icon" src="'+comm_icon+'" />';
+                      }          
+
+                      values = [
+                          {innerHTML:comm_icon},
+                          {innerText:rec.comments[j].user.login.toLowerCase()},
+                          {innerText:comm.toLowerCase()},
+                      ];           
+               
+                      faddelems('td',brow,values);
+                 }
+             }
          }
       };    
    }
