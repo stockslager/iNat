@@ -157,7 +157,6 @@ function fresults(xobj) {
          if( p_show_comments === 'yes' ){
              for( let j=0; j<rec.comments.length; j++) {
                   let comm = stripHtml(rec.comments[j].body || '');
-                  comm = truncate(comm.toLowerCase(),p_qv_length);
 
                   let comm_icon = rec.comments[j].user.icon || '';
 
@@ -168,7 +167,7 @@ function fresults(xobj) {
                   }          
               
                   faddelem('p',document.body,{innerHTML:comm_icon+rec.comments[j].user.login.toLowerCase()});
-                  faddelem('p',document.body,{innerText:comm});
+                  faddelem('p',document.body,{innerText:comm.toLowerCase()});
              }
          }
       };    
