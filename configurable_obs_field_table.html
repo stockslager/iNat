@@ -154,6 +154,10 @@ function fresults(xobj) {
       let label2 = '';
       let label3 = '';
       let label4 = '';
+      let foundLabel1 = '';
+      let foundLabel2 = '';
+      let foundLabel3 = '';
+      let foundLabel4 = '';
       let labels = [];
 
       for (let l=0; l<results.length; l++) {
@@ -162,7 +166,8 @@ function fresults(xobj) {
           if(rec.ofvs&&rec.ofvs.length>0){
              for( let k=0; k<rec.ofvs.length; k++ ){
 
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field1 ){
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field1 && foundLabel1 === '' ){
+                      foundLabel1 = 'yes';
                       if( label1 !== '' ){
                           label1 += ' or ';
                           label1 += rec.ofvs[k].name;
@@ -170,7 +175,8 @@ function fresults(xobj) {
                           label1 = rec.ofvs[k].name;
                       }
                   }
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field2 ){
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field2 && foundLabel2 === '' ){
+                      foundLabel2 = 'yes';
                       if( p_operator === 'or' ){
                           if( label1 !== '' ){
                               label1 += ' or ';
@@ -182,7 +188,8 @@ function fresults(xobj) {
                           label2 = rec.ofvs[k].name;
                       }
                   }
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field3 ){
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field3 && foundLabel3 === '' ){
+                      foundLabel3 = 'yes';
                       if( p_operator === 'or' ){
                           if( label1 !== '' ){
                               label1 += ' or ';
@@ -194,7 +201,8 @@ function fresults(xobj) {
                           label3 = rec.ofvs[k].name;
                       }
                   }
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field4 ){
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field4 && foundLabel4 === '' ){
+                      foundLabel4 = 'yes';
                       if( p_operator === 'or' ){
                           if( label1 !== '' ){
                               label1 += ' or ';
