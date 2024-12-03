@@ -155,22 +155,25 @@ function fresults(xobj) {
       let label4 = p_obs_field4 || '';
       let labels = [];
 
-      // find obs field labels
-      if(rec.ofvs&&rec.ofvs.length>0){
-         for( let k=0; k<rec.ofvs.length; k++ ){
+      for (let l=0; l<results.length; l++) {
+          let rec = results[l];
+          // find obs field labels
+          if(rec.ofvs&&rec.ofvs.length>0){
+             for( let k=0; k<rec.ofvs.length; k++ ){
 
-              if( rec.ofvs[k].field_id.toString() === p_obs_field1 ){
-                  label1 = rec.ofvs[k].name.toLowerCase();
-              }
-              if( rec.ofvs[k].field_id.toString() === p_obs_field2 ){
-                  label2 = rec.ofvs[k].name.toLowerCase();
-              }
-              if( rec.ofvs[k].field_id.toString() === p_obs_field3 ){
-                  label3 = rec.ofvs[k].name.toLowerCase();
-              }
-              if( rec.ofvs[k].field_id.toString() === p_obs_field4 ){
-                  label4 = rec.ofvs[k].name.toLowerCase();
-              }
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field1 ){
+                      label1 = rec.ofvs[k].name.toLowerCase(); 
+                  }
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field2 ){
+                      label2 = rec.ofvs[k].name.toLowerCase();
+                  }
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field3 ){
+                      label3 = rec.ofvs[k].name.toLowerCase();
+                  }
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field4 ){
+                      label4 = rec.ofvs[k].name.toLowerCase();
+                  }
+             }
          }
       }
 
