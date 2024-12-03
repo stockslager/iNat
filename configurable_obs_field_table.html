@@ -242,12 +242,27 @@ function fresults(xobj) {
                  }
                  if( rec.ofvs[j].field_id.toString() === p_obs_field2 ){
                      field2 = rec.ofvs[j].value.toLowerCase();
+                     if( rec.ofvs[j].taxon ){
+                         let name  = rec.ofvs[j].taxon.name || '';
+                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                         field2 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                     }
                  }
                  if( rec.ofvs[j].field_id.toString() === p_obs_field3 ){
                      field3 = rec.ofvs[j].value.toLowerCase();
+                     if( rec.ofvs[j].taxon ){
+                         let name  = rec.ofvs[j].taxon.name || '';
+                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                         field3 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                     }
                  }
                  if( rec.ofvs[j].field_id.toString() === p_obs_field4 ){
                      field4 = rec.ofvs[j].value.toLowerCase();
+                     if( rec.ofvs[j].taxon ){
+                         let name  = rec.ofvs[j].taxon.name || '';
+                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                         field4 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                     }
                  }
              
             }
