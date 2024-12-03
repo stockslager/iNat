@@ -160,21 +160,19 @@ function fresults(xobj) {
                {innerText:'#'},
                {innerText:'Photo'},
                {innerText:'Name'}, 
+               {innerText:'Obs Photo'},
                {innerText:'User Photo'},
                {innerText:'User Login'},
-               {innerText:'Observation Photo'},
-               {innerText:'Observation ID'},
           ];
       } else {
           labels = [
                {innerText:'#'},
                {innerText:'Photo'},
                {innerText:'Name'}, 
+               {innerText:'Obs Photo'},
+               {innerText:label1}, {innerText:label2}, {innerText:label3}, {innerText:label4},
                {innerText:'User Photo'},
                {innerText:'User Login'},
-               {innerText:'Observation Photo'},
-               {innerText:'Observation ID'},
-               {innerText:label1}, {innerText:label2}, {innerText:label3}, {innerText:label4},
           ];
       }
       
@@ -242,11 +240,10 @@ function fresults(xobj) {
                   {innerText:i+1},
                   {innerHTML:tax_photo},
                   {innerHTML:'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>'},
+                  {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                  {innerText:field1}, {innerText:field2}, {innerText:field3}, {innerText:field4},
                   {innerHTML:user_icon},
                   {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
-                  {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
-                  {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)}, 
-                  {innerText:field1}, {innerText:field2}, {innerText:field3}, {innerText:field4},
          ];             
    
          faddelems('td',brow,values);
