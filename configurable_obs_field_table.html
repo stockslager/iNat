@@ -77,7 +77,7 @@ let p_project_id = winurlparams.get('project_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
 
 winurlparams.delete('per_page');
-winurlparams.append('per_page','30');
+winurlparams.append('per_page','100');
 
 /*if( p_view === 'visiting' ){
    winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
@@ -345,7 +345,7 @@ function fresults(xobj) {
          values = [
                   {innerText:i+1},
                   {innerHTML:tax_photo},
-                  {innerHTML:furl('https://stockslager.github.io/iNat/configurable_obs_field_table.html?project_id='+p_project_id+'&obs_field1='+p_obs_field1+'&obs_field2='+p_obs_field2+'&obs_field3='+p_obs_field3+'&obs_field4='+p_obs_field4+'&operator='+p_operator,'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>')},
+                  {innerHTML:furl('https://stockslager.github.io/iNat/configurable_obs_field_table.html?project_id='+p_project_id+'&taxon_id='+rec.taxon.id+'&obs_field1='+p_obs_field1+'&obs_field2='+p_obs_field2+'&obs_field3='+p_obs_field3+'&obs_field4='+p_obs_field4+'&operator='+p_operator,'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>')},
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:field1}, {innerHTML:field2}, {innerHTML:field3}, {innerHTML:field4},
                   {innerHTML:user_icon},
