@@ -153,7 +153,6 @@ function fresults(xobj) {
       let label2 = p_obs_field2 || '';
       let label3 = p_obs_field3 || '';
       let label4 = p_obs_field4 || '';
-      let label5 = p_obs_field5 || '';
       let labels = [];
 
       if( p_obs_field1 === '' ){
@@ -175,7 +174,7 @@ function fresults(xobj) {
                {innerText:'User Login'},
                {innerText:'Observation Photo'},
                {innerText:'Observation ID'},
-               {innerText:label1}, {innerText:label2}, {innerText:label3}, {innerText:label4}, {innerText:label5},
+               {innerText:label1}, {innerText:label2}, {innerText:label3}, {innerText:label4},
           ];
       }
       
@@ -209,7 +208,6 @@ function fresults(xobj) {
          let field2 = '';
          let field3 = '';
          let field4 = '';
-         let field5 = '';
           
          if(rec.ofvs&&rec.ofvs.length>0){
             for( let j=0; j<rec.ofvs.length; j++ ){
@@ -217,6 +215,16 @@ function fresults(xobj) {
                  if( rec.ofvs[j].field_id.toString() === p_obs_field1 ){
                      field1 = rec.ofvs[j].value.toLowerCase();
                  }
+                 if( rec.ofvs[j].field_id.toString() === p_obs_field2 ){
+                     field2 = rec.ofvs[j].value.toLowerCase();
+                 }
+                 if( rec.ofvs[j].field_id.toString() === p_obs_field3 ){
+                     field3 = rec.ofvs[j].value.toLowerCase();
+                 }
+                 if( rec.ofvs[j].field_id.toString() === p_obs_field4 ){
+                     field4 = rec.ofvs[j].value.toLowerCase();
+                 }
+             
             }
          } 
           
@@ -237,7 +245,7 @@ function fresults(xobj) {
                   {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
                   {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)}, 
-                  {innerText:field1}, {innerText:field2}, {innerText:field3}, {innerText:field4}, {innerText:field5},
+                  {innerText:field1}, {innerText:field2}, {innerText:field3}, {innerText:field4},
          ];             
    
          faddelems('td',brow,values);
