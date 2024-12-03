@@ -151,7 +151,8 @@ function fresults(xobj) {
       let hrow = faddelem('tr',thead);
       let labels = [];
 
-      labels = [
+      if( p_obs_field1 === '' ){
+          labels = [
                {innerText:'#'},
                {innerText:'Photo'},
                {innerText:'Name'}, 
@@ -159,7 +160,19 @@ function fresults(xobj) {
                {innerText:'User Login'},
                {innerText:'Observation Photo'},
                {innerText:'Observation ID'},
-      ];         
+          ];
+      } else {
+          labels = [
+               {innerText:'#'},
+               {innerText:'Photo'},
+               {innerText:'Name'}, 
+               {innerText:'User Photo'},
+               {innerText:'User Login'},
+               {innerText:'Observation Photo'},
+               {innerText:'Observation ID'},
+               {innerText:''},
+          ];
+      }
       
       faddelems('th',hrow,labels);
 
@@ -174,9 +187,6 @@ function fresults(xobj) {
          let tax_name = '';
          let pref_tax_name = '';
          let tax_photo = '<div class="clipart">&#127807</div>'; 
-         let foundRec = '';
-         let activity_found = '';
-         let foundRecWTaxon = '';
          
          if( rec.taxon ){
              tax_name = rec.taxon.name || '';
@@ -190,43 +200,22 @@ function fresults(xobj) {
              }
          }
 
-        /* if(rec.ofvs&&rec.ofvs.length>0){
-            for (let j=0; j<rec.ofvs.length; j++){
+         let field1 = '';
+         let field2 = '';
+         let field3 = '';
+         let field4 = '';
+         let field5 = '';
+          
+         if(rec.ofvs&&rec.ofvs.length>0){
+            for( let j=0; j<rec.ofvs.length; j++ ){
 
-               foundRec = '';
-               if( (p_view === 'nectaring') ||
-                   (p_view === 'pollinating') ||
-                   (p_view === 'visiting') ||
-                   (p_view === 'associating') ){
-                  if( (rec.ofvs[j].field_id===498) ||    // 498 = nectar plant
-                      (rec.ofvs[j].field_id===7623) ||   // 7623 = plant that the organism was found on
-                      (rec.ofvs[j].field_id===4935) ||   // 4935 = nectar / pollen delivering plant
-                      (rec.ofvs[j].field_id===7807) ) {  // 7807 = name of associated plant
-                     // 498 == Nectar Plant.
-                     if( rec.ofvs[j].taxon_id === p_visitor_taxon_id ){
-                                                
-                        if( rec.ofvs[j].taxon == null ){
-                           tax_name = rec.ofvs[j].value;
-                           pref_tax_name = rec.ofvs[j].value_ci;
-                           //tax_photo = '&#127807';
-                           tax_photo = '<div class="clipart">&#127807</div>';
-                        } else {
-                           tax_name = rec.ofvs[j].taxon.name;
-                           pref_tax_name = rec.ofvs[j].taxon.preferred_common_name;
-                           tax_photo = '<img class="icon" src="'+rec.ofvs[j].taxon.default_photo.url+'" />';                     
-                        }
-                        foundRec = 'yes';
-                        displayCount++;
-                        j=rec.ofvs.length;
-                     }
-                  }               
-               } 
-         } else { 
-            tax_name = 'Unspecified Plant';
-            pref_tax_name = 'Unspecified Plant';
-            tax_photo = '<div class="clipart">&#127807</div>';
-         }*/
-
+                 foundRec = '';
+                 if( rec.ofvs[j].field_id === p_obs_field1 ){
+                     field1 = '{innerText:\'rec.ofvs[j].value.toLowerCase()\'}';
+                 }
+            }
+         } 
+          
          let values = [];
          let user_icon = rec.user.icon || '';
          
@@ -243,7 +232,7 @@ function fresults(xobj) {
                   {innerHTML:user_icon},
                   {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
-                  {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)},
+                  {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)}, field1
          ];             
    
          faddelems('td',brow,values);
