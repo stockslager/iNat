@@ -74,6 +74,7 @@ let p_obs_field2 = winurlparams.get('obs_field2') || '';
 let p_obs_field3 = winurlparams.get('obs_field3') || '';
 let p_obs_field4 = winurlparams.get('obs_field4') || '';
 let p_project_id = winurlparams.get('project_id') || '';
+let p_operator   = winurlparams.get('operator') || '';
 
 winurlparams.delete('per_page');
 winurlparams.append('per_page','30');
@@ -165,13 +166,25 @@ function fresults(xobj) {
                       label1 = rec.ofvs[k].name; 
                   }
                   if( rec.ofvs[k].field_id.toString() === p_obs_field2 ){
-                      label2 = rec.ofvs[k].name;
+                      if( p_operator === 'or' ){
+                          label1 += ' or ' + rec.ofvs[k].name;
+                      } else {
+                          label2 = rec.ofvs[k].name;
+                      }
                   }
                   if( rec.ofvs[k].field_id.toString() === p_obs_field3 ){
-                      label3 = rec.ofvs[k].name;
+                      if( p_operator === 'or' ){
+                          label1 += ' or ' + rec.ofvs[k].name;
+                      } else {
+                          label3 = rec.ofvs[k].name;
+                      }
                   }
                   if( rec.ofvs[k].field_id.toString() === p_obs_field4 ){
-                      label4 = rec.ofvs[k].name;
+                      if( p_operator === 'or' ){
+                          label1 += ' or ' + rec.ofvs[k].name;
+                      } else {
+                          label4 = rec.ofvs[k].name;
+                      }
                   }
              }
          }
@@ -245,7 +258,11 @@ function fresults(xobj) {
                      if( rec.ofvs[j].taxon ){
                          let name  = rec.ofvs[j].taxon.name || '';
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                         field2 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         if( p_operator === 'or' ){
+                             field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         } else {
+                             field2 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         }
                      }
                  }
                  if( rec.ofvs[j].field_id.toString() === p_obs_field3 ){
@@ -253,7 +270,11 @@ function fresults(xobj) {
                      if( rec.ofvs[j].taxon ){
                          let name  = rec.ofvs[j].taxon.name || '';
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                         field3 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         if( p_operator === 'or' ){
+                             field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         } else {
+                             field3 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         }
                      }
                  }
                  if( rec.ofvs[j].field_id.toString() === p_obs_field4 ){
@@ -261,7 +282,11 @@ function fresults(xobj) {
                      if( rec.ofvs[j].taxon ){
                          let name  = rec.ofvs[j].taxon.name || '';
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                         field4 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         if( p_operator === 'or' ){
+                             field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         } else {
+                             field4 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         }
                      }
                  }
              
