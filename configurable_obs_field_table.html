@@ -210,8 +210,7 @@ function fresults(xobj) {
             for( let j=0; j<rec.ofvs.length; j++ ){
 
                  if( rec.ofvs[j].field_id.toString() === p_obs_field1 ){
-                    // field1 = '{innerText:\'rec.ofvs[j].value.toLowerCase()\'}';
-                     field1 = 'asdf';
+                     field1 = '{innerText:\'' + rec.ofvs[j].value.toLowerCase() + '\'}';
                  }
             }
          } 
@@ -232,8 +231,7 @@ function fresults(xobj) {
                   {innerHTML:user_icon},
                   {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
-                  {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)}, 
-                  {innerText:field1}, //field1
+                  {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,rec.id)}, field1,
          ];             
    
          faddelems('td',brow,values);
