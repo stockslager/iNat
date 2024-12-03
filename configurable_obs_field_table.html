@@ -75,17 +75,6 @@ let p_obs_field3 = winurlparams.get('obs_field3') || '';
 let p_obs_field4 = winurlparams.get('obs_field4') || '';
 let p_project_id = winurlparams.get('project_id') || '';
 
-if( p_project_id === '' ){
-   throw new Error('Project not specified.  A project_id must be specified as a url parameter.  Please add &project_id=?????');
-} 
-
-if( p_obs_field1 === '' &&
-    p_obs_field2 === '' &&
-    p_obs_field3 === '' &&
-    p_obs_field4 === '' ){
-   throw new Error('Observation field not specifiec.  At lease one observation field must be specified.  Please add &obs_field1=?????');
-} 
-
 winurlparams.delete('per_page');
 winurlparams.append('per_page','30');
 
@@ -107,12 +96,10 @@ let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observa
 </script>  
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
 <script> 
-  
-if (winurlsearchstr==='') {
+
+if (winurlsearchstr==='' || p_project_id === '') {
    let instructions = [
-      {innerHTML:'This page displays the response from the '+apiref+' API endpoint in a human-readable format. To use this page, add at least one query parameter to the URL. See '+furl(apirefurl)+' for available query parameters.'},
-      {innerHTML:'Suppose the address of this page is '+winurlexsearchstr+', <br />and you want to see the results of '+furl(famp(apibase+'?user_id=bob&per_page=200'))+' in a friendly format, <br />then you would open '+furl(famp(winurlexsearchstr+'?user_id=bob&per_page=200'))+' in your browser.'},
-      {innerHTML:'The max records per page for this endpoint is 200. Note that the API will not return records beyond the 10,000th record for a given set of parameters, but you can work around this by using the id_above and id_below parameters.'},
+      {innerText:'This page requires a project_id argument.  Add ?project_id=12345678 to the end of the url.'},
    ];
    faddelems('p',document.body,instructions);
 }
