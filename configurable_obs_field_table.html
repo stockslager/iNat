@@ -49,7 +49,7 @@
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
    .icon { height:48px; width:48px; border-radius:50%; }
    .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
-   .photo { height:64px; width:64px; border-radius: 15px 15px 15px 15px; }
+   .photo { height:64px; width:64px; border-radius: 5px 5px 5px 5px; }
    img { margin:0; padding:0; border:0; }
    a { text-decoration:none; color:var(--color-text-link); }
    a:hover { background:var(--color-hover); }
@@ -184,7 +184,8 @@ function fresults(xobj) {
            
              if( rec.taxon.default_photo ){
                  if( rec.taxon.default_photo.url ){
-                     tax_photo = rec.taxon.default_photo.url;
+                     //'<img class="icon" src="'+rec.ofvs[j].taxon.default_photo.url+'" />';
+                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
                  }
              }
          }
@@ -239,8 +240,6 @@ function fresults(xobj) {
                   {innerText:i+1},
                   {innerHTML:tax_photo},
                   {innerHTML:'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>'},
-                  {innerText:tax_name},
-                  {innerText:rec.quality_grade}, 
                   {innerHTML:user_icon},
                   {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
                   {innerHTML:'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />'},
