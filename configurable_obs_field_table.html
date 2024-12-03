@@ -76,14 +76,14 @@ let p_obs_field4 = winurlparams.get('obs_field4') || '';
 let p_project_id = winurlparams.get('project_id') || '';
 
 if( p_project_id === '' ){
-   throw new Error(response.status+': '+'Project not specified.  A project_id must be specified as a url parameter.  Please add &project_id=?????');
+   throw new Error('Project not specified.  A project_id must be specified as a url parameter.  Please add &project_id=?????');
 } 
 
 if( p_obs_field1 === '' &&
     p_obs_field2 === '' &&
     p_obs_field3 === '' &&
     p_obs_field4 === '' ){
-   throw new Error(response.status+': '+'Observation field not specifiec.  At lease one observation field must be specified.  Please add &obs_field1=?????');
+   throw new Error('Observation field not specifiec.  At lease one observation field must be specified.  Please add &obs_field1=?????');
 } 
 
 winurlparams.delete('per_page');
