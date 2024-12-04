@@ -79,6 +79,11 @@ let p_field      = '';
 let p_field_value = '';
 let opts = '';
 
+//******************* add to library params *********************
+let root_people = 'https://www.inaturalist.org/people/';
+let github_root = 'https://stockslager.github.io/iNat/';
+//***************************************************************
+ 
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
 
@@ -255,7 +260,6 @@ function fresults(xobj) {
       faddelems('th',hrow,labels);
 
       let tbody = faddelem('tbody',table);
-      let inat_taxa = 'https://www.inaturalist.org/taxa/';
 
       let displayCount = 0;
       
@@ -357,11 +361,11 @@ function fresults(xobj) {
          values = [
                   {innerText:i+1},
                   {innerHTML:tax_photo},
-                  {innerHTML:furl('https://stockslager.github.io/iNat/configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id,'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>')},
-                  {innerHTML:furl('https://www.inaturalist.org/observations/'+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id,'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>')},
+                  {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:field1}, {innerHTML:field2}, {innerHTML:field3}, {innerHTML:field4},
                   {innerHTML:user_icon},
-                  {innerHTML:furl('https://www.inaturalist.org/people/'+rec.user.login,rec.user.login)},
+                  {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
          ];             
    
          faddelems('td',brow,values);
