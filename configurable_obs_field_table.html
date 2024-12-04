@@ -34,7 +34,7 @@
          --color-base-translucent: rgba(0,0,0,0.85);
       }
    }
-   #key { color:var(--color-text-link); }
+   #key { text-decoration:underline; }
    #main { width:100%; }
    dl { float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
    dt {  }
@@ -232,15 +232,15 @@ function fresults(xobj) {
       }           
 
       // if some of the observation fields are of different types, don't allow a merge.
-      if( mismatch === 'yes' ){
+//      if( mismatch === 'yes' ){
           faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+ ' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
-      } else {
+/*      } else {
           faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+ ' ( ' + toggle + ' )' + warning + ' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
-      }
+      }*/
     
       // display the "key" for the obs fields
       faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">obs id:</span></dt> <dd><span id="key">observation field:</span></dd>'
