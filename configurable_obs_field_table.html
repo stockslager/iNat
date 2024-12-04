@@ -130,7 +130,7 @@ else {
    });
 };
 
-// remove the field param from the url
+// remove the field param from the url before building options
 winurlparams.delete(p_field);
 winurlparams.delete('operator');
 
@@ -150,6 +150,10 @@ for (const [key, value] of winurlparams.entries()) {
       opts += value;
   }
 }   
+
+// add them back after building options...
+winurlparams.append('operator', p_operator);
+winurlparams.append(p_field, p_field_value);
    
 function fresults(xobj) {
    let results = xobj.results;
