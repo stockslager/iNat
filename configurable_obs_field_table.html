@@ -107,7 +107,7 @@ let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
 
 </script> 
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v2.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v3.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
 <script> 
 
@@ -165,7 +165,7 @@ let apiref = furl(apirefurl,apirefname);
      + '<dt>associating</dt> <dd>name of associated plant</dd></dl>'});
 } */
    
-faddelem('h2',document.body,{innerText:apirefname}); 
+//faddelem('h2',document.body,{innerText:apirefname}); 
 
 function fresults(xobj) {
    let results = xobj.results;
@@ -263,6 +263,19 @@ function fresults(xobj) {
              }
          }
       }
+
+      // display the "key" for the obs fields
+      faddelem('p',document.body,{innerHTML:'<dl><dt><span id="obs id">toggles</span></dt> <dd><span id="key">observation field</span></dd>'
+           + '<dt>' + furl(root_obs_fields+p_obs_field1,p_obs_field1)+'<dt> <dd>' 
+           + label1.toLowerCase() + '</dd>'
+           + '<dt>' + furl(root_obs_fields+p_obs_field2,p_obs_field2)+'<dt> <dd>' 
+           + label1.toLowerCase() + '</dd>'
+           + '<dt>' + furl(root_obs_fields+p_obs_field3,p_obs_field3)+'<dt> <dd>' 
+           + label1.toLowerCase() + '</dd>'
+           + '<dt>' + furl(root_obs_fields+p_obs_field4,p_obs_field4)+'<dt> <dd>' 
+           + label1.toLowerCase() + '</dd> </dl>'});
+    
+      faddelem('h2',document.body,{innerText:refn});
       
       labels = [
                {innerText:'#'},
