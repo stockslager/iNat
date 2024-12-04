@@ -220,8 +220,19 @@ function fresults(xobj) {
            + label4.toLowerCase() + '</dd> </dl>'});
 
       faddelem('h2',document.body,{innerText:'Observation Field Viewer'});
-      
-      labels = [
+
+      if( p_operator === 'merge' ){
+          labels = [
+               {innerText:'#'},
+               {innerText:'Photo'},
+               {innerText:'Name'}, 
+               {innerText:'Obs Photo'},
+               {innerText:'Merged Observation Fields'}, 
+               {innerText:'User Photo'},
+               {innerText:'User Login'},
+          ];
+      } else {
+          labels = [
                {innerText:'#'},
                {innerText:'Photo'},
                {innerText:'Name'}, 
@@ -229,7 +240,8 @@ function fresults(xobj) {
                {innerText:label1}, {innerText:label2}, {innerText:label3}, {innerText:label4},
                {innerText:'User Photo'},
                {innerText:'User Login'},
-      ];
+          ];
+      }
       
       faddelems('th',hrow,labels);
 
