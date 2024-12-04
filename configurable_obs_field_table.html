@@ -127,6 +127,7 @@ else {
 
 // remove the field param from the url
 winurlparams.delete(p_field);
+winurlparams.delete('operator');
 
 // build param list for url's used in fresults
 for (const [key, value] of winurlparams.entries()) { 
@@ -170,8 +171,16 @@ function fresults(xobj) {
       let page_max = Math.ceil(total_results/per_page);
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
+
+      let toggle = '';
+
+      if( p_operator === 'merge' ){
+          toggle = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id,'un-merge'); 
+      } else {
+          toggle = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id+'&operator=merge','merge');
+      }
       
-      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+'<br/>'
+      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+ ' ( ' + toggle + ' ) <br/>'
          +'per page: '+fcomnum(per_page)+'<br />'
          +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});   
                
@@ -383,7 +392,7 @@ function fresults(xobj) {
 
          let taxon = '';
          if( p_taxon_id === '' ){
-             taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id+'&operator='+p_operator,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          } else {
              taxon = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';        
          }
@@ -408,10 +417,10 @@ function fresults(xobj) {
                   {innerHTML:taxon},
                   //{innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id,'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>')},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1, field1)}, 
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param2, field2)}, 
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param3, field3)}, 
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param4, field4)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&operator='+p_operator, field1)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param2+'&operator='+p_operator, field2)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param3+'&operator='+p_operator, field3)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param4+'&operator='+p_operator, field4)}, 
                   {innerHTML:user_icon},
                   {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
              ];
