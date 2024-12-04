@@ -34,7 +34,7 @@
          --color-base-translucent: rgba(0,0,0,0.85);
       }
    }
-   #key { text-decoration:underline; }
+   #key { text-decoration:underline; font: 18px Sans-Serif; }
    #main { width:100%; }
    dl { float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
    dt {  }
@@ -86,7 +86,7 @@ if( winurlparams.get('ofv_datatype') === null || winurlparams.get('ofv_datatype'
 }
 
 winurlparams.delete('per_page');
-winurlparams.append('per_page','100');
+winurlparams.append('per_page','30');
 
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of winurlparams.entries()) {
@@ -241,9 +241,14 @@ function fresults(xobj) {
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
       }*/
+
+      let merged = 'observation field';
+      if( p_operator === 'merge' ){
+          merged = 'merged observation fields';
+      }
     
       // display the "key" for the obs fields
-      faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">obs id:</span></dt> <dd><span id="key">observation field:</span></dd>'
+      faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">obs id</span></dt> <dd><span id="key">'+merged+'</span></dd>'
            + '<dt>' + furl(root_obs_fields+p_obs_field1,p_obs_field1)+'</dt> <dd>' 
            + label1.toLowerCase() + '</dd>'
            + '<dt>' + furl(root_obs_fields+p_obs_field2,p_obs_field2)+'</dt> <dd>' 
