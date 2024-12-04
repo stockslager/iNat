@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Yard Project Dashboard" />
+<title>Yard Project Dashboard</title>
+<style>
+   :root { 
+      background: var(--color-base);
+      color: var(--color-text);
+      font: 14px Sans-Serif;
+      --color-base: white;
+      --color-alt: whitesmoke;
+      --color-brand: forestgreen;
+      --color-text: black;
+      --color-text-invert: white;
+      --color-text-link: royalblue;
+      --color-border: lightgray;
+      --color-hover: lightgray;
+      --color-base-translucent: rgba(255,255,255,0.85);
+   }
+   @media (prefers-color-scheme: dark) {
+      :root {
+         --color-base: black;
+         --color-alt: #171717;
+         --color-brand: forestgreen;
+         --color-text: #bababa;
+         --color-text-invert: black;
+         --color-text-link: cornflowerblue;
+         --color-border: #444;
+         --color-hover: #444;
+         --color-base-translucent: rgba(0,0,0,0.85);
+      }
+   }
+   #key { color:var(--color-text-link); }
+   #main { width:100%; }
+   dl { width:fit-content; background:var(--color-alt); display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }
+   dt {  }
+   dd { margin: 0; grid-column-start: 2;}   
+ 
+   table, td, th { border-collapse:collapse; margin:0; padding:4px; }
+   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
+   th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
+   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }
+   tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt); }
+   /*tr:nth-last-child(-n+1) { border-width:1px 0px; border-style:solid; border-color:forestgreen; background:var(--color-alt); }*/
+ 
+   .tar { text-align:right; }
+   .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
+   .icon { height:48px; width:48px; border-radius:50%; }
+   .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
+   .photo { height:64px; width:64px; border-radius: 15px 15px 15px 15px; }
+   img { margin:0; padding:0; border:0; }
+   a { text-decoration:underline; color:var(--color-text-link); }
+   a:hover { background:var(--color-hover); }
+   #nav { margin-left:-8px; position:-webkit-sticky /*Safari*/; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
+   @media print { #nav { display:none; } } 
+   .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
+   .button { background:var(--color-alt); }
+   .button_inactive { background:none; color:var(--color-border); }
+   .bin_true { text-decoration: underline wavy rgba(34,139,34,0.35); }
+   .bin_false { text-decoration: underline wavy rgba(178,34,34,0.35); }
+</style>
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v3.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+
+faddelem('p',document.body,{innerHTML:'<br><dl>'
+            + '<dt></dt><span id="key"><dd>notes ~ </dd></span>'
+            + '<dt></dt><dd>'+'dude'+'</dd>'
+            + '</dl>'});       
+  
+faddelem('h2',document.body,{innerText:'Yard Project Dashboard'});  
+  
+</script>
+</body>
+
+</html>
