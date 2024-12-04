@@ -225,10 +225,10 @@ function fresults(xobj) {
       faddelem('h2',document.body,{innerText:'Observation Field Viewer'});
 
       if( p_operator === 'merge' ){
-          toggle  = furl(github_root+'configurable_obs_field_table.html'+opts,'un-merge'); 
+          toggle  = furl(github_root+'configurable_obs_field_table.html'+opts+'&'+p_field+'='+p_field_value,'un-merge'); 
           warning = '  warning: merging synonymous observation fields may result in overlayed field values during display if values are different.'
       } else {
-          toggle = furl(github_root+'configurable_obs_field_table.html'+opts+'&operator=merge','merge');
+          toggle = furl(github_root+'configurable_obs_field_table.html'+opts+'&'+p_field+'='+p_field_value+'&operator=merge','merge');
       }           
 
       // if some of the observation fields are of different types, don't allow a merge.
