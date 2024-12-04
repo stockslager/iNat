@@ -286,6 +286,10 @@ function fresults(xobj) {
          let field2 = '';
          let field3 = '';
          let field4 = '';
+         let param1 = '';
+         let param2 = '';
+         let param3 = '';
+         let param4 = '';
           
          if(rec.ofvs&&rec.ofvs.length>0){
             for( let j=0; j<rec.ofvs.length; j++ ){
@@ -294,6 +298,7 @@ function fresults(xobj) {
                      if( p_operator === 'merge' ){
                          field1 = rec.ofvs[j].value.toLowerCase();
                      } else {
+                         param1 = '&field:' + rec.ovfs[j].name + '=' + rec.ovfs[j].value;
                          field1 = rec.ofvs[j].value.toLowerCase();
                      }
                      if( rec.ofvs[j].taxon ){
@@ -306,6 +311,7 @@ function fresults(xobj) {
                      if( p_operator === 'merge' ){
                          field1 = rec.ofvs[j].value.toLowerCase();
                      } else {
+                         param2 = '&field:' + rec.ovfs[j].name + '=' + rec.ovfs[j].value;
                          field2 = rec.ofvs[j].value.toLowerCase();
                      }
                      if( rec.ofvs[j].taxon ){
@@ -322,6 +328,7 @@ function fresults(xobj) {
                      if( p_operator === 'merge' ){
                          field1 = rec.ofvs[j].value.toLowerCase();
                      } else {
+                         param3 = '&field:' + rec.ovfs[j].name + '=' + rec.ovfs[j].value;
                          field3 = rec.ofvs[j].value.toLowerCase();
                      }
                      if( rec.ofvs[j].taxon ){
@@ -338,6 +345,7 @@ function fresults(xobj) {
                      if( p_operator === 'merge' ){
                          field1 = rec.ofvs[j].value.toLowerCase();
                      } else {
+                         param4 = '&field:' + rec.ovfs[j].name + '=' + rec.ovfs[j].value;
                          field4 = rec.ofvs[j].value.toLowerCase();
                      }
                      if( rec.ofvs[j].taxon ){
@@ -350,7 +358,6 @@ function fresults(xobj) {
                          }
                      }
                  }
-             
             }
          } 
           
@@ -363,18 +370,33 @@ function fresults(xobj) {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }
 
-         values = [
+         if( p_operator === 'merge' ){
+             values = [
                   {innerText:i+1},
                   {innerHTML:tax_photo},
                   {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id,'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>')},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts, field1)}, 
+                  {innerHTML:field1}, 
                   {innerHTML:field2}, 
                   {innerHTML:field3}, 
                   {innerHTML:field4},
                   {innerHTML:user_icon},
                   {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
-         ];             
+             ];
+         } else {
+             values = [
+                  {innerText:i+1},
+                  {innerHTML:tax_photo},
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id,'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>')},
+                  {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1, field1)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param2, field2)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param3, field3)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param4, field4)}, 
+                  {innerHTML:user_icon},
+                  {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
+             ];
+         }
    
          faddelems('td',brow,values);
       };
