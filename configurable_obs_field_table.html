@@ -204,6 +204,12 @@ function fresults(xobj) {
          }
       }
 
+      faddelem('h2',document.body,{innerText:'Observation Field Viewer'});
+
+      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+ ' ( ' + toggle + ' )   warning: merging synonymous observation fields may result in overlayed data if the merged values are different. <br/>'
+         +'per page: '+fcomnum(per_page)+'<br />'
+         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
+    
       // display the "key" for the obs fields
       faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">obs id:</span></dt> <dd><span id="key">observation field:</span></dd>'
            + '<dt>' + furl(root_obs_fields+p_obs_field1,p_obs_field1)+'</dt> <dd>' 
@@ -215,19 +221,13 @@ function fresults(xobj) {
            + '<dt>' + furl(root_obs_fields+p_obs_field4,p_obs_field4)+'</dt> <dd>' 
            + label4.toLowerCase() + '</dd> </dl>'});
 
-      faddelem('h2',document.body,{innerText:'Observation Field Viewer'});
-
-      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+ ' ( ' + toggle + ' )   warning: merging synonymous observation fields may result in overlayed data if the merged values are different. <br/>'
-         +'per page: '+fcomnum(per_page)+'<br />'
-         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});   
-
       if( p_operator === 'merge' ){
           labels = [
                {innerText:'#'},
                {innerText:'Photo'},
                {innerText:'Name'}, 
                {innerText:'Obs Photo'},
-               {innerText:'Merged Observation Fields'}, 
+               {innerText:'Merged Observation Fields'}, {innerText:''}, {innerText:''}, {innerText:''},
                {innerText:'User Photo'},
                {innerText:'User Login'},
           ];
