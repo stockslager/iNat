@@ -168,11 +168,7 @@ function fresults(xobj) {
       } else {
           toggle = furl(github_root+'configurable_obs_field_table.html'+opts+'&operator=merge','merge');
       }
-      
-      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+ ' ( ' + toggle + ' )   warning: merging synonymous observation fields may result in overlayed data if the merged values are different. <br/>'
-         +'per page: '+fcomnum(per_page)+'<br />'
-         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});   
-               
+                     
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
@@ -220,6 +216,10 @@ function fresults(xobj) {
            + label4.toLowerCase() + '</dd> </dl>'});
 
       faddelem('h2',document.body,{innerText:'Observation Field Viewer'});
+
+      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+ ' ( ' + toggle + ' )   warning: merging synonymous observation fields may result in overlayed data if the merged values are different. <br/>'
+         +'per page: '+fcomnum(per_page)+'<br />'
+         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});   
 
       if( p_operator === 'merge' ){
           labels = [
