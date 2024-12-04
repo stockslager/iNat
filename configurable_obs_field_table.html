@@ -168,9 +168,13 @@ function fresults(xobj) {
 
                   if( rec.ofvs[k].field_id.toString() === p_obs_field1 && foundLabel1 === '' ){
                       foundLabel1 = 'yes';
-                      if( label1 !== '' ){
-                          label1 += ' or ';
-                          label1 += rec.ofvs[k].name;
+                      if( p_operator === 'or' ){
+                          if( label1 !== '' ){
+                              label1 += ' or ';
+                              label1 += rec.ofvs[k].name;
+                          } else {
+                              label1 = rec.ofvs[k].name;
+                          }
                       } else {
                           label1 = rec.ofvs[k].name;
                       }
