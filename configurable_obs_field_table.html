@@ -76,9 +76,14 @@ let p_obs_field4 = winurlparams.get('obs_field4') || '';
 let p_project_id = winurlparams.get('project_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
-let p_field      = '';
+let p_field = '';
 let p_field_value = '';
 let opts = '';
+
+if( !winurlparams.get('ofv_datatype') ){
+    winurlparams.delete('ofv_datatype');
+    winurlparams.append('ofv_datatype', 'taxon,text,numeric,date,time,datetime,dna');
+}
 
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
