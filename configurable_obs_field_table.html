@@ -162,13 +162,8 @@ function fresults(xobj) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
       let toggle = '';
+      let warning = '';
 
-      if( p_operator === 'merge' ){
-          toggle = furl(github_root+'configurable_obs_field_table.html'+opts,'un-merge'); 
-      } else {
-          toggle = furl(github_root+'configurable_obs_field_table.html'+opts+'&operator=merge','merge');
-      }
-                     
       let label1 = '';
       let label2 = '';
       let label3 = '';
@@ -178,6 +173,8 @@ function fresults(xobj) {
       let foundLabel3 = '';
       let foundLabel4 = '';
       let labels = [];
+      let datatype = '';
+      let mismatch = '';
 
       for (let l=0; l<results.length; l++) {
           let rec = results[l];
@@ -186,15 +183,35 @@ function fresults(xobj) {
              for( let k=0; k<rec.ofvs.length; k++ ){
 
                   if( rec.ofvs[k].field_id.toString() === p_obs_field1 ){
+                      if( datatype === '' ){
+                          datatype = rec.ofvs[k].datatype;
+                      } else if( datatype !== rec.ofvs[k].datatype ){
+                          mismatch = 'yes';
+                      }
                       label1 = rec.ofvs[k].name;
                   }
                   if( rec.ofvs[k].field_id.toString() === p_obs_field2 ){
+                      if( datatype === '' ){
+                          datatype = rec.ofvs[k].datatype;
+                      } else if( datatype !== rec.ofvs[k].datatype ){
+                          mismatch = 'yes';
+                      }
                       label2 = rec.ofvs[k].name;
                   }
                   if( rec.ofvs[k].field_id.toString() === p_obs_field3 ){
+                      if( datatype === '' ){
+                          datatype = rec.ofvs[k].datatype;
+                      } else if( datatype !== rec.ofvs[k].datatype ){
+                          mismatch = 'yes';
+                      }
                       label3 = rec.ofvs[k].name;
                   }
                   if( rec.ofvs[k].field_id.toString() === p_obs_field4 ){
+                      if( datatype === '' ){
+                          datatype = rec.ofvs[k].datatype;
+                      } else if( datatype !== rec.ofvs[k].datatype ){
+                          mismatch = 'yes';
+                      }
                       label4 = rec.ofvs[k].name;
                   }
              }
@@ -203,9 +220,23 @@ function fresults(xobj) {
 
       faddelem('h2',document.body,{innerText:'Observation Field Viewer'});
 
-      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+ ' ( ' + toggle + ' )   warning: merging synonymous observation fields may result in overlayed data if the merged values are different. <br/>'
-         +'per page: '+fcomnum(per_page)+'<br />'
-         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
+      if( p_operator === 'merge' ){
+          toggle  = furl(github_root+'configurable_obs_field_table.html'+opts,'un-merge'); 
+          warning = '  warning: merging synonymous observation fields may result in overlayed field values during display if values are different.'
+      } else {
+          toggle = furl(github_root+'configurable_obs_field_table.html'+opts+'&operator=merge','merge');
+      }           
+
+      // if some of the observation fields are of different types, don't allow a merge.
+      if( mismatch === 'yes' ){
+          faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+ ' <br/>'
+             +'per page: '+fcomnum(per_page)+'<br />'
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
+      } else {
+          faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+ ' ( ' + toggle + ' )' + warning + ' <br/>'
+             +'per page: '+fcomnum(per_page)+'<br />'
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
+      }
     
       // display the "key" for the obs fields
       faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">obs id:</span></dt> <dd><span id="key">observation field:</span></dd>'
