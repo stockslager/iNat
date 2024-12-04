@@ -137,7 +137,7 @@ else {
    });
 };
 
-let apirefname = 'Observation Field Viewer ' + opts;
+let apirefname = 'Observation Field Viewer ';
    
 let apiref = furl(apirefurl,apirefname);
 
@@ -188,7 +188,7 @@ function fresults(xobj) {
 
                   if( rec.ofvs[k].field_id.toString() === p_obs_field1 && foundLabel1 === '' ){
                       foundLabel1 = 'yes';
-                      if( p_operator === 'or' ){
+                      if( p_operator === 'merge' ){
                           if( label1 !== '' ){
                               label1 += '  |  ';
                               label1 += rec.ofvs[k].name;
@@ -201,7 +201,7 @@ function fresults(xobj) {
                   }
                   if( rec.ofvs[k].field_id.toString() === p_obs_field2 && foundLabel2 === '' ){
                       foundLabel2 = 'yes';
-                      if( p_operator === 'or' ){
+                      if( p_operator === 'merge' ){
                           if( label1 !== '' ){
                               label1 += '  |  ';
                               label1 += rec.ofvs[k].name;
@@ -214,7 +214,7 @@ function fresults(xobj) {
                   }
                   if( rec.ofvs[k].field_id.toString() === p_obs_field3 && foundLabel3 === '' ){
                       foundLabel3 = 'yes';
-                      if( p_operator === 'or' ){
+                      if( p_operator === 'merge' ){
                           if( label1 !== '' ){
                               label1 += '  |  ';
                               label1 += rec.ofvs[k].name;
@@ -227,7 +227,7 @@ function fresults(xobj) {
                   }
                   if( rec.ofvs[k].field_id.toString() === p_obs_field4 && foundLabel4 === '' ){
                       foundLabel4 = 'yes';
-                      if( p_operator === 'or' ){
+                      if( p_operator === 'merge' ){
                           if( label1 !== '' ){
                               label1 += '  |  ';
                               label1 += rec.ofvs[k].name;
@@ -306,7 +306,7 @@ function fresults(xobj) {
                      }
                  }
                  if( rec.ofvs[j].field_id.toString() === p_obs_field2 ){
-                     if( p_operator === 'or' ){
+                     if( p_operator === 'merge' ){
                          field1 = rec.ofvs[j].value.toLowerCase();
                      } else {
                          field2 = rec.ofvs[j].value.toLowerCase();
@@ -314,7 +314,7 @@ function fresults(xobj) {
                      if( rec.ofvs[j].taxon ){
                          let name  = rec.ofvs[j].taxon.name || '';
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                         if( p_operator === 'or' ){
+                         if( p_operator === 'merge' ){
                              field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          } else {
                              field2 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
@@ -322,7 +322,7 @@ function fresults(xobj) {
                      }
                  }
                  if( rec.ofvs[j].field_id.toString() === p_obs_field3 ){
-                     if( p_operator === 'or' ){
+                     if( p_operator === 'merge' ){
                          field1 = rec.ofvs[j].value.toLowerCase();
                      } else {
                          field3 = rec.ofvs[j].value.toLowerCase();
@@ -330,7 +330,7 @@ function fresults(xobj) {
                      if( rec.ofvs[j].taxon ){
                          let name  = rec.ofvs[j].taxon.name || '';
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                         if( p_operator === 'or' ){
+                         if( p_operator === 'merge' ){
                              field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          } else {
                              field3 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
@@ -338,7 +338,7 @@ function fresults(xobj) {
                      }
                  }
                  if( rec.ofvs[j].field_id.toString() === p_obs_field4 ){
-                     if( p_operator === 'or' ){
+                     if( p_operator === 'merge' ){
                          field1 = rec.ofvs[j].value.toLowerCase();
                      } else {
                          field4 = rec.ofvs[j].value.toLowerCase();
@@ -346,7 +346,7 @@ function fresults(xobj) {
                      if( rec.ofvs[j].taxon ){
                          let name  = rec.ofvs[j].taxon.name || '';
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                         if( p_operator === 'or' ){
+                         if( p_operator === 'merge' ){
                              field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          } else {
                              field4 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
