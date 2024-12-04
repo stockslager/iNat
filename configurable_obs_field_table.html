@@ -75,7 +75,16 @@ let p_obs_field3 = winurlparams.get('obs_field3') || '';
 let p_obs_field4 = winurlparams.get('obs_field4') || '';
 let p_project_id = winurlparams.get('project_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
-let p_field      = winurlparams.get('field:') || '';
+let p_field      = '';
+let p_field_value = '';
+
+// find key/value pair for &field: param if one was passed in
+for (const [key, value] of searchParams.entries()) {
+  if( key.startsWith('field:') ){
+      let p_field = key;
+      let p_field_value = value;
+  }
+}
 
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
@@ -118,7 +127,7 @@ else {
    });
 };
 
-let apirefname = 'Observation Field Viewer' + p_field;
+let apirefname = 'Observation Field Viewer' + p_field + p_field_value;
    
 let apiref = furl(apirefurl,apirefname);
 
