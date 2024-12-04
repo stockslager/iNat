@@ -93,20 +93,6 @@ for (const [key, value] of winurlparams.entries()) {
       p_field = key;
       p_field_value = value;
   }
- 
-  if( opts === '' ){
-      opts += "?";
-  } else {
-      opts += "&";
-  }
-  opts += key;
-  opts += "=";
-
-  if( key === 'page' ){
-      opts += '1';
-  } else {
-      opts += value;
-  }
 }   
  
 winurlparams.delete('options');
@@ -142,6 +128,26 @@ else {
       faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
    });
 };
+
+// remove the field param from the url
+winurlparams.delete(p_field);
+
+// build param list for url's used in fresults
+for (const [key, value] of winurlparams.entries()) { 
+  if( opts === '' ){
+      opts += "?";
+  } else {
+      opts += "&";
+  }
+  opts += key;
+  opts += "=";
+
+  if( key === 'page' ){
+      opts += '1';
+  } else {
+      opts += value;
+  }
+}   
 
 let apirefname = 'Observation Field Viewer ';
    
