@@ -133,6 +133,7 @@ else {
 // remove the field param from the url before building options
 winurlparams.delete(p_field);
 winurlparams.delete('operator');
+winurlparams.delete('taxon_id');
 
 // build param list for url's used in fresults
 for (const [key, value] of winurlparams.entries()) { 
@@ -154,6 +155,7 @@ for (const [key, value] of winurlparams.entries()) {
 // add them back after building options...
 winurlparams.append('operator', p_operator);
 winurlparams.append(p_field, p_field_value);
+winurlparams.append('taxon_id', p_taxon_id);
    
 function fresults(xobj) {
    let results = xobj.results;
@@ -225,10 +227,10 @@ function fresults(xobj) {
       faddelem('h2',document.body,{innerText:'Observation Field Viewer'});
 
       if( p_operator === 'merge' ){
-          toggle  = furl(github_root+'configurable_obs_field_table.html'+opts+'&'+p_field+'='+p_field_value,'un-merge'); 
+          toggle  = furl(github_root+'configurable_obs_field_table.html'+opts+'&'+p_field+'='+p_field_value+'&taxon_id='+p_taxon_id,'un-merge'); 
           warning = '  warning: merging synonymous observation fields may result in overlayed field values during display if values are different.'
       } else {
-          toggle = furl(github_root+'configurable_obs_field_table.html'+opts+'&'+p_field+'='+p_field_value+'&operator=merge','merge');
+          toggle = furl(github_root+'configurable_obs_field_table.html'+opts+'&'+p_field+'='+p_field_value+'&taxon_id='+p_taxon_id+'&operator=merge','merge');
       }           
 
       // if some of the observation fields are of different types, don't allow a merge.
@@ -430,12 +432,11 @@ function fresults(xobj) {
                   {innerText:i+1},
                   {innerHTML:tax_photo},
                   {innerHTML:taxon},
-                  //{innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id,'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>')},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&operator='+p_operator, field1)}, 
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param2+'&operator='+p_operator, field2)}, 
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param3+'&operator='+p_operator, field3)}, 
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param4+'&operator='+p_operator, field4)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param2+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field2)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param3+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field3)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param4+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field4)}, 
                   {innerHTML:user_icon},
                   {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
              ];
