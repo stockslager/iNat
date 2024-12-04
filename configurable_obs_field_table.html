@@ -80,9 +80,9 @@ let p_field_value = '';
 
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of winurlparams.entries()) {
-  if( key.startsWith('field') ){
-      let p_field = key;
-      let p_field_value = value;
+  if( key.startsWith('field:') ){
+      p_field = key;
+      p_field_value = value;
   }
 }
 
