@@ -208,57 +208,17 @@ function fresults(xobj) {
           if(rec.ofvs&&rec.ofvs.length>0){
              for( let k=0; k<rec.ofvs.length; k++ ){
 
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field1 && foundLabel1 === '' ){
-                      foundLabel1 = 'yes';
-                      if( p_operator === 'merge' ){
-                          if( label1 !== '' ){
-                              label1 += '  |  ';
-                              label1 += rec.ofvs[k].name;
-                          } else {
-                              label1 = rec.ofvs[k].name;
-                          }
-                      } else {
-                          label1 = rec.ofvs[k].name;
-                      }
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field1 ){
+                      label1 = rec.ofvs[k].name;
                   }
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field2 && foundLabel2 === '' ){
-                      foundLabel2 = 'yes';
-                      if( p_operator === 'merge' ){
-                          if( label1 !== '' ){
-                              label1 += '  |  ';
-                              label1 += rec.ofvs[k].name;
-                          } else {
-                              label1 = rec.ofvs[k].name;
-                          }
-                      } else {
-                          label2 = rec.ofvs[k].name;
-                      }
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field2 ){
+                      label2 = rec.ofvs[k].name;
                   }
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field3 && foundLabel3 === '' ){
-                      foundLabel3 = 'yes';
-                      if( p_operator === 'merge' ){
-                          if( label1 !== '' ){
-                              label1 += '  |  ';
-                              label1 += rec.ofvs[k].name;
-                          } else {
-                              label1 = rec.ofvs[k].name;
-                          }
-                      } else {
-                          label3 = rec.ofvs[k].name;
-                      }
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field3 ){
+                      label3 = rec.ofvs[k].name;
                   }
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field4 && foundLabel4 === '' ){
-                      foundLabel4 = 'yes';
-                      if( p_operator === 'merge' ){
-                          if( label1 !== '' ){
-                              label1 += '  |  ';
-                              label1 += rec.ofvs[k].name;
-                          } else {
-                              label1 = rec.ofvs[k].name;
-                          }
-                      } else {
-                          label4 = rec.ofvs[k].name;
-                      }
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field4 ){
+                      label4 = rec.ofvs[k].name;
                   }
              }
          }
@@ -269,13 +229,13 @@ function fresults(xobj) {
            + '<dt>' + furl(root_obs_fields+p_obs_field1,p_obs_field1)+'<dt> <dd>' 
            + label1.toLowerCase() + '</dd>'
            + '<dt>' + furl(root_obs_fields+p_obs_field2,p_obs_field2)+'<dt> <dd>' 
-           + label1.toLowerCase() + '</dd>'
+           + label2.toLowerCase() + '</dd>'
            + '<dt>' + furl(root_obs_fields+p_obs_field3,p_obs_field3)+'<dt> <dd>' 
-           + label1.toLowerCase() + '</dd>'
+           + label3.toLowerCase() + '</dd>'
            + '<dt>' + furl(root_obs_fields+p_obs_field4,p_obs_field4)+'<dt> <dd>' 
-           + label1.toLowerCase() + '</dd> </dl>'});
+           + label4.toLowerCase() + '</dd> </dl>'});
     
-      faddelem('h2',document.body,{innerText:refn});
+      faddelem('h2',document.body,{innerText:apirefname});
       
       labels = [
                {innerText:'#'},
