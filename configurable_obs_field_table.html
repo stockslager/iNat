@@ -80,7 +80,7 @@ let p_field = '';
 let p_field_value = '';
 let opts = '';
 
-if( !winurlparams.get('ofv_datatype') ){
+if( winurlparams.get('ofv_datatype') === null || winurlparams.get('ofv_datatype') === ''){
     winurlparams.delete('ofv_datatype');
     winurlparams.append('ofv_datatype', 'taxon,text,numeric,date,time,datetime,dna');
 }
