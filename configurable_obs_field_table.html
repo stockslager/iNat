@@ -74,6 +74,7 @@ let p_obs_field2 = winurlparams.get('obs_field2') || '';
 let p_obs_field3 = winurlparams.get('obs_field3') || '';
 let p_obs_field4 = winurlparams.get('obs_field4') || '';
 let p_project_id = winurlparams.get('project_id') || '';
+let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
 let p_field      = '';
 let p_field_value = '';
@@ -385,11 +386,18 @@ function fresults(xobj) {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }
 
+         let taxon = '';
+         if( p_taxon_id === '' ){
+             taxon = "furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>')";         
+         } else {
+             taxon = "<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>";        
+         }
+
          if( p_operator === 'merge' ){
              values = [
                   {innerText:i+1},
                   {innerHTML:tax_photo},
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id,'<span style="font-size:larger">'+pref_tax_name.toLowerCase()+'</span><span style="font-style:italic"><br>('+tax_name+')</span>')},
+                  {innerHTML:taxon},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:field1}, 
                   {innerHTML:field2}, 
