@@ -175,9 +175,9 @@ function fresults(xobj) {
       let toggle = '';
 
       if( p_operator === 'merge' ){
-          toggle = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id,'un-merge'); 
+          toggle = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+p_taxon_id,'un-merge'); 
       } else {
-          toggle = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id+'&operator=merge','merge');
+          toggle = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+p_taxon_id+'&operator=merge','merge');
       }
       
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+ ' ( ' + toggle + ' ) <br/>'
