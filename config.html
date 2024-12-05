@@ -231,29 +231,35 @@ function fresults(xobj) {
       if( p_operator === 'merge' ){
           merged = 'merged observation field';
       }
+
+      let notFound = 'not occurring on this page of data';
+      if( label1 === '' ){ label1 = notFound; }
+      if( label2 === '' ){ label2 = notFound; }
+      if( label3 === '' ){ label3 = notFound; }
+      if( label4 === '' ){ label4 = notFound; }
     
- faddelem('p',document.body,{innerHTML:'<span id="h2">Observation Field Viewer</span><span id="dltest"><table id="tablekey">'
-    +'<tr id="trkey">  <td id="key">id</td>  <td id="key">'+merged+'</td>  </tr>'
-    +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</td>'
-    +'<td id="tdkey">' + label1.toLowerCase() + '</td></tr>'
-    +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field2,p_obs_field2) + '</td>'
-    +'<td id="tdkey">' + label2.toLowerCase() + '</td></tr>'
-    +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field3,p_obs_field3) + '</td>'
-    +'<td id="tdkey">' + label3.toLowerCase() + '</td></tr>'
-    +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field4,p_obs_field4) + '</td>'
-    +'<td id="tdkey">' + label4.toLowerCase() + '</td></tr>'
+      faddelem('p',document.body,{innerHTML:'<span id="h2">Observation Field Viewer</span><span id="dltest"><table id="tablekey">'
+         +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
+         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</td>'
+         +'<td id="tdkey">' + label1.toLowerCase() + '</td></tr>'
+         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field2,p_obs_field2) + '</td>'
+         +'<td id="tdkey">' + label2.toLowerCase() + '</td></tr>'
+         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field3,p_obs_field3) + '</td>'
+         +'<td id="tdkey">' + label3.toLowerCase() + '</td></tr>'
+         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field4,p_obs_field4) + '</td>'
+         +'<td id="tdkey">' + label4.toLowerCase() + '</td></tr>'
     
-    +'</table><span style="padding-right:50px;"></span><table id="tablekey">'
-    +'<tr id="trkey">  <td id="key">id</td>  <td id="key">'+merged+'</td>  </tr>'
-    +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</td>'
-    +'<td id="tdkey">' + label1.toLowerCase() + '</td></tr>'
-    +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field2,p_obs_field2) + '</td>'
-    +'<td id="tdkey">' + label2.toLowerCase() + '</td></tr>'
-    +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field3,p_obs_field3) + '</td>'
-    +'<td id="tdkey">' + label3.toLowerCase() + '</td></tr>'
-    +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field4,p_obs_field4) + '</td>'
-    +'<td id="tdkey">' + label4.toLowerCase() + '</td></tr>'
-    +'</table></span>'});
+         +'</table><span style="padding-right:50px;"></span><table id="tablekey">'
+         +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
+         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</td>'
+         +'<td id="tdkey">' + label1.toLowerCase() + '</td></tr>'
+         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field2,p_obs_field2) + '</td>'
+         +'<td id="tdkey">' + label2.toLowerCase() + '</td></tr>'
+         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field3,p_obs_field3) + '</td>'
+         +'<td id="tdkey">' + label3.toLowerCase() + '</td></tr>'
+         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field4,p_obs_field4) + '</td>'
+         +'<td id="tdkey">' + label4.toLowerCase() + '</td></tr>'
+         +'</table></span>'});
     
      // faddelem('h2',document.body,{innerText:'Observation Field Viewer'});
 
