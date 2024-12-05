@@ -400,8 +400,8 @@ function fresults(xobj) {
             }
          }  
 
-         let emojiTitle = 'Merged Observation Fields:&#10;&#13;test';
-         appendEmoji += '<div class="flowericon" title="'+emojiTitle+'">&#x1F338;</div>';
+         let emojiTitle = 'Merged Observation Fields:&#10;test';
+         appendEmoji += '<div class="flowericon" title="'+emojiTitle+'">&#x1F338;';
        
          let values = [];
          let user_icon = rec.user.icon || '';
@@ -425,7 +425,7 @@ function fresults(xobj) {
                   {innerHTML:tax_photo},
                   {innerHTML:taxon},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  {innerHTML:field1+appendEmoji}, 
+                  {innerHTML:appendEmoji+field1+'</div>'}, 
                   {innerHTML:field2}, 
                   {innerHTML:field3}, 
                   {innerHTML:field4},
