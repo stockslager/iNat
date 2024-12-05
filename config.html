@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Obs Field Table" />
+<title>Obs Field Table</title>
+<style>
+   :root { 
+      background: var(--color-base);
+      color: var(--color-text);
+      font: 14px Sans-Serif;
+      --color-base: white;
+      --color-alt: whitesmoke;
+      --color-brand: forestgreen;
+      --color-text: black;
+      --color-text-invert: white;
+      --color-text-link: royalblue;
+      --color-border: lightgray;
+      --color-hover: lightgray;
+      --color-base-translucent: rgba(255,255,255,0.85);
+   }
+   @media (prefers-color-scheme: dark) {
+      :root {
+         --color-base: black;
+         --color-alt: #171717;
+         --color-brand: forestgreen;
+         --color-text: #bababa;
+         --color-text-invert: black;
+         --color-text-link: cornflowerblue;
+         --color-border: #444;
+         --color-hover: #444;
+         --color-base-translucent: rgba(0,0,0,0.85);
+      }
+   }
+   #key { text-decoration:underline; font: 18px Sans-Serif; }
+   #main { width:100%; }
+   dl { float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
+   dt {  }
+   dd { margin: 0; grid-column-start: 2;}   
+   table, td, th { border-collapse:collapse; margin:0; padding:4px; }
+   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
+   th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
+   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }
+   tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
+   tr:nth-child(even) { background:var(--color-base); }
+   .tar { text-align:right; }
+   .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
+   .icon { height:48px; width:48px; border-radius:50%; }
+   .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
+   .flowericon { font-size:20px; }
+   .photo { height:64px; width:64px; border-radius: 5px 5px 5px 5px; }
+   img { margin:0; padding:0; border:0; }
+   a { text-decoration:none; color:var(--color-text-link); }
+   a:hover { background:var(--color-hover); }
+   #nav { margin-left:-8px; position:-webkit-sticky /*Safari*/; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
+   @media print { #nav { display:none; } } 
+   .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
+   .button { background:var(--color-alt); }
+   .button_inactive { background:none; color:var(--color-border); }
+   .bin_true { text-decoration: underline wavy rgba(34,139,34,0.35); }
+   .bin_false { text-decoration: underline wavy rgba(178,34,34,0.35); }
+</style>
+</head>
+
+<body>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let p_obs_field1 = winurlparams.get('obs_field1') || '';
+let p_obs_field2 = winurlparams.get('obs_field2') || '';
+let p_obs_field3 = winurlparams.get('obs_field3') || '';
+let p_obs_field4 = winurlparams.get('obs_field4') || '';
+let p_project_id = winurlparams.get('project_id') || '';
+let p_taxon_id   = winurlparams.get('taxon_id') || '';
+let p_operator   = winurlparams.get('operator') || '';
+let p_field = '';
+let p_field_value = '';
+let opts = '';
+
+if( winurlparams.get('ofv_datatype') === null || winurlparams.get('ofv_datatype') === ''){
+    winurlparams.delete('ofv_datatype');
+    winurlparams.append('ofv_datatype', 'taxon,text,numeric,date,time,datetime,dna');
+}
+
+winurlparams.delete('per_page');
+winurlparams.append('per_page','100');
+
+// find key/value pair for &field: param if one was passed in
+for (const [key, value] of winurlparams.entries()) {
+  if( key.startsWith('field') ){
+      p_field = key;
+      p_field_value = value;
+  }
+}   
+ 
+winurlparams.delete('options');
+let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
+winurlparams.delete('idextra_user_id');
+let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
+winurlparams.delete('photo_curl_filename_prefix');
+
+let apibase = 'https://api.inaturalist.org/v1/observations';
+let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
+
+</script> 
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v3.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
+<script> 
+
+if (winurlsearchstr==='' || p_project_id === '') {
+   let instructions = [
+      {innerText:'This page requires a project_id argument.  Add ?project_id=12345678 to the end of the url.'},
+   ];
+   faddelems('p',document.body,instructions);
+}
+else {
+   fetch(apiurl)
+   .then((response) => {
+      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+      return response.json();
+   })
+   .then((data) => { fresults(data); })
+   .catch((err) => {
+      console.error(err.message);
+      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+   });
+};
+
+// remove the field param from the url before building options
+winurlparams.delete(p_field);
+winurlparams.delete('operator');
+winurlparams.delete('taxon_id');
+
+// build param list for url's used in fresults
+for (const [key, value] of winurlparams.entries()) { 
+  if( opts === '' ){
+      opts += "?";
+  } else {
+      opts += "&";
+  }
+  opts += key;
+  opts += "=";
+
+  if( key === 'page' ){
+      opts += '1';
+  } else {
+      opts += value;
+  }
+}   
+
+// add them back after building options...
+winurlparams.append('operator', p_operator);
+winurlparams.append(p_field, p_field_value);
+winurlparams.append('taxon_id', p_taxon_id);
+   
+function fresults(xobj) {
+   let results = xobj.results;
+   if (results) {
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+
+      let toggle = '';
+      let warning = '';
+
+      let label1 = '';
+      let label2 = '';
+      let label3 = '';
+      let label4 = '';
+      let foundLabel1 = '';
+      let foundLabel2 = '';
+      let foundLabel3 = '';
+      let foundLabel4 = '';
+      let labels = [];
+      let datatype = '';
+      let mismatch = '';
+
+      for (let l=0; l<results.length; l++) {
+          let rec = results[l];
+          // find obs field labels
+          if(rec.ofvs&&rec.ofvs.length>0){
+             for( let k=0; k<rec.ofvs.length; k++ ){
+
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field1 ){
+                      if( datatype === '' ){
+                          datatype = rec.ofvs[k].datatype;
+                      } else if( datatype !== rec.ofvs[k].datatype ){
+                          mismatch = 'yes';
+                      }
+                      label1 = rec.ofvs[k].name;
+                  }
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field2 ){
+                      if( datatype === '' ){
+                          datatype = rec.ofvs[k].datatype;
+                      } else if( datatype !== rec.ofvs[k].datatype ){
+                          mismatch = 'yes';
+                      }
+                      label2 = rec.ofvs[k].name;
+                  }
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field3 ){
+                      if( datatype === '' ){
+                          datatype = rec.ofvs[k].datatype;
+                      } else if( datatype !== rec.ofvs[k].datatype ){
+                          mismatch = 'yes';
+                      }
+                      label3 = rec.ofvs[k].name;
+                  }
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field4 ){
+                      if( datatype === '' ){
+                          datatype = rec.ofvs[k].datatype;
+                      } else if( datatype !== rec.ofvs[k].datatype ){
+                          mismatch = 'yes';
+                      }
+                      label4 = rec.ofvs[k].name;
+                  }
+             }
+         }
+      }
+
+      faddelem('h2',document.body,{innerText:'Observation Field Viewer'});
+
+      if( p_operator === 'merge' ){
+          toggle  = furl(github_root+'configurable_obs_field_table.html'+opts+'&'+p_field+'='+p_field_value+'&taxon_id='+p_taxon_id,'un-merge'); 
+          warning = '  warning: merging synonymous observation fields may result in overlayed field values during display if values are different.'
+      } else {
+          toggle = furl(github_root+'configurable_obs_field_table.html'+opts+'&'+p_field+'='+p_field_value+'&taxon_id='+p_taxon_id+'&operator=merge','merge');
+      }           
+
+      // if some of the observation fields are of different types, don't allow a merge.
+//      if( mismatch === 'yes' ){
+          faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+ ' <br/>'
+             +'per page: '+fcomnum(per_page)+'<br />'
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
+/*      } else {
+          faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+ ' ( ' + toggle + ' )' + warning + ' <br/>'
+             +'per page: '+fcomnum(per_page)+'<br />'
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
+      }*/
+
+      let merged = 'observation field';
+      if( p_operator === 'merge' ){
+          merged = 'merged observation fields';
+      }
+    
+      // display the "key" for the obs fields
+      faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">obs id</span></dt> <dd><span id="key">'+merged+'</span></dd>'
+           + '<dt>' + furl(root_obs_fields+p_obs_field1,p_obs_field1)+'</dt> <dd>' 
+           + label1.toLowerCase() + '</dd>'
+           + '<dt>' + furl(root_obs_fields+p_obs_field2,p_obs_field2)+'</dt> <dd>' 
+           + label2.toLowerCase() + '</dd>'
+           + '<dt>' + furl(root_obs_fields+p_obs_field3,p_obs_field3)+'</dt> <dd>' 
+           + label3.toLowerCase() + '</dd>'
+           + '<dt>' + furl(root_obs_fields+p_obs_field4,p_obs_field4)+'</dt> <dd>' 
+           + label4.toLowerCase() + '</dd> </dl>'});
+
+      let table = faddelem('table',document.body,{id:'main'});
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+ 
+      if( p_operator === 'merge' ){
+          labels = [
+               {innerText:'#'},
+               {innerText:'Photo'},
+               {innerText:'Name'}, 
+               {innerText:'Obs Photo'},
+               {innerText:('Merged Fields (see upper right)')}, {innerText:''}, {innerText:''}, {innerText:''},
+               {innerText:'User Photo'},
+               {innerText:'User Login'},
+          ];
+      } else {
+          labels = [
+               {innerText:'#'},
+               {innerText:'Photo'},
+               {innerText:'Name'}, 
+               {innerText:'Obs Photo'},
+               {innerText:label1}, {innerText:label2}, {innerText:label3}, {innerText:label4},
+               {innerText:'User Photo'},
+               {innerText:'User Login'},
+          ];
+      }
+      
+      faddelems('th',hrow,labels);
+
+      let tbody = faddelem('tbody',table);
+
+      let displayCount = 0;
+      
+      for (let i=0; i<results.length; i++) {
+         let brow = faddelem('tr',tbody);
+         let rec = results[i];
+         let tax_name = '';
+         let pref_tax_name = '';
+         let tax_photo = '<div class="clipart">&#127807</div>'; 
+         
+         if( rec.taxon ){
+             tax_name = rec.taxon.name || '';
+             pref_tax_name = rec.taxon.preferred_common_name || '';
+           
+             if( rec.taxon.default_photo ){
+                 if( rec.taxon.default_photo.url ){
+                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
+                 }
+             }
+         }
+
+         let field1 = '';
+         let field2 = '';
+         let field3 = '';
+         let field4 = '';
+         let param1 = '';
+         let param2 = '';
+         let param3 = '';
+         let param4 = '';
+         let taxonFound = '';
+         let appendEmoji = ''
+
+        appendEmoji += '<div class="flowericon" title="Hello there">&#x1F338;</div>';
+          
+        if(rec.ofvs&&rec.ofvs.length>0){
+            for( let j=0; j<rec.ofvs.length && taxonFound===''; j++ ){
+
+                 if( rec.ofvs[j].field_id.toString() === p_obs_field1 ){
+                     if( p_operator === 'merge' ){
+                         field1 = rec.ofvs[j].value.toLowerCase();
+                     } else {
+                         param1 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
+                         field1 = rec.ofvs[j].value.toLowerCase();
+                     }
+                     if( rec.ofvs[j].taxon ){
+                         let name  = rec.ofvs[j].taxon.name || '';
+                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                         if( p_operator === 'merge' ){
+                             taxonFound = 'yes';
+                             field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         } else {
+                             field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         }
+                     }
+                 }
+                 if( rec.ofvs[j].field_id.toString() === p_obs_field2 ){
+                     if( p_operator === 'merge' ){
+                         field1 = rec.ofvs[j].value.toLowerCase();
+                     } else {
+                         param2 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
+                         field2 = rec.ofvs[j].value.toLowerCase();
+                     }
+                     if( rec.ofvs[j].taxon ){
+                         let name  = rec.ofvs[j].taxon.name || '';
+                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                         if( p_operator === 'merge' ){
+                             taxonFound = 'yes';
+                             field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         } else {
+                             field2 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         }
+                     }
+                 }
+                 if( rec.ofvs[j].field_id.toString() === p_obs_field3 ){
+                     if( p_operator === 'merge' ){
+                         field1 = rec.ofvs[j].value.toLowerCase();
+                     } else {
+                         param3 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
+                         field3 = rec.ofvs[j].value.toLowerCase();
+                     }
+                     if( rec.ofvs[j].taxon ){
+                         let name  = rec.ofvs[j].taxon.name || '';
+                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                         if( p_operator === 'merge' ){
+                             taxonFound = 'yes';
+                             field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         } else {
+                             field3 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         }
+                     }
+                 }
+                 if( rec.ofvs[j].field_id.toString() === p_obs_field4 ){
+                     if( p_operator === 'merge' ){
+                         field1 = rec.ofvs[j].value.toLowerCase();
+                     } else {
+                         param4 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
+                         field4 = rec.ofvs[j].value.toLowerCase();
+                     }
+                     if( rec.ofvs[j].taxon ){
+                         let name  = rec.ofvs[j].taxon.name || '';
+                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                         if( p_operator === 'merge' ){
+                             taxonFound = 'yes';
+                             field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         } else {
+                             field4 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         }
+                     }
+                 }
+            }
+         }  
+       
+         let values = [];
+         let user_icon = rec.user.icon || '';
+         
+         if( user_icon === '' ){
+            user_icon += '<div class="npcicon">&#x1F464;</div>';
+         } else {
+            user_icon = '<img class="icon" src="'+user_icon+'" />';
+         }
+
+         let taxon = '';
+         //if( p_taxon_id === '' ){
+             taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+         /*} else {
+             taxon = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';        
+         }*/
+
+         if( p_operator === 'merge' ){
+             values = [
+                  {innerText:i+1},
+                  {innerHTML:tax_photo},
+                  {innerHTML:taxon},
+                  {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                  {innerHTML:field1+appendEmoji}, 
+                  {innerHTML:field2}, 
+                  {innerHTML:field3}, 
+                  {innerHTML:field4},
+                  {innerHTML:user_icon},
+                  {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
+             ];
+         } else {
+             values = [
+                  {innerText:i+1},
+                  {innerHTML:tax_photo},
+                  {innerHTML:taxon},
+                  {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param2+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field2)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param3+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field3)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param4+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field4)}, 
+                  {innerHTML:user_icon},
+                  {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
+             ];
+         }
+   
+         faddelems('td',brow,values);
+      };
+
+      // buttons to go to prev or next page
+      let nav = faddelem('div',document.body,{id:'nav'});
+      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); };
+};
+</script>
+</body>
+
+</html>
