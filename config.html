@@ -49,7 +49,7 @@
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
    .icon { height:48px; width:48px; border-radius:50%; }
    .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
-   .flowericon { font-size:20px; }
+   .flowericon { font-size:20px; white-space: nowrap; }
    .photo { height:64px; width:64px; border-radius: 5px 5px 5px 5px; }
    img { margin:0; padding:0; border:0; }
    a { text-decoration:none; color:var(--color-text-link); }
@@ -400,8 +400,12 @@ function fresults(xobj) {
             }
          }  
 
-         let emojiTitle = 'Merged Observation Fields:&#10;test';
-         appendEmoji += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;';
+         let emojiTitle = 'Merged Observation Fields:&#10;';
+         emojiTitle    += label1 + ' ' + field1 + '&#10;';
+         emojiTitle    += label2 + ' ' + field2 + '&#10;';
+         emojiTitle    += label3 + ' ' + field3 + '&#10;';
+         emojiTitle    += label4 + ' ' + field4 + '&#10;';
+         appendEmoji += '<div class="flowericon" title="'+emojiTitle+'">&#x1F338;</div>';
        
          let values = [];
          let user_icon = rec.user.icon || '';
@@ -425,7 +429,7 @@ function fresults(xobj) {
                   {innerHTML:tax_photo},
                   {innerHTML:taxon},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  {innerHTML:appendEmoji+field1+'</span>'}, 
+                  {innerHTML:field1+appendEmoji}, 
                   {innerHTML:field2}, 
                   {innerHTML:field3}, 
                   {innerHTML:field4},
