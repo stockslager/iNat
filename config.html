@@ -317,6 +317,7 @@ function fresults(xobj) {
          let field3 = '';
          let field4 = '';
          let displayName = '';
+         let displayTaxonName = '';
          let param1 = '';
          let param2 = '';
          let param3 = '';
@@ -344,6 +345,8 @@ function fresults(xobj) {
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                          if( p_operator === 'merge' ){
                              field1 = name;
+                             displayCommonName = cname.toLowerCase();
+                             displayTaxonName = name;
                              displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          } else {
                              field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
@@ -363,6 +366,8 @@ function fresults(xobj) {
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                          if( p_operator === 'merge' ){
                              field2 = name;
+                             displayCommonName = cname.toLowerCase();
+                             displayTaxonName = name;
                              displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          } else {
                              field2 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
@@ -382,6 +387,8 @@ function fresults(xobj) {
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                          if( p_operator === 'merge' ){
                              field3 = name;
+                             displayCommonName = cname.toLowerCase();
+                             displayTaxonName = name;
                              displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          } else {
                              field3 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
@@ -401,6 +408,8 @@ function fresults(xobj) {
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                          if( p_operator === 'merge' ){
                              field4 = name;
+                             displayCommonName = cname.toLowerCase();
+                             displayTaxonName = name;
                              displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          } else {
                              field4 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
@@ -416,6 +425,10 @@ function fresults(xobj) {
          if( ofvs3 !== '' ){ emojiTitle    += (ofvs3.field_id + ' ' + field3 + '&#10;'); }
          if( ofvs4 !== '' ){ emojiTitle    += (ofvs4.field_id + ' ' + field4 + '&#10;'); }
          appendEmoji += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span>';
+
+         if( displayTaxonName !== '' ){
+             displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+appendEmoji')</span>';
+         }
        
          let values = [];
          let user_icon = rec.user.icon || '';
