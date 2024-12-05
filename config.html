@@ -315,10 +315,15 @@ function fresults(xobj) {
          let field2 = '';
          let field3 = '';
          let field4 = '';
+         let displayName = '';
          let param1 = '';
          let param2 = '';
          let param3 = '';
          let param4 = '';
+         let ofvs1 = '';
+         let ofvs2 = '';
+         let ofvs3 = '';
+         let ofvs4 = '';
          let taxonFound = '';
          let appendEmoji = ''
           
@@ -326,72 +331,77 @@ function fresults(xobj) {
             for( let j=0; j<rec.ofvs.length && taxonFound===''; j++ ){
 
                  if( rec.ofvs[j].field_id.toString() === p_obs_field1 ){
+                     ofvs1 = rec.ofvs[j];
+                     field1 = rec.ofvs[j].value.toLowerCase();
                      if( p_operator === 'merge' ){
-                         field1 = rec.ofvs[j].value.toLowerCase();
+                         displayName = rec.ofvs[j].value.toLowerCase();
                      } else {
                          param1 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
-                         field1 = rec.ofvs[j].value.toLowerCase();
+                         displayName = rec.ofvs[j].value.toLowerCase();
                      }
                      if( rec.ofvs[j].taxon ){
                          let name  = rec.ofvs[j].taxon.name || '';
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                          if( p_operator === 'merge' ){
                              taxonFound = 'yes';
-                             field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          } else {
-                             field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          }
                      }
                  }
                  if( rec.ofvs[j].field_id.toString() === p_obs_field2 ){
+                     ofvs2 = rec.ofvs[j];
+                     field2 = rec.ofvs[j].value.toLowerCase();
                      if( p_operator === 'merge' ){
-                         field1 = rec.ofvs[j].value.toLowerCase();
+                         displayName = rec.ofvs[j].value.toLowerCase();
                      } else {
                          param2 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
-                         field2 = rec.ofvs[j].value.toLowerCase();
                      }
                      if( rec.ofvs[j].taxon ){
                          let name  = rec.ofvs[j].taxon.name || '';
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                          if( p_operator === 'merge' ){
                              taxonFound = 'yes';
-                             field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          } else {
                              field2 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          }
                      }
                  }
                  if( rec.ofvs[j].field_id.toString() === p_obs_field3 ){
+                     ofvs3 = rec.ofvs[j];
+                     field3 = rec.ofvs[j].value.toLowerCase();
                      if( p_operator === 'merge' ){
-                         field1 = rec.ofvs[j].value.toLowerCase();
+                         displayName = rec.ofvs[j].value.toLowerCase();
                      } else {
                          param3 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
-                         field3 = rec.ofvs[j].value.toLowerCase();
                      }
                      if( rec.ofvs[j].taxon ){
                          let name  = rec.ofvs[j].taxon.name || '';
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                          if( p_operator === 'merge' ){
                              taxonFound = 'yes';
-                             field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          } else {
                              field3 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          }
                      }
                  }
                  if( rec.ofvs[j].field_id.toString() === p_obs_field4 ){
+                     ofvs4 = rec.ofvs[j];
+                     field4 = rec.ofvs[j].value.toLowerCase();
                      if( p_operator === 'merge' ){
-                         field1 = rec.ofvs[j].value.toLowerCase();
+                         displayName = rec.ofvs[j].value.toLowerCase();
                      } else {
                          param4 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
-                         field4 = rec.ofvs[j].value.toLowerCase();
                      }
                      if( rec.ofvs[j].taxon ){
                          let name  = rec.ofvs[j].taxon.name || '';
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                          if( p_operator === 'merge' ){
                              taxonFound = 'yes';
-                             field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          } else {
                              field4 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          }
@@ -401,10 +411,10 @@ function fresults(xobj) {
          }  
 
          let emojiTitle = 'Merged Observation Fields:&#10;';
-         emojiTitle    += (p_obs_field1 + ' ' + field1 + '&#10;');
-         emojiTitle    += (p_obs_field2 + ' ' + field2 + '&#10;');
-         emojiTitle    += (p_obs_field3 + ' ' + field3 + '&#10;');
-         emojiTitle    += (p_obs_field4 + ' ' + field4 + '&#10;');
+         if( ofvs1 !== '' ){ emojiTitle    += (ofvs1.field_id + ' ' + field1 + '&#10;'); }
+         if( ofvs2 !== '' ){ emojiTitle    += (ofvs2.field_id + ' ' + field2 + '&#10;'); }
+         if( ofvs3 !== '' ){ emojiTitle    += (ofvs3.field_id + ' ' + field3 + '&#10;'); }
+         if( ofvs4 !== '' ){ emojiTitle    += (ofvs4.field_id + ' ' + field4 + '&#10;'); }
          appendEmoji += '<div class="flowericon" title="'+emojiTitle+'">&#x1F338;</div>';
        
          let values = [];
@@ -429,10 +439,10 @@ function fresults(xobj) {
                   {innerHTML:tax_photo},
                   {innerHTML:taxon},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  {innerHTML:field1+appendEmoji}, 
-                  {innerHTML:field2}, 
-                  {innerHTML:field3}, 
-                  {innerHTML:field4},
+                  {innerHTML:displayName+appendEmoji}, 
+                  {innerHTML:''}, 
+                  {innerHTML:''}, 
+                  {innerHTML:''},
                   {innerHTML:user_icon},
                   {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
              ];
