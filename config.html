@@ -324,11 +324,10 @@ function fresults(xobj) {
          let ofvs2 = '';
          let ofvs3 = '';
          let ofvs4 = '';
-         let taxonFound = '';
          let appendEmoji = ''
           
         if(rec.ofvs&&rec.ofvs.length>0){
-            for( let j=0; j<rec.ofvs.length && taxonFound===''; j++ ){
+            for( let j=0; j<rec.ofvs.length; j++ ){
 
                  if( rec.ofvs[j].field_id.toString() === p_obs_field1 ){
                      ofvs1 = rec.ofvs[j];
@@ -343,7 +342,6 @@ function fresults(xobj) {
                          let name  = rec.ofvs[j].taxon.name || '';
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                          if( p_operator === 'merge' ){
-                             taxonFound = 'yes';
                              field1 = name;
                              displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          } else {
@@ -363,7 +361,6 @@ function fresults(xobj) {
                          let name  = rec.ofvs[j].taxon.name || '';
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                          if( p_operator === 'merge' ){
-                             taxonFound = 'yes';
                              field2 = name;
                              displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          } else {
@@ -383,7 +380,6 @@ function fresults(xobj) {
                          let name  = rec.ofvs[j].taxon.name || '';
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                          if( p_operator === 'merge' ){
-                             taxonFound = 'yes';
                              field3 = name;
                              displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          } else {
@@ -403,7 +399,6 @@ function fresults(xobj) {
                          let name  = rec.ofvs[j].taxon.name || '';
                          let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                          if( p_operator === 'merge' ){
-                             taxonFound = 'yes';
                              field4 = name;
                              displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                          } else {
