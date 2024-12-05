@@ -427,7 +427,7 @@ function fresults(xobj) {
          appendEmoji += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span>';
 
          if( displayTaxonName !== '' ){
-             displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
+             displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
          }
        
          let values = [];
@@ -452,7 +452,7 @@ function fresults(xobj) {
                   {innerHTML:tax_photo},
                   {innerHTML:taxon},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  {innerHTML:appendEmoji+displayName}, 
+                  {innerHTML:displayName}, 
                   {innerHTML:''}, 
                   {innerHTML:''}, 
                   {innerHTML:''},
