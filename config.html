@@ -471,10 +471,16 @@ function fresults(xobj) {
          if( ofvs4 !== '' ){ emojiTitle    += (ofvs4.field_id + ' ' + field4 + '&#10;'); }
 
          if( displayTaxonName !== '' ){
-             displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
+             if( mismatch === 'yes' ){
+                 displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
+             } else {
+                 displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+')</span>';
+             }
          } else {
-             displayName += ' ';
-             displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
+             if( mismatch === 'yes' ){
+                 displayName += ' ';
+                 displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
+             } 
          }
        
          let values = [];
