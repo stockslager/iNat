@@ -34,13 +34,13 @@
          --color-base-translucent: rgba(0,0,0,0.85);
       }
    }
-   #key { color:var(--color-text-link); }
-   #tab1 { padding-left:20px; }
-   #tab2 { padding-left:40px; }
+   #key { color:var(--color-text-link); font: 18px Sans-Serif; }
+   #tab1 { padding-left:20px; font: 18px Sans-Serif; }
+   #tab2 { padding-left:40px; font: 16px Sans-Serif; }
    #main { width:100%; }
    dl { width:500px; background:var(--color-alt); display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }
    dt {  }
-   dd { margin: 0; grid-column-start: 2; font: 18px Sans-Serif; padding-top: 5px; padding-bottom: 5px; }   
+   dd { margin: 0; grid-column-start: 2; padding-top: 5px; padding-bottom: 5px; }   
  
    table, td, th { border-collapse:collapse; margin:0; padding:4px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
@@ -86,11 +86,16 @@ let herps    = furl(github_root+'configurable_obs_field_table.html?project_id=15
 let molluscs = furl(github_root+'configurable_obs_field_table.html?project_id=152539&iconic_taxa=mollusca&ofv_datatype=taxon&obs_field2=8581&obs_field1=7623&operator=merge','molluscs'); 
 let spiders  = furl(github_root+'configurable_obs_field_table.html?project_id=152539&iconic_taxa=Arachnida&ofv_datatype=taxon&obs_field1=7623&obs_field2=8581&obs_field3=6586&operator=merge','spiders'); 
 let fungi    = furl(github_root+'configurable_obs_field_table.html?project_id=152539&iconic_taxa=fungi&ofv_datatype=taxon&obs_field1=7623&obs_field2=8581&obs_field3=7807&obs_field4=254&operator=merge','fungi'); 
+let bees     = furl(github_root+'configurable_obs_field_table.html?project_id=152539&iconic_taxa=insecta&taxon_id=47157&obs_field1=7623&obs_field2=498&obs_field3=4935&obs_field4=7807&ofv_datatype=taxon&operator=merge','insects'); 
+let butter   = furl(github_root+'configurable_obs_field_table.html?project_id=152539&iconic_taxa=insecta&taxon_id=630955&obs_field1=7623&obs_field2=498&obs_field3=4935&obs_field4=7807&ofv_datatype=taxon&operator=merge','insects'); 
   
 faddelem('p',document.body,{innerHTML:'<dl>'
-            + '<dt></dt><span id="key"><dd>'+plantIns+'</dd></span>'
+            + '<dt></dt><span id="key"><dd>Plants Visited</dd></span>'
+            + '<dt></dt><span id="tab1"><dd>'+plantIns+'</dd></span>'
             + '<dt></dt><span id="key"><dd>Visitors to the Plants</dd></span>'
             + '<dt></dt><span id="tab1"><dd>'+insects+'</dd></span>'
+            + '<dt></dt><span id="tab2"><dd>'+butter+'</dd></span>'
+            + '<dt></dt><span id="tab2"><dd>'+bees+'</dd></span>'
             + '<dt></dt><span id="tab1"><dd>'+birds+'</dd></span>'
             + '<dt></dt><span id="tab1"><dd>'+mammals+'</dd></span>'
             + '<dt></dt><span id="tab1"><dd>'+herps+'</dd></span>'
