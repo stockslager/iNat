@@ -326,7 +326,6 @@ function fresults(xobj) {
          let ofvs2 = '';
          let ofvs3 = '';
          let ofvs4 = '';
-         let appendEmoji = ''
           
         if(rec.ofvs&&rec.ofvs.length>0){
             for( let j=0; j<rec.ofvs.length; j++ ){
@@ -419,15 +418,63 @@ function fresults(xobj) {
             }
          }  
 
+         // look for mismatch of merged obs fields...
+         let mismatch = '';
+         if( p_operator === 'merge' ){
+             // if 1 is not equal to null make sure there aren't mismatches with 2, 3, or 4.
+             if( ofvs1 !== '' ){
+                 if( ofvs2 !== '' ){
+                     if( ofvs1.value !== ofvs2.value ){
+                         mismatch = 'yes';
+                     } 
+                 }
+                 if( ofvs3 !== '' ){
+                     if( ofvs1.value !== ofvs3.value ){
+                         mismatch = 'yes';
+                     }
+                 } 
+                 if( ofvs4 !== '' ){
+                     if( ofvs1.value !== ofvs4.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+             }
+
+             // if 2 is not equal to null, make sure there aren't mismatches with 3 or 4.
+             if( ofvs2 !== '' ) {
+                 if( ofvs3 !== '' ){
+                     if( ofvs2.value !== ofvs3.value ){
+                         mismatch = 'yes';
+                     }
+                 } 
+                 if( ofvs4 !== '' ){
+                     if( ofvs2.value !== ofvs4.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+             } 
+          
+             // if 3 is not equal to null, make sure there aren't mismatches with 4.
+             if( ofvs3 !== '' ) {
+                 if( ofvs4 !== '' ){
+                     if( ofvs3.value !== ofvs4.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+             }
+         }
+       
          let emojiTitle = 'Merged Observation Fields:&#10;';
          if( ofvs1 !== '' ){ emojiTitle    += (ofvs1.field_id + ' ' + field1 + '&#10;'); }
          if( ofvs2 !== '' ){ emojiTitle    += (ofvs2.field_id + ' ' + field2 + '&#10;'); }
          if( ofvs3 !== '' ){ emojiTitle    += (ofvs3.field_id + ' ' + field3 + '&#10;'); }
          if( ofvs4 !== '' ){ emojiTitle    += (ofvs4.field_id + ' ' + field4 + '&#10;'); }
-         appendEmoji += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span>';
 
          if( displayTaxonName !== '' ){
              displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
+         } else {
+             displayName += ' ';
+             displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
          }
        
          let values = [];
