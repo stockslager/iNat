@@ -321,8 +321,6 @@ function fresults(xobj) {
          let param4 = '';
          let taxonFound = '';
          let appendEmoji = ''
-
-        appendEmoji += '<div class="flowericon" title="Hello there">&#x1F338;</div>';
           
         if(rec.ofvs&&rec.ofvs.length>0){
             for( let j=0; j<rec.ofvs.length && taxonFound===''; j++ ){
@@ -401,6 +399,9 @@ function fresults(xobj) {
                  }
             }
          }  
+
+         let emojiTitle = 'Merged Observation Fields:<br>test';
+         appendEmoji += '<div class="flowericon" title="'+emojiTitle+'">&#x1F338;</div>';
        
          let values = [];
          let user_icon = rec.user.icon || '';
