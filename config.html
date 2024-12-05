@@ -72,20 +72,37 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let p_obs_field1 = winurlparams.get('obs_field1') || '';
-let p_obs_field2 = winurlparams.get('obs_field2') || '';
-let p_obs_field3 = winurlparams.get('obs_field3') || '';
-let p_obs_field4 = winurlparams.get('obs_field4') || '';
-let p_obs_field5 = winurlparams.get('obs_field5') || '';
-let p_obs_field6 = winurlparams.get('obs_field6') || '';
-let p_obs_field7 = winurlparams.get('obs_field7') || '';
-let p_obs_field8 = winurlparams.get('obs_field8') || '';
+let p_obs_field1 = '';
+let p_obs_field2 = '';
+let p_obs_field3 = '';
+let p_obs_field4 = '';
+let p_obs_field5 = '';
+let p_obs_field6 = '';
+let p_obs_field7 = '';
+let p_obs_field8 = '';
 let p_project_id = winurlparams.get('project_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
+let p_obs_field_array = winurlparams.get('obs_fields') || '';
 let p_field = '';
 let p_field_value = '';
 let opts = '';
+let arr = [];
+
+if( p_obs_field_array !== '' );
+    arr = p_obs_field_array.split(",");
+
+    if( arr[0] !== null ){ p_obs_field1 = arr[0]; }
+    if( arr[1] !== null ){ p_obs_field2 = arr[1]; }
+    if( arr[2] !== null ){ p_obs_field3 = arr[2]; }
+    if( arr[3] !== null ){ p_obs_field4 = arr[3]; }
+    if( arr[4] !== null ){ p_obs_field5 = arr[4]; }
+    if( arr[5] !== null ){ p_obs_field6 = arr[5]; }
+    if( arr[6] !== null ){ p_obs_field7 = arr[6]; }
+    if( arr[7] !== null ){ p_obs_field8 = arr[7]; }
+}
+const str = "apple,banana,orange"; 
+const fruits = str.split(",");
 
 if( winurlparams.get('ofv_datatype') === null || winurlparams.get('ofv_datatype') === ''){
     winurlparams.delete('ofv_datatype');
