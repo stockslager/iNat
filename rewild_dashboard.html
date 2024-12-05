@@ -54,7 +54,8 @@
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
    .icon { height:48px; width:48px; border-radius:50%; }
    .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
-   .photo { height:20px; width:20px; border-radius: 5px 5px 5px 5px; }
+   .photo { height:40px; width:40px; border-radius: 5px 5px 5px 5px; }
+   .box { display: flex; align-items:center; }
    img { margin:0; padding:0; border:0; }
    a { text-decoration:underline; color:var(--color-text-link); }
    a:hover { background:var(--color-hover); }
@@ -78,7 +79,7 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 
 let icon = 'https://static.inaturalist.org/projects/152539-icon-span2.?1730371479';
-faddelem('h2',document.body,{innerHTML:'<img class="photo" src="'+icon+'" /> Yard Project Dashboard'});  
+faddelem('h2',document.body,{innerHTML:'<div class="box"><img class="photo" src="'+icon+'"> <span>Yard Project Dashboard</span></div>'});  
 
 let plantIns = furl(github_root+'rewild_plants_visited.html?project_id=152539&g_list=4484313&s_list=4484172&project_title=Cincinnati%20Re-Wild', 'plant inspector');
 let insects  = furl(github_root+'configurable_obs_field_table.html?project_id=152539&iconic_taxa=insecta&obs_field1=7623&obs_field2=498&obs_field3=4935&obs_field4=7807&ofv_datatype=taxon&operator=merge','insects'); 
