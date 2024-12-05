@@ -34,7 +34,7 @@
          --color-base-translucent: rgba(0,0,0,0.85);
       }
    }
-   #dltest { width:fit-content; display: inline-table; justify-content:start; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }   
+   #dltest { float:right; width:fit-content; display: inline-table; justify-content:start; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }   
    #key { text-decoration:underline; font: 18px Sans-Serif; padding:0; padding-right: 7px; }
    #tablekey { display:inline-table; }
    #trkey { padding:0; background:var(--color-base); border:none; border-collapse:collapse; }
@@ -237,41 +237,10 @@ function fresults(xobj) {
       if( p_operator === 'merge' ){
           merged = 'merged observation fields';
       }
-
-faddelem('p',document.body,{innerHTML:'<dl><div id="dlkey">'
-  +'<div>'
-    +'<dt id="key">obs id</dt>'
-    +'<dd>' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</dd>'
-    +'<dd>' + furl(root_obs_fields+p_obs_field2,p_obs_field2) + '</dd>'
-    +'<dd>' + furl(root_obs_fields+p_obs_field3,p_obs_field3) + '</dd>'
-    +'<dd>' + furl(root_obs_fields+p_obs_field4,p_obs_field4) + '</dd>'
-  +'</div>'
-  +'<div>'
-    +'<dt id="key">'+merged+'</dt>'
-    +'<dd>' + label1.toLowerCase() + '</dd>'
-    +'<dd>' + label2.toLowerCase() + '</dd>'
-    +'<dd>' + label3.toLowerCase() + '</dd>'
-    +'<dd>' + label4.toLowerCase() + '</dd>'
-  +'</div></div>'
-  +'<div id="dlkey"><div>'
-    +'<dt id="key">obs id</dt>'
-    +'<dd>' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</dd>'
-    +'<dd>' + furl(root_obs_fields+p_obs_field2,p_obs_field2) + '</dd>'
-    +'<dd>' + furl(root_obs_fields+p_obs_field3,p_obs_field3) + '</dd>'
-    +'<dd>' + furl(root_obs_fields+p_obs_field4,p_obs_field4) + '</dd>'
-  +'</div>'
-  +'<div>'
-    +'<dt id="key">'+merged+'</dt>'
-    +'<dd>' + label1.toLowerCase() + '</dd>'
-    +'<dd>' + label2.toLowerCase() + '</dd>'
-    +'<dd>' + label3.toLowerCase() + '</dd>'
-    +'<dd>' + label4.toLowerCase() + '</dd>'
-  +'</div></div>'
-+'</dl>'});
     
  faddelem('p',document.body,{innerHTML:'<span id="dltest"><table id="tablekey">'
     +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
-    +'<tr id="trkey"><td>' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</td>'
+    +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</td>'
     +'<td id="tdkey">' + label1.toLowerCase() + '</td></tr>'
     +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field2,p_obs_field2) + '</td>'
     +'<td id="tdkey">' + label2.toLowerCase() + '</td></tr>'
@@ -290,27 +259,6 @@ faddelem('p',document.body,{innerHTML:'<dl><div id="dlkey">'
     +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field4,p_obs_field4) + '</td>'
     +'<td id="tdkey">' + label4.toLowerCase() + '</td></tr>'
     +'</table></span>'});
-    
-      // display the "key" for the obs fields
-      faddelem('p',document.body,{innerHTML:'<span id="h2">Observation Field Viewer</span>' 
-           + '<span id="topright"><dl id="dlkey"><dt><span id="key">obs id</span></dt> <dd><span id="key">'+merged+'</span></dd>'
-           + '<dt>' + furl(root_obs_fields+p_obs_field1,p_obs_field1)+'</dt> <dd>' 
-           + label1.toLowerCase() + '</dd>'
-           + '<dt>' + furl(root_obs_fields+p_obs_field2,p_obs_field2)+'</dt> <dd>' 
-           + label2.toLowerCase() + '</dd>'
-           + '<dt>' + furl(root_obs_fields+p_obs_field3,p_obs_field3)+'</dt> <dd>' 
-           + label3.toLowerCase() + '</dd>'
-           + '<dt>' + furl(root_obs_fields+p_obs_field4,p_obs_field4)+'</dt> <dd>' 
-           + label4.toLowerCase() + '</dd> </dl>'
-           + '<dl id="dlkey"><dt><span id="key">obs id</span></dt> <dd><span id="key">'+merged+'</span></dd>'
-           + '<dt>' + furl(root_obs_fields+p_obs_field1,p_obs_field1)+'</dt> <dd>' 
-           + label1.toLowerCase() + '</dd>'
-           + '<dt>' + furl(root_obs_fields+p_obs_field2,p_obs_field2)+'</dt> <dd>' 
-           + label2.toLowerCase() + '</dd>'
-           + '<dt>' + furl(root_obs_fields+p_obs_field3,p_obs_field3)+'</dt> <dd>' 
-           + label3.toLowerCase() + '</dd>'
-           + '<dt>' + furl(root_obs_fields+p_obs_field4,p_obs_field4)+'</dt> <dd>' 
-           + label4.toLowerCase() + '</dd> </dl></span>'});
     
      // faddelem('h2',document.body,{innerText:'Observation Field Viewer'});
 
