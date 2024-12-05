@@ -36,6 +36,7 @@
    }
    #dltest { width:fit-content; display: flex; justify-content:start; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }   
    #key { text-decoration:underline; font: 18px Sans-Serif; }
+   #tablekey { }
    #trkey { }
    #main { width:100%; }
    #h2 { font-weight:bold; font-size:20px; }
@@ -236,7 +237,7 @@ function fresults(xobj) {
           merged = 'merged observation fields';
       }
 
-    faddelem('p',document.body,{innerHTML:'<table>'
+    faddelem('p',document.body,{innerHTML:'<table id="tablekey">'
     +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
     +'<tr id="trkey"><td>' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</td>'
     +'<td>' + label1.toLowerCase() + '</td></tr>'
@@ -246,6 +247,7 @@ function fresults(xobj) {
     +'<td>' + label3.toLowerCase() + '</td></tr>'
     +'<tr id="trkey"><td>' + furl(root_obs_fields+p_obs_field4,p_obs_field4) + '</td>'
     +'<td>' + label4.toLowerCase() + '</td></tr>'
+    +'</table><table>'
     +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
     +'<tr id="trkey"><td>' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</td>'
     +'<td>' + label1.toLowerCase() + '</td></tr>'
