@@ -288,14 +288,6 @@ function fresults(xobj) {
       if( p_obs_field6 !== '' ){ if( label6 === '' ){ label6 = notFound; }}
       if( p_obs_field7 !== '' ){ if( label7 === '' ){ label7 = notFound; }}
       if( p_obs_field8 !== '' ){ if( label8 === '' ){ label8 = notFound; }}
-/*
-      if( label2 === '' ){ label2 = notFound; }
-      if( label3 === '' ){ label3 = notFound; }
-      if( label4 === '' ){ label4 = notFound; }
-      if( label5 === '' ){ label5 = notFound; }
-      if( label6 === '' ){ label6 = notFound; }
-      if( label7 === '' ){ label7 = notFound; }
-      if( label8 === '' ){ label8 = notFound; } */
 
       if( field_array.length > 4 ){
           faddelem('p',document.body,{innerHTML:'<span id="h2">Observation Field Viewer</span><span id="dltest"><table id="tablekey">'
@@ -595,173 +587,6 @@ function fresults(xobj) {
                  }
             }
          }  
-
-         // look for mismatch of merged obs fields...
- /*        if( p_operator === 'merge' ){
-             // if 1 is not equal to null make sure there aren't mismatches with 2, 3, or 4.
-             if( ofvs1 !== '' ){
-                 if( ofvs2 !== '' ){
-                     if( ofvs1.value !== ofvs2.value ){
-                         mismatch = 'yes';
-                     } 
-                 }
-                 if( ofvs3 !== '' ){
-                     if( ofvs1.value !== ofvs3.value ){
-                         mismatch = 'yes';
-                     }
-                 } 
-                 if( ofvs4 !== '' ){
-                     if( ofvs1.value !== ofvs4.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-                 if( ofvs5 !== '' ){
-                     if( ofvs1.value !== ofvs5.value ){
-                         mismatch = 'yes';
-                     } 
-                 }
-                 if( ofvs6 !== '' ){
-                     if( ofvs1.value !== ofvs6.value ){
-                         mismatch = 'yes';
-                     }
-                 } 
-                 if( ofvs7 !== '' ){
-                     if( ofvs1.value !== ofvs7.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-                 if( ofvs8 !== '' ){
-                     if( ofvs1.value !== ofvs8.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-             }
-
-             // if 2 is not equal to null, make sure there aren't mismatches with 3 or 4.
-             if( ofvs2 !== '' ) {
-                 if( ofvs3 !== '' ){
-                     if( ofvs2.value !== ofvs3.value ){
-                         mismatch = 'yes';
-                     }
-                 } 
-                 if( ofvs4 !== '' ){
-                     if( ofvs2.value !== ofvs4.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-                 if( ofvs5 !== '' ){
-                     if( ofvs2.value !== ofvs5.value ){
-                         mismatch = 'yes';
-                     }
-                 } 
-                 if( ofvs6 !== '' ){
-                     if( ofvs2.value !== ofvs6.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-                 if( ofvs7 !== '' ){
-                     if( ofvs2.value !== ofvs7.value ){
-                         mismatch = 'yes';
-                     }
-                 } 
-                 if( ofvs8 !== '' ){
-                     if( ofvs2.value !== ofvs8.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-             } 
-          
-             if( ofvs3 !== '' ) {
-                 if( ofvs4 !== '' ){
-                     if( ofvs3.value !== ofvs4.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-                 if( ofvs5 !== '' ){
-                     if( ofvs3.value !== ofvs5.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-                 if( ofvs6 !== '' ){
-                     if( ofvs3.value !== ofvs6.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-                 if( ofvs7 !== '' ){
-                     if( ofvs3.value !== ofvs7.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-                 if( ofvs8 !== '' ){
-                     if( ofvs3.value !== ofvs8.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-             }
-          
-             if( ofvs4 !== '' ) {
-                 if( ofvs5 !== '' ){
-                     if( ofvs4.value !== ofvs5.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-                 if( ofvs6 !== '' ){
-                     if( ofvs4.value !== ofvs6.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-                 if( ofvs7 !== '' ){
-                     if( ofvs4.value !== ofvs7.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-                 if( ofvs8 !== '' ){
-                     if( ofvs4.value !== ofvs8.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-             }
-          
-             if( ofvs5 !== '' ) {
-                 if( ofvs6 !== '' ){
-                     if( ofvs5.value !== ofvs6.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-                 if( ofvs7 !== '' ){
-                     if( ofvs5.value !== ofvs7.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-                 if( ofvs8 !== '' ){
-                     if( ofvs5.value !== ofvs8.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-             }
-
-             if( ofvs6 !== '' ) {
-                 if( ofvs7 !== '' ){
-                     if( ofvs6.value !== ofvs7.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-                 if( ofvs8 !== '' ){
-                     if( ofvs6.value !== ofvs8.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-             }
-
-             if( ofvs7 !== '' ) {
-                 if( ofvs8 !== '' ){
-                     if( ofvs7.value !== ofvs8.value ){
-                         mismatch = 'yes';
-                     }
-                 }
-             }
-         }
-         */
        
          let emojiTitle = 'Merged Observation Fields:&#10;';
          if( ofvs1 !== '' ){ emojiTitle    += (ofvs1.field_id + ' ' + field1 + '&#10;'); }
@@ -796,11 +621,7 @@ function fresults(xobj) {
          }
 
          let taxon = '';
-         //if( p_taxon_id === '' ){
-             taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
-         /*} else {
-             taxon = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';        
-         }*/
+         taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
 
          if( p_operator === 'merge' ){
              values = [
