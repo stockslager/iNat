@@ -76,6 +76,10 @@ let p_obs_field1 = winurlparams.get('obs_field1') || '';
 let p_obs_field2 = winurlparams.get('obs_field2') || '';
 let p_obs_field3 = winurlparams.get('obs_field3') || '';
 let p_obs_field4 = winurlparams.get('obs_field4') || '';
+let p_obs_field5 = winurlparams.get('obs_field5') || '';
+let p_obs_field6 = winurlparams.get('obs_field6') || '';
+let p_obs_field7 = winurlparams.get('obs_field7') || '';
+let p_obs_field8 = winurlparams.get('obs_field8') || '';
 let p_project_id = winurlparams.get('project_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
@@ -173,15 +177,8 @@ function fresults(xobj) {
       let toggle = '';
       let warning = '';
 
-      let label1 = '';
-      let label2 = '';
-      let label3 = '';
-      let label4 = '';
-      let foundLabel1 = '';
-      let foundLabel2 = '';
-      let foundLabel3 = '';
-      let foundLabel4 = '';
-      let labels = [];
+      let label1 = '';      let label2 = '';      let label3 = '';      let label4 = '';      let label5 = '';      let label6 = '';      let label7 = '';      let label8 = '';
+      let foundLabel1 = ''; let foundLabel2 = ''; let foundLabel3 = ''; let foundLabel4 = ''; let foundLabel5 = ''; let foundLabel6 = ''; let foundLabel7 = ''; let foundLabel8 = '';       let labels = [];
       let datatype = '';
       let mismatch = '';
 
@@ -223,6 +220,38 @@ function fresults(xobj) {
                       }
                       label4 = rec.ofvs[k].name;
                   }
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field5 ){
+                      if( datatype === '' ){
+                          datatype = rec.ofvs[k].datatype;
+                      } else if( datatype !== rec.ofvs[k].datatype ){
+                          mismatch = 'yes';
+                      }
+                      label5 = rec.ofvs[k].name;
+                  }
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field6 ){
+                      if( datatype === '' ){
+                          datatype = rec.ofvs[k].datatype;
+                      } else if( datatype !== rec.ofvs[k].datatype ){
+                          mismatch = 'yes';
+                      }
+                      label6 = rec.ofvs[k].name;
+                  }
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field7 ){
+                      if( datatype === '' ){
+                          datatype = rec.ofvs[k].datatype;
+                      } else if( datatype !== rec.ofvs[k].datatype ){
+                          mismatch = 'yes';
+                      }
+                      label7 = rec.ofvs[k].name;
+                  }
+                  if( rec.ofvs[k].field_id.toString() === p_obs_field8 ){
+                      if( datatype === '' ){
+                          datatype = rec.ofvs[k].datatype;
+                      } else if( datatype !== rec.ofvs[k].datatype ){
+                          mismatch = 'yes';
+                      }
+                      label8 = rec.ofvs[k].name;
+                  }
              }
          }
       }
@@ -237,6 +266,10 @@ function fresults(xobj) {
       if( label2 === '' ){ label2 = notFound; }
       if( label3 === '' ){ label3 = notFound; }
       if( label4 === '' ){ label4 = notFound; }
+      if( label5 === '' ){ label5 = notFound; }
+      if( label6 === '' ){ label6 = notFound; }
+      if( label7 === '' ){ label7 = notFound; }
+      if( label8 === '' ){ label8 = notFound; }
     
       faddelem('p',document.body,{innerHTML:'<span id="h2">Observation Field Viewer</span><span id="dltest"><table id="tablekey">'
          +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
@@ -251,14 +284,14 @@ function fresults(xobj) {
     
          +'</table><span style="padding-right:50px;"></span><table id="tablekey">'
          +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
-         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</td>'
-         +'<td id="tdkey">' + label1.toLowerCase() + '</td></tr>'
-         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field2,p_obs_field2) + '</td>'
-         +'<td id="tdkey">' + label2.toLowerCase() + '</td></tr>'
-         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field3,p_obs_field3) + '</td>'
-         +'<td id="tdkey">' + label3.toLowerCase() + '</td></tr>'
-         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field4,p_obs_field4) + '</td>'
-         +'<td id="tdkey">' + label4.toLowerCase() + '</td></tr>'
+         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field5,p_obs_field5) + '</td>'
+         +'<td id="tdkey">' + label5.toLowerCase() + '</td></tr>'
+         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field6,p_obs_field6) + '</td>'
+         +'<td id="tdkey">' + label6.toLowerCase() + '</td></tr>'
+         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field7,p_obs_field7) + '</td>'
+         +'<td id="tdkey">' + label7.toLowerCase() + '</td></tr>'
+         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field8,p_obs_field8) + '</td>'
+         +'<td id="tdkey">' + label8.toLowerCase() + '</td></tr>'
          +'</table></span>'});
     
      // faddelem('h2',document.body,{innerText:'Observation Field Viewer'});
@@ -270,16 +303,9 @@ function fresults(xobj) {
           toggle = furl(github_root+'configurable_obs_field_table.html'+opts+'&'+p_field+'='+p_field_value+'&taxon_id='+p_taxon_id+'&operator=merge','merge');
       }           
 
-      // if some of the observation fields are of different types, don't allow a merge.
-//      if( mismatch === 'yes' ){
-          faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+ ' <br/>'
+      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+ ' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
-/*      } else {
-          faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+ ' ( ' + toggle + ' )' + warning + ' <br/>'
-             +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
-      }*/
 
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
@@ -291,8 +317,7 @@ function fresults(xobj) {
                {innerText:'Photo'},
                {innerText:'Name'}, 
                {innerText:'Obs Photo'},
-               {innerText:('Merged Fields (see upper right)')}, {innerText:''}, {innerText:''}, {innerText:''},
-               {innerText:'User Photo'},
+               {innerText:('Merged Fields (see upper right)')}, {innerText:''}, {innerText:''}, {innerText:''}, {innerText:''}, {innerText:''}, {innerText:''}, {innerText:''},               {innerText:'User Photo'},
                {innerText:'User Login'},
           ];
       } else {
@@ -301,7 +326,7 @@ function fresults(xobj) {
                {innerText:'Photo'},
                {innerText:'Name'}, 
                {innerText:'Obs Photo'},
-               {innerText:label1}, {innerText:label2}, {innerText:label3}, {innerText:label4},
+               {innerText:label1}, {innerText:label2}, {innerText:label3}, {innerText:label4}, {innerText:label5}, {innerText:label6}, {innerText:label7}, {innerText:label8},
                {innerText:'User Photo'},
                {innerText:'User Login'},
           ];
@@ -331,20 +356,11 @@ function fresults(xobj) {
              }
          }
 
-         let field1 = '';
-         let field2 = '';
-         let field3 = '';
-         let field4 = '';
+         let field1 = ''; let field2 = ''; let field3 = ''; let field4 = ''; let field5 = ''; let field6 = ''; let field7 = ''; let field8 = '';
+         let param1 = ''; let param2 = ''; let param3 = ''; let param4 = ''; let param5 = ''; let param6 = ''; let param7 = ''; let param8 = '';
+         let ofvs1 = '';  let ofvs2 = '';  let ofvs3 = '';  let ofvs4 = '';  let ofvs5 = '';  let ofvs6 = '';  let ofvs7 = '';  let ofvs8 = '';
          let displayName = '';
          let displayTaxonName = '';
-         let param1 = '';
-         let param2 = '';
-         let param3 = '';
-         let param4 = '';
-         let ofvs1 = '';
-         let ofvs2 = '';
-         let ofvs3 = '';
-         let ofvs4 = '';
           
         if(rec.ofvs&&rec.ofvs.length>0){
             for( let j=0; j<rec.ofvs.length; j++ ){
@@ -434,6 +450,91 @@ function fresults(xobj) {
                          }
                      }
                  }
+                 if( rec.ofvs[j].field_id.toString() === p_obs_field5 ){
+                     ofvs5 = rec.ofvs[j];
+                     field5 = rec.ofvs[j].value.toLowerCase();
+                     if( p_operator === 'merge' ){
+                         displayName = rec.ofvs[j].value.toLowerCase();
+                     } else {
+                         param = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
+                         displayName = rec.ofvs[j].value.toLowerCase();
+                     }
+                     if( rec.ofvs[j].taxon ){
+                         let name  = rec.ofvs[j].taxon.name || '';
+                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                         if( p_operator === 'merge' ){
+                             field5 = name;
+                             displayCommonName = cname.toLowerCase();
+                             displayTaxonName = name;
+                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         } else {
+                             field5 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         }
+                     }
+                 }
+                 if( rec.ofvs[j].field_id.toString() === p_obs_field6 ){
+                     ofvs6 = rec.ofvs[j];
+                     field6 = rec.ofvs[j].value.toLowerCase();
+                     if( p_operator === 'merge' ){
+                         displayName = rec.ofvs[j].value.toLowerCase();
+                     } else {
+                         param2 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
+                     }
+                     if( rec.ofvs[j].taxon ){
+                         let name  = rec.ofvs[j].taxon.name || '';
+                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                         if( p_operator === 'merge' ){
+                             field6 = name;
+                             displayCommonName = cname.toLowerCase();
+                             displayTaxonName = name;
+                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         } else {
+                             field6 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         }
+                     }
+                 }
+                 if( rec.ofvs[j].field_id.toString() === p_obs_field7 ){
+                     ofvs7 = rec.ofvs[j];
+                     field7 = rec.ofvs[j].value.toLowerCase();
+                     if( p_operator === 'merge' ){
+                         displayName = rec.ofvs[j].value.toLowerCase();
+                     } else {
+                         param7 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
+                     }
+                     if( rec.ofvs[j].taxon ){
+                         let name  = rec.ofvs[j].taxon.name || '';
+                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                         if( p_operator === 'merge' ){
+                             field7 = name;
+                             displayCommonName = cname.toLowerCase();
+                             displayTaxonName = name;
+                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         } else {
+                             field7 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         }
+                     }
+                 }
+                 if( rec.ofvs[j].field_id.toString() === p_obs_field8 ){
+                     ofvs8 = rec.ofvs[j];
+                     field8 = rec.ofvs[j].value.toLowerCase();
+                     if( p_operator === 'merge' ){
+                         displayName = rec.ofvs[j].value.toLowerCase();
+                     } else {
+                         param8 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
+                     }
+                     if( rec.ofvs[j].taxon ){
+                         let name  = rec.ofvs[j].taxon.name || '';
+                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                         if( p_operator === 'merge' ){
+                             field8 = name;
+                             displayCommonName = cname.toLowerCase();
+                             displayTaxonName = name;
+                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         } else {
+                             field8 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                         }
+                     }
+                 }
             }
          }  
 
@@ -457,6 +558,26 @@ function fresults(xobj) {
                          mismatch = 'yes';
                      }
                  }
+                 if( ofvs5 !== '' ){
+                     if( ofvs1.value !== ofvs5.value ){
+                         mismatch = 'yes';
+                     } 
+                 }
+                 if( ofvs6 !== '' ){
+                     if( ofvs1.value !== ofvs6.value ){
+                         mismatch = 'yes';
+                     }
+                 } 
+                 if( ofvs7 !== '' ){
+                     if( ofvs1.value !== ofvs7.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+                 if( ofvs8 !== '' ){
+                     if( ofvs1.value !== ofvs8.value ){
+                         mismatch = 'yes';
+                     }
+                 }
              }
 
              // if 2 is not equal to null, make sure there aren't mismatches with 3 or 4.
@@ -471,12 +592,113 @@ function fresults(xobj) {
                          mismatch = 'yes';
                      }
                  }
+                 if( ofvs5 !== '' ){
+                     if( ofvs2.value !== ofvs5.value ){
+                         mismatch = 'yes';
+                     }
+                 } 
+                 if( ofvs6 !== '' ){
+                     if( ofvs2.value !== ofvs6.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+                 if( ofvs7 !== '' ){
+                     if( ofvs2.value !== ofvs7.value ){
+                         mismatch = 'yes';
+                     }
+                 } 
+                 if( ofvs8 !== '' ){
+                     if( ofvs2.value !== ofvs8.value ){
+                         mismatch = 'yes';
+                     }
+                 }
              } 
           
-             // if 3 is not equal to null, make sure there aren't mismatches with 4.
              if( ofvs3 !== '' ) {
                  if( ofvs4 !== '' ){
                      if( ofvs3.value !== ofvs4.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+                 if( ofvs5 !== '' ){
+                     if( ofvs3.value !== ofvs5.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+                 if( ofvs6 !== '' ){
+                     if( ofvs3.value !== ofvs6.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+                 if( ofvs7 !== '' ){
+                     if( ofvs3.value !== ofvs7.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+                 if( ofvs8 !== '' ){
+                     if( ofvs3.value !== ofvs8.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+             }
+          
+             if( ofvs4 !== '' ) {
+                 if( ofvs5 !== '' ){
+                     if( ofvs4.value !== ofvs5.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+                 if( ofvs6 !== '' ){
+                     if( ofvs4.value !== ofvs6.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+                 if( ofvs7 !== '' ){
+                     if( ofvs4.value !== ofvs7.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+                 if( ofvs8 !== '' ){
+                     if( ofvs4.value !== ofvs8.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+             }
+          
+             if( ofvs5 !== '' ) {
+                 if( ofvs6 !== '' ){
+                     if( ofvs5.value !== ofvs6.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+                 if( ofvs7 !== '' ){
+                     if( ofvs5.value !== ofvs7.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+                 if( ofvs8 !== '' ){
+                     if( ofvs5.value !== ofvs8.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+             }
+
+             if( ofvs6 !== '' ) {
+                 if( ofvs7 !== '' ){
+                     if( ofvs6.value !== ofvs7.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+                 if( ofvs8 !== '' ){
+                     if( ofvs6.value !== ofvs8.value ){
+                         mismatch = 'yes';
+                     }
+                 }
+             }
+
+             if( ofvs7 !== '' ) {
+                 if( ofvs8 !== '' ){
+                     if( ofvs7.value !== ofvs8.value ){
                          mismatch = 'yes';
                      }
                  }
@@ -488,6 +710,10 @@ function fresults(xobj) {
          if( ofvs2 !== '' ){ emojiTitle    += (ofvs2.field_id + ' ' + field2 + '&#10;'); }
          if( ofvs3 !== '' ){ emojiTitle    += (ofvs3.field_id + ' ' + field3 + '&#10;'); }
          if( ofvs4 !== '' ){ emojiTitle    += (ofvs4.field_id + ' ' + field4 + '&#10;'); }
+         if( ofvs5 !== '' ){ emojiTitle    += (ofvs5.field_id + ' ' + field5 + '&#10;'); }
+         if( ofvs6 !== '' ){ emojiTitle    += (ofvs6.field_id + ' ' + field6 + '&#10;'); }
+         if( ofvs7 !== '' ){ emojiTitle    += (ofvs7.field_id + ' ' + field7 + '&#10;'); }
+         if( ofvs8 !== '' ){ emojiTitle    += (ofvs8.field_id + ' ' + field8 + '&#10;'); }
 
          if( displayTaxonName !== '' ){
              if( mismatch === 'yes' ){
@@ -525,9 +751,7 @@ function fresults(xobj) {
                   {innerHTML:taxon},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:displayName}, 
-                  {innerHTML:''}, 
-                  {innerHTML:''}, 
-                  {innerHTML:''},
+                  {innerHTML:''}, {innerHTML:''}, {innerHTML:''}, {innerHTML:''}, {innerHTML:''}, {innerHTML:''}, {innerHTML:''}, 
                   {innerHTML:user_icon},
                   {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
              ];
@@ -541,6 +765,10 @@ function fresults(xobj) {
                   {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param2+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field2)}, 
                   {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param3+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field3)}, 
                   {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param4+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field4)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param5+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field5)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param6+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field6)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param7+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field7)}, 
+                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param8+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field8)}, 
                   {innerHTML:user_icon},
                   {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
              ];
