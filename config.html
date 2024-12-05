@@ -36,8 +36,9 @@
    }
    #key { text-decoration:underline; font: 18px Sans-Serif; }
    #main { width:100%; }
-   dl { float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
-   dt { position:-webkit-sticky /*Safari*/; position:sticky; }
+   #dlkey { float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }   
+   dl { }
+   dt {  }
    dd { margin: 0; grid-column-start: 2;}   
    table, td, th { border-collapse:collapse; margin:0; padding:4px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
@@ -251,7 +252,7 @@ function fresults(xobj) {
       }
     
       // display the "key" for the obs fields
-      faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">obs id</span></dt> <dd><span id="key">'+merged+'</span></dd>'
+      faddelem('p',document.body,{innerHTML:'<dl id="dlkey"><dt><span id="key">obs id</span></dt> <dd><span id="key">'+merged+'</span></dd>'
            + '<dt>' + furl(root_obs_fields+p_obs_field1,p_obs_field1)+'</dt> <dd>' 
            + label1.toLowerCase() + '</dd>'
            + '<dt>' + furl(root_obs_fields+p_obs_field2,p_obs_field2)+'</dt> <dd>' 
