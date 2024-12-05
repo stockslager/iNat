@@ -87,19 +87,19 @@ let p_obs_field_array = winurlparams.get('obs_fields') || '';
 let p_field = '';
 let p_field_value = '';
 let opts = '';
-let arr = [];
+let field_array = [];
 
 if( p_obs_field_array !== '' ){
-    arr = p_obs_field_array.split(",");
+    field_array = p_obs_field_array.split(",");
 
-    if( arr[0] !== null ){ p_obs_field1 = arr[0]; }
-    if( arr[1] !== null ){ p_obs_field2 = arr[1]; }
-    if( arr[2] !== null ){ p_obs_field3 = arr[2]; }
-    if( arr[3] !== null ){ p_obs_field4 = arr[3]; }
-    if( arr[4] !== null ){ p_obs_field5 = arr[4]; }
-    if( arr[5] !== null ){ p_obs_field6 = arr[5]; }
-    if( arr[6] !== null ){ p_obs_field7 = arr[6]; }
-    if( arr[7] !== null ){ p_obs_field8 = arr[7]; }
+    if( field_array[0] !== null ){ p_obs_field1 = field_array[0]; }
+    if( field_array[1] !== null ){ p_obs_field2 = field_array[1]; }
+    if( field_array[2] !== null ){ p_obs_field3 = field_array[2]; }
+    if( field_array[3] !== null ){ p_obs_field4 = field_array[3]; }
+    if( field_array[4] !== null ){ p_obs_field5 = field_array[4]; }
+    if( field_array[5] !== null ){ p_obs_field6 = field_array[5]; }
+    if( field_array[6] !== null ){ p_obs_field7 = field_array[6]; }
+    if( field_array[7] !== null ){ p_obs_field8 = field_array[7]; }
 }
 const str = "apple,banana,orange"; 
 const fruits = str.split(",");
@@ -287,32 +287,44 @@ function fresults(xobj) {
       if( label6 === '' ){ label6 = notFound; }
       if( label7 === '' ){ label7 = notFound; }
       if( label8 === '' ){ label8 = notFound; }
-    
-      faddelem('p',document.body,{innerHTML:'<span id="h2">Observation Field Viewer</span><span id="dltest"><table id="tablekey">'
-         +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
-         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</td>'
-         +'<td id="tdkey">' + label1.toLowerCase() + '</td></tr>'
-         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field2,p_obs_field2) + '</td>'
-         +'<td id="tdkey">' + label2.toLowerCase() + '</td></tr>'
-         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field3,p_obs_field3) + '</td>'
-         +'<td id="tdkey">' + label3.toLowerCase() + '</td></tr>'
-         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field4,p_obs_field4) + '</td>'
-         +'<td id="tdkey">' + label4.toLowerCase() + '</td></tr>'
-    
-         +'</table><span style="padding-right:50px;"></span><table id="tablekey">'
-         +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
-         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field5,p_obs_field5) + '</td>'
-         +'<td id="tdkey">' + label5.toLowerCase() + '</td></tr>'
-         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field6,p_obs_field6) + '</td>'
-         +'<td id="tdkey">' + label6.toLowerCase() + '</td></tr>'
-         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field7,p_obs_field7) + '</td>'
-         +'<td id="tdkey">' + label7.toLowerCase() + '</td></tr>'
-         +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field8,p_obs_field8) + '</td>'
-         +'<td id="tdkey">' + label8.toLowerCase() + '</td></tr>'
-         +'</table></span>'});
-    
-     // faddelem('h2',document.body,{innerText:'Observation Field Viewer'});
 
+      if( field_array.length > 4 ){
+          faddelem('p',document.body,{innerHTML:'<span id="h2">Observation Field Viewer</span><span id="dltest"><table id="tablekey">'
+            +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</td>'
+            +'<td id="tdkey">' + label1.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field2,p_obs_field2) + '</td>'
+            +'<td id="tdkey">' + label2.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field3,p_obs_field3) + '</td>'
+            +'<td id="tdkey">' + label3.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field4,p_obs_field4) + '</td>'
+            +'<td id="tdkey">' + label4.toLowerCase() + '</td></tr>'
+    
+            +'</table></span><span style="padding-right:50px;"></span><table id="tablekey">'
+            +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field5,p_obs_field5) + '</td>'
+            +'<td id="tdkey">' + label5.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field6,p_obs_field6) + '</td>'
+            +'<td id="tdkey">' + label6.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field7,p_obs_field7) + '</td>'
+            +'<td id="tdkey">' + label7.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field8,p_obs_field8) + '</td>'
+            +'<td id="tdkey">' + label8.toLowerCase() + '</td></tr>'
+            +'</table></span>'});
+      } else {
+          faddelem('p',document.body,{innerHTML:'<span id="h2">Observation Field Viewer</span><span id="dltest"><table id="tablekey">'
+            +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</td>'
+            +'<td id="tdkey">' + label1.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field2,p_obs_field2) + '</td>'
+            +'<td id="tdkey">' + label2.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field3,p_obs_field3) + '</td>'
+            +'<td id="tdkey">' + label3.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field4,p_obs_field4) + '</td>'
+            +'<td id="tdkey">' + label4.toLowerCase() + '</td></tr>'
+            +'</table></span>'});     
+      }
+    
       if( p_operator === 'merge' ){
           toggle  = furl(github_root+'configurable_obs_field_table.html'+opts+'&'+p_field+'='+p_field_value+'&taxon_id='+p_taxon_id,'un-merge'); 
           warning = '  warning: merging synonymous observation fields may result in overlayed field values during display if values are different.'
