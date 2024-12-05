@@ -401,9 +401,26 @@ function fresults(xobj) {
          let ofvs1 = '';  let ofvs2 = '';  let ofvs3 = '';  let ofvs4 = '';  let ofvs5 = '';  let ofvs6 = '';  let ofvs7 = '';  let ofvs8 = '';
          let displayName = '';
          let displayTaxonName = '';
+         let mismatch = '';
           
         if(rec.ofvs&&rec.ofvs.length>0){
             for( let j=0; j<rec.ofvs.length; j++ ){
+
+                 if( rec.ofvs[j].field_id.toString() === p_obs_field1 || 
+                     rec.ofvs[j].field_id.toString() === p_obs_field2 ||      
+                     rec.ofvs[j].field_id.toString() === p_obs_field3 ||     
+                     rec.ofvs[j].field_id.toString() === p_obs_field4 ||      
+                     rec.ofvs[j].field_id.toString() === p_obs_field5 ||    
+                     rec.ofvs[j].field_id.toString() === p_obs_field6 ||      
+                     rec.ofvs[j].field_id.toString() === p_obs_field7 ||     
+                     rec.ofvs[j].field_id.toString() === p_obs_field8 )   {
+
+                     if( matchValue === '' ){
+                         matchValue += rec.ofvs[j].value;
+                     } else if( matchValue !== rec.ofvs[j].value ){
+                         mismatch = 'yes';
+                     }
+                 }
 
                  if( rec.ofvs[j].field_id.toString() === p_obs_field1 ){
                      ofvs1 = rec.ofvs[j];
@@ -579,8 +596,7 @@ function fresults(xobj) {
          }  
 
          // look for mismatch of merged obs fields...
-         let mismatch = '';
-         if( p_operator === 'merge' ){
+ /*        if( p_operator === 'merge' ){
              // if 1 is not equal to null make sure there aren't mismatches with 2, 3, or 4.
              if( ofvs1 !== '' ){
                  if( ofvs2 !== '' ){
@@ -744,6 +760,7 @@ function fresults(xobj) {
                  }
              }
          }
+         */
        
          let emojiTitle = 'Merged Observation Fields:&#10;';
          if( ofvs1 !== '' ){ emojiTitle    += (ofvs1.field_id + ' ' + field1 + '&#10;'); }
