@@ -89,8 +89,9 @@ let spiders  = furl(github_root+'configurable_obs_field_table.html?project_id=15
 let fungi    = furl(github_root+'configurable_obs_field_table.html?project_id=152539&iconic_taxa=fungi&ofv_datatype=taxon&obs_field1=7623&obs_field2=8581&obs_field3=7807&obs_field4=254&operator=merge','fungi'); 
 let bees     = furl(github_root+'configurable_obs_field_table.html?project_id=152539&iconic_taxa=insecta&taxon_id=630955&obs_field1=7623&obs_field2=498&obs_field3=4935&obs_field4=7807&ofv_datatype=taxon&operator=merge','bees only'); 
 let butter   = furl(github_root+'configurable_obs_field_table.html?project_id=152539&iconic_taxa=insecta&taxon_id=47157&obs_field1=7623&obs_field2=498&obs_field3=4935&obs_field4=7807&ofv_datatype=taxon&operator=merge','butterflies only'); 
-let larva    = furl(github_root+'configurable_obs_field_table.html?project_id=152539&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=6&obs_field1=7623&obs_field2=8581&obs_field3=254&obs_field4=7807&ofv_datatype=taxon&operator=merge','larva only'); 
-  
+let larva    = furl(github_root+'configurable_obs_field_table.html?project_id=152539&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=6&obs_field1=7623&obs_field2=8581&obs_field3=254&obs_field4=7807&ofv_datatype=taxon&operator=merge','larvae only'); 
+let adult    = furl(github_root+'configurable_obs_field_table.html?project_id=152539&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=2&obs_field1=7623&obs_field2=8581&obs_field3=254&obs_field4=7807&ofv_datatype=taxon&operator=merge','adults only'); 
+let pupa     = furl(github_root+'configurable_obs_field_table.html?project_id=152539&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=4&obs_field1=7623&obs_field2=8581&obs_field3=254&obs_field4=7807&ofv_datatype=taxon&operator=merge','pupae only'); 
   
 faddelem('p',document.body,{innerHTML:'<dl>'
             + '<dt></dt><span id="key"><dd>Plants Visited</dd></span>'
@@ -99,7 +100,9 @@ faddelem('p',document.body,{innerHTML:'<dl>'
             + '<dt></dt><span id="key"><dd>Visitors to the Plants</dd></span>'
             + '<dt></dt><span id="tab1"><dd>'+insects+'</dd></span>'
             + '<dt></dt><span id="tab2"><dd>'+butter+'</dd></span>'
+            + '<dt></dt><span id="tab3"><dd>'+adult+'</dd></span>'
             + '<dt></dt><span id="tab3"><dd>'+larva+'</dd></span>'
+            + '<dt></dt><span id="tab3"><dd>'+pupa+'</dd></span>'
             + '<dt></dt><span id="tab2"><dd>'+bees+'</dd></span>'
             + '<dt></dt><span id="tab1"><dd>'+birds+'</dd></span>'
             + '<dt></dt><span id="tab1"><dd>'+mammals+'</dd></span>'
