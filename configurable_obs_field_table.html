@@ -357,7 +357,16 @@ function fresults(xobj) {
       } else {
           faddelem('p',document.body,{innerHTML:'<span id="h2">Observation Field Viewer</span>'});
       }
-    
+
+      if( p_obs_field1 !== '' ){ if( label1 === notFound ){ label1 = ''; }}
+      if( p_obs_field2 !== '' ){ if( label2 === notFound ){ label2 = ''; }}
+      if( p_obs_field3 !== '' ){ if( label3 === notFound ){ label3 = ''; }}
+      if( p_obs_field4 !== '' ){ if( label4 === notFound ){ label4 = ''; }}
+      if( p_obs_field5 !== '' ){ if( label5 === notFound ){ label5 = ''; }}
+      if( p_obs_field6 !== '' ){ if( label6 === notFound ){ label6 = ''; }}
+      if( p_obs_field7 !== '' ){ if( label7 === notFound ){ label7 = ''; }}
+      if( p_obs_field8 !== '' ){ if( label8 === notFound ){ label8 = ''; }}
+ 
       if( p_operator === 'merge' ){
           toggle  = furl(github_root+'configurable_obs_field_table.html'+opts+'&'+p_field+'='+p_field_value+'&taxon_id='+p_taxon_id,'un-merge'); 
           warning = '  warning: merging synonymous observation fields may result in overlayed field values during display if values are different.'
