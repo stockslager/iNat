@@ -207,7 +207,6 @@ function fresults(xobj) {
 
       for (let l=0; l<results.length; l++) {
           let rec = results[l];
-          let mismatch = '';
           let matchValue = '';
        
           // find obs field labels
@@ -417,10 +416,28 @@ function fresults(xobj) {
          let ofvs1 = '';  let ofvs2 = '';  let ofvs3 = '';  let ofvs4 = '';  let ofvs5 = '';  let ofvs6 = '';  let ofvs7 = '';  let ofvs8 = '';
          let displayName = '';
          let displayTaxonName = '';
+         let mismatch = '';
           
         if(rec.ofvs&&rec.ofvs.length>0){
             for( let j=0; j<rec.ofvs.length; j++ ){
+                  let matchValue = '';
 
+                  if( rec.ofvs[j].field_id.toString() === p_obs_field1 || 
+                      rec.ofvs[j].field_id.toString() === p_obs_field2 ||      
+                      rec.ofvs[j].field_id.toString() === p_obs_field3 ||     
+                      rec.ofvs[j].field_id.toString() === p_obs_field4 ||      
+                      rec.ofvs[j].field_id.toString() === p_obs_field5 ||    
+                      rec.ofvs[j].field_id.toString() === p_obs_field6 ||      
+                      rec.ofvs[j].field_id.toString() === p_obs_field7 ||     
+                      rec.ofvs[j].field_id.toString() === p_obs_field8 )   {
+
+                      if( matchValue === '' ){
+                          matchValue += rec.ofvs[j].value;
+                      } else if( matchValue !== rec.ofvs[j].value ){
+                          mismatch = 'yes';
+                      }
+                  }
+             
                  if( rec.ofvs[j].field_id.toString() === p_obs_field1 ){
                      ofvs1 = rec.ofvs[j];
                      field1 = rec.ofvs[j].value.toLowerCase();
