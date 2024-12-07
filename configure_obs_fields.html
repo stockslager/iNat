@@ -238,13 +238,23 @@ function fresults(xobj) {
 
                   if( field !== '' ){
                       let brow = faddelem('tr',tbody);
-                      values = [
-                         {innerText:i+1},
-                         {innerHTML:tax_photo},
-                         {innerHTML:taxon},
-                         {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                         {innerHTML:field}, 
-                      ];
+                      if( j === 0 ){
+                          values = [
+                             {innerText:i+1},
+                             {innerHTML:tax_photo},
+                             {innerHTML:taxon},
+                             {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                             {innerHTML:field}, 
+                          ];
+                      } else {
+                          values = [
+                             {innerText:''},
+                             {innerHTML:''},
+                             {innerHTML:''},
+                             {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                             {innerHTML:field}, 
+                          ];
+                      }
                       faddelems('td',brow,values);
                   } 
              }
