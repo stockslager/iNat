@@ -206,7 +206,6 @@ function fresults(xobj) {
       let displayCount = 0;
       
       for (let i=0; i<results.length; i++) {
-         let brow = faddelem('tr',tbody);
          let rec = results[i];
          let tax_name = '';
          let pref_tax_name = '';
@@ -238,6 +237,7 @@ function fresults(xobj) {
                   let taxon = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';         
 
                   if( field !== '' ){
+                      let brow = faddelem('tr',tbody);
                       values = [
                          {innerText:i+1},
                          {innerHTML:tax_photo},
@@ -245,8 +245,8 @@ function fresults(xobj) {
                          {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                          {innerHTML:field}, 
                       ];
+                      faddelems('td',brow,values);
                   } 
-                  faddelems('td',brow,values);
              }
           }  
       };
