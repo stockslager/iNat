@@ -223,18 +223,8 @@ function fresults(xobj) {
          }
 
          let field = ''; 
+         let defList = '';
          let taxon = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';         
-
-         // add observation row.
-         let brow = faddelem('tr',tbody);
-         let values = [
-                {innerText:i+1},
-                {innerHTML:tax_photo},
-                {innerHTML:taxon},
-                {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                {innerHTML:''},
-         ];
-         faddelems('td',brow,values);
        
          if(rec.ofvs&&rec.ofvs.length>0){
              for( let j=0; j<rec.ofvs.length; j++ ){
@@ -246,21 +236,24 @@ function fresults(xobj) {
                       field = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                   }
                   let values = [];
-
+              
                   // add obs field row.
                   if( field !== '' ){
-                      let brow = faddelem('tr',tbody);
-                      values = [
-                             {innerText:''},
-                             {innerHTML:''},
-                             {innerHTML:''},
-                             {innerHTML:''},
-                             {innerHTML:field}, 
-                      ];
-                      faddelems('td',brow,values);
+                      defList += ('<dt>'+rec.ofvs[j].name+'</dt> <dd>'+field+'</dd>');
                   } 
              }
-          }  
+         } 
+         // add observation row.
+         let brow = faddelem('tr',tbody);
+         let values = [
+                {innerText:i+1},
+                {innerHTML:tax_photo},
+                {innerHTML:taxon},
+                {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                {innerHTML:('<dl>'+defList+'</dl>')},
+         ];
+         faddelems('td',brow,values);
+
       };
 
       // buttons to go to prev or next page
