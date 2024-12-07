@@ -77,13 +77,14 @@ let icon = 'https://static.inaturalist.org/projects/152539-icon-span2.?173037147
 faddelem('h2',document.body,{innerHTML:'<div class="box"><img class="photo" src="'+icon+'"> <span>'+ '  Yard Project Dashboard</span></div>'});  
 
 // observation exclusion list (not_id list) for each iconic taxa...
-let notBirds   = '119609973,118527519,233728903,218384446,215394847,213574178,205886725,205715997,138789558';
+let notInsects = '233728903,218384446,215394847,213574178,205886725,205715997,138789558';
+let notBirds   = '119609973,118527519';
 let notSpiders = '232905310,125168044,123407637,123310333';
 let notBees    = '233728903,218384446,215394847,213574178,205886725,205715997,138789558';
 let notHerps   = '144428711';
   
 let plantIns = furl(github_root+'rewild_plants_visited.html?project_id='+p_project_id+'&g_list=4484313&s_list=4484172&project_title=Cincinnati%20Re-Wild', 'plant inspector');
-let insects  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499&ofv_datatype=taxon&operator=merge','insects'); 
+let insects  = furl(github_root+'configurable_obs_field_table.html?not_id='+notInsects+'&project_id='+p_project_id+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499&ofv_datatype=taxon&operator=merge','insects'); 
 let birds    = furl(github_root+'configurable_obs_field_table.html?not_id='+notBirds+'&project_id='+p_project_id+'&iconic_taxa=aves&obs_fields=7623,8581&ofv_datatype=taxon&operator=merge','birds'); 
 let mammals  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&iconic_taxa=mammalia&ofv_datatype=taxon&obs_fields=8581,7623&operator=merge','mammals'); 
 let herps    = furl(github_root+'configurable_obs_field_table.html?not_id='+notHerps+'&project_id='+p_project_id+'&iconic_taxa=reptilia,amphibia&ofv_datatype=taxon&obs_fields=8581,7623&operator=merge','herps'); 
