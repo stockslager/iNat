@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Obs Field Table" />
+<title>Obs Field Table</title>
+<style>
+   :root { 
+      background: var(--color-base);
+      color: var(--color-text);
+      font: 14px Sans-Serif;
+      --color-base: white;
+      --color-alt: whitesmoke;
+      --color-brand: forestgreen;
+      --color-text: black;
+      --color-text-invert: white;
+      --color-text-link: royalblue;
+      --color-border: lightgray;
+      --color-hover: lightgray;
+      --color-base-translucent: rgba(255,255,255,0.85);
+   }
+   @media (prefers-color-scheme: dark) {
+      :root {
+         --color-base: black;
+         --color-alt: #171717;
+         --color-brand: forestgreen;
+         --color-text: #bababa;
+         --color-text-invert: black;
+         --color-text-link: cornflowerblue;
+         --color-border: #444;
+         --color-hover: #444;
+         --color-base-translucent: rgba(0,0,0,0.85);
+      }
+   }
+   #dltest { float:right; width:fit-content; display: inline-table; justify-content:start; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }
+   #itable { float:right; width:fit-content; display: inline-table; justify-content:start; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }   
+   #key { text-decoration:underline; font: 16px Sans-Serif; padding:0; padding-right: 25px; }
+   #tablekey { display:inline-table; }
+   #trkey { padding:0; background:var(--color-base); border:none; border-collapse:collapse; }
+   #tdkey { padding:0; padding-right: 25px; }
+   #main { width:100%; }
+   #h2 { font-weight:bold; font-size:20px; }
+   table, td, th { border-collapse:collapse; margin:0; padding:4px; }
+   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
+   th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
+   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }
+   tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
+   tr:nth-child(even) { background:var(--color-base); }
+   .tar { text-align:right; }
+   .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
+   .icon { height:48px; width:48px; border-radius:50%; }
+   .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
+   .flowericon { padding-left:5%; font-size:14px; white-space: nowrap; font-style:normal; }
+   .photo { height:64px; width:64px; border-radius: 5px 5px 5px 5px; }
+   img { margin:0; padding:0; border:0; }
+   a { text-decoration:none; color:var(--color-text-link); }
+   a:hover { background:var(--color-hover); }
+   #nav { margin-left:-8px; position:-webkit-sticky /*Safari*/; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
+   @media print { #nav { display:none; } } 
+   .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
+   .button { background:var(--color-alt); }
+   .button_inactive { background:none; color:var(--color-border); }
+   .bin_true { text-decoration: underline wavy rgba(34,139,34,0.35); }
+   .bin_false { text-decoration: underline wavy rgba(178,34,34,0.35); }
+</style>
+</head>
+
+<body>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let p_project_id = winurlparams.get('project_id') || '';
+
+winurlparams.delete('per_page');
+winurlparams.append('per_page','50');
+ 
+winurlparams.delete('options');
+let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
+winurlparams.delete('idextra_user_id');
+let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
+winurlparams.delete('photo_curl_filename_prefix');
+
+let apibase = 'https://api.inaturalist.org/v1/observations';
+let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
+
+</script> 
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
+<script> 
+
+if (winurlsearchstr==='' || p_project_id === '') {
+   let instructions = [
+      {innerText:'This page requires a project_id argument.  Add ?project_id=12345678 to the end of the url.'},
+   ];
+   faddelems('p',document.body,instructions);
+}
+else {
+   fetch(apiurl)
+   .then((response) => {
+      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+      return response.json();
+   })
+   .then((data) => { fresults(data); })
+   .catch((err) => {
+      console.error(err.message);
+      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+   });
+};
+   
+function fresults(xobj) {
+   let results = xobj.results;
+   if (results) {
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+
+      let label1 = '';      let label2 = '';      let label3 = '';      let label4 = '';      let label5 = '';      let label6 = '';      let label7 = '';      let label8 = '';
+      let labels = [];
+      let datatype = '';
+  
+      for (let l=0; l<results.length; l++) {
+          let rec = results[l];
+          let matchValue = '';
+       
+          // find obs field labels
+          if(rec.ofvs&&rec.ofvs.length>0){
+             for( let k=0; k<rec.ofvs.length; k++ ){
+
+                      if( datatype === '' ){
+                          datatype = rec.ofvs[k].datatype;
+                      } 
+                      label1 = rec.ofvs[k].name;
+             }
+          }
+      }
+
+/*
+      if( field_array.length > 4 ){
+          faddelem('p',document.body,{innerHTML:'<span id="h2">Observation Field Viewer</span><span id="dltest"><table id="tablekey">'
+            +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</td>'
+            +'<td id="tdkey">' + label1.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field2,p_obs_field2) + '</td>'
+            +'<td id="tdkey">' + label2.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field3,p_obs_field3) + '</td>'
+            +'<td id="tdkey">' + label3.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field4,p_obs_field4) + '</td>'
+            +'<td id="tdkey">' + label4.toLowerCase() + '</td></tr>'
+    
+            +'</table><span style="padding-right:50px;"></span><table id="tablekey">'
+            +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field5,p_obs_field5) + '</td>'
+            +'<td id="tdkey">' + label5.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field6,p_obs_field6) + '</td>'
+            +'<td id="tdkey">' + label6.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field7,p_obs_field7) + '</td>'
+            +'<td id="tdkey">' + label7.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field8,p_obs_field8) + '</td>'
+            +'<td id="tdkey">' + label8.toLowerCase() + '</td></tr>'
+            +'</table></span>'});
+      } else if( field_array.length > 0 ) {
+          faddelem('p',document.body,{innerHTML:'<span id="h2">Observation Field Viewer</span><span id="dltest"><table id="tablekey">'
+            +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</td>'
+            +'<td id="tdkey">' + label1.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field2,p_obs_field2) + '</td>'
+            +'<td id="tdkey">' + label2.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field3,p_obs_field3) + '</td>'
+            +'<td id="tdkey">' + label3.toLowerCase() + '</td></tr>'
+            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field4,p_obs_field4) + '</td>'
+            +'<td id="tdkey">' + label4.toLowerCase() + '</td></tr>'
+            +'</table></span>'});     
+      } else {
+          faddelem('p',document.body,{innerHTML:'<span id="h2">Observation Field Viewer</span>'});
+      }
+*/
+
+      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
+             +'per page: '+fcomnum(per_page)+'<br />'
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
+
+      let table = faddelem('table',document.body,{id:'main'});
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+
+      labels = [
+               {innerText:'#'},
+               {innerText:'Photo'},
+               {innerText:'Name'}, 
+               {innerText:'Obs Photo'},
+               {innerText:'Obs Field Value'},
+      ];
+      
+      faddelems('th',hrow,labels);
+
+      let tbody = faddelem('tbody',table);
+
+      let displayCount = 0;
+      
+      for (let i=0; i<results.length; i++) {
+         let brow = faddelem('tr',tbody);
+         let rec = results[i];
+         let tax_name = '';
+         let pref_tax_name = '';
+         let tax_photo = '<div class="clipart">&#127807</div>'; 
+         
+         if( rec.taxon ){
+             tax_name = rec.taxon.name || '';
+             pref_tax_name = rec.taxon.preferred_common_name || '';
+           
+             if( rec.taxon.default_photo ){
+                 if( rec.taxon.default_photo.url ){
+                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
+                 }
+             }
+         }
+
+         let field1 = ''; let field2 = ''; let field3 = ''; let field4 = ''; let field5 = ''; let field6 = ''; let field7 = ''; let field8 = '';
+         let ofvs1 = '';  let ofvs2 = '';  let ofvs3 = '';  let ofvs4 = '';  let ofvs5 = '';  let ofvs6 = '';  let ofvs7 = '';  let ofvs8 = '';
+         let displayName = '';
+         let displayTaxonName = '';
+          
+         if(rec.ofvs&&rec.ofvs.length>0){
+             for( let j=0; j<rec.ofvs.length; j++ ){
+                  ofvs = rec.ofvs[j];
+                  field = rec.ofvs[j].value.toLowerCase();
+             }
+          }  
+       
+          if( displayTaxonName !== '' ){
+              if( mismatch === 'yes' ){
+                  displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
+              } else {
+                  displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+')</span>';
+              }
+          } else {
+              if( mismatch === 'yes' ){
+                  displayName += ' ';
+                  displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
+              } 
+          }
+       
+         let values = [];
+         let user_icon = rec.user.icon || '';
+         
+         if( user_icon === '' ){
+            user_icon += '<div class="npcicon">&#x1F464;</div>';
+         } else {
+            user_icon = '<img class="icon" src="'+user_icon+'" />';
+         }
+
+         let taxon = '';
+         taxon = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';         
+
+         if( field !== '' ){
+             values = [
+                  {innerText:i+1},
+                  {innerHTML:tax_photo},
+                  {innerHTML:taxon},
+                  {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                  {innerHTML:field}, 
+             ];
+         } 
+   
+         faddelems('td',brow,values);
+      };
+
+      // buttons to go to prev or next page
+      let nav = faddelem('div',document.body,{id:'nav'});
+      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); };
+};
+</script>
+</body>
+
+</html>
