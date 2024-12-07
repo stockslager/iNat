@@ -233,7 +233,8 @@ function fresults(xobj) {
                   if( rec.ofvs[j].taxon ){
                       let name  = rec.ofvs[j].taxon.name || '';
                       let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                      field = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                      //field = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                      field = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"> ('+name+')</span>';
                   }
                   let values = [];
               
@@ -250,7 +251,7 @@ function fresults(xobj) {
                 {innerHTML:tax_photo},
                 {innerHTML:taxon},
                 {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                {innerHTML:('<dl>'+defList+'</dl>')},
+                {innerHTML:('<dl><dt>obs field:</dt> <dd>value:</dd>'+defList+'</dl>')},
          ];
          faddelems('td',brow,values);
 
