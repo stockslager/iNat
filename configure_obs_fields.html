@@ -223,7 +223,18 @@ function fresults(xobj) {
          }
 
          let field = ''; 
-          
+
+         // add observation row.
+         let brow = faddelem('tr',tbody);
+         values = [
+                {innerText:i+1},
+                {innerHTML:tax_photo},
+                {innerHTML:taxon},
+                {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                {innerHTML:''},
+         ];
+         faddelems('td',brow,values);
+       
          if(rec.ofvs&&rec.ofvs.length>0){
              for( let j=0; j<rec.ofvs.length; j++ ){
                   field = rec.ofvs[j].value.toLowerCase();
@@ -236,25 +247,16 @@ function fresults(xobj) {
                   let values = [];
                   let taxon = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';         
 
+                  // add obs field row.
                   if( field !== '' ){
                       let brow = faddelem('tr',tbody);
-                      if( j === 0 ){
-                          values = [
-                             {innerText:i+1},
-                             {innerHTML:tax_photo},
-                             {innerHTML:taxon},
-                             {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                             {innerHTML:field}, 
-                          ];
-                      } else {
-                          values = [
+                      values = [
                              {innerText:''},
                              {innerHTML:''},
                              {innerHTML:''},
-                             {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                             {innerHTML:''},
                              {innerHTML:field}, 
-                          ];
-                      }
+                      ];
                       faddelems('td',brow,values);
                   } 
              }
