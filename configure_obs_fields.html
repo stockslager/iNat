@@ -223,54 +223,33 @@ function fresults(xobj) {
              }
          }
 
-         let field1 = ''; let field2 = ''; let field3 = ''; let field4 = ''; let field5 = ''; let field6 = ''; let field7 = ''; let field8 = '';
-         let ofvs1 = '';  let ofvs2 = '';  let ofvs3 = '';  let ofvs4 = '';  let ofvs5 = '';  let ofvs6 = '';  let ofvs7 = '';  let ofvs8 = '';
-         let displayName = '';
-         let displayTaxonName = '';
+         let field = ''; 
           
          if(rec.ofvs&&rec.ofvs.length>0){
              for( let j=0; j<rec.ofvs.length; j++ ){
-                  ofvs = rec.ofvs[j];
                   field = rec.ofvs[j].value.toLowerCase();
+            
+                  if( rec.ofvs[j].taxon ){
+                      let name  = rec.ofvs[j].taxon.name || '';
+                      let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                      field = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                      displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+')</span>';
+                  }
+                  let values = [];
+                  let taxon = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';         
+
+                  if( field !== '' ){
+                      values = [
+                         {innerText:i+1},
+                         {innerHTML:tax_photo},
+                         {innerHTML:taxon},
+                         {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                         {innerHTML:field}, 
+                      ];
+                  } 
+                  faddelems('td',brow,values);
              }
           }  
-       
-          if( displayTaxonName !== '' ){
-              if( mismatch === 'yes' ){
-                  displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
-              } else {
-                  displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+')</span>';
-              }
-          } else {
-              if( mismatch === 'yes' ){
-                  displayName += ' ';
-                  displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
-              } 
-          }
-       
-         let values = [];
-         let user_icon = rec.user.icon || '';
-         
-         if( user_icon === '' ){
-            user_icon += '<div class="npcicon">&#x1F464;</div>';
-         } else {
-            user_icon = '<img class="icon" src="'+user_icon+'" />';
-         }
-
-         let taxon = '';
-         taxon = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';         
-
-         if( field !== '' ){
-             values = [
-                  {innerText:i+1},
-                  {innerHTML:tax_photo},
-                  {innerHTML:taxon},
-                  {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  {innerHTML:field}, 
-             ];
-         } 
-   
-         faddelems('td',brow,values);
       };
 
       // buttons to go to prev or next page
