@@ -42,7 +42,7 @@
    #tdkey { padding:0; padding-right: 25px; }
    #main { width:100%; }
    #h2 { font-weight:bold; font-size:20px; }
-   dl { display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; }
+   dl { display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 16px Sans-Serif; }
    dt {  }
    dd { margin: 0; grid-column-start: 2;}   
    table, td, th { border-collapse:collapse; margin:0; padding:4px; }
@@ -237,14 +237,14 @@ function fresults(xobj) {
                       let name  = rec.ofvs[j].taxon.name || '';
                       let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                       //field = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                      field = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"> ('+name+')</span>';
+                      field = '<span>'+cname.toLowerCase()+'</span><span style="font-style:italic"> ('+name+')</span>';
                   }
                   let values = [];
               
                   // add obs field row.
                   if( field !== '' ){
-                      defList += ('<dt>'+rec.ofvs[j].name+'</dt> <dd>'+field+'</dd>');
-                  } 
+                      defList += ('<dt>'+rec.ofvs[j].name.toLowerCase()+'</dt> <dd>'+field.toLowerCase()+'</dd>');
+                  }
              }
          } 
          // add observation row.
