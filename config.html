@@ -244,7 +244,7 @@ function fresults(xobj) {
                       } else if( datatype !== rec.ofvs[k].datatype ){
                           mismatch = 'yes';
                       }
-                      field_array_copy.remove(rec.ofvs[k].field_id.toString());
+                      field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[k].field_id.toString());
                       labelCount++;
                       if( labelCount === 1 ){
                           dlString += '<span id="dltest"><table id="tablekey">';
