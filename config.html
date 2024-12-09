@@ -377,7 +377,6 @@ function fresults(xobj) {
                                   mismatch = 'yes';
                               }
                            
-                              emojiTitle    += (ofvs1.field_id + ' ' + rec.ofvs[j].value.toLowerCase() + '&#10;');
                               field1 = rec.ofvs[j].value.toLowerCase();
                               displayName = rec.ofvs[j].value.toLowerCase()  
                                     
@@ -388,8 +387,13 @@ function fresults(xobj) {
                                       field1 = name;
                                       displayCommonName = cname.toLowerCase();
                                       displayTaxonName = name;
+                                      emojiTitle    += (ofvs1.name.toLowerCase() + ' ' + name.toLowerCase() + '&#10;');
                                       displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                                  } else { 
+                                      emojiTitle    += (ofvs1.field_id + ' ' + rec.ofvs[j].value.toLowerCase() + '&#10;');
                                   }
+                              } else {
+                                      emojiTitle    += (ofvs1.field_id + ' ' + rec.ofvs[j].value.toLowerCase() + '&#10;');
                               }
                           }
                       } else {
