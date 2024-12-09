@@ -201,11 +201,6 @@ function fresults(xobj) {
       for (let l=0; l<results.length; l++) {
           let rec = results[l];
           let matchValue = '';
-
-          if( mismatch === 'yes' &&
-              p_operator === 'merge' ){       
-              flower = '<span class="flowericon">&#x1F338; merged obs field values do not match.</span>';
-          }  
        
           // find obs field labels
           if( rec.ofvs&&rec.ofvs.length > 0 ) {
@@ -258,6 +253,10 @@ function fresults(xobj) {
                   } 
              } 
          }
+         if( mismatch === 'yes' &&
+             p_operator === 'merge' ){       
+             flower = '<span class="flowericon">&#x1F338; merged obs field values do not match.</span>';
+         }  
       }
 
       // check for observation fields passed in and not found
