@@ -388,11 +388,6 @@ function fresults(xobj) {
           
         if(rec.ofvs&&rec.ofvs.length>0){
             for( let w=0; w<field_array_copy2.length; w++ ){
-                 if( matchedCopy === 'yes' ){
-                     matchedCopy = 'no';
-                 } else {
-                     values.push({innerText:''});
-                 }
                  for( let j=0; j<rec.ofvs.length; j++ ){
 
                       if( p_operator === 'merge' ){
@@ -430,14 +425,12 @@ function fresults(xobj) {
                           }
                       }
                   }
+                  if( matchedCopy === 'yes' ){
+                      matchedCopy = 'no';
+                  } else {
+                      values.push({innerText:''});
+                  }
              }
-    /*         if( p_operator !== 'merge' ){
-                 if( p_field === '' ){
-                     values.push({innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
-                 } else {
-                     values.push({innerHTML:field1});
-                 }
-             }*/
          }  
        
          if( p_operator === 'merge' ){
