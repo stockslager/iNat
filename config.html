@@ -206,7 +206,7 @@ function fresults(xobj) {
        
           // find obs field labels
           if( rec.ofvs&&rec.ofvs.length > 0 ) {
-              for( let b=0; b<rec.ofvs.length; b++ ){
+    /*          for( let b=0; b<rec.ofvs.length; b++ ){
                    if( field_array.includes(rec.ofvs[b].field_id.toString()) ){
                             if( matchValue === '' ){
                                 matchValue = rec.ofvs[b].value;
@@ -228,10 +228,10 @@ function fresults(xobj) {
                                 }
                             }
                    }
-              } 
+              } */
               for( let r=0; r<field_array_copy.length; r++ ) {
                    for( let k=0; k<rec.ofvs.length; k++ ){
-                 /*       if( field_array_copy2.includes(rec.ofvs[k].field_id.toString()) ){
+                        if( field_array.includes(rec.ofvs[k].field_id.toString()) ){
                             if( matchValue === '' ){
                                 matchValue = rec.ofvs[k].value;
                             } else if( matchValue !== rec.ofvs[k].value ){
@@ -251,7 +251,7 @@ function fresults(xobj) {
                                     mismatch = 'yes';
                                 }
                             }
-                        } */
+                        } 
                             
                         if( field_array_copy[r] === rec.ofvs[k].field_id.toString() ){
                             field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[k].field_id.toString());
