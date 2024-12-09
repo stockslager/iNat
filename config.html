@@ -77,6 +77,7 @@ let p_project_id = winurlparams.get('project_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
 let p_obs_field_array = winurlparams.get('obs_fields') || '';
+let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_field = '';
 let p_field_value = '';
 let opts = '';
@@ -381,12 +382,14 @@ function fresults(xobj) {
                               displayName = rec.ofvs[j].value.toLowerCase()  
                                     
                               if( rec.ofvs[j].taxon ){
-                                  let name  = rec.ofvs[j].taxon.name || '';
-                                  let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                                  field1 = name;
-                                  displayCommonName = cname.toLowerCase();
-                                  displayTaxonName = name;
-                                  displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                                  if( p_ofield_iconic === rec.ofvs[j].taxon.iconic_taxa ){
+                                      let name  = rec.ofvs[j].taxon.name || '';
+                                      let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                                      field1 = name;
+                                      displayCommonName = cname.toLowerCase();
+                                      displayTaxonName = name;
+                                      displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                                  }
                               }
                           }
                       } else {
