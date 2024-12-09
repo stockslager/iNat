@@ -205,6 +205,7 @@ function fresults(xobj) {
           // find obs field labels
           if( rec.ofvs&&rec.ofvs.length > 0 ) {
               for( let r=0; r<field_array_copy.length; r++ ) {
+                   matchValue = '';
                    for( let k=0; k<rec.ofvs.length; k++ ){
 
                         if( field_array_copy[r] === rec.ofvs[k].field_id.toString() ){
@@ -275,10 +276,10 @@ function fresults(xobj) {
       dlString += '</table></span>';
       faddelem('p',document.body,{innerHTML:dlString});
 
-  //    if( mismatch === 'yes' &&
-  //        p_operator === 'merge' ){       
+      if( mismatch === 'yes' &&
+          p_operator === 'merge' ){       
           flower = '<span class="flowericon">&#x1F338; merged obs field values do not match.</span>';
-  //    }  
+      }  
 
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
@@ -324,7 +325,6 @@ function fresults(xobj) {
          let matchedCopy = 'no';
          let values = [];
          dataType = '';
-         matchValue = '';
          
          let taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          values = [
@@ -346,6 +346,7 @@ function fresults(xobj) {
           
         if(rec.ofvs&&rec.ofvs.length>0){
             for( let w=0; w<field_array_copy2.length; w++ ){
+                 matchValue = '';
                  for( let j=0; j<rec.ofvs.length; j++ ){
 
                       if( p_operator === 'merge' ){
