@@ -215,14 +215,6 @@ function fresults(xobj) {
               for( let r=0; r<field_array_copy.length; r++ ) {
                    for( let k=0; k<rec.ofvs.length; k++ ){
 
-          /*        if( field_array.includes(rec.ofvs[k].field_id.toString()) ){
-                      if( matchValue === '' ){
-                          matchValue += rec.ofvs[k].value;
-                      } else if( matchValue !== rec.ofvs[k].value ){
-                          mismatch = 'yes';
-                      }
-                  }  */
-
                         if( field_array_copy[r] === rec.ofvs[k].field_id.toString() ){
                             labelMatchFound = 'yes';
                             if( matchValue === '' ){
@@ -267,7 +259,14 @@ function fresults(xobj) {
       // check for observation fields passed in and not found
       for( let a=0; a<field_array.length; a++ ) {
            if( !field_array_copy2.includes(field_array[a]) ) {
-               dlString += ('<tr id="trkey"><td id="tdkey">' + field_array[a] + '</td>');
+               if( labelCount === 1 ){
+                   dlString += '<span id="dltest"><table id="tablekey">';
+                   dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
+               }
+               if( labelCount === 5 ){
+                   dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
+               }
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+field_array[a],field_array[a]) + '</td>');
                dlString += ('<td id="tdkey">not occurring on this page of data</td></tr>');
            }
       }
