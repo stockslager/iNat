@@ -377,18 +377,18 @@ function fresults(xobj) {
                                   mismatch = 'yes';
                               }
                            
-                              field1 = rec.ofvs[j].value.toLowerCase();
-                              displayName = rec.ofvs[j].value.toLowerCase();
+                              field1 = rec.ofvs[j].value;//.toLowerCase();
+                              displayName = rec.ofvs[j].value;//.toLowerCase();
                                     
                               if( rec.ofvs[j].taxon ){ 
                                   if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
                                       let name  = rec.ofvs[j].taxon.name || '';
                                       let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                                       field1 = name;
-                                      displayCommonName = cname.toLowerCase();
+                                      displayCommonName = '' // cname.toLowerCase();
                                       displayTaxonName = name;
                                       emojiTitle    += (ofvs1.name.toLowerCase() + ' ' + name + '&#10;');
-                                      displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                                      displayName = '<span style="font-size:larger">'+cname/*.toLowerCase()*/+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   } else { 
                                       emojiTitle    += (ofvs1.field_id + ' ' + rec.ofvs[j].taxon.name + '&#10;');
                                   }
