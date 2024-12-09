@@ -428,18 +428,10 @@ function fresults(xobj) {
                                    let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                                    field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                }
-                               for( let q=0; q<field_array_copy2.length; q++ ){
-                                    if( q === w ){
-                                        if( p_field === '' ){
-                                            values.push({innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
-                                        } else {
-                                            values.push({innerHTML:field1});
-                                        }
-                                    } else if( q < w ){
-                                            values.push({innerText:'a'});
-                                    } else if( q > w ){
-                                            values.push({innerText:'b'});
-                                    }  
+                               if( p_field === '' ){
+                                   values.push({innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
+                               } else {
+                                   values.push({innerHTML:field1});
                                }
                            }
                       }
