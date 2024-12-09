@@ -168,6 +168,10 @@ winurlparams.append('operator', p_operator);
 winurlparams.append(p_field, p_field_value);
 winurlparams.append('taxon_id', p_taxon_id);
 
+function isMultipleOfFour(num) {
+  return num % 4 === 0;
+}
+
 function fresults(xobj) {
    let results = xobj.results;
    if (results) {
@@ -229,14 +233,15 @@ function fresults(xobj) {
                                 mismatch = 'yes';
                             }
                             field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[k].field_id.toString());
-                            labelCount++;
-                            if( labelCount === 1 ){
+                            if( labelCount === 0 ){
                                 dlString += '<span id="dltest"><table id="tablekey">';
                                 dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
                             }
-                            if( labelCount === 5 ){
+                            if( labelCount === 4 ){
                                 dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
+                                dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
                             }
+                            labelCount++;
                             dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+rec.ofvs[k].field_id,rec.ofvs[k].field_id) + '</td>');
                             dlString += ('<td id="tdkey">' + rec.ofvs[k].name.toLowerCase() + '</td></tr>');
                       
@@ -259,14 +264,15 @@ function fresults(xobj) {
       // check for observation fields passed in and not found
       for( let a=0; a<field_array.length; a++ ) {
            if( !field_array_copy2.includes(field_array[a]) ) {
-               labelCount++;
-               if( labelCount === 1 ){
+               if( labelCount === 0 ){
                    dlString += '<span id="dltest"><table id="tablekey">';
                    dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
                }
-               if( labelCount === 5 ){
+               if( isMultipleOfFour(labelCount) ){
                    dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
+                   dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
                }
+               labelCount++;
                dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+field_array[a],field_array[a]) + '</td>');
                dlString += ('<td id="tdkey">not occurring on this page of data</td></tr>');
            }
