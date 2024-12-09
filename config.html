@@ -73,14 +73,6 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let p_obs_field1 = '';
-let p_obs_field2 = '';
-let p_obs_field3 = '';
-let p_obs_field4 = '';
-let p_obs_field5 = '';
-let p_obs_field6 = '';
-let p_obs_field7 = '';
-let p_obs_field8 = '';
 let p_project_id = winurlparams.get('project_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
@@ -92,15 +84,6 @@ let field_array = [];
 
 if( p_obs_field_array !== '' ){
     field_array = p_obs_field_array.split(",");
-
-    p_obs_field1 = field_array[0] || ''; 
-    p_obs_field2 = field_array[1] || ''; 
-    p_obs_field3 = field_array[2] || '';
-    p_obs_field4 = field_array[3] || ''; 
-    p_obs_field5 = field_array[4] || ''; 
-    p_obs_field6 = field_array[5] || '';
-    p_obs_field7 = field_array[6] || ''; 
-    p_obs_field8 = field_array[7] || ''; 
 }
 
 if( winurlparams.get('ofv_datatype') === null || winurlparams.get('ofv_datatype') === ''){
@@ -196,7 +179,6 @@ function fresults(xobj) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
       let label = '';
-      let label1 = '';      let label2 = '';      let label3 = '';      let label4 = '';      let label5 = '';      let label6 = '';      let label7 = '';      let label8 = '';
       let labels = [];
       let datatype = '';
       let mismatch = '';
@@ -271,35 +253,6 @@ function fresults(xobj) {
                        }
                   }
                
-               /*   if( field_array_copy.includes(rec.ofvs[k].field_id.toString()) ){
-                      if( matchValue === '' ){
-                          matchValue += rec.ofvs[k].value;
-                      } else if( matchValue !== rec.ofvs[k].value ){
-                          mismatch = 'yes';
-                      }
-                   
-                      if( datatype === '' ){
-                          datatype = rec.ofvs[k].datatype;
-                      } else if( datatype !== rec.ofvs[k].datatype ){
-                          mismatch = 'yes';
-                      }
-                      field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[k].field_id.toString());
-                      labelCount++;
-                      if( labelCount === 1 ){
-                          dlString += '<span id="dltest"><table id="tablekey">';
-                          dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      }
-                      if( labelCount === 5 ){
-                          dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
-                      }
-                      dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+rec.ofvs[k].field_id,rec.ofvs[k].field_id) + '</td>');
-                      dlString += ('<td id="tdkey">' + rec.ofvs[k].value.toLowerCase() + '</td></tr>');
-                      
-                      // add label to header row (if not merge)
-                      if( p_operator !== 'merge' ){
-                          labels.push({innerText:rec.ofvs[k].name});
-                      }
-                  }*/
-
                   // no need to continue looping if all labels have been found.
                   if( field_array_copy.length === 0 ){
                       dlString += '</table></span>';
@@ -330,7 +283,6 @@ function fresults(xobj) {
                {innerText:'User Login'},
           ];
       } else {
-          //labels.push("{innerText:'User Photo'}");
           labels.push({innerText:'User Photo'});
           labels.push({innerText:'User Login'});
       }
@@ -359,9 +311,9 @@ function fresults(xobj) {
              }
          }
 
-         let field1 = ''; let field2 = ''; let field3 = ''; let field4 = ''; let field5 = ''; let field6 = ''; let field7 = ''; let field8 = '';
-         let param1 = ''; let param2 = ''; let param3 = ''; let param4 = ''; let param5 = ''; let param6 = ''; let param7 = ''; let param8 = '';
-         let ofvs1 = '';  let ofvs2 = '';  let ofvs3 = '';  let ofvs4 = '';  let ofvs5 = '';  let ofvs6 = '';  let ofvs7 = '';  let ofvs8 = '';
+         let field1 = ''; 
+         let param1 = ''; 
+         let ofvs1 = '';  
          let displayName = '';
          let displayTaxonName = '';
          let mismatch = '';
