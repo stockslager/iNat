@@ -387,7 +387,7 @@ function fresults(xobj) {
                                       field1 = name;
                                       displayCommonName = cname.toLowerCase();
                                       displayTaxonName = name;
-                                      emojiTitle    += (rec.ofvs[j].field_id + ' ' + name + '&#10;');
+                                      emojiTitle    += (rec.ofvs[j].field_id + ' ' + 'h3llo2'/*name*/ + '&#10;');
                                       displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   } else { 
                                       emojiTitle    += (rec.ofvs[j].field_id + ' ' + 'hello'/*rec.ofvs[j].taxon.name*/ + '&#10;');
@@ -399,14 +399,14 @@ function fresults(xobj) {
                       } else {
                           if( rec.ofvs[j].field_id.toString() === field_array_copy2[w].toString() ){
                               matchedCopy = 'yes';
-                              field1 = rec.ofvs[j].value/*.toLowerCase()*/;
+                              field1 = rec.ofvs[j].value.toLowerCase();
                               param1 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
-                              displayName = rec.ofvs[j].value/*.toLowerCase()*/;
+                              displayName = rec.ofvs[j].value.toLowerCase();
                                
                               if( rec.ofvs[j].taxon ){
                                   let name  = rec.ofvs[j].taxon.name || '';
                                   let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                                  field1 = '<span style="font-size:larger">'+cname/*.toLowerCase()*/+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                                  field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                               }
                               if( p_field === '' ){
                                   values.push({innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
@@ -428,9 +428,9 @@ function fresults(xobj) {
          if( p_operator === 'merge' ){
               if( displayTaxonName !== '' ){
                   if( mismatch === 'yes' ){
-                      displayName = '<span style="font-size:larger">'+displayCommonName/*.toLowerCase()*/+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
+                      displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
                   } else {
-                      displayName = '<span style="font-size:larger">'+displayCommonName/*.toLowerCase()*/+'</span><span style="font-style:italic"><br>('+displayTaxonName+')</span>';
+                      displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+')</span>';
                   }
               } else {
                   if( mismatch === 'yes' ){
