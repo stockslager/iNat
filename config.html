@@ -371,7 +371,6 @@ function fresults(xobj) {
                               }
                            
                               field1 = rec.ofvs[j].value.toLowerCase();
-                              displayName = rec.ofvs[j].value.toLowerCase();
                                     
                               if( rec.ofvs[j].taxon ){ 
                                   if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
@@ -384,8 +383,10 @@ function fresults(xobj) {
                                       displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   } else { 
                                       emojiTitle    += (rec.ofvs[j].field_id + ' ' + rec.ofvs[j].taxon.name.toLowerCase() + '&#10;');
+                                      displayName = '';
                                   }
                               } else {
+                                      displayName    = rec.ofvs[j].value.toLowerCase();
                                       emojiTitle    += (rec.ofvs[j].field_id + ' ' + rec.ofvs[j].value.toLowerCase() + '&#10;');
                               }
                           }
