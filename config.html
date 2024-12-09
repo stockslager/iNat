@@ -244,7 +244,7 @@ function fresults(xobj) {
                             }
                             labelCount++;
                             dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+rec.ofvs[k].field_id,rec.ofvs[k].field_id) + '</td>');
-                            dlString += ('<td id="tdkey">' + rec.ofvs[k].name/*.toLowerCase()*/ + '</td></tr>');
+                            dlString += ('<td id="tdkey">' + rec.ofvs[k].name.toLowerCase() + '</td></tr>');
 
                             field_array_copy2.push(rec.ofvs[k].field_id.toString());
                             // add label to header row (if not merge)
@@ -341,7 +341,7 @@ function fresults(xobj) {
          dataType = '';
          matchValue = '';
          
-         let taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name/*.toLowerCase()*/+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+         let taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          values = [
                   {innerText:i+1},
                   {innerHTML:tax_photo},
@@ -377,8 +377,8 @@ function fresults(xobj) {
                                   mismatch = 'yes';
                               }
                            
-                              field1 = rec.ofvs[j].value/*.toLowerCase()*/;
-                              displayName = rec.ofvs[j].value/*.toLowerCase()*/;
+                              field1 = rec.ofvs[j].value.toLowerCase();
+                              displayName = rec.ofvs[j].value.toLowerCase();
                                     
                               if( rec.ofvs[j].taxon ){ 
                                   if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
