@@ -188,17 +188,16 @@ function fresults(xobj) {
       let labelCount = 0;
 
       let merged = 'observation field';
+      labels = [
+            {innerText:'#'},
+            {innerText:'Photo'},
+            {innerText:'Name'}, 
+            {innerText:'Obs Photo'}];
+    
       if( p_operator === 'merge' ){
           merged = 'merged observation field';
-      } else {
-          labels = [
-               {innerText:'#'},
-               {innerText:'Photo'},
-               {innerText:'Name'}, 
-               {innerText:'Obs Photo'}
-          ];
-      }
-
+      } 
+    
       for (let l=0; l<results.length; l++) {
           let rec = results[l];
           let matchValue = '';
@@ -243,6 +242,12 @@ function fresults(xobj) {
                             if( p_operator !== 'merge' ){
                                 //field_array_copy2.push(rec.ofvs[k].field_id.toString());
                                 labels.push({innerText:rec.ofvs[k].name});
+                            } else {
+                                if( labelCount === 1 ){
+                                    labels.push({innerText:'Merged Fields (see upper right)'});
+                                } else {
+                                    labels.push({innerText:''});
+                                }
                             }
                        }
                   }
@@ -282,21 +287,9 @@ function fresults(xobj) {
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
- 
-      if( p_operator === 'merge' ){
-          labels = [
-               {innerText:'#'},
-               {innerText:'Photo'},
-               {innerText:'Name'}, 
-               {innerText:'Obs Photo'},
-               {innerText:('Merged Fields (see upper right)')}, {innerText:''}, {innerText:''}, {innerText:''}, {innerText:''}, {innerText:''}, {innerText:''}, {innerText:''},               
-               {innerText:'User Photo'},
-               {innerText:'User Login'},
-          ];
-      } else {
-          labels.push({innerText:'User Photo'});
-          labels.push({innerText:'User Login'});
-      }
+
+      labels.push({innerText:'User Photo'});
+      labels.push({innerText:'User Login'});
       
       faddelems('th',hrow,labels);
 
