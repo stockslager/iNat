@@ -211,6 +211,7 @@ function fresults(xobj) {
        
           // find obs field labels
           if( rec.ofvs&&rec.ofvs.length > 0 ) {
+              let labelMatchFound = 'no';
               for( let r=0; r<field_array_copy.length; r++ ) {
                    for( let k=0; k<rec.ofvs.length; k++ ){
 
@@ -223,6 +224,7 @@ function fresults(xobj) {
                   }  */
 
                         if( field_array_copy[r] === rec.ofvs[k].field_id.toString() ){
+                            labelMatchFound = 'yes';
                             if( matchValue === '' ){
                                 matchValue += rec.ofvs[k].value;
                             } else if( matchValue !== rec.ofvs[k].value ){
@@ -253,6 +255,8 @@ function fresults(xobj) {
                             }
                        }
                   }
+                  dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+rec.ofvs[k].field_id,rec.ofvs[k].field_id) + '</td>');
+                  dlString += ('<td id="tdkey">not occurring on this page of data</td></tr>');
                
                   // no need to continue looping if all labels have been found.
                   if( field_array_copy.length === 0 ){
