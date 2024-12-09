@@ -73,18 +73,11 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let p_obs_field1 = '';
-let p_obs_field2 = '';
-let p_obs_field3 = '';
-let p_obs_field4 = '';
-let p_obs_field5 = '';
-let p_obs_field6 = '';
-let p_obs_field7 = '';
-let p_obs_field8 = '';
 let p_project_id = winurlparams.get('project_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
 let p_obs_field_array = winurlparams.get('obs_fields') || '';
+let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_field = '';
 let p_field_value = '';
 let opts = '';
@@ -92,15 +85,6 @@ let field_array = [];
 
 if( p_obs_field_array !== '' ){
     field_array = p_obs_field_array.split(",");
-
-    p_obs_field1 = field_array[0] || ''; 
-    p_obs_field2 = field_array[1] || ''; 
-    p_obs_field3 = field_array[2] || '';
-    p_obs_field4 = field_array[3] || ''; 
-    p_obs_field5 = field_array[4] || ''; 
-    p_obs_field6 = field_array[5] || '';
-    p_obs_field7 = field_array[6] || ''; 
-    p_obs_field8 = field_array[7] || ''; 
 }
 
 if( winurlparams.get('ofv_datatype') === null || winurlparams.get('ofv_datatype') === ''){
@@ -134,12 +118,7 @@ let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observa
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
 <script> 
 
-if( field_array.length > 8 ){
-    let instructions = [
-      {innerText:'More than 8 observation fields entered.  A maximum of 8 observation fields can be passed in.  Please change the &obs_fields parameter to have 8 or less values.'},
-   ];
-   faddelems('p',document.body,instructions);
-} else if (winurlsearchstr==='' || p_project_id === '') {
+if (winurlsearchstr==='' || p_project_id === '') {
    let instructions = [
       {innerText:'This page requires a project_id argument.  Add ?project_id=12345678 to the end of the url.'},
    ];
@@ -184,7 +163,11 @@ for (const [key, value] of winurlparams.entries()) {
 winurlparams.append('operator', p_operator);
 winurlparams.append(p_field, p_field_value);
 winurlparams.append('taxon_id', p_taxon_id);
-   
+
+function isMultipleOfFour(num) {
+  return num % 4 === 0;
+}
+
 function fresults(xobj) {
    let results = xobj.results;
    if (results) {
@@ -195,173 +178,116 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let label1 = '';      let label2 = '';      let label3 = '';      let label4 = '';      let label5 = '';      let label6 = '';      let label7 = '';      let label8 = '';
-      let foundLabel1 = ''; let foundLabel2 = ''; let foundLabel3 = ''; let foundLabel4 = ''; let foundLabel5 = ''; let foundLabel6 = ''; let foundLabel7 = ''; let foundLabel8 = '';       
+      let label = '';
       let labels = [];
       let datatype = '';
       let mismatch = '';
+      let field_array_copy = field_array;
+      let field_array_copy2 = [];
+      let flower = '';
+      let dlString = '<span id="h2">Observation Field Viewer</span>';
+      let labelCount = 0;
 
+      let merged = 'observation field';
+      labels = [
+            {innerText:'#'},
+            {innerText:'Photo'},
+            {innerText:'Name'}, 
+            {innerText:'Obs Photo'}];
+    
+      if( p_operator === 'merge' ){
+          merged = 'merged observation field';
+      } 
+    
       for (let l=0; l<results.length; l++) {
           let rec = results[l];
           let matchValue = '';
+          let matchTaxonId = '';
        
           // find obs field labels
-          if(rec.ofvs&&rec.ofvs.length>0){
-             for( let k=0; k<rec.ofvs.length; k++ ){
+          if( rec.ofvs&&rec.ofvs.length > 0 ) {
+              for( let r=0; r<field_array_copy.length; r++ ) {
+                   for( let k=0; k<rec.ofvs.length; k++ ){
+                        if( field_array.includes(rec.ofvs[k].field_id.toString()) ){
+                            if( matchValue === '' ){
+                                matchValue = rec.ofvs[k].value;
+                            } else if( matchValue !== rec.ofvs[k].value ){
+                                mismatch = 'yes';
+                            }
+                      
+                            if( datatype === '' ){
+                                datatype = rec.ofvs[k].datatype;
+                            } else if( datatype !== rec.ofvs[k].datatype ){
+                                mismatch = 'yes';
+                            }
+                            if( rec.ofvs[k].taxon ){ 
+                                if( matchTaxonId === '' ){
+                                    matchTaxonId = rec.ofvs[k].taxon.id;
+                                }
+                                if( rec.ofvs[k].taxon.id !== matchTaxonId ){
+                                    mismatch = 'yes';
+                                }
+                            }
+                        } 
+                            
+                        if( field_array_copy[r] === rec.ofvs[k].field_id.toString() ){
+                            field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[k].field_id.toString());
+                            if( labelCount === 0 ){
+                                dlString += '<span id="dltest"><table id="tablekey">';
+                                dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
+                            }
+                            if( labelCount === 4 ){
+                                dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
+                                dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
+                            }
+                            labelCount++;
+                            dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+rec.ofvs[k].field_id,rec.ofvs[k].field_id) + '</td>');
+                            dlString += ('<td id="tdkey">' + rec.ofvs[k].name.toLowerCase() + '</td></tr>');
 
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field1 || 
-                      rec.ofvs[k].field_id.toString() === p_obs_field2 ||      
-                      rec.ofvs[k].field_id.toString() === p_obs_field3 ||     
-                      rec.ofvs[k].field_id.toString() === p_obs_field4 ||      
-                      rec.ofvs[k].field_id.toString() === p_obs_field5 ||    
-                      rec.ofvs[k].field_id.toString() === p_obs_field6 ||      
-                      rec.ofvs[k].field_id.toString() === p_obs_field7 ||     
-                      rec.ofvs[k].field_id.toString() === p_obs_field8 )   {
-
-                      if( matchValue === '' ){
-                          matchValue += rec.ofvs[k].value;
-                      } else if( matchValue !== rec.ofvs[k].value ){
-                          mismatch = 'yes';
-                      }
+                            field_array_copy2.push(rec.ofvs[k].field_id.toString());
+                            // add label to header row (if not merge)
+                            if( p_operator !== 'merge' ){
+                                //field_array_copy2.push(rec.ofvs[k].field_id.toString());
+                                labels.push({innerText:rec.ofvs[k].name});
+                            } else {
+                                if( labelCount === 1 ){
+                                    labels.push({innerText:'Merged Fields (see upper right)'});
+                                } else {
+                                    labels.push({innerText:''});
+                                }
+                            }
+                       }
                   }
-
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field1 ){
-                      if( datatype === '' ){
-                          datatype = rec.ofvs[k].datatype;
-                      } else if( datatype !== rec.ofvs[k].datatype ){
-                          mismatch = 'yes';
-                      }
-                      label1 = rec.ofvs[k].name;
-                  }
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field2 ){
-                      if( datatype === '' ){
-                          datatype = rec.ofvs[k].datatype;
-                      } else if( datatype !== rec.ofvs[k].datatype ){
-                          mismatch = 'yes';
-                      }
-                      label2 = rec.ofvs[k].name;
-                  }
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field3 ){
-                      if( datatype === '' ){
-                          datatype = rec.ofvs[k].datatype;
-                      } else if( datatype !== rec.ofvs[k].datatype ){
-                          mismatch = 'yes';
-                      }
-                      label3 = rec.ofvs[k].name;
-                  }
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field4 ){
-                      if( datatype === '' ){
-                          datatype = rec.ofvs[k].datatype;
-                      } else if( datatype !== rec.ofvs[k].datatype ){
-                          mismatch = 'yes';
-                      }
-                      label4 = rec.ofvs[k].name;
-                  }
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field5 ){
-                      if( datatype === '' ){
-                          datatype = rec.ofvs[k].datatype;
-                      } else if( datatype !== rec.ofvs[k].datatype ){
-                          mismatch = 'yes';
-                      }
-                      label5 = rec.ofvs[k].name;
-                  }
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field6 ){
-                      if( datatype === '' ){
-                          datatype = rec.ofvs[k].datatype;
-                      } else if( datatype !== rec.ofvs[k].datatype ){
-                          mismatch = 'yes';
-                      }
-                      label6 = rec.ofvs[k].name;
-                  }
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field7 ){
-                      if( datatype === '' ){
-                          datatype = rec.ofvs[k].datatype;
-                      } else if( datatype !== rec.ofvs[k].datatype ){
-                          mismatch = 'yes';
-                      }
-                      label7 = rec.ofvs[k].name;
-                  }
-                  if( rec.ofvs[k].field_id.toString() === p_obs_field8 ){
-                      if( datatype === '' ){
-                          datatype = rec.ofvs[k].datatype;
-                      } else if( datatype !== rec.ofvs[k].datatype ){
-                          mismatch = 'yes';
-                      }
-                      label8 = rec.ofvs[k].name;
-                  }
-             }
+             } 
          }
       }
 
-      let merged = 'observation field';
-      if( p_operator === 'merge' ){
-          merged = 'merged observation field';
+      // check for observation fields passed in and not found
+      for( let a=0; a<field_array.length; a++ ) {
+           if( !field_array_copy2.includes(field_array[a]) ) {
+               if( labelCount === 0 ){
+                   dlString += '<span id="dltest"><table id="tablekey">';
+                   dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
+               }
+               if( isMultipleOfFour(labelCount) ){
+                   dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
+                   dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
+               }
+               labelCount++;
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+field_array[a],field_array[a]) + '</td>');
+               dlString += ('<td id="tdkey">not occurring on this page of data</td></tr>');
+           }
       }
 
-      let notFound = 'not occurring on this page of data';
-      if( p_obs_field1 !== '' ){ if( label1 === '' ){ label1 = notFound; }}
-      if( p_obs_field2 !== '' ){ if( label2 === '' ){ label2 = notFound; }}
-      if( p_obs_field3 !== '' ){ if( label3 === '' ){ label3 = notFound; }}
-      if( p_obs_field4 !== '' ){ if( label4 === '' ){ label4 = notFound; }}
-      if( p_obs_field5 !== '' ){ if( label5 === '' ){ label5 = notFound; }}
-      if( p_obs_field6 !== '' ){ if( label6 === '' ){ label6 = notFound; }}
-      if( p_obs_field7 !== '' ){ if( label7 === '' ){ label7 = notFound; }}
-      if( p_obs_field8 !== '' ){ if( label8 === '' ){ label8 = notFound; }}
+      dlString += '</table></span>';
+      faddelem('p',document.body,{innerHTML:dlString});
 
-      let flower = '';
-      if( mismatch === 'yes' &&
-          p_operator === 'merge' ){       
-          flower = '<span class="flowericon">&#x1F338; merged obs field values do not match.</span>';
-      }
+      if( mismatch === 'yes' ) {
+          if( p_operator === 'merge' ){       
+              flower = '<span class="flowericon">&#x1F338; merged obs field values do not match.</span>';
+          }
+      }  
 
-      if( field_array.length > 4 ){
-          faddelem('p',document.body,{innerHTML:'<span id="h2">Observation Field Viewer</span><span id="dltest"><table id="tablekey">'
-            +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
-            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</td>'
-            +'<td id="tdkey">' + label1.toLowerCase() + '</td></tr>'
-            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field2,p_obs_field2) + '</td>'
-            +'<td id="tdkey">' + label2.toLowerCase() + '</td></tr>'
-            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field3,p_obs_field3) + '</td>'
-            +'<td id="tdkey">' + label3.toLowerCase() + '</td></tr>'
-            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field4,p_obs_field4) + '</td>'
-            +'<td id="tdkey">' + label4.toLowerCase() + '</td></tr>'
-    
-            +'</table><span style="padding-right:50px;"></span><table id="tablekey">'
-            +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
-            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field5,p_obs_field5) + '</td>'
-            +'<td id="tdkey">' + label5.toLowerCase() + '</td></tr>'
-            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field6,p_obs_field6) + '</td>'
-            +'<td id="tdkey">' + label6.toLowerCase() + '</td></tr>'
-            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field7,p_obs_field7) + '</td>'
-            +'<td id="tdkey">' + label7.toLowerCase() + '</td></tr>'
-            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field8,p_obs_field8) + '</td>'
-            +'<td id="tdkey">' + label8.toLowerCase() + '</td></tr>'
-            +'</table></span>'});
-      } else if( field_array.length > 0 ) {
-          faddelem('p',document.body,{innerHTML:'<span id="h2">Observation Field Viewer</span><span id="dltest"><table id="tablekey">'
-            +'<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'
-            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field1,p_obs_field1) + '</td>'
-            +'<td id="tdkey">' + label1.toLowerCase() + '</td></tr>'
-            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field2,p_obs_field2) + '</td>'
-            +'<td id="tdkey">' + label2.toLowerCase() + '</td></tr>'
-            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field3,p_obs_field3) + '</td>'
-            +'<td id="tdkey">' + label3.toLowerCase() + '</td></tr>'
-            +'<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+p_obs_field4,p_obs_field4) + '</td>'
-            +'<td id="tdkey">' + label4.toLowerCase() + '</td></tr>'
-            +'</table></span>'});     
-      } else {
-          faddelem('p',document.body,{innerHTML:'<span id="h2">Observation Field Viewer</span>'});
-      }
-
-      if( p_obs_field1 !== '' ){ if( label1 === notFound ){ label1 = ''; }}
-      if( p_obs_field2 !== '' ){ if( label2 === notFound ){ label2 = ''; }}
-      if( p_obs_field3 !== '' ){ if( label3 === notFound ){ label3 = ''; }}
-      if( p_obs_field4 !== '' ){ if( label4 === notFound ){ label4 = ''; }}
-      if( p_obs_field5 !== '' ){ if( label5 === notFound ){ label5 = ''; }}
-      if( p_obs_field6 !== '' ){ if( label6 === notFound ){ label6 = ''; }}
-      if( p_obs_field7 !== '' ){ if( label7 === notFound ){ label7 = ''; }}
-      if( p_obs_field8 !== '' ){ if( label8 === notFound ){ label8 = ''; }}
- 
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br />'});  
@@ -369,28 +295,9 @@ function fresults(xobj) {
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
- 
-      if( p_operator === 'merge' ){
-          labels = [
-               {innerText:'#'},
-               {innerText:'Photo'},
-               {innerText:'Name'}, 
-               {innerText:'Obs Photo'},
-               {innerText:('Merged Fields (see upper right)')}, {innerText:''}, {innerText:''}, {innerText:''}, {innerText:''}, {innerText:''}, {innerText:''}, {innerText:''},               
-               {innerText:'User Photo'},
-               {innerText:'User Login'},
-          ];
-      } else {
-          labels = [
-               {innerText:'#'},
-               {innerText:'Photo'},
-               {innerText:'Name'}, 
-               {innerText:'Obs Photo'},
-               {innerText:label1}, {innerText:label2}, {innerText:label3}, {innerText:label4}, {innerText:label5}, {innerText:label6}, {innerText:label7}, {innerText:label8},
-               {innerText:'User Photo'},
-               {innerText:'User Login'},
-          ];
-      }
+
+      labels.push({innerText:'User Photo'});
+      labels.push({innerText:'User Login'});
       
       faddelems('th',hrow,labels);
 
@@ -416,230 +323,25 @@ function fresults(xobj) {
              }
          }
 
-         let field1 = ''; let field2 = ''; let field3 = ''; let field4 = ''; let field5 = ''; let field6 = ''; let field7 = ''; let field8 = '';
-         let param1 = ''; let param2 = ''; let param3 = ''; let param4 = ''; let param5 = ''; let param6 = ''; let param7 = ''; let param8 = '';
-         let ofvs1 = '';  let ofvs2 = '';  let ofvs3 = '';  let ofvs4 = '';  let ofvs5 = '';  let ofvs6 = '';  let ofvs7 = '';  let ofvs8 = '';
+         let field1 = ''; 
+         let param1 = ''; 
+         let ofvs1 = '';  
          let displayName = '';
          let displayTaxonName = '';
          let mismatch = '';
-         let matchValue = '';
-          
-        if(rec.ofvs&&rec.ofvs.length>0){
-            for( let j=0; j<rec.ofvs.length; j++ ){
-
-                  if( rec.ofvs[j].field_id.toString() === p_obs_field1 || 
-                      rec.ofvs[j].field_id.toString() === p_obs_field2 ||      
-                      rec.ofvs[j].field_id.toString() === p_obs_field3 ||     
-                      rec.ofvs[j].field_id.toString() === p_obs_field4 ||      
-                      rec.ofvs[j].field_id.toString() === p_obs_field5 ||    
-                      rec.ofvs[j].field_id.toString() === p_obs_field6 ||      
-                      rec.ofvs[j].field_id.toString() === p_obs_field7 ||     
-                      rec.ofvs[j].field_id.toString() === p_obs_field8 )   {
-
-                      if( matchValue === '' ){
-                          matchValue += rec.ofvs[j].value;
-                      } else if( matchValue !== rec.ofvs[j].value ){
-                          mismatch = 'yes';
-                      }
-                  }
-             
-                 if( rec.ofvs[j].field_id.toString() === p_obs_field1 ){
-                     ofvs1 = rec.ofvs[j];
-                     field1 = rec.ofvs[j].value.toLowerCase();
-                     if( p_operator === 'merge' ){
-                         displayName = rec.ofvs[j].value.toLowerCase();
-                     } else {
-                         param1 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
-                         displayName = rec.ofvs[j].value.toLowerCase();
-                     }
-                     if( rec.ofvs[j].taxon ){
-                         let name  = rec.ofvs[j].taxon.name || '';
-                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                         if( p_operator === 'merge' ){
-                             field1 = name;
-                             displayCommonName = cname.toLowerCase();
-                             displayTaxonName = name;
-                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                         } else {
-                             field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                         }
-                     }
-                 }
-                 if( rec.ofvs[j].field_id.toString() === p_obs_field2 ){
-                     ofvs2 = rec.ofvs[j];
-                     field2 = rec.ofvs[j].value.toLowerCase();
-                     if( p_operator === 'merge' ){
-                         displayName = rec.ofvs[j].value.toLowerCase();
-                     } else {
-                         param2 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
-                     }
-                     if( rec.ofvs[j].taxon ){
-                         let name  = rec.ofvs[j].taxon.name || '';
-                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                         if( p_operator === 'merge' ){
-                             field2 = name;
-                             displayCommonName = cname.toLowerCase();
-                             displayTaxonName = name;
-                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                         } else {
-                             field2 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                         }
-                     }
-                 }
-                 if( rec.ofvs[j].field_id.toString() === p_obs_field3 ){
-                     ofvs3 = rec.ofvs[j];
-                     field3 = rec.ofvs[j].value.toLowerCase();
-                     if( p_operator === 'merge' ){
-                         displayName = rec.ofvs[j].value.toLowerCase();
-                     } else {
-                         param3 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
-                     }
-                     if( rec.ofvs[j].taxon ){
-                         let name  = rec.ofvs[j].taxon.name || '';
-                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                         if( p_operator === 'merge' ){
-                             field3 = name;
-                             displayCommonName = cname.toLowerCase();
-                             displayTaxonName = name;
-                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                         } else {
-                             field3 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                         }
-                     }
-                 }
-                 if( rec.ofvs[j].field_id.toString() === p_obs_field4 ){
-                     ofvs4 = rec.ofvs[j];
-                     field4 = rec.ofvs[j].value.toLowerCase();
-                     if( p_operator === 'merge' ){
-                         displayName = rec.ofvs[j].value.toLowerCase();
-                     } else {
-                         param4 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
-                     }
-                     if( rec.ofvs[j].taxon ){
-                         let name  = rec.ofvs[j].taxon.name || '';
-                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                         if( p_operator === 'merge' ){
-                             field4 = name;
-                             displayCommonName = cname.toLowerCase();
-                             displayTaxonName = name;
-                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                         } else {
-                             field4 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                         }
-                     }
-                 }
-                 if( rec.ofvs[j].field_id.toString() === p_obs_field5 ){
-                     ofvs5 = rec.ofvs[j];
-                     field5 = rec.ofvs[j].value.toLowerCase();
-                     if( p_operator === 'merge' ){
-                         displayName = rec.ofvs[j].value.toLowerCase();
-                     } else {
-                         param = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
-                         displayName = rec.ofvs[j].value.toLowerCase();
-                     }
-                     if( rec.ofvs[j].taxon ){
-                         let name  = rec.ofvs[j].taxon.name || '';
-                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                         if( p_operator === 'merge' ){
-                             field5 = name;
-                             displayCommonName = cname.toLowerCase();
-                             displayTaxonName = name;
-                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                         } else {
-                             field5 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                         }
-                     }
-                 }
-                 if( rec.ofvs[j].field_id.toString() === p_obs_field6 ){
-                     ofvs6 = rec.ofvs[j];
-                     field6 = rec.ofvs[j].value.toLowerCase();
-                     if( p_operator === 'merge' ){
-                         displayName = rec.ofvs[j].value.toLowerCase();
-                     } else {
-                         param2 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
-                     }
-                     if( rec.ofvs[j].taxon ){
-                         let name  = rec.ofvs[j].taxon.name || '';
-                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                         if( p_operator === 'merge' ){
-                             field6 = name;
-                             displayCommonName = cname.toLowerCase();
-                             displayTaxonName = name;
-                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                         } else {
-                             field6 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                         }
-                     }
-                 }
-                 if( rec.ofvs[j].field_id.toString() === p_obs_field7 ){
-                     ofvs7 = rec.ofvs[j];
-                     field7 = rec.ofvs[j].value.toLowerCase();
-                     if( p_operator === 'merge' ){
-                         displayName = rec.ofvs[j].value.toLowerCase();
-                     } else {
-                         param7 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
-                     }
-                     if( rec.ofvs[j].taxon ){
-                         let name  = rec.ofvs[j].taxon.name || '';
-                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                         if( p_operator === 'merge' ){
-                             field7 = name;
-                             displayCommonName = cname.toLowerCase();
-                             displayTaxonName = name;
-                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                         } else {
-                             field7 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                         }
-                     }
-                 }
-                 if( rec.ofvs[j].field_id.toString() === p_obs_field8 ){
-                     ofvs8 = rec.ofvs[j];
-                     field8 = rec.ofvs[j].value.toLowerCase();
-                     if( p_operator === 'merge' ){
-                         displayName = rec.ofvs[j].value.toLowerCase();
-                     } else {
-                         param8 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
-                     }
-                     if( rec.ofvs[j].taxon ){
-                         let name  = rec.ofvs[j].taxon.name || '';
-                         let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                         if( p_operator === 'merge' ){
-                             field8 = name;
-                             displayCommonName = cname.toLowerCase();
-                             displayTaxonName = name;
-                             displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                         } else {
-                             field8 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                         }
-                     }
-                 }
-            }
-         }  
-       
-         let emojiTitle = 'Merged Observation Fields:&#10;';
-         if( ofvs1 !== '' ){ emojiTitle    += (ofvs1.field_id + ' ' + field1 + '&#10;'); }
-         if( ofvs2 !== '' ){ emojiTitle    += (ofvs2.field_id + ' ' + field2 + '&#10;'); }
-         if( ofvs3 !== '' ){ emojiTitle    += (ofvs3.field_id + ' ' + field3 + '&#10;'); }
-         if( ofvs4 !== '' ){ emojiTitle    += (ofvs4.field_id + ' ' + field4 + '&#10;'); }
-         if( ofvs5 !== '' ){ emojiTitle    += (ofvs5.field_id + ' ' + field5 + '&#10;'); }
-         if( ofvs6 !== '' ){ emojiTitle    += (ofvs6.field_id + ' ' + field6 + '&#10;'); }
-         if( ofvs7 !== '' ){ emojiTitle    += (ofvs7.field_id + ' ' + field7 + '&#10;'); }
-         if( ofvs8 !== '' ){ emojiTitle    += (ofvs8.field_id + ' ' + field8 + '&#10;'); }
-
-         if( displayTaxonName !== '' ){
-             if( mismatch === 'yes' ){
-                 displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
-             } else {
-                 displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+')</span>';
-             }
-         } else {
-             if( mismatch === 'yes' ){
-                 displayName += ' ';
-                 displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
-             } 
-         }
-       
+         let matchedCopy = 'no';
          let values = [];
+         dataType = '';
+         matchValue = '';
+         
+         let taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+         values = [
+                  {innerText:i+1},
+                  {innerHTML:tax_photo},
+                  {innerHTML:taxon},
+                  {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+              ];
+
          let user_icon = rec.user.icon || '';
          
          if( user_icon === '' ){
@@ -648,55 +350,97 @@ function fresults(xobj) {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }
 
-         let taxon = '';
-         taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+         let emojiTitle = 'Merged Observation Fields:&#10;';
+          
+        if(rec.ofvs&&rec.ofvs.length>0){
+            for( let w=0; w<field_array_copy2.length; w++ ){
+                 for( let j=0; j<rec.ofvs.length; j++ ){
 
+                      if( p_operator === 'merge' ){
+                          if( rec.ofvs[j].field_id.toString() === field_array_copy2[w].toString() ){
+                              if( matchValue === '' ){
+                                  matchValue = rec.ofvs[j].value;
+                              } else if( matchValue !== rec.ofvs[j].value ){
+                                  mismatch = 'yes';
+                              }
+                   
+                              if( datatype === '' ){
+                                  datatype = rec.ofvs[j].datatype;
+                              } else if( datatype !== rec.ofvs[j].datatype ){
+                                  mismatch = 'yes';
+                              }
+                           
+                              field1 = rec.ofvs[j].value.toLowerCase();
+                                    
+                              if( rec.ofvs[j].taxon ){ 
+                                  if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
+                                      let name  = rec.ofvs[j].taxon.name || '';
+                                      let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                                      field1 = name;
+                                      displayCommonName = cname.toLowerCase();
+                                      displayTaxonName = name;
+                                      emojiTitle    += (rec.ofvs[j].field_id + ' ' + name + '&#10;');
+                                      displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                                  } else { 
+                                      emojiTitle    += (rec.ofvs[j].field_id + ' ' + rec.ofvs[j].taxon.name.toLowerCase() + '&#10;');
+                                      displayName = '';
+                                  }
+                              } else {
+                                      displayName    = rec.ofvs[j].value.toLowerCase();
+                                      emojiTitle    += (rec.ofvs[j].field_id + ' ' + rec.ofvs[j].value.toLowerCase() + '&#10;');
+                              }
+                          }
+                      } else {
+                          if( rec.ofvs[j].field_id.toString() === field_array_copy2[w].toString() ){
+                              matchedCopy = 'yes';
+                              field1 = rec.ofvs[j].value.toLowerCase();
+                              param1 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
+                              displayName = rec.ofvs[j].value.toLowerCase();
+                               
+                              if( rec.ofvs[j].taxon ){
+                                  let name  = rec.ofvs[j].taxon.name || '';
+                                  let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                                  field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                              }
+                              if( p_field === '' ){
+                                  values.push({innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
+                              } else {
+                                  values.push({innerHTML:field1});
+                              }
+                          }
+                      }
+                  }
+                  if( p_operator !== 'merge' ){
+                  if( matchedCopy === 'yes' ){
+                      matchedCopy = 'no';
+                  } else {
+                      values.push({innerText:''});
+                  }}
+             }
+         }  
+       
          if( p_operator === 'merge' ){
-             values = [
-                  {innerText:i+1},
-                  {innerHTML:tax_photo},
-                  {innerHTML:taxon},
-                  {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  {innerHTML:displayName}, 
-                  {innerHTML:''}, {innerHTML:''}, {innerHTML:''}, {innerHTML:''}, {innerHTML:''}, {innerHTML:''}, {innerHTML:''}, 
-                  {innerHTML:user_icon},
-                  {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
-             ];
-         } else if( p_field !== '' ){
-             values = [
-                  {innerText:i+1},
-                  {innerHTML:tax_photo},
-                  {innerHTML:taxon},
-                  {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  {innerHTML:field1}, 
-                  {innerHTML:field2}, 
-                  {innerHTML:field3}, 
-                  {innerHTML:field4}, 
-                  {innerHTML:field5}, 
-                  {innerHTML:field6}, 
-                  {innerHTML:field7}, 
-                  {innerHTML:field8}, 
-                  {innerHTML:user_icon},
-                  {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
-             ];
-         } else {
-             values = [
-                  {innerText:i+1},
-                  {innerHTML:tax_photo},
-                  {innerHTML:taxon},
-                  {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)}, 
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param2+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field2)}, 
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param3+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field3)}, 
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param4+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field4)}, 
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param5+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field5)}, 
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param6+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field6)}, 
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param7+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field7)}, 
-                  {innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param8+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field8)}, 
-                  {innerHTML:user_icon},
-                  {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
-             ];
-         }
+              if( displayTaxonName !== '' ){
+                  if( mismatch === 'yes' ){
+                      displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
+                  } else {
+                      displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+')</span>';
+                  }
+              } else {
+                  if( mismatch === 'yes' ){
+                      displayName += ' ';
+                      displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
+                  } 
+              }
+          
+              values.push({innerHTML:displayName});
+              for( let x=1; x<field_array_copy2.length; x++ ){
+                   values.push({innerHTML:''});
+              }
+         }          
+ 
+         values.push({innerHTML:user_icon});
+         values.push({innerHTML:furl(root_people+rec.user.login,rec.user.login)});
    
          faddelems('td',brow,values);
       };
@@ -708,7 +452,7 @@ function fresults(xobj) {
       (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
       (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
    }
-   else { faddelem('p',document.body,{innerText:'No results returned.'}); };
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
 </script>
 </body>
