@@ -202,6 +202,7 @@ function fresults(xobj) {
       for (let l=0; l<results.length; l++) {
           let rec = results[l];
           let matchValue = '';
+          let matchTaxonId = '';
        
           // find obs field labels
           if( rec.ofvs&&rec.ofvs.length > 0 ) {
@@ -219,20 +220,17 @@ function fresults(xobj) {
                             } else if( datatype !== rec.ofvs[k].datatype ){
                                 mismatch = 'yes';
                             }
+                            if( rec.ofvs[k].taxon ){ 
+                                if( matchTaxonId === '' ){
+                                    matchTaxonId = rec.ofvs[k].taxon.id;
+                                }
+                                if( rec.ofvs[k].taxon.id != matchTaxonId ){
+                                    mismatch = 'yes';
+                                }
+                            }
                         }
                             
                         if( field_array_copy[r] === rec.ofvs[k].field_id.toString() ){
-              /*              if( matchValue === '' ){
-                                matchValue = rec.ofvs[k].value;
-                            } else if( matchValue !== rec.ofvs[k].value ){
-                                mismatch = 'yes';
-                            }
-                      
-                            if( datatype === '' ){
-                                datatype = rec.ofvs[k].datatype;
-                            } else if( datatype !== rec.ofvs[k].datatype ){
-                                mismatch = 'yes';
-                            } */
                             field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[k].field_id.toString());
                             if( labelCount === 0 ){
                                 dlString += '<span id="dltest"><table id="tablekey">';
@@ -260,11 +258,6 @@ function fresults(xobj) {
                             }
                        }
                   }
-               
-                  // no need to continue looping if all labels have been found.
-                  //if( field_array_copy.length === 0 ){
-                  //    k = rec.ofvs.length;
-                  //} 
              } 
          }
       }
