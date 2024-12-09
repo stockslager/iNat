@@ -210,8 +210,9 @@ function fresults(xobj) {
           }  
        
           // find obs field labels
-          if(rec.ofvs&&rec.ofvs.length>0){
-             for( let k=0; k<rec.ofvs.length; k++ ){
+          if( rec.ofvs&&rec.ofvs.length > 0 ) {
+              for( let r=0; r<field_array_copy.length; r++ ) {
+                   for( let k=0; k<rec.ofvs.length; k++ ){
 
           /*        if( field_array.includes(rec.ofvs[k].field_id.toString()) ){
                       if( matchValue === '' ){
@@ -221,35 +222,35 @@ function fresults(xobj) {
                       }
                   }  */
 
-                  for( let r=0; r<field_array_copy.length; r++ ){
-                       if( field_array_copy[r] === rec.ofvs[k].field_id.toString() ){
-                           if( matchValue === '' ){
-                               matchValue += rec.ofvs[k].value;
-                           } else if( matchValue !== rec.ofvs[k].value ){
-                               mismatch = 'yes';
-                           }
-                   
-                           if( datatype === '' ){
-                               datatype = rec.ofvs[k].datatype;
-                           } else if( datatype !== rec.ofvs[k].datatype ){
-                               mismatch = 'yes';
-                           }
-                           field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[k].field_id.toString());
-                           labelCount++;
-                           if( labelCount === 1 ){
-                               dlString += '<span id="dltest"><table id="tablekey">';
-                               dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      }
-                           if( labelCount === 5 ){
-                               dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
-                           }
-                           dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+rec.ofvs[k].field_id,rec.ofvs[k].field_id) + '</td>');
-                           dlString += ('<td id="tdkey">' + rec.ofvs[k].name.toLowerCase() + '</td></tr>');
+                        if( field_array_copy[r] === rec.ofvs[k].field_id.toString() ){
+                            if( matchValue === '' ){
+                                matchValue += rec.ofvs[k].value;
+                            } else if( matchValue !== rec.ofvs[k].value ){
+                                mismatch = 'yes';
+                            }
                       
-                           // add label to header row (if not merge)
-                           if( p_operator !== 'merge' ){
-                               field_array_copy2.push(rec.ofvs[k].field_id.toString());
-                               labels.push({innerText:rec.ofvs[k].name});
-                           }
+                            if( datatype === '' ){
+                                datatype = rec.ofvs[k].datatype;
+                            } else if( datatype !== rec.ofvs[k].datatype ){
+                                mismatch = 'yes';
+                            }
+                            field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[k].field_id.toString());
+                            labelCount++;
+                            if( labelCount === 1 ){
+                                dlString += '<span id="dltest"><table id="tablekey">';
+                                dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
+                            }
+                            if( labelCount === 5 ){
+                                dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
+                            }
+                            dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+rec.ofvs[k].field_id,rec.ofvs[k].field_id) + '</td>');
+                            dlString += ('<td id="tdkey">' + rec.ofvs[k].name.toLowerCase() + '</td></tr>');
+                      
+                            // add label to header row (if not merge)
+                            if( p_operator !== 'merge' ){
+                                field_array_copy2.push(rec.ofvs[k].field_id.toString());
+                                labels.push({innerText:rec.ofvs[k].name});
+                            }
                        }
                   }
                
