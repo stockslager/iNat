@@ -117,12 +117,7 @@ let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observa
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
 <script> 
 
-if( field_array.length > 8 ){
-    let instructions = [
-      {innerText:'More than 8 observation fields entered.  A maximum of 8 observation fields can be passed in.  Please change the &obs_fields parameter to have 8 or less values.'},
-   ];
-   faddelems('p',document.body,instructions);
-} else if (winurlsearchstr==='' || p_project_id === '') {
+if (winurlsearchstr==='' || p_project_id === '') {
    let instructions = [
       {innerText:'This page requires a project_id argument.  Add ?project_id=12345678 to the end of the url.'},
    ];
