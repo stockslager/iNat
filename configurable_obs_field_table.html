@@ -319,8 +319,10 @@ function fresults(xobj) {
          let tax_name = '';
          let pref_tax_name = '';
          let tax_photo = '<div class="clipart">&#127807</div>'; 
+         let tax_id = '';
          
          if( rec.taxon ){
+             tax_id = rec.taxon.id;
              tax_name = rec.taxon.name || '';
              pref_tax_name = rec.taxon.preferred_common_name || '';
            
@@ -341,8 +343,10 @@ function fresults(xobj) {
          let values = [];
          dataType = '';
          matchValue = '';
-         
-         let taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+rec.taxon.id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+         let taxon = '';
+
+         let taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+
          values = [
                   {innerText:i+1},
                   {innerHTML:tax_photo},
