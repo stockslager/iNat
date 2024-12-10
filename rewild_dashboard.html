@@ -95,11 +95,23 @@ let butter   = furl(github_root+'configurable_obs_field_table.html?project_id='+
 let larva    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=6&obs_fields=7623,8581,254,7807,499,4935,6586&ofv_datatype=taxon&operator=merge','larvae only'); 
 let adult    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=2&obs_fields=7623,498,4935,7807,499,10524,254,8581&ofv_datatype=taxon&operator=merge','adults only'); 
 let pupa     = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=4&obs_fields=8581&ofv_datatype=taxon&operator=merge','pupae only'); 
-  
-let intRAspecific = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&obs_fields=5955&field:Interaction%20intra-species','competition'); 
-let mating        = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&obs_fields=6637&ofv_datatype=text&field:Behavior:+mating=yes','mating'); 
-let intERspecific = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&obs_fields=8599&ofv_datatype=taxon&field:interspecific+competition+with','competition'); 
-let preying       = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&obs_fields=8586&ofv_datatype=taxon&field:prey+taxon','preying upon'); 
+
+let intRAspecific = '';
+let mating        = '';
+let intERspecific = '';
+let preying       = '';
+
+if( p_project_id.toLowerCase() = 'biodiversity-of-ohio' || p_project_id = '22501' ){
+    intRAspecific = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&obs_fields=5955&field:Interaction%20intra-species','competition'); 
+    mating        = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&obs_fields=6637&ofv_datatype=text&field:Behavior:+mating=yes','mating'); 
+    intERspecific = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&obs_fields=8599&ofv_datatype=taxon&field:interspecific+competition+with','competition'); 
+    preying       = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&obs_fields=8586&ofv_datatype=taxon&field:prey+taxon','preying upon'); 
+} else {
+    intRAspecific = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&obs_fields=5955&field:Interaction%20intra-species','competition'); 
+    mating        = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&obs_fields=6637&ofv_datatype=text&field:Behavior:+mating=yes','mating'); 
+    intERspecific = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&obs_fields=8599&ofv_datatype=taxon&field:interspecific+competition+with','competition'); 
+    preying       = furl(github_root+'configurable_obs_field_table.html?project_id=76944,122377&place_id=31&obs_fields=13,7026,3134,8586&ofv_datatype=taxon&operator=merge','preying upon'); 
+}
   
 let col1 = '<table style="margin-top:-7px"><tr><td><dl>'
             + '<dt></dt><span id="key"><dd>Plants Visited</dd></span>'
