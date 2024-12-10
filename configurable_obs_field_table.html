@@ -78,6 +78,7 @@ let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
 let p_obs_field_array = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
+let p_omit_users = winurlparams.get('omit_users') || '';
 let p_field = '';
 let p_field_value = '';
 let opts = '';
@@ -85,6 +86,11 @@ let field_array = [];
 
 if( p_obs_field_array !== '' ){
     field_array = p_obs_field_array.split(",");
+}
+
+if( p_omit_users !== '' ){
+    winurlparams.delete('not_user_id');
+    winurlparams.append('not_user_id', p_omit_users);
 }
 
 if( winurlparams.get('ofv_datatype') === null || winurlparams.get('ofv_datatype') === ''){
