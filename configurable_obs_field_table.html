@@ -390,15 +390,15 @@ function fresults(xobj) {
                                   let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                                   if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
                                       field1 = name;
-                                      displayCommonName = cname.toLowerCase();
-                                      displayTaxonName = name;
-                                      emojiTitle    += (rec.ofvs[j].field_id + ' ' + name + '&#10;');
-                                      if( cname.toString() !== 'unknown' ) {
-                                          displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                                      if( cname !== 'unknown' ){
+                                          displayCommonName = cname.toLowerCase();
+                                          displayTaxonName = name;
                                       }
+                                      emojiTitle    += (rec.ofvs[j].field_id + ' ' + name + '&#10;');
+                                      displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   } else { 
                                       emojiTitle    += (rec.ofvs[j].field_id + ' ' + name.toLowerCase() + '&#10;');
-                                      //displayName = '';
+                                      displayName = '';
                                   }
                               } else {
                                       displayName    = rec.ofvs[j].value.toLowerCase();
