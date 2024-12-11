@@ -223,8 +223,8 @@ function fresults(xobj) {
                         if( field_array.includes(rec.ofvs[k].field_id.toString()) ){
                             if( matchValue === '' ){
                                 matchValue = rec.ofvs[k].value;
-                            } else if( matchValue !== rec.ofvs[k].value ){
-                                //mismatch = 'yes';
+                            } else if( rec.ofvs[k].value !== '' && matchValue !== rec.ofvs[k].value ){
+                                mismatch = 'yes';
                             }
                       
                             if( datatype === '' ){
