@@ -71,32 +71,43 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 
-let p_project_id = winurlparams.get('project_id') || '152539';
+let p_project_id = winurlparams.get('project_id') || '152539'; // cinti re-wild
+let p_place_id   = winurlparams.get('place_id') || '31';       // ohio
+let p_pollinator = p_project_id;
+
+if( p_project_id === 'biodiversity-of-cincinnati-nature-center' ){
+    p_project_id = 'biodiversity-of-ohio';
+    p_pollinator = '220623';
+    p_place_id   = '128707';
+}
 
 let icon = 'https://static.inaturalist.org/projects/152539-icon-span2.?1730371479';
 faddelem('h2',document.body,{innerHTML:'<div class="box"><img class="photo" src="'+icon+'"> <span>'+ '  Yard Project Dashboard</span></div>'});  
 
+// set up common params
+let common = ('place_id='+p_place_id+'&project_id='+p_project_id);
+  
 // observation exclusion list (not_id list) for each iconic taxa...
-let notInsects = '';
 let notBirds   = '76944,131004,18960';
 let notSpiders = '232905310,125168044,123407637,123310333';
 let notBees    = '233728903,218384446,215394847,213574178,205886725,205715997,138789558';
 let notHerps   = '76944,122377,219530,18960,18959';
 let commonPlants = '&ofield_iconic=47126'
-  
-let plantIns = furl(github_root+'rewild_plants_visited.html?project_id='+p_project_id+'&g_list=4484313&s_list=4484172&project_title=Cincinnati%20Re-Wild', 'plant inspector');
-let insects  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499&ofv_datatype=taxon&operator=merge','insects'); 
-let birds    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+'&project_id='+p_project_id+'&iconic_taxa=aves&obs_fields=7623,8581&ofv_datatype=taxon&operator=merge','birds'); 
-let mammals  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&iconic_taxa=mammalia&ofv_datatype=taxon&obs_fields=8581,7623&operator=merge','mammals'); 
-let herps    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notHerps+'&project_id='+p_project_id+'&iconic_taxa=reptilia,amphibia&ofv_datatype=taxon&obs_fields=8581,7623&operator=merge','herps'); 
-let molluscs = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&iconic_taxa=mollusca&ofv_datatype=taxon&obs_fields=8581,7623&operator=merge','molluscs'); 
-let spiders  = furl(github_root+'configurable_obs_field_table.html?not_id='+notSpiders+'&project_id='+p_project_id+'&iconic_taxa=Arachnida&ofv_datatype=taxon&obs_fields=7623,8581,6586&operator=merge','spiders'); 
-let fungi    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&iconic_taxa=fungi&ofv_datatype=taxon&obs_fields=7623,8581,7807,254&operator=merge','fungi'); 
-let bees     = furl(github_root+'configurable_obs_field_table.html?not_id='+notBees+'&project_id='+p_project_id+'&iconic_taxa=insecta&taxon_id=630955&obs_fields=7623,498,4935,7807,8581,254&ofv_datatype=taxon&operator=merge','bees only'); 
-let butter   = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&iconic_taxa=insecta&taxon_id=47157&obs_fields=7623,498,4935,7807,499,10524,254,8581&ofv_datatype=taxon&operator=merge','butterflies only'); 
-let larva    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=6&obs_fields=7623,8581,254,7807,499,4935,6586&ofv_datatype=taxon&operator=merge','larvae only'); 
-let adult    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=2&obs_fields=7623,498,4935,7807,499,10524,254,8581&ofv_datatype=taxon&operator=merge','adults only'); 
-let pupa     = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=4&obs_fields=8581&ofv_datatype=taxon&operator=merge','pupae only'); 
+
+let notInsects = '';
+let plantIns = furl(github_root+'rewild_plants_visited.html?project_id='+p_pollinator+'&g_list=4484313&s_list=4484172', 'plant inspector');
+let insects  = furl(github_root+'configurable_obs_field_table.html?'+common+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499&ofv_datatype=taxon&operator=merge','insects'); 
+let birds    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+common+'&iconic_taxa=aves&obs_fields=7623,8581&ofv_datatype=taxon&operator=merge','birds'); 
+let mammals  = furl(github_root+'configurable_obs_field_table.html?'+common+p_project_id+'&iconic_taxa=mammalia&ofv_datatype=taxon&obs_fields=8581,7623&operator=merge','mammals'); 
+let herps    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notHerps+common+'&iconic_taxa=reptilia,amphibia&ofv_datatype=taxon&obs_fields=8581,7623&operator=merge','herps'); 
+let molluscs = furl(github_root+'configurable_obs_field_table.html?'+common+p_project_id+'&iconic_taxa=mollusca&ofv_datatype=taxon&obs_fields=8581,7623&operator=merge','molluscs'); 
+let spiders  = furl(github_root+'configurable_obs_field_table.html?not_id='+notSpiders+common+'&iconic_taxa=Arachnida&ofv_datatype=taxon&obs_fields=7623,8581,6586&operator=merge','spiders'); 
+let fungi    = furl(github_root+'configurable_obs_field_table.html?'+common+p_project_id+'&iconic_taxa=fungi&ofv_datatype=taxon&obs_fields=7623,8581,7807,254&operator=merge','fungi'); 
+let bees     = furl(github_root+'configurable_obs_field_table.html?not_id='+notBees+common+'&iconic_taxa=insecta&taxon_id=630955&obs_fields=7623,498,4935,7807,8581,254&ofv_datatype=taxon&operator=merge','bees only'); 
+let butter   = furl(github_root+'configurable_obs_field_table.html?'+common+p_project_id+'&iconic_taxa=insecta&taxon_id=47157&obs_fields=7623,498,4935,7807,499,10524,254,8581&ofv_datatype=taxon&operator=merge','butterflies only'); 
+let larva    = furl(github_root+'configurable_obs_field_table.html?'+common+p_project_id+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=6&obs_fields=7623,8581,254,7807,499,4935,6586&ofv_datatype=taxon&operator=merge','larvae only'); 
+let adult    = furl(github_root+'configurable_obs_field_table.html?'+common+p_project_id+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=2&obs_fields=7623,498,4935,7807,499,10524,254,8581&ofv_datatype=taxon&operator=merge','adults only'); 
+let pupa     = furl(github_root+'configurable_obs_field_table.html?'+common+p_project_id+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=4&obs_fields=8581&ofv_datatype=taxon&operator=merge','pupae only'); 
 
 let intRAspecific = '';
 let mating        = '';
@@ -113,28 +124,28 @@ if( p_project_id.toLowerCase() === 'biodiversity-of-ohio' || p_project_id === '2
     spiderOmit = '&omit_id=232905310,125168044,123407637,123310333';
     birdOmitId = '&omit_id=209849,484573,502634,1111665,1811366,2489623,2564970,2841714,20883583,32500064,46239390,66184927,68528959,182848678,188302757,188302867';
 
-    insects       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+commonPlants+'&project_id='+p_project_id+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711,2365&ofv_datatype=taxon&operator=merge&without_field=Classification%20Category','insects'); 
-    butter        = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+commonPlants+'&project_id='+p_project_id+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711,2365&ofv_datatype=taxon&operator=merge&taxon_id=47157&without_field=Classification%20Category','butterflies only'); 
-    larva         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+commonPlants+'&project_id='+p_project_id+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711,2365&ofv_datatype=taxon&operator=merge&taxon_id=47157&term_id=1&term_value_id=6&without_field=Classification%20Category','larvae only'); 
-    adult         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+commonPlants+'&project_id='+p_project_id+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711,2365&ofv_datatype=taxon&operator=merge&taxon_id=47157&term_id=1&term_value_id=2&without_field=Classification%20Category','adults only'); 
-    pupa          = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+commonPlants+'&project_id='+p_project_id+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711,2365&ofv_datatype=taxon&operator=merge&taxon_id=47157&term_id=1&term_value_id=4&without_field=Classification%20Category','pupae only'); 
+    insects       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+commonPlants+common+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711,2365&ofv_datatype=taxon&operator=merge&without_field=Classification%20Category','insects'); 
+    butter        = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+commonPlants+common+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711,2365&ofv_datatype=taxon&operator=merge&taxon_id=47157&without_field=Classification%20Category','butterflies only'); 
+    larva         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+commonPlants+common+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711,2365&ofv_datatype=taxon&operator=merge&taxon_id=47157&term_id=1&term_value_id=6&without_field=Classification%20Category','larvae only'); 
+    adult         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+commonPlants+common+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711,2365&ofv_datatype=taxon&operator=merge&taxon_id=47157&term_id=1&term_value_id=2&without_field=Classification%20Category','adults only'); 
+    pupa          = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+commonPlants+common+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711,2365&ofv_datatype=taxon&operator=merge&taxon_id=47157&term_id=1&term_value_id=4&without_field=Classification%20Category','pupae only'); 
   
-    birds         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+commonPlants+birdOmitId+'&project_id='+p_project_id+'&iconic_taxa=aves&obs_fields=3141,47,12264,3126,6586,498,7623,7807,4935,14609,8581,3845,1685,115,614&ofv_datatype=taxon&operator=merge&without_field=Classification%20Category','birds');
-    mammals       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notMammals+commonPlants+'&project_id='+p_project_id+'&iconic_taxa=mammalia&ofv_datatype=taxon&obs_fields=8581,7623,13,6586&operator=merge&without_field=Classification%20Category','mammals'); 
-    spiders       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notSpiders+commonPlants+spiderOmit+'&project_id='+p_project_id+'&iconic_taxa=Arachnida&ofv_datatype=taxon&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126&operator=merge','spiders'); 
-    fungi         = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+'&iconic_taxa=fungi&ofv_datatype=taxon&obs_fields=7623,8581,7807,254,6586,47,3137,3839&operator=merge','fungi'); 
+    birds         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+commonPlants+birdOmitId+common+'&iconic_taxa=aves&obs_fields=3141,47,12264,3126,6586,498,7623,7807,4935,14609,8581,3845,1685,115,614&ofv_datatype=taxon&operator=merge&without_field=Classification%20Category','birds');
+    mammals       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notMammals+commonPlants+common+'&iconic_taxa=mammalia&ofv_datatype=taxon&obs_fields=8581,7623,13,6586&operator=merge&without_field=Classification%20Category','mammals'); 
+    spiders       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notSpiders+commonPlants+spiderOmit+common+'&iconic_taxa=Arachnida&ofv_datatype=taxon&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126&operator=merge','spiders'); 
+    fungi         = furl(github_root+'configurable_obs_field_table.html?'+common+p_project_id+commonPlants+'&iconic_taxa=fungi&ofv_datatype=taxon&obs_fields=7623,8581,7807,254,6586,47,3137,3839&operator=merge','fungi'); 
 
-    intERspecific = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInter+'&project_id=221846&place_id=31&obs_fields=8599,3549&ofv_datatype=taxon&field:attacking=&operator=merge','competition'); 
-    intRAspecific = furl(github_root+'configurable_obs_field_table.html?project_id=225292&place_id=31&obs_fields=5955&field:Interaction-%3Eintraspecific=competition','competition'); 
-    mating        = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&obs_fields=6637&ofv_datatype=text&field:Behavior:+mating=yes','mating'); 
-    preying       = furl(github_root+'configurable_obs_field_table.html?project_id=76944,122377,7350,177851,81601,28829,46923,122506,137227&place_id=31&obs_fields=13,7026,3134,8586,1685,3525,3011,15242,3146&ofv_datatype=taxon&operator=merge','preying upon'); 
-    galls         = furl(github_root+'configurable_obs_field_table.html?project_id=biodiversity-of-ohio&place_id=31&obs_fields=6586,254,47,7807,877&ofv_datatype=taxon&operator=merge&term_id=22&term_value_id=29','galls'); 
+    intERspecific = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInter+'&project_id=221846&obs_fields=8599,3549&ofv_datatype=taxon&field:attacking=&operator=merge','competition'); 
+    intRAspecific = furl(github_root+'configurable_obs_field_table.html?project_id=225292&obs_fields=5955&field:Interaction-%3Eintraspecific=competition','competition'); 
+    mating        = furl(github_root+'configurable_obs_field_table.html?'+common+p_project_id+'&obs_fields=6637&ofv_datatype=text&field:Behavior:+mating=yes','mating'); 
+    preying       = furl(github_root+'configurable_obs_field_table.html?project_id=76944,122377,7350,177851,81601,28829,46923,122506,137227&obs_fields=13,7026,3134,8586,1685,3525,3011,15242,3146&ofv_datatype=taxon&operator=merge','preying upon'); 
+    galls         = furl(github_root+'configurable_obs_field_table.html?project_id=biodiversity-of-ohio&obs_fields=6586,254,47,7807,877&ofv_datatype=taxon&operator=merge&term_id=22&term_value_id=29','galls'); 
       
 } else {
-    intRAspecific = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&obs_fields=5955&field:Interaction%20intra-species','competition'); 
-    mating        = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&obs_fields=6637&ofv_datatype=text&field:Behavior:+mating=yes','mating'); 
-    intERspecific = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&obs_fields=8599&ofv_datatype=taxon&field:interspecific+competition+with','competition'); 
-    preying       = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&obs_fields=8586&ofv_datatype=taxon&field:prey+taxon','preying upon'); 
+    intRAspecific = furl(github_root+'configurable_obs_field_table.html?'+common+p_project_id+'&obs_fields=5955&field:Interaction%20intra-species','competition'); 
+    mating        = furl(github_root+'configurable_obs_field_table.html?'+common+p_project_id+'&obs_fields=6637&ofv_datatype=text&field:Behavior:+mating=yes','mating'); 
+    intERspecific = furl(github_root+'configurable_obs_field_table.html?'+common+p_project_id+'&obs_fields=8599&ofv_datatype=taxon&field:interspecific+competition+with','competition'); 
+    preying       = furl(github_root+'configurable_obs_field_table.html?'+common+p_project_id+'&obs_fields=8586&ofv_datatype=taxon&field:prey+taxon','preying upon'); 
     galls         = furl(github_root+'configurable_obs_field_table.html?project_id=152539&obs_fields=6586,254,47,7807,877,7623,8581&ofv_datatype=taxon&operator=merge&term_id=22&term_value_id=29','galls'); 
 }
   
