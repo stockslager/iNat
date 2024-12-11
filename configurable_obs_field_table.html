@@ -192,7 +192,6 @@ function fresults(xobj) {
 
       let label = '';
       let labels = [];
-      let datatype = '';
       let mismatch = '';
       let field_array_copy = field_array;
       let field_array_copy2 = [];
@@ -215,6 +214,7 @@ function fresults(xobj) {
           let rec = results[l];
           let matchValue = '';
           let matchTaxonId = '';
+          let datatype = '';
        
           // find obs field labels
           if( rec.ofvs&&rec.ofvs.length > 0 ) {
@@ -232,14 +232,14 @@ function fresults(xobj) {
                             } else if( datatype !== rec.ofvs[k].datatype ){
                                 mismatch = 'yes';
                             }
-                          /*  if( rec.ofvs[k].taxon ){ 
+                            if( rec.ofvs[k].taxon ){ 
                                 if( matchTaxonId === '' ){
                                     matchTaxonId = rec.ofvs[k].taxon.id;
                                 }
                                 if( rec.ofvs[k].taxon.id !== matchTaxonId ){
                                     mismatch = 'yes';
                                 }
-                            }*/
+                            }
                         } 
                             
                         if( field_array_copy[r] === rec.ofvs[k].field_id.toString() ){
