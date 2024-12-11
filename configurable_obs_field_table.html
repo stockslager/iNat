@@ -79,7 +79,6 @@ let p_operator   = winurlparams.get('operator') || '';
 let p_obs_field_array = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_omit_users = winurlparams.get('omit_users') || '';
-let p_omit_id = winurlparams.get('omit_id') || '';
 let p_field = '';
 let p_field_value = '';
 let opts = '';
@@ -92,11 +91,6 @@ if( p_obs_field_array !== '' ){
 if( p_omit_users !== '' ){
     winurlparams.delete('not_user_id');
     winurlparams.append('not_user_id', p_omit_users);
-}
-
-if( p_omit_id !== '' ){
-    winurlparams.delete('omit_id');
-    winurlparams.append('omit_id', p_omit_id);
 }
 
 if( winurlparams.get('ofv_datatype') === null || winurlparams.get('ofv_datatype') === ''){
