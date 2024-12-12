@@ -213,8 +213,25 @@ let col1 = '<table style="margin-top:-7px"><tr><td><dl>'
             + '<dt></dt><span id="tab1"><dd>'+molluscs+'</dd></span>'
             + '<dt></dt><span id="tab1"><dd>'+fungi+'</dd></span>'
             + '</dl></td>';    
-  
-let col2 = '<td style="vertical-align:top;"><dl>'
+
+let col2 = '';
+
+if( p_project_id === '152539' || p_project_id === 'cincinnati-rewild' ){
+    col2 = '<td style="vertical-align:top;"><dl>'
+            + '<dt></dt><span id="key"><dd>Interactions</dd></span>'
+            + '<dt></dt><span id="tab1"><dd>intraspecific</dd></span>'
+            + '<dt></dt><span id="tab2"><dd>'+intRAspecific+'</dd></span>'
+            + '<dt></dt><span id="tab2"><dd>'+mating+'</dd></span>'
+            + '<dt></dt><span id="tab1"><dd>&nbsp;</dd></span>'
+            + '<dt></dt><span id="tab1"><dd>interspecific</dd></span>'
+            + '<dt></dt><span id="tab2"><dd>'+intERspecific+'</dd></span>'
+            + '<dt></dt><span id="tab2"><dd>'+preying+'</dd></span>'
+            + '<dt></dt><span id="tab2"><dd>'+symbiosis+'</dd></span>'
+            + '<dt></dt><span id="tab2"><dd>parasitizing</dd></span>'
+            + '<dt></dt><span id="tab3"><dd>'+galls+'</dd></span>'
+            + '</dl></td>';  
+} else {
+    col2 = '<td style="vertical-align:top;"><dl>'
             + '<dt></dt><span id="key"><dd>Interactions</dd></span>'
             + '<dt></dt><span id="tab1"><dd>intraspecific</dd></span>'
             + '<dt></dt><span id="tab2"><dd>'+intRAspecific+'</dd></span>'
@@ -227,7 +244,8 @@ let col2 = '<td style="vertical-align:top;"><dl>'
             + '<dt></dt><span id="tab2"><dd>'+symbiosis+'</dd></span>'
             + '<dt></dt><span id="tab2"><dd>parasitizing</dd></span>'
             + '<dt></dt><span id="tab3"><dd>'+galls+'</dd></span>'
-            + '</dl></td>';       
+            + '</dl></td>';  
+}
   
 faddelem('p',document.body,{innerHTML:col1+col2});
     
