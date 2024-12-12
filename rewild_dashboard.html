@@ -78,7 +78,7 @@ let lists = '&g_list=4484313&s_list=4484172';
 
 // default obs fields for rewild...
 let insectOFields  = '&obs_fields=7623,498,4935,7807,8581,254,6586,499';
-let birdOfields    = '&obs_fields=7623,8581';
+let birdOFields    = '&obs_fields=7623,8581';
 let mammalOFields  = '&obs_fields=8581,7623';
 let herpOFields    = '&obs_fields=8581,7623';
 let molluscOFields = '&obs_fields=8581,7623';
@@ -103,7 +103,7 @@ if( p_project_id === 'cnc' ){
 } else if( p_project_id === '221779' || p_project_id === 'glenwood-gardens' ){
     p_project_id = '221779';
     lists = '&g_list=4484950&s_list=4484949&view=nectaring&project_title=Glenwood%20Gardens';
-    insectOFields = '&obs_fields=498,6586,4935,7807,13,47'; 
+    insectOFields = '&obs_fields=498,6586,4935,7807,13,47,254'; 
 }
 
 let icon = 'https://static.inaturalist.org/projects/152539-icon-span2.?1730371479';
@@ -122,7 +122,7 @@ let commonPlants = '&ofield_iconic=47126'
 let notInsects = '';
 let plantIns = furl(github_root+'rewild_plants_visited.html?project_id='+p_pollinator+lists, 'plant inspector');
 let insects  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+common+'&iconic_taxa=insecta'+insectOFields+'&ofv_datatype=taxon&operator=merge','insects'); 
-let birds    = ''//furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+'&project_id='+p_project_id+common+'&iconic_taxa=aves'+birdOFields+'&ofv_datatype=taxon&operator=merge','birds'); 
+let birds    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+'&project_id='+p_project_id+common+'&iconic_taxa=aves'+birdOFields+'&ofv_datatype=taxon&operator=merge','birds'); 
 let mammals  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+common+'&iconic_taxa=mammalia&ofv_datatype=taxon'+mammalOFields+'&operator=merge','mammals'); 
 let herps    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notHerps+'&project_id='+p_project_id+common+'&iconic_taxa=reptilia,amphibia&ofv_datatype=taxon'+herpOFields+'&operator=merge','herps'); 
 let molluscs = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+common+'&iconic_taxa=mollusca&ofv_datatype=taxon'+molluscOFields+'&operator=merge','molluscs'); 
