@@ -89,6 +89,7 @@ let butterOFields  = '&obs_fields=7623,498,4935,7807,499,10524,254,8581';
 let larvaeOFields  = '&obs_fields=7623,8581,254,7807,499,4935,6586';
 let adultsOFields  = '&obs_fields=7623,498,4935,7807,499,10524,254,8581';
 let pupaeOFields   = '&obs_fields=8581';
+let allOhio        = 'no';
   
 if( p_project_id === 'cnc' ){
     p_project_id = 'biodiversity-of-ohio';
@@ -109,8 +110,10 @@ if( p_project_id === 'cnc' ){
     adultsOFields = '&obs_fields=498,4935,6586';
     larvaeOFields = '&obs_fields=498,6586,254,13';
     beesOFields   = '&obs_fields=498,4935';
+} else if( p_project_id.toLowerCase() === 'biodiversity-of-ohio' || p_project_id === '22501' ){
+    allOhio = 'yes';
 }
-
+  
 let icon = 'https://static.inaturalist.org/projects/152539-icon-span2.?1730371479';
 faddelem('h2',document.body,{innerHTML:'<div class="box"><img class="photo" src="'+icon+'"> <span>'+ '  Yard Project Dashboard</span></div>'});  
 
@@ -145,7 +148,7 @@ let intERspecific = '';
 let preying       = '';
 let galls         = '';
 
-if( p_project_id.toLowerCase() === 'biodiversity-of-ohio' || p_project_id === '22501' ){
+if( allOhio === 'yes' ){
     notInsects = '76944,137227,7350,81601,28829,122506,64204,84767,64680';
     notBirds   = '76944,131004,18960,64204,46641,137227,225292,182405,2307,3405,3594&omit_users=biketandem,harold,rcurtis,mfbenard';
     notMammals = '76944,137227';
