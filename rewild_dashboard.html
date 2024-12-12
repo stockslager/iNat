@@ -153,6 +153,7 @@ let mating        = '';
 let intERspecific = '';
 let preying       = '';
 let galls         = '';
+let pinsects      = '';
 let scavenging    = furl(github_root+'configurable_obs_field_table.html?project_id=137227'+placeId+'&obs_fields=13,7026,3134,8586,1685,3525,3011,15242,3146&ofv_datatype=taxon&operator=merge','scavenging'); 
 let symbiosis     = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=6695&ofv_datatype=taxon&operator=merge&field:Observed%20Species%20Association:%20Symbiosis','symbiosis'); 
 
@@ -187,14 +188,15 @@ if( allOhio === 'yes' ){
     intRAspecific = furl(github_root+'configurable_obs_field_table.html?project_id=225292'+placeId+'&obs_fields=5955&field:Interaction-%3Eintraspecific=competition','competition'); 
     mating        = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=6637&ofv_datatype=text&field:Behavior:+mating=yes','mating'); 
     preying       = furl(github_root+'configurable_obs_field_table.html?project_id=76944,122377,7350,177851,81601,28829,46923,122506'+placeId+'&obs_fields=13,7026,3134,8586,1685,3525,3011,15242,3146&ofv_datatype=taxon&operator=merge','preying upon'); 
-    galls         = furl(github_root+'configurable_obs_field_table.html?project_id=biodiversity-of-ohio'+placeId+'&obs_fields=6586,254,47,7807,877,7623&ofv_datatype=taxon&operator=merge&term_id=22&term_value_id=29','galls'); 
+    galls         = furl(github_root+'configurable_obs_field_table.html?project_id=biodiversity-of-ohio'+placeId+'&obs_fields=6586,254,47,7807,877,7623&ofv_datatype=taxon&operator=merge&term_id=22&term_value_id=29','plants'); 
       
 } else {
     intRAspecific = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=5955&field:Interaction%20intra-species','competition'); 
     mating        = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=6637&ofv_datatype=text&field:Behavior:+mating=yes','mating'); 
     intERspecific = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=8599&ofv_datatype=taxon&field:interspecific+competition+with','competition'); 
     preying       = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=8586&ofv_datatype=taxon&field:prey+taxon','preying upon'); 
-    galls         = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=6586,254,47,7807,877,7623,8581,7623&ofv_datatype=taxon&operator=merge&term_id=22&term_value_id=29','galls'); 
+    galls         = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=6586,254,47,7807,877,7623,8581,7623&ofv_datatype=taxon&operator=merge&term_id=22&term_value_id=29','plants'); 
+    pinsects      = furl(github_root+'configurable_obs_field_table.html?project_id=64680'+placeId+'&obs_fields=6586,254,47,7807,877,7623,8581,7623&ofv_datatype=taxon&operator=merge','insects'); 
 }
   
 let col1 = '<table style="margin-top:-7px"><tr><td><dl>'
@@ -246,6 +248,7 @@ if( p_project_id === '152539' || p_project_id === 'cincinnati-rewild' ){
             + '<dt></dt><span id="tab2"><dd>'+symbiosis+'</dd></span>'
             + '<dt></dt><span id="tab2"><dd>parasitizing</dd></span>'
             + '<dt></dt><span id="tab3"><dd>'+galls+'</dd></span>'
+            + '<dt></dt><span id="tab3"><dd>'+pinsects+'</dd></span>'
             + '</dl></td>';  
 }
   
