@@ -146,10 +146,10 @@ let notInsects = '';
 let plantIns = furl(github_root+'rewild_plants_visited.html?project_id='+p_pollinator+lists, 'plant inspector');
 let insects  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=insecta'+insectOFields+'&ofv_datatype=taxon&operator=merge','insects on plants'); 
 let birds    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+'&project_id='+p_project_id+placeId+'&iconic_taxa=aves'+birdOFields+'&ofv_datatype=taxon&operator=merge','birds on plants'); 
-let mammals  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=mammalia&ofv_datatype=taxon'+mammalOFields+'&operator=merge','mammals'); 
-let herps    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notHerps+'&project_id='+p_project_id+placeId+'&iconic_taxa=reptilia,amphibia&ofv_datatype=taxon'+herpOFields+'&operator=merge','herps'); 
-let molluscs = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=mollusca&ofv_datatype=taxon'+molluscOFields+'&operator=merge','molluscs'); 
-let spiders  = furl(github_root+'configurable_obs_field_table.html?not_id='+notSpiders+'&project_id='+p_project_id+placeId+'&iconic_taxa=Arachnida&ofv_datatype=taxon'+spiderOFields+'&operator=merge','spiders'); 
+let mammals  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=mammalia&ofv_datatype=taxon'+mammalOFields+'&operator=merge','mammals on plants'); 
+let herps    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notHerps+'&project_id='+p_project_id+placeId+'&iconic_taxa=reptilia,amphibia&ofv_datatype=taxon'+herpOFields+'&operator=merge','herps on plants'); 
+let molluscs = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=mollusca&ofv_datatype=taxon'+molluscOFields+'&operator=merge','molluscs on plants'); 
+let spiders  = furl(github_root+'configurable_obs_field_table.html?not_id='+notSpiders+'&project_id='+p_project_id+placeId+'&iconic_taxa=Arachnida&ofv_datatype=taxon'+spiderOFields+'&operator=merge','spiders on plants'); 
 let fungi    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=fungi&ofv_datatype=taxon'+fungiOFields+'&operator=merge','fungi on plants'); 
 let bees     = furl(github_root+'configurable_obs_field_table.html?not_id='+notBees+'&project_id='+p_project_id+placeId+'&iconic_taxa=insecta&taxon_id=630955'+beesOFields+'&ofv_datatype=taxon&operator=merge','bees only'); 
 let butter   = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=insecta&taxon_id=47157'+butterOFields+'&ofv_datatype=taxon&operator=merge','butterflies only'); 
@@ -227,11 +227,6 @@ let col1 = '<span id="tablespan"><table id="tablekey"><tr id="trkey"><td id="tdk
             + '<dt></dt><span id="tab3"><dd>'+larva+'</dd></span>'
             + '<dt></dt><span id="tab3"><dd>'+pupa+'</dd></span>'
             + '<dt></dt><span id="tab2"><dd>'+bees+'</dd></span>'
-            + '<dt></dt><span id="tab1"><dd>'+birds+'</dd></span>'
-            + '<dt></dt><span id="tab1"><dd>'+mammals+'</dd></span>'
-            + '<dt></dt><span id="tab1"><dd>'+herps+'</dd></span>'
-            + '<dt></dt><span id="tab1"><dd>'+spiders+'</dd></span>'
-            + '<dt></dt><span id="tab1"><dd>'+molluscs+'</dd></span>'
             + '</dl></td>';    
 
 let col2 = '';
@@ -288,9 +283,21 @@ let row2col1 = '<tr id="trkey"><dl><td id="tdkey"><dl>'
             + '<dt></dt><span id="tab1"><dd>'+fungi+'</dd></span>'
             + '</dl></td>';    
 
-row2col1 += '</tr></table></span>';
+let row2col2 = '<tr id="trkey"><dl><td id="tdkey"><dl>'
+            + '<dt></dt><span id="tab1"><dd>'+mammals+'</dd></span>'
+            + '</dl></td>';    
+
+let row2col3 = '<tr id="trkey"><dl><td id="tdkey"><dl>'
+            + '<dt></dt><span id="tab1"><dd>'+spiders+'</dd></span>'
+            + '</dl></td>';    
+
+let row2col4 = '<tr id="trkey"><dl><td id="tdkey"><dl>'
+            + '<dt></dt><span id="tab1"><dd>'+molluscs+'</dd></span>'
+            + '</dl></td>';    
+
+row2col4 += '</tr></table></span>';
   
-faddelem('p',document.body,{innerHTML:col1+col2+col3+col4+row2col1});
+faddelem('p',document.body,{innerHTML:col1+col2+col3+col4+row2col1+row2col2+row2col3+row2col4});
     
 </script>
 </body>
