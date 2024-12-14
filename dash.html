@@ -245,7 +245,7 @@ if( placeId !== '&place_id=128707' ){
             + '</dl></td></table>';  
     } else {
         col2 = '<td id="tdkey"><dl>'
-            + '<dt></dt><span id="key"><dd>Interactions</dd></span>'
+            + '<dt></dt><span id="key"><dd>Interaction</dd></span>'
             + '<dt></dt><span id="tab1"><dd>intraspecific</dd></span>'
             + '<dt></dt><span id="tab2"><dd>'+intRAspecific+'</dd></span>'
             + '<dt></dt><span id="tab2"><dd>'+mating+'</dd></span>'
@@ -262,7 +262,16 @@ if( placeId !== '&place_id=128707' ){
             + '</dl></td></table>';  
     }
 } else {
-    col1 += '</table>'
+    col2 = '<td><dl>'
+            + '<dt></dt><span id="key"><dd>&nbsp;</dd></span>'
+            + '<dt></dt><span id="tab1"><dd>&nbsp;</dd></span>'
+            + '<dt></dt><span id="tab1"><dd>&nbsp;</dd></span>'
+            + '<dt></dt><span id="key"><dd>&nbsp;</dd></span>'
+            + '<dt></dt><span id="tab1"><dd>'+birds+'</dd></span>'
+            + '<dt></dt><span id="tab2"><dd>eating</dd></span>'
+            + '<dt></dt><span id="tab3"><dd>nesting</dd></span>'
+            + '<dt></dt><span id="tab3"><dd>pollinating</dd></span>'
+            + '</dl></td></table>';    
 }
   
 faddelem('p',document.body,{innerHTML:col1+col2});
