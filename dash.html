@@ -40,7 +40,8 @@
    #tab3 { padding-left:60px; font: 14px Sans-Serif; }
    #main { width:100%; }
 
-   #tablekey { padding:0; background:var(--color-alt); margin-top:-7px; display:inline-table; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; }
+   #tablespan { padding:0; background:var(--color-alt); margin-top:-7px; display:inline-table; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; }
+   #tablekey { padding:0; margin-top:-7px; display:inline-table; }
    #trkey { padding:0; border:none; border-collapse:collapse; }
    #tdkey { padding:0; padding-right: 25px; vertical-align:top; border-collapse:collapse; }
 
@@ -206,7 +207,7 @@ if( allOhio === 'yes' ){
     pinsects      = furl(github_root+'configurable_obs_field_table.html?project_id=64680'+placeId+'&obs_fields=3137,3138&ofv_datatype=taxon&operator=merge&iconic_taxa=47158&ofield_iconic=47158','insects parasitizing insects'); 
 }
   
-let col1 = '<table id="tablekey"><tr id="trkey"><td><dl>'
+let col1 = '<span id="tablespan"><table id="tablekey"><tr id="trkey"><td><dl>'
             + '<dt></dt><span id="key"><dd>Plants Visited</dd></span>'
             + '<dt></dt><span id="tab1"><dd>'+plantIns+'</dd></span>'
             + '<dt></dt><span id="tab1"><dd> </dd></span>'
@@ -273,6 +274,8 @@ if( placeId !== '&place_id=128707' ){
             + '<dt></dt><span id="tab3"><dd>pollinating</dd></span>'
             + '</dl></td></table>';    
 }
+
+col2 += '</span>';
   
 faddelem('p',document.body,{innerHTML:col1+col2});
     
