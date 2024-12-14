@@ -236,7 +236,7 @@ let col1 = '<span id="tablespan"><table id="tablekey"><tr id="trkey"><td id="tdk
 let col2 = '';
 
 // place_id=128707 = cincinnati nature center
-//if( placeId !== '&place_id=128707' ){
+if( placeId !== '&place_id=128707' ){
     if( p_project_id === '152539' || p_project_id === 'cincinnati-rewild' ){
         col2 = '<td id="tdkey"><dl>'
             + '<dt></dt><span id="col2key"><dd>Interactions</dd></span>'
@@ -270,6 +270,7 @@ let col2 = '';
             + '<dt></dt><span id="tab3"><dd>'+pinsects+'</dd></span>'
             + '</dl></td>';  
     }
+}
 //} else {
 let col3 = '<td id="tdkey"><dl>'
             + '<dt></dt><span id="tab1"><dd>'+birds+'</dd></span>'
@@ -279,7 +280,6 @@ let col3 = '<td id="tdkey"><dl>'
             + '</dl></td>';    
 //}
 
-col2 += '</tr></table></span>';
 col3 += '</tr></table></span>';
   
 faddelem('p',document.body,{innerHTML:col1+col2+col3});
