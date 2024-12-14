@@ -219,7 +219,7 @@ let col1 = '<span id="tablespan"><table id="tablekey"><tr id="trkey"><td id="tdk
             + '<dt></dt><span id="key"><dd>Plants Visited</dd></span>'
             + '<dt></dt><span id="tab1"><dd>'+plantIns+'</dd></span>'
             + '<dt></dt><span id="tab1"><dd> </dd></span>'
-            + '</dl></td></tr></table><table id="table2key"><tr id="trkey"><td id="tdkey"><dl style="vertical-align:top;">'
+            + '</dl></td></tr></table><table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
             + '<dt></dt><span id="key"><dd>Visitors to the Plants</dd></span></dl></td></tr><tr id="trkey"><td id="tdkey"><dl>'
             + '<dt></dt><span id="tab1"><dd>'+insects+'</dd></span>'
             + '<dt></dt><span id="tab2"><dd>'+butter+'</dd></span>'
@@ -293,11 +293,15 @@ let row2col2 = '<td id="tdkey"><dl>'
 
 let row2col3 = '<td id="tdkey"><dl>'
             + '<dt></dt><span id="tab1"><dd>'+molluscs+'</dd></span>'
-            + '</dl></td>';    
+            + '</dl></td></tr>';    
 
-row2col3 += '</tr></table></span>';
+let test = '<tr id="trkey"><dl><td id="tdkey"><dl>'
+            + '<dt></dt><span id="tab1"><dd>test</dd></span>'
+            + '</dl></td></tr>';    
+
+row2col3 += '</table></span>';
   
-faddelem('p',document.body,{innerHTML:col1+col2+col3+col4+col5+row2col1+row2col2+row2col3});
+faddelem('p',document.body,{innerHTML:col1+col2+col3+col4+col5+row2col1+row2col2+row2col3+test});
     
 </script>
 </body>
