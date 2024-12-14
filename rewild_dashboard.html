@@ -137,7 +137,8 @@ faddelem('h2',document.body,{innerHTML:'<div class="box"><img class="photo" src=
   
 // observation exclusion list (not_id list) for each iconic taxa...
 let notBirds     = '76944,131004,18960';
-let notSpiders   = '232905310,125168044,123407637,123310333';
+let notSpiders   = '76944';
+let spiderOmit   = '&omit_id=232905310,125168044,123407637,123310333&omit_users=cjblessing';
 let notBees      = '233728903,218384446,215394847,213574178,205886725,205715997,138789558';
 let notHerps     = '76944,122377,219530,18960,18959,64680';
 let commonPlants = '&ofield_iconic=47126'
@@ -151,7 +152,7 @@ let birds    = furl(github_root+'configurable_obs_field_table.html?not_in_projec
 let mammals  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=mammalia&ofv_datatype=taxon'+mammalOFields+'&operator=merge','mammals on plants'); 
 let herps    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notHerps+'&project_id='+p_project_id+placeId+'&iconic_taxa=reptilia,amphibia&ofv_datatype=taxon'+herpOFields+'&operator=merge','herps on plants'); 
 let molluscs = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=mollusca&ofv_datatype=taxon'+molluscOFields+'&operator=merge','molluscs on plants'); 
-let spiders  = furl(github_root+'configurable_obs_field_table.html?not_id='+notSpiders+'&project_id='+p_project_id+placeId+'&iconic_taxa=Arachnida&ofv_datatype=taxon'+spiderOFields+'&operator=merge','spiders on plants'); 
+let spiders  = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notSpiders+'&project_id='+p_project_id+spiderOmit+placeId+'&iconic_taxa=Arachnida&ofv_datatype=taxon'+spiderOFields+'&operator=merge','spiders on plants'); 
 let fungi    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=fungi&ofv_datatype=taxon'+fungiOFields+'&operator=merge','fungi on plants'); 
 let bees     = furl(github_root+'configurable_obs_field_table.html?not_id='+notBees+'&project_id='+p_project_id+placeId+'&iconic_taxa=insecta&taxon_id=630955'+beesOFields+'&ofv_datatype=taxon&operator=merge','bees only'); 
 let butter   = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=insecta&taxon_id=47157'+butterOFields+'&ofv_datatype=taxon&operator=merge','butterflies only'); 
