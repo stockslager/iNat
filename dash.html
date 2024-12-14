@@ -92,7 +92,7 @@ let mammalOFields  = '&obs_fields=8581,7623';
 let herpOFields    = '&obs_fields=7623';
 let molluscOFields = '&obs_fields=8581,7623';
 let spiderOFields  = '&obs_fields=7623,8581,6586';
-let fungiOFields   = '&obs_fields=7623,8581,7807,254';
+let fungiOFields   = '&obs_fields=7623,8581,7807,254,6586';
 let beesOFields    = '&obs_fields=7623,498,4935,7807,8581,254';
 let butterOFields  = '&obs_fields=7623,498,4935,7807,499,10524,254,8581';
 let larvaeOFields  = '&obs_fields=7623,8581,254,7807,499,4935,6586';
@@ -144,13 +144,13 @@ let notFungi     = '64680,49511,10112';
 
 let notInsects = '';
 let plantIns = furl(github_root+'rewild_plants_visited.html?project_id='+p_pollinator+lists, 'plant inspector');
-let insects  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=insecta'+insectOFields+'&ofv_datatype=taxon&operator=merge','insects with plants'); 
-let birds    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+'&project_id='+p_project_id+placeId+'&iconic_taxa=aves'+birdOFields+'&ofv_datatype=taxon&operator=merge','birds with plants'); 
+let insects  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=insecta'+insectOFields+'&ofv_datatype=taxon&operator=merge','insects on plants'); 
+let birds    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+'&project_id='+p_project_id+placeId+'&iconic_taxa=aves'+birdOFields+'&ofv_datatype=taxon&operator=merge','birds on plants'); 
 let mammals  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=mammalia&ofv_datatype=taxon'+mammalOFields+'&operator=merge','mammals'); 
 let herps    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notHerps+'&project_id='+p_project_id+placeId+'&iconic_taxa=reptilia,amphibia&ofv_datatype=taxon'+herpOFields+'&operator=merge','herps'); 
 let molluscs = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=mollusca&ofv_datatype=taxon'+molluscOFields+'&operator=merge','molluscs'); 
 let spiders  = furl(github_root+'configurable_obs_field_table.html?not_id='+notSpiders+'&project_id='+p_project_id+placeId+'&iconic_taxa=Arachnida&ofv_datatype=taxon'+spiderOFields+'&operator=merge','spiders'); 
-let fungi    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=fungi&ofv_datatype=taxon'+fungiOFields+'&operator=merge','fungi parasitizing plants'); 
+let fungi    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=fungi&ofv_datatype=taxon'+fungiOFields+'&operator=merge','fungi on plants'); 
 let bees     = furl(github_root+'configurable_obs_field_table.html?not_id='+notBees+'&project_id='+p_project_id+placeId+'&iconic_taxa=insecta&taxon_id=630955'+beesOFields+'&ofv_datatype=taxon&operator=merge','bees only'); 
 let butter   = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=insecta&taxon_id=47157'+butterOFields+'&ofv_datatype=taxon&operator=merge','butterflies only'); 
 let larva    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=6'+larvaeOFields+'&ofv_datatype=taxon&operator=merge','larvae only'); 
@@ -194,7 +194,8 @@ if( allOhio === 'yes' ){
     birds         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+commonPlants+birdOmitId+'&project_id='+p_project_id+placeId+'&iconic_taxa=aves&obs_fields=3141,47,12264,3126,6586,498,7623,7807,4935,14609,8581,3845,1685,115,614&ofv_datatype=taxon&operator=merge&without_field=Classification%20Category','birds');
     mammals       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notMammals+commonPlants+'&project_id='+p_project_id+placeId+'&iconic_taxa=mammalia&ofv_datatype=taxon&obs_fields=8581,7623,13,6586&operator=merge&without_field=Classification%20Category','mammals'); 
     herps         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notHerps+'&project_id='+p_project_id+placeId+'&iconic_taxa=reptilia,amphibia&ofv_datatype=taxon&obs_fields=7623,7807&operator=merge&without_field=Occupying%20Maintained%20Landscape%3F,Classification%20Category','herps'); 
-    spiders       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notSpiders+commonPlants+spiderOmit+'&project_id='+p_project_id+placeId+'&iconic_taxa=Arachnida&ofv_datatype=taxon&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711&operator=merge&without_field=Classification%20Category,Observed%20Species%20Association:%20Symbiosis,Preying%20on','spiders'); 
+    spiders       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notSpiders+commonPlants+spiderOmit+'&project_id='+p_project_id+placeId+'&iconic_taxa=Arachnida&ofv_datatype=taxon&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711&operator=merge&without_field=Classification%20Category,Observed%20Species%20Association:%20Symbiosis,Preying%20on','spiders');
+    fungi         = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=fungi&ofv_datatype=taxon'+fungiOFields+'&operator=merge','fungi on plants'); 
     molluscs      = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notMolluscs+'&project_id='+p_project_id+placeId+'&iconic_taxa=mollusca&ofv_datatype=taxon&obs_fields=7623,7807,6586,254&operator=merge&without_field=Classification%20Category','molluscs'); 
     fungi         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notFungi+placeId+commonPlants+fungiOmit+'&project_id='+p_project_id+'&iconic_taxa=fungi&ofv_datatype=taxon&obs_fields=7623,8581,7807,254,6586,47,3137,2297,1711&operator=merge&without_field=Classification%20Category','fungi parasitizing plants'); 
 
@@ -271,14 +272,20 @@ if( placeId !== '&place_id=128707' ){
             + '</dl></td>';  
     }
 }
-//} else {
+  
 let col3 = '<td id="tdkey"><dl>'
             + '<dt></dt><span id="tab1"><dd>'+birds+'</dd></span>'
             + '<dt></dt><span id="tab2"><dd>'+birdsEatingPlants+'</dd></span>'
             + '<dt></dt><span id="tab2"><dd>'+birdsNestingOnPlants+'</dd></span>'
             + '<dt></dt><span id="tab2"><dd>'+birdsNectaringAtPlants+'</dd></span>'
             + '</dl></td>';    
-//}
+
+let col4 = '<td id="tdkey"><dl>'
+            + '<dt></dt><span id="tab1"><dd>'+fungi+'</dd></span>'
+            + '<dt></dt><span id="tab2"><dd>'+birdsEatingPlants+'</dd></span>'
+            + '<dt></dt><span id="tab2"><dd>'+birdsNestingOnPlants+'</dd></span>'
+            + '<dt></dt><span id="tab2"><dd>'+birdsNectaringAtPlants+'</dd></span>'
+            + '</dl></td>';    
 
 col3 += '</tr></table></span>';
   
