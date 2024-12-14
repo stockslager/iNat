@@ -243,7 +243,7 @@ if( placeId !== '&place_id=128707' ){
             + '<dt></dt><span id="tab2"><dd>parasitizing</dd></span>'
             + '<dt></dt><span id="tab3"><dd>'+fungi+'</dd></span>'
             + '<dt></dt><span id="tab3"><dd>'+pgalls+'</dd></span>'
-            + '</dl></td>';  
+            + '</dl></td></table></span>';  
     } else {
         col2 = '<td id="tdkey"><dl>'
             + '<dt></dt><span id="key"><dd>Interactions</dd></span>'
@@ -262,6 +262,8 @@ if( placeId !== '&place_id=128707' ){
             + '<dt></dt><span id="tab3"><dd>'+pinsects+'</dd></span>'
             + '</dl></td></table></span>';  
     }
+} else {
+    col1 += '</table></span>'
 }
   
 faddelem('p',document.body,{innerHTML:col1+col2});
