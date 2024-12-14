@@ -39,7 +39,12 @@
    #tab2 { padding-left:40px; font: 14px Sans-Serif; }
    #tab3 { padding-left:60px; font: 14px Sans-Serif; }
    #main { width:100%; }
-   dl { width:300px; background:var(--color-alt); display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }
+
+   #tablekey { display:inline-table; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; }
+   #trkey { padding:0; background:var(--color-base); border:none; border-collapse:collapse; }
+   #tdkey { padding:0; padding-right: 25px; vertical-align:top;}
+
+   dl { width:300px; background:var(--color-alt); display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; /*border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px;*/ padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }
    dt {  }
    dd { margin: 0; grid-column-start: 2; padding-top: 5px; padding-bottom: 5px; }   
   
@@ -201,7 +206,7 @@ if( allOhio === 'yes' ){
     pinsects      = furl(github_root+'configurable_obs_field_table.html?project_id=64680'+placeId+'&obs_fields=3137,3138&ofv_datatype=taxon&operator=merge&iconic_taxa=47158&ofield_iconic=47158','insects parasitizing insects'); 
 }
   
-let col1 = '<table style="margin-top:-7px"><tr><td><dl>'
+let col1 = '<table id="tablekey"><tr id="trkey"><td><dl>'
             + '<dt></dt><span id="key"><dd>Plants Visited</dd></span>'
             + '<dt></dt><span id="tab1"><dd>'+plantIns+'</dd></span>'
             + '<dt></dt><span id="tab1"><dd> </dd></span>'
@@ -224,7 +229,7 @@ let col2 = '';
 // place_id=128707 = cincinnati nature center
 if( placeId !== '&place_id=128707' ){
     if( p_project_id === '152539' || p_project_id === 'cincinnati-rewild' ){
-        col2 = '<td style="vertical-align:top;"><dl>'
+        col2 = '<td id="tdkey"><dl>'
             + '<dt></dt><span id="key"><dd>Interactions</dd></span>'
             + '<dt></dt><span id="tab1"><dd>intraspecific</dd></span>'
             + '<dt></dt><span id="tab2"><dd>'+intRAspecific+'</dd></span>'
@@ -239,7 +244,7 @@ if( placeId !== '&place_id=128707' ){
             + '<dt></dt><span id="tab3"><dd>'+pgalls+'</dd></span>'
             + '</dl></td>';  
     } else {
-        col2 = '<td style="vertical-align:top;"><dl>'
+        col2 = '<td id="tdkey"><dl>'
             + '<dt></dt><span id="key"><dd>Interactions</dd></span>'
             + '<dt></dt><span id="tab1"><dd>intraspecific</dd></span>'
             + '<dt></dt><span id="tab2"><dd>'+intRAspecific+'</dd></span>'
