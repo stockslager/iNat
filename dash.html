@@ -79,14 +79,6 @@
   border-top: none;
 }  
 
-.tabcontent2 {
-  display: none;
-  padding: 6px 12px;
-  border: 0px solid #ccc;
-  border-top: none;
-  background-color: #ccc;
-  color:var(--color-text-invert);
-}
    #key { color:var(--color-text); font: 20px Sans-Serif; }
    #col2key { padding-left:50px; color:var(--color-text); font: 20px Sans-Serif; }
    #tab1 { margin-collapse:collapse; padding-left:20px; font: 18px Sans-Serif; }
@@ -423,16 +415,16 @@ let mollusc_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
                      + '</tr></table>';
   
 let menu = '<span id="tablespan"><div class="tab">'
-              + '<button class="tablinks" onclick="openCity(event, \'Plants\')">Plants</button>'
-              + '<button class="tablinks" onclick="openCity(event, \'Insects\')">Insects</button>'
-              + '<button class="tablinks" onclick="openCity(event, \'Birds\')">Birds</button>'
-              + '<button class="tablinks" onclick="openCity(event, \'Spiders\')">Spiders</button>'
-              + '<button class="tablinks" onclick="openCity(event, \'Mammals\')">Mammals</button>'
-              + '<button class="tablinks" onclick="openCity(event, \'Herps\')">Herps</button>'
-              + '<button class="tablinks" onclick="openCity(event, \'Fungi\')">Fungi</button>'
-              + '<button class="tablinks" onclick="openCity(event, \'Molluscs\')">Molluscs</button>'
+              + '<button class="tablinks" onclick="openTaxon(event, \'Plants\')">Plants</button>'
+              + '<button class="tablinks" onclick="openTaxon(event, \'Insects\')">Insects</button>'
+              + '<button class="tablinks" onclick="openTaxon(event, \'Birds\')">Birds</button>'
+              + '<button class="tablinks" onclick="openTaxon(event, \'Spiders\')">Spiders</button>'
+              + '<button class="tablinks" onclick="openTaxon(event, \'Mammals\')">Mammals</button>'
+              + '<button class="tablinks" onclick="openTaxon(event, \'Herps\')">Herps</button>'
+              + '<button class="tablinks" onclick="openTaxon(event, \'Fungi\')">Fungi</button>'
+              + '<button class="tablinks" onclick="openTaxon(event, \'Molluscs\')">Molluscs</button>'
               + '</div>'
-              + '<div id="Plants" class="tabcontent2">'
+              + '<div id="Plants" class="tabcontent">'
               + plant_tab
               + '</div>'
               + '<div id="Insects" class="tabcontent">'
@@ -460,9 +452,12 @@ let menu = '<span id="tablespan"><div class="tab">'
   
 faddelem('p',document.body,{innerHTML:menu});
 
-document.getElementById('Plants').style.display = "block";
+const myEvent = new Event('myCustomEvent');
+openTaxon(myEvent, 'Plants');
+//document.getElementById('Plants').style.display = "block";
+  
 
-function openCity(evt, cityName) {
+function openTaxon(evt, taxon) {
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
   for (i = 0; i < tabcontent.length; i++) {
@@ -472,7 +467,7 @@ function openCity(evt, cityName) {
   for (i = 0; i < tablinks.length; i++) {
     tablinks[i].className = tablinks[i].className.replace(" active", "");
   }
-  document.getElementById(cityName).style.display = "block";
+  document.getElementById(taxon).style.display = "block";
   evt.currentTarget.className += " active"; 
 }
     
