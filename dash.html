@@ -303,7 +303,7 @@ let birdsDesc = '<span id="spandesc">displays observations of birds that have th
 let bird_tab  = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                      + '<span id="key"><dt>Birds</dt><dd></dd></span>'
                      + '<span id="tab1"><dt>'+birdsAsPredators+'</dt><dd>'+birdsPredDesc+'</dd></span>'
-                     + '<span id="tab3"><dt></dt><dd></dd></span>'
+                     + '<span id="tab2"><dt></dt><dd></dd></span>'
                      + '<span id="tab1"><dt>'+birds+'</dt><dd>'+birdsDesc+'</dd></span>'
                      + '<span id="tab2"><dt>'+birdsEatingPlants+'</dt><dd></dd></span>'
                      + '<span id="tab2"><dt>'+birdsNestingOnPlants+'</dt><dd></dd></span>'
@@ -320,6 +320,7 @@ let insectsDesc = '<span id="spandesc">displays observations of insects that hav
 let insect_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                      + '<span id="key"><dt>Insects</dt><dd></dd></span>'
                      + '<span id="tab1"><dt>'+insectsAsPredators+'</dt><dd>'+insectsPredDesc+'</dd></span>'
+                     + '<span id="tab2"><dt></dt><dd></dd></span>'
                      + '<span id="tab1"><dt>'+insects+'</dt><dd>'+insectsDesc+'</dd></span>'
                      + '<span id="tab2"><dt>'+butter+'</dt><dd></dd></span>'
                      + '<span id="tab3"><dt>'+adult+'</dt><dd></dd></span>'
@@ -332,7 +333,7 @@ let insect_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
 
 let spidersDesc = '<span id="spandesc">displays observations of spiders that have the "Plant that the organsism was found on" '
                      + 'observation field set.  </span>';
-let spidersPreyDesc = '<span id="spandesc">displays observations of spiders preying.  </span>';
+let spidersPredDesc = '<span id="spandesc">displays observations of spiders that have been addded to the global "Predators" project. </span>';
 
 let spider_tab = '';
 // if there is no place id, we can't show predators.
@@ -345,26 +346,34 @@ if( placeId === '' ){
 } else {
     spider_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                      + '<span id="key"><dt>Spiders</dt><dd></dd></span>'
+                     + '<span id="tab1"><dt>'+spidersAsPredators+'</dt><dd>'+spidersPredDesc+'</dd></span>'
+                     + '<span id="tab2"><dt></dt><dd></dd></span>'
                      + '<span id="tab1"><dt>'+spiders+'</dt><dd>'+spidersDesc+'</dd></span>'
-                     + '<span id="tab2"><dt>'+spidersAsPredators+'</dt><dd>'+spidersPreyDesc+'</dd></span>'
                      + '</dl></td>'
                      + '</tr></table>';
 }
   
 let mammalsDesc = '<span id="spandesc">displays observations of mammals that have the "Plant that the organsism was found on" '
                      + 'observation field set.   </span>';
+let mammalsPredDesc = '<span id="spandesc">displays observations of mammals that have been addded to the global "Predators" project. </span>';
+
 
 let mammal_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                      + '<span id="key"><dt>Mammals</dt><dd></dd></span>'
+                     + '<span id="tab1"><dt>'+mammalsAsPredators+'</dt><dd>'+mammalsPredDesc+'</dd></span>'
+                     + '<span id="tab2"><dt></dt><dd></dd></span>'
                      + '<span id="tab1"><dt>'+mammals+'</dt><dd>'+mammalsDesc+'</dd></span>'
                      + '</dl></td>'
                      + '</tr></table>';
   
 let herpsDesc = '<span id="spandesc">displays observations of herps that have the "Plant that the organsism was found on" '
                      + 'observation field set.  </span>';
+let herpsPredDesc = '<span id="spandesc">displays observations of herps that have been addded to the global "Predators" project. </span>';
 
 let herp_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                      + '<span id="key"><dt>Herps</dt><dd></dd></span>'
+                     + '<span id="tab1"><dt>'+herpsAsPredators+'</dt><dd>'+herpsPredDesc+'</dd></span>'
+                     + '<span id="tab2"><dt></dt><dd></dd></span>'
                      + '<span id="tab1"><dt>'+herps+'</dt><dd>'+herpsDesc+'</dd></span>'
                      + '</dl></td>'
                      + '</tr></table>';
