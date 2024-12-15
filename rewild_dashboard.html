@@ -4,8 +4,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charseFt=utf-8" />  
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
-<meta name="description" content="Yard Project Dashboard" />
-<title>Yard Project Dashboard</title>
+<meta name="description" content="Species Interactions Dashboard" />
+<title>Species Interactions Dashboard</title>
 <style>
    :root { 
       background: var(--color-base);
@@ -34,13 +34,59 @@
          --color-base-translucent: rgba(0,0,0,0.85);
       }
    }
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 0px solid #ccc;
+  border-radius: 5px 5px 0px 0px;  
+  /*background-color: #f1f1f1;*/
+  background:var(--color-alt);
+  color:var(--color-text);  
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  /*background-color: inherit;*/
+  background:var(--color-alt);
+  color:var(--color-text);
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+  color:var(--color-text-invert);
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+  color:var(--color-text-invert);
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 0px solid #ccc;
+  border-top: none;
+}  
+
    #key { color:var(--color-text); font: 20px Sans-Serif; }
    #col2key { padding-left:50px; color:var(--color-text); font: 20px Sans-Serif; }
    #tab1 { margin-collapse:collapse; padding-left:20px; font: 18px Sans-Serif; }
    #tab2 { margin-collapse:collapse; padding-left:40px; font: 14px Sans-Serif; }
    #tab3 { margin-collapse:collapse; padding-left:60px; font: 14px Sans-Serif; }
    #main { width:100%; }
- 
+
+   #spandesc { width:600px; font: 14px Sans-Serif; display:inline-block;}
    #tablespan { padding-top:0px; padding-bottom:16px; background:var(--color-alt); margin-top:-7px; display:inline-table; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; }
    #tablekey { padding:0; margin-top:-10px; }
    #table2key { padding:0; margin-top:-5px; }
@@ -53,6 +99,10 @@
    dl { margin-collapse:collapse; margin-bottom:-10px; padding:0; border:none; border-collapse:collapse; display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; padding-top: 0px; padding-bottom: 0px; padding-left: 10px; padding-right: 10px; }
    dt { margin-collapse:collapse; }
    dd { margin-collapse:collapse; margin: 0; grid-column-start: 2; padding-top: 5px; padding-bottom: 5px; }   
+   /*dl { float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px;  }
+   dt {  }
+   dd { margin: 0; grid-column-start: 2;}   */
+
   
    .tar { text-align:right; }
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
@@ -106,7 +156,7 @@ let placeId        = ('&place_id='+p_place_id);
 
 let icon = 'https://static.inaturalist.org/projects/152539-icon-span2.?1730371479';
 
-faddelem('h2',document.body,{innerHTML:'<div class="box"><img class="photo" src="'+icon+'">'+ '  Yard Project Dashboard</div>'});  
+faddelem('h2',document.body,{innerHTML:'<div class="box"><img class="photo" src="'+icon+'">'+ '  Species Interactions Dashboard</div>'}); 
 
 if( p_project_id === 'cnc' ){
     p_project_id = 'biodiversity-of-ohio';
@@ -149,23 +199,23 @@ let notSpiders   = '76944';
 let spiderOmit   = '&omit_id=232905310,125168044,123407637,123310333&omit_users=cjblessing';
 let insectOmit   = '&omit_id=246151575'; 
 let birdOmit     = '&omit_id=176025976';
-let notBees      = '233728903,218384446,215394847,213574178,205886725,205715997,138789558';
+let beesOmit     = '&omit_id=232400618,233728903,218384446,215394847,213574178,205886725,205715997,138789558';
 let notHerps     = '76944,122377,219530,18960,18959,64680';
 let commonPlants = '&ofield_iconic=47126'
 let notMolluscs  = '10112';
 let notFungi     = '64680,49511,10112';
-let fungiOmit    = '&omit_id=12626497';
+let fungiOmit    = '&omit_id=12626497,224666368';
 let notInsects   = '64680,76944';
   
 let plantIns = furl(github_root+'rewild_plants_visited.html?project_id='+p_pollinator+lists, 'plant inspector');
-let insects  = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+'&project_id='+p_project_id+commonPlants+insectOmit+placeId+'&iconic_taxa=insecta'+insectOFields+'&ofv_datatype=taxon&operator=merge','insects on plants'); 
-let birds    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+'&project_id='+p_project_id+commonPlants+birdOmit+placeId+'&iconic_taxa=aves'+birdOFields+'&ofv_datatype=taxon&operator=merge','birds on plants'); 
-let mammals  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=mammalia&ofv_datatype=taxon'+mammalOFields+'&operator=merge','mammals on plants'); 
-let herps    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notHerps+'&project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=reptilia,amphibia&ofv_datatype=taxon'+herpOFields+'&operator=merge','herps on plants'); 
-let molluscs = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=mollusca&ofv_datatype=taxon'+molluscOFields+'&operator=merge','molluscs on plants'); 
-let spiders  = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notSpiders+'&project_id='+p_project_id+commonPlants+spiderOmit+placeId+'&iconic_taxa=Arachnida&ofv_datatype=taxon'+spiderOFields+'&operator=merge','spiders on plants'); 
-let fungi    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+fungiOmit+placeId+'&iconic_taxa=fungi&ofv_datatype=taxon'+fungiOFields+'&operator=merge','fungi on plants'); 
-let bees     = furl(github_root+'configurable_obs_field_table.html?not_id='+notBees+'&project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=insecta&taxon_id=630955'+beesOFields+'&ofv_datatype=taxon&operator=merge','bees only'); 
+let insects  = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+'&project_id='+p_project_id+commonPlants+insectOmit+placeId+'&iconic_taxa=insecta'+insectOFields+'&ofv_datatype=taxon&operator=merge','on plants'); 
+let birds    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+'&project_id='+p_project_id+commonPlants+birdOmit+placeId+'&iconic_taxa=aves'+birdOFields+'&ofv_datatype=taxon&operator=merge','on plants'); 
+let mammals  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=mammalia&ofv_datatype=taxon'+mammalOFields+'&operator=merge','on plants'); 
+let herps    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notHerps+'&project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=reptilia,amphibia&ofv_datatype=taxon'+herpOFields+'&operator=merge','on plants'); 
+let molluscs = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=mollusca&ofv_datatype=taxon'+molluscOFields+'&operator=merge','on plants'); 
+let spiders  = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notSpiders+'&project_id='+p_project_id+commonPlants+spiderOmit+placeId+'&iconic_taxa=Arachnida&ofv_datatype=taxon'+spiderOFields+'&operator=merge','on plants'); 
+let fungi    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+fungiOmit+placeId+'&iconic_taxa=fungi&ofv_datatype=taxon'+fungiOFields+'&operator=merge','on plants'); 
+let bees     = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+beesOmit+placeId+'&iconic_taxa=insecta&taxon_id=630955'+beesOFields+'&ofv_datatype=taxon&operator=merge','bees only'); 
 let butter   = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=insecta&taxon_id=47157'+butterOFields+'&ofv_datatype=taxon&operator=merge','butterflies only'); 
 let larva    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=6'+larvaeOFields+'&ofv_datatype=taxon&operator=merge','larvae only'); 
 let adult    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=2'+adultsOFields+'&ofv_datatype=taxon&operator=merge','adults only'); 
@@ -174,7 +224,19 @@ let pupa     = furl(github_root+'configurable_obs_field_table.html?project_id='+
 let birdsNestingOnPlants    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+'&project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=aves&obs_fields=3845&ofv_datatype=taxon&field:Birds%20Nesting%20In','nesting on plants'); 
 let birdsEatingPlants       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+'&project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=aves&obs_fields=13&ofv_datatype=taxon&field:eating','eating plants'); 
 let birdsNectaringAtPlants  = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+'&project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=aves&obs_fields=498&ofv_datatype=taxon&field:nectar+plant','nectaring at plants'); 
-  
+
+let predatorsField = '';
+let predatorsProjects = '76944';
+if( placeId === '' ){
+    predatorsProjects = '152539';
+    predatorsField    = '&field:Interaction->Preyed%20on'; 
+}
+let spidersAsPredators  = furl(github_root+'configurable_obs_field_table.html?project_id='+predatorsProjects+placeId+'&obs_fields=3134&ofv_datatype=taxon&iconic_taxa=arachnida'+predatorsField,'as predators'); 
+let insectsAsPredators  = furl(github_root+'configurable_obs_field_table.html?project_id='+predatorsProjects+placeId+'&obs_fields=3134&ofv_datatype=taxon&iconic_taxa=insecta'+predatorsField,'as predators'); 
+let birdsAsPredators    = furl(github_root+'configurable_obs_field_table.html?project_id='+predatorsProjects+placeId+'&obs_fields=3134&ofv_datatype=taxon&iconic_taxa=aves'+predatorsField,'as predators'); 
+let mammalsAsPredators  = furl(github_root+'configurable_obs_field_table.html?project_id='+predatorsProjects+placeId+'&obs_fields=3134&ofv_datatype=taxon&iconic_taxa=mammalia'+predatorsField,'as predators'); 
+let herpsAsPredators    = furl(github_root+'configurable_obs_field_table.html?project_id='+predatorsProjects+placeId+'&obs_fields=3134&ofv_datatype=taxon&iconic_taxa=reptilia,amphibia'+predatorsField,'as predators'); 
+
 let intRAspecific = '';
 let mating        = '';
 let intERspecific = '';
@@ -199,25 +261,25 @@ if( allOhio === 'yes' ){
     birdOmitId = '&omit_id=209849,484573,502634,1111665,1811366,2489623,2564970,2841714,20883583,32500064,46239390,66184927,68528959,182848678,188302757,188302867';
     fungiOmit  = '&omit_id=167036783,179680503,175483373,175217563,31352243,854126,854123,12626497';
 
-    insects       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+commonPlants+'&project_id='+p_project_id+placeId+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711,2365&ofv_datatype=taxon&operator=merge&without_field=Classification%20Category','insects'); 
+    insects       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+commonPlants+'&project_id='+p_project_id+placeId+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711,2365&ofv_datatype=taxon&operator=merge&without_field=Classification%20Category','on plants'); 
     butter        = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+commonPlants+'&project_id='+p_project_id+placeId+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711,2365&ofv_datatype=taxon&operator=merge&taxon_id=47157&without_field=Classification%20Category','butterflies only'); 
     larva         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+commonPlants+'&project_id='+p_project_id+placeId+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711,2365&ofv_datatype=taxon&operator=merge&taxon_id=47157&term_id=1&term_value_id=6&without_field=Classification%20Category','larvae only'); 
     adult         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+commonPlants+'&project_id='+p_project_id+placeId+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711,2365&ofv_datatype=taxon&operator=merge&taxon_id=47157&term_id=1&term_value_id=2&without_field=Classification%20Category','adults only'); 
     pupa          = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+commonPlants+'&project_id='+p_project_id+placeId+'&iconic_taxa=insecta&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711,2365&ofv_datatype=taxon&operator=merge&taxon_id=47157&term_id=1&term_value_id=4&without_field=Classification%20Category','pupae only'); 
   
-    birds         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+commonPlants+birdOmitId+'&project_id='+p_project_id+placeId+'&iconic_taxa=aves&obs_fields=3141,47,12264,3126,6586,498,7623,7807,4935,14609,8581,3845,1685,115,614&ofv_datatype=taxon&operator=merge&without_field=Classification%20Category','birds');
-    mammals       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notMammals+commonPlants+'&project_id='+p_project_id+placeId+'&iconic_taxa=mammalia&ofv_datatype=taxon&obs_fields=8581,7623,13,6586&operator=merge&without_field=Classification%20Category','mammals'); 
-    herps         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notHerps+'&project_id='+p_project_id+placeId+'&iconic_taxa=reptilia,amphibia&ofv_datatype=taxon&obs_fields=7623,7807&operator=merge&without_field=Occupying%20Maintained%20Landscape%3F,Classification%20Category','herps'); 
-    spiders       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notSpiders+commonPlants+spiderOmit+'&project_id='+p_project_id+placeId+'&iconic_taxa=Arachnida&ofv_datatype=taxon&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711&operator=merge&without_field=Classification%20Category,Observed%20Species%20Association:%20Symbiosis,Preying%20on','spiders');
-    fungi         = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=fungi&ofv_datatype=taxon'+fungiOFields+'&operator=merge','fungi on plants'); 
-    molluscs      = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notMolluscs+'&project_id='+p_project_id+placeId+'&iconic_taxa=mollusca&ofv_datatype=taxon&obs_fields=7623,7807,6586,254&operator=merge&without_field=Classification%20Category','molluscs'); 
-    fungi         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notFungi+placeId+commonPlants+fungiOmit+'&project_id='+p_project_id+'&iconic_taxa=fungi&ofv_datatype=taxon&obs_fields=7623,8581,7807,254,6586,47,3137,2297,1711&operator=merge&without_field=Classification%20Category','fungi parasitizing plants'); 
+    birds         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+commonPlants+birdOmitId+'&project_id='+p_project_id+placeId+'&iconic_taxa=aves&obs_fields=3141,47,12264,3126,6586,498,7623,7807,4935,14609,8581,3845,1685,115,614&ofv_datatype=taxon&operator=merge&without_field=Classification%20Category','on plants');
+    mammals       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notMammals+commonPlants+'&project_id='+p_project_id+placeId+'&iconic_taxa=mammalia&ofv_datatype=taxon&obs_fields=8581,7623,13,6586&operator=merge&without_field=Classification%20Category','on plants'); 
+    herps         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notHerps+'&project_id='+p_project_id+placeId+'&iconic_taxa=reptilia,amphibia&ofv_datatype=taxon&obs_fields=7623,7807&operator=merge&without_field=Occupying%20Maintained%20Landscape%3F,Classification%20Category','on plants'); 
+    spiders       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notSpiders+commonPlants+spiderOmit+'&project_id='+p_project_id+placeId+'&iconic_taxa=Arachnida&ofv_datatype=taxon&obs_fields=7623,498,4935,7807,8581,254,6586,499,47,877,115,13,3126,1711&operator=merge&without_field=Classification%20Category,Observed%20Species%20Association:%20Symbiosis,Preying%20on','on plants');
+    fungi         = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&iconic_taxa=fungi&ofv_datatype=taxon'+fungiOFields+'&operator=merge','on plants'); 
+    molluscs      = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notMolluscs+'&project_id='+p_project_id+placeId+'&iconic_taxa=mollusca&ofv_datatype=taxon&obs_fields=7623,7807,6586,254&operator=merge&without_field=Classification%20Category','on plants'); 
+    fungi         = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notFungi+placeId+commonPlants+fungiOmit+'&project_id='+p_project_id+'&iconic_taxa=fungi&ofv_datatype=taxon&obs_fields=7623,8581,7807,254,6586,47,3137,2297,1711&operator=merge&without_field=Classification%20Category','on plants'); 
 
     intERspecific = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInter+'&project_id=221846'+placeId+'&obs_fields=8599,3549&ofv_datatype=taxon&field:attacking=&operator=merge','competition'); 
     intRAspecific = furl(github_root+'configurable_obs_field_table.html?project_id=225292'+placeId+'&obs_fields=5955&field:Interaction-%3Eintraspecific=competition','competition'); 
     mating        = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=6637&ofv_datatype=text&field:Behavior:+mating=yes','mating'); 
     preying       = furl(github_root+'configurable_obs_field_table.html?project_id=76944,122377,7350,177851,81601,28829,46923,122506'+placeId+'&obs_fields=13,7026,3134,8586,1685,3525,3011,15242,3146&ofv_datatype=taxon&operator=merge','preying upon'); 
-    pgalls        = furl(github_root+'configurable_obs_field_table.html?project_id=biodiversity-of-ohio'+placeId+'&obs_fields=6586,254,47,7807,877,7623&ofv_datatype=taxon&operator=merge&term_id=22&term_value_id=29','insects parasitizing plants'); 
+    pgalls        = furl(github_root+'configurable_obs_field_table.html?project_id=biodiversity-of-ohio'+placeId+'&obs_fields=6586,254,47,7807,877,7623&ofv_datatype=taxon&operator=merge&term_id=22&term_value_id=29','galls only'); 
     pinsects      = furl(github_root+'configurable_obs_field_table.html?project_id=64680'+placeId+'&obs_fields=3137,3138&ofv_datatype=taxon&operator=merge&iconic_taxa=47158&ofield_iconic=47158','insects parasitizing insects'); 
       
 } else {
@@ -225,93 +287,166 @@ if( allOhio === 'yes' ){
     mating        = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=6637&ofv_datatype=text&field:Behavior:+mating=yes','mating'); 
     intERspecific = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=8599&ofv_datatype=taxon&field:interspecific+competition+with','competition'); 
     preying       = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=8586&ofv_datatype=taxon&field:prey+taxon','preying upon'); 
-    pgalls        = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=6586,254,47,7807,877,7623,8581,7623&ofv_datatype=taxon&operator=merge&term_id=22&term_value_id=29','insects parasitizing plants'); 
+    pgalls        = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=6586,254,47,7807,877,7623,8581,7623&ofv_datatype=taxon&operator=merge&term_id=22&term_value_id=29','galls only'); 
     pinsects      = furl(github_root+'configurable_obs_field_table.html?project_id=64680'+placeId+'&obs_fields=3137,3138&ofv_datatype=taxon&operator=merge&iconic_taxa=47158&ofield_iconic=47158','insects parasitizing insects'); 
+}  
+
+let plantInsDesc = '<span id="spandesc">the plant inspector displays a list of plant species.  selecting an individual species '
+                 + 'from the first table will reveal a list of species observed visiting that plant.  if an '
+                 + 'insect species is chosen, the individual observations of that specific insect visiting that '
+                 + 'specific plant is then shown.</span>'
+
+let plant_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
+            + '<span id="key"><dt>Plants Visited</dt><dd></dd></span>'
+            + '<span id="tab1"><dt>'+plantIns+'</dt><dd>'+plantInsDesc+'</dd></span>'
+            + '</dl></td></tr></table>';
+
+let birdsPredDesc = '<span id="spandesc">displays observations of birds that have been addded to the global "Predators" project. </span>';
+let birdsDesc = '<span id="spandesc">displays observations of birds that have the "Plant that the organsism was found on" '
+                     + 'observation field set.  the options below display observations of birds that have the "eating", '
+                     + '"birds nesting in", and "nectar plant" observation fields set. </span>';
+
+let bird_tab  = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
+                     + '<span id="key"><dt>Birds</dt><dd></dd></span>'
+                     + '<span id="tab1"><dt>'+birdsAsPredators+'</dt><dd>'+birdsPredDesc+'</dd></span>'
+                     + '<span id="tab2"><dt></dt><dd></dd></span>'
+                     + '<span id="tab1"><dt>'+birds+'</dt><dd>'+birdsDesc+'</dd></span>'
+                     + '<span id="tab2"><dt>'+birdsEatingPlants+'</dt><dd></dd></span>'
+                     + '<span id="tab2"><dt>'+birdsNestingOnPlants+'</dt><dd></dd></span>'
+                     + '<span id="tab2"><dt>'+birdsNectaringAtPlants+'</dt><dd></dd></span>'
+                     + '</dl></td>'
+                     + '</tr></table>';
+
+let insectsPredDesc = '<span id="spandesc">displays observations of insects that have been addded to the global "Predators" project. </span>';
+let insectsDesc = '<span id="spandesc">displays observations of insects that have the "Plant that the organsism was found on" '
+                     + 'observation field set.  the options below display observations of butterflies which are further filtered '
+                     + 'by the "life stage" annotation (adults, larvae, and pupae).  bees are also filtered and displayed '
+                     + 'separately. </span>';
+
+let insect_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
+                     + '<span id="key"><dt>Insects</dt><dd></dd></span>'
+                     + '<span id="tab1"><dt>'+insectsAsPredators+'</dt><dd>'+insectsPredDesc+'</dd></span>'
+                     + '<span id="tab2"><dt></dt><dd></dd></span>'
+                     + '<span id="tab1"><dt>'+insects+'</dt><dd>'+insectsDesc+'</dd></span>'
+                     + '<span id="tab2"><dt>'+butter+'</dt><dd></dd></span>'
+                     + '<span id="tab3"><dt>'+adult+'</dt><dd></dd></span>'
+                     + '<span id="tab3"><dt>'+larva+'</dt><dd></dd></span>'
+                     + '<span id="tab3"><dt>'+pupa+'</dt><dd></dd></span>'
+                     + '<span id="tab2"><dt>'+bees+'</dt><dd></dd></span>'
+                     + '<span id="tab2"><dt>'+pgalls+'</dt><dd></dd></span>'
+                     + '</dl></td>'
+                     + '</tr></table>';
+
+let spidersDesc = '<span id="spandesc">displays observations of spiders that have the "Plant that the organsism was found on" '
+                     + 'observation field set.  </span>';
+let spidersPredDesc = '<span id="spandesc">displays observations of spiders that have been addded to the global "Predators" project. </span>';
+
+let spider_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
+                     + '<span id="key"><dt>Spiders</dt><dd></dd></span>'
+                     + '<span id="tab1"><dt>'+spidersAsPredators+'</dt><dd>'+spidersPredDesc+'</dd></span>'
+                     + '<span id="tab2"><dt></dt><dd></dd></span>'
+                     + '<span id="tab1"><dt>'+spiders+'</dt><dd>'+spidersDesc+'</dd></span>'
+                     + '</dl></td>'
+                     + '</tr></table>';
+  
+let mammalsDesc = '<span id="spandesc">displays observations of mammals that have the "Plant that the organsism was found on" '
+                     + 'observation field set.   </span>';
+let mammalsPredDesc = '<span id="spandesc">displays observations of mammals that have been addded to the global "Predators" project. </span>';
+
+
+let mammal_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
+                     + '<span id="key"><dt>Mammals</dt><dd></dd></span>'
+                     + '<span id="tab1"><dt>'+mammalsAsPredators+'</dt><dd>'+mammalsPredDesc+'</dd></span>'
+                     + '<span id="tab2"><dt></dt><dd></dd></span>'
+                     + '<span id="tab1"><dt>'+mammals+'</dt><dd>'+mammalsDesc+'</dd></span>'
+                     + '</dl></td>'
+                     + '</tr></table>';
+  
+let herpsDesc = '<span id="spandesc">displays observations of herps that have the "Plant that the organsism was found on" '
+                     + 'observation field set.  </span>';
+let herpsPredDesc = '<span id="spandesc">displays observations of herps that have been addded to the global "Predators" project. </span>';
+
+let herp_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
+                     + '<span id="key"><dt>Herps</dt><dd></dd></span>'
+                     + '<span id="tab1"><dt>'+herpsAsPredators+'</dt><dd>'+herpsPredDesc+'</dd></span>'
+                     + '<span id="tab2"><dt></dt><dd></dd></span>'
+                     + '<span id="tab1"><dt>'+herps+'</dt><dd>'+herpsDesc+'</dd></span>'
+                     + '</dl></td>'
+                     + '</tr></table>';
+  
+let fungiDesc = '<span id="spandesc">displays observations of fungi that have the "Plant that the organsism was found on" '
+                     + 'observation field set.   </span>';
+
+let fungi_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
+                     + '<span id="key"><dt>Fungi</dt><dd></dd></span>'
+                     + '<span id="tab1"><dt>'+fungi+'</dt><dd>'+fungiDesc+'</dd></span>'
+                     + '</dl></td>'
+                     + '</tr></table>';
+  
+let molluscsDesc = '<span id="spandesc">displays observations of molluscs that have the "Plant that the organsism was found on" '
+                     + 'observation field set.   </span>';
+
+let mollusc_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
+                     + '<span id="key"><dt>Molluscs</dt><dd></dd></span>'
+                     + '<span id="tab1"><dt>'+molluscs+'</dt><dd>'+molluscsDesc+'</dd></span>'
+                     + '</dl></td>'
+                     + '</tr></table>';
+  
+let menu = '<span id="tablespan"><div class="tab">'
+              + '<button class="tablinks" onclick="openTaxon(event, \'Plants\')">Plants</button>'
+              + '<button class="tablinks" onclick="openTaxon(event, \'Insects\')">Insects</button>'
+              + '<button class="tablinks" onclick="openTaxon(event, \'Birds\')">Birds</button>'
+              + '<button class="tablinks" onclick="openTaxon(event, \'Spiders\')">Spiders</button>'
+              + '<button class="tablinks" onclick="openTaxon(event, \'Mammals\')">Mammals</button>'
+              + '<button class="tablinks" onclick="openTaxon(event, \'Herps\')">Herps</button>'
+              + '<button class="tablinks" onclick="openTaxon(event, \'Fungi\')">Fungi</button>'
+              + '<button class="tablinks" onclick="openTaxon(event, \'Molluscs\')">Molluscs</button>'
+              + '</div>'
+              + '<div id="Plants" class="tabcontent">'
+              + plant_tab
+              + '</div>'
+              + '<div id="Insects" class="tabcontent">'
+              + insect_tab
+              + '</div>'
+              + '<div id="Birds" class="tabcontent">'
+              + bird_tab
+              + '</div>'
+              + '<div id="Spiders" class="tabcontent">'
+              + spider_tab
+              + '</div>'
+              + '<div id="Mammals" class="tabcontent">'
+              + mammal_tab
+              + '</div>'
+              + '<div id="Herps" class="tabcontent">'
+              + herp_tab
+              + '</div>'
+              + '<div id="Fungi" class="tabcontent">'
+              + fungi_tab
+              + '</div>'
+              + '<div id="Molluscs" class="tabcontent">'
+              + mollusc_tab
+              + '</div>'
+              + '</span>';
+  
+faddelem('p',document.body,{innerHTML:menu});
+
+const myEvent = new Event('myCustomEvent');
+openTaxon(myEvent, 'Plants');
+//document.getElementById('Plants').style.display = "block";
+  
+function openTaxon(evt, taxon) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(taxon).style.display = "block";
+  evt.currentTarget.className += " active"; 
 }
-  
-let col1 = '<span id="tablespan"><table id="tablekey"><tr id="trkey"><td id="tdkey"><dl>'
-            + '<dt></dt><span id="key"><dd>Plants Visited</dd></span>'
-            + '<dt></dt><span id="tab1"><dd>'+plantIns+'</dd></span>'
-            + '<dt></dt><span id="tab1"><dd> </dd></span>'
-            + '</dl></td></tr></table><table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
-            + '<dt></dt><span id="key"><dd>Visitors to the Plants</dd></span></dl></td></tr><tr id="trkey"><td id="tdkey"><dl>'
-            + '<dt></dt><span id="tab1"><dd>'+insects+'</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+butter+'</dd></span>'
-            + '<dt></dt><span id="tab3"><dd>'+adult+'</dd></span>'
-            + '<dt></dt><span id="tab3"><dd>'+larva+'</dd></span>'
-            + '<dt></dt><span id="tab3"><dd>'+pupa+'</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+bees+'</dd></span>'
-            + '</dl></td>';    
-
-let col2 = '';
-
-// place_id=128707 = cincinnati nature center
-if( allOhio === 'yes' ){
-    /*if( p_project_id === '152539' || p_project_id === 'cincinnati-rewild' ){
-        col2 = '<td id="tdkey"><dl>'
-            + '<dt></dt><span id="col2key"><dd>Interactions</dd></span>'
-            + '<dt></dt><span id="tab1"><dd>intraspecific</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+intRAspecific+'</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+mating+'</dd></span>'
-            + '<dt></dt><span id="tab1"><dd>&nbsp;</dd></span>'
-            + '<dt></dt><span id="tab1"><dd>interspecific</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+intERspecific+'</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+preying+'</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+symbiosis+'</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>parasitizing</dd></span>'
-            + '<dt></dt><span id="tab3"><dd>'+fungi+'</dd></span>'
-            + '<dt></dt><span id="tab3"><dd>'+pgalls+'</dd></span>'
-            + '</dl></td>';  
-    } else { */
-        col2 = '<td id="tdkey"><dl>'
-            + '<dt></dt><span id="col2key"><dd>Interaction</dd></span>'
-            + '<dt></dt><span id="tab1"><dd>intraspecific</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+intRAspecific+'</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+mating+'</dd></span>'
-            + '<dt></dt><span id="tab1"><dd>&nbsp;</dd></span>'
-            + '<dt></dt><span id="tab1"><dd>interspecific</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+intERspecific+'</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+preying+'</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+scavenging+'</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+symbiosis+'</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>parasitizing</dd></span>'
-            + '<dt></dt><span id="tab3"><dd>'+fungi+'</dd></span>'
-            + '<dt></dt><span id="tab3"><dd>'+pgalls+'</dd></span>'
-            + '<dt></dt><span id="tab3"><dd>'+pinsects+'</dd></span>'
-            + '</dl></td>';  
-    //}
-}
-  
-let col3 = '<td id="tdkey"><dl>'
-            + '<dt></dt><span id="tab1"><dd>'+birds+'</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+birdsEatingPlants+'</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+birdsNestingOnPlants+'</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+birdsNectaringAtPlants+'</dd></span>'
-            + '</dl></td>';    
-
-let col4 = '<td id="tdkey"><dl>'
-            + '<dt></dt><span id="tab1"><dd>'+herps+'</dd></span>'
-            + '</dl></td>';    
-
-let col5 = '<td id="tdkey"><dl>'
-            + '<dt></dt><span id="tab1"><dd>'+spiders+'</dd></span>'
-            + '</dl></td></tr>';    
-
-let row2col1 = '<tr id="trkey"><td id="tdkey"><dl id="lastdl">'
-            + '<dt></dt><span id="tab1"><dd>'+fungi+'</dd></span>'
-            + '</dl></td>';    
-
-let row2col2 = '<td id="tdkey"><dl id="lastdl">'
-            + '<dt></dt><span id="tab1"><dd>'+mammals+'</dd></span>'
-            + '</dl></td>';    
-
-let row2col3 = '<td id="tdkey"><dl id="lastdl">'
-            + '<dt></dt><span id="tab1"><dd>'+molluscs+'</dd></span>'
-            + '</dl></td></tr>';    
-
-row2col3 += '</table></span>';
-  
-faddelem('p',document.body,{innerHTML:col1+col2+col3+col4+col5+row2col1+row2col2+row2col3});
     
 </script>
 </body>
