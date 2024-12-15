@@ -277,11 +277,6 @@ if( allOhio === 'yes' ){
     pgalls        = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=6586,254,47,7807,877,7623,8581,7623&ofv_datatype=taxon&operator=merge&term_id=22&term_value_id=29','insects parasitizing plants'); 
     pinsects      = furl(github_root+'configurable_obs_field_table.html?project_id=64680'+placeId+'&obs_fields=3137,3138&ofv_datatype=taxon&operator=merge&iconic_taxa=47158&ofield_iconic=47158','insects parasitizing insects'); 
 }
-
-let plantInsDesc = '<span id="spandesc">the plant inspector displays a list of plant species.  selecting an individual species '
-                 + 'from the first table will reveal a list of species observed visiting that plant.  if an '
-                 + 'insect species is chosen, the individual observations of that specific insect visiting that '
-                 + 'specific plant is then shown.</span>'
   
 let col1 = '<table id="tablekey"><tr id="trkey"><td id="tdkey"><dl>'
             + '<span id="key"><dt>Plants Visited</dt><dd></dd></span>'
@@ -339,17 +334,31 @@ let row2col3 = '<td id="tdkey"><dl id="lastdl">'
 
 row2col3 += '</table>';
 
+let plantInsDesc = '<span id="spandesc">the plant inspector displays a list of plant species.  selecting an individual species '
+                 + 'from the first table will reveal a list of species observed visiting that plant.  if an '
+                 + 'insect species is chosen, the individual observations of that specific insect visiting that '
+                 + 'specific plant is then shown.</span>'
+
 let plant_tab = '<table id="tablekey"><tr id="trkey"><td id="tdkey"><dl>'
             + '<span id="key"><dt>Plants Visited</dt><dd></dd></span>'
             + '<span id="tab1"><dt>'+plantIns+'</dt><dd>'+plantInsDesc+'</dd></span>'
             + '</dl></td></tr></table>';
-  //col1; //+col2+col3+col4+col5+row2col1+row2col2+row2col3;
+  
+let birdsDesc = '<span id="spandesc">displays observations of birds that have the "plant the organsism was found on" '
+                     + 'observation field set. </span>';
+let birdsEatingPlantsDesc = '<span id="spandesc">displays observations of birds that have the "eating" '
+                     + 'observation field set. </span>';  
+let birdsNestingOnPlantsDesc = '<span id="spandesc">displays observations of birds that have the "birds nesting in" '
+                     + 'observation field set. </span>';  
+let birdsNectaringAtDesc = '<span id="spandesc">displays observations of birds that have the "nectar plant" '
+                     + 'observation field set. </span>';  
+
 let bird_tab  = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                      + '<span id="key"><dt></dt><dd>Bird Activity</dd></span>'
-                     + '<span id="tab1"><dt>'+birds+'</dt><dd>test descre</dd></span>'
-                     + '<span id="tab2"><dt>'+birdsEatingPlants+'</dt><dd>adfadsfa</dd></span>'
-                     + '<span id="tab2"><dt>'+birdsNestingOnPlants+'</dt><dd>asdfadfas</dd></span>'
-                     + '<span id="tab2"><dt>'+birdsNectaringAtPlants+'</dt><dd>adfdfas</dd></span>'
+                     + '<span id="tab1"><dt>'+birds+'</dt><dd>'+birdsDesc+'</dd></span>'
+                     + '<span id="tab2"><dt>'+birdsEatingPlants+'</dt><dd>'+birdsEatingPlantsDesc+'</dd></span>'
+                     + '<span id="tab2"><dt>'+birdsNestingOnPlants+'</dt><dd>'+birdsNestingOnPlantsDesc+'</dd></span>'
+                     + '<span id="tab2"><dt>'+birdsNectaringAtPlants+'</dt><dd>'+birdsNectaringAtDesc+'</dd></span>'
                      + '</dl></td>'
                      + '</tr></table>';
 let insect_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
