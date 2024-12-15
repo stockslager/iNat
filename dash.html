@@ -86,7 +86,7 @@
    #tab3 { margin-collapse:collapse; padding-left:60px; font: 14px Sans-Serif; }
    #main { width:100%; }
 
-   #spandesc { width:500px; font: 14px Sans-Serif; display:inline-block;}
+   #spandesc { width:600px; font: 14px Sans-Serif; display:inline-block;}
    #tablespan { padding-top:0px; padding-bottom:16px; background:var(--color-alt); margin-top:-7px; display:inline-table; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; }
    #tablekey { padding:0; margin-top:-10px; }
    #table2key { padding:0; margin-top:-5px; }
@@ -225,8 +225,12 @@ let birdsNestingOnPlants    = furl(github_root+'configurable_obs_field_table.htm
 let birdsEatingPlants       = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+'&project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=aves&obs_fields=13&ofv_datatype=taxon&field:eating','eating plants'); 
 let birdsNectaringAtPlants  = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+'&project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=aves&obs_fields=498&ofv_datatype=taxon&field:nectar+plant','nectaring at plants'); 
 
-let predatorSpiders  = furl(github_root+'configurable_obs_field_table.html?project_id=76944'+placeId+'&obs_fields=8586&ofv_datatype=taxon&iconic_taxa=arachnida','preying upon'); 
-  
+let spidersAsPredators  = furl(github_root+'configurable_obs_field_table.html?project_id=76944'+placeId+'&obs_fields=8586&ofv_datatype=taxon&iconic_taxa=arachnida','as predators'); 
+let insectsAsPredators  = furl(github_root+'configurable_obs_field_table.html?project_id=76944'+placeId+'&obs_fields=8586&ofv_datatype=taxon&iconic_taxa=insecta','as predators'); 
+let birdsAsPredators    = furl(github_root+'configurable_obs_field_table.html?project_id=76944'+placeId+'&obs_fields=8586&ofv_datatype=taxon&iconic_taxa=aves','as predators'); 
+let mammalsAsPredators  = furl(github_root+'configurable_obs_field_table.html?project_id=76944'+placeId+'&obs_fields=8586&ofv_datatype=taxon&iconic_taxa=mammalia','as predators'); 
+let herpsAsPredators    = furl(github_root+'configurable_obs_field_table.html?project_id=76944'+placeId+'&obs_fields=8586&ofv_datatype=taxon&iconic_taxa=reptilia,amphibia','as predators'); 
+
 let intRAspecific = '';
 let mating        = '';
 let intERspecific = '';
@@ -304,6 +308,7 @@ let bird_tab  = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
                      + '</dl></td>'
                      + '</tr></table>';
 
+let insectsPredDesc = '<span id="spandesc">displays observations of insects that have been addded to the global "Predators" project. </span>';
 let insectsDesc = '<span id="spandesc">displays observations of insects that have the "Plant that the organsism was found on" '
                      + 'observation field set.  the options below display observations of butterflies which are further filtered '
                      + 'by the "life stage" annotation (adults, larvae, and pupae).  bees are also filtered and displayed '
@@ -311,6 +316,7 @@ let insectsDesc = '<span id="spandesc">displays observations of insects that hav
 
 let insect_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                      + '<span id="key"><dt>Insects</dt><dd></dd></span>'
+                     + '<span id="tab1"><dt>'+insectsAsPredators+'</dt><dd>'+insectsPredDesc+'</dd></span>'
                      + '<span id="tab1"><dt>'+insects+'</dt><dd>'+insectsDesc+'</dd></span>'
                      + '<span id="tab2"><dt>'+butter+'</dt><dd></dd></span>'
                      + '<span id="tab3"><dt>'+adult+'</dt><dd></dd></span>'
@@ -337,7 +343,7 @@ if( placeId === '' ){
     spider_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                      + '<span id="key"><dt>Spiders</dt><dd></dd></span>'
                      + '<span id="tab1"><dt>'+spiders+'</dt><dd>'+spidersDesc+'</dd></span>'
-                     + '<span id="tab2"><dt>'+predatorSpiders+'</dt><dd>'+spidersPreyDesc+'</dd></span>'
+                     + '<span id="tab2"><dt>'+spidersAsPredators+'</dt><dd>'+spidersPreyDesc+'</dd></span>'
                      + '</dl></td>'
                      + '</tr></table>';
 }
