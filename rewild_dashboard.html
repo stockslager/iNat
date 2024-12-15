@@ -103,6 +103,14 @@ let pupaeOFields   = '&obs_fields=8581';
 let allOhio        = 'no';
 let showScavenge   = 'yes';
 let placeId        = ('&place_id='+p_place_id);
+
+let icon = 'https://static.inaturalist.org/projects/152539-icon-span2.?1730371479';
+
+if( p_project_id === 'cnc' ){
+    icon = 'https://static.inaturalist.org/projects/220623-icon-thumb.png?1729433728';
+}
+  
+faddelem('h2',document.body,{innerHTML:'<div class="box"><img class="photo" src="'+icon+'"> <span>'+ '  Yard Project Dashboard</span></div>'});  
   
 if( p_project_id === 'cnc' ){
     p_project_id = 'biodiversity-of-ohio';
@@ -138,15 +146,7 @@ if( p_project_id === 'cnc' ){
     showScavenge  = 'no';
     placeId       = '&place_id=31';
 }
-  
-let icon = 'https://static.inaturalist.org/projects/152539-icon-span2.?1730371479';
-
-if( p_project_id === 'cnc' ){
-    icon = 'https://static.inaturalist.org/projects/220623-icon-thumb.png?1729433728';
-}
-  
-faddelem('h2',document.body,{innerHTML:'<div class="box"><img class="photo" src="'+icon+'"> <span>'+ '  Yard Project Dashboard</span></div>'});  
-  
+    
 // observation exclusion list (not_id list) for each iconic taxa...
 let notBirds     = '76944,131004,18960';
 let notSpiders   = '76944';
