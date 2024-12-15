@@ -78,6 +78,15 @@
   border: 0px solid #ccc;
   border-top: none;
 }  
+
+.tabcontent2 {
+  display: none;
+  padding: 6px 12px;
+  border: 0px solid #ccc;
+  border-top: none;
+  background-color: #ccc;
+  color:var(--color-text-invert);
+}
    #key { color:var(--color-text); font: 20px Sans-Serif; }
    #col2key { padding-left:50px; color:var(--color-text); font: 20px Sans-Serif; }
    #tab1 { margin-collapse:collapse; padding-left:20px; font: 18px Sans-Serif; }
@@ -278,12 +287,7 @@ if( allOhio === 'yes' ){
     pinsects      = furl(github_root+'configurable_obs_field_table.html?project_id=64680'+placeId+'&obs_fields=3137,3138&ofv_datatype=taxon&operator=merge&iconic_taxa=47158&ofield_iconic=47158','insects parasitizing insects'); 
 }
   
-/*let col1 = '<table id="tablekey"><tr id="trkey"><td id="tdkey"><dl>'
-            + '<span id="key"><dt>Plants Visited</dt><dd></dd></span>'
-            + '<span id="tab1"><dt>'+plantIns+'</dt><dd>'+plantInsDesc+'</dd></span>'
-            + '</dl></td>';   */ 
-
-let col2 = '';
+/*let col2 = '';
 
 // place_id=128707 = cincinnati nature center
 if( allOhio === 'yes' ){
@@ -332,7 +336,7 @@ let row2col3 = '<td id="tdkey"><dl id="lastdl">'
             + '<dt></dt><span id="tab1"><dd>'+molluscs+'</dd></span>'
             + '</dl></td></tr>';    
 
-row2col3 += '</table>';
+row2col3 += '</table>'; */
 
 let plantInsDesc = '<span id="spandesc">the plant inspector displays a list of plant species.  selecting an individual species '
                  + 'from the first table will reveal a list of species observed visiting that plant.  if an '
@@ -428,7 +432,7 @@ let menu = '<span id="tablespan"><div class="tab">'
               + '<button class="tablinks" onclick="openCity(event, \'Fungi\')">Fungi</button>'
               + '<button class="tablinks" onclick="openCity(event, \'Molluscs\')">Molluscs</button>'
               + '</div>'
-              + '<div id="Plants" class="tabcontent">'
+              + '<div id="Plants" class="tabcontent2">'
               + plant_tab
               + '</div>'
               + '<div id="Insects" class="tabcontent">'
