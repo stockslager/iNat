@@ -58,7 +58,7 @@
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
    .icon { height:48px; width:48px; border-radius:50%; }
    .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
-   .photo { height:40px; width:40px; border-radius: 5px 5px 5px 5px; padding-right:10px; }
+   .photo { height:64px; width:64px; border-radius: 5px 5px 5px 5px; padding-right:10px; padding-bottom:20px;}
    .box { display: flex; align-items:center; }
    img { margin:0; padding:0; border:0; }
    a { text-decoration:underline; color:var(--color-text-link); }
@@ -140,6 +140,11 @@ if( p_project_id === 'cnc' ){
 }
   
 let icon = 'https://static.inaturalist.org/projects/152539-icon-span2.?1730371479';
+
+if( p_project_id === 'cnc' ){
+    icon = 'https://static.inaturalist.org/projects/220623-icon-thumb.png?1729433728';
+}
+  
 faddelem('h2',document.body,{innerHTML:'<div class="box"><img class="photo" src="'+icon+'"> <span>'+ '  Yard Project Dashboard</span></div>'});  
   
 // observation exclusion list (not_id list) for each iconic taxa...
