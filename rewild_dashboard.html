@@ -153,10 +153,10 @@ let commonPlants = '&ofield_iconic=47126'
 let notMolluscs  = '10112';
 let notFungi     = '64680,49511,10112';
 let fungiOmit    = '&omit_id=12626497';
+let notInsects   = '64680';
   
-let notInsects = '';
 let plantIns = furl(github_root+'rewild_plants_visited.html?project_id='+p_pollinator+lists, 'plant inspector');
-let insects  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+insectOmit+placeId+'&iconic_taxa=insecta'+insectOFields+'&ofv_datatype=taxon&operator=merge','insects on plants'); 
+let insects  = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notInsects+'&project_id='+p_project_id+commonPlants+insectOmit+placeId+'&iconic_taxa=insecta'+insectOFields+'&ofv_datatype=taxon&operator=merge','insects on plants'); 
 let birds    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notBirds+'&project_id='+p_project_id+commonPlants+birdOmit+placeId+'&iconic_taxa=aves'+birdOFields+'&ofv_datatype=taxon&operator=merge','birds on plants'); 
 let mammals  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=mammalia&ofv_datatype=taxon'+mammalOFields+'&operator=merge','mammals on plants'); 
 let herps    = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notHerps+'&project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=reptilia,amphibia&ofv_datatype=taxon'+herpOFields+'&operator=merge','herps on plants'); 
