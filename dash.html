@@ -199,6 +199,7 @@ let notSpiders   = '76944';
 let spiderOmit   = '&omit_id=232905310,125168044,123407637,123310333&omit_users=cjblessing';
 let insectOmit   = '&omit_id=246151575'; 
 let birdOmit     = '&omit_id=176025976';
+let beesOmit     = '&omit_id=232400618';
 let notBees      = '233728903,218384446,215394847,213574178,205886725,205715997,138789558';
 let notHerps     = '76944,122377,219530,18960,18959,64680';
 let commonPlants = '&ofield_iconic=47126'
@@ -215,7 +216,7 @@ let herps    = furl(github_root+'configurable_obs_field_table.html?not_in_projec
 let molluscs = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=mollusca&ofv_datatype=taxon'+molluscOFields+'&operator=merge','on plants'); 
 let spiders  = furl(github_root+'configurable_obs_field_table.html?not_in_project='+notSpiders+'&project_id='+p_project_id+commonPlants+spiderOmit+placeId+'&iconic_taxa=Arachnida&ofv_datatype=taxon'+spiderOFields+'&operator=merge','on plants'); 
 let fungi    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+fungiOmit+placeId+'&iconic_taxa=fungi&ofv_datatype=taxon'+fungiOFields+'&operator=merge','on plants'); 
-let bees     = furl(github_root+'configurable_obs_field_table.html?not_id='+notBees+'&project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=insecta&taxon_id=630955'+beesOFields+'&ofv_datatype=taxon&operator=merge','bees only'); 
+let bees     = furl(github_root+'configurable_obs_field_table.html?not_id='+notBees+'&project_id='+p_project_id+commonPlants+beesOmit+placeId+'&iconic_taxa=insecta&taxon_id=630955'+beesOFields+'&ofv_datatype=taxon&operator=merge','bees only'); 
 let butter   = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=insecta&taxon_id=47157'+butterOFields+'&ofv_datatype=taxon&operator=merge','butterflies only'); 
 let larva    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=6'+larvaeOFields+'&ofv_datatype=taxon&operator=merge','larvae only'); 
 let adult    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+commonPlants+placeId+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=2'+adultsOFields+'&ofv_datatype=taxon&operator=merge','adults only'); 
