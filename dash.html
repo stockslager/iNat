@@ -340,33 +340,42 @@ row2col3 += '</table>';
 
 let plant_tab = col1+col2+col3+col4+col5+row2col1+row2col2+row2col3;
 let bird_tab  = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
-                     + '<dt></dt><span id="key"><dd>Eating</dd></span>'
+                     + '<dt></dt><span id="key"><dd>Bird Activity</dd></span>'
                      + '<dt></dt><span id="tab1"><dd>'+birds+'</dd></span>'
                      + '<dt></dt><span id="tab2"><dd>'+birdsEatingPlants+'</dd></span>'
                      + '<dt></dt><span id="tab2"><dd>'+birdsNestingOnPlants+'</dd></span>'
                      + '<dt></dt><span id="tab2"><dd>'+birdsNectaringAtPlants+'</dd></span>'
                      + '</dl></td>'
                      + '</tr></table>';
+let insect_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
+                     + '<dt></dt><span id="key"><dd>Insect Activity</dd></span>'
+                     + '<dt></dt><span id="tab1"><dd>'+insects+'</dd></span>'
+                     + '<dt></dt><span id="tab2"><dd>'+butter+'</dd></span>'
+                     + '<dt></dt><span id="tab3"><dd>'+adult+'</dd></span>'
+                     + '<dt></dt><span id="tab3"><dd>'+larva+'</dd></span>'
+                     + '<dt></dt><span id="tab3"><dd>'+pupa+'</dd></span>'
+                     + '<dt></dt><span id="tab2"><dd>'+bees+'</dd></span>'
+                     + '</dl></td>'
+                     + '</tr></table>';
   
 let menu = '<span id="tablespan"><div class="tab">'
               + '<button class="tablinks" onclick="openCity(event, \'Plants\')">Plants</button>'
+              + '<button class="tablinks" onclick="openCity(event, \'Insects\')">Insects</button>'
               + '<button class="tablinks" onclick="openCity(event, \'Birds\')">Birds</button>'
-              + '<button class="tablinks" onclick="openCity(event, \'Herps\')">Herps</button>'
               + '</div>'
               + '<div id="Plants" class="tabcontent">'
               + plant_tab
               + '</div>'
+              + '<div id="Insects" class="tabcontent">'
+              + insect_tab
+              + '</div>'
               + '<div id="Birds" class="tabcontent">'
               + bird_tab
-              + '</div>'
-              + '<div id="Herps" class="tabcontent">'
-              + '<h3>Tokyo</h3>'
-              + '<p>Tokyo is the capital of Japan.</p>'
               + '</div></span>'
   
 faddelem('p',document.body,{innerHTML:menu});
 
-document.getElementById('Birds').style.display = "block";
+document.getElementById('Plants').style.display = "block";
 
 function openCity(evt, cityName) {
   var i, tabcontent, tablinks;
