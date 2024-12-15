@@ -4,8 +4,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charseFt=utf-8" />  
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
-<meta name="description" content="Yard Project Dashboard" />
-<title>Yard Project Dashboard</title>
+<meta name="description" content="Species Interactions Dashboard" />
+<title>Species Interactions Dashboard</title>
 <style>
    :root { 
       background: var(--color-base);
@@ -155,7 +155,7 @@ let placeId        = ('&place_id='+p_place_id);
 
 let icon = 'https://static.inaturalist.org/projects/152539-icon-span2.?1730371479';
 
-faddelem('h2',document.body,{innerHTML:'<div class="box"><img class="photo" src="'+icon+'">'+ '  Yard Project Dashboard</div>'}); 
+faddelem('h2',document.body,{innerHTML:'<div class="box"><img class="photo" src="'+icon+'">'+ '  Species Interactions Dashboard</div>'}); 
 
 if( p_project_id === 'cnc' ){
     p_project_id = 'biodiversity-of-ohio';
@@ -344,7 +344,7 @@ let plant_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
             + '<span id="tab1"><dt>'+plantIns+'</dt><dd>'+plantInsDesc+'</dd></span>'
             + '</dl></td></tr></table>';
   
-let birdsDesc = '<span id="spandesc">displays observations of birds that have the "plant the organsism was found on" '
+let birdsDesc = '<span id="spandesc">displays observations of birds that have the "Plant that the organsism was found on" '
                      + 'observation field set.  the options below display observations of birds that have the "eating", '
                      + '"birds nesting in", and "nectar plant" observation fields set. </span>';
 
@@ -357,7 +357,7 @@ let bird_tab  = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
                      + '</dl></td>'
                      + '</tr></table>';
 
-let insectsDesc = '<span id="spandesc">displays observations of insects that have the "plant the organsism was found on" '
+let insectsDesc = '<span id="spandesc">displays observations of insects that have the "Plant that the organsism was found on" '
                      + 'observation field set.  the options below display observations of butterflies which are further filtered '
                      + 'by the "life stage" annotation (adults, larvae, and pupae).  bees are also filtered and displayed '
                      + 'separately. </span>';
@@ -372,26 +372,46 @@ let insect_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
                      + '<span id="tab2"><dt>'+bees+'</dt><dd></dd></span>'
                      + '</dl></td>'
                      + '</tr></table>';
+
+let spidersDesc = '<span id="spandesc">displays observations of spiders that have the "Plant that the organsism was found on" '
+                     + 'observation field set.  </span>';
+
 let spider_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                      + '<dt></dt><span id="key"><dd>Spider Activity</dd></span>'
                      + '<dt></dt><span id="tab1"><dd>'+spiders+'</dd></span>'
                      + '</dl></td>'
                      + '</tr></table>';
+  
+let mammalsDesc = '<span id="spandesc">displays observations of mammals that have the "Plant that the organsism was found on" '
+                     + 'observation field set.   </span>';
+
 let mammal_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                      + '<dt></dt><span id="key"><dd>Mammal Activity</dd></span>'
                      + '<dt></dt><span id="tab1"><dd>'+mammals+'</dd></span>'
                      + '</dl></td>'
                      + '</tr></table>';
+  
+let herpsDesc = '<span id="spandesc">displays observations of herps that have the "Plant that the organsism was found on" '
+                     + 'observation field set.  </span>';
+
 let herp_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                      + '<dt></dt><span id="key"><dd>Herp Activity</dd></span>'
                      + '<dt></dt><span id="tab1"><dd>'+herps+'</dd></span>'
                      + '</dl></td>'
                      + '</tr></table>';
+  
+let fungiDesc = '<span id="spandesc">displays observations of fungi that have the "Plant that the organsism was found on" '
+                     + 'observation field set.   </span>';
+
 let fungi_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                      + '<dt></dt><span id="key"><dd>Fungi Activity</dd></span>'
                      + '<dt></dt><span id="tab1"><dd>'+fungi+'</dd></span>'
                      + '</dl></td>'
                      + '</tr></table>';
+  
+let molluscsDesc = '<span id="spandesc">displays observations of molluscs that have the "Plant that the organsism was found on" '
+                     + 'observation field set.   </span>';
+
 let mollusc_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                      + '<dt></dt><span id="key"><dd>Mollusc Activity</dd></span>'
                      + '<dt></dt><span id="tab1"><dd>'+molluscs+'</dd></span>'
