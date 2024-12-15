@@ -272,11 +272,16 @@ if( allOhio === 'yes' ){
     pgalls        = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=6586,254,47,7807,877,7623,8581,7623&ofv_datatype=taxon&operator=merge&term_id=22&term_value_id=29','insects parasitizing plants'); 
     pinsects      = furl(github_root+'configurable_obs_field_table.html?project_id=64680'+placeId+'&obs_fields=3137,3138&ofv_datatype=taxon&operator=merge&iconic_taxa=47158&ofield_iconic=47158','insects parasitizing insects'); 
 }
+
+let plantInsDesc = ' ~ the plant inspector displays a list of plant species.  selecting an individual species '
+                 + 'from the first table will reveal a list of species observed visiting that plant.  if an '
+                 + 'insect species is chosen, the individual observations of that specific insect visiting that '
+                 + 'specific plant is then shown.'
   
 let col1 = '<table id="tablekey"><tr id="trkey"><td id="tdkey"><dl>'
             + '<dt></dt><span id="key"><dd>Plants Visited</dd></span>'
-            + '<dt></dt><span id="tab1"><dd>'+plantIns+'</dd></span>'
-            + '<dt></dt><span id="tab1"><dd> </dd></span>'
+            + '<dt></dt><span id="tab1"><dd>'+plantIns+plantInsDesc+'</dd></span>'
+           /* + '<dt></dt><span id="tab1"><dd> </dd></span>'
             + '</dl></td></tr></table><table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
             + '<dt></dt><span id="key"><dd>Visitors to the Plants</dd></span></dl></td></tr><tr id="trkey"><td id="tdkey"><dl>'
             + '<dt></dt><span id="tab1"><dd>'+insects+'</dd></span>'
@@ -284,7 +289,7 @@ let col1 = '<table id="tablekey"><tr id="trkey"><td id="tdkey"><dl>'
             + '<dt></dt><span id="tab3"><dd>'+adult+'</dd></span>'
             + '<dt></dt><span id="tab3"><dd>'+larva+'</dd></span>'
             + '<dt></dt><span id="tab3"><dd>'+pupa+'</dd></span>'
-            + '<dt></dt><span id="tab2"><dd>'+bees+'</dd></span>'
+            + '<dt></dt><span id="tab2"><dd>'+bees+'</dd></span>' */
             + '</dl></td>';    
 
 let col2 = '';
@@ -338,7 +343,7 @@ let row2col3 = '<td id="tdkey"><dl id="lastdl">'
 
 row2col3 += '</table>';
 
-let plant_tab = col1+col2+col3+col4+col5+row2col1+row2col2+row2col3;
+let plant_tab = col1; //+col2+col3+col4+col5+row2col1+row2col2+row2col3;
 let bird_tab  = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                      + '<dt></dt><span id="key"><dd>Bird Activity</dd></span>'
                      + '<dt></dt><span id="tab1"><dd>'+birds+'</dd></span>'
