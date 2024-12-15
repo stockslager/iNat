@@ -85,7 +85,7 @@
    #tab3 { margin-collapse:collapse; padding-left:60px; font: 14px Sans-Serif; }
    #main { width:100%; }
  
-   #tablespan { height:100%; padding-top:0px; padding-bottom:16px; background:var(--color-alt); margin-top:-7px; display:inline-table; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; }
+   #tablespan { padding-top:0px; padding-bottom:16px; background:var(--color-alt); margin-top:-7px; display:inline-table; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; }
    #tablekey { padding:0; margin-top:-10px; }
    #table2key { padding:0; margin-top:-5px; }
 
@@ -339,7 +339,14 @@ let row2col3 = '<td id="tdkey"><dl id="lastdl">'
 row2col3 += '</table>';
 
 let plant_tab = col1+col2+col3+col4+col5+row2col1+row2col2+row2col3;
-let bird_tab  = '<table id="table2key"><tr id="trkey">' + col3 + '</tr></table>';
+let bird_tab  = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
+                     + '<dt></dt><span id="key"><dd>Eating</dd></span>'
+                     + '<dt></dt><span id="tab1"><dd>'+birds+'</dd></span>'
+                     + '<dt></dt><span id="tab2"><dd>'+birdsEatingPlants+'</dd></span>'
+                     + '<dt></dt><span id="tab2"><dd>'+birdsNestingOnPlants+'</dd></span>'
+                     + '<dt></dt><span id="tab2"><dd>'+birdsNectaringAtPlants+'</dd></span>'
+                     + '</dl></td>'
+                     + '</tr></table>';
   
 let menu = '<span id="tablespan"><div class="tab">'
               + '<button class="tablinks" onclick="openCity(event, \'Plants\')">Plants</button>'
