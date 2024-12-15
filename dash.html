@@ -371,10 +371,12 @@ let insect_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
 
 let spidersDesc = '<span id="spandesc">displays observations of spiders that have the "Plant that the organsism was found on" '
                      + 'observation field set.  </span>';
+let spidersPreyDesc = '<span id="spandesc">displays observations of spiders preying.  </span>';
 
 let spider_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                      + '<span id="key"><dt>Spider Activity</dt><dd></dd></span>'
                      + '<span id="tab1"><dt>'+spiders+'</dt><dd>'+spidersDesc+'</dd></span>'
+                     + '<span id="tab2"><dt>'+preying+'</dt><dd>'+spidersPreyDesc+'</dd></span>'
                      + '</dl></td>'
                      + '</tr></table>';
   
@@ -453,11 +455,9 @@ let menu = '<span id="tablespan"><div class="tab">'
 faddelem('p',document.body,{innerHTML:menu});
 
 const myEvent = new Event('myCustomEvent');
-myEvent.currentTarget.className = 'Plants';
 openTaxon(myEvent, 'Plants');
 //document.getElementById('Plants').style.display = "block";
   
-
 function openTaxon(evt, taxon) {
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
