@@ -174,15 +174,21 @@ if( p_place_id !== '' ){
 }
 
 // project specific defaults...
+// biodiversity of ohio...
+if( p_project_id.toLowerCase() === 'biodiversity-of-ohio' || p_project_id === '22501' ){
+    showAll = 'yes';
+    placeId = '&place_id=31';
+} 
+
 // cnc
 if( p_project_id === 'cnc' ){
-    showAll = 'no';
-    p_project_id = 'biodiversity-of-ohio';
-    lists = '&g_list=4488957&s_list=4488958&view=visitingOnly&project_title=Cincinnati%20Nature%20Center%20Pollinator%20Garden';
+    showAll       = 'no';
+    p_project_id  = 'biodiversity-of-ohio';
+    lists         = '&g_list=4488957&s_list=4488958&view=visitingOnly&project_title=Cincinnati%20Nature%20Center%20Pollinator%20Garden';
     p_pollinator  = '220623';
     placeId       = '&place_id=128707';
     insectOFields = '&obs_fields=7623,498,6586,3126,4935,13,7807';
-    beesOFields    = '&obs_fields=7623,498,4935,7807,8581,254,6586,3126';
+    beesOFields   = '&obs_fields=7623,498,4935,7807,8581,254,6586,3126';
     birdOFields   = '&obs_fields=7623,8581,498,3845';
 }
   
@@ -208,12 +214,6 @@ if( p_project_id === '221779' || p_project_id === 'glenwood-gardens' ){
     adultsOFields = '&obs_fields=498,4935,6586';
     larvaeOFields = '&obs_fields=498,6586,254,13';
     beesOFields   = '&obs_fields=498,4935';
-} 
-
-// biodiversity of ohio...
-if( p_project_id.toLowerCase() === 'biodiversity-of-ohio' || p_project_id === '22501' ){
-    showAll = 'yes';
-    placeId       = '&place_id=31';
 } 
 
 // cincinnati re-wild...
@@ -476,7 +476,7 @@ let menu = '<span id="tablespan"><div class="tab">'
       
 faddelem('p',document.body,{innerHTML:menu});
   
-const myEvent = new Event('myCustomEvent');
+//const myEvent = new Event('myCustomEvent');
 //openTaxon(myEvent, 'Plants');
 document.getElementById('Plants').style.display = "block";
       
