@@ -80,6 +80,7 @@ let p_obs_field_array = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_omit_users = winurlparams.get('omit_users') || '';
 let p_omit_id = winurlparams.get('omit_id') || '';
+let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_field = '';
 let p_field_value = '';
 let opts = '';
@@ -99,6 +100,11 @@ if( p_omit_id !== '' ){
     winurlparams.append('not_id', p_omit_id);
 }
 
+if( p_omit_project !== '' ){
+    winurlparams.delete('not_in_project');
+    winurlparams.append('not_in_project', p_omit_project);
+}
+ 
 if( winurlparams.get('ofv_datatype') === null || winurlparams.get('ofv_datatype') === ''){
     winurlparams.delete('ofv_datatype');
     winurlparams.append('ofv_datatype', 'taxon,text,numeric,date,time,datetime,dna');
@@ -155,6 +161,7 @@ winurlparams.delete('operator');
 winurlparams.delete('taxon_id');
 winurlparams.delete('not_user_id');
 winurlparams.delete('not_id');
+winurlparams.delete('not_in_project');
 
 // build param list for url's used in fresults
 for (const [key, value] of winurlparams.entries()) { 
