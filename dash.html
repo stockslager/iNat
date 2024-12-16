@@ -168,7 +168,9 @@ function openTaxon(evt, taxon) {
 
 let placeId = '';  
 let showAll = 'yes';
-    
+let predatorsProjects = '76944';
+let predatorsOFields  = '&obs_fields=3134';
+  
 if( p_place_id !== '' ){
     placeId       = ('&place_id'+p_place_id);
 }
@@ -191,6 +193,8 @@ if( p_project_id === 'cnc' ){
     insectOFields = '&obs_fields=7623,498,6586,3126,4935,13,7807';
     beesOFields   = '&obs_fields=7623,498,4935,7807,8581,254,6586,3126';
     birdOFields   = '&obs_fields=7623,8581,498,3845';
+    predatorsOFields  = '&obs_fields=3134,13';
+    predatorsProjects = '76944,122377';
 }
   
 // the grail...
@@ -279,16 +283,15 @@ let birdsEatingPlants       = furl(github_root+'configurable_obs_field_table.htm
 let birdsNectaringAtPlants  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=498'+notBirds+commonPlants+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:nectar+plant','nectaring at plants'); 
     
 let predatorsField = '';
-let predatorsProjects = '76944';
 if( placeId === '' ){
     predatorsProjects = p_project_id;
     predatorsField    = '&field:Interaction->Preyed%20on'; 
 }
-let spidersAsPredators  = furl(github_root+'configurable_obs_field_table.html?project_id='+predatorsProjects+placeId+'&obs_fields=3134&ofv_datatype=taxon&iconic_taxa=arachnida'+predatorsField,'as predators'); 
-let insectsAsPredators  = furl(github_root+'configurable_obs_field_table.html?project_id='+predatorsProjects+placeId+'&obs_fields=3134&ofv_datatype=taxon&iconic_taxa=insecta'+predatorsField,'as predators'); 
-let birdsAsPredators    = furl(github_root+'configurable_obs_field_table.html?project_id='+predatorsProjects+placeId+'&obs_fields=3134&ofv_datatype=taxon&iconic_taxa=aves'+predatorsField,'as predators'); 
-let mammalsAsPredators  = furl(github_root+'configurable_obs_field_table.html?project_id='+predatorsProjects+placeId+'&obs_fields=3134&ofv_datatype=taxon&iconic_taxa=mammalia'+predatorsField,'as predators'); 
-let herpsAsPredators    = furl(github_root+'configurable_obs_field_table.html?project_id='+predatorsProjects+placeId+'&obs_fields=3134&ofv_datatype=taxon&iconic_taxa=reptilia,amphibia'+predatorsField,'as predators'); 
+let spidersAsPredators  = furl(github_root+'configurable_obs_field_table.html?project_id='+predatorsProjects+placeId+predatorsOFields+'&ofv_datatype=taxon&iconic_taxa=arachnida'+predatorsField,'as predators'); 
+let insectsAsPredators  = furl(github_root+'configurable_obs_field_table.html?project_id='+predatorsProjects+placeId+predatorsOFields+'&ofv_datatype=taxon&iconic_taxa=insecta'+predatorsField,'as predators'); 
+let birdsAsPredators    = furl(github_root+'configurable_obs_field_table.html?project_id='+predatorsProjects+placeId+predatorsOFields+'&ofv_datatype=taxon&iconic_taxa=aves'+predatorsField,'as predators'); 
+let mammalsAsPredators  = furl(github_root+'configurable_obs_field_table.html?project_id='+predatorsProjects+placeId+predatorsOFields+'&ofv_datatype=taxon&iconic_taxa=mammalia'+predatorsField,'as predators'); 
+let herpsAsPredators    = furl(github_root+'configurable_obs_field_table.html?project_id='+predatorsProjects+placeId+predatorsOFields+'&ofv_datatype=taxon&iconic_taxa=reptilia,amphibia'+predatorsField,'as predators'); 
     
 let intRAspecific = '';
 let mating        = '';
