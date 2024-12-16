@@ -176,17 +176,18 @@ if( p_place_id !== '' ){
 // project specific defaults...
 // biodiversity of ohio...
 if( p_project_id.toLowerCase() === 'biodiversity-of-ohio' || p_project_id === '22501' ){
-    showAll = 'yes';
-    placeId = '&place_id=31';
+    showAll      = 'yes';
+    placeId      = '&place_id=31';
+    p_project_id = '22501';
 } 
 
 // cnc
 if( p_project_id === 'cnc' ){
     showAll       = 'no';
-    p_project_id  = 'biodiversity-of-ohio';
+    placeId       = '&place_id=128707';
+    p_project_id  = '22501';
     lists         = '&g_list=4488957&s_list=4488958&view=visitingOnly&project_title=Cincinnati%20Nature%20Center%20Pollinator%20Garden';
     p_pollinator  = '220623';
-    placeId       = '&place_id=128707';
     insectOFields = '&obs_fields=7623,498,6586,3126,4935,13,7807';
     beesOFields   = '&obs_fields=7623,498,4935,7807,8581,254,6586,3126';
     birdOFields   = '&obs_fields=7623,8581,498,3845';
@@ -194,19 +195,19 @@ if( p_project_id === 'cnc' ){
   
 // the grail...
 if( p_project_id === 'the-grail' ){
-    showAll = 'no';
-    p_project_id  = 'biodiversity-of-ohio'
+    showAll       = 'no';
     placeId       = '&place_id=205674'
+    p_project_id  = '22501'
     insectOFields = '&obs_fields=7623,498,6586,4935'; 
 }
 
 // glenwood gardens...
 if( p_project_id === '221779' || p_project_id === 'glenwood-gardens' ){
-    showAll = 'no';
+    showAll      = 'no';
+    placeId      = '&place_id=209027'
     p_project_id = '221779';
-    placeId       = '&place_id=209027'
-    lists = '&g_list=4484950&s_list=4484949&view=nectaring&project_title=Glenwood%20Gardens';
-    herpOFields    = '&obs_fields=7623';
+    lists        = '&g_list=4484950&s_list=4484949&view=nectaring&project_title=Glenwood%20Gardens';
+    herpOFields  = '&obs_fields=7623';
     spiderOFields  = '&obs_fields=7623';
     insectOFields = '&obs_fields=498,6586,4935,7807,13,47,254,1711'; 
     birdOFields   = '&obs_fields=498,7623,8581,3845,13';
@@ -218,9 +219,10 @@ if( p_project_id === '221779' || p_project_id === 'glenwood-gardens' ){
 
 // cincinnati re-wild...
 if( p_project_id.toLowerCase() === 'cincinnati-rewild' || p_project_id === '152539' || p_project_id.toLowerCase() === 'cincinnati-re-wild' ){
-    showAll = 'no';
-    birdOFields   = '&obs_fields=7623,8581,498,3845';
+    showAll       = 'no';
     placeId       = '';
+    p_project_id  = '152539';
+    birdOFields   = '&obs_fields=7623,8581,498,3845';
 } 
   
 // exclude these projects from the main "on plants" view.  
