@@ -434,9 +434,13 @@ let mollusc_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
                          + '<span id="tab1"><dt>'+molluscs+'</dt><dd>'+molluscsDesc+'</dd></span>'
                          + '</dl></td>'
                          + '</tr></table>';
-      
+
+let plantButton = '';
+if( lists !== '' ){
+    plantButton = '<button class="tablinks" onclick="openTaxon(event, \'Plants\')">Plants</button>';
+}
+  
 let menu = '<span id="tablespan"><div class="tab">'
-                  + '<button class="tablinks" onclick="openTaxon(event, \'Plants\')">Plants</button>'
                   + '<button class="tablinks" onclick="openTaxon(event, \'Insects\')">Insects</button>'
                   + '<button class="tablinks" onclick="openTaxon(event, \'Birds\')">Birds</button>'
                   + '<button class="tablinks" onclick="openTaxon(event, \'Spiders\')">Spiders</button>'
@@ -444,6 +448,7 @@ let menu = '<span id="tablespan"><div class="tab">'
                   + '<button class="tablinks" onclick="openTaxon(event, \'Herps\')">Herps</button>'
                   + '<button class="tablinks" onclick="openTaxon(event, \'Fungi\')">Fungi</button>'
                   + '<button class="tablinks" onclick="openTaxon(event, \'Molluscs\')">Molluscs</button>'
+                  + plantBUtton
                   + '</div>'
                   + '<div id="Insects" class="tabcontent">'
                   + insect_tab
