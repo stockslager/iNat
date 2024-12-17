@@ -150,6 +150,7 @@ let placeId = '';
 let showAll = 'yes';
 let predatorsProjects = '76944';
 let predatorsOFields  = '&obs_fields=3134';
+let limitPredatorSearch = 'yes';
   
 if( p_place_id !== '' ){
     placeId       = ('&place_id'+p_place_id);
@@ -161,6 +162,7 @@ if( p_project_id.toLowerCase() === 'biodiversity-of-ohio' || p_project_id === '2
     showAll      = 'yes';
     placeId      = '&place_id=31';
     p_project_id = '22501';
+    limitPredatorSearch = 'no';
     lists = '&g_list=4484313&s_list=4484172&project_title=Biodiversity%20of%20Ohio';
 } 
 
@@ -171,6 +173,7 @@ if( p_project_id === 'cnc' ){
     p_project_id  = '22501';
     lists         = '&g_list=4488957&s_list=4488958&view=visitingOnly&project_title=Cincinnati%20Nature%20Center%20Pollinator%20Garden';
     p_pollinator  = '220623';
+    limitPredatorSearch = 'no';
     insectOFields = '&obs_fields=7623,498,6586,3126,4935,13,7807';
     beesOFields   = '&obs_fields=7623,498,4935,7807,8581,254,6586,3126';
     birdOFields   = '&obs_fields=7623,8581,498,3845';
@@ -183,6 +186,7 @@ if( p_project_id === 'the-grail' ){
     showAll       = 'no';
     placeId       = '&place_id=205674'
     p_project_id  = '22501'
+    limitPredatorSearch = 'no';
     insectOFields = '&obs_fields=7623,498,6586,4935'; 
     lists = '&g_list=4484313&s_list=4484172&project_title=The%Grail';
 }
@@ -192,6 +196,7 @@ if( p_project_id === '221779' || p_project_id === 'glenwood-gardens' ){
     showAll      = 'no';
     placeId      = '&place_id=209027'
     p_project_id = '221779';
+    limitPredatorSearch = 'no';
     lists        = '&g_list=4484950&s_list=4484949&view=nectaring&project_title=Glenwood%20Gardens';
     herpOFields  = '&obs_fields=7623';
     spiderOFields  = '&obs_fields=7623';
@@ -206,8 +211,9 @@ if( p_project_id === '221779' || p_project_id === 'glenwood-gardens' ){
 // cincinnati re-wild...
 if( p_project_id.toLowerCase() === 'cincinnati-rewild' || p_project_id === '152539' || p_project_id.toLowerCase() === 'cincinnati-re-wild' ){
     showAll       = 'no';
-    placeId      = '&place_id=26,31';
+    placeId       = '&place_id=26,31';
     p_project_id  = '152539';
+    limitPredatorSearch = 'yes';
     lists         = '&g_list=4484313&s_list=4484172&project_title=Cincinnati%20Re-Wild';
     birdOFields   = '&obs_fields=7623,8581,498,3845';
 } 
@@ -272,7 +278,7 @@ let birdsEatingPlants       = furl(github_root+'configurable_obs_field_table.htm
 let birdsNectaringAtPlants  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=498'+notBirds+commonPlants+allButPlantIns+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:nectar+plant','nectaring at plants'); 
     
 let predatorsField = '';
-if( placeId === '' ){
+if( limitPredatorSearch === 'yes' ){
     predatorsProjects = p_project_id;
     predatorsField    = '&field:Interaction->Preyed%20on'; 
 }
