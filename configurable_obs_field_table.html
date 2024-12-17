@@ -74,6 +74,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
+let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
 let p_obs_field_array = winurlparams.get('obs_fields') || '';
@@ -136,9 +137,9 @@ let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observa
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
 <script> 
 
-if (winurlsearchstr==='' || p_project_id === '') {
+if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
    let instructions = [
-      {innerText:'This page requires a project_id argument.  Add ?project_id=12345678 to the end of the url.'},
+      {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.'},
    ];
    faddelems('p',document.body,instructions);
 }
