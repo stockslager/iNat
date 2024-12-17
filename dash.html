@@ -35,38 +35,16 @@
       }
    }
 
-/* Style the tab */
-.tab {
-  overflow: hidden;
-  border: 0px solid #ccc;
-  border-radius: 5px 5px 0px 0px;  
-  /*background-color: #f1f1f1;*/
-  background:var(--color-alt);
-  color:var(--color-text);  
-}
-
-/* Style the buttons inside the tab */
-.tab button { background:var(--color-alt); color:var(--color-text); float: left; border: none; outline: none; cursor: pointer; padding: 14px 16px; transition: 0.3s; font-size: 17px; }
-
-/* Change background color of buttons on hover */
-.tab button:hover {
-  background-color: #ddd;
-  color:var(--color-text-invert);
-}
-
-/* Create an active/current tablink class */
-.tab button.active {
-  background-color: #ccc;
-  color:var(--color-text-invert);
-}
-
-/* Style the tab content */
-.tabcontent {
-  display: none;
-  padding: 6px 12px;
-  border: 0px solid #ccc;
-  border-top: none;
-}  
+   /* Style the tab */
+   .tab { overflow: hidden; border: 0px solid #ccc; border-radius: 5px 5px 0px 0px; background:var(--color-alt); color:var(--color-text); }
+   /* Style the buttons inside the tab */
+   .tab button { background:var(--color-alt); color:var(--color-text); float: left; border: none; outline: none; cursor: pointer; padding: 14px 16px; transition: 0.3s; font-size: 17px; }
+   /* Change background color of buttons on hover */
+   .tab button:hover { background-color: #ddd; color:var(--color-text-invert); }
+   /* Create an active/current tablink class */
+   .tab button.active { background-color: #ccc; color:var(--color-text-invert); }
+   /* Style the tab content */
+   .tabcontent { display: none; padding: 6px 12px; border: 0px solid #ccc; border-top: none; }  
 
    #key { color:var(--color-text); font: 20px Sans-Serif; }
    #col2key { padding-left:50px; color:var(--color-text); font: 20px Sans-Serif; }
@@ -120,9 +98,14 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '152539'; // cinti re-wild
 let p_place_id   = winurlparams.get('place_id') || '';   
 let p_user_id    = winurlparams.get('user_id') || '';
+let p_g_list     = winurlparams.get('g_list') || '';
+let p_s_list     = winurlparams.get('s_list') || '';
 let p_pollinator = p_project_id;
-  
-let lists = ('&g_list=4484313&s_list=4484172&project_title='+p_project_id);
+let lists = '';
+
+if( p_g_list !== '' && p_s_list !== '' ){
+    lists = ('&g_list=4484313&s_list=4484172&project_title='+p_project_id);
+} 
 
 // default obs fields for rewild...
 let insectOFields  = '&obs_fields=7623,498,4935,7807,8581,254,6586,499';
@@ -219,6 +202,7 @@ if( p_project_id.toLowerCase() === 'cincinnati-rewild' || p_project_id === '1525
     showAll       = 'no';
     placeId       = '';
     p_project_id  = '152539';
+    lists         = '&g_list=4484313&s_list=4484172&project_title=Cincinnati%20Re-Wild';
     birdOFields   = '&obs_fields=7623,8581,498,3845';
 } 
 
@@ -342,16 +326,21 @@ if( showAll === 'yes' ){
     insectPara      = '<span id="spandesc">displays observations of insects that have the "Interaction->Parasitised by" '
                          + 'observation field set.   </span>';
 }  
-  
+
 let plantInsDesc = '<span id="spandesc">the plant inspector displays a list of plant species.  selecting an individual species '
                      + 'from the first table will reveal a list of species observed visiting that plant.  if an '
                      + 'insect species is chosen, the individual observations of that specific insect visiting that '
                      + 'specific plant is then shown.</span>';
-    
-let plant_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
+
+// if lists (g_list and s_list) were passed in or set in the logic above,
+// show the plants tab for the plant inspector.
+let plant_tab = '';
+if( lists !== '' ){
+    plant_tab = '<div id="Plants" class="tabcontent"><table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
                 + '<span id="key"><dt>Plants Visited</dt><dd></dd></span>'
                 + '<span id="tab1"><dt>'+plantIns+'</dt><dd>'+plantInsDesc+'</dd></span>'
-                + '</dl></td></tr></table>';
+                + '</dl></td></tr></table></div>';
+}
     
 let birdsPredDesc = '<span id="spandesc">displays observations of birds that have been addded to the global "Predators" project. </span>';
 let birdsDesc = '<span id="spandesc">displays observations of birds that have the "Plant that the organsism was found on" '
@@ -456,9 +445,6 @@ let menu = '<span id="tablespan"><div class="tab">'
                   + '<button class="tablinks" onclick="openTaxon(event, \'Fungi\')">Fungi</button>'
                   + '<button class="tablinks" onclick="openTaxon(event, \'Molluscs\')">Molluscs</button>'
                   + '</div>'
-                  + '<div id="Plants" class="tabcontent">'
-                  + plant_tab
-                  + '</div>'
                   + '<div id="Insects" class="tabcontent">'
                   + insect_tab
                   + '</div>'
@@ -480,6 +466,7 @@ let menu = '<span id="tablespan"><div class="tab">'
                   + '<div id="Molluscs" class="tabcontent">'
                   + mollusc_tab
                   + '</div>'
+                  + plant_tab
                   + '</span>';
       
 faddelem('p',document.body,{innerHTML:menu});
