@@ -95,7 +95,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 
-let p_project_id = winurlparams.get('project_id') || '152539'; // cinti re-wild
+let p_project_id = winurlparams.get('project_id') || ''; 
 let p_place_id   = winurlparams.get('place_id') || '';   
 let p_user_id    = winurlparams.get('user_id') || '';
 let p_g_list     = winurlparams.get('g_list') || '';
@@ -103,6 +103,12 @@ let p_s_list     = winurlparams.get('s_list') || '';
 let p_pollinator = p_project_id;
 let lists = '';
 
+// if project_id and user_id are both null, default to re-wild
+if( p_project_id === '' && p_user_id === '' ){
+    p_project_id = '152539';
+}
+
+// default to ohio's lists if the lists weren't passed in.
 if( p_g_list !== '' && p_s_list !== '' ){
     lists = ('&g_list=4484313&s_list=4484172&project_title='+p_project_id);
 } 
