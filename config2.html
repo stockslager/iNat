@@ -276,6 +276,7 @@ function fresults(xobj) {
          }
       }
 
+      let firstCol = 'yes';
       for( let e=0; e<data_row_array.length; e++ ){
            if( isMultipleOfFour(labelCount) ){
                if( labelCount === 0 ){
@@ -293,7 +294,8 @@ function fresults(xobj) {
                if( p_operator !== 'merge' ){
                    labels.push({innerText:data_row_array[e].field_name});
                } else {
-                   if( labelCount === 1 ){
+                   if( firstCol === 'yes' ){
+                       firstCol = 'no';
                        labels.push({innerText:'Merged Fields (see upper right)'});
                    } else {
                        labels.push({innerText:''});
