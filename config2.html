@@ -298,7 +298,12 @@ function fresults(xobj) {
                        firstCol = 'no';
                        labels.push({innerText:'Merged Fields (see upper right)'});
                    } else {
-                       labels.push({innerText:''});
+                       if( firstCol === 'yes' ){
+                           firstCol = 'no';
+                           labels.push({innerText:'Merged Fields (see upper right)'});
+                       else {
+                           labels.push({innerText:''});
+                       }
                    }
                }
            } else {
