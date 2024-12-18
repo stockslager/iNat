@@ -198,6 +198,12 @@ function dataRow(field_id, field_name, field_value) {
 
 function fresults(xobj) {
    let results = xobj.results;
+   let data_row_array = [];
+
+   for( let f=0; f<field_array.length; f++ ){
+        data_row_array.push(new dataRow(field_array[f], '', '') );
+   }
+ 
    if (results) {
       let total_results = xobj.total_results;
       let per_page = xobj.per_page;
@@ -211,7 +217,6 @@ function fresults(xobj) {
       let mismatch = '';
       let field_array_copy = field_array;
       let field_array_copy2 = [];
-      let data_row_array = [];
       let flower = '';
       let dlString = '<span id="h2">Observation Field Viewer</span>';
       let labelCount = 0;
@@ -260,8 +265,10 @@ function fresults(xobj) {
                         } 
                             
                         if( field_array_copy[r] === rec.ofvs[k].field_id.toString() ){
-                            const data_row    = new dataRow(rec.ofvs[k].field_id.toString(),rec.ofvs[k].name,'');
-                            data_row_array.push(data_row);
+                            let data_row   = data_row_array.find( dataRow => dataRow.field_id === rec.ofvs[k].field_id.toString() );
+                            data_row.field_name = rec.ofvs[k].name;
+                            //const data_row    = new dataRow(rec.ofvs[k].field_id.toString(),rec.ofvs[k].name,'');
+                            //data_row_array.push(data_row);
                             field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[k].field_id.toString());
                   /*          if( isMultipleOfFour(labelCount) ){
                                 if( labelCount === 0 ){
