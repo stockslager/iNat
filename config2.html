@@ -260,8 +260,10 @@ function fresults(xobj) {
          let mismatch = '';
          let matchedCopy = 'no';
          let values = [];
+         let dataType = '';
          let dataType2 = '';
          let matchValue = '';
+         let matchValue2 = '';
          let taxon = '';
          
          if( rec.taxon ){
@@ -334,7 +336,7 @@ function fresults(xobj) {
                       }
 
                       if( p_operator === 'merge' ){
-                          if( rec.ofvs[j].field_id.toString() === box_array[w].field_id.toString() ){
+                         /* if( rec.ofvs[j].field_id.toString() === box_array[w].field_id.toString() ){
                               if( matchValue === '' ){
                                   matchValue = rec.ofvs[j].value;
                               } else if( matchValue !== rec.ofvs[j].value ){
@@ -345,7 +347,7 @@ function fresults(xobj) {
                                   dataType2 = rec.ofvs[j].dataType2;
                               } else if( dataType2 !== rec.ofvs[j].dataType2 ){
                                   mismatch = 'yes';
-                              }
+                              }*/
                            
                               field1 = rec.ofvs[j].value.toLowerCase();
                                     
