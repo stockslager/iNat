@@ -291,7 +291,7 @@ function fresults(xobj) {
            labelCount++;
            if( data_row_array[e].field_name !== '' ){
                dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+data_row_array[e].field_id,data_row_array[e].field_id) + '</td>');
-               dlString += ('<td id="tdkey">' + data_row_array[e].field_name + '</td></tr>');
+               dlString += ('<td id="tdkey">' + data_row_array[e].field_name.toLowerCase() + '</td></tr>');
                if( p_operator !== 'merge' ){
                    labels.push({innerText:data_row_array[e].field_name});
                } else {
