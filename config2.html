@@ -301,36 +301,36 @@ function fresults(xobj) {
             for( let w=0; w<box_array.length; w++ ){
                  for( let j=0; j<rec.ofvs.length; j++ ){
 
-                      if( field_array.includes(rec.ofvs[k].field_id.toString()) ){
+                      if( field_array.includes(rec.ofvs[j].field_id.toString()) ){
                           if( matchValue === '' ){
-                              matchValue = rec.ofvs[k].value;
-                          } else if( rec.ofvs[k].value !== '' && matchValue !== rec.ofvs[k].value ){
+                              matchValue = rec.ofvs[j].value;
+                          } else if( rec.ofvs[j].value !== '' && matchValue !== rec.ofvs[j].value ){
                               mismatch = 'yes';
                           }
                       
                           if( datatype === '' ){
-                              datatype = rec.ofvs[k].datatype;
-                          } else if( datatype !== rec.ofvs[k].datatype ){
+                              datatype = rec.ofvs[j].datatype;
+                          } else if( datatype !== rec.ofvs[j].datatype ){
                               mismatch = 'yes';
                           }
-                          if( rec.ofvs[k].taxon ){
+                          if( rec.ofvs[j].taxon ){
                               if( matchTaxonId === '' ){
-                                  matchTaxonId = rec.ofvs[k].taxon.id;
+                                  matchTaxonId = rec.ofvs[j].taxon.id;
                               }
-                              if( rec.ofvs[k].taxon.id !== matchTaxonId ){
+                              if( rec.ofvs[j].taxon.id !== matchTaxonId ){
                                   mismatch = 'yes';
                               }
                           }
                       } 
 
-                      if( field_array_copy[r] === rec.ofvs[k].field_id.toString() ){
-                          let box_row   = box_array.find( boxRow => boxRow.field_id === rec.ofvs[k].field_id.toString() );
-                          box_row.field_name = rec.ofvs[k].name.toString();
+                      if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){
+                          let box_row   = box_array.find( boxRow => boxRow.field_id === rec.ofvs[j].field_id.toString() );
+                          box_row.field_name = rec.ofvs[j].name.toString();
                           if( p_operator === 'merge' ){
-                              field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[k].field_id.toString());
+                              field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[j].field_id.toString());
                           }
                          
-                          field_array_copy2.push(rec.ofvs[k].field_id.toString());
+                          field_array_copy2.push(rec.ofvs[j].field_id.toString());
                       }
 
                       if( p_operator === 'merge' ){
