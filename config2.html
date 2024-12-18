@@ -211,11 +211,9 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let label = '';
       let labels = [];
       let mismatch = '';
       let field_array_copy = field_array;
-      let mergeCount = 0;
       let flower = '';
       let dlString = '<span id="h2">Observation Field Viewer</span>';
       let labelCount = 0;
@@ -231,7 +229,6 @@ function fresults(xobj) {
           merged = 'merged observation field';
       } 
 
-      let displayCount = 0;
       let tempBrow = [];
       
       for (let i=0; i<results.length; i++) {
@@ -242,7 +239,6 @@ function fresults(xobj) {
          let tax_id = '';
          let field1 = ''; 
          let param1 = ''; 
-         let ofvs1 = '';  
          let displayName = '';
          let displayTaxonName = '';
          let mismatch = '';
@@ -251,7 +247,6 @@ function fresults(xobj) {
          let dataType = '';
          let dataType2 = '';
          let matchValue = '';
-         let matchValue2 = '';
          let matchTaxonId = '';
          let taxon = '';
          
@@ -320,8 +315,6 @@ function fresults(xobj) {
                           if( p_operator === 'merge' ){
                               field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[j].field_id.toString());
                           }
-                          mergeCount++;
-                          //field_array_copy2.push(rec.ofvs[j].field_id.toString());
                       }
 
                       if( p_operator === 'merge' ){
@@ -393,9 +386,6 @@ function fresults(xobj) {
               }
           
               values.push({innerHTML:displayName});
-              for( let x=1; x<mergeCount; x++ ){
-                  // values.push({innerHTML:''});
-              }
          }          
  
          values.push({innerHTML:user_icon});
@@ -429,9 +419,7 @@ function fresults(xobj) {
                        if( firstCol === 'yes' ){
                            firstCol = 'no';
                            labels.push({innerText:'Merged Fields (see upper right)'});
-                       } else {
-                         //  labels.push({innerText:''});
-                       }
+                       } 
                    }
                }
            } else {
