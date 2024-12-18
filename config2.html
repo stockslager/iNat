@@ -246,7 +246,7 @@ function fresults(xobj) {
       let displayCount = 0;
       
       for (let i=0; i<results.length; i++) {
-         let brow = faddelem('tr',tbody);
+         let tempBrow = [];
          let rec = results[i];
          let tax_name = '';
          let pref_tax_name = '';
@@ -420,8 +420,8 @@ function fresults(xobj) {
  
          values.push({innerHTML:user_icon});
          values.push({innerHTML:furl(root_people+rec.user.login,rec.user.login)});
-   
-         faddelems('td',brow,values);
+
+         tempBrow.push(values);
       };
     ////////////////////////////
     /*  for (let l=0; l<results.length; l++) {
@@ -531,8 +531,12 @@ function fresults(xobj) {
       faddelems('th',hrow,labels);
 
       let tbody = faddelem('tbody',table);
-
+    
       // loop through array of rows stored on object.
+      for( let q=0; q<tempBrow.length; q++ ){
+           let brow = faddelem('tr',tbody);
+           faddelems('td',brow,tempBrow[q]);
+      }
 
       // buttons to go to prev or next page
       let nav = faddelem('div',document.body,{id:'nav'});
