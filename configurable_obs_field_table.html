@@ -190,8 +190,20 @@ function isMultipleOfFour(num) {
   return num % 4 === 0;
 }
 
+function dataRow(field_id, field_name, field_value) {
+    this.field_id    = field_id;
+    this.field_name  = field_name;
+    this.field_value = field_value;
+}
+
 function fresults(xobj) {
    let results = xobj.results;
+   let data_row_array = [];
+
+   for( let f=0; f<field_array.length; f++ ){
+        data_row_array.push(new dataRow(field_array[f], '', '') );
+   }
+ 
    if (results) {
       let total_results = xobj.total_results;
       let per_page = xobj.per_page;
@@ -251,55 +263,56 @@ function fresults(xobj) {
                                 }
                             }
                         } 
-                            
                         if( field_array_copy[r] === rec.ofvs[k].field_id.toString() ){
-                            field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[k].field_id.toString());
-                            if( isMultipleOfFour(labelCount) ){
-                                if( labelCount === 0 ){
-                                    dlString += '<span id="dltest"><table id="tablekey">';
-                                    dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
-                                } else {
-                                    dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
-                                    dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>'); 
-                                }
+                            let data_row   = data_row_array.find( dataRow => dataRow.field_id === rec.ofvs[k].field_id.toString() );
+                            data_row.field_name = rec.ofvs[k].name.toString();
+                            if( p_operator === 'merge' ){
+                                field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[k].field_id.toString());
                             }
-                            labelCount++;
-                            dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+rec.ofvs[k].field_id,rec.ofvs[k].field_id) + '</td>');
-                            dlString += ('<td id="tdkey">' + rec.ofvs[k].name.toLowerCase() + '</td></tr>');
 
                             field_array_copy2.push(rec.ofvs[k].field_id.toString());
-                            // add label to header row (if not merge)
-                            if( p_operator !== 'merge' ){
-                                //field_array_copy2.push(rec.ofvs[k].field_id.toString());
-                                labels.push({innerText:rec.ofvs[k].name});
-                            } else {
-                                if( labelCount === 1 ){
-                                    labels.push({innerText:'Merged Fields (see upper right)'});
-                                } else {
-                                    labels.push({innerText:''});
-                                }
-                            }
-                       }
+                        }
                   }
              } 
          }
       }
 
-      // check for observation fields passed in and not found
-      for( let a=0; a<field_array.length; a++ ) {
-           if( !field_array_copy2.includes(field_array[a]) ) {
-               if( isMultipleOfFour(labelCount) ){
-                   if( labelCount === 0 ){
-                       dlString += '<span id="dltest"><table id="tablekey">';
-                       dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
+      let firstCol = 'yes';
+      for( let e=0; e<data_row_array.length; e++ ){
+           if( isMultipleOfFour(labelCount) ){
+               if( labelCount === 0 ){
+                   dlString += '<span id="dltest"><table id="tablekey">';
+                   dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
+               } else {
+                   dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
+                   dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');    
+               }
+           }
+           labelCount++;
+           if( data_row_array[e].field_name !== '' ){
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+data_row_array[e].field_id,data_row_array[e].field_id) + '</td>');
+               dlString += ('<td id="tdkey">' + data_row_array[e].field_name.toLowerCase() + '</td></tr>');
+               if( p_operator !== 'merge' ){
+                   labels.push({innerText:data_row_array[e].field_name});
+               } else {
+                   if( firstCol === 'yes' ){
+                       firstCol = 'no';
+                       labels.push({innerText:'Merged Fields (see upper right)'});
                    } else {
-                       dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
-                       dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');    
+                       if( firstCol === 'yes' ){
+                           firstCol = 'no';
+                           labels.push({innerText:'Merged Fields (see upper right)'});
+                       } else {
+                           labels.push({innerText:''});
+                       }
                    }
                }
-               labelCount++;
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+field_array[a],field_array[a]) + '</td>');
+           } else {
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+data_row_array[e].field_id,data_row_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">missing from this page of data</td></tr>');
+               if( p_operator !== 'merge' ) {
+                   labels.push({innerText:''});
+               }
            }
       }
 
@@ -361,7 +374,7 @@ function fresults(xobj) {
          }
 
          if( tax_id !== '' ){
-             taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl(github_root+'config2.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
          values = [
@@ -380,13 +393,13 @@ function fresults(xobj) {
          }
 
          let emojiTitle = 'Merged Observation Fields:&#10;';
-          
-        if(rec.ofvs&&rec.ofvs.length>0){
-            for( let w=0; w<field_array_copy2.length; w++ ){
+
+         if(rec.ofvs&&rec.ofvs.length>0){
+            for( let w=0; w<data_row_array.length; w++ ){
                  for( let j=0; j<rec.ofvs.length; j++ ){
 
                       if( p_operator === 'merge' ){
-                          if( rec.ofvs[j].field_id.toString() === field_array_copy2[w].toString() ){
+                          if( rec.ofvs[j].field_id.toString() === data_row_array[w].field_id.toString() ){
                               if( matchValue === '' ){
                                   matchValue = rec.ofvs[j].value;
                               } else if( matchValue !== rec.ofvs[j].value ){
@@ -422,7 +435,7 @@ function fresults(xobj) {
                               }
                           }
                       } else {
-                          if( rec.ofvs[j].field_id.toString() === field_array_copy2[w].toString() ){
+                          if( rec.ofvs[j].field_id.toString() === data_row_array[w].field_id.toString() ){
                               matchedCopy = 'yes';
                               field1 = rec.ofvs[j].value.toLowerCase();
                               param1 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
@@ -434,7 +447,7 @@ function fresults(xobj) {
                                   field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                               }
                               if( p_field_value === '' ){
-                                  values.push({innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
+                                  values.push({innerHTML:furl(github_root+'config2.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
                               } else {
                                   values.push({innerHTML:field1});
                               }
@@ -448,7 +461,7 @@ function fresults(xobj) {
                       values.push({innerText:''});
                   }}
              }
-         }  
+         }             
        
          if( p_operator === 'merge' ){
               if( displayTaxonName !== '' ){
