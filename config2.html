@@ -190,6 +190,12 @@ function isMultipleOfFour(num) {
   return num % 4 === 0;
 }
 
+function dataRow(field_id, field_name, field_value) {
+    this.field_id    = field_id;
+    this.field_name  = field_name;
+    this.field_value = field_value;
+}
+
 function fresults(xobj) {
    let results = xobj.results;
    if (results) {
@@ -205,6 +211,7 @@ function fresults(xobj) {
       let mismatch = '';
       let field_array_copy = field_array;
       let field_array_copy2 = [];
+      let data_row_array = [];
       let flower = '';
       let dlString = '<span id="h2">Observation Field Viewer</span>';
       let labelCount = 0;
@@ -253,8 +260,10 @@ function fresults(xobj) {
                         } 
                             
                         if( field_array_copy[r] === rec.ofvs[k].field_id.toString() ){
+                            const dataRow    = new dataRow(field_array_copy[r],rec.ofvs[k].name,'');
+                            data_row_array.push(dataRow);
                             field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[k].field_id.toString());
-                            if( isMultipleOfFour(labelCount) ){
+                  /*          if( isMultipleOfFour(labelCount) ){
                                 if( labelCount === 0 ){
                                     dlString += '<span id="dltest"><table id="tablekey">';
                                     dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
@@ -266,10 +275,10 @@ function fresults(xobj) {
                             labelCount++;
                             dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+rec.ofvs[k].field_id,rec.ofvs[k].field_id) + '</td>');
                             dlString += ('<td id="tdkey">' + rec.ofvs[k].name.toLowerCase() + '</td></tr>');
-
+                  */
                             field_array_copy2.push(rec.ofvs[k].field_id.toString());
                             // add label to header row (if not merge)
-                            if( p_operator !== 'merge' ){
+                  /*          if( p_operator !== 'merge' ){
                                 //field_array_copy2.push(rec.ofvs[k].field_id.toString());
                                 labels.push({innerText:rec.ofvs[k].name});
                             } else {
@@ -278,15 +287,43 @@ function fresults(xobj) {
                                 } else {
                                     labels.push({innerText:''});
                                 }
-                            }
+                            } */
                        }
                   }
              } 
          }
       }
 
+      for( let e=0; e<data_row_array.length; e++ ){
+           if( isMultipleOfFour(labelCount) ){
+               if( labelCount === 0 ){
+                   dlString += '<span id="dltest"><table id="tablekey">';
+                   dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
+               } else {
+                   dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
+                   dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');    
+               }
+           }
+           if( field_array_copy2.includes(data_row_array[e].field_id) ){
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+field_array[a],field_array[a]) + '</td>');
+               dlString += ('<td id="tdkey">' + data_row_array[e].field_name + '</td></tr>');
+               if( p_operator !== 'merge' ){
+                   labels.push({innerText:rec.ofvs[k].name});
+               } else {
+                   if( labelCount === 1 ){
+                       labels.push({innerText:'Merged Fields (see upper right)'});
+                   } else {
+                       labels.push({innerText:''});
+                   }
+               }
+           } else {
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+field_array[a],field_array[a]) + '</td>');
+               dlString += ('<td id="tdkey">missing from this page of data</td></tr>');
+           }
+      }
+
       // check for observation fields passed in and not found
-      for( let a=0; a<field_array.length; a++ ) {
+      /*for( let a=0; a<field_array.length; a++ ) {
            if( !field_array_copy2.includes(field_array[a]) ) {
                if( isMultipleOfFour(labelCount) ){
                    if( labelCount === 0 ){
@@ -301,7 +338,7 @@ function fresults(xobj) {
                dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+field_array[a],field_array[a]) + '</td>');
                dlString += ('<td id="tdkey">missing from this page of data</td></tr>');
            }
-      }
+      } */
 
       dlString += '</table></span>';
       faddelem('p',document.body,{innerHTML:dlString});
