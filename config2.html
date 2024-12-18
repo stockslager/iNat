@@ -215,7 +215,7 @@ function fresults(xobj) {
       let labels = [];
       let mismatch = '';
       let field_array_copy = field_array;
-      let field_array_copy2 = [];
+      let mergeCount = 0;
       let flower = '';
       let dlString = '<span id="h2">Observation Field Viewer</span>';
       let labelCount = 0;
@@ -320,8 +320,8 @@ function fresults(xobj) {
                           if( p_operator === 'merge' ){
                               field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[j].field_id.toString());
                           }
-                         
-                          field_array_copy2.push(rec.ofvs[j].field_id.toString());
+                          mergeCount++;
+                          //field_array_copy2.push(rec.ofvs[j].field_id.toString());
                       }
 
                       if( p_operator === 'merge' ){
@@ -393,8 +393,8 @@ function fresults(xobj) {
               }
           
               values.push({innerHTML:displayName});
-              for( let x=1; x<field_array_copy2.length; x++ ){
-                   //values.push({innerHTML:''});
+              for( let x=1; x<mergeCount; x++ ){
+                   values.push({innerHTML:''});
               }
          }          
  
