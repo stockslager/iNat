@@ -285,6 +285,7 @@ function fresults(xobj) {
 
          if(rec.ofvs&&rec.ofvs.length>0){
               for( let r=0; r<field_array_copy.length; r++ ) {
+                 alert("asdfad - " + field_array_copy[r]);
                  for( let j=0; j<rec.ofvs.length; j++ ){
 
                       if( field_array.includes(rec.ofvs[j].field_id.toString()) ){
@@ -316,7 +317,6 @@ function fresults(xobj) {
                               field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[j].field_id.toString());
                           }
                       }
-                      alert("name1 = " + rec.ofvs[j].name);
                       if( p_operator === 'merge' ){
                            
                           field1 = rec.ofvs[j].value.toLowerCase();
