@@ -318,13 +318,13 @@ function fresults(xobj) {
                       }
                   
                       if( p_operator === 'merge' && rec.ofvs[j].field_id.toString() === field_array_copy[r].toString() ){
-                          alert("name = " + rec.ofvs[j].taxon.preferred_common_name);
                           
                           field1 = rec.ofvs[j].value.toLowerCase();
                                     
                           if( rec.ofvs[j].taxon ){ 
                               let name  = rec.ofvs[j].taxon.name || '';
                               let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                              alert("name = " + name);
                               if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
                                   field1 = name;
                                   displayCommonName = cname.toLowerCase();
