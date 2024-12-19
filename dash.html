@@ -151,6 +151,7 @@ let showAll = 'yes';
 let predatorsProjects = '76944';
 let predatorsOFields  = '&obs_fields=3134';
 let limitPredatorSearch = 'yes';
+let nestBoxMonitoring = 'no';
   
 if( p_place_id !== '' ){
     placeId       = ('&place_id='+p_place_id);
@@ -174,6 +175,7 @@ if( p_project_id === 'cnc' ){
     lists         = '&g_list=4488957&s_list=4488958&view=visitingOnly&project_title=Cincinnati%20Nature%20Center%20Pollinator%20Garden';
     p_pollinator  = '220623';
     limitPredatorSearch = 'no';
+    nestBoxMonitoring   = 'yes';
     insectOFields = '&obs_fields=7623,498,6586,3126,4935,13,7807';
     beesOFields   = '&obs_fields=7623,498,4935,7807,8581,254,6586,3126';
     birdOFields   = '&obs_fields=7623,8581,498,3845';
@@ -214,6 +216,7 @@ if( p_project_id.toLowerCase() === 'cincinnati-rewild' || p_project_id === '1525
     placeId       = '&place_id=26,31';
     p_project_id  = '152539';
     limitPredatorSearch = 'yes';
+    nestBoxMonitoring   = 'yes';
     lists         = '&g_list=4484313&s_list=4484172&project_title=Cincinnati%20Re-Wild';
     insectOFields = '&obs_fields=7623,498,4935,7807,8581,254,6586,499,10524';
     birdOFields   = '&obs_fields=7623,8581,498,3845';
@@ -276,7 +279,8 @@ let pgalls   = furl(github_root+'configurable_obs_field_table.html?project_id='+
     
 let birdsNestingOnPlants    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=3845'+notBirds+commonPlants+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:Birds%20Nesting%20In','nesting on plants'); 
 let birdsEatingPlants       = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=13'+notBirds+commonPlants+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:eating','eating plants'); 
-let birdsNectaringAtPlants  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=498'+notBirds+commonPlants+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:nectar+plant','nectaring at plants'); 
+let birdsNectaringAtPlants  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=498'+notBirds+commonPlants+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:nectar+plant','nectaring at plants');
+let nestBox                 = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=13436,1'+notBirds+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:Nest%20box%20or%20artificial%20hollow','nest box monitoring');
     
 let predatorsField = '';
 if( limitPredatorSearch === 'yes' ){
@@ -361,7 +365,9 @@ let birdsPredDesc = '<span id="spandesc">displays observations of birds that hav
 let birdsDesc = '<span id="spandesc">displays observations of birds that have the "Plant that the organsism was found on" '
                          + 'observation field set.  the options below display observations of birds that have the "eating", '
                          + '"birds nesting in", and "nectar plant" observation fields set. </span>';
-    
+let nestBoxDesc = '<span id="spandesc">displays observations of birds that have the "Nest box or artificial hollow" observation '
+                         + 'field set.  </span>';    
+  
 let bird_tab  = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                          + '<span id="key"><dt>Birds</dt><dd></dd></span>'
                          + '<span id="tab1"><dt>'+birdsAsPredators+'</dt><dd>'+birdsPredDesc+'</dd></span>'
@@ -370,6 +376,7 @@ let bird_tab  = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
                          + '<span id="tab2"><dt>'+birdsEatingPlants+'</dt><dd></dd></span>'
                          + '<span id="tab2"><dt>'+birdsNestingOnPlants+'</dt><dd></dd></span>'
                          + '<span id="tab2"><dt>'+birdsNectaringAtPlants+'</dt><dd></dd></span>'
+                         + '<span id="tab1"><dt>'+nestBox+'</dt><dd>'+nestBoxDesc+'</dd></span>'
                          + '</dl></td>'
                          + '</tr></table>';
     
