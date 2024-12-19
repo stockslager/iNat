@@ -284,9 +284,7 @@ function fresults(xobj) {
          let emojiTitle = 'Merged Observation Fields:&#10;';
 
          if(rec.ofvs&&rec.ofvs.length>0){
-              alert( "hiya" );
               for( let r=0; r<field_array_copy.length; r++ ) {
-                 alert("asdfad - " + field_array_copy[r]);
                  for( let j=0; j<rec.ofvs.length; j++ ){
 
                       if( field_array.includes(rec.ofvs[j].field_id.toString()) ){
@@ -314,9 +312,9 @@ function fresults(xobj) {
                       if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){
                           let box_row   = box_array.find( boxRow => boxRow.field_id === rec.ofvs[j].field_id.toString() );
                           box_row.field_name = rec.ofvs[j].name.toString();
-                          if( p_operator === 'merge' ){
-                              //field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[j].field_id.toString());
-                          }
+                          /*if( p_operator === 'merge' ){
+                              field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[j].field_id.toString());
+                          }*/
                       }
                       if( p_operator === 'merge' ){
                            
@@ -325,7 +323,6 @@ function fresults(xobj) {
                           if( rec.ofvs[j].taxon ){ 
                               let name  = rec.ofvs[j].taxon.name || '';
                               let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                              alert("name - " + name );
                               if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
                                   field1 = name;
                                   displayCommonName = cname.toLowerCase();
