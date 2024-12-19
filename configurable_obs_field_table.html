@@ -91,6 +91,14 @@ if( p_obs_field_array !== '' ){
     field_array = p_obs_field_array.split(",");
 }
 
+// if only one observation field was passed in, there is no reason to "merge"
+// a single field.  so default to "un-merged" if only one obs field is passed in. 
+// defaulting to un-merged will add a target url to the single obs field value in the table.
+if( field_array.length === 1 ){
+    winurlparams.delete('operator');
+    p_operator = '';
+}
+
 if( p_omit_users !== '' ){
     winurlparams.delete('not_user_id');
     winurlparams.append('not_user_id', p_omit_users);
