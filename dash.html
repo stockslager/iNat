@@ -127,6 +127,9 @@ let larvaeOFields  = '&obs_fields=7623,8581,254,7807,499,4935,6586';
 let adultsOFields  = '&obs_fields=7623,498,4935,7807,499,10524,254,8581';
 let pupaeOFields   = '&obs_fields=8581';
 let gallsOFields   = '&obs_fields=6586,254,47,7807,877,7623,8581';
+
+// nesting field for birdsNestingOnPlants...
+let nestingField = '&field:Birds%20Nesting%20In';
   
 let icon = 'https://static.inaturalist.org/projects/152539-icon-span2.?1730371479';
 
@@ -243,6 +246,7 @@ if( p_project_id.toLowerCase() === 'ewa-at-the-fells' || p_project_id === '21313
     adultsOFields  += ',12550';
     pupaeOFields   += ',12550';
     gallsOFields   += ',12550';
+    nestingField = '&field:EwA%20-%20Avian%20Sign=Nest';
 } 
 
 // build parameters for all url's except for the plant inspector
@@ -300,7 +304,7 @@ let adult    = furl(github_root+'configurable_obs_field_table.html?project_id='+
 let pupa     = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+pupaeOFields+commonPlants+userId+notPupae+pupaeOmit+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=4&ofv_datatype=taxon&operator=merge','pupae only'); 
 let pgalls   = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+gallsOFields+commonPlants+userId+notGalls+gallsOmit+'&iconic_taxa=insecta&ofv_datatype=taxon&operator=merge&term_id=22&term_value_id=29','galls only'); 
     
-let birdsNestingOnPlants    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=3845'+notBirds+commonPlants+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:Birds%20Nesting%20In','nesting on plants'); 
+let birdsNestingOnPlants    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=3845'+notBirds+commonPlants+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon'+nestingField,'nesting on plants'); 
 let birdsEatingPlants       = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=13'+notBirds+commonPlants+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:eating','eating plants'); 
 let birdsNectaringAtPlants  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=498'+notBirds+commonPlants+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:nectar+plant','nectaring at plants');
 let nestBox                 = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=1,13436'+notBirds+userId+birdOmit+'&iconic_taxa=aves&field:Nest%20box%20or%20artificial%20hollow','nest box monitoring');
