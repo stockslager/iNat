@@ -190,18 +190,17 @@ function isMultipleOfFour(num) {
   return num % 4 === 0;
 }
 
-function dataRow(field_id, field_name, field_value) {
+function boxRow(field_id, field_name, field_value) {
     this.field_id    = field_id;
     this.field_name  = field_name;
-    this.field_value = field_value;
 }
 
 function fresults(xobj) {
    let results = xobj.results;
-   let data_row_array = [];
+   let box_array = [];
 
    for( let f=0; f<field_array.length; f++ ){
-        data_row_array.push(new dataRow(field_array[f], '', '') );
+        box_array.push(new boxRow(field_array[f], '') );
    }
  
    if (results) {
@@ -212,11 +211,9 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let label = '';
       let labels = [];
       let mismatch = '';
       let field_array_copy = field_array;
-      let field_array_copy2 = [];
       let flower = '';
       let dlString = '<span id="h2">Observation Field Viewer</span>';
       let labelCount = 0;
@@ -231,119 +228,10 @@ function fresults(xobj) {
       if( p_operator === 'merge' ){
           merged = 'merged observation field';
       } 
-    
-      for (let l=0; l<results.length; l++) {
-          let rec = results[l];
-          let matchValue = '';
-          let matchTaxonId = '';
-          let datatype = '';
-       
-          // find obs field labels
-          if( rec.ofvs&&rec.ofvs.length > 0 ) {
-              for( let r=0; r<field_array_copy.length; r++ ) {
-                   for( let k=0; k<rec.ofvs.length; k++ ){
-                        if( field_array.includes(rec.ofvs[k].field_id.toString()) ){
-                            if( matchValue === '' ){
-                                matchValue = rec.ofvs[k].value;
-                            } else if( rec.ofvs[k].value !== '' && matchValue !== rec.ofvs[k].value ){
-                                mismatch = 'yes';
-                            }
-                      
-                            if( datatype === '' ){
-                                datatype = rec.ofvs[k].datatype;
-                            } else if( datatype !== rec.ofvs[k].datatype ){
-                                mismatch = 'yes';
-                            }
-                            if( rec.ofvs[k].taxon ){ 
-                                if( matchTaxonId === '' ){
-                                    matchTaxonId = rec.ofvs[k].taxon.id;
-                                }
-                                if( rec.ofvs[k].taxon.id !== matchTaxonId ){
-                                    mismatch = 'yes';
-                                }
-                            }
-                        } 
-                        if( field_array_copy[r] === rec.ofvs[k].field_id.toString() ){
-                            let data_row   = data_row_array.find( dataRow => dataRow.field_id === rec.ofvs[k].field_id.toString() );
-                            data_row.field_name = rec.ofvs[k].name.toString();
-                            if( p_operator === 'merge' ){
-                                field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[k].field_id.toString());
-                            }
 
-                            field_array_copy2.push(rec.ofvs[k].field_id.toString());
-                        }
-                  }
-             } 
-         }
-      }
-
-      let firstCol = 'yes';
-      for( let e=0; e<data_row_array.length; e++ ){
-           if( isMultipleOfFour(labelCount) ){
-               if( labelCount === 0 ){
-                   dlString += '<span id="dltest"><table id="tablekey">';
-                   dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
-               } else {
-                   dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
-                   dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');    
-               }
-           }
-           labelCount++;
-           if( data_row_array[e].field_name !== '' ){
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+data_row_array[e].field_id,data_row_array[e].field_id) + '</td>');
-               dlString += ('<td id="tdkey">' + data_row_array[e].field_name.toLowerCase() + '</td></tr>');
-               if( p_operator !== 'merge' ){
-                   labels.push({innerText:data_row_array[e].field_name});
-               } else {
-                   if( firstCol === 'yes' ){
-                       firstCol = 'no';
-                       labels.push({innerText:'Merged Fields (see upper right)'});
-                   } else {
-                       if( firstCol === 'yes' ){
-                           firstCol = 'no';
-                           labels.push({innerText:'Merged Fields (see upper right)'});
-                       } else {
-                           labels.push({innerText:''});
-                       }
-                   }
-               }
-           } else {
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+data_row_array[e].field_id,data_row_array[e].field_id) + '</td>');
-               dlString += ('<td id="tdkey">missing from this page of data</td></tr>');
-               if( p_operator !== 'merge' ) {
-                   labels.push({innerText:''});
-               }
-           }
-      }
-
-      dlString += '</table></span>';
-      faddelem('p',document.body,{innerHTML:dlString});
-
-      if( mismatch === 'yes' ) {
-          if( p_operator === 'merge' ){       
-              flower = '<span class="flowericon">&#x1F338; merged obs field values do not match.</span>';
-          }
-      }  
-
-      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
-             +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br />'});  
-
-      let table = faddelem('table',document.body,{id:'main'});
-      let thead = faddelem('thead',table);
-      let hrow = faddelem('tr',thead);
-
-      labels.push({innerText:'User Photo'});
-      labels.push({innerText:'User Login'});
-      
-      faddelems('th',hrow,labels);
-
-      let tbody = faddelem('tbody',table);
-
-      let displayCount = 0;
+      let tempBrow = [];
       
       for (let i=0; i<results.length; i++) {
-         let brow = faddelem('tr',tbody);
          let rec = results[i];
          let tax_name = '';
          let pref_tax_name = '';
@@ -351,14 +239,15 @@ function fresults(xobj) {
          let tax_id = '';
          let field1 = ''; 
          let param1 = ''; 
-         let ofvs1 = '';  
          let displayName = '';
          let displayTaxonName = '';
          let mismatch = '';
          let matchedCopy = 'no';
          let values = [];
-         dataType2 = '';
-         matchValue = '';
+         let dataType = '';
+         let dataType2 = '';
+         let matchValue = '';
+         let matchTaxonId = '';
          let taxon = '';
          
          if( rec.taxon ){
@@ -395,47 +284,66 @@ function fresults(xobj) {
          let emojiTitle = 'Merged Observation Fields:&#10;';
 
          if(rec.ofvs&&rec.ofvs.length>0){
-            for( let w=0; w<data_row_array.length; w++ ){
+              for( let r=0; r<field_array_copy.length; r++ ) {
                  for( let j=0; j<rec.ofvs.length; j++ ){
 
-                      if( p_operator === 'merge' ){
-                          if( rec.ofvs[j].field_id.toString() === data_row_array[w].field_id.toString() ){
-                              if( matchValue === '' ){
-                                  matchValue = rec.ofvs[j].value;
-                              } else if( matchValue !== rec.ofvs[j].value ){
-                                  mismatch = 'yes';
+                      if( field_array.includes(rec.ofvs[j].field_id.toString()) ){
+                          if( matchValue === '' ){
+                              matchValue = rec.ofvs[j].value;
+                          } else if( rec.ofvs[j].value !== '' && matchValue !== rec.ofvs[j].value ){
+                              mismatch = 'yes';
+                          }
+                      
+                          if( dataType === '' ){
+                              dataType = rec.ofvs[j].datatype;
+                          } else if( dataType !== rec.ofvs[j].datatype ){
+                              mismatch = 'yes';
+                          }
+                          if( rec.ofvs[j].taxon ){
+                              if( matchTaxonId === '' ){
+                                  matchTaxonId = rec.ofvs[j].taxon.id;
                               }
-                   
-                              if( dataType2 === '' ){
-                                  dataType2 = rec.ofvs[j].dataType2;
-                              } else if( dataType2 !== rec.ofvs[j].dataType2 ){
+                              if( rec.ofvs[j].taxon.id !== matchTaxonId ){
                                   mismatch = 'yes';
-                              }
-                           
-                              field1 = rec.ofvs[j].value.toLowerCase();
-                                    
-                              if( rec.ofvs[j].taxon ){ 
-                                  let name  = rec.ofvs[j].taxon.name || '';
-                                  let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                                  if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
-                                      field1 = name;
-                                      displayCommonName = cname.toLowerCase();
-                                      displayTaxonName = name;
-                                      displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                                      emojiTitle    += (rec.ofvs[j].field_id + ' ' + name + '&#10;');
-                                  } else { 
-                                      emojiTitle    += (rec.ofvs[j].field_id + ' ' + name.toLowerCase() + '&#10;');
-                                      displayName = '';
-                                  }
-                              } else {
-                                      if( rec.ofvs[j].value.toLowerCase() !== 'unknown' ){
-                                          displayName    = rec.ofvs[j].value.toLowerCase();
-                                      }
-                                      emojiTitle    += (rec.ofvs[j].field_id + ' ' + rec.ofvs[j].value.toLowerCase() + '&#10;');
                               }
                           }
-                      } else {
-                          if( rec.ofvs[j].field_id.toString() === data_row_array[w].field_id.toString() ){
+                      } 
+
+                      if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){
+                          let box_row   = box_array.find( boxRow => boxRow.field_id === rec.ofvs[j].field_id.toString() );
+                          box_row.field_name = rec.ofvs[j].name.toString();
+                          if( p_operator === 'merge' ){
+                              field_array_copy = field_array_copy.filter(item => item !== rec.ofvs[j].field_id.toString());
+                          }
+                      }
+
+                      if( p_operator === 'merge' ){
+                           
+                          field1 = rec.ofvs[j].value.toLowerCase();
+                                    
+                          if( rec.ofvs[j].taxon ){ 
+                              let name  = rec.ofvs[j].taxon.name || '';
+                              let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                              if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
+                                  field1 = name;
+                                  displayCommonName = cname.toLowerCase();
+                                  displayTaxonName = name;
+                                  displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                                  emojiTitle    += (rec.ofvs[j].field_id + ' ' + name + '&#10;');
+                              } else { 
+                                  emojiTitle    += (rec.ofvs[j].field_id + ' ' + name.toLowerCase() + '&#10;');
+                                  displayName = '';
+                              }
+                          } else {
+                                  if( rec.ofvs[j].value.toLowerCase() !== 'unknown' ){
+                                      displayName    = rec.ofvs[j].value.toLowerCase();
+                                  }
+                                  emojiTitle    += (rec.ofvs[j].field_id + ' ' + rec.ofvs[j].value.toLowerCase() + '&#10;');
+                          }
+                      }
+                      
+                      if( p_operator !== 'merge' ) {
+                          if( rec.ofvs[j].field_id.toString() === field_array_copy[r].toString() ){
                               matchedCopy = 'yes';
                               field1 = rec.ofvs[j].value.toLowerCase();
                               param1 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value;
@@ -478,16 +386,80 @@ function fresults(xobj) {
               }
           
               values.push({innerHTML:displayName});
-              for( let x=1; x<field_array_copy2.length; x++ ){
-                   values.push({innerHTML:''});
-              }
          }          
  
          values.push({innerHTML:user_icon});
          values.push({innerHTML:furl(root_people+rec.user.login,rec.user.login)});
-   
-         faddelems('td',brow,values);
+
+         tempBrow.push(values);
       };
+
+      let firstCol = 'yes';
+      for( let e=0; e<box_array.length; e++ ){
+           if( isMultipleOfFour(labelCount) ){
+               if( labelCount === 0 ){
+                   dlString += '<span id="dltest"><table id="tablekey">';
+                   dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
+               } else {
+                   dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
+                   dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');    
+               }
+           }
+           labelCount++;
+           if( box_array[e].field_name !== '' ){
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
+               dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
+               if( p_operator !== 'merge' ){
+                   labels.push({innerText:box_array[e].field_name});
+               } else {
+                   if( firstCol === 'yes' ){
+                       firstCol = 'no';
+                       labels.push({innerText:'Merged Fields (see upper right)'});
+                   } else {
+                       if( firstCol === 'yes' ){
+                           firstCol = 'no';
+                           labels.push({innerText:'Merged Fields (see upper right)'});
+                       } 
+                   }
+               }
+           } else {
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
+               dlString += ('<td id="tdkey">missing from this page of data</td></tr>');
+               if( p_operator !== 'merge' ) {
+                   labels.push({innerText:''});
+               }
+           }
+      }
+
+      dlString += '</table></span>';
+      faddelem('p',document.body,{innerHTML:dlString});
+
+      if( mismatch === 'yes' ) {
+          if( p_operator === 'merge' ){       
+              flower = '<span class="flowericon">&#x1F338; merged obs field values do not match.</span>';
+          }
+      }  
+
+      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
+             +'per page: '+fcomnum(per_page)+'<br />'
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br />'});  
+
+      let table = faddelem('table',document.body,{id:'main'});
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+
+      labels.push({innerText:'User Photo'});
+      labels.push({innerText:'User Login'});
+      
+      faddelems('th',hrow,labels);
+
+      let tbody = faddelem('tbody',table);
+    
+      // loop through array of rows stored on object.
+      for( let q=0; q<tempBrow.length; q++ ){
+           let brow = faddelem('tr',tbody);
+           faddelems('td',brow,tempBrow[q]);
+      }
 
       // buttons to go to prev or next page
       let nav = faddelem('div',document.body,{id:'nav'});
