@@ -280,7 +280,7 @@ let pgalls   = furl(github_root+'configurable_obs_field_table.html?project_id='+
 let birdsNestingOnPlants    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=3845'+notBirds+commonPlants+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:Birds%20Nesting%20In','nesting on plants'); 
 let birdsEatingPlants       = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=13'+notBirds+commonPlants+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:eating','eating plants'); 
 let birdsNectaringAtPlants  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=498'+notBirds+commonPlants+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:nectar+plant','nectaring at plants');
-let nestBox                 = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=13436,1'+notBirds+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:Nest%20box%20or%20artificial%20hollow','nest box monitoring');
+let nestBox                 = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=13436,1'+notBirds+userId+birdOmit+'&iconic_taxa=aves&field:Nest%20box%20or%20artificial%20hollow','nest box monitoring');
     
 let predatorsField = '';
 if( limitPredatorSearch === 'yes' ){
@@ -376,6 +376,7 @@ let bird_tab  = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
                          + '<span id="tab2"><dt>'+birdsEatingPlants+'</dt><dd></dd></span>'
                          + '<span id="tab2"><dt>'+birdsNestingOnPlants+'</dt><dd></dd></span>'
                          + '<span id="tab2"><dt>'+birdsNectaringAtPlants+'</dt><dd></dd></span>'
+                         + '<span id="tab2"><dt></dt><dd></dd></span>'
                          + '<span id="tab1"><dt>'+nestBox+'</dt><dd>'+nestBoxDesc+'</dd></span>'
                          + '</dl></td>'
                          + '</tr></table>';
