@@ -365,8 +365,15 @@ let birdsPredDesc = '<span id="spandesc">displays observations of birds that hav
 let birdsDesc = '<span id="spandesc">displays observations of birds that have the "Plant that the organsism was found on" '
                          + 'observation field set.  the options below display observations of birds that have the "eating", '
                          + '"birds nesting in", and "nectar plant" observation fields set. </span>';
+
+let showNestBox = '';
 let nestBoxDesc = '<span id="spandesc">displays observations of birds that have the "Nest box or artificial hollow" observation '
-                         + 'field set.  </span>';    
+                         + 'field set.  </span>'; 
+  
+if( nestBoxMonitoring === 'yes' ){
+    showNestBox = '<span id="tab2"><dt></dt><dd></dd></span>'
+                + '<span id="tab1"><dt>'+nestBox+'</dt><dd>'+nestBoxDesc+'</dd></span>'
+}
   
 let bird_tab  = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                          + '<span id="key"><dt>Birds</dt><dd></dd></span>'
@@ -376,8 +383,7 @@ let bird_tab  = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
                          + '<span id="tab2"><dt>'+birdsEatingPlants+'</dt><dd></dd></span>'
                          + '<span id="tab2"><dt>'+birdsNestingOnPlants+'</dt><dd></dd></span>'
                          + '<span id="tab2"><dt>'+birdsNectaringAtPlants+'</dt><dd></dd></span>'
-                         + '<span id="tab2"><dt></dt><dd></dd></span>'
-                         + '<span id="tab1"><dt>'+nestBox+'</dt><dd>'+nestBoxDesc+'</dd></span>'
+                         + showNestBox
                          + '</dl></td>'
                          + '</tr></table>';
     
