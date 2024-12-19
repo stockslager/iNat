@@ -113,20 +113,8 @@ if( p_g_list !== '' && p_s_list !== '' ){
     lists = ('&g_list=4484313&s_list=4484172&project_title='+p_project_id);
 } 
 
-// default obs fields for rewild...
-let insectOFields  = '&obs_fields=7623,498,4935,7807,8581,254,6586,499';
-let birdOFields    = '&obs_fields=7623,8581';
-let mammalOFields  = '&obs_fields=8581,7623';
-let herpOFields    = '&obs_fields=7623,8581';
-let molluscOFields = '&obs_fields=8581,7623';
-let spiderOFields  = '&obs_fields=7623,8581,6586';
-let fungiOFields   = '&obs_fields=7623,8581,7807,254,6586';
-let beesOFields    = '&obs_fields=7623,498,4935,7807,8581,254';
-let butterOFields  = '&obs_fields=7623,498,4935,7807,499,10524,254,8581';
-let larvaeOFields  = '&obs_fields=7623,8581,254,7807,499,4935,6586';
-let adultsOFields  = '&obs_fields=7623,498,4935,7807,499,10524,254,8581';
-let pupaeOFields   = '&obs_fields=8581';
-let gallsOFields   = '&obs_fields=6586,254,47,7807,877,7623,8581';
+// nesting field for birdsNestingOnPlants...
+let nestingField = '&field:Birds%20Nesting%20In';
   
 let icon = 'https://static.inaturalist.org/projects/152539-icon-span2.?1730371479';
 
@@ -147,7 +135,6 @@ function openTaxon(evt, taxon) {
 }
 
 let placeId = '';  
-let showAll = 'yes';
 let predatorsProjects = '76944';
 let predatorsOFields  = '&obs_fields=3134';
 let limitPredatorSearch = 'yes';
@@ -156,6 +143,69 @@ if( p_place_id !== '' ){
     placeId       = ('&place_id='+p_place_id);
 }
 
+// when a project is passed in but there is no place associated with the project,
+// some of the links are not shown since they are reliant on having a place associated
+// with the project.
+let showAll = 'yes';
+let showNestBox = 'no';
+let showMolluscsOnFungi = 'no';
+  
+// build parameters for all url's except for the plant inspector
+let userId = '&user_id=' + p_user_id;
+
+// default obs fields these can be overwritten with project specific obs 
+// fields further down...
+let insectOFields  = '&obs_fields=7623,498,4935,7807,8581,254,6586,499';
+let birdOFields    = '&obs_fields=7623,8581';
+let mammalOFields  = '&obs_fields=8581,7623';
+let herpOFields    = '&obs_fields=7623,8581';
+let molluscOFields = '&obs_fields=8581,7623';
+let spiderOFields  = '&obs_fields=7623,8581,6586';
+let fungiOFields   = '&obs_fields=7623,8581,7807,254,6586';
+let beesOFields    = '&obs_fields=7623,498,4935,7807,8581,254';
+let butterOFields  = '&obs_fields=7623,498,4935,7807,499,10524,254,8581';
+let larvaeOFields  = '&obs_fields=7623,8581,254,7807,499,4935,6586';
+let adultsOFields  = '&obs_fields=7623,498,4935,7807,499,10524,254,8581';
+let pupaeOFields   = '&obs_fields=8581';
+let gallsOFields   = '&obs_fields=6586,254,47,7807,877,7623,8581';
+  
+// exclude these projects from the main "on plants" view.  
+// these projects have lots of observations with obs fields of type
+// taxon with the taxon being something other than plants.
+let notInsects   = '&omit_projects=64680,76944';
+let notBees      = '&omit_projects=';
+let notButter    = '&omit_projects=';
+let notAdults    = '&omit_projects=';
+let notLarvae    = '&omit_projects=';
+let notPupae     = '&omit_projects=';
+let notGalls     = '&omit_projects=';
+let notBirds     = '&omit_projects=76944,131004,18960';
+let notSpiders   = '&omit_projects=76944';
+let notMammals   = '&omit_projects=';
+let notHerps     = '&omit_projects=76944,122377,219530,18960,18959,64680';
+let notMolluscs  = '&omit_projects=10112';
+let notFungi     = '&omit_projects=64680,49511,10112';
+
+// exclude these observations which have an obs field of type taxon
+// that is unpopulated.
+let insectOmit   = '&omit_id=246151575'; 
+let beesOmit     = '&omit_id=232400618,233728903,218384446,215394847,213574178,205886725,205715997,138789558';
+let butterOmit   = '';
+let larvaeOmit   = '';
+let adultsOmit   = '';
+let pupaeOmit    = '';
+let gallsOmit    = '';
+let birdOmit     = '&omit_id=176025976';
+let spiderOmit   = '&omit_id=232905310,125168044,123407637,123310333&omit_users=cjblessing';
+let mammalsOmit  = '';
+let herpsOmit    = '&omit_id=240369986';
+let molluscsOmit = '';
+let fungiOmit    = '&omit_id=12626497,224666368';
+
+// only show the observation field value during the main "plants" view when
+// the iconic_taxa of the observation field of type "taxon" is plantae.
+let commonPlants = '&ofield_iconic=47126'
+
 // project specific defaults...
 // biodiversity of ohio...
 if( p_project_id.toLowerCase() === 'biodiversity-of-ohio' || p_project_id === '22501' ){
@@ -163,6 +213,7 @@ if( p_project_id.toLowerCase() === 'biodiversity-of-ohio' || p_project_id === '2
     placeId      = '&place_id=31';
     p_project_id = '22501';
     limitPredatorSearch = 'no';
+    showMolluscsOnFungi = 'yes';
     lists = '&g_list=4484313&s_list=4484172&project_title=Biodiversity%20of%20Ohio';
 } 
 
@@ -174,6 +225,7 @@ if( p_project_id === 'cnc' ){
     lists         = '&g_list=4488957&s_list=4488958&view=visitingOnly&project_title=Cincinnati%20Nature%20Center%20Pollinator%20Garden';
     p_pollinator  = '220623';
     limitPredatorSearch = 'no';
+    showNestBox   = 'yes';
     insectOFields = '&obs_fields=7623,498,6586,3126,4935,13,7807';
     beesOFields   = '&obs_fields=7623,498,4935,7807,8581,254,6586,3126';
     birdOFields   = '&obs_fields=7623,8581,498,3845';
@@ -214,70 +266,79 @@ if( p_project_id.toLowerCase() === 'cincinnati-rewild' || p_project_id === '1525
     placeId       = '&place_id=26,31';
     p_project_id  = '152539';
     limitPredatorSearch = 'yes';
+    showNestBox   = 'yes';
     lists         = '&g_list=4484313&s_list=4484172&project_title=Cincinnati%20Re-Wild';
     insectOFields = '&obs_fields=7623,498,4935,7807,8581,254,6586,499,10524';
     birdOFields   = '&obs_fields=7623,8581,498,3845';
 } 
 
-// build parameters for all url's except for the plant inspector
-let userId = '&user_id=' + p_user_id;
-  
-// exclude these projects from the main "on plants" view.  
-// these projects have lots of observations with obs fields of type
-// taxon with the taxon being something other than plants.
-let notInsects   = '&omit_projects=64680,76944';
-let notBees      = '&omit_projects=';
-let notButter    = '&omit_projects=';
-let notAdults    = '&omit_projects=';
-let notLarvae    = '&omit_projects=';
-let notPupae     = '&omit_projects=';
-let notGalls     = '&omit_projects=';
-let notBirds     = '&omit_projects=76944,131004,18960';
-let notSpiders   = '&omit_projects=76944';
-let notMammals   = '&omit_projects=';
-let notHerps     = '&omit_projects=76944,122377,219530,18960,18959,64680';
-let notMolluscs  = '&omit_projects=10112';
-let notFungi     = '&omit_projects=64680,49511,10112';
+// ewa at the fells...
+if( p_project_id.toLowerCase() === 'ewa-at-the-fells' || p_project_id === '21313' ){
+    showAll       = 'no';
+    placeId       = '&place_id=140932,120762';
+    p_project_id  = '21313';
+    limitPredatorSearch = 'yes';
+    showNestBox   = 'no';
+    showMolluscsOnFungi = 'yes';
+    lists         = '';  // hides the plant tab when null
+   /* insectOFields  += ',12550';
+    birdOFields    += ',12550';
+    mammalOFields  += ',12550';
+    herpOFields    += ',12550';
+    molluscOFields  = '&obs_fields=12548,12550,15423,10360';
+    spiderOFields  += ',12550';
+    fungiOFields    = '&obs_fields=12550';
+    beesOFields    += ',12550';
+    butterOFields  += ',12550';
+    larvaeOFields  += ',12550';
+    adultsOFields  += ',12550';
+    pupaeOFields   += ',12550';
+    gallsOFields   += ',12550'; */
 
-// exclude these observations which have an obs field of type taxon
-// that is unpopulated.
-let insectOmit   = '&omit_id=246151575'; 
-let beesOmit     = '&omit_id=232400618,233728903,218384446,215394847,213574178,205886725,205715997,138789558';
-let butterOmit   = '';
-let larvaeOmit   = '';
-let adultsOmit   = '';
-let pupaeOmit    = '';
-let gallsOmit    = '';
-let birdOmit     = '&omit_id=176025976';
-let spiderOmit   = '&omit_id=232905310,125168044,123407637,123310333&omit_users=cjblessing';
-let mammalsOmit  = '';
-let herpsOmit    = '&omit_id=240369986';
-let molluscsOmit = '';
-let fungiOmit    = '&omit_id=12626497,224666368';
+    insectOFields  = '&obs_fields=12550';
+    birdOFields    = '&obs_fields=12550';
+    mammalOFields  = '&obs_fields=12550';
+    herpOFields    = '&obs_fields=12550';
+    molluscOFields = '&obs_fields=12548,12550,15423,10360';
+    spiderOFields  = '&obs_fields=12550';
+    fungiOFields   = '&obs_fields=12550';
+    beesOFields    = '&obs_fields=12550';
+    butterOFields  = '&obs_fields=12550';
+    larvaeOFields  = '&obs_fields=12550';
+    adultsOFields  = '&obs_fields=12550';
+    pupaeOFields   = '&obs_fields=12550';
+    gallsOFields   = '&obs_fields=12550';
+    nestingField = '&field:EwA%20-%20Avian%20Sign=Nest';
+} 
 
-// only show the observation field value during the main "plants" view when
-// the iconic_taxa of the observation field of type "taxon" is plantae.
-let commonPlants = '&ofield_iconic=47126'
-      
+// main tabs...  
 let plantIns = furl(github_root+'rewild_plants_visited.html?project_id='+p_pollinator+lists, 'plant inspector');
 let insects  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+insectOFields+commonPlants+userId+notInsects+insectOmit+'&iconic_taxa=insecta&ofv_datatype=taxon&operator=merge','on plants'); 
 let birds    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+birdOFields+commonPlants+userId+notBirds+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&operator=merge','on plants'); 
 let mammals  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+mammalOFields+commonPlants+userId+notMammals+mammalsOmit+'&iconic_taxa=mammalia&ofv_datatype=taxon&operator=merge','on plants'); 
 let herps    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+herpOFields+commonPlants+userId+notHerps+herpsOmit+'&iconic_taxa=reptilia,amphibia&ofv_datatype=taxon&operator=merge','on plants'); 
-let molluscs = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+molluscOFields+commonPlants+userId+notMolluscs+molluscsOmit+'&iconic_taxa=mollusca&ofv_datatype=taxon&operator=merge','on plants'); 
+let molluscs = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+molluscOFields+commonPlants+userId+notMolluscs+molluscsOmit+'&iconic_taxa=mollusca&ofv_datatype=taxon&operator=merge','on plants');   
 let spiders  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+spiderOFields+commonPlants+userId+notSpiders+spiderOmit+'&iconic_taxa=Arachnida&ofv_datatype=taxon&operator=merge','on plants'); 
 let fungi    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+fungiOFields+commonPlants+userId+notFungi+fungiOmit+'&iconic_taxa=fungi&ofv_datatype=taxon&operator=merge','on plants'); 
+
+// molluscs sub-menu...
+let molluscsOnFungi = furl(github_root+'configurable_obs_field_table.html?project_id=10112'+placeId+molluscOFields+userId+molluscsOmit+'&ofield_iconic=47170&iconic_taxa=mollusca&ofv_datatype=taxon&operator=merge','on fungi');
+
+// insects sub-menu...
 let bees     = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+beesOFields+commonPlants+userId+notBees+beesOmit+'&iconic_taxa=insecta&taxon_id=630955&ofv_datatype=taxon&operator=merge','bees only'); 
 let butter   = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+butterOFields+commonPlants+userId+notButter+butterOmit+'&iconic_taxa=insecta&taxon_id=47157&ofv_datatype=taxon&operator=merge','butterflies only'); 
 let larva    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+larvaeOFields+commonPlants+userId+notLarvae+larvaeOmit+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=6&ofv_datatype=taxon&operator=merge','larvae only'); 
 let adult    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+adultsOFields+commonPlants+userId+notAdults+adultsOmit+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=2&ofv_datatype=taxon&operator=merge','adults only'); 
 let pupa     = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+pupaeOFields+commonPlants+userId+notPupae+pupaeOmit+'&iconic_taxa=insecta&taxon_id=47157&term_id=1&term_value_id=4&ofv_datatype=taxon&operator=merge','pupae only'); 
 let pgalls   = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+gallsOFields+commonPlants+userId+notGalls+gallsOmit+'&iconic_taxa=insecta&ofv_datatype=taxon&operator=merge&term_id=22&term_value_id=29','galls only'); 
-    
-let birdsNestingOnPlants    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=3845'+notBirds+commonPlants+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:Birds%20Nesting%20In','nesting on plants'); 
+
+// birds sub-menu...
+let birdsNestingOnPlants    = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=3845'+notBirds+commonPlants+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon'+nestingField,'nesting on plants'); 
 let birdsEatingPlants       = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=13'+notBirds+commonPlants+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:eating','eating plants'); 
-let birdsNectaringAtPlants  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=498'+notBirds+commonPlants+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:nectar+plant','nectaring at plants'); 
-    
+let birdsNectaringAtPlants  = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=498'+notBirds+commonPlants+userId+birdOmit+'&iconic_taxa=aves&ofv_datatype=taxon&field:nectar+plant','nectaring at plants');
+let nestBox                 = furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+placeId+'&obs_fields=1,13436'+notBirds+userId+birdOmit+'&iconic_taxa=aves&field:Nest%20box%20or%20artificial%20hollow','nest box monitoring');
+
+// iconic predator for main tabs...
 let predatorsField = '';
 if( limitPredatorSearch === 'yes' ){
     predatorsProjects = p_project_id;
@@ -361,7 +422,16 @@ let birdsPredDesc = '<span id="spandesc">displays observations of birds that hav
 let birdsDesc = '<span id="spandesc">displays observations of birds that have the "Plant that the organsism was found on" '
                          + 'observation field set.  the options below display observations of birds that have the "eating", '
                          + '"birds nesting in", and "nectar plant" observation fields set. </span>';
-    
+
+let nestBoxLink = '';
+let nestBoxDesc = '<span id="spandesc">displays observations of birds that have the "Nest box or artificial hollow" observation '
+                         + 'field set.  </span>'; 
+  
+if( showNestBox === 'yes' ){
+    nestBoxLink = '<span id="tab2"><dt></dt><dd></dd></span>'
+                + '<span id="tab1"><dt>'+nestBox+'</dt><dd>'+nestBoxDesc+'</dd></span>'
+}
+  
 let bird_tab  = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                          + '<span id="key"><dt>Birds</dt><dd></dd></span>'
                          + '<span id="tab1"><dt>'+birdsAsPredators+'</dt><dd>'+birdsPredDesc+'</dd></span>'
@@ -370,6 +440,7 @@ let bird_tab  = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
                          + '<span id="tab2"><dt>'+birdsEatingPlants+'</dt><dd></dd></span>'
                          + '<span id="tab2"><dt>'+birdsNestingOnPlants+'</dt><dd></dd></span>'
                          + '<span id="tab2"><dt>'+birdsNectaringAtPlants+'</dt><dd></dd></span>'
+                         + nestBoxLink
                          + '</dl></td>'
                          + '</tr></table>';
     
@@ -443,10 +514,20 @@ let fungi_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
       
 let molluscsDesc = '<span id="spandesc">displays observations of molluscs that have the "Plant that the organsism was found on" '
                          + 'observation field set.   </span>';
-    
+let molluscsOnFungiDesc = '<span id="spandesc">displays observations of molluscs that have been added to the "Molluscan Mycophagy " '
+                        + 'project.   </span>';
+
+let mOnFLink = '';
+  
+if( showMolluscsOnFungi === 'yes' ) {
+    mOnFLink = '<span id="tab2"><dt></dt><dd></dd></span>'
+         + '<span id="tab1"><dt>'+molluscsOnFungi+'</dt><dd>'+molluscsOnFungiDesc+'</dd></span>';
+}
+  
 let mollusc_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                          + '<span id="key"><dt>Molluscs</dt><dd></dd></span>'
                          + '<span id="tab1"><dt>'+molluscs+'</dt><dd>'+molluscsDesc+'</dd></span>'
+                         + mOnFLink
                          + '</dl></td>'
                          + '</tr></table>';
 
