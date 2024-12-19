@@ -135,16 +135,21 @@ function openTaxon(evt, taxon) {
 }
 
 let placeId = '';  
-let showAll = 'yes';
 let predatorsProjects = '76944';
 let predatorsOFields  = '&obs_fields=3134';
 let limitPredatorSearch = 'yes';
-let nestBoxMonitoring = 'no';
   
 if( p_place_id !== '' ){
     placeId       = ('&place_id='+p_place_id);
 }
 
+// when a project is passed in but there is no place associated with the project,
+// some of the links are not shown since they are reliant on having a place associated
+// with the project.
+let showAll = 'yes';
+let showNestBox = 'no';
+let showMolluscsOnFungi = 'no';
+  
 // build parameters for all url's except for the plant inspector
 let userId = '&user_id=' + p_user_id;
 
@@ -208,6 +213,7 @@ if( p_project_id.toLowerCase() === 'biodiversity-of-ohio' || p_project_id === '2
     placeId      = '&place_id=31';
     p_project_id = '22501';
     limitPredatorSearch = 'no';
+    showMolluscsOnFungi = 'yes';
     lists = '&g_list=4484313&s_list=4484172&project_title=Biodiversity%20of%20Ohio';
 } 
 
@@ -219,7 +225,7 @@ if( p_project_id === 'cnc' ){
     lists         = '&g_list=4488957&s_list=4488958&view=visitingOnly&project_title=Cincinnati%20Nature%20Center%20Pollinator%20Garden';
     p_pollinator  = '220623';
     limitPredatorSearch = 'no';
-    nestBoxMonitoring   = 'yes';
+    showNestBox   = 'yes';
     insectOFields = '&obs_fields=7623,498,6586,3126,4935,13,7807';
     beesOFields   = '&obs_fields=7623,498,4935,7807,8581,254,6586,3126';
     birdOFields   = '&obs_fields=7623,8581,498,3845';
@@ -260,7 +266,7 @@ if( p_project_id.toLowerCase() === 'cincinnati-rewild' || p_project_id === '1525
     placeId       = '&place_id=26,31';
     p_project_id  = '152539';
     limitPredatorSearch = 'yes';
-    nestBoxMonitoring   = 'yes';
+    showNestBox   = 'yes';
     lists         = '&g_list=4484313&s_list=4484172&project_title=Cincinnati%20Re-Wild';
     insectOFields = '&obs_fields=7623,498,4935,7807,8581,254,6586,499,10524';
     birdOFields   = '&obs_fields=7623,8581,498,3845';
@@ -272,7 +278,8 @@ if( p_project_id.toLowerCase() === 'ewa-at-the-fells' || p_project_id === '21313
     placeId       = '&place_id=140932,120762';
     p_project_id  = '21313';
     limitPredatorSearch = 'yes';
-    nestBoxMonitoring   = 'no';
+    showNestBox   = 'no';
+    showMolluscsOnFungi = 'yes';
     lists         = '';  // hides the plant tab when null
     insectOFields  += ',12550';
     birdOFields    += ',12550';
@@ -402,12 +409,12 @@ let birdsDesc = '<span id="spandesc">displays observations of birds that have th
                          + 'observation field set.  the options below display observations of birds that have the "eating", '
                          + '"birds nesting in", and "nectar plant" observation fields set. </span>';
 
-let showNestBox = '';
+let nestBoxLink = '';
 let nestBoxDesc = '<span id="spandesc">displays observations of birds that have the "Nest box or artificial hollow" observation '
                          + 'field set.  </span>'; 
   
-if( nestBoxMonitoring === 'yes' ){
-    showNestBox = '<span id="tab2"><dt></dt><dd></dd></span>'
+if( showNestBox === 'yes' ){
+    nestBoxLink = '<span id="tab2"><dt></dt><dd></dd></span>'
                 + '<span id="tab1"><dt>'+nestBox+'</dt><dd>'+nestBoxDesc+'</dd></span>'
 }
   
@@ -419,7 +426,7 @@ let bird_tab  = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>'
                          + '<span id="tab2"><dt>'+birdsEatingPlants+'</dt><dd></dd></span>'
                          + '<span id="tab2"><dt>'+birdsNestingOnPlants+'</dt><dd></dd></span>'
                          + '<span id="tab2"><dt>'+birdsNectaringAtPlants+'</dt><dd></dd></span>'
-                         + showNestBox
+                         + nestBoxLink
                          + '</dl></td>'
                          + '</tr></table>';
     
@@ -496,17 +503,17 @@ let molluscsDesc = '<span id="spandesc">displays observations of molluscs that h
 let molluscsOnFungiDesc = '<span id="spandesc">displays observations of molluscs that have been added to the "Molluscan Mycophagy " '
                         + 'project.   </span>';
 
-let mOnF = '';
+let mOnFLink = '';
   
-if( placeId !== '' ) {
-    mOnF = '<span id="tab2"><dt></dt><dd></dd></span>'
+if( showMolluscsOnFungi === 'yes' ) {
+    mOnFLink = '<span id="tab2"><dt></dt><dd></dd></span>'
          + '<span id="tab1"><dt>'+molluscsOnFungi+'</dt><dd>'+molluscsOnFungiDesc+'</dd></span>';
 }
   
 let mollusc_tab = '<table id="table2key"><tr id="trkey"><td id="tdkey"><dl>' 
                          + '<span id="key"><dt>Molluscs</dt><dd></dd></span>'
                          + '<span id="tab1"><dt>'+molluscs+'</dt><dd>'+molluscsDesc+'</dd></span>'
-                         + mOnF
+                         + mOnFLink
                          + '</dl></td>'
                          + '</tr></table>';
 
