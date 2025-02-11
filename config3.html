@@ -354,7 +354,7 @@ function fresults(xobj) {
                           if( rec.ofvs[j].field_id.toString() === field_array_copy[r].toString() ){
                               matchedCopy = 'yes';
                               field1 = rec.ofvs[j].value.toLowerCase();
-                              param1 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value.toString();
+                              param1 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value.toString().replace(/([\"\‘])/g,’\\'+$1);
                               displayName = rec.ofvs[j].value.toLowerCase();
                                
                               if( rec.ofvs[j].taxon ){
