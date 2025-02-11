@@ -145,6 +145,11 @@ let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observa
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
 <script> 
 
+function escapeQuotes(inputString) {
+      // Use a regular expression to match single and double quotes and escape them
+      return inputString.replace(/['"]/g, '\\$&');
+}
+ 
 if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
    let instructions = [
       {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.'},
@@ -354,7 +359,7 @@ function fresults(xobj) {
                           if( rec.ofvs[j].field_id.toString() === field_array_copy[r].toString() ){
                               matchedCopy = 'yes';
                               field1 = rec.ofvs[j].value.toLowerCase();
-                              param1 = '&field:' + rec.ofvs[j].name + '=' + rec.ofvs[j].value.toString().replace(/([\"\‘])/g,’\\'+$1);
+                              param1 = '&field:' + rec.ofvs[j].name + '=' + escapeQuotes(rec.ofvs[j].value.toString());
                               displayName = rec.ofvs[j].value.toLowerCase();
                                
                               if( rec.ofvs[j].taxon ){
