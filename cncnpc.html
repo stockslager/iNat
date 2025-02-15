@@ -81,11 +81,6 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      faddelem('p',document.body,{innerHTML:'total projects: '+fcomnum(total_results)+'<br />' 
-         +'per page: '+fcomnum(per_page)+'<br />'
-         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
-         });
-
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
