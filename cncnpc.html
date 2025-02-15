@@ -137,25 +137,11 @@ function fresults(xobj) {
 let apibase = 'https://api.inaturalist.org/v1/projects';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
-let apirefname = 'What\'s Visiting?';
+let apirefname = 'CNC Native Plant Club Leadership Team';
 let apiref = furl(apirefurl,apirefname);
-faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
-  + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});
 faddelem('h2',document.body,{innerText:apirefname});
 
-let rw_g_list = winurlparams.get('g_list') || '';
-let rw_s_list = winurlparams.get('s_list') || '';
-   
-if ( (rw_g_list === '' && rw_s_list != '') || (rw_g_list != '' && rw_s_list === '') ){
-   let instructions = [
-      {innerHTML:'Custom list missing from url parameters.  If custom species lists are passed in, they both need to be specified.  Please specify both url parameters (<b>&g_list</b> and <b>&s_list</b>).'},
-   ];
-   faddelem('h2',document.body,{innerText:'Error ~ Invalid URL Parameters'});
-   faddelems('p',document.body,instructions);
-   throw('');
-}
-
-faddelem('p',document.body,{innerHTML:'To see what\'s visiting the plants in each garden.'});
+faddelem('p',document.body,{innerHTML:'Each user profile name is clickable and directs you to an iNaturalist user profile for that user.  If you are an iNat user, you can message the user through iNat.  Otherwise, we hope to see you at a meeting.'});
 
 fetch(apiurl)
    .then((response) => {
