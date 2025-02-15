@@ -87,31 +87,31 @@ function fresults(xobj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
       let labels = [
-         {innerText:'User Image'},
-         {innerText:'User'},
-         {innerText:'Description'},
+         {innerText:'Image'},
+         {innerText:'User Alias'},
+         {innerText:'User Role'},
       ];
       faddelems('th',hrow,labels);
       
       let tbody = faddelem('tbody',table);
       for (let i=0; i<results.length; i++) {
          let target_url = '';     
-         let brow = faddelem('tr',tbody);
          let rec = results[i];
          let longText = rec.description||'';
          let truncatedText = truncate(stripHtml(longText), 500);
          let lists = '';
 
          for( let f=0; f<rec.admins.length; f++ ){
+             
+              let brow = faddelem('tr',tbody);
+              let admin = rec.admins[f];
 
-             let admin = rec.admins[f];
-
-             let values = [
-                {innerHTML:'<img class="photo" src="'+((admin.user.icon)?admin.user.icon:'')+'" />'},
-                {innerHTML:furl(target_url, (rec.title||'no title'))},
-                {innerText:truncatedText},
-             ];
-             faddelems('td',brow,values);
+              let values = [
+                 {innerHTML:'<img class="photo" src="'+((admin.user.icon)?admin.user.icon:'')+'" />'},
+                 {innerText:(admin.user.login||' ')},
+                 {innerText:(admin.role||' ')},
+              ];
+              faddelems('td',brow,values);
          }
       };
 
