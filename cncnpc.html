@@ -90,6 +90,7 @@ function fresults(xobj) {
          {innerText:'Image'},
          {innerText:'User Alias'},
          {innerText:'User Role'},
+         {innerText:'User Profile'},
       ];
       faddelems('th',hrow,labels);
       
@@ -110,6 +111,7 @@ function fresults(xobj) {
                  {innerHTML:'<img class="photo" src="'+((admin.user.icon)?admin.user.icon:'')+'" />'},
                  {innerText:(admin.user.login||' ')},
                  {innerText:(admin.role||' ')},
+                 {innerHTML:furl(root_people+admin.user.login,root_people+admin.user.login)},
               ];
               faddelems('td',brow,values);
          }
