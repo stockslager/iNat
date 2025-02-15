@@ -89,10 +89,9 @@ function fresults(xobj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
       let labels = [
-         {innerText:'Image'},
-         {innerText:'User Alias'},
-         {innerText:'User Role'},
+         {innerText:'User Icon'},
          {innerText:'User Profile'},
+         {innerText:'User Role'},
       ];
       faddelems('th',hrow,labels);
       
@@ -119,9 +118,8 @@ function fresults(xobj) {
             
               let values = [
                  {innerHTML:user_icon},
-                 {innerText:(admin.user.login||' ')},
+                 {innerHTML:furl((root_people+admin.user.logn),admin.user.login)},
                  {innerText:(admin.role||' ')},
-                 {innerHTML:furl(root_people+admin.user.login,root_people+admin.user.login)},
               ];
               faddelems('td',brow,values);
          }
