@@ -64,6 +64,8 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+
+let p_club_name = winurlparams.get('club_name') || '';
    
 </script>
 
@@ -133,8 +135,14 @@ function fresults(xobj) {
 let apibase = 'https://api.inaturalist.org/v1/projects';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
-let apirefname = 'CNC Native Plant Club Leadership Team';
-let apiref = furl(apirefurl,apirefname);
+let apirefname = ''; 
+
+if( p_club_name === '' ){
+   apirefname += 'Leadership Team';
+} else {
+   apirefname += (p_club_name + ' Leadership Team');
+}
+   
 faddelem('h3',document.body,{innerText:apirefname});
 
 faddelem('p',document.body,{innerHTML:'Each user profile name is clickable and directs you to an iNaturalist user profile for that user.  If you are an iNat user, you can message us through iNat.  Otherwise, we hope to see you at a meeting.'});
