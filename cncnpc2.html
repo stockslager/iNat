@@ -131,13 +131,10 @@ function fresults(xobj) {
                                                 '<option value="3">Option 3</option>' +
                                                 '</select>'});
 
-      const dropdown = document.getElementById('clubDropDown');
-
-dropdown.addEventListener('change', function() {
-  const selectedValue = dropdown.value;
-  // Perform actions based on the selected value
-  console.log('Selected value:', selectedValue);
-});
+      faddelem('p',document.body,{innerHTML:'<script>const dropdown = document.getElementById(\'clubDropDown\');'+
+                                                 'dropdown.addEventListener(\'change\', function() {'+
+                                                 'const selectedValue = dropdown.value;'+
+                                                  'console.log(\'Selected value:\', selectedValue);});'});
    
       
       let club = '';
