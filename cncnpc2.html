@@ -133,20 +133,6 @@ function fresults(xobj) {
           club = 'Club\'s iNat Project';
       }
       
-      let table = faddelem('table',document.body,{id:'main'});
-      let caption = faddelem('caption',table,{innerText:club.toLowerCase()});
-      let thead = faddelem('thead',table);
-      let hrow = faddelem('tr',thead);
-      let labels = [
-         {innerText:'User Icon'},
-         {innerText:'User Profile'},
-         {innerText:'User Role'},
-         {innerText:club},
-      ];
-      faddelems('th',hrow,labels);
-      
-      let tbody = faddelem('tbody',table);
-
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
          let lists = '';
@@ -155,6 +141,20 @@ function fresults(xobj) {
          if( rec.id.toString() === p_umbrella_id ){
              continue;
          }
+         
+         let table = faddelem('table',document.body,{id:'main'});
+         let caption = faddelem('caption',table,{innerText:rec.title.toLowerCase()});
+         let thead = faddelem('thead',table);
+         let hrow = faddelem('tr',thead);
+         let labels = [
+           {innerText:'User Icon'},
+           {innerText:'User Profile'},
+           {innerText:'User Role'},
+           {innerText:club},
+         ];
+         faddelems('th',hrow,labels);
+      
+         let tbody = faddelem('tbody',table);
          
          if( p_show_club === 'yes' ){
             title = rec.title;
