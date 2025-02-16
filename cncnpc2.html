@@ -69,10 +69,9 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_id          = winurlparams.get('id') || '';
 let p_club_name   = winurlparams.get('club_name') || '';
 let p_umbrella_id = winurlparams.get('umbrella_id') || ''; 
-let showClubName  = 'yes';
+let p_show_club   = winurlparams.get('show_club') || 'yes';
 
 if( p_umbrella_id !== '' ){
-    showClubName = 'no';
     winurlparams.delete('id');
     winurlparams.append('id', (p_id+','+p_umbrella_id));
 }
@@ -129,7 +128,7 @@ function fresults(xobj) {
       
       let club = '';
 
-      if( showClubName === 'yes' ){
+      if( p_show_club === 'yes' ){
           club = 'Club\'s iNat Project';
       }
       
@@ -155,7 +154,7 @@ function fresults(xobj) {
              continue;
          }
          
-         if( showClubName === 'yes' ){
+         if( p_show_club === 'yes' ){
             title = rec.title;
          }
          
