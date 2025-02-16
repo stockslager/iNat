@@ -108,15 +108,10 @@ function fresults(xobj) {
          let rec = results[n];
          let lists = '';
 
-         alert("a");
          if( p_umbrella_id === rec.id.toString() ){
-            alert("one");
              for( let k=0; k<rec.search_parameters.length; k++){
-                alert("two");
                   if( rec.search_parameters[k].field === 'project_id' ){
-                     alert("three");
                       for( let m=0; m<rec.search_parameters[k].value.length; m++){
-                         alert("founr");
                            id_list += (rec.search_parameters[k].value[m] + ',');
                       }
                   }
@@ -132,8 +127,7 @@ function fresults(xobj) {
          let rec = results[i];
          let lists = '';
 
-         if( rec.id === p_umbrella_id ){
-             alert("break");
+         if( rec.id.toString() === p_umbrella_id ){
              break;
          }
          
