@@ -85,33 +85,27 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let table = faddelem('table',document.body,{id:'main'});
-      let thead = faddelem('thead',table);
-      let hrow = faddelem('tr',thead);
-      let labels = [
-         {innerText:'User Icon'},
-         {innerText:'User Profile'},
-         {innerText:'User Role'},
-      ];
-      faddelems('th',hrow,labels);
-      
-      let tbody = faddelem('tbody',table);
       for (let i=0; i<results.length; i++) {
          let target_url = '';     
          let rec = results[i];
          let longText = rec.description||'';
          let truncatedText = truncate(stripHtml(longText), 500);
          let lists = '';
-         let id = rec.id;
+
+         let table = faddelem('table',document.body,{id:'main'});
+         let thead = faddelem('thead',table);
+         let hrow = faddelem('tr',thead);
+         let labels = [
+            {innerText:'User Icon'},
+            {innerText:'User Profile'},
+            {innerText:'User Role'},
+         ];
+         faddelems('th',hrow,labels);
+
+         let tbody = faddelem('tbody',table);
 
          for( let f=0; f<rec.admins.length; f++ ){
 
-              // create a new table if the project id doesn't match
-              if( rec.id !== id ){
-                  tbody = faddelem('tbody',table);
-              }
-              id = rec.id;
-             
               let brow = faddelem('tr',tbody);
               let admin = rec.admins[f];
 
