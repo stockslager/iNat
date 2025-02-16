@@ -95,6 +95,7 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let apirefname = ''; 
+      let club_name = '';
 
       if( p_club_name === '' ){
           if( results.length > 1 ){
@@ -103,7 +104,8 @@ function fresults(xobj) {
               apirefname += 'Leadership Team';
           }
       } else {
-          apirefname += (p_club_name + ' Leadership Team');
+          club_name = p_club_name;
+          apirefname += ('Leadership Team');
       }
 
       for( let n=0; n<results.length; n++) {
@@ -143,7 +145,7 @@ function fresults(xobj) {
          }
          
          let table = faddelem('table',document.body,{id:'main'});
-         let caption = faddelem('caption',table,{innerText:rec.title.toLowerCase()});
+         let caption = faddelem('caption',table,{innerText:club_name || rec.title.toLowerCase()});
          let thead = faddelem('thead',table);
          let hrow = faddelem('tr',thead);
          let labels = [
