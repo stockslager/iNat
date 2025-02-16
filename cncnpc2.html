@@ -214,6 +214,11 @@ fetch(apiurl)
       faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
 });
 
+const url = new URL(window.location.href);
+url.search = '';
+const newUrl = url.toString();
+window.history.replaceState({}, document.title, newUrl);
+
 </script>
 </body>
 </html>
