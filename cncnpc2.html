@@ -77,6 +77,7 @@ let p_umbrella_id = winurlparams.get('umbrella_id') || '';
 <script>
 function fresults(xobj) {
    let results = xobj.results;
+
    if (results) {
       let total_results = xobj.total_results;
       let per_page = xobj.per_page;
@@ -84,13 +85,31 @@ function fresults(xobj) {
       let page_max = Math.ceil(total_results/per_page);
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
+      let apirefname = ''; 
 
+      if( p_club_name === '' ){
+          if( results.length > 1 ){
+              apirefname += 'Leadership Teams';
+          } else {
+              apirefname += 'Leadership Team';
+          }
+      } else {
+          apirefname += (p_club_name + ' Leadership Team');
+      }
+   
+      faddelem('h3',document.body,{innerText:apirefname});
+      faddelem('p',document.body,{innerHTML:'Each user profile name is clickable and directs you to an iNaturalist user profile for that user.  If you are an iNat user, you can message us through iNat.  Otherwise, we hope to see you at a meeting.'});
+      
       for (let i=0; i<results.length; i++) {
          let target_url = '';     
          let rec = results[i];
          let longText = rec.description||'';
          let truncatedText = truncate(stripHtml(longText), 500);
          let lists = '';
+
+         if( i > 0 ){
+            faddelem('p',document.body,{innerHTML:' '});
+         }
 
          let table = faddelem('table',document.body,{id:'main'});
          let thead = faddelem('thead',table);
@@ -127,28 +146,19 @@ function fresults(xobj) {
       };
 
       // buttons to go to prev or next page
-      let nav = faddelem('div',document.body,{id:'nav'});
-      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
-      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
-      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
-      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+      if( results.length <== 1 ){
+          let nav = faddelem('div',document.body,{id:'nav'});
+          (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+          (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+          (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+          (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+      }
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); };
 };
 let apibase = 'https://api.inaturalist.org/v1/projects';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
-let apirefname = ''; 
-
-if( p_club_name === '' ){
-   apirefname += 'Leadership Team';
-} else {
-   apirefname += (p_club_name + ' Leadership Team');
-}
-   
-faddelem('h3',document.body,{innerText:apirefname});
-
-faddelem('p',document.body,{innerHTML:'Each user profile name is clickable and directs you to an iNaturalist user profile for that user.  If you are an iNat user, you can message us through iNat.  Otherwise, we hope to see you at a meeting.'});
 
 fetch(apiurl)
    .then((response) => {
