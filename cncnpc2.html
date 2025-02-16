@@ -72,12 +72,12 @@ let p_club_name   = winurlparams.get('club_name') || '';
 let p_umbrella_id = winurlparams.get('umbrella_id') || ''; 
 let p_show_club   = winurlparams.get('show_club') || 'yes';
 let p_obs_fields  = winurlparams.get('obs_fields') || '';
+let p_iconic_taxa = winurlparams.get('iconic_taxa') || '';
 
 let args = '';
 
-if( p_obs_fields !== '' ) {   
-    args += '&obs_fields=' + p_obs_fields;
-}
+if( p_obs_fields !== '' ) { args += '&obs_fields=' + p_obs_fields; }
+if( p_iconic_taxa !== '' ) { args += '&iconic_taxa=' + p_iconic_taxa; }
 
 if( p_umbrella_id !== '' ){
     winurlparams.delete('id');
