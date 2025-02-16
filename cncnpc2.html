@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
 <meta name="description" content="Contact Us" /> 
-<title>ContactUs</title>
+<title>Contact Us</title>
 <style>
    :root {
       background: var(--color-base);
@@ -66,8 +66,13 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 
+let p_id          = winurlparams.get('id') || '';
 let p_club_name   = winurlparams.get('club_name') || '';
 let p_umbrella_id = winurlparams.get('umbrella_id') || ''; 
+
+if( p_umbrella_id !== '' ){
+    winurlparams.append('club_name', p_umbrella_id);
+}
    
 </script>
 
@@ -77,6 +82,7 @@ let p_umbrella_id = winurlparams.get('umbrella_id') || '';
 <script>
 function fresults(xobj) {
    let results = xobj.results;
+   let id_list = '';
 
    if (results) {
       let total_results = xobj.total_results;
@@ -96,23 +102,36 @@ function fresults(xobj) {
       } else {
           apirefname += (p_club_name + ' Leadership Team');
       }
+
+      for( let n=0; n<results.length; n++) {
+         let rec = results[n];
+         let lists = '';
+
+         if( p_umbrella_id === rec.id ){
+             for( let k=0; k<rec.search_parameters.length; k++){
+                  if( rec.search_parameters[k].field === 'project_id' ){
+                      for( let m=0; m<rec.search_parameters[k].value.length; m++){
+                           id_list += (rec.search_parameters[k].value[m] + ',');
+                      }
+                  }
+             }
+         } 
+      }
    
       faddelem('h3',document.body,{innerText:apirefname});
+      faddelem('p',document.body,{innerHTML:furl(github_root+'cncnpc2.html?id='+id_list,'show all')});
       faddelem('p',document.body,{innerHTML:'Each user profile name is clickable and directs you to an iNaturalist user profile for that user.  If you are an iNat user, you can message us through iNat.  Otherwise, we hope to see you at a meeting.'});
       
       for (let i=0; i<results.length; i++) {
-         let target_url = '';     
          let rec = results[i];
-         let longText = rec.description||'';
-         let truncatedText = truncate(stripHtml(longText), 500);
          let lists = '';
-
+         
          if( i > 0 ){
-            faddelem('p',document.body,{innerHTML:'<br><br>'});
+             faddelem('p',document.body,{innerHTML:'<br><br>'});
          }
 
          if( results.length > 1 ){
-             faddelem('h3',document.body,{innerText:rec.title});
+            faddelem('h3',document.body,{innerText:rec.title});
          }
          
          let table = faddelem('table',document.body,{id:'main'});
@@ -131,21 +150,22 @@ function fresults(xobj) {
 
               let brow = faddelem('tr',tbody);
               let admin = rec.admins[f];
-
+ 
               let user_icon = admin.user.icon || '';
-         
+          
               if( user_icon === '' ){
                   user_icon += '<div class="npcicon">&#x1F464;</div>';
               } else {
-                  user_icon = '<img class="icon" src="'+user_icon+'" />';
+                   user_icon = '<img class="icon" src="'+user_icon+'" />';
               }
             
               let values = [
-                 {innerHTML:user_icon},
-                 {innerHTML:furl((root_people+admin.user.login),admin.user.login)},
-                 {innerText:(admin.role||' ')},
+                   {innerHTML:user_icon},
+                   {innerHTML:furl((root_people+admin.user.login),admin.user.login)},
+                   {innerText:(admin.role||' ')},
               ];
               faddelems('td',brow,values);
+           }
          }
       };
 
