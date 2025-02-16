@@ -122,17 +122,37 @@ function fresults(xobj) {
       faddelem('h3',document.body,{innerText:apirefname});
       faddelem('p',document.body,{innerHTML:furl(github_root+'cncnpc2.html?id='+id_list,'show all')});
       faddelem('p',document.body,{innerHTML:'Each user profile name is clickable and directs you to an iNaturalist user profile for that user.  If you are an iNat user, you can message us through iNat.  Otherwise, we hope to see you at a meeting.'});
+
+      let club = '';
+
+      if( results.length > 1 ){
+          club = 'Club\'s iNat Project';
+      }
       
+      let table = faddelem('table',document.body,{id:'main'});
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+      let labels = [
+         {innerText:'User Icon'},
+         {innerText:'User Profile'},
+         {innerText:'User Role'},
+         {innerText:club},
+      ];
+      faddelems('th',hrow,labels);
+      
+      let tbody = faddelem('tbody',table);
+
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
          let lists = '';
+         let title = '';
 
          if( rec.id.toString() === p_umbrella_id ){
              continue;
          }
          
          if( results.length > 1 ){
-            faddelem('h3',document.body,{innerText:rec.title});
+            title = rec.title;
          }
          
          for( let f=0; f<rec.admins.length; f++ ){
@@ -152,6 +172,7 @@ function fresults(xobj) {
                    {innerHTML:user_icon},
                    {innerHTML:furl((root_people+admin.user.login),admin.user.login)},
                    {innerText:(admin.role||' ')},
+                   {innerText:(title)},
               ];
               faddelems('td',brow,values);
            }
