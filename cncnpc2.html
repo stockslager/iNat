@@ -131,26 +131,10 @@ function fresults(xobj) {
              continue;
          }
          
-         if( i > 0 ){
-             faddelem('p',document.body,{innerText:' '});
-         }
-
          if( results.length > 1 ){
             faddelem('h3',document.body,{innerText:rec.title});
          }
          
-         let table = faddelem('table',document.body,{id:'main'});
-         let thead = faddelem('thead',table);
-         let hrow = faddelem('tr',thead);
-         let labels = [
-            {innerText:'User Icon'},
-            {innerText:'User Profile'},
-            {innerText:'User Role'},
-         ];
-         faddelems('th',hrow,labels);
-
-         let tbody = faddelem('tbody',table);
-
          for( let f=0; f<rec.admins.length; f++ ){
 
               let brow = faddelem('tr',tbody);
