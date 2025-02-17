@@ -74,6 +74,9 @@ let p_show_club   = winurlparams.get('show_club') || 'yes';
 let p_obs_fields  = winurlparams.get('obs_fields') || '';
 let p_iconic_taxa = winurlparams.get('iconic_taxa') || '';
 let p_user_view   = winurlparams.get('user_view') || '';
+let p_orig_id     = winurlparams.get('orig_id') || winurlparams.get('id');
+
+winurlparams.append('orig_id', p_orig_id);
 
 let args = '';
 
@@ -146,6 +149,10 @@ function fresults(xobj) {
          let lists = '';
          let title = '';
          let nm = club_name || rec.title;
+
+         if( rec.id === p_orig_id ){
+             nm = p_club_name;
+         }
 
          if( rec.id.toString() === p_umbrella_id ){
              continue;
