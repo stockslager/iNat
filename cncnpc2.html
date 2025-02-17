@@ -111,6 +111,7 @@ function fresults(xobj) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let apirefname = ''; 
       let club_name = '';
+      let nm = '';
 
       if( p_club_name === '' ){
           if( results.length > 1 ){
@@ -126,6 +127,12 @@ function fresults(xobj) {
       for( let n=0; n<results.length; n++) {
          let rec = results[n];
          let lists = '';
+
+         nm = club_name || rec.title;
+
+         if( rec.id === p_orig_id ){
+             nm = p_club_name;
+         }
 
          if( p_umbrella_id === rec.id.toString() ){
              for( let k=0; k<rec.search_parameters.length; k++){
@@ -148,11 +155,6 @@ function fresults(xobj) {
          let rec = results[i];
          let lists = '';
          let title = '';
-         let nm = club_name || rec.title;
-
-         if( rec.id === p_orig_id ){
-             nm = p_club_name;
-         }
 
          if( rec.id.toString() === p_umbrella_id ){
              continue;
