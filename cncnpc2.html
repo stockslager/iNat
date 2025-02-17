@@ -152,13 +152,11 @@ function fresults(xobj) {
 
          nm = rec.title;
 
-         alert( i );
-         alert( 'o' + p_orig_id );
          if( rec.id.toString() === p_orig_id.toString() ){
              nm = p_club_name;
          }
 
-         if( i < 1 ) {
+         if( i === 0 ) {
              if( p_umbrella_id !== '' ){
                  faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-top:2px; padding-bottom:10px;">'+furl(github_root+'cncnpc2.html?id='+id_list+p_user_view+'&orig_id='+p_orig_id+'&club_name='+p_club_name,'show all')+'</div>'});
              }
@@ -211,14 +209,6 @@ function fresults(xobj) {
          //faddelem('p',document.body,{innerHTML:rec.description});
       }
 
-      /* buttons to go to prev or next page
-      if( results.length <= 1 ){
-          let nav = faddelem('div',document.body,{id:'nav'});
-          (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
-          (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
-          (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
-          (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
-      }*/
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); };
    faddelem('p',document.body,{innerHTML:'<br><br>'});
