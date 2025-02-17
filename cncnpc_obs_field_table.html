@@ -114,11 +114,15 @@ if( p_omit_project !== '' ){
     winurlparams.delete('not_in_project');
     winurlparams.append('not_in_project', p_omit_project);
 }
- 
-if( winurlparams.get('ofv_datatype') === null || winurlparams.get('ofv_datatype') === ''){
+
+// we want to show everything for the cnc entrance into this code.
+// this is different from the species interaction dashboard which is only
+// interested in species interactions which implies that at least one obs
+// field exists.
+/*if( winurlparams.get('ofv_datatype') === null || winurlparams.get('ofv_datatype') === ''){
     winurlparams.delete('ofv_datatype');
     winurlparams.append('ofv_datatype', 'taxon,text,numeric,date,time,datetime,dna');
-}
+}*/
 
 winurlparams.delete('per_page');
 winurlparams.append('per_page','50');
