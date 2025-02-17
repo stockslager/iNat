@@ -403,9 +403,9 @@ function fresults(xobj) {
  
          values.push({innerHTML:user_icon});
          if( p_user_view === 'pics' ) {
-             values.push({innerHTML:furl(github_root+'cncnpc_grid.html?user_id='+rec.user.login,rec.user.login)});
+             values.push({innerHTML:furl(github_root+'cncnpc_grid.html?user_id='+rec.user.login+'&rows=4&columns=3&cellpx=120',rec.user.login)});
          } else if( p_user_view === 'sort' ) {
-            values.push({innerHTML:furl(github_root+'cncnpc_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator,rec.user.login)});
+            values.push({innerHTML:furl(github_root+'cncnpc_obs_field_table.html'+opts+param1+'&user_id='+rec.user.login+'&operator='+p_operator,rec.user.login)});
          } else {
             values.push({innerHTML:furl(root_people+rec.user.login,rec.user.login)});
          }
