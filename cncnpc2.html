@@ -73,6 +73,7 @@ let p_umbrella_id = winurlparams.get('umbrella_id') || '';
 let p_show_club   = winurlparams.get('show_club') || 'yes';
 let p_obs_fields  = winurlparams.get('obs_fields') || '';
 let p_iconic_taxa = winurlparams.get('iconic_taxa') || '';
+let p_user_view   = winurlparams.get('user_view') || '';
 
 let args = '';
 
@@ -147,7 +148,7 @@ function fresults(xobj) {
          }
          
          let table = faddelem('table',document.body,{id:'main'});
-         let caption = faddelem('caption',table,{innerHTML:furl( github_root+'cncnpc_obs_field_table.html?project_id='+rec.id+args,nm )});
+         let caption = faddelem('caption',table,{innerHTML:furl( github_root+'cncnpc_obs_field_table.html?project_id='+rec.id+'&user_view='+p_user_view+args,nm )});
          let thead = faddelem('thead',table);
          let hrow = faddelem('tr',thead);
          let labels = [
