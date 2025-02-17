@@ -401,7 +401,6 @@ function fresults(xobj) {
               values.push({innerHTML:displayName});
          }          
  
-         values.push({innerHTML:user_icon});
          if( p_user_view === 'pics' ) {
              values.push({innerHTML:furl(github_root+'cncnpc_grid.html?user_id='+rec.user.login+'&rows=4&columns=3&cellpx=75&project_id='+p_project_id,rec.user.login)});
          } else if( p_user_view === 'sort' ) {
@@ -409,6 +408,8 @@ function fresults(xobj) {
          } else {
             values.push({innerHTML:furl(root_people+rec.user.login,rec.user.login)});
          }
+       
+         values.push({innerHTML:user_icon});
         
          tempBrow.push(values);
       };
@@ -467,8 +468,8 @@ function fresults(xobj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
 
-      labels.push({innerText:'User Photo'});
       labels.push({innerText:'User Login'});
+      labels.push({innerText:'User Photo'});
       
       faddelems('th',hrow,labels);
 
