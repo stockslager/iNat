@@ -456,7 +456,7 @@ function fresults(xobj) {
       }
 
       dlString += '</table></span>';
-      //faddelem('p',document.body,{innerHTML:dlString});
+      faddelem('p',document.body,{innerHTML:dlString});
 
       if( mismatch === 'yes' ) {
           if( p_operator === 'merge' ){       
@@ -464,9 +464,9 @@ function fresults(xobj) {
           }
       }  
 
-      faddelem('p',document.body,{innerHTML:'<span align="right">total: '+fcomnum(total_results)+' </span>'
-             +'<span align="center">per page: '+fcomnum(per_page)+'</span>'
-             +'<span align="right">page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'</span>'});  
+      faddelem('p',document.body,{innerHTML:'total: '+fcomnum(total_results)+' <br>'
+             +'per page: '+fcomnum(per_page)+'<br>'
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br>'});  
 
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
