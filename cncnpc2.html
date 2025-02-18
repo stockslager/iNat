@@ -168,6 +168,14 @@ function fresults(xobj) {
          if( rec.id.toString() === p_umbrella_id ){
              continue;
          }
+
+         // find the name of the observation field passed in
+         let field_param = '';
+         for( int z=0; z<rec.project_observation_fields.length; z++ ){
+              if( rec.project_observation_fields[z].id.toString() === p_obs_fields ){
+                  field_param = ('&field:'+rec.project_observation_fields[z].name+'='+rec.project_observation_fields[z].id.toString());
+              }
+         }
          
          let table = faddelem('table',document.body,{id:'main'});
          let caption = '';
@@ -175,7 +183,7 @@ function fresults(xobj) {
          if( p_show_all === 'yes' ){
              caption = faddelem('caption',table,{ innerText:nm });
          } else {
-             caption = faddelem('caption',table,{ innerHTML:furl( github_root+'cncnpc_obs_field_table.html?project_id='+rec.id+p_user_view+args,nm )});
+             caption = faddelem('caption',table,{ innerHTML:furl( github_root+'cncnpc_obs_field_table.html?project_id='+rec.id+p_user_view+args+field_param,nm )});
          }
          
          let thead = faddelem('thead',table);
