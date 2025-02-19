@@ -34,6 +34,7 @@
          --color-base-translucent: rgba(0,0,0,0.85);
       }
    }
+   #main { width:350px; }
    #main { width:100%; }
    table, td, th { border-collapse:collapse; margin:0; padding:4px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
@@ -46,6 +47,7 @@
    .icon_big { height:250px; width:250px; border-radius:10%; object-fit: cover; object-position: center; }
    .photo { height:64px; width:64px; }
    img { margin:0; padding:0; border:0; }
+   p { width:350px; }
    p { width:100%; }
    a { text-decoration:none; color:var(--color-text-link); }
    a:hover { background:var(--color-hover); }
@@ -69,13 +71,11 @@ let p_options = winurlparams.get('options') || [];
 
 // set defaults for re-wild...
 winurlparams.delete('place_id');
-winurlparams.append('place_id', '3059,1357');  // hamilton & clermont county
+winurlparams.append('place_id', '3059');
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
-
-let p_iconic_taxa = winurlparams.get('iconic_taxa') || 'Plantae';
 winurlparams.delete('iconic_taxa');
-winurlparams.append('iconic_taxa', p_iconic_taxa); 
+winurlparams.append('iconic_taxa','Plantae'); 
 
 // delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
 // the creation of local projects / places for restoration sites  and/or pollinator gardens.
@@ -86,7 +86,7 @@ winurlparams.delete('nelng');
 winurlparams.delete('nelat');
 winurlparams.delete('swlng');
 winurlparams.delete('swlat');
-   
+
 // set rw_win_options defaults for re-wild...
 let rw_view = '';
 let rw_g_list = winurlparams.get('g_list') || '';
@@ -118,35 +118,33 @@ if( winurlparams.get('user_id') !== null ){
 }
 
 // set rw_g_list (genera list) and rw_s_list (species list) for re-wild...
-if( p_iconic_taxa === 'Plantae' ){
-    if( winurlparams.get('g_list') !== null && winurlparams.get('s_list') !== null ){
-       if( winurlparams.get('lrank')  !== null ){
-          if( winurlparams.get('lrank') === 'species' ){
-             winurlparams.delete('list_id');
-             winurlparams.append('list_id', winurlparams.get('s_list')); 
-          } else if( winurlparams.get('lrank') === 'genus' ){
-              winurlparams.delete('list_id');
-              winurlparams.append('list_id', winurlparams.get('g_list'));      
-          } else {
-             winurlparams.delete('list_id');
-             winurlparams.append('list_id', winurlparams.get('s_list'));
-          }
-       } else {
-             winurlparams.delete('list_id');
-             winurlparams.append('list_id', winurlparams.get('s_list'));      
-       }
-    } else {
-       winurlparams.delete('g_list');
-       winurlparams.delete('s_list');
-       winurlparams.delete('');
-       if( winurlparams.get('lrank') === null ){
-          winurlparams.append('list_id', '4484172');         // default to project species list 
-       } else if( winurlparams.get('lrank') === 'genus' ){
-          winurlparams.append('list_id', '4484313');         // default to project genera list   
-       } else {
-          winurlparams.append('list_id', '4484172');         // default to project species list   
-       }
-    }
+if( winurlparams.get('g_list') !== null && winurlparams.get('s_list') !== null ){
+   if( winurlparams.get('lrank')  !== null ){
+      if( winurlparams.get('lrank') === 'species' ){
+         winurlparams.delete('list_id');
+         winurlparams.append('list_id', winurlparams.get('s_list'));
+      } else if( winurlparams.get('lrank') === 'genus' ){
+          winurlparams.delete('list_id');
+          winurlparams.append('list_id', winurlparams.get('g_list'));      
+      } else {
+         winurlparams.delete('list_id');
+         winurlparams.append('list_id', winurlparams.get('s_list'));
+      }
+   } else {
+         winurlparams.delete('list_id');
+         winurlparams.append('list_id', winurlparams.get('s_list'));      
+   }
+} else {
+   winurlparams.delete('g_list');
+   winurlparams.delete('s_list');
+   winurlparams.delete('list_id');
+   if( winurlparams.get('lrank') === null ){
+      winurlparams.append('list_id', '4484172');         // default to project species list 
+   } else if( winurlparams.get('lrank') === 'genus' ){
+      winurlparams.append('list_id', '4484313');         // default to project genera list   
+   } else {
+      winurlparams.append('list_id', '4484172');         // default to project species list   
+   }
 }
 
 winurlparams.delete('options');
@@ -155,11 +153,11 @@ winurlparams.delete('options');
 winurlparams.delete('s_list');
 winurlparams.delete('g_list');
 winurlparams.delete('view');
-//winurlparams.delete('project_id');
+winurlparams.delete('project_id');
 
 function fresults(xobj) {
    //faddelem('p',document.body,{innerHTML:furl(famp(apiurl))});
-   
+
    let results = xobj.results;
    if (results) {
       let total_results = xobj.total_results;
@@ -180,19 +178,14 @@ function fresults(xobj) {
          args += '&user_id=' + rw_user_id;
          toggle_args += '&user_id=' + rw_user_id;
       }
-      
+
       if( rw_g_list != '' && rw_s_list != '' ){
          toggle_args += '&g_list='+rw_g_list+'&s_list='+rw_s_list;
       }
 
-      let l_id = '';
-      if( winurlparams.get('list_id') ) {
-          l_id = ('&list_id=' + winurlparams.get('list_id'));
-      }
-
       if( winurlparams.get('lrank') === 'genus' ) {
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +furl(github_root+'cncnpc_plants.html?lrank=species&project_id='+rw_project_id+l_id+'&iconic_taxa='+p_iconic_taxa+toggle_args,'show visited plants id\'d to species')
+            +furl(github_root+'cncnpc_plants.html?lrank=species&project_id='+rw_project_id+'&project_title='+rw_project_title+'&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to species')
             +')'+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
@@ -200,7 +193,7 @@ function fresults(xobj) {
          });
       } else {
          faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +furl(github_root+'cncnpc_plants.html?lrank=genus&project_id='+rw_project_id+l_id+'&iconic_taxa='+p_iconic_taxa+toggle_args,'show visited plants id\'d to genus')
+            +furl(github_root+'cncnpc_plants.html?lrank=genus&project_id='+rw_project_id+'&project_title='+rw_project_title+'&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to genus')
             +')'+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
@@ -219,7 +212,7 @@ function fresults(xobj) {
             //{innerText:'Rank'},
             //{innerText:'Rank Level'},
       ];
-      
+
       if (p_options.includes('ancestry')) { labels.splice(7,0,{innerText:'Ancestry'}); };
       faddelems('th',hrow,labels);
 
@@ -227,7 +220,7 @@ function fresults(xobj) {
       for (let i=0; i<results.length; i++) {
          let brow = faddelem('tr',tbody);
          let rec = results[i];
-         
+
          // this section sets up parameters for hyperlinks to Explore page
          // won't be able properly to handle situations where user inputs subspecies in URL parameters
          // also, won't always tie exactly because Explore page always filters for spam=false (cannot change this parameter on that page) 
@@ -239,10 +232,7 @@ function fresults(xobj) {
          let url_explore = 'https://www.inaturalist.org/observations?taxon_id='+rec.taxon.id
          let obsparam_verifiable = (obsparams.get('verifiable')===null)?'&verifiable=any':('&verifiable='+obsparams.get('verifiable'));
          obsparams.delete('verifiable');
-         
-         let comm = (rec.taxon.preferred_common_name || ' ');
-         let nm   = (rec.taxon.name || ' ');
-         let displayName = '<span style="font-size:larger">'+(comm.toLowerCase()||'')+'</span><span style="font-style:italic"><br>('+(nm.toLowerCase()||'')+')</span>';
+         let displayName = '<span style="font-size:larger">'+(rec.taxon.preferred_common_name.toLowerCase()||'')+'</span><span style="font-style:italic"><br>('+(rec.taxon.name.toLowerCase()||'')+')</span>';
          let values = [
             {innerText:i+1},
             (p_options.includes('bigger_image'))
@@ -253,7 +243,7 @@ function fresults(xobj) {
                   //{innerText:rec.taxon.rank||''},
                  // {innerText:rec.taxon.rank_level||''},
          ];         
-         
+
          if (p_options.includes('ancestry')) { values.splice(7,0,{innerHTML:rec.taxon.ancestor_ids.map(function(e){return furl('http://www.inaturalist.org/taxa/'+e,e)}).join('/')||''}); };
          faddelems('td',brow,values);
       };
@@ -280,16 +270,12 @@ let apirefname = 'Plants Visited';
 } else {
    apirefname += 'Plants Visited @ ' + winurlparams.get('project_title');
 }*/
-   
+
 let apiref = furl(apirefurl,apirefname);
 
 
 
-if ( !rw_project_id ){
-      let instructions = [ {innerHTML:'A project_id needs to be passed in.  Please add url parameters (<b>&project_id</b>) for the appropriate project.'}, ];
-      faddelem('h2',document.body,{innerText:'Error ~ Invalid URL Parameters'});
-      faddelems('p',document.body,instructions);
-} else if (rw_user_id != '' && (rw_g_list == '' || rw_s_list == '') ) {
+if (rw_user_id != '' && (rw_g_list == '' || rw_s_list == '') ) {
    let instructions = [
       {innerHTML:'A custom species and genera list needs to be passed in when <b>&user_id</b> is specified.  Please add url parameters (<b>&g_list</b> and <b>&s_list</b>) for your custom genera and species lists.'},
    ];
