@@ -331,8 +331,11 @@ function fresults(xobj) {
          if( rec.taxon.conservation_status ){
             cons_status = (rec.taxon.conservation_status.status_name || '');
          }
-        
-         let displayName = '<span style="font-size:larger">'+(rec.taxon.preferred_common_name.toLowerCase()||'')+'</span><span style="font-style:italic"><br>('+(rec.taxon.name.toLowerCase()||'')+')</span>';
+
+         let comName = rec.taxon.preferred_common_name || ' ';
+         let nm = rec.taxon.name || ' ';
+
+         let displayName = '<span style="font-size:larger">'+(comName.toLowerCase()||'')+'</span><span style="font-style:italic"><br>('+(nm.toLowerCase()||'')+')</span>';
         
          values = [
                {innerText:i+1},
