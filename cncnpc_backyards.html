@@ -63,8 +63,17 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 
+// cnc affiliate gardens...
+// cnc affiliate gardens
+let cnc              = '220623';
+let grovedale        = '135795';
+let all_gardens      = '220623,135795';
+   
 // default the id's of the projects to be passed in to the projects api.
 let view = winurlparams.get('view') || '';
+
+winurlparams.delete('id');
+winurlparams.append('id', all_gardens);
    
 </script>
    
@@ -105,8 +114,15 @@ function fresults(xobj) {
          let rec = results[i];
          let longText = rec.description||'';
          let truncatedText = truncate(longText, 500);
+         let garden_params = '';
 
-         target_url += 'https://stockslager.github.io/iNat/cnc_plants_visited.html';
+         if( rec.id === cnc ){
+            garden_params = ('?project_id='cnc+cnc_params);
+         } else if( rec.id === grovedale ){
+            garden_params = ('?project_id='+grovedale+grovedale_params);
+         }
+
+         target_url += (github_root+'cncnpc_plants.html.html'+garden_params);
          
          let values = [
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
