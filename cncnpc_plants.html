@@ -299,10 +299,9 @@ function fresults(xobj) {
             {innerText:('#')},
             {innerText:'Photo'},   
             {innerText:'Name'},
-            {innerText:'Common Name'},
             {innerText:'Visiting'},
-            {innerText:'Rank'},
-            {innerText:'Rank Level'},
+            //{innerText:'Rank'},
+            //{innerText:'Rank Level'},
       ];
       
       if (p_options.includes('ancestry')) { labels.splice(7,0,{innerText:'Ancestry'}); };
@@ -324,16 +323,16 @@ function fresults(xobj) {
          let url_explore = 'https://www.inaturalist.org/observations?taxon_id='+rec.taxon.id
          let obsparam_verifiable = (obsparams.get('verifiable')===null)?'&verifiable=any':('&verifiable='+obsparams.get('verifiable'));
          obsparams.delete('verifiable');
+         let displayName = '<span style="font-size:larger">'+(rec.taxon.preferred_common_name||'')+'</span><span style="font-style:italic"><br>('+(rec.taxon.name||)''+')</span>';
          let values = [
             {innerText:i+1},
             (p_options.includes('bigger_image'))
                ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
                : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerText:rec.taxon.name||''},
-                  {innerText:rec.taxon.preferred_common_name||''},
-                  {innerHTML:furl('https://stockslager.github.io/iNat/rewild_insects_visiting.html?project_id='+rw_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Visiting Organisms...')},
-                  {innerText:rec.taxon.rank||''},
-                  {innerText:rec.taxon.rank_level||''},
+                  {innerText:displayName},
+                  {innerHTML:furl(github_root+'rewild_insects_visiting.html?project_id='+rw_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Visiting Organisms...')},
+                  //{innerText:rec.taxon.rank||''},
+                 // {innerText:rec.taxon.rank_level||''},
          ];         
          
          if (p_options.includes('ancestry')) { values.splice(7,0,{innerHTML:rec.taxon.ancestor_ids.map(function(e){return furl('http://www.inaturalist.org/taxa/'+e,e)}).join('/')||''}); };
