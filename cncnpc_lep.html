@@ -183,7 +183,7 @@ function fresults(xobj) {
          obsparams.delete('taxon_id'); 
          let url_explore = 'https://www.inaturalist.org/observations?taxon_id='+rec.taxon.id
          let obsparam_verifiable = (obsparams.get('verifiable')===null)?'&verifiable=any':('&verifiable='+obsparams.get('verifiable'));
-         obsparams.delete('verifiable
+         obsparams.delete('verifiable');
 
          let comm = (rec.taxon.preferred_common_name || ' ');
          let nm   = (rec.taxon.name || ' ');
