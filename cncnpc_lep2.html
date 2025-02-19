@@ -232,7 +232,7 @@ function fresults(xobj) {
       let mismatch = '';
       let field_array_copy = field_array;
       let flower = '';
-      let dlString = '<span id="h2">Insects on Plants</span>';
+      let dlString = 'Visits by'; 
       let labelCount = 0;
 
       let merged = 'observation field';
@@ -266,9 +266,10 @@ function fresults(xobj) {
          let taxon = '';
          
          if( rec.taxon ){
-             tax_id = rec.taxon.id;
-             tax_name = rec.taxon.name || '';
+             tax_id        = rec.taxon.id;
+             tax_name      = rec.taxon.name || '';
              pref_tax_name = rec.taxon.preferred_common_name || '';
+             dlString      = '<span id="h2">Visits by '+pref_tax_name+'</span>';
            
              if( rec.taxon.default_photo ){
                  if( rec.taxon.default_photo.url ){
