@@ -7,6 +7,10 @@ let root_projects     = 'https://www.inaturalist.org/projects/';
 // repo root directory
 let github_root = 'https://stockslager.github.io/iNat/';
 
+// cnc affiliate gardens
+let cnc              = '220623';
+let grovedale        = '135795';
+
 // backyard affiliate defaults
 let cnc_params       = '&view=visitingonly&g_list=4488957&s_list=4488958';
 let grovedale_params = '&view=visitingonly&g_list=4484313&s_list=4484172';
