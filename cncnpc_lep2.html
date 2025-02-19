@@ -368,7 +368,8 @@ function fresults(xobj) {
                                   field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                               }
                               if( p_field_value === '' ){
-                                  values.push({innerHTML:furl(github_root+'cncnpc_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
+                                  values.push({innerHTML:furl(github_root+'cncnpc_grid.html?user_id='+rec.user.login+'&rows=4&columns=3&cellpx=300&project_id='+p_project_id,field1)});
+                                  //values.push({innerHTML:furl(github_root+'cncnpc_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
                               } else {
                                   values.push({innerHTML:field1});
                               }
