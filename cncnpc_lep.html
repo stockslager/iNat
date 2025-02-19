@@ -200,7 +200,7 @@ function fresults(xobj) {
             (p_options.includes('bigger_image'))
                ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
                : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'cncnpc_obs_field_table.html?project_id='+rw_project_id+'&taxon_id='+rec.taxon.id+'&user_view=pics'+obs_args,displayName)},
+                  {innerHTML:furl(github_root+'cncnpc_lep2.html?project_id='+rw_project_id+'&taxon_id='+rec.taxon.id+'&user_view=pics'+obs_args,displayName)},
          ];         
 
          if (p_options.includes('ancestry')) { values.splice(7,0,{innerHTML:rec.taxon.ancestor_ids.map(function(e){return furl('http://www.inaturalist.org/taxa/'+e,e)}).join('/')||''}); };
