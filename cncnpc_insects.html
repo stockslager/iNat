@@ -194,7 +194,7 @@ function fresults(xobj) {
       // if single view show descriptive line since there is no key.
       if( p_single_view === 'yes' ){
         
-        if( p_view === 'visiting' ){          
+        /*if( p_view === 'visiting' ){          
            faddelem('p',document.body,{innerHTML:'<dl><dt>List of organisms with a link to the plants </dt>'
                                                    + '<dt>visited by those organisms. Relies on the </dt>'
                                                    + '<dt>' + furl(visitingURL,'plant that the organism was found on') 
@@ -212,7 +212,7 @@ function fresults(xobj) {
            faddelem('p',document.body,{innerHTML:'<dl><dt>List of organisms with a link to the plants </dt>'
                                                    + '<dt>they are associated with. Relies on </dt>'
                                                    + '<dt>the ' + furl(associatingURL, 'name of associated plant') + ' observation field.</dt></dl>'});
-        }
+        }*/
         faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)            
             +'<br />'
             +'per page: '+fcomnum(per_page)+'<br />'
@@ -332,7 +332,7 @@ function fresults(xobj) {
                (p_options.includes('bigger_image'))
                   ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
                   : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-               {innerHTML:furl(github_root+'cncnpc_grid.html?project_id='+p_project_id+'&insect_id='+rec.taxon.id+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name+'&insect_name='+ins_name+'&view='+p_view,(displayName||''))},
+               {innerHTML:furl(github_root+'cncnpc_grid.html?project_id='+p_project_id+'&taxon_id='+rec.taxon.id+'&plant_id='+p_plant_id,(displayName||''))},
                {innerText:recCount||''},
             ];
          
