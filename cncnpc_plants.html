@@ -234,7 +234,10 @@ function fresults(xobj) {
          let url_explore = 'https://www.inaturalist.org/observations?taxon_id='+rec.taxon.id
          let obsparam_verifiable = (obsparams.get('verifiable')===null)?'&verifiable=any':('&verifiable='+obsparams.get('verifiable'));
          obsparams.delete('verifiable');
-         let displayName = '<span style="font-size:larger">'+(rec.taxon.preferred_common_name.toLowerCase()||'')+'</span><span style="font-style:italic"><br>('+(rec.taxon.name.toLowerCase()||'')+')</span>';
+         
+         let comm = (rec.taxon.preferred_common_name || ' ');
+         let nm   = (rec.taxon.name || ' ');
+         let displayName = '<span style="font-size:larger">'+(comm.toLowerCase()||'')+'</span><span style="font-style:italic"><br>('+(nm.toLowerCase()||'')+')</span>';
          let values = [
             {innerText:i+1},
             (p_options.includes('bigger_image'))
