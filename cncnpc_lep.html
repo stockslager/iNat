@@ -87,16 +87,9 @@ winurlparams.delete('swlat');
 
 // set rw_win_options defaults for re-wild...
 let rw_view = '';
-let rw_project_id = '';
+let rw_project_id = winurlparams.get('project_id');
 let rw_user_id = '';
 let rw_project_title = winurlparams.get('project_title') || '';
-
-// if project id is passed in, save it to pass to the next table
-if( winurlparams.get('project_id') != null && winurlparams.get('project_id') != '' ) {
-   rw_project_id += winurlparams.get('project_id');
-} else {
-   rw_project_id += '152539';  // default to rewild if null.
-}
 
 // if &view was passed in, pass it along for the display on the next table.
 if( winurlparams.get('view') !== null ){
@@ -117,7 +110,6 @@ winurlparams.delete('options');
 
 // clean up the params for rw table control so they aren't passed to api
 winurlparams.delete('view');
-winurlparams.delete('project_id');
 
 function fresults(xobj) {
    //faddelem('p',document.body,{innerHTML:furl(famp(apiurl))});
@@ -223,7 +215,7 @@ let apirefname = 'Visiting Insects';
 
 let apiref = furl(apirefurl,apirefname);
 
-if (!p_project_id) ) {
+if ( !rw_project_id ) {
    let instructions = [
       {innerHTML:'A project_id needs to be passed in.  Please add url parameters (<b>&project_id=xxxxx</b>).'},
    ];
