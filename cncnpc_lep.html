@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Insects Visiting" />
+<title>Insects Visiting</title>
+<style>
+   :root {
+      background: var(--color-base);
+      color: var(--color-text); 
+      font: 14px Sans-Serif;
+      --color-base: white;
+      --color-alt: whitesmoke;
+      --color-brand: forestgreen;
+      --color-text: black;
+      --color-text-invert: white;
+      --color-text-link: royalblue;
+      --color-border: lightgray;
+      --color-hover: lightgray;
+      --color-base-translucent: rgba(255,255,255,0.85);
+   }
+   @media (prefers-color-scheme: dark) {
+      :root {
+         --color-base: black;
+         --color-alt: #171717;
+         --color-brand: forestgreen;
+         --color-text: #bababa;
+         --color-text-invert: black;
+         --color-text-link: cornflowerblue;
+         --color-border: #444;
+         --color-hover: #444;
+         --color-base-translucent: rgba(0,0,0,0.85);
+      }
+   }
+   #main { width:100%; }
+   table, td, th { border-collapse:collapse; margin:0; padding:4px; }
+   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
+   th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
+   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }
+   tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
+   tr:nth-child(even) { background:var(--color-base); }
+   .tar { text-align:right; }
+   .icon { height:48px; width:48px; border-radius:50%; }
+   .icon_big { height:250px; width:250px; border-radius:10%; object-fit: cover; object-position: center; }
+   .photo { height:64px; width:64px; }
+   img { margin:0; padding:0; border:0; }
+   p { width:100%; }
+   a { text-decoration:none; color:var(--color-text-link); }
+   a:hover { background:var(--color-hover); }
+   #nav { margin-left:-8px; position:-webkit-sticky /*Safari*/; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
+   @media print { #nav { display:none; } } 
+   .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
+   .button { background:var(--color-alt); }
+   .button_inactive { background:none; color:var(--color-border); }
+</style>
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v5.js"></script>  
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>  
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let p_options = winurlparams.get('options') || [];
+
+// set defaults for re-wild...
+winurlparams.delete('place_id');
+winurlparams.append('place_id', '3059');
+winurlparams.delete('per_page');
+winurlparams.append('per_page','100');
+winurlparams.delete('iconic_taxa');
+winurlparams.append('iconic_taxa','Insecta'); 
+
+// delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
+// the creation of local projects / places for restoration sites  and/or pollinator gardens.
+winurlparams.delete('lat');
+winurlparams.delete('lng');
+winurlparams.delete('radius');
+winurlparams.delete('nelng');
+winurlparams.delete('nelat');
+winurlparams.delete('swlng');
+winurlparams.delete('swlat');
+
+// set rw_win_options defaults for re-wild...
+let rw_view = '';
+let rw_project_id = '';
+let rw_user_id = '';
+let rw_project_title = winurlparams.get('project_title') || '';
+
+// if project id is passed in, save it to pass to the next table
+if( winurlparams.get('project_id') != null && winurlparams.get('project_id') != '' ) {
+   rw_project_id += winurlparams.get('project_id');
+} else {
+   rw_project_id += '152539';  // default to rewild if null.
+}
+
+// if &view was passed in, pass it along for the display on the next table.
+if( winurlparams.get('view') !== null ){
+   rw_view += winurlparams.get('view');
+} 
+
+// if &user_id was passed in, pass it along for the three displays.
+// user id should not be passed to this api since we want see plants all the plants in the user's custom list.
+// passing in a user_id implies that they've also passed in a custom list.
+if( winurlparams.get('user_id') !== null ){
+   rw_user_id += winurlparams.get('user_id');
+   winurlparams.delete('user_id');
+} else {
+   winurlparams.delete('user_id');
+}
+
+winurlparams.delete('options');
+
+// clean up the params for rw table control so they aren't passed to api
+winurlparams.delete('view');
+winurlparams.delete('project_id');
+
+function fresults(xobj) {
+   //faddelem('p',document.body,{innerHTML:furl(famp(apiurl))});
+
+   let results = xobj.results;
+   if (results) {
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+      let toggle_args = '';
+      let args = '';
+
+      if( rw_view != '' ){
+         args += '&view=' + rw_view;
+         toggle_args += '&view=' + rw_view;
+      }
+
+      if( rw_user_id != ''){
+         args += '&user_id=' + rw_user_id;
+         toggle_args += '&user_id=' + rw_user_id;
+      }
+
+      if( winurlparams.get('lrank') === 'genus' ) {
+         faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
+            +furl(github_root+'cncnpc_plants.html?lrank=species&project_id='+rw_project_id+'&project_title='+rw_project_title+'&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to species')
+            +')'+' <br />'
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
+            +'<br />'
+         });
+      } else {
+         faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
+            +furl(github_root+'cncnpc_plants.html?lrank=genus&project_id='+rw_project_id+'&project_title='+rw_project_title+'&list_id='+winurlparams.get('list_id')+toggle_args,'show visited plants id\'d to genus')
+            +')'+' <br />'
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
+            +'<br />'
+         });
+      }
+
+      let table = faddelem('table',document.body,{id:'main'});
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+      let labels = [
+            {innerText:('#')},
+            {innerText:'photo'},   
+            {innerText:'name'},
+            //{innerText:'Visiting'},
+            //{innerText:'Rank'},
+            //{innerText:'Rank Level'},
+      ];
+
+      if (p_options.includes('ancestry')) { labels.splice(7,0,{innerText:'Ancestry'}); };
+      faddelems('th',hrow,labels);
+
+      let tbody = faddelem('tbody',table);
+      for (let i=0; i<results.length; i++) {
+         let brow = faddelem('tr',tbody);
+         let rec = results[i];
+
+         // this section sets up parameters for hyperlinks to Explore page
+         // won't be able properly to handle situations where user inputs subspecies in URL parameters
+         // also, won't always tie exactly because Explore page always filters for spam=false (cannot change this parameter on that page) 
+         let obsparams = new URLSearchParams(winurlparams);
+         obsparams.delete('order');
+         obsparams.delete('page');
+         obsparams.delete('');
+         obsparams.delete('taxon_id'); 
+         let url_explore = 'https://www.inaturalist.org/observations?taxon_id='+rec.taxon.id
+         let obsparam_verifiable = (obsparams.get('verifiable')===null)?'&verifiable=any':('&verifiable='+obsparams.get('verifiable'));
+         obsparams.delete('verifiable');
+         let displayName = '<span style="font-size:larger">'+(rec.taxon.preferred_common_name.toLowerCase()||'')+'</span><span style="font-style:italic"><br>('+(rec.taxon.name.toLowerCase()||'')+')</span>';
+         let values = [
+            {innerText:i+1},
+            (p_options.includes('bigger_image'))
+               ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
+               : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
+                  {innerHTML:furl(github_root+'cncnpc_insects.html?project_id='+rw_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,displayName)},
+         ];         
+
+         if (p_options.includes('ancestry')) { values.splice(7,0,{innerHTML:rec.taxon.ancestor_ids.map(function(e){return furl('http://www.inaturalist.org/taxa/'+e,e)}).join('/')||''}); };
+         faddelems('td',brow,values);
+      };
+
+      // buttons to go to prev or next page
+      let nav = faddelem('div',document.body,{id:'nav'});
+      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); };
+};
+let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
+
+let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
+
+let apirefname = 'Visiting Insects';
+
+let apiref = furl(apirefurl,apirefname);
+
+if (!p_project_id) ) {
+   let instructions = [
+      {innerHTML:'A project_id needs to be passed in.  Please add url parameters (<b>&project_id=xxxxx</b>).'},
+   ];
+   faddelem('h2',document.body,{innerText:'Error ~ Invalid URL Parameters'});
+   faddelems('p',document.body,instructions);
+} else {
+   faddelem('h2',document.body,{innerText:apirefname});
+   faddelem('p',document.body,{innerHTML:'List of plant species with a link to the organisms observed visiting those plants.'});
+   fetch(apiurl)
+      .then((response) => {
+         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+         return response.json();
+      })
+      .then((data) => { fresults(data); })
+      .catch((err) => {
+         console.error(err.message);
+         faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+      })
+};
+
+</script>
+</body>
+
+</html>
