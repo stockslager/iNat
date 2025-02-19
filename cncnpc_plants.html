@@ -203,9 +203,9 @@ function fresults(xobj) {
       let hrow = faddelem('tr',thead);
       let labels = [
             {innerText:('#')},
-            {innerText:'Photo'},   
-            {innerText:'Name'},
-            {innerText:'Visiting'},
+            {innerText:'photo'},   
+            {innerText:'name'},
+            //{innerText:'Visiting'},
             //{innerText:'Rank'},
             //{innerText:'Rank Level'},
       ];
@@ -229,14 +229,14 @@ function fresults(xobj) {
          let url_explore = 'https://www.inaturalist.org/observations?taxon_id='+rec.taxon.id
          let obsparam_verifiable = (obsparams.get('verifiable')===null)?'&verifiable=any':('&verifiable='+obsparams.get('verifiable'));
          obsparams.delete('verifiable');
-         let displayName = '<span style="font-size:larger">'+(rec.taxon.preferred_common_name||'')+'</span><span style="font-style:italic"><br>('+(rec.taxon.name||'')+')</span>';
+         let displayName = '<span style="font-size:larger">'+(rec.taxon.preferred_common_name.toLowerCase()||'')+'</span><span style="font-style:italic"><br>('+(rec.taxon.name.toLowerCase()||'')+')</span>';
          let values = [
             {innerText:i+1},
             (p_options.includes('bigger_image'))
                ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
                : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:displayName},
-                  {innerHTML:furl(github_root+'rewild_insects_visiting.html?project_id='+rw_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Visiting Organisms...')},
+                  {innerHTML:furl(github_root+'rewild_insects_visiting.html?project_id='+rw_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,displayName)},
+                  //{innerHTML:furl(github_root+'rewild_insects_visiting.html?project_id='+rw_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Visiting Organisms...')},
                   //{innerText:rec.taxon.rank||''},
                  // {innerText:rec.taxon.rank_level||''},
          ];         
