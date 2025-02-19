@@ -105,16 +105,8 @@ function fresults(xobj) {
          let rec = results[i];
          let longText = rec.description||'';
          let truncatedText = truncate(longText, 500);
-         let lists = '';
 
-         lists += setupLists(rec.id);
-         lists += '&project_title=' + rec.title||'';
-         
-         if( rec.id === 220623 ){
-            target_url += 'https://stockslager.github.io/iNat/cnc_plants_visited.html';
-         } else {
-            target_url += 'https://stockslager.github.io/iNat/rewild_plants_visited.html?project_id='+rec.id+lists;
-         } 
+         target_url += 'https://stockslager.github.io/iNat/cnc_plants_visited.html';
          
          let values = [
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
