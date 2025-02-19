@@ -405,8 +405,8 @@ function fresults(xobj) {
       };
 
       let firstCol = 'yes';
-      /*for( let e=0; e<box_array.length; e++ ){
-           if( isMultipleOfFour(labelCount) ){
+      for( let e=0; e<box_array.length; e++ ){
+          /* if( isMultipleOfFour(labelCount) ){
                if( labelCount === 0 ){
                    dlString += '<span id="dltest"><table id="tablekey">';
                    dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');                      
@@ -414,11 +414,11 @@ function fresults(xobj) {
                    dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
                    dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">'+merged+'</td>  </tr>');    
                }
-           }
+           }*/
            labelCount++;
            if( box_array[e].field_name !== '' ){
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
-               dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
+               //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
+               //dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                if( p_operator !== 'merge' ){
                    labels.push({innerText:box_array[e].field_name});
                } else {
@@ -433,13 +433,13 @@ function fresults(xobj) {
                    }
                }
            } else {
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
-               dlString += ('<td id="tdkey">missing from this page of data</td></tr>');
+               //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
+               //dlString += ('<td id="tdkey">missing from this page of data</td></tr>');
                if( p_operator !== 'merge' ) {
                    labels.push({innerText:''});
                }
            }
-      }*/
+      }
 
       //dlString += '</table></span>';
       faddelem('p',document.body,{innerHTML:dlString});
