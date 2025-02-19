@@ -285,8 +285,6 @@ function fresults(xobj) {
        
          values = [
                   {innerText:i+1},
-                  {innerHTML:tax_photo},
-                  {innerHTML:taxon},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
               ];
 
@@ -412,9 +410,7 @@ function fresults(xobj) {
          } else {
             values.push({innerHTML:furl(root_people+rec.user.login,rec.user.login)});
          }
-       
-         values.push({innerHTML:user_icon});
-        
+               
          tempBrow.push(values);
       };
 
@@ -472,9 +468,6 @@ function fresults(xobj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
 
-      labels.push({innerText:'User Login'});
-      labels.push({innerText:'User Photo'});
-      
       faddelems('th',hrow,labels);
 
       let tbody = faddelem('tbody',table);
