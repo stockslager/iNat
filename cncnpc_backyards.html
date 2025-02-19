@@ -116,13 +116,13 @@ function fresults(xobj) {
          let truncatedText = truncate(longText, 500);
          let garden_params = '';
 
-         if( rec.id === cnc ){
+         if( rec.id.toString() === cnc ){
             garden_params = ('?project_id='+cnc+cnc_params);
-         } else if( rec.id === grovedale ){
+         } else if( rec.id.toString() === grovedale ){
             garden_params = ('?project_id='+grovedale+grovedale_params);
          }
 
-         target_url += (github_root+'cncnpc_plants.html.html'+garden_params);
+         target_url += (github_root+'cncnpc_plants.html'+garden_params);
          
          let values = [
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
