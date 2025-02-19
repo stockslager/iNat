@@ -81,7 +81,11 @@ function fresults(data) {
             break;
             }
          else if (recsfound===obsseq) {
-            gcell.innerHTML = furl(famp(obsurl),'<span>+'+(fshorten(data.total_results-obsseq))+'<br />more</span>');
+            if( (fshorten(data.total_results-obsseq)) === 0 ){
+               gcell.innerText = '<span>+0<br />more</span>';
+            } else {
+               gcell.innerHTML = furl(famp(obsurl),'<span>+'+(fshorten(data.total_results-obsseq))+'<br />more</span>');
+            }
             obsseq = 0;
             if (r===1&&c>1) { grid.style.width = (c*cellpx+(c-1)*spacerpx)+'px'; };
             break;
