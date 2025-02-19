@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Contact Us" /> 
+<title>Contact Us</title>
+<style>
+   :root {
+      background: var(--color-base);
+      color: var(--color-text);
+      font: 14px Sans-Serif;
+      --color-base: white;
+      --color-alt: whitesmoke;
+      --color-brand: forestgreen;
+      --color-text: black;
+      --color-text-invert: white;
+      --color-text-link: royalblue;
+      --color-border: lightgray;
+      --color-hover: lightgray;
+      --color-base-translucent: rgba(255,255,255,0.85);
+   }
+   @media (prefers-color-scheme: dark) {
+      :root {
+         --color-base: black;
+         --color-alt: #171717;
+         --color-brand: forestgreen;
+         --color-text: #bababa;
+         --color-text-invert: black;
+         --color-text-link: cornflowerblue;
+         --color-border: #444;
+         --color-hover: #444;
+         --color-base-translucent: rgba(0,0,0,0.85);
+      }
+   }  
+   #main { width:360px; }
+   table, td, th { border-collapse:collapse; margin:0px; padding:5px; }
+   caption { width:fit-content; border: 1px solid forestgreen; border-radius: 5px 5px 0px 0px; padding-bottom:10px; padding-top:10px; padding-left:10px; padding-right:10px; border-bottom-width:0; }   
+   th { position:-webkit-sticky; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
+   th:first-child{ border: 0px solid forestgreen; border-radius: 0px 0px 0px 0px; }
+   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }   
+   tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
+   tr:nth-child(even) { background:var(--color-base); }
+   .tar { text-align:right; }
+   .icon { height:48px; width:48px; border-radius:50%; }
+   .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
+   .photo { height:64px; width:64px; border-radius: 5px 5px 5px 5px; }
+   img { margin:0; padding:0; border:0; }
+   p { width:360px; }
+   h3 { text-wrap:wrap; }
+   a { text-decoration:none; color:var(--color-text-link); }
+   a:hover { background:var(--color-hover); }
+   #nav { margin-left:-8px; position:-webkit-sticky; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
+   @media print { #nav { display:none; } } 
+   .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
+   .button { background:var(--color-alt); }
+   .button_inactive { background:none; color:var(--color-border); }
+
+</style>
+</head>
+
+<body>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+
+let p_id          = winurlparams.get('id') || '';
+let p_club_name   = winurlparams.get('club_name') || '';
+let p_umbrella_id = winurlparams.get('umbrella_id') || ''; 
+let p_show_club   = winurlparams.get('show_club') || 'yes';
+let p_obs_fields  = winurlparams.get('obs_fields') || '';
+let p_iconic_taxa = winurlparams.get('iconic_taxa') || '';
+let p_user_view   = winurlparams.get('user_view') || '';
+let p_orig_id     = winurlparams.get('orig_id') || winurlparams.get('id');
+let p_show_all    = winurlparams.get('show_all') || '';
+
+winurlparams.append('orig_id', p_orig_id);
+
+let args = '';
+
+if( p_obs_fields !== '' ) { args += '&obs_fields=' + p_obs_fields; }
+if( p_iconic_taxa !== '' ) { args += '&iconic_taxa=' + p_iconic_taxa; }
+
+if( p_umbrella_id !== '' ){
+    winurlparams.delete('id');
+    winurlparams.append('id', (p_id+','+p_umbrella_id));
+}
+
+if( p_user_view !== '' ){
+    p_user_view = '&user_view=' + p_user_view;
+}
+   
+</script>
+
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v5.js"></script>  
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>  
+
+<script>
+function fresults(xobj) {
+   let results = xobj.results;
+   let id_list = '';
+
+   if (results) {
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+      let apirefname = ''; 
+      let club_name = '';
+      let nm = '';
+
+      if( p_club_name === '' ){
+          if( results.length > 1 ){
+              apirefname += 'Leadership Teams';
+          } else {
+              apirefname += 'Leadership Team';
+          }
+      } else {
+          club_name = p_club_name;
+          apirefname += ('Leadership Team');
+      }
+
+      for( let n=0; n<results.length; n++) {
+         let rec = results[n];
+         let lists = '';
+
+         if( p_umbrella_id === rec.id.toString() ){
+             for( let k=0; k<rec.search_parameters.length; k++){
+                  if( rec.search_parameters[k].field === 'project_id' ){
+                      for( let m=0; m<rec.search_parameters[k].value.length; m++){
+                           id_list += (rec.search_parameters[k].value[m] + ',');
+                      }
+                  }
+             }
+         } 
+      }
+
+     /* if( p_umbrella_id !== '' ){
+          faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-top:2px; padding-bottom:10px;">'+furl(github_root+'cncnpc2.html?id='+id_list+p_user_view+'&show_all=yes','show all')+'</div>'});
+      }
+      faddelem('h3',document.body,{innerText:apirefname});
+      faddelem('p',document.body,{innerHTML:'Each user profile name is clickable and directs you to an iNaturalist user profile for that user.  If you are an iNat user, you can message us through iNat.  Otherwise, we hope to see you at a meeting.'});
+      */
+      for (let i=0; i<results.length; i++) {
+         let rec = results[i];
+         let lists = '';
+         let title = '';
+
+         nm = rec.title;
+
+         if( rec.id.toString() === p_orig_id.toString() ){
+             nm = p_club_name || rec.title;
+         }
+
+         if( i === 0 ) {
+             if( p_umbrella_id !== '' ){
+                 faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-top:2px; padding-bottom:10px;">'+furl(github_root+'cncnpc2.html?id='+id_list+p_user_view+'&orig_id='+p_orig_id+'&club_name='+p_club_name+'&show_all=yes','show all')+'</div>'});
+             }
+             faddelem('h3',document.body,{innerText:apirefname});
+             faddelem('p',document.body,{innerHTML:'Each user profile name is clickable and directs you to an iNaturalist user profile for that user.  If you are an iNat user, you can message us through iNat.  Otherwise, we hope to see you at a meeting.'});
+         }
+         
+         if( rec.id.toString() === p_umbrella_id ){
+             continue;
+         }
+
+         // find the name of the observation field passed in
+         let field_param = '';
+         for( let z=0; z<rec.project_observation_fields.length; z++ ){
+              if( rec.project_observation_fields[z].observation_field.id.toString() === p_obs_fields.toString() ){
+                  field_param = ('&field:'+rec.project_observation_fields[z].observation_field.name);
+              }
+         }
+         
+         let table = faddelem('table',document.body,{id:'main'});
+         let caption = '';
+
+         if( p_show_all === 'yes' ){
+             caption = faddelem('caption',table,{ innerText:nm });
+         } else {
+           caption = faddelem('caption',table,{ innerHTML:furl( github_root+'cncnpc_plants.html?project_id='+rec.id+'lrank=genus&view=visitingonly&g_list=4488957&s_list=4488958',nm)});
+           //caption = faddelem('caption',table,{ innerHTML:furl( github_root+'cncnpc_obs_field_table.html?project_id='+rec.id+p_user_view+args+field_param,nm )});
+         }
+         
+         let thead = faddelem('thead',table);
+         let hrow = faddelem('tr',thead);
+         let labels = [
+           {innerText:'User Icon'},
+           {innerText:'User Profile'},
+           {innerText:'User Role'},
+         ];
+         faddelems('th',hrow,labels);
+      
+         let tbody = faddelem('tbody',table);
+         
+         if( p_show_club === 'yes' ){
+            title = rec.title;
+         }
+         
+         for( let f=0; f<rec.admins.length; f++ ){
+
+              let brow = faddelem('tr',tbody);
+              let admin = rec.admins[f];
+ 
+              let user_icon = admin.user.icon || '';
+          
+              if( user_icon === '' ){
+                  user_icon += '<div class="npcicon">&#x1F464;</div>';
+              } else {
+                   user_icon = '<img class="icon" src="'+user_icon+'" />';
+              }
+            
+              let values = [
+                   {innerHTML:user_icon},
+                   {innerHTML:furl((root_people+admin.user.login),admin.user.login)},
+                   {innerText:(admin.role||' ')},
+              ];
+              faddelems('td',brow,values);
+         }
+         faddelem('p',document.body,{innerHTML:'<div style="padding:5px;"> </div>'});
+         //faddelem('p',document.body,{innerHTML:rec.description});
+      }
+
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); };
+   faddelem('p',document.body,{innerHTML:'<br><br>'});
+};
+let apibase = 'https://api.inaturalist.org/v1/projects';
+let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
+
+fetch(apiurl)
+   .then((response) => {
+      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+      return response.json();
+   })
+   .then((data) => { fresults(data); })
+   .catch((err) => {
+      console.error(err.message);
+      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+});
+
+</script>
+</body>
+</html>
