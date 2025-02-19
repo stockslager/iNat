@@ -43,7 +43,7 @@
    tr:nth-child(even) { background:var(--color-base); }
    .tar { text-align:right; }
    .icon { height:48px; width:48px; border-radius:50%; }
-   .photo { height:64px; width:64px; }
+   .photo { height:48px; width:48px; border-radius: 5px 5px 5px 5px; }
    img { margin:0; padding:0; border:0; }
    a { text-decoration:none; color:var(--color-text-link); }
    a:hover { background:var(--color-hover); }
@@ -94,7 +94,7 @@ function fresults(xobj) {
       let labels = [
          {innerText:'Icon'},
          {innerText:'Title'},
-         {innerText:'Description'},
+         //{innerText:'Description'},
       ];
       faddelems('th',hrow,labels);
       
@@ -111,7 +111,7 @@ function fresults(xobj) {
          let values = [
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
             {innerHTML:furl(target_url, (rec.title||'no title'))},
-            {innerText:truncatedText},
+            //{innerText:truncatedText},
          ];
          faddelems('td',brow,values);
       };
