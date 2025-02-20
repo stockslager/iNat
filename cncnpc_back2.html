@@ -104,7 +104,6 @@ function fresults(xobj) {
       let labels = [
          {innerText:'Icon'},
          {innerText:'Title'},
-         {innerText:'Seed library Species'},
          //{innerText:'Description'},
       ];
       faddelems('th',hrow,labels);
@@ -144,7 +143,6 @@ function fresults(xobj) {
          let values = [
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
             {innerHTML:furl(target_url, (rec.title||'no title'))},
-            {innerHTML:furl(github_root+'cncnpc_obs_field_table.html?project_id=223729&user_view=pics', 'seeds')},
             //{innerHTML:furl(github_root+'reseed_plants_visited.html?project_id='+cnc_affiliates+'&donor_project_id='+rec.id+'&view=visiting&project_title='+rec.title,'seeds')},
             //{innerText:truncatedText},
          ];
@@ -165,8 +163,8 @@ let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
 let apirefname = 'Affiliate Gardens';
 let apiref = furl(apirefurl,apirefname);
-faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
-  + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});
+/*faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
+  + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});*/
 faddelem('h2',document.body,{innerText:apirefname});
 
 fetch(apiurl)
