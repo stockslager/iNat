@@ -198,10 +198,9 @@ function fresults(xobj) {
          let displayName = '<span style="font-size:larger">'+(comm.toLowerCase()||'')+'</span><span style="font-style:italic"><br>('+(nm.toLowerCase()||'')+')</span>';
          let values = [
             {innerText:i+1},
-            {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-            //(p_options.includes('bigger_image'))
-               //? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
-              // : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
+            (p_options.includes('bigger_image'))
+               ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
+               : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
                   {innerHTML:furl(github_root+'cncnpc_insects.html?project_id='+rw_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,displayName)},
                   //{innerHTML:furl(github_root+'rewild_insects_visiting.html?project_id='+rw_project_id+'&plant_id='+rec.taxon.id+'&plant_name='+rec.taxon.preferred_common_name+args,'Visiting Organisms...')},
                   //{innerText:rec.taxon.rank||''},
