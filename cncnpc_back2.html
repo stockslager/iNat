@@ -138,16 +138,15 @@ function fresults(xobj) {
          // if it's the cnc project, the view will be simplified 
          // using the g_list and s_list
          if( rec.id.toString() === cnc_project ){
-             target_url   = (github_root+'cncnpc_plants.html'+cnc_library_params);
-             plant_target = '&#127807;'
-         } else {
-             target_url = (github_root+'cncnpc_obs_field_table.html?project_id='+rec.id+'&user_view=pics&obs_fields=7623&field:Plant%20that%20the%20organism%20was%20found%20on');         
-         }
+             plant_target = (github_root+'cncnpc_plants.html'+cnc_library_params);
+         } 
+             
+         target_url = (github_root+'cncnpc_obs_field_table.html?project_id='+rec.id+'&user_view=pics&obs_fields=7623&field:Plant%20that%20the%20organism%20was%20found%20on');         
                   
          let values = [
-            {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
+            {innerHTML:furl(root_projects+rec.id,'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />')},
             {innerHTML:furl(target_url, (rec.title||'no title'))},
-            {innerHTML:plant_target},
+            {innerHTML:furl(plant_target,'&#127807')},
          ];
          faddelems('td',brow,values);
       };
