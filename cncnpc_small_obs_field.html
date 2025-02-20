@@ -240,7 +240,7 @@ function fresults(xobj) {
             {innerText:'#'},
             {innerText:'Obs Photo'},
             {innerText:'Name'},
-            {innerText:'User Photo'},
+            {innerText:' '},
       ];
     
       if( p_operator === 'merge' ){
@@ -288,6 +288,7 @@ function fresults(xobj) {
                   {innerText:i+1},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:taxon},
+                  {innerText:'on'},
               ];
 
          let user_icon = rec.user.icon || '';
@@ -388,13 +389,13 @@ function fresults(xobj) {
              }
          }    
 
-         if( p_user_view === 'pics' ) {
+         /*if( p_user_view === 'pics' ) {
              values.push({innerHTML:furl(github_root+'cncnpc_grid.html?user_id='+rec.user.login+'&rows=4&columns=3&cellpx=300&project_id='+p_project_id,user_icon)});
          } else if( p_user_view === 'sort' ) {
-            values.push({innerHTML:furl(github_root+'cncnpc_obs_field_table.html'+opts/*+'&taxon_id='+tax_id*/+'&user_id='+rec.user.login+'&operator='+p_operator+'&'+p_field+'='+p_field_value,user_icon)});
+            values.push({innerHTML:furl(github_root+'cncnpc_obs_field_table.html'+opts+'&user_id='+rec.user.login+'&operator='+p_operator+'&'+p_field+'='+p_field_value,user_icon)});
          } else {
             values.push({innerHTML:furl(root_people+rec.user.login,user_icon)});
-         }
+         }*/
                
          if( p_operator === 'merge' ){
               if( displayTaxonName !== '' ){
