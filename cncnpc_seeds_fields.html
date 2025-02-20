@@ -130,14 +130,14 @@ function fresults(xobj) {
          let d_thead = faddelem('thead',d_table);
          let d_hrow = faddelem('tr',d_thead);
 
-         let d_labels = [ {innerText:'Donor'},
+         let d_labels = [ {innerText:'Donor Info'},
                          { innerText:' '}, ];
 
          faddelems('th',d_hrow,d_labels);
 
          let d_tbody = faddelem('tbody',d_table);
 
-         let d_row  = faddelem('tr',d_tbody);
+         let d_row1  = faddelem('tr',d_tbody);
 
          let user_icon = rec.user.icon || '';
          
@@ -151,11 +151,12 @@ function fresults(xobj) {
                              {innerText:'donor'},
                              {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
                        ];        
-         faddelems('td',d_row, d_one);
+         faddelems('td',d_row1, d_one);
 
-         let d_two = [     {innerText:'inat observation'},
+         let d_row2 = faddelem('tr',d_tbody);
+         let d_two  = [     {innerText:'inat observation'},
                              {innerHTML:furl(root_observations+rec.id,rec.id)},];        
-         faddelems('td',d_row, d_two);
+         faddelems('td',d_row2, d_two);
 
          faddelem('p',document.body,{innerHTML:'<div style="padding:3px;">&nbsp;</div>'});  
         
