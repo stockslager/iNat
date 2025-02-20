@@ -64,11 +64,15 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 
 // cnc affiliate gardens...
-let cnc            = '220623';
+let cnc_project    = '220623';
 let cnc_affiliates = '220623,133007,154702';
 let library        = '223729';
 
-  // default the id's of the projects to be passed in to the projects api.
+// library params
+// the library should always create a g_list and s_list 
+let cnc_library_params = '?project_id=220623&view=visitingonly&g_list=4488957&s_list=4488958';
+   
+// default the id's of the projects to be passed in to the projects api.
 let view = winurlparams.get('view') || '';
    
 winurlparams.delete('id');
@@ -130,21 +134,17 @@ function fresults(xobj) {
          let truncatedText = truncate(longText, 500);
          let garden_params = '';
 
-       /*  if( rec.id.toString() === cnc ){
-            garden_params = ('?project_id='+cnc+cnc_params);
-         } else if( rec.id.toString() === casual ){
-            garden_params = ('?project_id='+casual+casual_params);
-         } else if( rec.id.toString() === britton ){
-            garden_params = ('?project_id='+britton+britton_params);
-         }*/
-
-         target_url += (github_root+'cncnpc_plants.html'+garden_params);
-         
+         // if it's the cnc project, the view will be simplified 
+         // using the g_list and s_list
+         if( rec.id.toString() === cnc_project ){
+             target_url = (github_root+'cncnpc_plants.html'+cnc_library_params);
+         } else {
+             target_url = (github_root+'cncnpc_obs_field_table.html?project_id='+rec.id+'&user_view=pics&obs_fields=7623&field:Plant%20that%20the%20organism%20was%20found%20on');         
+         }
+                  
          let values = [
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
             {innerHTML:furl(target_url, (rec.title||'no title'))},
-            //{innerHTML:furl(github_root+'reseed_plants_visited.html?project_id='+cnc_affiliates+'&donor_project_id='+rec.id+'&view=visiting&project_title='+rec.title,'seeds')},
-            //{innerText:truncatedText},
          ];
          faddelems('td',brow,values);
       };
