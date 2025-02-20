@@ -35,7 +35,7 @@
       }
    }
    #key { color:var(--color-text-link); }
-   #main { width:100%; }
+   #main { width:fit-content; }
    dl { width:fit-content; background:var(--color-alt); display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }
    dt {  }
    dd { margin: 0; grid-column-start: 2;}   
@@ -167,10 +167,10 @@ function fresults(xobj) {
          let availability = 'Out of Stock';
          let header_row = '';
 
-         let icon = '<div style="display:flex; align-items:center;"><img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" /></div>';
+         let icon = '<div style="display:flex; align-items:center;"><img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
          header_row += ((rec.taxon.preferred_common_name||''));
  
-         faddelem('h2',document.body,{innerHTML:icon+'<span style="padding:10px;">'+header_row+'</span>'});  
+         faddelem('h2',document.body,{innerHTML:icon+'<span style="padding:10px;">'+header_row+'</span></div>'});  
 
          // donor table
          let d_table = faddelem('table',document.body,{id:'main'});
@@ -193,7 +193,7 @@ function fresults(xobj) {
 
          faddelems('td',d_row, d_avail);
 
-        
+         faddelem('p',document.body,{innerHTML:'<div style="padding:10px;">&nbsp;</div>'});  
         
 
          let table = faddelem('table',document.body,{id:'main'});
