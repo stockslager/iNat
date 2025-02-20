@@ -64,10 +64,12 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 
 // cnc affiliate gardens...
-// cnc affiliate gardens
 let cnc              = '220623';
 let grovedale        = '135795';
-let all_gardens      = '220623,135795';
+let all_gardens      = '223729,220623,135795';
+
+// cnc seed swap project...
+let cnc_swap         = '223729';
    
 // default the id's of the projects to be passed in to the projects api.
 let view = winurlparams.get('view') || '';
@@ -103,9 +105,23 @@ function fresults(xobj) {
       let labels = [
          {innerText:'Icon'},
          {innerText:'Title'},
+         {innerText:'Seed Swap Species'},
          //{innerText:'Description'},
       ];
       faddelems('th',hrow,labels);
+
+      let swap_rec = '';
+
+      // find the seed swap project, save the record and
+      // delete it from the array so it's not shown in the
+      // project table.
+      for( int j=0; j<results.length; j++ ){
+         let rec = results[j];
+         if( rec.id.toString() === cnc_swap ) {
+             swap_rec = rec;
+             delete results[j];
+         }
+      }
       
       let tbody = faddelem('tbody',table);
       for (let i=0; i<results.length; i++) {
@@ -127,6 +143,7 @@ function fresults(xobj) {
          let values = [
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
             {innerHTML:furl(target_url, (rec.title||'no title'))},
+            {innerHTML:furl(github_root+'reseed_plants_visited.html?project_id=133007&donor_project_id=223729&view=visiting&project_title=Casual%20Woodland%20Garden%20Free%20Seed%20Library',seeds)},
             //{innerText:truncatedText},
          ];
          faddelems('td',brow,values);
