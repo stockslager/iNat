@@ -84,9 +84,7 @@ winurlparams.delete('per_page');
 winurlparams.append('per_page','30');
 
 let apiurl = ('https://api.inaturalist.org/v1/observations/'+p_obs_id);
-//let apibase = 'https://api.inaturalist.org/v1/observations';
  
-//let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://stockslager.github.io/iNat/reseed_plant_inspector.html';
 
 if (winurlsearchstr==='') {
@@ -186,14 +184,22 @@ function fresults(xobj) {
 
          let d_row  = faddelem('tr',d_tbody);
 
+         let user_icon = rec.user.icon || '';
+         
+         if( user_icon === '' ){
+            user_icon += '<div class="npcicon">&#x1F464;</div>';
+         } else {
+            user_icon = '<img class="icon" src="'+user_icon+'" />';
+         }
+
          let d_avail = [
-                             {innerText:'asdfafds'},
-                             {innerText:'dfsdf'},
+                             {innerHTML:user_icon},
+                             {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
                        ];        
 
          faddelems('td',d_row, d_avail);
 
-         faddelem('p',document.body,{innerHTML:'<div style="padding:10px;">&nbsp;</div>'});  
+         faddelem('p',document.body,{innerHTML:'<div style="padding:3px;">&nbsp;</div>'});  
         
 
          let table = faddelem('table',document.body,{id:'main'});
@@ -232,7 +238,8 @@ function fresults(xobj) {
          }
          
          if( rec.description ){
-             faddelem('p',document.body,{innerHTML:'<br><dl>'
+             faddelem('p',document.body,{innerHTML:'<div style="padding:3px;">&nbsp;</div>'});  
+             faddelem('p',document.body,{innerHTML:'<dl>'
                             + '<dt></dt><span id="key"><dd>Notes ~ </dd></span>'
                             + '<dt></dt><dd>'+rec.description.toLowerCase()+'</dd>'
                             + '</dl>'});       
