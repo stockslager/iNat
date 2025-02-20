@@ -65,11 +65,15 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 
 // cnc affiliate gardens...
 let cnc              = '220623';
-let grovedale        = '135795';
-let all_gardens      = '223729,220623,135795';
+let casual           = '133007';
+let britton          = '154702';
+let all_gardens      = '223729,220623,133007,154702';
 
-// cnc seed swap project...
-let cnc_swap         = '223729';
+let casual_params  = '&view=visitingonly&g_list=4485878&s_list=4485877';
+let britton_params = '&view=visitingonly&g_list=4500805&s_list=4500804';
+   
+// cnc seed library project...
+let cnc_library      = '223729';
    
 // default the id's of the projects to be passed in to the projects api.
 let view = winurlparams.get('view') || '';
@@ -105,20 +109,20 @@ function fresults(xobj) {
       let labels = [
          {innerText:'Icon'},
          {innerText:'Title'},
-         {innerText:'Seed Swap Species'},
+         {innerText:'Seed library Species'},
          //{innerText:'Description'},
       ];
       faddelems('th',hrow,labels);
 
-      let swap_rec = '';
+      let library_rec = '';
 
-      // find the seed swap project, save the record and
+      // find the seed library project, save the record and
       // delete it from the array so it's not shown in the
       // project table.
       for( let j=0; j<results.length; j++ ){
          let rec = results[j];
-         if( rec.id.toString() === cnc_swap ) {
-             swap_rec = rec;
+         if( rec.id.toString() === cnc_library ) {
+             library_rec = rec;
              results.splice( j, 1 );
          }
       }
@@ -134,8 +138,10 @@ function fresults(xobj) {
 
          if( rec.id.toString() === cnc ){
             garden_params = ('?project_id='+cnc+cnc_params);
-         } else if( rec.id.toString() === grovedale ){
-            garden_params = ('?project_id='+grovedale+grovedale_params);
+         } else if( rec.id.toString() === casual ){
+            garden_params = ('?project_id='+casual+casual_params);
+         } else if( rec.id.toString() === britton ){
+            garden_params = ('?project_id='+britton+britton_params);
          }
 
          target_url += (github_root+'cncnpc_plants.html'+garden_params);
