@@ -89,16 +89,16 @@ winurlparams.delete('swlat');
 let rw_view = '';
 let rw_g_list = winurlparams.get('g_list') || '';
 let rw_s_list = winurlparams.get('s_list') || '';
-let rw_project_id = '';
 let rw_user_id = '';
 let rw_project_title = winurlparams.get('project_title') || '';
 
+let rw_project_id = winurlparams.get('project_id');
 // if project id is passed in, save it to pass to the next table
-if( winurlparams.get('project_id') != null && winurlparams.get('project_id') != '' ) {
+/*if( winurlparams.get('project_id') != null && winurlparams.get('project_id') != '' ) {
    rw_project_id += winurlparams.get('project_id');
 } else {
    rw_project_id += '152539';  // default to rewild if null.
-}
+}*/
 
 // if &view was passed in, pass it along for the display on the next table.
 if( winurlparams.get('view') !== null ){
