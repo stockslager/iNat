@@ -167,10 +167,10 @@ function fresults(xobj) {
          let availability = 'Out of Stock';
          let header_row = '';
 
-         let icon = '<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
+         let icon = '<div style="display:flex; align-items:center;"><img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" /></div>';
          header_row += ((rec.taxon.preferred_common_name||''));
  
-         faddelem('h2',document.body,{innerHTML:icon+'<span padding-bottom:5px;>'+header_row+'</span>'});  
+         faddelem('h2',document.body,{innerHTML:icon+'<span style="padding:10px;">'+header_row+'</span>'});  
 
          // donor table
          let d_table = faddelem('table',document.body,{id:'main'});
@@ -184,7 +184,7 @@ function fresults(xobj) {
 
          let d_tbody = faddelem('tbody',d_table);
 
-         let d_row  = faddelem('tr',tbody);
+         let d_row  = faddelem('tr',d_tbody);
 
          let d_avail = [
                              {innerText:'asdfafds'},
