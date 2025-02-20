@@ -4,8 +4,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
-<meta name="description" content="What\'s Visiting?" />
-<title>What's Visiting?</title>
+<meta name="description" content="Affiliate Gardens" />
+<title>Affiliate Gardens</title>
 <style>
    :root {
       background: var(--color-base);
@@ -34,7 +34,7 @@
          --color-base-translucent: rgba(0,0,0,0.85);
       }
    }  
-   #main { width:100%; }
+   #main { width:fit-content; }
    table, td, th { border-collapse:collapse; margin:0px; padding:5px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
@@ -64,23 +64,20 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 
 // cnc affiliate gardens...
-let cnc              = '220623';
-let casual           = '133007';
-let britton          = '154702';
-let all_gardens      = '223729,220623,133007,154702';
+let cnc_project    = '220623';
+let cnc_affiliates = '220623,133007,154702';
+let library        = '223729';
 
-let casual_params  = '&view=visitingonly&g_list=4485878&s_list=4485877';
-let britton_params = '&view=visitingonly&g_list=4500805&s_list=4500804';
-   
-// cnc seed library project...
-let cnc_library      = '223729';
+// library params
+// the library should always create a g_list and s_list 
+let cnc_library_params = '?project_id=220623&view=visitingonly&g_list=4488957&s_list=4488958';
    
 // default the id's of the projects to be passed in to the projects api.
 let view = winurlparams.get('view') || '';
-
-winurlparams.delete('id');
-winurlparams.append('id', all_gardens);
    
+winurlparams.delete('id');
+winurlparams.append('id', cnc_affiliates);
+
 </script>
    
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/cncnpc_params_v2.js"></script>
@@ -100,17 +97,18 @@ function fresults(xobj) {
 
       faddelem('p',document.body,{innerHTML:'total projects: '+fcomnum(total_results)+'<br />' 
          +'per page: '+fcomnum(per_page)+'<br />'
-         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
+         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<span style="padding-left:20px"> ( ' 
+         + furl(github_root+'cncnpc_obs_field_table.html?project_id=223729&user_view=pics', 'seeds')+' )</span>' 
+         + '<br />'
          });
-
+            
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
       let labels = [
          {innerText:'Icon'},
          {innerText:'Title'},
-         {innerText:'Seed library Species'},
-         //{innerText:'Description'},
+         {innerText:' '},
       ];
       faddelems('th',hrow,labels);
 
@@ -119,13 +117,13 @@ function fresults(xobj) {
       // find the seed library project, save the record and
       // delete it from the array so it's not shown in the
       // project table.
-      for( let j=0; j<results.length; j++ ){
+      /*for( let j=0; j<results.length; j++ ){
          let rec = results[j];
          if( rec.id.toString() === cnc_library ) {
              library_rec = rec;
              results.splice( j, 1 );
          }
-      }
+      }*/
       
       let tbody = faddelem('tbody',table);
       for (let i=0; i<results.length; i++) {
@@ -135,22 +133,21 @@ function fresults(xobj) {
          let longText = rec.description||'';
          let truncatedText = truncate(longText, 500);
          let garden_params = '';
+         let plant_target = '';
 
-         if( rec.id.toString() === cnc ){
-            garden_params = ('?project_id='+cnc+cnc_params);
-         } else if( rec.id.toString() === casual ){
-            garden_params = ('?project_id='+casual+casual_params);
-         } else if( rec.id.toString() === britton ){
-            garden_params = ('?project_id='+britton+britton_params);
-         }
-
-         target_url += (github_root+'cncnpc_plants.html'+garden_params);
-         
+         // if it's the cnc project, the view will be simplified 
+         // using the g_list and s_list
+         if( rec.id.toString() === cnc_project ){
+             plant_target = (github_root+'cncnpc_plants.html'+cnc_library_params);
+             plant_target = furl(plant_target,'&#127807');
+         } 
+             
+         target_url = (github_root+'cncnpc_obs_field_table.html?project_id='+rec.id+'&user_view=pics&obs_fields=7623&field:Plant%20that%20the%20organism%20was%20found%20on');         
+                  
          let values = [
-            {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
+            {innerHTML:furl(root_projects+rec.id,'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />')},
             {innerHTML:furl(target_url, (rec.title||'no title'))},
-            {innerHTML:furl(github_root+'reseed_plants_visited.html?project_id='+cnc_library+'&donor_project_id='+rec.id+'&view=visiting&project_title='+rec.title,'seeds')},
-            //{innerText:truncatedText},
+            {innerHTML:plant_target},
          ];
          faddelems('td',brow,values);
       };
@@ -167,25 +164,11 @@ function fresults(xobj) {
 let apibase = 'https://api.inaturalist.org/v1/projects';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
-let apirefname = 'What\'s Visiting?';
+let apirefname = 'Affiliate Gardens';
 let apiref = furl(apirefurl,apirefname);
-faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
-  + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});
+/*faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
+  + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});*/
 faddelem('h2',document.body,{innerText:apirefname});
-
-let rw_g_list = winurlparams.get('g_list') || '';
-let rw_s_list = winurlparams.get('s_list') || '';
-   
-if ( (rw_g_list === '' && rw_s_list != '') || (rw_g_list != '' && rw_s_list === '') ){
-   let instructions = [
-      {innerHTML:'Custom list missing from url parameters.  If custom species lists are passed in, they both need to be specified.  Please specify both url parameters (<b>&g_list</b> and <b>&s_list</b>).'},
-   ];
-   faddelem('h2',document.body,{innerText:'Error ~ Invalid URL Parameters'});
-   faddelems('p',document.body,instructions);
-   throw('');
-}
-
-faddelem('p',document.body,{innerHTML:'To see what\'s visiting the plants in each garden.'});
 
 fetch(apiurl)
    .then((response) => {
