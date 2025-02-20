@@ -165,10 +165,9 @@ function fresults(xobj) {
          let pref_tax_name = '';  
          let tax_photo = '';
          let availability = 'Out of Stock';
-         //let map_url = root_observations + '?subview=map&verifiable=any&id=' + rec.id;
-
          let header_row = '';
-         header_row += ('Seed Availability Information for '+(rec.taxon.preferred_common_name||''));
+           
+         header_row += ((rec.taxon.preferred_common_name||''));
  
          faddelem('h2',document.body,{innerText:header_row.toLowerCase()});  
 
@@ -176,9 +175,9 @@ function fresults(xobj) {
          let thead = faddelem('thead',table);
          let hrow = faddelem('tr',thead);
 
-         let labels = [ {innerText:'observation field'},
-                       {innerText:'value'},
-                       {innerText:'description'}, ];
+         let labels = [ {innerText:'Observation Field'},
+                       {innerText:'Value'},
+                       {innerText:'Description'}, ];
 
          faddelems('th',hrow,labels);
 
@@ -192,14 +191,14 @@ function fresults(xobj) {
                    rec.ofvs[j].field_id === 17434 ){   // seed swap
                    if( rec.ofvs[j].value ){
                        let brow  = faddelem('tr',tbody);
-                       let nm    = rec.ofvs[j].name;
+                       let nm    = rec.ofvs[j].name || '';
                        let value = rec.ofvs[j].value || '';
                        let desc  = rec.ofvs[j].observation_field.description || '';
 
                        let avail = [
-                             {innerText:nm},
+                             {innerText:nm.toLowerCase()},
                              {innerHTML:'<span id="key">'+value.toLowerCase()+'</span>'},
-                             {innerText:desc},];        
+                             {innerText:desc.toLowerCase()},];        
 
                        faddelems('td',brow, avail);
                    }
@@ -209,7 +208,7 @@ function fresults(xobj) {
          
          if( rec.description ){
              faddelem('p',document.body,{innerHTML:'<br><dl>'
-                            + '<dt></dt><span id="key"><dd>notes ~ </dd></span>'
+                            + '<dt></dt><span id="key"><dd>Notes ~ </dd></span>'
                             + '<dt></dt><dd>'+rec.description.toLowerCase()+'</dd>'
                             + '</dl>'});       
          }
