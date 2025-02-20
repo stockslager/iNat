@@ -64,7 +64,8 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 
 // cnc affiliate gardens...
-let cnc              = '220623';
+let cnc            = '220623';
+let cnc_affiliates = '152539';
 
   // default the id's of the projects to be passed in to the projects api.
 let view = winurlparams.get('view') || '';
@@ -137,7 +138,7 @@ function fresults(xobj) {
          let values = [
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
             {innerHTML:furl(target_url, (rec.title||'no title'))},
-            {innerHTML:furl(github_root+'reseed_plants_visited.html?project_id=152539&donor_project_id='+rec.id+'&view=visiting&project_title='+rec.title,'seeds')},
+            {innerHTML:furl(github_root+'reseed_plants_visited.html?project_id='+cnc_affiliates+'&donor_project_id='+rec.id+'&view=visiting&project_title='+rec.title,'seeds')},
             //{innerText:truncatedText},
          ];
          faddelems('td',brow,values);
