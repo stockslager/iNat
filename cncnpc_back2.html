@@ -66,6 +66,7 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 // cnc affiliate gardens...
 let cnc            = '220623';
 let cnc_affiliates = '220623,133007,154702';
+let library        = '223729';
 
   // default the id's of the projects to be passed in to the projects api.
 let view = winurlparams.get('view') || '';
@@ -94,7 +95,11 @@ function fresults(xobj) {
          +'per page: '+fcomnum(per_page)+'<br />'
          +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
          });
-
+      
+      faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">' +
+                                      + furl(github_root+'cncnpc_obs_field_table.html?project_id=223729&user_view=pics', 'seeds')
+                                      + '</div>'});
+      
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
@@ -141,7 +146,7 @@ function fresults(xobj) {
          let values = [
             {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
             {innerHTML:furl(target_url, (rec.title||'no title'))},
-            {innerHTML:furl(github_root+'cncnpc_obs_field_table.html?project_id=133007&user_view=pics&field:seed+hub=sample+hub', 'seeds')},
+            {innerHTML:furl(github_root+'cncnpc_obs_field_table.html?project_id=223729&user_view=pics', 'seeds')},
             //{innerHTML:furl(github_root+'reseed_plants_visited.html?project_id='+cnc_affiliates+'&donor_project_id='+rec.id+'&view=visiting&project_title='+rec.title,'seeds')},
             //{innerText:truncatedText},
          ];
