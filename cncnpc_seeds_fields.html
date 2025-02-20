@@ -166,10 +166,11 @@ function fresults(xobj) {
          let tax_photo = '';
          let availability = 'Out of Stock';
          let header_row = '';
-           
+
+         let icon = '<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
          header_row += ((rec.taxon.preferred_common_name||''));
  
-         faddelem('h2',document.body,{innerText:header_row.toLowerCase()});  
+         faddelem('h2',document.body,{innerHTML:icon+header_row});  
 
          let table = faddelem('table',document.body,{id:'main'});
          let thead = faddelem('thead',table);
