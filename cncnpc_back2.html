@@ -4,8 +4,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
-<meta name="description" content="What\'s Visiting?" />
-<title>What's Visiting?</title>
+<meta name="description" content="Affiliate Gardens" />
+<title>Affiliate Gardens</title>
 <style>
    :root {
       background: var(--color-base);
@@ -93,13 +93,11 @@ function fresults(xobj) {
 
       faddelem('p',document.body,{innerHTML:'total projects: '+fcomnum(total_results)+'<br />' 
          +'per page: '+fcomnum(per_page)+'<br />'
-         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
+         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'      ( ' 
+         + furl(github_root+'cncnpc_obs_field_table.html?project_id=223729&user_view=pics', 'seeds')+' )' 
+         + '<br />'
          });
-      
-      faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">' 
-                                      + furl(github_root+'cncnpc_obs_field_table.html?project_id=223729&user_view=pics', 'seeds')
-                                      + '</div>'});
-      
+            
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
@@ -170,20 +168,6 @@ let apiref = furl(apirefurl,apirefname);
 faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
   + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});
 faddelem('h2',document.body,{innerText:apirefname});
-
-let rw_g_list = winurlparams.get('g_list') || '';
-let rw_s_list = winurlparams.get('s_list') || '';
-   
-if ( (rw_g_list === '' && rw_s_list != '') || (rw_g_list != '' && rw_s_list === '') ){
-   let instructions = [
-      {innerHTML:'Custom list missing from url parameters.  If custom species lists are passed in, they both need to be specified.  Please specify both url parameters (<b>&g_list</b> and <b>&s_list</b>).'},
-   ];
-   faddelem('h2',document.body,{innerText:'Error ~ Invalid URL Parameters'});
-   faddelems('p',document.body,instructions);
-   throw('');
-}
-
-faddelem('p',document.body,{innerHTML:'To see what\'s visiting the plants in each garden.'});
 
 fetch(apiurl)
    .then((response) => {
