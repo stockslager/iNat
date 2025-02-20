@@ -165,187 +165,48 @@ function fresults(xobj) {
          let pref_tax_name = '';  
          let tax_photo = '';
          let availability = 'Out of Stock';
-         let quantity_available = '';
-         let quantity_available_desc = '';
-         let seed_hub = '';
-         let seed_hub_desc = '';
-         let pickup_info = '';
-         let pickup_info_desc = '';
-         let wild_parent = '';
-         let wild_parent_desc = '';
-         let prop_by = '';
-         let prop_by_desc = '';
-         let parent_col = '';
-         let parent_col_desc = '';
-         let deposit_date = '';
-         let deposit_date_desc = '';
          //let map_url = root_observations + '?subview=map&verifiable=any&id=' + rec.id;
-       
-         if(rec.ofvs&&rec.ofvs.length>0){
-            for (let j=0; j<rec.ofvs.length; j++){
-
-               if( rec.ofvs[j].field_id === 17234 ){   // Quantity Available
-                   if( rec.ofvs[j].value ){
-                       quantity_available = rec.ofvs[j].value;
-                       quantity_available_desc = rec.ofvs[j].observation_field.description || '';
-                   } 
-               }
-             
-              if( rec.ofvs[j].field_id === 18298 ){   // Seed Hub location and pick-up info
-                   if( rec.ofvs[j].value ){
-                       pickup_info = rec.ofvs[j].value;
-                       pickup_info_desc = rec.ofvs[j].observation_field.description || '';
-                   } 
-               }
-             
-               if( rec.ofvs[j].field_id === 17434 ){   // Seed Hub
-                   if( rec.ofvs[j].value ){
-                       seed_hub = rec.ofvs[j].value;
-                       seed_hub_desc = rec.ofvs[j].observation_field.description || '';
-                   } 
-               }    
-             
-             /*  if( rec.ofvs[j].field_id === 18497 ){   // "seeds available in library" observation field.   
-                   if( rec.ofvs[j].value === 'yes' ){
-                       availability = 'Available Now';
-                   } 
-               }
-
-               if( rec.ofvs[j].field_id === 17383 ){   // "wild ancestral colony" observation field.   
-                   if( rec.ofvs[j].value ){
-                       wild_parent = rec.ofvs[j].value;
-                       //map_url += (',' + (rec.ofvs[j].value || ''));
-                       wild_parent_desc = rec.ofvs[j].observation_field.description || '';
-                   } 
-               }
-
-               if( rec.ofvs[j].field_id === 18295 ){   // "availability" observation field.
-                   if( rec.ofvs[j].value ){
-                       availability = rec.ofvs[j].value || 'Out of Stock';
-                   }
-               }
- 
-               if( rec.ofvs[j].field_id === 16769 ){   // "propagated by" observation field.
-                   if( rec.ofvs[j].value ){
-                       prop_by = rec.ofvs[j].value || '';
-                       prop_by_desc = rec.ofvs[j].observation_field.description || '';
-                   }
-               }           
-
-               if( rec.ofvs[j].field_id === 16628 ){   // "parent colony" observation field.
-                   if( rec.ofvs[j].value ){
-                       parent_col = rec.ofvs[j].value || '';
-                       //map_url += (',' + (rec.ofvs[j].value || ''));
-                       parent_col_desc = rec.ofvs[j].observation_field.description || '';
-                   }
-               }   
-
-               if( rec.ofvs[j].field_id === 18706 ){   // "deposit date" observation field.
-                   if( rec.ofvs[j].value ){
-                       deposit_date = rec.ofvs[j].value || '';
-                       //map_url += (',' + (rec.ofvs[j].value || ''));
-                       deposit_date_desc = rec.ofvs[j].observation_field.description || '';
-                       if( deposit_date !== '' ){
-                           const dt = new Date(Date.parse(deposit_date));
-                           deposit_date = getFormattedDate(dt);
-                       }
-                   }
-               }   */
-            }
-         }
 
          let header_row = '';
          header_row += ('Seed Availability Information for '+(rec.taxon.preferred_common_name||''));
  
-        // let tax_name = rec.taxon.name || '';
-   
-        faddelem('h2',document.body,{innerText:header_row.toLowerCase()});  
+         faddelem('h2',document.body,{innerText:header_row.toLowerCase()});  
 
-        let table = faddelem('table',document.body,{id:'main'});
-        let thead = faddelem('thead',table);
-        let hrow = faddelem('tr',thead);
+         let table = faddelem('table',document.body,{id:'main'});
+         let thead = faddelem('thead',table);
+         let hrow = faddelem('tr',thead);
 
-        let labels = [ {innerText:'observation field'},
+         let labels = [ {innerText:'observation field'},
                        {innerText:'value'},
                        {innerText:'description'}, ];
-      
-        faddelems('th',hrow,labels);
 
-        let tbody = faddelem('tbody',table);
+         faddelems('th',hrow,labels);
 
-        let brow = faddelem('tr',tbody);
-        let avail = [
-                  {innerText:'availability'},
-                  {innerHTML:'<span id="key">'+availability.toLowerCase()+'</span>'},
-                  {innerText:' '},];        
+         let tbody = faddelem('tbody',table);
+       
+         if(rec.ofvs&&rec.ofvs.length>0){
+            for (let j=0; j<rec.ofvs.length; j++){
 
-         faddelems('td',brow, avail);
+               if( rec.ofvs[j].field_id === 17234 ||   // quantity available
+                   rec.ofvs[j].field_id === 18298 ||   // seed hub location and pickup info
+                   rec.ofvs[j].field_id === 17434 ){   // seed swap
+                   if( rec.ofvs[j].value ){
+                       let brow  = faddelem('tr',tbody);
+                       let nm    = rec.ofvs[j].name;
+                       let value = rec.ofvs[j].value || '';
+                       let desc  = rec.ofvs[j].observation_field.description || '';
 
-         let brow2 = faddelem('tr',tbody);
-         let quant = [
-                  {innerText:'quantity available'},
-                  {innerHTML:'<span id="key">'+quantity_available.toLowerCase()+'</span>'},
-                  {innerText:quantity_available_desc.toLowerCase()},];        
+                       let avail = [
+                             {innerText:nm},
+                             {innerHTML:'<span id="key">'+value.toLowerCase()+'</span>'},
+                             {innerText:desc},];        
 
-         faddelems('td',brow2, quant);
-
-         let brow2a = faddelem('tr',tbody);
-         let dt = [
-                  {innerText:'deposit date'},
-                  {innerHTML:'<span id="key">'+deposit_date+'</span>'},
-                  {innerText:deposit_date_desc.toLowerCase()},];        
-
-         faddelems('td',brow2a, dt);
-
-         let brow3 = faddelem('tr',tbody);
-         let shub = [
-                  {innerText:'seed hub'},
-                  {innerHTML:'<span id="key">'+seed_hub.toLowerCase()+'</span>'},
-                  {innerText:seed_hub_desc.toLowerCase()},];        
-
-         faddelems('td',brow3, shub);
-
-         let brow4 = faddelem('tr',tbody);
-         let shub_info = [
-                  {innerText:'seed hub info'},
-                  {innerHTML:'<span id="key">'+pickup_info.toLowerCase()+'</span>'},
-                  {innerText:pickup_info_desc.toLowerCase()},];        
-
-         faddelems('td',brow4, shub_info);
-
-         let brow5 = faddelem('tr',tbody);
-         let prop = [
-                  {innerText:'propagated by'},
-                  {innerHTML:'<span id="key">'+prop_by.toLowerCase()+'</span>'},
-                  {innerText:prop_by_desc.toLowerCase()},];        
-
-         faddelems('td',brow5, prop);    
-
-         let brow6 = faddelem('tr',tbody);
-         let donor = [
-                  {innerText:'donor plant'},
-                  {innerHTML:'<span id="key">'+furl(root_observations+rec.id,rec.id)+'</span>'},
-                  {innerText:'plant that the seeds were collected from.'},];        
-
-         faddelems('td',brow6, donor);  
-
-         let brow7 = faddelem('tr',tbody);
-         let par = [
-                  {innerText:'parent colony'},
-                  {innerHTML:'<span id="key">'+parent_col.toLowerCase()+'</span>'},
-                  {innerText:parent_col_desc.toLowerCase()},];        
-
-         faddelems('td',brow7, par);  
-
-         let brow8 = faddelem('tr',tbody);
-         let wild = [
-                  {innerText:'wild ancestral colony'},
-                  {innerHTML:'<span id="key">'+furl(root_observations+wild_parent.toLowerCase(),wild_parent)+'</span><br>'},
-                           //  + ' ' + furl(map_url, 'map ancestry')},
-                  {innerText:wild_parent_desc.toLowerCase()},];        
-
-         faddelems('td',brow8, wild); 
-
+                       faddelems('td',brow, avail);
+                   }
+               }
+            }
+         }
+         
          if( rec.description ){
              faddelem('p',document.body,{innerHTML:'<br><dl>'
                             + '<dt></dt><span id="key"><dd>notes ~ </dd></span>'
