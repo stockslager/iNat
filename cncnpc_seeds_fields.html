@@ -51,7 +51,7 @@
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
    .icon { height:48px; width:48px; border-radius:50%; }
    .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
-   .photo { height:64px; width:64px; border-radius: 15px 15px 15px 15px; }
+   .photo { height:48px; width:48px; border-radius: 5px 5px 5px 5px; }
    img { margin:0; padding:0; border:0; }
    a { text-decoration:underline; color:var(--color-text-link); }
    a:hover { background:var(--color-hover); }
@@ -170,7 +170,7 @@ function fresults(xobj) {
          let icon = '<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
          header_row += ((rec.taxon.preferred_common_name||''));
  
-         faddelem('h2',document.body,{innerHTML:icon+header_row});  
+         faddelem('h2',document.body,{innerHTML:icon+'<span padding-bottom:5px;>'+header_row+</span>});  
 
          let table = faddelem('table',document.body,{id:'main'});
          let thead = faddelem('thead',table);
