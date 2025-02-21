@@ -5,6 +5,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
 <meta name="description" content="Found on" />
+<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="Seeds" />
+<link rel="manifest" href="site.webmanifest" />
 <title>Found on</title>
 <style>
    :root {
@@ -74,7 +80,8 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let per_page = winurlparams.get('per_page') || 100;
 let p_options = winurlparams.get('options') || [];
 let p_plant_name = winurlparams.get('plant_name') || '';
-let p_view = winurlparams.get('view') || 'visiting';
+//let p_view = winurlparams.get('view') || 'visiting';
+let p_obs_field = winurlparams.get('obs_field') || '7623';  // default to plant that the org was found on
 let p_single_view = '';
 let p_project_id = '';
 winurlparams.delete('options');
@@ -86,27 +93,32 @@ winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa');
 
 // remove the toggles if the project is only allowing observations with one obs field.
-if ( p_view === 'visitingonly' ){
+/*if ( p_obs_field === '7623' ){               // plant the org was found on
    winurlparams.delete('view');
    winurlparams.append('view', 'visiting');
    p_view = 'visiting';
    p_single_view = 'yes';
-} else if( p_view === 'nectaringonly' ){
+} else if( p_obs_field === '498' ){         // nectar plant
    winurlparams.delete('view');
    winurlparams.append('view', 'nectaring');
    p_view = 'nectaring';
    p_single_view = 'yes';
-} else if( p_view === 'associatingonly' ){
+} else if( p_obs_field === '7807' ){        // name of associated plant
    p_view = 'associating';
    winurlparams.delete('view');
    winurlparams.append('view', 'associating');
    p_single_view = 'yes';
-} else if( p_view === 'pollinatingonly' ){
+} else if( p_obs_field === '4935' ){        // nectar // pollen delivering plant
    p_view = 'pollinating';
    winurlparams.delete('view');
    winurlparams.append('view', 'pollinating');
    p_single_view = 'yes';
-}
+} else if( p_obs_field === '8581' ){        // other org
+   p_view = 'othering';
+   winurlparams.delete('view');
+   winurlparams.append('view', 'othering');
+   p_single_view = 'yes';
+}*/
 
 // delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
 // the creation of local projects / places for restoration sites  and/or pollinator gardens.
@@ -120,23 +132,27 @@ winurlparams.delete('swlat');
 
 let grid_param = '';
    
-if( p_view === 'visiting' ){
+if( p_obs_field === '7623' ){
    grid_param = ('&field:Plant%20that%20the%20organism%20was%20found%20on=' + p_plant_id);
    winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
    winurlparams.append('field:Plant%20that%20the%20organism%20was%20found%20on', p_plant_id);
-} else if( p_view === 'nectaring' ){
+} else if( p_obs_field === '498' ){
    grid_param = ('&field:Nectar%20Plant=' + p_plant_id);
    winurlparams.delete('field:Nectar%20Plant');
    winurlparams.append('field:Nectar%20Plant', p_plant_id);
-} else if( p_view === 'pollinating' ){
+} else if( p_obs_field === '4935' ){
    grid_param = ('&field:Nectar+/+Pollen+delivering+plant=' + p_plant_id);
    winurlparams.delete('field:Nectar+/+Pollen+delivering+plant');
    winurlparams.append('field:Nectar+/+Pollen+delivering+plant', p_plant_id);
-} else if( p_view === 'associating' ){
+} else if( p_obs_field === '7807' ){
    grid_param = ('&field:Name%20of%20Associated%20Plant=' + p_plant_id);
    winurlparams.delete('field:Name%20of%20Associated%20Plant');
    winurlparams.append('field:Name%20of%20Associated%20Plant', p_plant_id);
-}  else {
+}  else if( p_obs_field === '8581' ){
+   grid_param = ('&field:Other%20Organism=' + p_plant_id);
+   winurlparams.delete('field:Other%20Organism');
+   winurlparams.append('field:Other%20Organism', p_plant_id);
+} else {
    grid_param = ('&field:Plant%20that%20the%20organism%20was%20found%20on=' + p_plant_id);
    winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
    winurlparams.append('field:Plant%20that%20the%20organism%20was%20found%20on', p_plant_id);
@@ -149,7 +165,6 @@ if( winurlparams.get('project_id') == null ){
 }
    
 function fresults(xobj) {
-   //faddelem('p',document.body,{innerHTML:furl(famp(apiurl))});
    let results = xobj.results;
    if (results) {
       let total_results = xobj.total_results;
@@ -161,16 +176,16 @@ function fresults(xobj) {
 
       let refn = '';
 
-      if( p_view === 'visiting' ){
+      if( p_obs_field === '7623' ){
          refn += 'Found on ';
          refn += p_plant_name;
-      } else if( p_view === 'nectaring' ){
+      } else if( p_obs_field === '498' ){
          refn += 'Nectaring at ';
          refn += p_plant_name;
-      } else if( p_view === 'pollinating' ){
+      } else if( p_obs_field === '4935' ){
          refn += 'Pollinating ';
          refn += p_plant_name;
-      } else if( p_view === 'associating' ){
+      } else if( p_obs_field === '7807' ){
          refn += 'Associated With ';
          refn += p_plant_name;
       } else {
@@ -178,7 +193,7 @@ function fresults(xobj) {
          refn += p_plant_name;
       }
 
-      let visitingURL     = 'https://www.inaturalist.org/observation_fields/7623';   
+      /*let visitingURL     = 'https://www.inaturalist.org/observation_fields/7623';   
       let nectaringURL    = 'https://www.inaturalist.org/observation_fields/498';
       let associatingURL  = 'https://www.inaturalist.org/observation_fields/7807';   
       let pollinatingURL  = 'https://www.inaturalist.org/observation_fields/4935';
@@ -195,7 +210,7 @@ function fresults(xobj) {
            + furl(pollinatingURL, 'nectar / pollen delivering plant') + '</dd>'
            + '<dt>associating</dt> <dd>'
            + furl(associatingURL, 'name of associated plant') + '</dd></dl>'});
-      }      
+      }*/
       faddelem('h2',document.body,{innerText:refn});
 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)            
