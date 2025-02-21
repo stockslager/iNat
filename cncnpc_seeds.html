@@ -144,9 +144,9 @@ fetch('params.json')
   .then(response => response.json())
   .then(data => {
     // Access your data here 
-    let obj = JSON.parse(jj);
+    let obj = JSON.parse(data);
     alert(('blah: '+ obj.seed_library_prj_id));
-    console.log(jj);
+    console.log(data);
   })
   .catch(error => {
     console.error('Error fetching JSON:', error);
