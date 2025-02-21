@@ -137,15 +137,12 @@ function replaceDoubleQuotes(str) {
   return str.replace(/"/g, '%22');
 }
 
-// pull in the params from params.json
-//const jj = '{ "seed_library_prj_id": "223729", "insect_obs_field": "7623" }'; 
-
 fetch('params.json')
   .then(response => response.json())
   .then(data => {
     // Access your data here 
-    //let obj = JSON.parse(data);
-    alert(('blah: '+ data.seed_library_prj_id));
+    p_project_id = data.seed_library_prj_id;
+    p_obs_id     = data.preferred_obs_id;
     console.log(data);
   })
   .catch(error => {
