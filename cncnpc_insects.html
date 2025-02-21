@@ -80,9 +80,7 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let per_page = winurlparams.get('per_page') || 100;
 let p_options = winurlparams.get('options') || [];
 let p_plant_name = winurlparams.get('plant_name') || '';
-//let p_view = winurlparams.get('view') || 'visiting';
 let p_obs_field = winurlparams.get('obs_field') || '7623';  // default to plant that the org was found on
-let p_single_view = '';
 let p_project_id = '';
 winurlparams.delete('options');
 
@@ -91,34 +89,6 @@ winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
 winurlparams.delete('iconic_taxa');
 winurlparams.append('iconic_taxa','Aves,Amphibia,Reptilia,Mammalia,Mollusca,Arachnida,Insecta,Fungi,Protozoa');
-
-// remove the toggles if the project is only allowing observations with one obs field.
-/*if ( p_obs_field === '7623' ){               // plant the org was found on
-   winurlparams.delete('view');
-   winurlparams.append('view', 'visiting');
-   p_view = 'visiting';
-   p_single_view = 'yes';
-} else if( p_obs_field === '498' ){         // nectar plant
-   winurlparams.delete('view');
-   winurlparams.append('view', 'nectaring');
-   p_view = 'nectaring';
-   p_single_view = 'yes';
-} else if( p_obs_field === '7807' ){        // name of associated plant
-   p_view = 'associating';
-   winurlparams.delete('view');
-   winurlparams.append('view', 'associating');
-   p_single_view = 'yes';
-} else if( p_obs_field === '4935' ){        // nectar // pollen delivering plant
-   p_view = 'pollinating';
-   winurlparams.delete('view');
-   winurlparams.append('view', 'pollinating');
-   p_single_view = 'yes';
-} else if( p_obs_field === '8581' ){        // other org
-   p_view = 'othering';
-   winurlparams.delete('view');
-   winurlparams.append('view', 'othering');
-   p_single_view = 'yes';
-}*/
 
 // delete these if passed in.  it'd probably work with these but i think it makes sense  to encourage
 // the creation of local projects / places for restoration sites  and/or pollinator gardens.
@@ -193,24 +163,6 @@ function fresults(xobj) {
          refn += p_plant_name;
       }
 
-      /*let visitingURL     = 'https://www.inaturalist.org/observation_fields/7623';   
-      let nectaringURL    = 'https://www.inaturalist.org/observation_fields/498';
-      let associatingURL  = 'https://www.inaturalist.org/observation_fields/7807';   
-      let pollinatingURL  = 'https://www.inaturalist.org/observation_fields/4935';
-      
-      // display the "key" associating observation fields to the toggles.
-      // hide the key for project only using a single obs field.
-      if( p_single_view !== 'yes' ){
-         faddelem('p',document.body,{innerHTML:'<dl><dt><span id="key">toggles</span></dt> <dd><span id="key">observation field</span></dd>'
-           + '<dt>visiting</dt> <dd>' 
-           + furl(visitingURL,'plant that the organism was found on') + '</dd>'
-           + '<dt>nectaring</dt> <dd>'
-           + furl(nectaringURL, 'nectar plant') + '</dd>'
-           + '<dt>pollinating</dt> <dd>'
-           + furl(pollinatingURL, 'nectar / pollen delivering plant') + '</dd>'
-           + '<dt>associating</dt> <dd>'
-           + furl(associatingURL, 'name of associated plant') + '</dd></dl>'});
-      }*/
       faddelem('h2',document.body,{innerText:refn});
 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)            
