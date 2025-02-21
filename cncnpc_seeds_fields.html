@@ -119,6 +119,7 @@ function fresults(xobj) {
          let tax_photo = '';
          let availability = 'Out of Stock';
          let header_row = '';
+         let wild = '';
 
          let icon = '<div style="display:flex; align-items:center;"><img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
          header_row += ((rec.taxon.preferred_common_name||''));
@@ -140,13 +141,19 @@ function fresults(xobj) {
             user_icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+user_icon+'" />';
          }
 
+         if( rec.quality_grade === 'research' ) {
+             wild = (rec.quality_grade + ' (wild)');
+         } else if( rec.quality_grade === 'casual' ){
+             wild = (rec.quality_grade + ' (cultivated)');
+         }
+
          faddelems('th',d_hrow,d_labels);
 
          let d_tbody = faddelem('tbody',d_table);
 
          let d_row3   = faddelem('tr',d_tbody);
          let d_three  = [     {innerText:'quality grade'},
-                              {innerText:rec.quality_grade},];        
+                              {innerText:wild},];        
          faddelems('td',d_row3, d_three);
         
          let d_row2 = faddelem('tr',d_tbody);
