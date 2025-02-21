@@ -151,6 +151,13 @@ function fresults(xobj) {
 
          faddelems('th',d_hrow,d_labels);
 
+         let d_row1  = faddelem('tr',d_tbody);
+         let d_one = [
+                             {innerText:'donor'},
+                             {innerHTML:user_icon + '<span style="padding-left:10px;">' + furl(root_people+rec.user.login,rec.user.login)+'</span></div>'},
+                       ];        
+         faddelems('td',d_row1, d_one);
+
          let d_tbody = faddelem('tbody',d_table);
 
          let d_row3   = faddelem('tr',d_tbody);
@@ -162,13 +169,6 @@ function fresults(xobj) {
          let d_two  = [     {innerText:'inat observation'},
                              {innerHTML:furl(root_observations+rec.id,rec.id)},];        
          faddelems('td',d_row2, d_two);
-
-         let d_row1  = faddelem('tr',d_tbody);
-         let d_one = [
-                             {innerText:'donor'},
-                             {innerHTML:user_icon + '<span style="padding-left:10px;">' + furl(root_people+rec.user.login,rec.user.login)+'</span></div>'},
-                       ];        
-         faddelems('td',d_row1, d_one);
 
          faddelem('p',document.body,{innerText:' '});
 
