@@ -268,25 +268,11 @@ function fresults(xobj) {
              taxon = furl(github_root+'cncnpc_seeds_fields.html?obs_id='+rec.id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
 
-         let view = '&view=visitingonly';
-         // determine view based on the obs id stored in params.json
-         if( p_obs_id === '7623' ) {          // plant that the organism was found on
-             view = '&view=visitingonly';
-         } else if ( p_obs_id === '498' ) {   // nectar plant
-             view = '&view=nectaringonly';
-         } else if ( p_obs_id === '4935' ) {  // nectar / pollen delivering plant
-             view = '&view=pollinatingonly';
-         } else if ( p_obs_id === '7807' ) {  // name of associated plant
-             view = '&view=associatingonly';
-         } else if ( p_obs_id === '8581' ) {  // other organism
-             view = '&view=otheringonly';
-         } 
-       
          values = [
                   {innerText:i+1},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:taxon},
-                  {innerHTML:furl(github_root+'cncnpc_insects.html?project_id='+p_insect_prj+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_id+'&plant_name='+pref_tax_name+view,'&#128027;')},
+                  {innerHTML:furl(github_root+'cncnpc_insects.html?project_id='+p_insect_prj+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_id+'&plant_name='+pref_tax_name,'&#128027;')},
                   ];
 
          faddelems('td',brow,values);
