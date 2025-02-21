@@ -48,8 +48,8 @@
  
    .tar { text-align:right; }
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
-   .icon { height:18px; width:18px; border-radius:50%; }
-   .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; }
+   .icon { height:28px; width:28px; border-radius:50%; }
+   .npcicon { width:28px; height:28px; text-align:center; vertical-align:middle; z-index: 9999; }
    .photo { height:64px; width:64px; border-radius: 5px 5px 5px 5px; }
    img { margin:0; padding:0; border:0; }
    a { text-decoration:none; color:var(--color-text-link); }
@@ -144,12 +144,12 @@ function fresults(xobj) {
          if( user_icon === '' ){
             user_icon += '<div class="npcicon">&#x1F464;</div>';
          } else {
-            user_icon = '<img class="icon" src="'+user_icon+'" />';
+            user_icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+user_icon+'" />';
          }
 
          let d_one = [
                              {innerText:'donor'},
-                             {innerHTML:user_icon + ' ' + furl(root_people+rec.user.login,rec.user.login)},
+                             {innerHTML:user_icon + '<span style="padding-left:10px;">' + furl(root_people+rec.user.login,rec.user.login)+'</span></div>'},
                        ];        
          faddelems('td',d_row1, d_one);
 
