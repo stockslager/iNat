@@ -45,7 +45,6 @@
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
    th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }
    tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt); }
-   /*tr:nth-last-child(-n+1) { border-width:1px 0px; border-style:solid; border-color:forestgreen; background:var(--color-alt); }*/
  
    .tar { text-align:right; }
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
@@ -69,6 +68,7 @@
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v5.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
 <script>
+  
 let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
@@ -158,6 +158,7 @@ function fresults(xobj) {
                              {innerHTML:furl(root_observations+rec.id,rec.id)},];        
          faddelems('td',d_row2, d_two);
 
+         faddelem('p',document.body,{innerText:' '});
          //faddelem('p',document.body,{innerHTML:'<div style="padding:3px;">&nbsp;</div>'});     
 
          let table = faddelem('table',document.body,{id:'main'});
