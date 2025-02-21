@@ -138,18 +138,18 @@ function replaceDoubleQuotes(str) {
 }
 
 // pull in the params from params.json
+const obj = '';
 fetch('params.json')
   .then(response => response.json())
   .then(data => {
     // Access your data here
+    obj = JSON.parse(data);
+    alert(("blah: "+ obj.seed_library_prj_id));
     console.log(data);
   })
   .catch(error => {
     console.error('Error fetching JSON:', error);
 });
-
-const obj = JSON.parse(data);
-alert(("blah: "+ obj.seed_library_prj_id));
 
 if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
    let instructions = [
