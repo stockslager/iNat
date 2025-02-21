@@ -77,7 +77,6 @@ let p_project_id = winurlparams.get('project_id') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
-let p_obs_field_array = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_omit_users = winurlparams.get('omit_users') || '';
 let p_omit_id = winurlparams.get('omit_id') || '';
@@ -85,19 +84,6 @@ let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_field = '';
 let p_field_value = '';
 let opts = '';
-let field_array = [];
-
-if( p_obs_field_array !== '' ){
-    field_array = p_obs_field_array.split(",");
-}
-
-// if only one observation field was passed in, there is no reason to "merge"
-// a single field.  so default to "un-merged" if only one obs field is passed in. 
-// defaulting to un-merged will add a target url to the single obs field value in the table.
-if( field_array.length === 1 ){
-    winurlparams.delete('operator');
-    p_operator = '';
-}
 
 if( p_omit_users !== '' ){
     winurlparams.delete('not_user_id');
@@ -210,10 +196,6 @@ function boxRow(field_id, field_name, field_value) {
 function fresults(xobj) {
    let results = xobj.results;
    let box_array = [];
-
-   for( let f=0; f<field_array.length; f++ ){
-        box_array.push(new boxRow(field_array[f], '') );
-   }
  
    if (results) {
       let total_results = xobj.total_results;
@@ -225,10 +207,8 @@ function fresults(xobj) {
 
       let labels = [];
       let mismatch = '';
-      let field_array_copy = field_array;
       let flower = '';
       let dlString = '<span id="h2">Seeds to be Swapped</span>';
-      let labelCount = 0;
 
       let merged = 'observation field';
       labels = [
@@ -250,10 +230,6 @@ function fresults(xobj) {
          let pref_tax_name = '';
          let tax_photo = '<div class="clipart">&#127807</div>'; 
          let tax_id = '';
-         let field1 = ''; 
-         let param1 = ''; 
-         let displayName = '';
-         let displayTaxonName = '';
          let mismatch = '';
          let matchedCopy = 'no';
          let values = [];
@@ -262,7 +238,17 @@ function fresults(xobj) {
          let matchValue = '';
          let matchTaxonId = '';
          let taxon = '';
-         
+
+       
+         let table = faddelem('table',document.body,{id:'main'});
+         let thead = faddelem('thead',table);
+         let hrow = faddelem('tr',thead);
+      
+         faddelems('th',hrow,labels);
+
+         let tbody = faddelem('tbody',table);
+         let brow = faddelem('tr',tbody);
+
          if( rec.taxon ){
              tax_id = rec.taxon.id;
              tax_name = rec.taxon.name || '';
@@ -286,27 +272,20 @@ function fresults(xobj) {
                   {innerHTML:furl(github_root+'cncnpc_insects.html?project_id=232670&plant_id='+rec.taxon.id+'&view=visitingonly','&#128027;')},
                   ];
 
-         tempBrow.push(values);
+         brow.push(values);
       };
 
+      faddelem('p',document.body,{innerHTML:dlString});
+    
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br />'});  
 
-      let table = faddelem('table',document.body,{id:'main'});
-      let thead = faddelem('thead',table);
-      let hrow = faddelem('tr',thead);
-
-      
-      faddelems('th',hrow,labels);
-
-      let tbody = faddelem('tbody',table);
-    
       // loop through array of rows stored on object.
-      for( let q=0; q<tempBrow.length; q++ ){
+      /*for( let q=0; q<tempBrow.length; q++ ){
            let brow = faddelem('tr',tbody);
            faddelems('td',brow,tempBrow[q]);
-      }
+      }*/
 
       // buttons to go to prev or next page
       let nav = faddelem('div',document.body,{id:'nav'});
