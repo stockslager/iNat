@@ -139,8 +139,6 @@ fetch('params.json')
   .then(response => response.json())
   .then(data => {
     // Access your data here 
-    //p_project_id = data.seed_library_prj_id;
-    //p_obs_id     = data.preferred_obs_id;
     const pref   = data.prefs.find(item => item.seed_library_prj_id === p_project_id);
     p_obs_id     = pref.preferred_obs_field;
     p_insect_prj = pref.insect_prj; 
@@ -269,12 +267,26 @@ function fresults(xobj) {
          if( tax_id !== '' ){
              taxon = furl(github_root+'cncnpc_seeds_fields.html?obs_id='+rec.id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
+
+         let view = '&view=visitingonly';
+         // determine view based on the obs id stored in params.json
+         if( p_obs_id === '7623' ) {          // plant that the organism was found on
+             view = '&view=visitingonly';
+         } else if ( p_obs_id === '498' ) {   // nectar plant
+             view = '&view=nectaringonly';
+         } else if ( p_obs_id === '4935' ) {  // nectar / pollen delivering plant
+             view = '&view=pollinatingonly';
+         } else if ( p_obs_id === '7807' ) {  // name of associated plant
+             view = '&view=associatingonly';
+         } else if ( p_obs_id === '8581' ) {  // other organism
+             view = '&view=otheringonly';
+         } 
        
          values = [
                   {innerText:i+1},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:taxon},
-                  {innerHTML:furl(github_root+'cncnpc_insects.html?project_id='+p_insect_prj+'&plant_id='+rec.taxon.id+'&plant_name='+pref_tax_name+'&view=visitingonly','&#128027;')},
+                  {innerHTML:furl(github_root+'cncnpc_insects.html?project_id='+p_insect_prj+'&plant_id='+rec.taxon.id+'&plant_name='+pref_tax_name+view,'&#128027;')},
                   ];
 
          faddelems('td',brow,values);
