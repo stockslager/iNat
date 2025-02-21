@@ -133,13 +133,16 @@ function fresults(xobj) {
          let d_labels = [ {innerText:'Donor Info'},
                          { innerText:' '}, ];
 
+         let user_icon = rec.user.icon || '';
+         if( user_icon === '' ){
+            user_icon += '<div class="npcicon">&#x1F464;</div>';
+         } else {
+            user_icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+user_icon+'" />';
+         }
+
          faddelems('th',d_hrow,d_labels);
 
          let d_tbody = faddelem('tbody',d_table);
-
-         let d_row1  = faddelem('tr',d_tbody);
-
-         let user_icon = rec.user.icon || '';
 
          let d_row3   = faddelem('tr',d_tbody);
          let d_three  = [     {innerText:'quality grade'},
@@ -151,12 +154,7 @@ function fresults(xobj) {
                              {innerHTML:furl(root_observations+rec.id,rec.id)},];        
          faddelems('td',d_row2, d_two);
 
-         if( user_icon === '' ){
-            user_icon += '<div class="npcicon">&#x1F464;</div>';
-         } else {
-            user_icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+user_icon+'" />';
-         }
-
+         let d_row1  = faddelem('tr',d_tbody);
          let d_one = [
                              {innerText:'donor'},
                              {innerHTML:user_icon + '<span style="padding-left:10px;">' + furl(root_people+rec.user.login,rec.user.login)+'</span></div>'},
