@@ -284,7 +284,7 @@ function fresults(xobj) {
        
          values = [
                   {innerText:i+1},
-                  {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                 // {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
               ];
 
          let user_icon = rec.user.icon || '';
@@ -362,6 +362,9 @@ function fresults(xobj) {
                               field1 = rec.ofvs[j].value.toLowerCase();
                               param1 = '&field:' + rec.ofvs[j].name + '=' + replaceDoubleQuotes(rec.ofvs[j].value.toString());
                               displayName = rec.ofvs[j].value.toLowerCase();
+
+                              // here
+                              values.push({innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'});
                                
                               if( rec.ofvs[j].taxon ){
                                   let name  = rec.ofvs[j].taxon.name || '';
