@@ -94,6 +94,20 @@ let apiurl = ('https://api.inaturalist.org/v1/observations/'+p_obs_id);
  
 let apirefurl = 'https://stockslager.github.io/iNat/reseed_plant_inspector.html';
 
+let p_custom   = 'no';
+
+fetch('params.json')
+  .then(response => response.json())
+  .then(data => {
+    // Access your data here 
+    const pref   = data.prefs.find(item => item.seed_library_prj_id === p_project_id);
+    p_custom = pref.custom_obs_fields; 
+    console.log(data);
+  })
+  .catch(error => {
+    console.error('Error fetching JSON:', error);
+});
+
 if (winurlsearchstr==='') {
    let instructions = [
       {innerHTML:'Invalid parameter list.  Please access via '+furl(apirefurl)+'.'},
@@ -193,22 +207,38 @@ function fresults(xobj) {
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
 
-               if( rec.ofvs[j].field_id === 17234 ||   // quantity available
-                   rec.ofvs[j].field_id === 18298 ||   // seed hub location and pickup info
-                   rec.ofvs[j].field_id === 17434 ){   // seed swap
-                   if( rec.ofvs[j].value ){
+               if( p_custom === 'yes' ) {
+                   if( rec.ofvs[j].value ) {
                        let brow  = faddelem('tr',tbody);
                        let nm    = rec.ofvs[j].name || '';
                        let value = rec.ofvs[j].value || '';
                        let desc  = rec.ofvs[j].observation_field.description || '';
 
                        let avail = [
+                            {innerText:nm.toLowerCase()},
+                            {innerText:value.toLowerCase()},
+                            // {innerText:desc.toLowerCase()},
+                       ];        
+                       faddelems('td',brow, avail);
+                   }
+               } else {
+                   if( rec.ofvs[j].field_id === 17234 ||   // quantity available
+                       rec.ofvs[j].field_id === 18298 ||   // seed hub location and pickup info
+                       rec.ofvs[j].field_id === 17434 ){   // seed swap
+                       if( rec.ofvs[j].value ){
+                           let brow  = faddelem('tr',tbody);
+                           let nm    = rec.ofvs[j].name || '';
+                           let value = rec.ofvs[j].value || '';
+                           let desc  = rec.ofvs[j].observation_field.description || '';
+
+                           let avail = [
                              {innerText:nm.toLowerCase()},
                              {innerText:value.toLowerCase()},
                             // {innerText:desc.toLowerCase()},
-                       ];        
+                           ];        
 
-                       faddelems('td',brow, avail);
+                           faddelems('td',brow, avail);
+                       }
                    }
                }
             }
