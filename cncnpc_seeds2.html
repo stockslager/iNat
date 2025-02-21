@@ -100,11 +100,6 @@ if( p_omit_project !== '' ){
     winurlparams.append('not_in_project', p_omit_project);
 }
  
-if( winurlparams.get('ofv_datatype') === null || winurlparams.get('ofv_datatype') === ''){
-    winurlparams.delete('ofv_datatype');
-    winurlparams.append('ofv_datatype', 'taxon,text,numeric,date,time,datetime,dna');
-}
-
 winurlparams.delete('per_page');
 winurlparams.append('per_page','50');
 
@@ -206,47 +201,37 @@ function fresults(xobj) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
       let labels = [];
-      let mismatch = '';
-      let flower = '';
       let dlString = '<span id="h2">Seeds to be Swapped</span>';
 
-      let merged = 'observation field';
+      faddelem('p',document.body,{innerHTML:dlString});
+    
+      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
+             +'per page: '+fcomnum(per_page)+'<br />'
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br />'});  
+
       labels = [
             {innerText:'#'},
             {innerText:'Obs Photo'},
             {innerText:'Name'}, 
             {innerText:' '},
       ];
-    
-      if( p_operator === 'merge' ){
-          merged = 'merged observation field';
-      } 
 
-      let tempBrow = [];
+      let table = faddelem('table',document.body,{id:'main'};                    
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
       
+      faddelems('th',hrow,labels);
+      let tbody = faddelem('tbody',table);
+          
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
          let tax_name = '';
          let pref_tax_name = '';
          let tax_photo = '<div class="clipart">&#127807</div>'; 
          let tax_id = '';
-         let mismatch = '';
-         let matchedCopy = 'no';
          let values = [];
-         let dataType = '';
-         let dataType2 = '';
-         let matchValue = '';
-         let matchTaxonId = '';
          let taxon = '';
 
-       
-         let table = faddelem('table',document.body,{id:'main'});
-         let thead = faddelem('thead',table);
-         let hrow = faddelem('tr',thead);
-      
-         faddelems('th',hrow,labels);
-
-         let tbody = faddelem('tbody',table);
          let brow = faddelem('tr',tbody);
 
          if( rec.taxon ){
@@ -274,18 +259,6 @@ function fresults(xobj) {
 
          faddelems('td',brow,values);
       };
-
-      faddelem('p',document.body,{innerHTML:dlString});
-    
-      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
-             +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br />'});  
-
-      // loop through array of rows stored on object.
-      /*for( let q=0; q<tempBrow.length; q++ ){
-           let brow = faddelem('tr',tbody);
-           faddelems('td',brow,tempBrow[q]);
-      }*/
 
       // buttons to go to prev or next page
       let nav = faddelem('div',document.body,{id:'nav'});
