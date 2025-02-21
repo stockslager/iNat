@@ -141,7 +141,7 @@ fetch('params.json')
     // Access your data here 
     //p_project_id = data.seed_library_prj_id;
     //p_obs_id     = data.preferred_obs_id;
-    const pref   = data.prefs.find(item.seed_library_prj_id => item.seed_library_prj_id === p_project_id);
+    const pref   = data.prefs.find(item => item.seed_library_prj_id === p_project_id);
     p_obs_id     = pref.preferred_obs_field;
     p_insect_prj = pref.insect_prj; 
     console.log(data);
