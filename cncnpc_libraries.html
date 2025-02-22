@@ -167,12 +167,19 @@ fetch(apiurl)
 
 async function exe() {
  try {
-  const result = getProjectIds(); // Now this will wait till it finished
+  const result = await getProjectIds(); // Now this will wait till it finished
   console.log(result);
  } catch(e) {
   console.log(e);
  }
- await getResults();
+
+ try {
+  const result = await getResult(); // Now this will wait till it finished
+  console.log(result);
+ } catch(e) {
+  console.log(e);
+ }
+
 }
       
 let apibase = 'https://api.inaturalist.org/v1/projects';
