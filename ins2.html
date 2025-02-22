@@ -136,6 +136,18 @@ if( winurlparams.get('project_id') == null ){
 } else {
    p_project_id += winurlparams.get('project_id');
 }
+
+window.onload = function() {
+  if (navigator.userAgent.match(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i)) {
+    window.scrollTo(0, 1);
+  }
+};
+
+window.addEventListener('resize', function() {
+  if (navigator.userAgent.match(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i)) {
+    window.scrollTo(0, 1);
+  }
+});
    
 function fresults(xobj) {
    let results = xobj.results;
