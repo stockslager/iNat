@@ -48,6 +48,7 @@
    #tdkey { padding:0; padding-right: 25px; }
    #main { width:fit-content; min-width:375px; }
    #h2 { font-weight:bold; font-size:20px; }
+   #utf { 
    table, td, th { border-collapse:collapse; margin:0; padding:5px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
@@ -274,7 +275,7 @@ function fresults(xobj) {
                   {innerText:i+1},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:taxon},
-                  {innerHTML:furl(github_root+'cncnpc_insects.html?project_id='+p_insect_prj+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_id+'&plant_name='+pref_tax_name,'<span style="font-size:1.475em;">&#128027;</span>')},
+                  {innerHTML:furl(github_root+'cncnpc_insects.html?project_id='+p_insect_prj+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_id+'&plant_name='+pref_tax_name,'<span id=\"utf\">&#128027;</span>')},
                   ];
 
          faddelems('td',brow,values);
