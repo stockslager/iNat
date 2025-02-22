@@ -144,6 +144,7 @@ function getProjectIds() {
        alert(('two'+p_projects));
        winurlparams.delete('id');
        winurlparams.append('id', p_projects);
+       alert(("twoa " + winurlparams.get('id')));
      })
      .catch(error => {
         console.error('Error fetching JSON:', error);
@@ -157,6 +158,7 @@ async function exe() {
  } catch(e) {
   console.log(e);
  }
+   alert('hya');
 fetch(apiurl)
    .then((response) => {
       if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
@@ -179,8 +181,6 @@ let apiref = furl(apirefurl,apirefname);
   + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});*/
 faddelem('h2',document.body,{innerText:apirefname});
    
-alert(('one' + winurlparams.get('id')));
-alert(winurlparams.get('id'));
 exe();
    
 </script>
