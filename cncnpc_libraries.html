@@ -139,7 +139,7 @@ async function getData() {
   return p_project_ids;
 }
    
-let p_projects   = getData();
+let p_projects   = '';
    alert( 'after await ' + p_projects );
 let p_library_name = '';
 
@@ -172,6 +172,9 @@ let apiref = furl(apirefurl,apirefname);
 faddelem('h2',document.body,{innerText:apirefname});
    
 alert(winurlparams.get('id'));
+mainFetch();
+function mainFetch() {
+p_projects = await getProjectIds();
 fetch(apiurl)
    .then((response) => {
       if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
@@ -182,6 +185,7 @@ fetch(apiurl)
       console.error(err.message);
       faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
 });
+}
    
 </script>
   
