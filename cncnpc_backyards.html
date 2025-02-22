@@ -151,6 +151,7 @@ let apiref = furl(apirefurl,apirefname);
   + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});*/
 faddelem('h2',document.body,{innerText:apirefname});
 
+alert(winurlparams.get('id'));
 fetch(apiurl)
    .then((response) => {
       if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
