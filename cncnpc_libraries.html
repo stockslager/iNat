@@ -157,6 +157,17 @@ async function exe() {
  } catch(e) {
   console.log(e);
  }
+fetch(apiurl)
+   .then((response) => {
+      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+      return response.json();
+   })
+   .then((data) => { fresults(data); })
+   .catch((err) => {
+      console.error(err.message);
+      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+});
+
 }
       
 let apibase = 'https://api.inaturalist.org/v1/projects';
@@ -171,16 +182,6 @@ faddelem('h2',document.body,{innerText:apirefname});
 alert(('one' + winurlparams.get('id')));
 alert(winurlparams.get('id'));
 exe();
-fetch(apiurl)
-   .then((response) => {
-      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-      return response.json();
-   })
-   .then((data) => { fresults(data); })
-   .catch((err) => {
-      console.error(err.message);
-      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-});
    
 </script>
   
