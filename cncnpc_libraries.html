@@ -188,6 +188,8 @@ let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
 let apirefname = 'Seed Swaps & Libraries';
 let apiref = furl(apirefurl,apirefname);
+/*faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
+  + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});*/
 faddelem('h2',document.body,{innerText:apirefname});
 
    alert('hya');
@@ -203,31 +205,25 @@ await fetch(apiurl)
 });
 }
 
-/*let apibase = 'https://api.inaturalist.org/v1/projects';
-let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
-let apirefname = 'Seed Swaps & Libraries';
-let apiref = furl(apirefurl,apirefname);*/
-/*faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
-  + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});*/
-/*faddelem('h2',document.body,{innerText:apirefname});*/
-
 const request = async () => {
    getProjectIds();
-   //getResults();
-    /*const response = await fetch('https://api.com/values/1');
-    const json = await response.json();
-    console.log(json);*/
+}
+
+/*const useRequest = async () => {
+  const res = await request()
+}*/
+
+request()   
+//////////////////////////////////////////////////////
+/*const request = async () => {
+   getProjectIds();
 }
 
 const useRequest = async () => {
   const res = await request()
 }
 
-useRequest()   
-  //getProjectIds(); // Now this will wait till it finished
-
- // getResults(); // Now this will wait till it finished
+useRequest()  */ 
    
 </script>
   
