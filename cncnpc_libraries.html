@@ -151,13 +151,7 @@ function getProjectIds() {
    });
 }
 
-async function exe() {
- try {
-  const result = await getProjectIds(); // Now this will wait till it finished
-  console.log(result);
- } catch(e) {
-  console.log(e);
- }
+function getResults(){
    alert('hya');
 fetch(apiurl)
    .then((response) => {
@@ -169,7 +163,16 @@ fetch(apiurl)
       console.error(err.message);
       faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
 });
+}
 
+async function exe() {
+ try {
+  const result = getProjectIds(); // Now this will wait till it finished
+  console.log(result);
+ } catch(e) {
+  console.log(e);
+ }
+ await getResults();
 }
       
 let apibase = 'https://api.inaturalist.org/v1/projects';
