@@ -43,6 +43,7 @@
    
    #key { font-weight: bold; text-decoration-line: underline; text-decoration-thickness: 1px; }
    #main { width:fit-content; min-width:375px; }
+   #utf { font-size:1.475em; padding-left:30px; }
    dl { max-width: 40%; float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
    dt { }
    dd { margin: 0; grid-column-start: 2;}   
@@ -173,9 +174,8 @@ function fresults(xobj) {
 
    /*faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
      + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});*/
-      faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;>'
-            + '<a href="'+github_root+'ins2.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&obs_field='+p_obs_field+'&plant_name='+p_plant_name+taxon_param+'"><span style="font-size:1.875em;">&#129419;</span> only</a></div>'});      
-      faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)            
+      faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results) 
+            +furl(github_root+'ins2.html?project_id='+p_project_id+'&plant_id='+p_plant_id+'&obs_field='+p_obs_field+'&plant_name='+p_plant_name+taxon_param,'<span id=\"utf\">&#129419;</span>')},
             +'<br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});
