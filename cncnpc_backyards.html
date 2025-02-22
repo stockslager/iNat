@@ -76,7 +76,7 @@ fetch('params.json')
   .then(response => response.json())
   .then(data => {
     // Access your data here 
-    for( let i=0; i<data.prefs; i++ ){
+    for( let i=0; i<data.prefs.length(); i++ ){
        p_projects += (data.prefs[i].seed_library_prj_id + ',');
     }
     winurlparams.delete('id');
