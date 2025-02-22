@@ -48,7 +48,7 @@
    #tdkey { padding:0; padding-right: 25px; }
    #main { width:fit-content; min-width:375px; }
    #h2 { font-weight:bold; font-size:20px; }
-   #nav { width:100%; position:-webkit-sticky /*Safari*/; position:sticky; }
+   span.sticky { background:var(--color-alt); position:-webkit-sticky /*Safari*/; position:sticky; }
    table, td, th { border-collapse:collapse; margin:0; padding:5px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
@@ -170,7 +170,7 @@ else {
    });
 };
 
-faddelem('p',document.body,{innerHTML:'<span id="nav" onclick="goBack()">&#10095;</span>'});
+faddelem('p',document.body,{innerHTML:'<span class="sticky" onclick="goBack()">&#10095;</span>'});
 
 function goBack() {
   window.history.back();
