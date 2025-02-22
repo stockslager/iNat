@@ -130,21 +130,9 @@ function fresults(xobj) {
    else { faddelem('p',document.body,{innerText:'No results returned.'}); };
 };
 
-function replaceDoubleQuotes(str) {
-  return str.replace(/"/g, '%22');
-}
-   
-async function getData() {
-  let p_project_ids = await getProjectIds();
-  return p_project_ids;
-}
-   
 let p_projects   = '';
-   alert( 'after await ' + p_projects );
 let p_library_name = '';
 
-alert(('one' + winurlparams.get('id')));
-   
 function getProjectIds() {
    fetch('params.json')
      .then(response => response.json())
@@ -161,7 +149,16 @@ function getProjectIds() {
         console.error('Error fetching JSON:', error);
    });
 }
-   
+
+async function exe() {
+ try {
+  const result = await getProjectIds(); // Now this will wait till it finished
+  console.log(result);
+ } catch(e) {
+  console.log(e);
+ }
+}
+      
 let apibase = 'https://api.inaturalist.org/v1/projects';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
@@ -171,10 +168,9 @@ let apiref = furl(apirefurl,apirefname);
   + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});*/
 faddelem('h2',document.body,{innerText:apirefname});
    
+alert(('one' + winurlparams.get('id')));
 alert(winurlparams.get('id'));
-mainFetch();
-async function mainFetch() {
-p_projects = await getProjectIds();
+exe();
 fetch(apiurl)
    .then((response) => {
       if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
@@ -185,7 +181,6 @@ fetch(apiurl)
       console.error(err.message);
       faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
 });
-}
    
 </script>
   
