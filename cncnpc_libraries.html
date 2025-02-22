@@ -133,39 +133,6 @@ function fresults(xobj) {
 let p_projects   = '';
 let p_library_name = '';
 
-/*function getProjectIds() {
-   fetch('params.json')
-     .then(response => response.json())
-     .then(data => {
-       // Access your data here 
-       for( let i=0; i<data.prefs.length; i++ ){
-            p_projects += (data.prefs[i].seed_library_prj_id + ',');
-       }
-       alert(('two'+p_projects));
-       winurlparams.delete('id');
-       winurlparams.append('id', p_projects);
-       alert(("twoa " + winurlparams.get('id')));
-     })
-     .catch(error => {
-        console.error('Error fetching JSON:', error);
-   });
-}
-
-function getResults(){
-   alert('hya');
-fetch(apiurl)
-   .then((response) => {
-      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-      return response.json();
-   })
-   .then((data) => { fresults(data); })
-   .catch((err) => {
-      console.error(err.message);
-      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-});
-}*/
-
-
 async function getProjectIds() {
    await fetch('params.json')
      .then(response => response.json())
@@ -183,47 +150,32 @@ async function getProjectIds() {
         console.error('Error fetching JSON:', error);
    });
 
-let apibase = 'https://api.inaturalist.org/v1/projects';
-let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
-let apirefname = 'Seed Swaps & Libraries';
-let apiref = furl(apirefurl,apirefname);
-/*faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
-  + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});*/
-faddelem('h2',document.body,{innerText:apirefname});
+   let apibase = 'https://api.inaturalist.org/v1/projects';
+   let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+   let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
+   let apirefname = 'Seed Swaps & Libraries';
+   let apiref = furl(apirefurl,apirefname);
+   /*faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
+     + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});*/
+   faddelem('h2',document.body,{innerText:apirefname});
 
-   alert('hya');
-await fetch(apiurl)
-   .then((response) => {
-      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-      return response.json();
-   })
-   .then((data) => { fresults(data); })
-   .catch((err) => {
-      console.error(err.message);
-      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-});
+   await fetch(apiurl)
+      .then((response) => {
+         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+         return response.json();
+      })
+      .then((data) => { fresults(data); })
+      .catch((err) => {
+         console.error(err.message);
+         faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+   });
 }
 
 const request = async () => {
    getProjectIds();
 }
 
-/*const useRequest = async () => {
-  const res = await request()
-}*/
-
 request()   
-//////////////////////////////////////////////////////
-/*const request = async () => {
-   getProjectIds();
-}
-
-const useRequest = async () => {
-  const res = await request()
-}
-
-useRequest()  */ 
    
 </script>
   
