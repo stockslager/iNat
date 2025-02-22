@@ -77,9 +77,9 @@ fetch('params.json')
   .then(data => {
     // Access your data here 
     for( let i=0; i<data.prefs.length; i++ ){
-       alert(data.prefs[i].seed_library_prj_id);
        p_projects += (data.prefs[i].seed_library_prj_id + ',');
     }
+    alert(p_projects);
     winurlparams.delete('id');
     winurlparams.append('id', p_projects);
   })
