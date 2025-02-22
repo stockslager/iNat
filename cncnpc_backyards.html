@@ -4,8 +4,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
-<meta name="description" content="Affiliate Gardens" />
-<title>Affiliate Gardens</title>
+<meta name="description" content="Seed Libraries" />
+<title>Seed Libraries</title>
 <style>
    :root {
       background: var(--color-base);
@@ -62,28 +62,30 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-
-// cnc affiliate gardens...
-let cnc_project    = '220623';
-let cnc_affiliates = '220623,133007,154702';
-let library        = '223729';
-
-// library params
-// the library should always create a g_list and s_list 
-let cnc_library_params = '?project_id=220623&view=visitingonly&g_list=4488957&s_list=4488958';
-   
-// default the id's of the projects to be passed in to the projects api.
-let view = winurlparams.get('view') || '';
-   
-winurlparams.delete('id');
-winurlparams.append('id', cnc_affiliates);
-
 </script>
    
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/cncnpc_params_v2.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
 
 <script>
+
+let p_projects   = '';
+let p_library_name = '';
+
+fetch('params.json')
+  .then(response => response.json())
+  .then(data => {
+    // Access your data here 
+    for( let i=0; i<data.prefs; i++ ){
+       p_projects += (pref.seed_library_prj_id + ',');
+    }
+    winurlparams.delete('id');
+    winurlparams.append('id', p_projects);
+    p_library_name = pref.library_name; 
+  })
+  .catch(error => {
+    console.error('Error fetching JSON:', error);
+});
 
 function fresults(xobj) {
    let results = xobj.results;
@@ -97,8 +99,9 @@ function fresults(xobj) {
 
       faddelem('p',document.body,{innerHTML:'total projects: '+fcomnum(total_results)+'<br />' 
          +'per page: '+fcomnum(per_page)+'<br />'
-         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<span style="padding-left:20px"> ( ' 
-         + furl(github_root+'cncnpc_seeds.html?project_id=223729&user_view=pics', 'seeds')+' )</span>' 
+         +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
+         //+'<span style="padding-left:20px"> ( ' 
+         //+ furl(github_root+'cncnpc_seeds.html?project_id=223729', 'seeds')+' )</span>' 
          + '<br />'
          });
             
@@ -110,19 +113,6 @@ function fresults(xobj) {
          {innerText:'Title'},
       ];
       faddelems('th',hrow,labels);
-
-      let library_rec = '';
-
-      // find the seed library project, save the record and
-      // delete it from the array so it's not shown in the
-      // project table.
-      /*for( let j=0; j<results.length; j++ ){
-         let rec = results[j];
-         if( rec.id.toString() === cnc_library ) {
-             library_rec = rec;
-             results.splice( j, 1 );
-         }
-      }*/
       
       let tbody = faddelem('tbody',table);
       for (let i=0; i<results.length; i++) {
@@ -134,19 +124,11 @@ function fresults(xobj) {
          let garden_params = '';
          let plant_target = '';
 
-         // if it's the cnc project, the view will be simplified 
-         // using the g_list and s_list
-         if( rec.id.toString() === cnc_project ){
-             target_url = (github_root+'cncnpc_plants.html'+cnc_library_params);
-             //plant_target = furl(plant_target,'&#127807');
-         } else {
-             target_url = (github_root+'cncnpc_plants_w.html?project_id='+rec.id+'&view=visitingonly&field:wildlife+activity=yes&hrank=species');
-         }
+         target_url = (github_root+'cncnpc_seeds.html?project_id='+rec.id);
          
          let values = [
             {innerHTML:furl(root_projects+rec.id,'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />')},
             {innerHTML:furl(target_url, (rec.title||'no title'))},
-           // {innerHTML:plant_target},
          ];
          faddelems('td',brow,values);
       };
@@ -163,7 +145,7 @@ function fresults(xobj) {
 let apibase = 'https://api.inaturalist.org/v1/projects';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Projects/get_projects';
-let apirefname = 'Affiliate Gardens';
+let apirefname = 'Seed Swaps & Libraries';
 let apiref = furl(apirefurl,apirefname);
 /*faddelem('p',document.body,{innerHTML:'<div style="float:right; padding-left: 20px; padding-right: 20px; padding-top:5px; padding-bottom:10px;">'
   + '<a href="https://stockslager.github.io/iNat/do_what_now.html">help</div></a>'});*/
