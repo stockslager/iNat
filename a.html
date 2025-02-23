@@ -34,15 +34,16 @@
          --color-base-translucent: rgba(0,0,0,0.85);
       }
    }
-   #dltest { float:right; width:fit-content; display: inline-table; justify-content:start; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }
+   #dltest { margin-left:15px; float:right; width:fit-content; display: inline-table; justify-content:start; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }
    #itable { float:right; width:fit-content; display: inline-table; justify-content:start; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }   
    #key { text-decoration:underline; font: 16px Sans-Serif; padding:0; padding-right: 25px; }
-   #tablekey { display:inline-table; padding-left:20px; }
+   #tablekey { display:inline-table; }
    #trkey { padding:0; background:var(--color-base); border:none; border-collapse:collapse; }
    #tdkey { padding:0; padding-right: 25px; }
    #main { width:100%; }
    #h2 { font-weight:bold; font-size:20px; }
    table, td, th { border-collapse:collapse; margin:0; padding:4px; }
+   caption { align:left; text-decoration:underline; font: 16px Sans-Serif; padding:0; padding-right: 25px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
    th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }
@@ -420,7 +421,7 @@ function fresults(xobj) {
            if( nf_box_array[e].field_name === '' ){
                if( labelCount === 0 ){
                    dlString += '<span id="dltest"><table id="tablekey">';
-                   dlString += ('<caption id="key">not found on this page</caption>');                      
+                   dlString += ('<caption>not found on this page</caption>');                      
                } 
                // delete the group of obs field and add only the one chosen
                winurlparams_copy = winurlparams;
