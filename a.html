@@ -91,8 +91,6 @@ if( p_obs_field_array !== '' ){
     field_array = p_obs_field_array.split(",");
 }
 
-alert( winurlparams );
-
 // if only one observation field was passed in, there is no reason to "merge"
 // a single field.  so default to "un-merged" if only one obs field is passed in. 
 // defaulting to un-merged will add a target url to the single obs field value in the table.
@@ -422,6 +420,7 @@ function fresults(xobj) {
            labelCount++;
            if( box_array[e].field_name !== '' ){
                // link to 
+               alert( winurlparams );
                dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html?project'+box_array[e].field_id,box_array[e].field_id) + '</td>');
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
