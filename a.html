@@ -408,6 +408,11 @@ function fresults(xobj) {
 
       let firstCol = 'yes';
       let winurlparams_copy ='';
+
+
+      box_array = box_array.filter(box_array => box_array.field_name !== '');
+      alert(box_array);
+    
       for( let e=0; e<box_array.length; e++ ){
            if( isMultipleOfFour(labelCount) ){
                if( labelCount === 0 ){
@@ -437,7 +442,6 @@ function fresults(xobj) {
                winurlparams_copy.delete('obs_fields');
                winurlparams_copy.append('obs_fields',box_array[e].field_id);
             
-               alert(winurlparams_copy);
                 dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
