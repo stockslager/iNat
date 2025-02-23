@@ -163,14 +163,10 @@ winurlparams.append('operator', p_operator);
 winurlparams.append(p_field, p_field_value);
 winurlparams.append('taxon_id', p_taxon_id);
 
-function isMultipleOfFour(num) {
-  return num % 4 === 0;
-}
-
-function boxRow(field_id, field_name, field_value) {
-    this.field_id    = field_id;
-    this.field_name  = field_name;
-}
+// these are stored in params.json 
+let p_obs_id   = '';
+let p_insect_prj = '';
+let p_library_name = '';
 
 function fresults(xobj) {
    let results = xobj.results;
@@ -255,10 +251,6 @@ function fresults(xobj) {
 };
 
 async function asyncGetData() {
-   let p_obs_id   = '';
-   let p_insect_prj = '';
-   let p_library_name = '';
-
    await fetch('params.json')
      .then(response => response.json())
      .then(data => {
