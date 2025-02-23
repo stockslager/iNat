@@ -412,7 +412,7 @@ function fresults(xobj) {
       for( let e=0; e<box_array.length; e++ ){
            if( labelCount === 0 ){
                dlString += '<span id="dltest"><table id="tablekey">';
-               dlString += ('<tr id="trkey">  <td id="key">obs id</td>  <td id="key">not found on this page</td>  </tr>');                      
+               dlString += ('<caption>not found on this page</caption>');                      
            } 
            labelCount++;
            if( box_array[e].field_name === '' ){
@@ -431,10 +431,14 @@ function fresults(xobj) {
                // delete any existing obs_fields and append the param for the url
                winurlparams_copy.delete('obs_fields');
                winurlparams_copy.append('obs_fields',box_array[e].field_id);
-            
-                dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
-               //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
-               dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
+
+               if( isMultipleOfFour(labelCount) ){
+                   dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html?'+winurlparams_copy,box_array[e].field_id) + '</td></tr>');
+                   //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
+               } else {
+                   dlString += ('<td id="tdkey">' + furl(github_root+'a.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
+                   //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
+               }
            }
       }
     
