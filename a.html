@@ -413,31 +413,31 @@ function fresults(xobj) {
            if( box_array[e].field_name === '' ){
                if( labelCount === 0 ){
                    dlString += '<span id="dltest"><table id="tablekey">';
-                   dlString += ('<caption>not found on this page</caption>');                      
+                   dlString += ('<caption id="trkey">not found on this page</caption>');                      
                } 
                labelCount++;
-               if( box_array[e].field_name === '' ){
-                   // delete the group of obs field and add only the one chosen
-                   winurlparams_copy = winurlparams;
+               // delete the group of obs field and add only the one chosen
+               winurlparams_copy = winurlparams;
             
-                   // find key/value pair for &field: param if one was passed in
-                   // delete the &field when found
-                   // then, append the single param for the url being displayed
-                   for (const [key, value] of winurlparams_copy.entries()) {
-                       if( key.startsWith('field') ){
-                           winurlparams_copy.delete( key );
-                       }
-                   }    
-
-                   // delete any existing obs_fields and append the param for the url
-                   winurlparams_copy.delete('obs_fields');
-                   winurlparams_copy.append('obs_fields',box_array[e].field_id);
-
-                   if( isMultipleOfFour(labelCount) ){
-                       dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html?'+winurlparams_copy,box_array[e].field_id) + '</td></tr>');
-                   } else {
-                       dlString += ('<td id="tdkey">' + furl(github_root+'a.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
+               // find key/value pair for &field: param if one was passed in
+               // delete the &field when found
+               // then, append the single param for the url being displayed
+               for (const [key, value] of winurlparams_copy.entries()) {
+                   if( key.startsWith('field') ){
+                       winurlparams_copy.delete( key );
                    }
+               }    
+
+               // delete any existing obs_fields and append the param for the url
+               winurlparams_copy.delete('obs_fields');
+               winurlparams_copy.append('obs_fields',box_array[e].field_id);
+
+               alert(labelCount);
+               if( isMultipleOfFour(labelCount) ){
+                   alert('2 ' + labelCount);
+                   dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html?'+winurlparams_copy,box_array[e].field_id) + '</td></tr>');
+               } else {
+                   dlString += ('<td id="tdkey">' + furl(github_root+'a.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
                }
            }
       }
