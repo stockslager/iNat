@@ -422,7 +422,6 @@ function fresults(xobj) {
                    dlString += '<span id="dltest"><table id="tablekey">';
                    dlString += ('<caption id="key">not found on this page</caption>');                      
                } 
-               labelCount++;
                // delete the group of obs field and add only the one chosen
                winurlparams_copy = winurlparams;
             
@@ -440,8 +439,8 @@ function fresults(xobj) {
                winurlparams_copy.append('obs_fields',nf_box_array[e].field_id);
 
                alert(labelCount);
-               if( labelCount === 1 || isMultipleOfFour(labelCount) ){
-                   if( labelCount > 1 ) {
+               if( labelCount === 0 || isMultipleOfFour(labelCount) ){
+                   if( labelCount > 0 ) {
                        dlString += '</tr>';
                    }
                    alert('2 ' + labelCount);
@@ -449,6 +448,7 @@ function fresults(xobj) {
                } else {
                    dlString += ('<td id="tdkey">' + furl(github_root+'a.html?'+winurlparams_copy,nf_box_array[e].field_id) + '</td>');
                }
+               labelCount++;
            }
       }
 
