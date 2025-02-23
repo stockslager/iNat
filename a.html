@@ -423,8 +423,6 @@ function fresults(xobj) {
                    dlString += '<span id="dltest"><table id="tablekey">';
                    dlString += ('<caption id="cap">not found on this page</caption>');                      
                } 
-               // delete the group of obs field and add only the one chosen
-               winurlparams_copy = winurlparams;
             
                if( labelCount === 0 || isMultipleOfFour(labelCount) ){
                    if( labelCount > 0 ) {
@@ -459,7 +457,7 @@ function fresults(xobj) {
            labelCount++;
            if( box_array[e].field_name !== '' ){
                // delete the group of obs field and add only the one chosen
-               winurlparams_copy = winurlparams;
+               let winurlparams_copy = new URLSearchParams(winurlsearchstr.substring(1));
             
                // find key/value pair for &field: param if one was passed in
                // delete the &field when found
