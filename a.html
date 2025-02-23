@@ -422,9 +422,21 @@ function fresults(xobj) {
            if( box_array[e].field_name !== '' ){
                // delete the group of obs field and add only the one chosen
                winurlparams_copy = winurlparams;
+            
+               // find key/value pair for &field: param if one was passed in
+               // delete the &field when found
+               // then, append the single param for the url being displayed
+               for (const [key, value] of winurlparams_copy.entries()) {
+                   if( key.startsWith('field') ){
+                       winurlparams_copy.delete( key );
+                   }
+               }    
+               winurlparams_copy.append(('field:'+box_array[e].field_name),box_array[e].field_id);
+
+               // delete any existing obs_fields and append the param for the url
                winurlparams_copy.delete('obs_fields');
                winurlparams_copy.append('obs_fields',box_array[e].field_id);
-               winurlparams_copy.append(('field:'+box_array[e].field_name),box_array[e].field_id);
+            
                alert(winurlparams_copy);
                 dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
