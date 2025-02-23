@@ -407,6 +407,7 @@ function fresults(xobj) {
       };
 
       let firstCol = 'yes';
+      let winurlparams_copy ='';
       for( let e=0; e<box_array.length; e++ ){
            if( isMultipleOfFour(labelCount) ){
                if( labelCount === 0 ){
@@ -420,7 +421,7 @@ function fresults(xobj) {
            labelCount++;
            if( box_array[e].field_name !== '' ){
                // delete the group of obs field and add only the one chosen
-               let winurlparams_copy = winurlparams;
+               winurlparams_copy = winurlparams;
                winurlparams_copy.delete('obs_fields');
                winurlparams_copy.append('obs_fields',box_array[e].field_id);
                winurlparams_copy.append(('field:'+box_array[e].field_name),box_array[e].field_id);
