@@ -40,12 +40,6 @@
          --color-base-translucent: rgba(0,0,0,0.85);
       }
    }
-   #dltest { float:right; width:fit-content; display: inline-table; justify-content:start; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }
-   #itable { float:right; width:fit-content; display: inline-table; justify-content:start; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }   
-   #key { text-decoration:underline; font: 16px Sans-Serif; padding:0; padding-right: 25px; }
-   #tablekey { display:inline-table; }
-   #trkey { padding:0; background:var(--color-base); border:none; border-collapse:collapse; }
-   #tdkey { padding:0; padding-right: 25px; }
    #main { width:fit-content; min-width:375px; }
    #h2 { font-weight:bold; font-size:20px; }
    #utf { font-size:1.475em; }
@@ -133,43 +127,6 @@ let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observa
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
 <script> 
 
-let p_obs_id   = '';
-let p_insect_prj = '';
-let p_library_name = '';
-
-fetch('params.json')
-  .then(response => response.json())
-  .then(data => {
-    // Access your data here 
-    const pref     = data.prefs.find(item => item.seed_library_prj_id === p_project_id);
-    p_obs_id       = pref.preferred_obs_field;
-    p_insect_prj   = pref.insect_prj;
-    p_library_name = pref.library_name; 
-    console.log(data);
-  })
-  .catch(error => {
-    console.error('Error fetching JSON:', error);
-});
-
-if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
-   let instructions = [
-      {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.'},
-   ];
-   faddelems('p',document.body,instructions);
-}
-else {
-   fetch(apiurl)
-   .then((response) => {
-      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-      return response.json();
-   })
-   .then((data) => { fresults(data); })
-   .catch((err) => {
-      console.error(err.message);
-      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-   });
-};
-
 // remove the field param from the url before building options
 winurlparams.delete(p_field);
 winurlparams.delete('operator');
@@ -200,14 +157,10 @@ winurlparams.append('operator', p_operator);
 winurlparams.append(p_field, p_field_value);
 winurlparams.append('taxon_id', p_taxon_id);
 
-function isMultipleOfFour(num) {
-  return num % 4 === 0;
-}
-
-function boxRow(field_id, field_name, field_value) {
-    this.field_id    = field_id;
-    this.field_name  = field_name;
-}
+// these are stored in params.json 
+let p_obs_id   = '';
+let p_insect_prj = '';
+let p_library_name = '';
 
 function fresults(xobj) {
    let results = xobj.results;
@@ -290,6 +243,50 @@ function fresults(xobj) {
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
+
+async function asyncGetData() {
+   await fetch('params.json')
+     .then(response => response.json())
+     .then(data => {
+      // Access your data here 
+      const pref     = data.prefs.find(item => item.seed_library_prj_id === p_project_id);
+      p_obs_id       = pref.preferred_obs_field;
+      p_insect_prj   = pref.insect_prj;
+      p_library_name = pref.library_name; 
+      console.log(data);
+   })
+     .catch(error => {
+      console.error('Error fetching JSON:', error);
+   });
+
+   if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
+      let instructions = [
+         {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.'},
+      ];
+      faddelems('p',document.body,instructions);
+   }
+   else {
+      await fetch(apiurl)
+      .then((response) => {
+         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+         return response.json();
+      })
+      .then((data) => { fresults(data); })
+      .catch((err) => {
+         console.error(err.message);
+         faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+      });
+   };
+}
+
+// need to pull resources from a json file to pass into an api
+// so needs to be asynchronous. 
+const request = async () => {
+   asyncGetData();
+}
+
+request()   
+
 </script>
 </body>
 
