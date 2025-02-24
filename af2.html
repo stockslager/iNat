@@ -91,7 +91,11 @@ winurlparams.delete('per_page');
 winurlparams.append('per_page','30');
 
 let apiurl = ('https://api.inaturalist.org/v1/observations?project_id='+p_project_id+'&id='+p_obs_id+'&taxon_id='+p_taxon_id);
-//let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+
+if( p_obs_id !== '' ){
+    apiurl = ('https://api.inaturalist.org/v1/observations/'+p_obs_id);
+}
+  
 let apirefurl = 'https://stockslager.github.io/iNat/reseed_plant_inspector.html';
 
 let p_custom     = 'no';
