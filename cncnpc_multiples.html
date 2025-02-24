@@ -202,6 +202,7 @@ function fresults(xobj) {
       let tbody = faddelem('tbody',table);
 
       // may need to revisit this if species_guess is ever null
+      results.sort((a, b) => a.taxon.preferred_common_name.toLowerCase().localeCompare(b.taxon.preferred_common_name.toLowerCase()))
       //results.sort((a, b) => a.species_guess.toLowerCase().localeCompare(b.species_guess.toLowerCase()))
           
       for (let i=0; i<results.length; i++) {
@@ -233,7 +234,10 @@ function fresults(xobj) {
 
          values = [
                   {innerText:i+1},
-                  {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                  (p_options.includes('bigger_image'))
+                     ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
+                     : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
+                  //{innerHTML:furl(root_observations+rec.id,'<img class="icon" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:taxon},
                   {innerHTML:furl(github_root+'cncnpc_insects.html?project_id='+p_insect_prj+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_id+'&plant_name='+pref_tax_name,'<span id=\"utf\">&#128027;</span>')},
                   ];
