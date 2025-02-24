@@ -42,7 +42,7 @@
    }
    #key { color:var(--color-text-link); }
    #main { width:fit-content; min-width:375px; }
-   dl { width:fit-content; background:var(--color-alt); display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }
+   dl { width:fit-content; min-width:375px; background:var(--color-alt); display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }
    dt {  }
    dd { margin: 0; grid-column-start: 2;} 
    table, td, th { border-collapse:collapse; margin:0; padding:10px; }
@@ -192,24 +192,22 @@ function fresults(xobj) {
                        let value = rec.ofvs[j].value || '';
                        let avail = [];
 
+                       if( p_strip_html === 'yes' ){
+                           value = stripHtml(value);
+                       }
+
                        if( rec.ofvs[j].field_id === 19197 ){
                            value = furl(root_usda+rec.ofvs[j].value,rec.ofvs[j].value);
                        }
                        if( rec.ofvs[j].field_id === 19198 ){
                            value = furl(root_missouri+rec.ofvs[j].value,rec.ofvs[j].value);
                        }
-
-                       if( p_strip_html === 'yes' ) {
-                          avail = [
-                             {innerText:nm.toLowerCase()},
-                             {innerText:stripHtml(value.toLowerCase())},
-                          ];        
-                       } else {
-                          avail = [
+                       
+                       avail = [
                              {innerText:nm.toLowerCase()},
                              {innerHTML:value.toLowerCase()},
-                          ];        
-                       }
+                       ];        
+                       
                        faddelems('td',brow, avail);
                    }
                } else {
@@ -220,8 +218,12 @@ function fresults(xobj) {
                        if( rec.ofvs[j].value ){
                            let brow  = faddelem('tr',tbody);
                            let nm    = rec.ofvs[j].name || '';
-                           let value = rec.ofvs[j].value || '';
+                           let value = rec.ofvs[j].value || ' ';
                            let avail = [];
+
+                           if( p_strip_html === 'yes' ){
+                               value = stripHtml(value);
+                           }
 
                            if( rec.ofvs[j].field_id === 19197 ){
                                value = furl(root_usda+rec.ofvs[j].value,rec.ofvs[j].value);
@@ -230,17 +232,10 @@ function fresults(xobj) {
                                value = furl(root_missouri+rec.ofvs[j].value,rec.ofvs[j].value);
                            }
 
-                           if( p_strip_html === 'yes' ) {
-                               avail = [
-                                 {innerText:nm.toLowerCase()},
-                                 {innerText:stripHtml(value.toLowerCase())},
-                               ];        
-                           } else {
-                               avail = [
+                           avail = [
                                  {innerText:nm.toLowerCase()},
                                  {innerHTML:value.toLowerCase()},
-                               ];        
-                           }
+                           ];        
 
                            faddelems('td',brow, avail);
                        }
