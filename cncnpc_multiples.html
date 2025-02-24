@@ -229,15 +229,14 @@ function fresults(xobj) {
          }
 
          if( tax_id !== '' ){
-             taxon = furl(github_root+'cncnpc_seeds_fields.html?project_id='+p_project_id+'&obs_id='+rec.id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl(github_root+'cncnpc_seeds_fields.html?project_id='+p_project_id+'&obs_id='+rec.id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');  
+             if( rec.taxon.count >1 ){
+                 taxon = furl((github_root+'cncnpc_seeds.html?'+winurlparams),rec.count);
+             }
          }
 
          let caterpillar = furl(github_root+'cncnpc_insects.html?project_id='+p_insect_prj+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_id+'&plant_name='+pref_tax_name,'<span id=\"utf\">&#128027;</span>'); 
 
-         if( rec.count > 1 ){
-             caterpillar = furl((github_root+'cncnpc_seeds.html?'+winurlparams),rec.count);
-         }
-       
          values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
