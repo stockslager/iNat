@@ -190,14 +190,15 @@ function fresults(xobj) {
                        let brow  = faddelem('tr',tbody);
                        let nm    = rec.ofvs[j].name || '';
                        let value = rec.ofvs[j].value || '';
+                       let avail = [];
 
                        if( p_strip_html === 'yes' ) {
-                          let avail = [
+                          avail = [
                              {innerText:nm.toLowerCase()},
                              {innerText:stripHtml(value.toLowerCase())},
                           ];        
                        } else {
-                          let avail = [
+                          avail = [
                              {innerText:nm.toLowerCase()},
                              {innerHTML:value.toLowerCase()},
                           ];        
@@ -212,14 +213,15 @@ function fresults(xobj) {
                            let brow  = faddelem('tr',tbody);
                            let nm    = rec.ofvs[j].name || '';
                            let value = rec.ofvs[j].value || '';
+                           let avail = [];
 
                            if( p_strip_html === 'yes' ) {
-                               let avail = [
+                               avail = [
                                  {innerText:nm.toLowerCase()},
                                  {innerText:stripHtml(value.toLowerCase())},
                                ];        
                            } else {
-                               let avail = [
+                               avail = [
                                  {innerText:nm.toLowerCase()},
                                  {innerHTML:value.toLowerCase()},
                                ];        
