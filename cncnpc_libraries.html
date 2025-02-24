@@ -115,12 +115,11 @@ function fresults(xobj) {
          let multi_obs_per_species = 'no';
 
          for( let i=0; i < p_prefs.length; i++ ) {
-              alert( 'rec.id ' + rec.id + 'lib prj id - ' + p_prefs[i].seed_library_prj_id );
               if( rec.id === p_prefs[i].seed_library_prj_id ){
                   multi_obs_per_species = p_prefs[i].multi_obs_per_species;
               }
          }
-
+         alert(multi_obs_per_species);
          if( multi_obs_per_species === 'yes' ){
              target_url = (github_root+'cncnpc_multiples.html?project_id='+rec.id);
          } else {
