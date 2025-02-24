@@ -142,7 +142,7 @@ function fresults(xobj) {
          let wild = '';
 
          let icon = '<div style="display:flex; align-items:center;"><img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
-         if( rec.taxon.preferred_common_name ){
+         if( rec.taxon.preferred_common_name && rec.taxon.preferred_common_name !== ''){
              header_row += ((rec.taxon.preferred_common_name||''));
          }
  
