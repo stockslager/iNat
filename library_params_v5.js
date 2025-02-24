@@ -7,6 +7,9 @@ let root_projects     = 'https://www.inaturalist.org/projects/';
 // repo root directory
 let github_root = 'https://stockslager.github.io/iNat/';
 
+// usda outlink used in cncnpc_seeds_fields.html
+let root_usda = 'https://plants.usda.gov/plant-profile/';
+
 // iconic taxa id defaults
 let iPlants = '47126';
 let iReptiles = '26036';
