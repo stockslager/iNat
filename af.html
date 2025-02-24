@@ -164,7 +164,7 @@ function fresults(xobj) {
          if( rec.quality_grade === 'research' ) {
              wild = (rec.quality_grade + ' (wild)');
              for( let i=0; i<rec.outlinks.length; i++ ){
-                  if( rec.outlinks.source === 'GBIF' ){
+                  if( rec.outlinks.source.toString() === 'GBIF' ){
                       wild = furl(rec.outlinks[i].url, (rec.quality_grade + ' (wild)'));
                   } 
              }
