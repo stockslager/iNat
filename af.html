@@ -89,9 +89,7 @@ winurlparams.append('id', p_obs_id);
 winurlparams.delete('per_page');
 winurlparams.append('per_page','30');
 
-let apibase = 'https://api.inaturalist.org/v1/observations';
-let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-//let apiurl = ('https://api.inaturalist.org/v1/observations/'+p_obs_id);
+let apiurl = ('https://api.inaturalist.org/v1/observations/'+p_obs_id);
  
 let apirefurl = 'https://stockslager.github.io/iNat/reseed_plant_inspector.html';
 
@@ -178,7 +176,6 @@ function fresults(xobj) {
 
          let labels = [ {innerText:'Observation Field'},
                        {innerText:'Value'},
-                      // {innerText:'Description'},
                       ];
 
          faddelems('th',hrow,labels);
@@ -193,12 +190,10 @@ function fresults(xobj) {
                        let brow  = faddelem('tr',tbody);
                        let nm    = rec.ofvs[j].name || '';
                        let value = rec.ofvs[j].value || '';
-                       //let desc  = rec.ofvs[j].observation_field.description || '';
 
                        let avail = [
                             {innerText:nm.toLowerCase()},
                             {innerText:value.toLowerCase()},
-                            // {innerText:desc.toLowerCase()},
                        ];        
                        faddelems('td',brow, avail);
                    }
@@ -210,12 +205,10 @@ function fresults(xobj) {
                            let brow  = faddelem('tr',tbody);
                            let nm    = rec.ofvs[j].name || '';
                            let value = rec.ofvs[j].value || '';
-                           //let desc  = rec.ofvs[j].observation_field.description || '';
 
                            let avail = [
                              {innerText:nm.toLowerCase()},
                              {innerText:value.toLowerCase()},
-                            // {innerText:desc.toLowerCase()},
                            ];        
 
                            faddelems('td',brow, avail);
@@ -226,7 +219,6 @@ function fresults(xobj) {
          }
          
          if( rec.description ){
-             //faddelem('p',document.body,{innerHTML:'<div style="padding:1px;">&nbsp;</div>'});  
              faddelem('p',document.body,{innerHTML:'<dl>'
                             + '<dt></dt><span id="key"><dd>Notes ~ </dd></span>'
                             + '<dt></dt><dd>'+rec.description.toLowerCase()+'</dd>'
@@ -249,9 +241,9 @@ async function asyncGetData(){
        console.error('Error fetching JSON:', error);
    });
 
-   if (winurlsearchstr==='') {
+   if (winurlsearchstr==='' || p_obs_id === '' ) {
       let instructions = [
-         {innerHTML:'Invalid parameter list.  Please access via '+furl(apirefurl)+'.'},
+         {innerHTML:'Invalid parameter list.  An observation id is required.  Please add &obs_id=xxxxxxxxx'},
       ];
       faddelems('p',document.body,instructions);
    }
