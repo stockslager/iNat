@@ -81,6 +81,7 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 
 let p_project_id = winurlparams.get('project_id') || '';
 let p_obs_id     = winurlparams.get('obs_id') || '';
+let p_taxon_id   = winurlparams.get('taxon_id') || '';
 
 // set id to the obs_id passed in for call to api...
 winurlparams.delete('id');
@@ -268,9 +269,9 @@ async function asyncGetData(){
        console.error('Error fetching JSON:', error);
    });
 
-   if (winurlsearchstr==='' || p_obs_id === '' ) {
+   if (winurlsearchstr==='' || (p_obs_id === '' && p_taxon_id === '') ) {
       let instructions = [
-         {innerHTML:'Invalid parameter list.  An observation id is required.  Please add &obs_id=xxxxxxxxx'},
+         {innerHTML:'Invalid parameter list.  An observation id or taxon_id is required.  Please add &obs_id=xxxxxxxxx or &taxon_id=xxxxxx'},
       ];
       faddelems('p',document.body,instructions);
    }
