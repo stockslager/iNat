@@ -93,7 +93,8 @@ let apiurl = ('https://api.inaturalist.org/v1/observations/'+p_obs_id);
  
 let apirefurl = 'https://stockslager.github.io/iNat/reseed_plant_inspector.html';
 
-let p_custom   = 'no';
+let p_custom     = 'no';
+let p_strip_html = 'yes';
   
 function fresults(xobj) {
    let results = xobj.results;
@@ -190,10 +191,17 @@ function fresults(xobj) {
                        let nm    = rec.ofvs[j].name || '';
                        let value = rec.ofvs[j].value || '';
 
-                       let avail = [
-                            {innerText:nm.toLowerCase()},
-                            {innerText:value.toLowerCase()},
-                       ];        
+                       if( p_strip_html === 'yes' ) {
+                          let avail = [
+                             {innerText:nm.toLowerCase()},
+                             {innerText:stripHtml(value.toLowerCase())},
+                          ];        
+                       } else {
+                          let avail = [
+                             {innerText:nm.toLowerCase()},
+                             {innerHTML:value.toLowerCase()},
+                          ];        
+                       }
                        faddelems('td',brow, avail);
                    }
                } else {
@@ -205,10 +213,17 @@ function fresults(xobj) {
                            let nm    = rec.ofvs[j].name || '';
                            let value = rec.ofvs[j].value || '';
 
-                           let avail = [
-                             {innerText:nm.toLowerCase()},
-                             {innerText:value.toLowerCase()},
-                           ];        
+                           if( p_strip_html === 'yes' ) {
+                               let avail = [
+                                 {innerText:nm.toLowerCase()},
+                                 {innerText:stripHtml(value.toLowerCase())},
+                               ];        
+                           } else {
+                               let avail = [
+                                 {innerText:nm.toLowerCase()},
+                                 {innerHTML:value.toLowerCase()},
+                               ];        
+                           }
 
                            faddelems('td',brow, avail);
                        }
@@ -233,7 +248,8 @@ async function asyncGetData(){
      .then(data => {
        // Access your data here 
        const pref   = data.prefs.find(item => item.seed_library_prj_id === p_project_id);
-       p_custom = pref.custom_obs_fields; 
+       p_custom     = pref.custom_obs_fields; 
+       p_strip_html = pref.strip_html;
        console.log(data);
      })
      .catch(error => {
