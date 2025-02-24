@@ -68,6 +68,8 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+
+let p_prefs = [];
 </script>
    
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/cncnpc_params_v2.js"></script>
@@ -110,8 +112,19 @@ function fresults(xobj) {
          let truncatedText = truncate(longText, 500);
          let garden_params = '';
          let plant_target = '';
+         let multi_obs_per_species = 'no';
 
-         target_url = (github_root+'cncnpc_seeds.html?project_id='+rec.id);
+         for( let i=0; i<prefs.length; i++ ) {
+              if( id === prefs[i].seed_library_prj_id ){
+                  multi_obs_per_species = prefs[i].multi_obs_per_species;
+              }
+         }
+
+         if( multi_obs_per_species === 'yes' ){
+             target_url = (github_root+'cncnpc_multiples.html?project_id='+rec.id);
+         } else {
+             target_url = (github_root+'cncnpc_seeds.html?project_id='+rec.id);
+         }
          
          let values = [
             {innerHTML:furl(root_projects+rec.id,'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />')},
@@ -141,6 +154,7 @@ async function getProjectIds() {
        for( let i=0; i<data.prefs.length; i++ ){
             p_projects += (data.prefs[i].seed_library_prj_id + ',');
        }
+       p_prefs = data.prefs;
        winurlparams.delete('id');
        winurlparams.append('id', p_projects);
      })
