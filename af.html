@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Seed Availability" />
+<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="Seeds" />
+<link rel="manifest" href="site.webmanifest" />
+<title>Seed Availability</title>
+<style>
+   :root { 
+      background: var(--color-base);
+      color: var(--color-text);
+      font: 14px Sans-Serif;
+      --color-base: white;
+      --color-alt: whitesmoke;
+      --color-brand: forestgreen;
+      --color-text: black;
+      --color-text-invert: white;
+      --color-text-link: royalblue;
+      --color-border: lightgray;
+      --color-hover: lightgray;
+      --color-base-translucent: rgba(255,255,255,0.85);
+   }
+   @media (prefers-color-scheme: dark) {
+      :root {
+         --color-base: black;
+         --color-alt: #171717;
+         --color-brand: forestgreen;
+         --color-text: #bababa;
+         --color-text-invert: black;
+         --color-text-link: cornflowerblue;
+         --color-border: #444;
+         --color-hover: #444;
+         --color-base-translucent: rgba(0,0,0,0.85);
+      }
+   }
+   #key { color:var(--color-text-link); }
+   #main { width:fit-content; min-width:375px; }
+   dl { width:fit-content; background:var(--color-alt); display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; border-width:1px 0px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }
+   dt {  }
+   dd { margin: 0; grid-column-start: 2;}   
+ 
+   table, td, th { border-collapse:collapse; margin:0; padding:10px; }
+   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
+   th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
+   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }
+   tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt); }
+ 
+   .tar { text-align:right; }
+   .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
+   .icon { height:28px; width:28px; border-radius:50%; }
+   .npcicon { width:28px; height:28px; text-align:center; vertical-align:middle; z-index: 9999; }
+   .photo { height:64px; width:64px; border-radius: 5px 5px 5px 5px; }
+   img { margin:0; padding:0; border:0; }
+   a { text-decoration:none; color:var(--color-text-link); }
+   a:hover { background:var(--color-hover); }
+   #nav { margin-left:-8px; position:-webkit-sticky /*Safari*/; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
+   @media print { #nav { display:none; } } 
+   .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
+   .button { background:var(--color-alt); }
+   .button_inactive { background:none; color:var(--color-border); }
+   .bin_true { text-decoration: underline wavy rgba(34,139,34,0.35); }
+   .bin_false { text-decoration: underline wavy rgba(178,34,34,0.35); }
+</style>
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v5.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
+<script>
+  
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+
+let p_project_id = winurlparams.get('project_id') || '';
+let p_obs_id     = winurlparams.get('obs_id') || '';
+
+// set id to the obs_id passed in for call to api...
+winurlparams.delete('id');
+winurlparams.append('id', p_obs_id);
+
+winurlparams.delete('per_page');
+winurlparams.append('per_page','30');
+
+let apiurl = ('https://api.inaturalist.org/v1/observations/'+p_obs_id);
+ 
+let apirefurl = 'https://stockslager.github.io/iNat/reseed_plant_inspector.html';
+
+let p_custom   = 'no';
+
+fetch('params.json')
+  .then(response => response.json())
+  .then(data => {
+    // Access your data here 
+    const pref   = data.prefs.find(item => item.seed_library_prj_id === p_project_id);
+    p_custom = pref.custom_obs_fields; 
+    console.log(data);
+  })
+  .catch(error => {
+    console.error('Error fetching JSON:', error);
+});
+
+if (winurlsearchstr==='') {
+   let instructions = [
+      {innerHTML:'Invalid parameter list.  Please access via '+furl(apirefurl)+'.'},
+   ];
+   faddelems('p',document.body,instructions);
+}
+else {
+   fetch(apiurl)
+   .then((response) => {
+      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+      return response.json();
+   })
+   .then((data) => { fresults(data); })
+   .catch((err) => {
+      console.error(err.message);
+      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+   });
+};
+  
+function fresults(xobj) {
+   let results = xobj.results;
+   if (results) {
+      let total_results = xobj.total_results;
+               
+      for (let i=0; i<results.length; i++) {
+         let rec = results[i];
+         let tax_name = '';
+         let pref_tax_name = '';  
+         let tax_photo = '';
+         let availability = 'Out of Stock';
+         let header_row = '';
+         let wild = '';
+
+         let icon = '<div style="display:flex; align-items:center;"><img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
+         header_row += ((rec.taxon.preferred_common_name||''));
+ 
+         faddelem('h2',document.body,{innerHTML:icon+'<span style="padding:10px;">'+header_row+'</span></div>'});  
+
+         // donor table
+         let d_table = faddelem('table',document.body,{id:'main'});
+         let d_thead = faddelem('thead',d_table);
+         let d_hrow = faddelem('tr',d_thead);
+
+         let d_labels = [ {innerText:'Donor Info'},
+                         { innerText:' '}, ];
+
+         let user_icon = rec.user.icon || '';
+         if( user_icon === '' ){
+            user_icon += '<div class="npcicon">&#x1F464;</div>';
+         } else {
+            user_icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+user_icon+'" />';
+         }
+
+         if( rec.quality_grade === 'research' ) {
+             wild = (rec.quality_grade + ' (wild)');
+             for( let i=0; i<rec.outlinks.length; i++ ){
+                  if( rec.outlinks.source === 'GBIF' ){
+                      wild = furl(rec.outlinks[i].url, (rec.quality_grade + ' (wild)'));
+                  } 
+             }
+         } else if( rec.quality_grade === 'casual' ){
+             wild = (rec.quality_grade + ' (cultivated)');
+         } else {
+             wild = rec.quality_grade;
+         }
+
+         faddelems('th',d_hrow,d_labels);
+         let d_tbody = faddelem('tbody',d_table);
+
+         let d_row1  = faddelem('tr',d_tbody);
+         let d_one = [
+                             {innerText:'donor'},
+                             {innerHTML:user_icon+'<span style="padding-left:10px;">' + furl(root_people+rec.user.login,rec.user.login)+'</span></div>'},
+                       ];        
+         faddelems('td',d_row1, d_one);
+
+         let d_row3   = faddelem('tr',d_tbody);
+         let d_three  = [     {innerText:'quality grade'},
+                              {innerHTML:wild},];        
+         faddelems('td',d_row3, d_three);
+        
+         let d_row2 = faddelem('tr',d_tbody);
+         let d_two  = [     {innerText:'inat observation'},
+                             {innerHTML:furl(root_observations+rec.id,rec.id)},];        
+         faddelems('td',d_row2, d_two);
+
+         faddelem('p',document.body,{innerText:' '});
+
+         let table = faddelem('table',document.body,{id:'main'});
+         let thead = faddelem('thead',table);
+         let hrow = faddelem('tr',thead);
+
+         let labels = [ {innerText:'Observation Field'},
+                       {innerText:'Value'},
+                      // {innerText:'Description'},
+                      ];
+
+         faddelems('th',hrow,labels);
+
+         let tbody = faddelem('tbody',table);
+       
+         if(rec.ofvs&&rec.ofvs.length>0){
+            for (let j=0; j<rec.ofvs.length; j++){
+
+               if( p_custom === 'yes' ) {
+                   if( rec.ofvs[j].value ) {
+                       let brow  = faddelem('tr',tbody);
+                       let nm    = rec.ofvs[j].name || '';
+                       let value = rec.ofvs[j].value || '';
+                       let desc  = rec.ofvs[j].observation_field.description || '';
+
+                       let avail = [
+                            {innerText:nm.toLowerCase()},
+                            {innerText:value.toLowerCase()},
+                            // {innerText:desc.toLowerCase()},
+                       ];        
+                       faddelems('td',brow, avail);
+                   }
+               } else {
+                   if( rec.ofvs[j].field_id === 17234 ||   // quantity available
+                       rec.ofvs[j].field_id === 18298 ||   // seed hub location and pickup info
+                       rec.ofvs[j].field_id === 17434 ){   // seed swap
+                       if( rec.ofvs[j].value ){
+                           let brow  = faddelem('tr',tbody);
+                           let nm    = rec.ofvs[j].name || '';
+                           let value = rec.ofvs[j].value || '';
+                           let desc  = rec.ofvs[j].observation_field.description || '';
+
+                           let avail = [
+                             {innerText:nm.toLowerCase()},
+                             {innerText:value.toLowerCase()},
+                            // {innerText:desc.toLowerCase()},
+                           ];        
+
+                           faddelems('td',brow, avail);
+                       }
+                   }
+               }
+            }
+         }
+         
+         if( rec.description ){
+             //faddelem('p',document.body,{innerHTML:'<div style="padding:1px;">&nbsp;</div>'});  
+             faddelem('p',document.body,{innerHTML:'<dl>'
+                            + '<dt></dt><span id="key"><dd>Notes ~ </dd></span>'
+                            + '<dt></dt><dd>'+rec.description.toLowerCase()+'</dd>'
+                            + '</dl>'});       
+         }
+      };    
+   }
+};
+</script>
+</body>
+
+</html>
