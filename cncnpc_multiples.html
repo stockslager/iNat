@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">  
+<html lang="en">   
  
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
@@ -43,6 +43,7 @@
    #main { width:fit-content; min-width:375px; }
    #h2 { font-weight:bold; font-size:20px; }
    #utf { font-size:1.475em; }
+   #recct { position:absolute; z-index:100; rotate:-20deg; /*font-weight:bold;*/ font-size:12px; padding-bottom:10px; padding-left:8px; }
    table, td, th { border-collapse:collapse; margin:0; padding:5px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
@@ -231,7 +232,8 @@ function fresults(xobj) {
          if( tax_id !== '' ){
              taxon = furl(github_root+'cncnpc_seeds_fields.html?project_id='+p_project_id+'&taxon_id='+rec.taxon.id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');  
              if( rec.count > 1 ){
-                 taxon = furl((github_root+'cncnpc_seeds.html?project_id='+p_project_id+'&taxon_id='+rec.taxon.id),'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');
+                 let multiples = ('<span id="recct"> x'+rec.count+'</span>');
+                 taxon = furl((github_root+'cncnpc_seeds.html?project_id='+p_project_id+'&taxon_id='+rec.taxon.id),'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+multiples+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');
              }
          }
 
