@@ -34,7 +34,7 @@
          --color-base-translucent: rgba(0,0,0,0.85);
       }
    }
-   #dltest { float:right; width:fit-content; display: inline-table; justify-content:start; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }
+   #dltest { margin-left:15px; float:right; width:fit-content; display: inline-table; justify-content:start; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }
    #itable { float:right; width:fit-content; display: inline-table; justify-content:start; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }   
    #key { text-decoration:underline; font: 16px Sans-Serif; padding:0; padding-right: 25px; }
    #tablekey { display:inline-table; }
@@ -42,6 +42,7 @@
    #tdkey { padding:0; padding-right: 25px; }
    #main { width:100%; }
    #h2 { font-weight:bold; font-size:20px; }
+   #cap { align:left; text-decoration:underline; font: 16px Sans-Serif; padding:0; padding-right: 25px; }
    table, td, th { border-collapse:collapse; margin:0; padding:4px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
@@ -200,6 +201,10 @@ winurlparams.append('taxon_id', p_taxon_id);
 
 function isMultipleOfFour(num) {
   return num % 4 === 0;
+}
+
+function isMultipleOfThree(num) {
+  return num % 3 === 0;
 }
 
 function boxRow(field_id, field_name, field_value) {
@@ -407,6 +412,38 @@ function fresults(xobj) {
       };
 
       let firstCol = 'yes';
+      let winurlparams_copy ='';
+      let nf_box_array = [];
+
+      nf_box_array = box_array;
+    
+      for( let e=0; e<nf_box_array.length; e++ ){
+           if( nf_box_array[e].field_name === '' ){
+               if( labelCount === 0 ){
+                   dlString += '<span id="dltest"><table id="tablekey">';
+                   dlString += ('<caption id="cap">not found on this page</caption>');                      
+               } 
+            
+               if( labelCount === 0 || isMultipleOfFour(labelCount) ){
+                   if( labelCount > 0 ) {
+                       dlString += '</tr>';
+                   }
+                   dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+nf_box_array[e].field_id,nf_box_array[e].field_id) + '</td>');
+               } else {
+                   dlString += ('<td id="tdkey">' + furl(root_obs_fields+nf_box_array[e].field_id,nf_box_array[e].field_id) + '</td>');
+               }
+               labelCount++;
+           }
+      }
+
+      if( labelCount > 0 ){
+          dlString += '</table></span>';
+      }
+    
+      labelCount = 0;
+    
+      box_array = box_array.filter(box_array => box_array.field_name !== '');
+    
       for( let e=0; e<box_array.length; e++ ){
            if( isMultipleOfFour(labelCount) ){
                if( labelCount === 0 ){
@@ -419,7 +456,27 @@ function fresults(xobj) {
            }
            labelCount++;
            if( box_array[e].field_name !== '' ){
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
+               // delete the group of obs field and add only the one chosen
+               let winurlparams_copy = new URLSearchParams(winurlsearchstr.substring(1));
+            
+               // find key/value pair for &field: param if one was passed in
+               // delete the &field when found
+               // then, append the single param for the url being displayed
+               for (const [key, value] of winurlparams_copy.entries()) {
+                   if( key.startsWith('field') ){
+                       winurlparams_copy.delete( key );
+                   }
+               }    
+               winurlparams_copy.delete('page');
+               winurlparams_copy.append('page', '1');
+               winurlparams_copy.append(('field:'+box_array[e].field_name),'');
+
+               // delete any existing obs_fields and append the param for the url
+               winurlparams_copy.delete('obs_fields');
+               winurlparams_copy.append('obs_fields',box_array[e].field_id);
+            
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'configurable_obs_field_table.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
+               //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                if( p_operator !== 'merge' ){
                    labels.push({innerText:box_array[e].field_name});
@@ -435,8 +492,9 @@ function fresults(xobj) {
                    }
                }
            } else {
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
-               dlString += ('<td id="tdkey">missing from this page of data</td></tr>');
+               //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
+               dlString += ('<tr id="trkey"><td id="tdkey">' + box_array[e].field_id + '</td>');
+               dlString += ('<td id="tdkey">missing from this page</td></tr>');
                if( p_operator !== 'merge' ) {
                    labels.push({innerText:''});
                }
