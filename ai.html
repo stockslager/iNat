@@ -42,7 +42,7 @@
    }
 
 .popup {
-  position: relative;
+  /*position: relative;*/
   display: inline-block;
   cursor: pointer;
   -webkit-user-select: none;
@@ -56,8 +56,10 @@
   padding-right: 5px;
   padding-left: 5px;
   padding-top: 2px;
-  padding-bottom: 5px;
+  padding-bottom: 20px;
   verticle-align: middle;
+  position:absolute; 
+  z-index:100;
 }
 
 /* The actual popup */
@@ -310,7 +312,7 @@ function fresults(xobj) {
              popup = '<div class="popup" onclick="consStatusPopup()">'+(cons_status.toLowerCase()||'')+'<span class="popuptext" id="myPopup">A Simple Popup!</span></div>';
          }
          
-         let displayName = '<span style="font-size:larger">'+(comName.toLowerCase()||'')+'</span> '+popup+'<span style="font-style:italic"><br>('+(nm.toLowerCase()||'')+')</span>';
+         let displayName = '<span style="font-size:larger">'+(comName.toLowerCase()||'')+'</span>  '+popup+'<span style="font-style:italic"><br>('+(nm.toLowerCase()||'')+')</span>';
         
          values = [
                {innerText:i+1},
