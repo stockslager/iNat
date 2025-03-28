@@ -419,6 +419,11 @@ function fresults(xobj) {
       };
 
       let firstCol = 'yes';
+
+      if( box_array.length === 0 ){
+          labels.push({innerText:' '});
+      }
+    
       for( let e=0; e<box_array.length; e++ ){
            if( isMultipleOfFour(labelCount) ){
                if( labelCount === 0 ){
@@ -442,7 +447,6 @@ function fresults(xobj) {
                    } 
                }
            } else {
-               labels.push({innerText:' '});
                dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">missing from this page of data</td></tr>');
                if( p_operator !== 'merge' ) {
