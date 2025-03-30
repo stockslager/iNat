@@ -325,7 +325,40 @@ function fresults(xobj) {
 
       dlString += '</table></span>';
      
+      for (let i=0; i<results.length; i++) {
+         let rec = results[i];
+         let tax_name = '';
+         let pref_tax_name = '';
+         let tax_photo = '<div class="clipart">&#127807</div>'; 
+         let tax_id = '';
+         let field1 = ''; 
+         let param1 = ''; 
+         let displayName = '';
+         let displayTaxonName = '';
+         let mismatch = '';
+         let matchedCopy = 'no';
          let values = [];
+         let dataType = '';
+         let dataType2 = '';
+         let matchValue = '';
+         let matchTaxonId = '';
+         let taxon = '';
+         
+         if( rec.taxon ){
+             tax_id = rec.taxon.id;
+             tax_name = rec.taxon.name || '';
+             pref_tax_name = rec.taxon.preferred_common_name || '';
+           
+             if( rec.taxon.default_photo ){
+                 if( rec.taxon.default_photo.url ){
+                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
+                 }
+             }
+         }
+
+         if( tax_id !== '' ){
+             taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+         }
        
          values = [
                   {innerText:i+1},
