@@ -451,8 +451,9 @@ async function asyncGetData() {
      .then(data => {
       // Access your data here 
       box_array     = data.fields;
-      winurlparams.append(('field:'+data.fields[0].field_name), '');
-      winurlparams.delete('obs_fields');
+     // winurlparams.append(('field:'+data.fields[0].field_name), '');
+     // winurlparams.delete('obs_fields');
+     // winurlparams.append('obs_fields', data.fields[0].field_id);
       console.log(data);
    })
      .catch(error => {
