@@ -461,7 +461,11 @@ function fresults(xobj) {
            labelCount++;
                
            if( p_operator !== 'merge' ){
-               labels.push({innerText:box_array[e].field_name});
+               if( box_array[e].field_name !== '' ){
+                   labels.push({innerText:box_array[e].field_name});
+               } else {
+                   labels.push({innerText:' '});
+               }
            } else {
                if( firstCol === 'yes' ){
                    firstCol = 'no';
