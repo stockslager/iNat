@@ -78,6 +78,7 @@ let p_project_id = winurlparams.get('project_id') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
+let p_obs_field  = winurlparams.get('obs_field') || '7623';
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_omit_users = winurlparams.get('omit_users') || '';
 let p_omit_id = winurlparams.get('omit_id') || '';
@@ -167,7 +168,6 @@ winurlparams.append(p_field, p_field_value);
 winurlparams.append('taxon_id', p_taxon_id);
 
 // these are stored in params.json 
-let p_obs_id   = '';
 let p_insect_prj = '';
 let p_library_name = '';
 
@@ -232,7 +232,7 @@ function fresults(xobj) {
          }
 
          if( tax_id !== '' ){
-             taxon = furl(github_root+'cncnpc_insects.html?project_id='+p_project_id+'&user_id='+p_user_id+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_id+'&plant_name='+pref_tax_name,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl(github_root+'cncnpc_insects.html?project_id='+p_project_id+'&user_id='+p_user_id+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_field+'&plant_name='+pref_tax_name,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
 
          values = [
