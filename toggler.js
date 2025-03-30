@@ -1,5 +1,5 @@
 {
-  "fields": [
+  "fiel": [
     {
       "field_id": "2262",
       "field_name": "smell"
