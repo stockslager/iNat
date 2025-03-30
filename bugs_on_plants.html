@@ -184,7 +184,7 @@ function fresults(xobj) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let labels = [];
 
-      let dlString = '<span id="h2">'+p_library_name+'</span>';
+      let dlString = '<span id="h2">Bugs on Plants</span>';
 
       faddelem('p',document.body,{innerHTML:dlString});
     
@@ -231,11 +231,14 @@ function fresults(xobj) {
              }
          }
 
+         if( tax_id !== '' ){
+             taxon = furl(github_root+'cncnpc_insects.html?project_id='+p_insect_prj+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_id+'&plant_name='+pref_tax_name,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+         }
 
          values = [
                   {innerText:i+1},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  {innerHTML:furl(github_root+'cncnpc_insects.html?project_id='+p_insect_prj+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_id+'&plant_name='+pref_tax_name,'<span id=\"utf\">&#128027;</span>')},
+                  {innerHTML:taxon},
                   ];
 
          faddelems('td',brow,values);
@@ -251,29 +254,13 @@ function fresults(xobj) {
    else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
 
-async function asyncGetData() {
-   await fetch('params.json')
-     .then(response => response.json())
-     .then(data => {
-      // Access your data here 
-      const pref     = data.prefs.find(item => item.seed_library_prj_id === p_project_id);
-      p_obs_id       = pref.preferred_obs_field;
-      p_insect_prj   = pref.insect_prj;
-      p_library_name = pref.library_name; 
-      console.log(data);
-   })
-     .catch(error => {
-      console.error('Error fetching JSON:', error);
-   });
-
-   if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
-      let instructions = [
+if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
+   let instructions = [
          {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.'},
-      ];
-      faddelems('p',document.body,instructions);
-   }
-   else {
-      await fetch(apiurl)
+   ];
+   faddelems('p',document.body,instructions);
+} else {
+      fetch(apiurl)
       .then((response) => {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
@@ -283,16 +270,7 @@ async function asyncGetData() {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
       });
-   };
-}
-
-// need to pull resources from a json file to pass into an api
-// so needs to be asynchronous. 
-const request = async () => {
-   asyncGetData();
-}
-
-request()   
+};
 
 </script>
 </body>
