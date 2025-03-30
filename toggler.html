@@ -77,7 +77,6 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
-let p_operator   = winurlparams.get('operator') || '';
 let p_obs_field_array = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_omit_users = winurlparams.get('omit_users') || '';
@@ -91,14 +90,6 @@ let box_array = [];
 
 if( p_obs_field_array !== '' ){
     field_array = p_obs_field_array.split(",");
-}
-
-// if only one observation field was passed in, there is no reason to "merge"
-// a single field.  so default to "un-merged" if only one obs field is passed in. 
-// defaulting to un-merged will add a target url to the single obs field value in the table.
-if( field_array.length === 1 ){
-    winurlparams.delete('operator');
-    p_operator = '';
 }
 
 if( p_omit_users !== '' ){
@@ -149,7 +140,6 @@ function replaceDoubleQuotes(str) {
  
 // remove the field param from the url before building options
 winurlparams.delete(p_field);
-winurlparams.delete('operator');
 winurlparams.delete('taxon_id');
 winurlparams.delete('not_user_id');
 winurlparams.delete('not_id');
@@ -173,7 +163,6 @@ for (const [key, value] of winurlparams.entries()) {
 }   
 
 // add them back after building options...
-winurlparams.append('operator', p_operator);
 winurlparams.append(p_field, p_field_value);
 winurlparams.append('taxon_id', p_taxon_id);
 
@@ -220,10 +209,6 @@ function fresults(xobj) {
             {innerText:'Name'}, 
             {innerText:'Obs Photo'}];
     
-      if( p_operator === 'merge' ){
-          merged = 'merged observation field';
-      } 
-
       let tempBrow = [];
       
       let firstCol = 'yes';
@@ -298,21 +283,12 @@ function fresults(xobj) {
                dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'configurable_obs_field_table.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
-               if( p_operator !== 'merge' ){
-                   labels.push({innerText:box_array[e].field_name});
-               } else {
-                   if( firstCol === 'yes' ){
-                       firstCol = 'no';
-                       labels.push({innerText:'Merged Fields (see upper right)'});
-                   } 
-               }
+               labels.push({innerText:box_array[e].field_name});
            } else {
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<tr id="trkey"><td id="tdkey">' + box_array[e].field_id + '</td>');
                dlString += ('<td id="tdkey">missing from this page</td></tr>');
-               if( p_operator !== 'merge' ) {
-                   labels.push({innerText:''});
-               }
+               labels.push({innerText:''});
            }
       }
 
@@ -352,7 +328,7 @@ function fresults(xobj) {
          }
 
          if( tax_id !== '' ){
-             taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+tax_id+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
          values = [
@@ -397,33 +373,7 @@ function fresults(xobj) {
                               }
                           }
                       } 
-
-                      if( p_operator === 'merge' && rec.ofvs[j].field_id.toString() === box_array[r].field_id.toString() ){
-                          
-                          field1 = rec.ofvs[j].value.toLowerCase();
-                                    
-                          if( rec.ofvs[j].taxon ){ 
-                              let name  = rec.ofvs[j].taxon.name || '';
-                              let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                              if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
-                                  field1 = name;
-                                  displayCommonName = cname.toLowerCase();
-                                  displayTaxonName = name;
-                                  displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                                  emojiTitle    += (rec.ofvs[j].field_id + ' ' + name + '&#10;');
-                              } else { 
-                                  emojiTitle    += (rec.ofvs[j].field_id + ' ' + name.toLowerCase() + '&#10;');
-                                  displayName = '';
-                              }
-                          } else {
-                                  if( rec.ofvs[j].value.toLowerCase() !== 'unknown' ){
-                                      displayName    = rec.ofvs[j].value.toLowerCase();
-                                  }
-                                  emojiTitle    += (rec.ofvs[j].field_id + ' ' + rec.ofvs[j].value.toLowerCase() + '&#10;');
-                          }
-                      }
                       
-                      if( p_operator !== 'merge' ) {
                           if( rec.ofvs[j].field_id.toString() === box_array[r].field_id.toString() ){
                               matchedCopy = 'yes';
                               if( rec.ofvs[j].value ) {
@@ -437,7 +387,7 @@ function fresults(xobj) {
                                       field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   }
                                   if( p_field_value === '' ){
-                                      values.push({innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
+                                      values.push({innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id, field1)});
                                   } else {
                                       values.push({innerHTML:field1});
                                   }
@@ -445,35 +395,15 @@ function fresults(xobj) {
                                   values.push({innerText:''});
                               }
                           }
-                      }
                   }
-                 if( p_operator !== 'merge' ){
                  if( matchedCopy === 'yes' ){
                      matchedCopy = 'no';
                  } else {
                      values.push({innerText:''});
                  }
-                 }
              }
          }             
-       
-         if( p_operator === 'merge' ){
-              if( displayTaxonName !== '' ){
-                  if( mismatch === 'yes' ){
-                      displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
-                  } else {
-                      displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+')</span>';
-                  }
-              } else {
-                  if( mismatch === 'yes' ){
-                      displayName += ' ';
-                      displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
-                  } 
-              }
-          
-              values.push({innerHTML:displayName});
-         } 
-       
+              
          values.push({innerHTML:user_icon});
          values.push({innerHTML:furl(root_people+rec.user.login,rec.user.login)});
 
