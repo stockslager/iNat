@@ -87,6 +87,7 @@ let p_field = '';
 let p_field_value = '';
 let opts = '';
 let field_array = [];
+let box_array = [];
 
 if( p_obs_field_array !== '' ){
     field_array = p_obs_field_array.split(",");
@@ -150,25 +151,6 @@ function replaceDoubleQuotes(str) {
   return str.replace(/"/g, '%22');
 }
  
-if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
-   let instructions = [
-      {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.'},
-   ];
-   faddelems('p',document.body,instructions);
-}
-else {
-   fetch(apiurl)
-   .then((response) => {
-      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-      return response.json();
-   })
-   .then((data) => { fresults(data); })
-   .catch((err) => {
-      console.error(err.message);
-      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-   });
-};
-
 // remove the field param from the url before building options
 winurlparams.delete(p_field);
 winurlparams.delete('operator');
@@ -214,7 +196,6 @@ function boxRow(field_id, field_name, field_value) {
 
 function fresults(xobj) {
    let results = xobj.results;
-   let box_array = [];
 
    for( let f=0; f<field_array.length; f++ ){
         box_array.push(new boxRow(field_array[f], '') );
@@ -230,7 +211,6 @@ function fresults(xobj) {
 
       let labels = [];
       let mismatch = '';
-      let field_array_copy = field_array;
       let flower = '';
       let dlString = '<span id="h2">Observation Field Viewer</span>';
       let labelCount = 0;
@@ -247,20 +227,6 @@ function fresults(xobj) {
       } 
 
       let tempBrow = [];
-
-      for (let i=0; i<results.length; i++) {
-         let rec = results[i];
-         if(rec.ofvs&&rec.ofvs.length>0){
-              for( let r=0; r<field_array_copy.length; r++ ) {
-                 for( let j=0; j<rec.ofvs.length; j++ ){
-                      if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){
-                          let box_row   = box_array.find( boxRow => boxRow.field_id === rec.ofvs[j].field_id.toString() );
-                          box_row.field_name = rec.ofvs[j].name.toString();
-                      }
-                 }
-              }
-         }
-      }
       
       let firstCol = 'yes';
       let winurlparams_copy ='';
@@ -400,6 +366,47 @@ function fresults(xobj) {
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
+
+async function asyncGetData() {
+   await fetch('toggler.json')
+     .then(response => response.json())
+     .then(data => {
+      // Access your data here 
+      box_array     = data.fields;
+      console.log(data);
+   })
+     .catch(error => {
+      console.error('Error fetching JSON:', error);
+   });
+
+   if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
+      let instructions = [
+         {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.'},
+      ];
+      faddelems('p',document.body,instructions);
+   }
+   else {
+      await fetch(apiurl)
+      .then((response) => {
+         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+         return response.json();
+      })
+      .then((data) => { fresults(data); })
+      .catch((err) => {
+         console.error(err.message);
+         faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+      });
+   };
+}
+
+// need to pull resources from a json file to pass into an api
+// so needs to be asynchronous. 
+const request = async () => {
+   asyncGetData();
+}
+
+request()   
+ 
 </script>
 </body>
 
