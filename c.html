@@ -383,7 +383,7 @@ function fresults(xobj) {
                   if( matchedCopy === 'yes' ){
                       matchedCopy = 'no';
                   } else {
-                      values.push({innerText:''});
+                      //values.push({innerText:''});
                   }}
              }
          }             
@@ -442,7 +442,7 @@ function fresults(xobj) {
     
       labelCount = 0;
     
-      //box_array = box_array.filter(box_array => box_array.field_name !== '');
+      box_array = box_array.filter(box_array => box_array.field_name !== '');
 
       if( box_array.length === 0 ){
           labels.push({innerText:' '});
@@ -459,20 +459,6 @@ function fresults(xobj) {
                }
            }
            labelCount++;
-               
-           if( p_operator !== 'merge' ){
-               if( box_array[e].field_name !== '' ){
-                   labels.push({innerText:box_array[e].field_name});
-               } else {
-                   labels.push({innerText:' '});
-               }
-           } else {
-               if( firstCol === 'yes' ){
-                   firstCol = 'no';
-                   labels.push({innerText:'Merged Fields (see upper right)'});
-               } 
-           }
- 
            if( box_array[e].field_name !== '' ){
                // delete the group of obs field and add only the one chosen
                let winurlparams_copy = new URLSearchParams(winurlsearchstr.substring(1));
@@ -496,6 +482,14 @@ function fresults(xobj) {
                dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'configurable_obs_field_table.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
+               if( p_operator !== 'merge' ){
+                   labels.push({innerText:box_array[e].field_name});
+               } else {
+                   if( firstCol === 'yes' ){
+                       firstCol = 'no';
+                       labels.push({innerText:'Merged Fields (see upper right)'});
+                   } 
+               }
            } else {
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<tr id="trkey"><td id="tdkey">' + box_array[e].field_id + '</td>');
