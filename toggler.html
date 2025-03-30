@@ -280,7 +280,7 @@ function fresults(xobj) {
                // toggler doesn't use obs-fields, just delete them if there.
                winurlparams_copy.delete('obs_fields');
             
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'configurable_obs_field_table.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'toggler.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                labels.push({innerText:box_array[e].field_name});
@@ -328,7 +328,7 @@ function fresults(xobj) {
          }
 
          if( tax_id !== '' ){
-             taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+tax_id+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl(github_root+'toggler.html'+opts+'&taxon_id='+tax_id+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
          values = [
@@ -387,7 +387,7 @@ function fresults(xobj) {
                                       field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   }
                                   if( p_field_value === '' ){
-                                      values.push({innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id, field1)});
+                                      values.push({innerHTML:furl(github_root+'toggler.html'+opts+param1+'&taxon_id='+p_taxon_id, field1)});
                                   } else {
                                       values.push({innerHTML:field1});
                                   }
