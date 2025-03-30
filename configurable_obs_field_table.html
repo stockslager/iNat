@@ -362,29 +362,34 @@ function fresults(xobj) {
                       if( p_operator !== 'merge' ) {
                           if( rec.ofvs[j].field_id.toString() === field_array_copy[r].toString() ){
                               matchedCopy = 'yes';
-                              field1 = rec.ofvs[j].value.toLowerCase();
-                              param1 = '&field:' + rec.ofvs[j].name + '=' + replaceDoubleQuotes(rec.ofvs[j].value.toString());
-                              displayName = rec.ofvs[j].value.toLowerCase();
-                               
-                              if( rec.ofvs[j].taxon ){
-                                  let name  = rec.ofvs[j].taxon.name || '';
-                                  let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                                  field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                              }
-                              if( p_field_value === '' ){
-                                  values.push({innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
+                              if( rec.ofvs[j].value ) {
+                                  field1 = rec.ofvs[j].value.toLowerCase();
+                                  param1 = '&field:' + rec.ofvs[j].name + '=' + replaceDoubleQuotes(rec.ofvs[j].value.toString());
+                                  displayName = rec.ofvs[j].value.toLowerCase();
+                                
+                                  if( rec.ofvs[j].taxon ){
+                                      let name  = rec.ofvs[j].taxon.name || '';
+                                      let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                                      field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                                  }
+                                  if( p_field_value === '' ){
+                                      values.push({innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
+                                  } else {
+                                      values.push({innerHTML:field1});
+                                  }
                               } else {
-                                  values.push({innerHTML:field1});
+                                  values.push({innerText:''});
                               }
                           }
                       }
                   }
-                  if( p_operator !== 'merge' ){
-                  if( matchedCopy === 'yes' ){
-                      matchedCopy = 'no';
-                  } else {
-                      values.push({innerText:''});
-                  }}
+             }
+             if( p_operator !== 'merge' ){
+                 if( matchedCopy === 'yes' ){
+                     matchedCopy = 'no';
+                 } else {
+                     values.push({innerText:''});
+                 }
              }
          }             
        
