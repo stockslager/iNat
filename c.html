@@ -360,7 +360,8 @@ function fresults(xobj) {
                       }
                       
                       if( p_operator !== 'merge' ) {
-                          if( rec.ofvs[j].field_id.toString() === field_array_copy[r].toString() ){
+                          if( rec.ofvs[j].field_id.toString() === field_array_copy[r].toString() &&
+                              rec.ofvs[j].value ){
                               matchedCopy = 'yes';
                               field1 = rec.ofvs[j].value.toLowerCase();
                               param1 = '&field:' + rec.ofvs[j].name + '=' + replaceDoubleQuotes(rec.ofvs[j].value.toString());
