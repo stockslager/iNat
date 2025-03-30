@@ -210,7 +210,7 @@ function fresults(xobj) {
       let labels = [];
       let mismatch = '';
       let flower = '';
-      let dlString = '<span id="h2">Observation Field Viewer</span>';
+      let dlString = '<span id="h2">Observation Field Toggler</span>';
       let labelCount = 0;
 
       let merged = 'observation field';
@@ -292,9 +292,8 @@ function fresults(xobj) {
                winurlparams_copy.append('page', '1');
                winurlparams_copy.append(('field:'+box_array[e].field_name),'');
 
-               // delete any existing obs_fields and append the param for the url
+               // toggler doesn't use obs-fields, just delete them if there.
                winurlparams_copy.delete('obs_fields');
-               winurlparams_copy.append('obs_fields',box_array[e].field_id);
             
                dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'configurable_obs_field_table.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
