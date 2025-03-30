@@ -406,7 +406,7 @@ function fresults(xobj) {
          let emojiTitle = 'Merged Observation Fields:&#10;';
 
          if(rec.ofvs&&rec.ofvs.length>0){
-              for( let r=0; r<field_array_copy.length; r++ ) {
+              for( let r=0; r<box_array.length; r++ ) {
                  for( let j=0; j<rec.ofvs.length; j++ ){
 
                       if( field_array.includes(rec.ofvs[j].field_id.toString()) ){
@@ -431,7 +431,7 @@ function fresults(xobj) {
                           }
                       } 
 
-                      if( p_operator === 'merge' && rec.ofvs[j].field_id.toString() === field_array_copy[r].toString() ){
+                      if( p_operator === 'merge' && rec.ofvs[j].field_id.toString() === box_array[r].field_id.toString() ){
                           
                           field1 = rec.ofvs[j].value.toLowerCase();
                                     
@@ -457,7 +457,7 @@ function fresults(xobj) {
                       }
                       
                       if( p_operator !== 'merge' ) {
-                          if( rec.ofvs[j].field_id.toString() === field_array_copy[r].toString() ){
+                          if( rec.ofvs[j].field_id.toString() === box_array[r].field_id.toString() ){
                               matchedCopy = 'yes';
                               if( rec.ofvs[j].value ) {
                                   field1 = rec.ofvs[j].value.toLowerCase();
