@@ -216,35 +216,7 @@ function fresults(xobj) {
       
       let firstCol = 'yes';
       let winurlparams_copy ='';
-      let nf_box_array = [];
 
-      nf_box_array = box_array;
-
-      for( let e=0; e<nf_box_array.length; e++ ){
-           if( nf_box_array[e].field_name === '' ){
-               if( labelCount === 0 ){
-                   dlString += '<span id="dltest"><table id="tablekey">';
-                   dlString += ('<caption id="cap">not found on this page</caption>');                      
-               } 
-            
-               if( labelCount === 0 || isMultipleOfFour(labelCount) ){
-                   if( labelCount > 0 ) {
-                       dlString += '</tr>';
-                   }
-                   dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+nf_box_array[e].field_id,nf_box_array[e].field_id) + '</td>');
-               } else {
-                   dlString += ('<td id="tdkey">' + furl(root_obs_fields+nf_box_array[e].field_id,nf_box_array[e].field_id) + '</td>');
-               }
-               labelCount++;
-           }
-      }
-
-      if( labelCount > 0 ){
-          dlString += '</table></span>';
-      }
-    
-      labelCount = 0;
-    
       box_array = box_array.filter(box_array => box_array.field_name !== '');
 
       if( box_array.length === 0 ){
@@ -451,6 +423,7 @@ async function asyncGetData() {
  
       if( p_obs_field === '' ){
           winurlparams.append(('field:'+data.fields[0].field_name), '');
+          p_obs_field = data.fields[0].field_id;
       } else {
           winurlparams.append(('field:'+getElementById(box_array,p_obs_field).field_name), '');
       }
