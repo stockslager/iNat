@@ -301,7 +301,7 @@ function fresults(xobj) {
                       
                       if( rec.ofvs[j].field_id.toString() === box_array[r].field_id.toString() ){
                           matchedCopy = 'yes';
-                          if( box_array[r].field_id === p_obs_field ) {
+                          if( box_array[r].field_id.toString() === p_obs_field.toString() ) {
                               if( rec.ofvs[j].value ) {
                                   field1 = rec.ofvs[j].value.toLowerCase();
                                   param1 = '&field:' + rec.ofvs[j].name + '=' + replaceDoubleQuotes(rec.ofvs[j].value.toString());
@@ -332,9 +332,9 @@ function fresults(xobj) {
                   }
                  if( matchedCopy === 'yes' ){
                      matchedCopy = 'no';
-                 } else {
+                 } /*else {
                      values.push({innerText:''});
-                 }
+                 } */
              }
          }             
               
