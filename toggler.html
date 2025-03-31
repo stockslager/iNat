@@ -203,7 +203,9 @@ function fresults(xobj) {
                dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'toggler.html?'+winurlparams_copy+'&obs_field='+box_array[e].field_id,box_array[e].field_id) + '</td>');
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
-               labels.push({innerText:box_array[e].field_name});
+               if( box_array[e].field_id === p_obs_field ) {
+                   labels.push({innerText:box_array[e].field_name});
+               }
            } else {
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<tr id="trkey"><td id="tdkey">' + box_array[e].field_id + '</td>');
@@ -297,8 +299,9 @@ function fresults(xobj) {
                           }
                       } 
                       
-                          if( rec.ofvs[j].field_id.toString() === box_array[r].field_id.toString() ){
-                              matchedCopy = 'yes';
+                      if( rec.ofvs[j].field_id.toString() === box_array[r].field_id.toString() ){
+                          matchedCopy = 'yes';
+                          if( box_array[r].field_id === p_obs_field ) {
                               if( rec.ofvs[j].value ) {
                                   field1 = rec.ofvs[j].value.toLowerCase();
                                   param1 = '&field:' + rec.ofvs[j].name + '=' + replaceDoubleQuotes(rec.ofvs[j].value.toString());
@@ -325,6 +328,7 @@ function fresults(xobj) {
                                   values.push({innerText:''});
                               }
                           }
+                      }
                   }
                  if( matchedCopy === 'yes' ){
                      matchedCopy = 'no';
