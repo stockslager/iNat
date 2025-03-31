@@ -251,7 +251,7 @@ function fresults(xobj) {
                (p_options.includes('bigger_image'))
                   ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
                   : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-               {innerHTML:furl(github_root+'cncnpc_grid.html?project_id='+p_project_id+'&taxon_id='+rec.taxon.id+'&rows=10&columns=3&cellpx=300'+grid_param,(displayName||''))},
+               {innerHTML:furl(github_root+'cncnpc_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+'&rows=10&columns=3&cellpx=300'+grid_param,(displayName||''))},
                {innerText:recCount||''},
             ];
          
