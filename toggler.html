@@ -115,37 +115,6 @@ function replaceDoubleQuotes(str) {
   return str.replace(/"/g, '%22');
 }
  
-// remove the field param from the url before building options
-winurlparams.delete(p_field);
-winurlparams.delete('taxon_id');
-winurlparams.delete('not_user_id');
-winurlparams.delete('not_id');
-winurlparams.delete('not_in_project');
-
-// build param list for url's used in fresults
-for (const [key, value] of winurlparams.entries()) { 
-  if( opts === '' ){
-      opts += "?";
-  } else {
-      opts += "&";
-  }
-  opts += key;
-  opts += "=";
-
-  if( key === 'page' ){
-      opts += '1';
-  } else {
-      opts += value;
-  }
-}   
-
-// add them back after building options...
-winurlparams.append(p_field, p_field_value);
-
-if( p_taxon_id !== '' ){
-    winurlparams.append('taxon_id', p_taxon_id);
-}
-
 function isMultipleOfFour(num) {
   return num % 4 === 0;
 }
