@@ -185,11 +185,6 @@ function fresults(xobj) {
    for( let f=0; f<field_array.length; f++ ){
         box_array.push(new boxRow(field_array[f], '') );
    }
-
-    const data = {
-      "8453": "scent?"
-    };
-       console.log(JSON.stringify(data));
  
    if (results) {
       let total_results = xobj.total_results;
@@ -220,7 +215,6 @@ function fresults(xobj) {
 
       nf_box_array = box_array;
 
-           console.log("two");
       for( let e=0; e<nf_box_array.length; e++ ){
            if( nf_box_array[e].field_name === '' ){
                if( labelCount === 0 ){
@@ -252,7 +246,6 @@ function fresults(xobj) {
           labels.push({innerText:' '});
       }
 
-           console.log("three");
       for( let e=0; e<box_array.length; e++ ){
            if( isMultipleOfFour(labelCount) ){
                if( labelCount === 0 ){
@@ -294,8 +287,6 @@ function fresults(xobj) {
                labels.push({innerText:''});
            }
       }
-
-           console.log("four");
 
       dlString += '</table></span>';
      
@@ -428,8 +419,6 @@ function fresults(xobj) {
       
       faddelems('th',hrow,labels);
 
-           console.log("five");
-
       let tbody = faddelem('tbody',table);
     
       // loop through array of rows stored on object.
@@ -454,9 +443,10 @@ async function asyncGetData() {
      .then(data => {
       // Access your data here 
       box_array     = data.fields;
-     // winurlparams.append(('field:'+data.fields[0].field_name), '');
-     // winurlparams.delete('obs_fields');
-     // winurlparams.append('obs_fields', data.fields[0].field_id);
+      const newArray = winurlparams.filter(element => element.startsWith("field:"));
+      if( newArray.length === 0 ){
+          winurlparams.append(('field:'+data.fields[0].field_name), '');
+      }
       console.log(data);
    })
      .catch(error => {
