@@ -269,14 +269,14 @@ function fresults(xobj) {
                // find key/value pair for &field: param if one was passed in
                // delete the &field when found
                // then, append the single param for the url being displayed
-               for (const [key, value] of winurlparams_copy.entries()) {
+               /*for (const [key, value] of winurlparams_copy.entries()) {
                    if( key.startsWith('field') ){
                        winurlparams_copy.delete( key );
                    }
-               }    
+               }    */
                winurlparams_copy.delete('page');
                winurlparams_copy.append('page', '1');
-               winurlparams_copy.append(('field:'+box_array[e].field_name),'');
+               //winurlparams_copy.append(('field:'+box_array[e].field_name),'');
 
                // toggler doesn't use obs-fields, just delete them if there.
                winurlparams_copy.delete('obs_fields');
