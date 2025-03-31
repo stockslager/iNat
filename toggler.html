@@ -82,6 +82,7 @@ let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_omit_users = winurlparams.get('omit_users') || '';
 let p_omit_id = winurlparams.get('omit_id') || '';
 let p_omit_project = winurlparams.get('omit_projects') || '';
+let p_obs_field    = winurlparams.get('obs_field' || '';
 let p_field = '';
 let p_field_value = '';
 let opts = '';
@@ -179,6 +180,10 @@ function boxRow(field_id, field_name, field_value) {
     this.field_name  = field_name;
 }
 
+function getElementById(arr, id) {
+  return arr.find(element => element.field_id === id);
+}
+ 
 function fresults(xobj) {
    let results = xobj.results;
 
@@ -276,7 +281,7 @@ function fresults(xobj) {
                // toggler doesn't use obs-fields, just delete them if there.
                winurlparams_copy.delete('obs_fields');
             
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'toggler.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'toggler.html?'+winurlparams_copy,box_array[e].field_id+'&obs_field='+p_obs_field) + '</td>');
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                labels.push({innerText:box_array[e].field_name});
@@ -443,11 +448,11 @@ async function asyncGetData() {
      .then(data => {
       // Access your data here 
       box_array     = data.fields;
-      const newArray = winurlparams.filter(element => element.startsWith("field:"));
  
-      if( newArray.length === 0 ){
-          console.log("asdfasdafs");
+      if( p_obs_field === '' ){
           winurlparams.append(('field:'+data.fields[0].field_name), '');
+      } else {
+          winurlparams.append(('field:'+getElementById(box_array,p_obs_field).field_name), '');
       }
       console.log(data);
    })
