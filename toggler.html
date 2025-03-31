@@ -406,13 +406,13 @@ async function asyncGetData() {
    let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
    let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';  
 
-   if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
+  /* if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
       let instructions = [
          {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.'},
       ];
       faddelems('p',document.body,instructions);
    }
-   else {
+   else { */
       await fetch(apiurl)
       .then((response) => {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
@@ -423,7 +423,7 @@ async function asyncGetData() {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
       });
-   };
+   //};
 }
 
 // need to pull resources from a json file to pass into an api
