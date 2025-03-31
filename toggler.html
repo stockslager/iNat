@@ -81,7 +81,6 @@ let p_obs_field_array = winurlparams.get('obs_fields') || '';
 let p_obs_field    = winurlparams.get('obs_field') || '';
 let p_field = '';
 let p_field_value = '';
-let opts = '';
 let field_array = [];
 let box_array = [];
 
@@ -247,7 +246,7 @@ function fresults(xobj) {
          }
 
          if( tax_id !== '' ){
-             taxon = furl(github_root+'toggler.html'+opts+'&taxon_id='+tax_id+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl(github_root+'toggler.html?project_id='+p_project_id+'&taxon_id='+tax_id+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
          values = [
@@ -306,7 +305,7 @@ function fresults(xobj) {
                                       field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   }
                                   if( p_field_value === '' ){
-                                      values.push({innerHTML:furl(github_root+'toggler.html'+opts+param1+'&taxon_id='+p_taxon_id, field1)});
+                                      values.push({innerHTML:furl(github_root+'toggler.html?project_id='+p_project_id+param1+'&taxon_id='+p_taxon_id, field1)});
                                   } else {
                                       values.push({innerHTML:field1});
                                   }
