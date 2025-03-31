@@ -244,9 +244,22 @@ function fresults(xobj) {
                  }
              }
          }
-
+               
+         let winurlparams_copy = new URLSearchParams(winurlsearchstr.substring(1));
+            
+               // find key/value pair for &field: param if one was passed in
+               // delete the &field when found
+               // then, append the single param for the url being displayed
+               /*for (const [key, value] of winurlparams_copy.entries()) {
+                   if( key.startsWith('field') ){
+                       winurlparams_copy.delete( key );
+                   }
+               }    */
+               winurlparams_copy.delete('page');
+               winurlparams_copy.append('page', '1');
+       
          if( tax_id !== '' ){
-             taxon = furl(github_root+'toggler.html?project_id='+p_project_id+'&taxon_id='+tax_id+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl(github_root+'toggler.html'+winurlparams_copy+'&taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
          values = [
