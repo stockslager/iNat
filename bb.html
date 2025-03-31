@@ -108,7 +108,12 @@ winurlparams.delete('order');
 winurlparams.append('order','asc');
 winurlparams.delete('order_by');
 winurlparams.append('order_by','species_guess');
+
+winurlparams.delete('q');
+winurlparams.delete('search_on');
 winurlparams.delete('iconic_taxa');
+winurlparams.append('q', 'bugs-on-plants');
+winurlparams.append('search_on', 'tags');
 winurlparams.append('iconic_taxa', 'insecta');
 
 // find key/value pair for &field: param if one was passed in
@@ -163,13 +168,6 @@ for (const [key, value] of winurlparams.entries()) {
 winurlparams.append('operator', p_operator);
 winurlparams.append(p_field, p_field_value);
 winurlparams.append('taxon_id', p_taxon_id);
-
-winurlparams.delete('q');
-winurlparams.delete('search_on');
-winurlparams.delete('iconic_taxa');
-winurlparams.append('q', 'bugs-on-plants');
-winurlparams.append('search_on', 'tags');
-winurlparams.append('iconic_taxa', 'plantae');
 
 // these are stored in params.json 
 let p_insect_prj = '';
