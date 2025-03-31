@@ -235,7 +235,17 @@ function fresults(xobj) {
          let nm = rec.taxon.name || ' ';
 
          let displayName = '<span style="font-size:larger">'+(comName.toLowerCase()||'')+'</span><span style="font-style:italic"><br>('+(nm.toLowerCase()||'')+')</span>';
-        
+
+         let query_params = '';
+         if( p_project_id === '' ){
+             query_params = ('user_id='+p_user_id);
+         } else {
+             query_params = ('project_id='+p_project_id);
+             if( p_user_id !== '' ){
+                 query_params += ('&user_id='+p_user_id);
+             }
+         }
+         
          values = [
                {innerText:i+1},
                (p_options.includes('bigger_image'))
