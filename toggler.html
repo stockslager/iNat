@@ -444,7 +444,9 @@ async function asyncGetData() {
       // Access your data here 
       box_array     = data.fields;
       const newArray = winurlparams.filter(element => element.startsWith("field:"));
+ 
       if( newArray.length === 0 ){
+          console.log("asdfasdafs");
           winurlparams.append(('field:'+data.fields[0].field_name), '');
       }
       console.log(data);
