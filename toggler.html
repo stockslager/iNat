@@ -141,7 +141,10 @@ for (const [key, value] of winurlparams.entries()) {
 
 // add them back after building options...
 winurlparams.append(p_field, p_field_value);
-winurlparams.append('taxon_id', p_taxon_id);
+
+if( p_taxon_id !== '' ){
+    winurlparams.append('taxon_id', p_taxon_id);
+}
 
 function isMultipleOfFour(num) {
   return num % 4 === 0;
