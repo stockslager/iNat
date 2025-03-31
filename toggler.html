@@ -420,7 +420,13 @@ async function asyncGetData() {
      .then(data => {
       // Access your data here 
       box_array     = data.fields;
- 
+
+      for (const [key, value] of winurlparams_copy.entries()) {
+           if( key.startsWith('field') ){
+               winurlparams_copy.delete( key );
+           }
+      }    
+      
       if( p_obs_field === '' ){
           winurlparams.append(('field:'+data.fields[0].field_name), '');
           p_obs_field = data.fields[0].field_id;
