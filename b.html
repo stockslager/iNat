@@ -111,12 +111,12 @@ winurlparams.delete('order_by');
 winurlparams.append('order_by','species_guess');
 
 // find key/value pair for &field: param if one was passed in
-for (const [key, value] of winurlparams.entries()) {
+/*for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
       p_field = key;
       p_field_value = value;
   }
-}   
+}   */
 
 winurlparams.delete('q');
 winurlparams.delete('search_on');
@@ -139,7 +139,7 @@ let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observa
 <script> 
 
 // remove the field param from the url before building options
-winurlparams.delete(p_field);
+//winurlparams.delete(p_field);
 winurlparams.delete('operator');
 winurlparams.delete('taxon_id');
 winurlparams.delete('not_user_id');
@@ -165,7 +165,7 @@ for (const [key, value] of winurlparams.entries()) {
 
 // add them back after building options...
 winurlparams.append('operator', p_operator);
-winurlparams.append(p_field, p_field_value);
+//winurlparams.append(p_field, p_field_value);
 winurlparams.append('taxon_id', p_taxon_id);
 
 // these are stored in params.json 
