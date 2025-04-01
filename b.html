@@ -111,17 +111,19 @@ winurlparams.delete('order_by');
 winurlparams.append('order_by','species_guess');
 
 // find key/value pair for &field: param if one was passed in
-/*for (const [key, value] of winurlparams.entries()) {
+for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
       p_field = key;
       p_field_value = value;
   }
-}   */
+}  
 
-winurlparams.delete('q');
-winurlparams.delete('search_on');
-winurlparams.append('q', 'bugs-on-plants');
-winurlparams.append('search_on', 'tags');
+if( p_field !== '' ) {
+    winurlparams.delete('q');
+    winurlparams.delete('search_on');
+    winurlparams.append('q', 'bugs-on-plants');
+    winurlparams.append('search_on', 'tags');
+}
  
 winurlparams.delete('options');
 let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
