@@ -221,6 +221,10 @@ function fresults(xobj) {
             {innerText:'Name'}, 
       ];
 
+      if( p_field !== '' ) {
+          labels.push({innerText:' '});
+      }
+
       let table = faddelem('table',document.body,{id:'main'});                    
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
@@ -268,11 +272,22 @@ function fresults(xobj) {
              taxon = furl(github_root+'cncnpc_insects.html?'+query_params+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_field+'&plant_name='+pref_tax_name,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
          }
 
-         values = [
+         if( p_field !== '' ) {
+             values = [
+                  {innerText:i+1},
+                  (p_options.includes('bigger_image'))
+                     ? {innerHTML:'<img class="icon_big" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.medium_url:'')+'" />'}
+                     : {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
+                  {innerHTML:taxon},
+                  {innerText:recCount||''},
+                  ];
+         } else {
+             values = [
                   {innerText:i+1},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:taxon},
                   ];
+         }
 
          faddelems('td',brow,values);
       };
