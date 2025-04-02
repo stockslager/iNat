@@ -338,6 +338,7 @@ function fresults(xobj) {
              }
          }
 
+         let displayName = '';
          if( tax_id !== '' ){
              let iconic = '&iconic_taxa=';
              if( p_iconic_taxa === 'plantae' ){
@@ -345,7 +346,8 @@ function fresults(xobj) {
              } else {
                  iconic += p_iconic_taxa;
              }
-             taxon = furl(github_root+'b2.html?'+query_params+'&obs_field='+p_obs_field+'&target_id='+tax_id+'&target_name='+pref_tax_name+iconic+'&title=on Plants'+field_name+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>'); 
+             displayName = ('<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');             
+             taxon = furl(github_root+'b2.html?'+query_params+'&obs_field='+p_obs_field+'&target_id='+tax_id+'&target_name='+pref_tax_name+iconic+'&title=on Plants'+field_name+tax_id,displayName); 
          }
 
          let values = [
