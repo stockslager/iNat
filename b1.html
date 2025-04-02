@@ -228,11 +228,13 @@ function fresults(xobj) {
       }
 
       if( p_title === '' ) {
-          dlString = '<span id="h2">Bugs on Plants</span>';
-          faddelem('p',document.body,{innerHTML:(dlString + '<span id="butter1">'+furl(github_root+'b1.html'+proj+user+'&obs_field='+p_obs_field,'&#127807;')+'</span>') });
+          dlString = 'Bugs on Plants';
+          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'b1.html'+proj+user+'&obs_field='+p_obs_field,'&#127807;')+'</span>') });
+          faddelem('h2',document.body,{innerText:(dlString)});
       } else {
-          dlString = '<span id="h2">bugs on plants</span>';
-          faddelem('p',document.body,{innerHTML:(dlString + '<span id="butter1">'+furl(github_root+'b1.html'+proj+user+'&title='+p_title,'&#127807;')+'</span>') });
+          dlString = 'bugs on plants';
+          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'b1.html'+proj+user+'&title='+p_title,'&#127807;')+'</span>') });
+          faddelem('h2',document.body,{innerText:(dlString)});
       }
 
       let field_id = '';
