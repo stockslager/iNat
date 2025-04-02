@@ -89,6 +89,7 @@ let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_original_iconic = winurlparams.get('iconic_taxa') || '';
 let p_iconic_taxa  = winurlparams.get('iconic_taxa') || 'plantae';
 let p_title        = winurlparams.get('title') || '';
+let p_plant_name   = winurlparams.get('plant_name') || '';
 let p_field = '';
 let p_field_value = '';
 let menu_items = [];
@@ -268,7 +269,7 @@ function fresults(xobj) {
            }
       }
 
-      if( icon_list.length > 0 && p_title && p_taxon_id ) { 
+      if( icon_list.length > 0 && p_title && ( p_taxon_id || p_plant_name ) ) { 
           let icons = '';
           for( let i=0; i<icon_list.length; i++ ) {
               //if( icon_list[i] === "plantae" ) {
