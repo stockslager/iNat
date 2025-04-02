@@ -43,6 +43,7 @@
    #main { width:fit-content; min-width:375px; }
    #h2 { font-weight:bold; font-size:20px; }
    #utf { font-size:1.475em; }
+   #butter1 { font-size:1.450em; padding-left:5px; padding-right:20px; padding-top:0px; padding-bottom:50px; }
    #butter2 { font-size:1.475em; padding-left:5px; padding-right:20px; padding-top:0px; padding-bottom:50px; }
    #butter { font-size:1.475em; position:absolute; z-index:100; }
    table, td, th { border-collapse:collapse; margin:0; padding:5px; }
@@ -268,33 +269,35 @@ function fresults(xobj) {
           user = ('?user_id='+p_user_id);
       }
 
-      if( menu_items.length > 0 && p_title !== '' ) { 
+      if( icon_list.length > 0 && p_title !== '' ) { 
           let icons = '';
-          if( icon_list.includes("plantae") ) {
-              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=plantae'+field_name+'&title=on Plants','&#127807;')+'</span>');       
+          for( int i=0; i<icon_list.length; i++ ) {
+              if( icon_list[i] === "plantae" ) {
+                  icons += ('<span id="butter1">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=plantae'+field_name+'&title=on Plants','&#127807;')+'</span>');       
+              }
+              if( icon_list[i] === "aves" ) {
+                  icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=aves'+field_name+'&title=on Plants','&#128038;')+'</span>');
+              }
+              if( icon_list[i] === "insecta" ) {
+                  icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=insecta'+field_name+'&title=on Plants','&#129714;')+'</span>');       
+              }
+              if( icon_list[i] === "herps" ) {
+                  icons += ('<span id="butter1">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=amphibia,reptilia'+field_name+'&title=on Plants','&#128056;')+'</span>');       
+              }
+              if( icon_list[i] === "arachnida" ) {
+                  icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=arachnida'+field_name+'&title=on Plants','&#128375;')+'</span>');       
+              }
+              if( icon_list[i] === "mammalia" ) {
+                  icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=mammalia'+field_name+'&title=on Plants','&#128059;')+'</span>');       
+              }
+              if( icon_list[i] === "mollusca" ) {
+                  icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=mollusca'+field_name+'&title=on Plants','&#128012;')+'</span>');       
+              }
+              if( icon_list[i] === "fungi" ) {
+                  icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=fungi'+field_name+'&title=on Plants','&#127812;')+'</span>');       
+              }
+              faddelem('p',document.body,{innerHTML:icons});
           }
-          if( icon_list.includes("aves") ) {
-              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=aves'+field_name+'&title=on Plants','&#128038;')+'</span>');
-          }
-          if( icon_list.includes("insecta") ) {
-              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=insecta'+field_name+'&title=on Plants','&#129714;')+'</span>');       
-          }
-          if( icon_list.includes("herps") ) {
-              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=amphibia,reptilia'+field_name+'&title=on Plants','&#128056;')+'</span>');       
-          }
-          if( icon_list.includes("arachnida") ) {
-              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=arachnida'+field_name+'&title=on Plants','&#128375;')+'</span>');       
-          }
-          if( icon_list.includes("mammalia") ) {
-              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=mammalia'+field_name+'&title=on Plants','&#128059;')+'</span>');       
-          }
-          if( icon_list.includes("mollusca") ) {
-              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=mollusca'+field_name+'&title=on Plants','&#128012;')+'</span>');       
-          }
-          if( icon_list.includes("fungi") ) {
-              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=fungi'+field_name+'&title=on Plants','&#127812;')+'</span>');       
-          }
-          faddelem('p',document.body,{innerHTML:icons});
       }
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
