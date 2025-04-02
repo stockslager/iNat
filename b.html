@@ -198,11 +198,19 @@ function fresults(xobj) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let labels = [];
       let dlString = '';
+      let prefix = '';
+
+      if( p_iconic_taxa === 'insecta' ){
+          prefix = 'Bugs ';
+      }
+      if( p_iconic_taxa === 'aves' ) {
+          prefix = 'Birds ';
+      }
 
       if( p_title === '' ) {
           dlString = '<span id="h2">Bugs on Plants</span>';
       } else {
-          dlString = '<span id="h2">'+p_title+'</span>';
+          dlString = '<span id="h2">'+prefix+p_title+'</span>';
       }
 
       faddelem('p',document.body,{innerHTML:dlString});
@@ -232,10 +240,10 @@ function fresults(xobj) {
       if( menu_items.length > 0 && p_title !== '' ) {
           let icons = '';
           if( icon_list.includes("aves") ) {
-              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=aves'+field_name+'&title=Birds on Plants','&#128038;')+'</span>');
+              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=aves'+field_name+'&title=on Plants','&#128038;')+'</span>');
           }
           if( icon_list.includes("insecta") ) {
-              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=insecta'+field_name+'&title=Insects on Plants','&#129714;')+'</span>');       
+              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=insecta'+field_name+'&title=on Plants','&#129714;')+'</span>');       
           }
           faddelem('p',document.body,{innerHTML:icons});
       }
@@ -246,7 +254,7 @@ function fresults(xobj) {
 
       labels = [
             {innerText:'#'},
-            {innerText:'Obs Photo'},
+            {innerText:'Photo'},
             {innerText:'Name'}, 
       ];
 
