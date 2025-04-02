@@ -232,6 +232,8 @@ function fresults(xobj) {
           prefix = 'Snails ';
       } else if( p_iconic_taxa === 'fungi' ) {
           prefix = 'Mushrooms ';
+      } else if( p_iconic_taxa === 'plantae' ) {
+          prefix = 'Everything Found ';
       } else {
           prefix = 'Bugs ';
       }
@@ -288,6 +290,9 @@ function fresults(xobj) {
           }
           if( icon_list.includes("fungi") ) {
               icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=fungi'+field_name+'&title=on Plants','&#127812;')+'</span>');       
+          }
+          if( icon_list.includes("plantae") ) {
+              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=plantae'+field_name+'&title=on Plants','&#127807;')+'</span>');       
           }
           faddelem('p',document.body,{innerHTML:icons});
       }
