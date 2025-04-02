@@ -86,8 +86,10 @@ let p_omit_users = winurlparams.get('omit_users') || '';
 let p_omit_id = winurlparams.get('omit_id') || '';
 let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_iconic_taxa  = winurlparams.get('iconic_taxa') || 'plantae';
+let p_title        = winurlparams.get('title') || 'Bugs on Plants';
 let p_field = '';
 let p_field_value = '';
+let menu_items = [];
 let opts = '';
 
 if( p_omit_users !== '' ){
@@ -200,6 +202,17 @@ function fresults(xobj) {
 
       faddelem('p',document.body,{innerHTML:dlString});
 
+      let field_id = '';
+      let field_name = '';
+      let icon_list = [];
+      for( let i=0; i<menu_items.length; i++ ){
+           if( menu_items[i].title === p_title ) {
+               field_id   = menu_items[i].field_id;
+               field_name = ('&field:'+menu_items[i].field_name);
+               icon_list  = menu_items[i].icon_list;
+           }
+      }
+
       let proj = '';
       let user = '';
       if( p_project_id !== '' && p_project_id !== 'null' ) {
@@ -208,10 +221,13 @@ function fresults(xobj) {
               proj += ('&user_id='+p_user_id);
           }
       } else {
-          user = ('&user_id='+p_user_id);
+          user = ('?user_id='+p_user_id);
       }
-      faddelem('p',document.body,{innerHTML:'<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=aves','&#128038;</span>') +
-                                            '<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=aves','&#129714;</span>')});
+
+      if( menu_items.length > 0 ) {
+          faddelem('p',document.body,{innerHTML:'<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=aves','&#128038;</span>') +
+                                                '<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=aves','&#129714;</span>')});
+      }
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
@@ -302,13 +318,25 @@ function fresults(xobj) {
    else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
 
-if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
-   let instructions = [
+async function asyncGetData() {
+   await fetch('bugs.json')
+     .then(response => response.json())
+     .then(data => {
+      // Access your data here 
+      menu_items  = data.menu_items;
+      console.log(data);
+   })
+     .catch(error => {
+      console.error('Error fetching JSON:', error);
+   });
+
+   if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
+      let instructions = [
          {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.  It will default to the "7623 - plant that the organism was found on" observation field if &obs_field=xxx is not passed in.'},
-   ];
-   faddelems('p',document.body,instructions);
-} else {
-      fetch(apiurl)
+      ];
+      faddelems('p',document.body,instructions);
+   } else {
+      await fetch(apiurl)
       .then((response) => {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
@@ -318,7 +346,16 @@ if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
       });
-};
+   }
+}
+
+// need to pull resources from a json file to pass into an api
+// so needs to be asynchronous. 
+const request = async () => {
+   asyncGetData();
+}
+
+request();  
 
 </script>
 </body>
