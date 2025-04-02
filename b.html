@@ -226,6 +226,12 @@ function fresults(xobj) {
           prefix = 'Spiders ';
       } else if( p_iconic_taxa === 'amphibia,reptilia' ) {
           prefix = 'Herps ';
+      } else if( p_iconic_taxa === 'mammalia' ) {
+          prefix = 'Mammals ';
+      } else if( p_iconic_taxa === 'mollusca' ) {
+          prefix = 'Snails ';
+      } else if( p_iconic_taxa === 'fungi' ) {
+          prefix = 'Mushrooms ';
       } else {
           prefix = 'Bugs ';
       }
@@ -273,6 +279,15 @@ function fresults(xobj) {
           }
           if( icon_list.includes("arachnida") ) {
               icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=arachnida'+field_name+'&title=on Plants','&#128375;')+'</span>');       
+          }
+          if( icon_list.includes("mammalia") ) {
+              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=mammalia'+field_name+'&title=on Plants','&#128059;')+'</span>');       
+          }
+          if( icon_list.includes("mollusca") ) {
+              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=mollusca'+field_name+'&title=on Plants','&#128012;')+'</span>');       
+          }
+          if( icon_list.includes("fungi") ) {
+              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=fungi'+field_name+'&title=on Plants','&#127812;')+'</span>');       
           }
           faddelem('p',document.body,{innerHTML:icons});
       }
