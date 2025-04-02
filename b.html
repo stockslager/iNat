@@ -187,6 +187,7 @@ let p_library_name = '';
 
 function sortWithNull(arr, ascending = true) {
   for( let i=0; i<arr.length; i++ ) {
+       console.log('nm '+arr[i].taxon.preferred_common_name);
        if( arr[i].taxon.preferred_common_name !== null && arr[i].taxon.preferred_common_name !== '' ){
            arr[i].taxon.preferred_common_name = arr[i].taxon.preferred_common_name.toLowerCase();
        }
@@ -306,7 +307,7 @@ function fresults(xobj) {
          if( rec.taxon ){
              tax_id = rec.taxon.id;
              tax_name = rec.taxon.name || '';
-             pref_tax_name = 'test'; //rec.taxon.preferred_common_name || rec.taxon.name || '';
+             pref_tax_name = rec.taxon.preferred_common_name || '';
            
              if( rec.taxon.default_photo ){
                  if( rec.taxon.default_photo.url ){
