@@ -96,6 +96,10 @@ let p_field_value = '';
 let menu_items = [];
 let opts = '';
 
+if( p_title ){
+    p_title = p_title.toLowerCase();
+}
+
 if( p_omit_users !== '' ){
     winurlparams.delete('not_user_id');
     winurlparams.append('not_user_id', p_omit_users);
