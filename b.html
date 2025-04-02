@@ -185,6 +185,18 @@ winurlparams.append('taxon_id', p_taxon_id);
 let p_insect_prj = '';
 let p_library_name = '';
 
+function sortWithNull(arr, ascending = true) {
+  arr.sort(function(a, b) {
+    if (a.taxon.preferred_common_name === null && b.taxon.preferred_common_name === null) return 0;
+    if (a.taxon.preferred_common_name === null) return ascending ? 1 : -1;
+    if (b.taxon.preferred_common_name === null) return ascending ? -1 : 1;
+    if (a.taxon.preferred_common_name < b.preferred_common_name) return ascending ? -1 : 1;
+    if (a.taxon.preferred_common_name > b.preferred_common_name) return ascending ? 1 : -1;
+    return 0;
+  });
+  return arr;
+}
+ 
 function fresults(xobj) {
    let results = xobj.results;
    let box_array = [];
@@ -272,7 +284,8 @@ function fresults(xobj) {
 
       // may need to revisit this if species_guess is ever null
       //results.sort((a, b) => a.species_guess.toLowerCase().localeCompare(b.species_guess.toLowerCase()))
-      results.sort((a, b) => a.taxon.preferred_common_name.toLowerCase().localeCompare(b.taxon.preferred_common_name.toLowerCase()))
+      results = sortWithNull(results);
+      //results.sort((a, b) => a.taxon.preferred_common_name.toLowerCase().localeCompare(b.taxon.preferred_common_name.toLowerCase()))
           
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
