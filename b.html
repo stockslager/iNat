@@ -186,7 +186,11 @@ let p_insect_prj = '';
 let p_library_name = '';
 
 function sortWithNull(arr, ascending = true) {
-  arr = arr.map(item => item.toLowerCase());
+  for( let i=0; i<arr.length; i++ ) {
+       if( arr[i].taxon.preferred_common_name !== null ){
+           arr[i].taxon.preferred_common_name = arr[i].taxon.preferred_common_name.toLowerCase();
+       }
+  }
   arr.sort(function(a, b) {
     if (a.taxon.preferred_common_name === null && b.taxon.preferred_common_name === null) return 0;
     if (a.taxon.preferred_common_name === null) return ascending ? 1 : -1;
