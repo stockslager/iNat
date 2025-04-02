@@ -167,23 +167,6 @@ winurlparams.append('operator', p_operator);
 winurlparams.append('taxon_id', p_taxon_id);
 winurlparams.append('target_id', p_target_id);
 
-/*function sortWithNull(arr, ascending = true) {
-  for( let i=0; i<arr.length; i++ ) {
-       if( arr[i].taxon.preferred_common_name ){
-           arr[i].taxon.preferred_common_name = arr[i].taxon.preferred_common_name.toLowerCase();
-       }
-  }
-  arr.sort(function(a, b) {
-    if (!a.taxon.preferred_common_name && !b.taxon.preferred_common_name) return 0;
-    if (!a.taxon.preferred_common_name) return ascending ? 1 : -1;
-    if (!b.taxon.preferred_common_name) return ascending ? -1 : 1;
-    if (a.taxon.preferred_common_name < b.taxon.preferred_common_name) return ascending ? -1 : 1;
-    if (a.taxon.preferred_common_name > b.taxon.preferred_common_name) return ascending ? 1 : -1;
-    return 0;
-  });
-  return arr;
-}*/
- 
 function fresults(xobj) {
    let results = xobj.results;
    let box_array = [];
@@ -231,11 +214,11 @@ function fresults(xobj) {
       }
 
       if( p_title === '' ) {
-          dlString = '<span id="h2">Bugs on Plants</span>';
-          faddelem('p',document.body,{innerHTML:(dlString + '<div id="butter1">'+furl(github_root+'b1.html'+proj+user+'&obs_field='+p_obs_field,'&#127807;')+'</div>') });
+          dlString = '<div width="375"><span id="h2">Bugs on Plants</span>';
+          faddelem('p',document.body,{innerHTML:(dlString + '<div id="butter1">'+furl(github_root+'b1.html'+proj+user+'&obs_field='+p_obs_field,'&#127807;')+'</div></div>') });
       } else {
-          dlString = '<span id="h2">'+prefix+p_title+'</span>';
-          faddelem('p',document.body,{innerHTML:(dlString + '<div id="butter1">'+furl(github_root+'b1.html'+proj+user+'&title='+p_title,'&#127807;')+'</div>') });
+          dlString = '<div width="375"><span id="h2">'+prefix+p_title+'</span>';
+          faddelem('p',document.body,{innerHTML:(dlString + '<div id="butter1">'+furl(github_root+'b1.html'+proj+user+'&title='+p_title,'&#127807;')+'</div></div>') });
       }
 
       let field_id = '';
