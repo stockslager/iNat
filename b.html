@@ -90,6 +90,7 @@ let p_original_iconic = winurlparams.get('iconic_taxa') || '';
 let p_iconic_taxa  = winurlparams.get('iconic_taxa') || 'plantae';
 let p_title        = winurlparams.get('title') || '';
 let p_target_name   = winurlparams.get('target_name') || '';
+let p_target_id     = winurlparams.get('target_id') || '';
 let p_field = '';
 let p_field_value = '';
 let menu_items = [];
@@ -367,7 +368,7 @@ function fresults(xobj) {
              if( p_obs_field ) {
                  taxon = furl(github_root+'cncnpc_insects.html?'+query_params+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_field+'&plant_name='+pref_tax_name,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
              } else {
-                 taxon = furl(github_root+'b.html?'+query_params+'&obs_field='+p_obs_field+'&target_name='+pref_tax_name+iconic+'&title=on Plants'+field_name+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>'); 
+                 taxon = furl(github_root+'b.html?'+query_params+'&obs_field='+p_obs_field+'&target_id='+tax_id+'&target_name='+pref_tax_name+iconic+'&title=on Plants'+field_name+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>'); 
              }
          }
 
