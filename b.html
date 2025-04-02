@@ -197,8 +197,13 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let labels = [];
+      let dlString = '';
 
-      let dlString = '<span id="h2">Bugs on Plants</span>';
+      if( p_title === '' ) {
+          dlString = '<span id="h2">Bugs on Plants</span>';
+      } else {
+          dlString = '<span id="h2">'+p_title+'</span>';
+      }
 
       faddelem('p',document.body,{innerHTML:dlString});
 
@@ -224,9 +229,18 @@ function fresults(xobj) {
           user = ('?user_id='+p_user_id);
       }
 
-      if( menu_items.length > 0 ) {
-          faddelem('p',document.body,{innerHTML:'<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=aves'+field_name,'&#128038;</span>') +
-                                                '<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=insecta'+field_name,'&#129714;</span>')});
+      if( p_title !== '' ) {
+      }
+
+      if( menu_items.length > 0 && p_title !== '' ) {
+          let icons = '';
+          if( icon_list.includes("aves") ) {
+              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=aves'+field_name+'&title=Birds on Plants','&#128038;</span>');
+          }
+          if( icon_list.includes("insecta") {
+              icons += ('<span id="butter2">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field+'&iconic_taxa=insecta'+field_name+'&title=Insects on Plants','&#129714;</span>');       
+          }
+          faddelem('p',document.body,{innerHTML:icons});
       }
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
