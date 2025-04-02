@@ -288,7 +288,7 @@ function fresults(xobj) {
       let tbody = faddelem('tbody',table);
 
       // may need to revisit this if species_guess is ever null
-      //results.sort((a, b) => a.species_guess.toLowerCase().localeCompare(b.species_guess.toLowerCase()))
+      //results.sort((a, b) => a.species_guess.().localeCompare(b.species_guess.()))
       results = sortWithNull(results);
       //results.sort((a, b) => a.taxon.preferred_common_name.toLowerCase().localeCompare(b.taxon.preferred_common_name.toLowerCase()))
     
@@ -306,7 +306,7 @@ function fresults(xobj) {
          if( rec.taxon ){
              tax_id = rec.taxon.id;
              tax_name = rec.taxon.name || '';
-             pref_tax_name = rec.taxon.preferred_common_name || '';
+             pref_tax_name = rec.taxon.preferred_common_name || rec.taxon.name || '';
            
              if( rec.taxon.default_photo ){
                  if( rec.taxon.default_photo.url ){
