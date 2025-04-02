@@ -238,6 +238,17 @@ function fresults(xobj) {
           prefix = 'Bugs ';
       }
 
+      let proj = '';
+      let user = '';
+      if( p_project_id !== '' && p_project_id !== 'null' ) {
+          proj = ('?project_id='+p_project_id);
+          if( p_user_id !== '' && p_user_id !== 'null' ) {
+              proj += ('&user_id='+p_user_id);
+          }
+      } else {
+          user = ('?user_id='+p_user_id);
+      }
+
       if( p_title === '' ) {
           dlString = '<span id="h2">Bugs on Plants</span>';
       } else {
@@ -255,17 +266,6 @@ function fresults(xobj) {
                field_name = ('&field:'+menu_items[i].field_name);
                icon_list  = menu_items[i].icon_list.split(',');
            }
-      }
-
-      let proj = '';
-      let user = '';
-      if( p_project_id !== '' && p_project_id !== 'null' ) {
-          proj = ('?project_id='+p_project_id);
-          if( p_user_id !== '' && p_user_id !== 'null' ) {
-              proj += ('&user_id='+p_user_id);
-          }
-      } else {
-          user = ('?user_id='+p_user_id);
       }
 
       if( icon_list.length > 0 && p_title !== '' ) { 
