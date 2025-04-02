@@ -284,14 +284,8 @@ function fresults(xobj) {
 
       // may need to revisit this if species_guess is ever null
       //results.sort((a, b) => a.species_guess.toLowerCase().localeCompare(b.species_guess.toLowerCase()))
-      //results = sortWithNull(results);
+      results = sortWithNull(results);
       //results.sort((a, b) => a.taxon.preferred_common_name.toLowerCase().localeCompare(b.taxon.preferred_common_name.toLowerCase()))
-      results.sort(function (a, b) {
-         if( clickedDevicePlatformSorting == 'orderDevicePlatformByASC' && a.taxon.preferred_common_Name)            
-             return  b.taxon.preferred_common_name ? a.taxon.preferred_common_name.localeCompare(b.taxon.preferred_common_name) : -1;
-         else if (b.taxon.preferred_common_name) 
-             return a.taxon.preferred_common_name ? b.taxon.preferred_common_name.localeCompare(a.taxon.preferred_common_name) : 1;
-         });
     
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
