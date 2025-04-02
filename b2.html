@@ -351,7 +351,8 @@ function fresults(xobj) {
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:taxon},
+                  {innerHTML:furl(github_root+'cncnpc_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+'&rows=10&columns=3&cellpx=300'+grid_param,(displayName||''))},
+                  //{innerHTML:taxon},
                   {innerText:rec.count||''},
                   ];
 
