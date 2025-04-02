@@ -86,7 +86,7 @@ let p_omit_users = winurlparams.get('omit_users') || '';
 let p_omit_id = winurlparams.get('omit_id') || '';
 let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_iconic_taxa  = winurlparams.get('iconic_taxa') || 'plantae';
-let p_title        = winurlparams.get('title') || 'Bugs on Plants';
+let p_title        = winurlparams.get('title') || '';
 let p_field = '';
 let p_field_value = '';
 let menu_items = [];
@@ -227,9 +227,6 @@ function fresults(xobj) {
           }
       } else {
           user = ('?user_id='+p_user_id);
-      }
-
-      if( p_title !== '' ) {
       }
 
       if( menu_items.length > 0 && p_title !== '' ) {
