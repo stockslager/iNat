@@ -338,7 +338,7 @@ function fresults(xobj) {
              }
          }
 
-         let displayName = '';
+         /*let displayName = '';
          if( tax_id !== '' ){
              let iconic = '&iconic_taxa=';
              if( p_iconic_taxa === 'plantae' ){
@@ -348,12 +348,12 @@ function fresults(xobj) {
              }
              displayName = ('<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');             
              taxon = furl(github_root+'b2.html?'+query_params+'&obs_field='+p_obs_field+'&target_id='+tax_id+'&target_name='+pref_tax_name+iconic+'&title=on Plants'+field_name+tax_id,displayName); 
-         }
+         }*/
 
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'cncnpc_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+'&rows=10&columns=3&cellpx=300'+field_name+tax_id,(displayName||''))},
+                  {innerHTML:furl(github_root+'cncnpc_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+'&rows=10&columns=3&cellpx=300'+field_name+p_target_id,(pref_tax_name||tax_name||''))},
                   //{innerHTML:taxon},
                   {innerText:rec.count||''},
                   ];
