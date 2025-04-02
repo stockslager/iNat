@@ -300,11 +300,10 @@ function fresults(xobj) {
              } else {
                  iconic += p_iconic_taxa;
              }
-             let displayName = rec.taxon.preferred_common_name || rec.taxon.name;
              if( p_obs_field ) {
-                 taxon = furl(github_root+'cncnpc_insects.html?'+query_params+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_field+'&plant_name='+displayName,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
+                 taxon = furl(github_root+'cncnpc_insects.html?'+query_params+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_field+'&plant_name='+pref_tax_name,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
              } else {
-                 taxon = furl(github_root+'b2.html?'+query_params+'&obs_field='+p_obs_field+'&target_id='+tax_id+'&target_name='+displayName+iconic+'&title=On'+field_name+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>'); 
+                 taxon = furl(github_root+'b2.html?'+query_params+'&obs_field='+p_obs_field+'&target_id='+tax_id+'&target_name='+pref_tax_name+iconic+'&title=On'+field_name+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>'); 
              }
          }
 
