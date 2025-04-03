@@ -109,8 +109,7 @@ function fresults(menu_items) {
       let icon_list = [];
 
       let labels = [
-            {innerText:'Interaction:'},
-            {innerText:'Field Id'},
+            {innerText:'Interaction'},
             {innerText:'Observation Field'}, 
       ];
 
@@ -130,12 +129,11 @@ function fresults(menu_items) {
            params += ('&field:'+menu_items[i].field_name+'=');
            params += ('&show_menu=yes');
 
-           let url = furl((github_root+'b2.html'+params),menu_items[i].title);  
+           let url = furl((github_root+'b2.html'+params),('observed '+menu_items[i].title));  
        
          let values = [
                   {innerHTML:'observed '+url},
-                  {innerText:menu_items[i].field_id},
-                  {innerHTML:menu_items[i].field_name},
+                  {innerHTML:'requires the "'+menu_items[i].field_name+'" observation field. ('+menu_items[i].field_id},
                   ];
 
          faddelems('td',brow,values);               
