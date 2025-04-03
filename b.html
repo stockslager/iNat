@@ -109,7 +109,7 @@ function fresults(menu_items) {
       let icon_list = [];
 
       let labels = [
-            {innerText:'Interaction'},
+            {innerText:'Observed'},
             {innerText:'Requires'}, 
       ];
 
@@ -130,7 +130,7 @@ function fresults(menu_items) {
            params += ('&field:'+menu_items[i].field_name+'=');
            params += ('&show_menu=yes');
 
-           let url = furl((github_root+'b2.html'+params),('observed '+menu_items[i].title));  
+           let url = furl((github_root+'b2.html'+params),menu_items[i].title);  
 
            if( menu_items[i].plant_list_name ){
                plant_list_string = '<br><br>"'+menu_items[i].plant_list_name+'" tag to be added for each plant in the plant list.';
