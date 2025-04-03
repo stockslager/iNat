@@ -243,12 +243,10 @@ function fresults(xobj) {
       } else {
           for( let i=0; i<results.length; i++) {
                if( !iconic_taxon_arr.includes(results[i].taxon.iconic_taxon_name.toLowerCase()) ) {
-                   console.log( "name " + results[i].taxon.iconic_taxon_name );
                    iconic_taxon_arr.push( results[i].taxon.iconic_taxon_name.toLowerCase() );
                }
           }
       }
-      console.log('arr ' + iconic_taxon_arr );
 
       if( icon_list.length > 0 && p_title && ( p_taxon_id || p_target_name ) && iconic_taxon_arr.length > 1 ) { 
           let icons = '';
