@@ -111,7 +111,7 @@ var spacerpx = winurlparams.get('spacerpx') || 2;
 var rows = winurlparams.get('rows') || 1;
 var columns = winurlparams.get('columns') || 2;*/
 var cellpx = 8;
-var spacerpx = 2;
+var spacerpx = .2;
 var rows = 30;
 var columns = 3;
 
@@ -137,8 +137,8 @@ function fresults(data) {
          var gcell = faddelem('div',grid,{classList:'gridcell',style:{
             height:cellpx+'em',
             width:cellpx+'em',
-            top:((r-1)*cellpx+(r<=1?0:r-1)*spacerpx)+'px',
-            left:((c-1)*cellpx+(c<=1?0:c-1)*spacerpx)+'px'
+            top:((r-1)*cellpx+(r<=1?0:r-1)*spacerpx)+'em',
+            left:((c-1)*cellpx+(c<=1?0:c-1)*spacerpx)+'em'
             }});
          if (recsfound===0&&data.total_results===0) { 
             gcell.innerHTML = furl(famp(obsurl),'<span>no<br />data</span>');
@@ -151,7 +151,7 @@ function fresults(data) {
                gcell.innerHTML = furl(famp(obsurl),'<span>+'+(fshorten(data.total_results-obsseq))+'<br />more</span>');
             }
             obsseq = 0;
-            if (r===1&&c>1) { grid.style.width = (c*cellpx+(c-1)*spacerpx)+'px'; };
+            if (r===1&&c>1) { grid.style.width = (c*cellpx+(c-1)*spacerpx)+'em'; };
             break;
          }
          else {
@@ -168,11 +168,11 @@ function fresults(data) {
                      : (cellpx<=150) ? photourl.replace('square','small')
                      : photourl.replace('square','medium'))
                   });
-            if (r===1&&c>1) { grid.style.width = (c*cellpx+(c-1)*spacerpx)+'px'; };
+            if (r===1&&c>1) { grid.style.width = (c*cellpx+(c-1)*spacerpx)+'em'; };
             obsseq++;
          };
       };
-      if (r>1) { grid.style.height = (r*cellpx+(r-1)*spacerpx)+'px'; };
+      if (r>1) { grid.style.height = (r*cellpx+(r-1)*spacerpx)+'em'; };
       if (obsseq===0) { break; };
    };
 };
