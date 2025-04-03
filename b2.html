@@ -238,7 +238,7 @@ function fresults(xobj) {
 
       let iconic_taxon_arr = [];
       if( p_menu_array ) {
-          iconic_taxon_arr = menu_array;
+          iconic_taxon_arr = p_menu_array;
       } else {
           for( let i=0; i<results.length; i++) {
                if( !iconic_taxon_arr.includes(results[i].taxon.iconic_taxon_name) ) {
@@ -247,6 +247,7 @@ function fresults(xobj) {
                }
           }
       }
+      console.log('arr ' + iconic_taxon_arr );
 
       if( icon_list.length > 0 && p_title && ( p_taxon_id || p_target_name ) ) { 
           let icons = '';
