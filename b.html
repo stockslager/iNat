@@ -110,7 +110,7 @@ function fresults(menu_items) {
 
       let labels = [
             {innerText:'Interaction'},
-            {innerText:'Observation Field'}, 
+            {innerText:'Requires'}, 
       ];
 
       let table = faddelem('table',document.body,{id:'main'});                    
@@ -138,7 +138,7 @@ function fresults(menu_items) {
        
            let values = [
                   {innerHTML:url},
-                  {innerHTML:'requires the "'+menu_items[i].field_name+'" observation field. ('+menu_items[i].field_id+plant_list_string},
+                  {innerHTML:menu_items[i].field_id+' - '+menu_items[i].field_name+'" observation field.'+plant_list_string},
                   ];
 
            faddelems('td',brow,values);               
