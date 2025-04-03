@@ -4,14 +4,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
-<meta name="description" content="Bugs on Plants" />
+<meta name="description" content="Wildlife Interactions" />
 <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-<meta name="apple-mobile-web-app-title" content="Bugs on Plants" />
+<meta name="apple-mobile-web-app-title" content="Wildlife Interactions" />
 <link rel="manifest" href="bugs.webmanifest" />
-<title>Bugs on Plants</title>
+<title>Wildlife Interactions</title>
 <style>
    :root { 
       background: var(--color-base);
@@ -79,365 +79,62 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
-let p_taxon_id   = winurlparams.get('taxon_id') || '';
-let p_operator   = winurlparams.get('operator') || '';
-let p_obs_field  = winurlparams.get('obs_field') || '';
-let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
-let p_omit_users = winurlparams.get('omit_users') || '';
-let p_omit_id = winurlparams.get('omit_id') || '';
-let p_omit_project = winurlparams.get('omit_projects') || '';
-let p_original_iconic = winurlparams.get('iconic_taxa') || '';
-let p_iconic_taxa  = winurlparams.get('iconic_taxa') || 'plantae';
-let p_title        = winurlparams.get('title') || '';
-let p_target_name   = winurlparams.get('target_name') || '';
-let p_target_id     = winurlparams.get('target_id') || '';
-let p_field = '';
-let p_field_value = '';
-let menu_items = [];
-let opts = '';
-
-if( p_omit_users !== '' ){
-    winurlparams.delete('not_user_id');
-    winurlparams.append('not_user_id', p_omit_users);
-}
-
-if( p_omit_id !== '' ){
-    winurlparams.delete('not_id');
-    winurlparams.append('not_id', p_omit_id);
-}
-
-if( p_omit_project !== '' ){
-    winurlparams.delete('not_in_project');
-    winurlparams.append('not_in_project', p_omit_project);
-}
- 
-winurlparams.delete('per_page');
-winurlparams.append('per_page','50');
-winurlparams.delete('order');
-winurlparams.append('order','asc');
-winurlparams.delete('order_by');
-winurlparams.append('order_by','species_guess');
-
-// find key/value pair for &field: param if one was passed in
-for (const [key, value] of winurlparams.entries()) {
-  if( key.startsWith('field') ){
-      p_field = key;
-      p_field_value = value;
-  }
-}  
-
-if( p_original_iconic === '' ) {
-    winurlparams.delete('q');
-    winurlparams.delete('search_on');
-    winurlparams.append('q', 'bugs-on-plants');
-    winurlparams.append('search_on', 'tags');
-}
- 
-winurlparams.delete('options');
-let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
-winurlparams.delete('idextra_user_id');
-let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
-winurlparams.delete('photo_curl_filename_prefix');
- 
-let apibase = 'https://api.inaturalist.org/v1/observations';
-let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
-
-// if a field was passed in call species counts instead of observations endpoint
-if( p_field !== '' ) {
-    apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
-    apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-    apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
-}
 
 </script> 
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
 <script> 
 
-// remove the field param from the url before building options
-//winurlparams.delete(p_field);
-winurlparams.delete('operator');
-winurlparams.delete('taxon_id');
-winurlparams.delete('not_user_id');
-winurlparams.delete('not_id');
-winurlparams.delete('not_in_project');
-
-// build param list for url's used in fresults
-for (const [key, value] of winurlparams.entries()) { 
-  if( opts === '' ){
-      opts += "?";
-  } else {
-      opts += "&";
-  }
-  opts += key;
-  opts += "=";
-
-  if( key === 'page' ){
-      opts += '1';
-  } else {
-      opts += value;
-  }
-}   
-
-// add them back after building options...
-winurlparams.append('operator', p_operator);
-winurlparams.append('taxon_id', p_taxon_id);
-
-// these are stored in params.json 
-let p_insect_prj = '';
-let p_library_name = '';
-
-function sortWithNull(arr, ascending = true) {
-  for( let i=0; i<arr.length; i++ ) {
-       if( arr[i].taxon.preferred_common_name ){
-           arr[i].taxon.preferred_common_name = arr[i].taxon.preferred_common_name.toLowerCase();
-       }
-  }
-  arr.sort(function(a, b) {
-    if (!a.taxon.preferred_common_name && !b.taxon.preferred_common_name) return 0;
-    if (!a.taxon.preferred_common_name) return ascending ? 1 : -1;
-    if (!b.taxon.preferred_common_name) return ascending ? -1 : 1;
-    if (a.taxon.preferred_common_name < b.taxon.preferred_common_name) return ascending ? -1 : 1;
-    if (a.taxon.preferred_common_name > b.taxon.preferred_common_name) return ascending ? 1 : -1;
-    return 0;
-  });
-  return arr;
-}
+function fresults(menu_items) {
  
-function fresults(xobj) {
-   let results = xobj.results;
-   let box_array = [];
- 
-   if (results) {
-      let total_results = xobj.total_results;
-      let per_page = xobj.per_page;
-      let page_curr = xobj.page;
-      let page_max = Math.ceil(total_results/per_page);
-      let page_prev = ((page_curr>1)?page_curr-1:null);
-      let page_next = ((page_curr<page_max)?page_curr+1:null);
-      let labels = [];
-      let dlString = '';
-      let prefix = '';
-
-      if( p_iconic_taxa === 'insecta' ){
-          prefix = 'Bugs ';
-      } else if( p_iconic_taxa === 'aves' ) {
-          prefix = 'Birds ';
-      } else if( p_iconic_taxa === 'arachnida' ) {
-          prefix = 'Spiders ';
-      } else if( p_iconic_taxa === 'amphibia,reptilia' ) {
-          prefix = 'Herps ';
-      } else if( p_iconic_taxa === 'mammalia' ) {
-          prefix = 'Mammals ';
-      } else if( p_iconic_taxa === 'mollusca' ) {
-          prefix = 'Snails ';
-      } else if( p_iconic_taxa === 'fungi' ) {
-          prefix = 'Mushrooms ';
-      } else if( p_iconic_taxa === 'plantae' ) {
-          prefix = 'Everything Found ';
-      } else {
-          prefix = 'Bugs ';
-      }
-
-      let proj = '';
-      let user = '';
-      if( p_project_id !== '' && p_project_id !== 'null' ) {
-          proj = ('?project_id='+p_project_id);
-          if( p_user_id !== '' && p_user_id !== 'null' ) {
-              proj += ('&user_id='+p_user_id);
+   if (menu_items) {
+      let params = '';
+      if( p_project_id ) {
+          params = ('?project_id='+p_project_id);
+          if( p_user_id ) {
+              params += ('&user_id='+p_user_id);
           }
       } else {
-          user = ('?user_id='+p_user_id);
+          params = ('?user_id='+p_user_id);
       }
-
-      if( p_title === '' ) {
-          dlString = '<span id="h2">Bugs on Plants</span>';
-          faddelem('p',document.body,{innerHTML:(dlString + '<span id="butter1">'+furl(github_root+'b.html'+proj+user+'&obs_field='+p_obs_field,'&#127807;')+'</span>') });
-      } else {
-          dlString = '<span id="h2">'+prefix+p_title+'</span>';
-          faddelem('p',document.body,{innerHTML:(dlString + '<span id="butter1">'+furl(github_root+'b.html'+proj+user+'&title='+p_title,'&#127807;')+'</span>') });
-      }
-
+ 
       let field_id = '';
       let field_name = '';
       let icon_list = [];
+      let url = '';
       for( let i=0; i<menu_items.length; i++ ){
            if( menu_items[i].title === p_title ) {
                field_id   = menu_items[i].field_id;
-               field_name = ('&field:'+menu_items[i].field_name+'=');
                icon_list  = menu_items[i].icon_list.split(',');
+               params += ('&title='+menu_items[i].title;
+               params += ('&field:'+menu_items[i].field_name+'=');
+               params += ('&show_menu=yes');
+               
+               url = furl((github_root+'b2.html?'+params),menu_items[i].title);   
+               faddelem('p',document.body,{innerHTML:url});
            }
       }
-
-      if( icon_list.length > 0 && p_title && ( p_taxon_id || p_target_name ) ) { 
-          let icons = '';
-          for( let i=0; i<icon_list.length; i++ ) {
-              let params = ('b.html'+proj+user+field_name+p_target_id+'&title=on Plants'+'&target_name='+p_target_name);
-              if( icon_list[i] === "aves" ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=aves','&#128038;')+'</span>');
-              }
-              if( icon_list[i] === "insecta" ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=insecta','&#129714;')+'</span>');
-              }
-              if( icon_list[i] === "herps" ) {
-                  icons += ('<span id="butter1">'+furl(github_root+params+'&iconic_taxa=amphibia,reptilia','&#128056;')+'</span>');
-              }
-              if( icon_list[i] === "arachnida" ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=arachnida','&#128375;')+'</span>');
-              }
-              if( icon_list[i] === "mammalia" ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=mammalia','&#128059;')+'</span>');
-              }
-              if( icon_list[i] === "mollusca" ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=mollusca','&#128012;')+'</span>');
-              }
-              if( icon_list[i] === "fungi" ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=fungi','&#127812;')+'</span>');
-              }
-          }
-          faddelem('p',document.body,{innerHTML:icons});
-      }
-    
-      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
-             +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
-
-      labels = [
-            {innerText:'#'},
-            {innerText:'Photo'},
-            {innerText:'Name'}, 
-      ];
-
-      if( p_field !== '' ) {
-          labels.push({innerText:' '});
-      }
-
-      let table = faddelem('table',document.body,{id:'main'});                    
-      let thead = faddelem('thead',table);
-      let hrow = faddelem('tr',thead);
-      
-      faddelems('th',hrow,labels);
-      let tbody = faddelem('tbody',table);
-
-      // may need to revisit this if species_guess is ever null
-      //results.sort((a, b) => a.species_guess.().localeCompare(b.species_guess.()))
-      results = sortWithNull(results);
-      //results.sort((a, b) => a.taxon.preferred_common_name.toLowerCase().localeCompare(b.taxon.preferred_common_name.toLowerCase()))
-    
-      for (let i=0; i<results.length; i++) {
-         let rec = results[i];
-         let tax_name = '';
-         let pref_tax_name = '';
-         let tax_photo = '<div class="clipart">&#127807</div>'; 
-         let tax_id = '';
-         let values = [];
-         let taxon = '';
-
-         let brow = faddelem('tr',tbody);
-
-         if( rec.taxon ){
-             tax_id = rec.taxon.id;
-             tax_name = rec.taxon.name || '';
-             pref_tax_name = rec.taxon.preferred_common_name || '';
-           
-             if( rec.taxon.default_photo ){
-                 if( rec.taxon.default_photo.url ){
-                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
-                 }
-             }
-         }
-
-         let query_params = '';
-         if( p_project_id === '' || p_project_id === 'null' ){
-             query_params = ('user_id='+p_user_id);
-         } else {
-             query_params = ('project_id='+p_project_id);
-             if( p_user_id !== '' ){
-                 query_params += ('&user_id='+p_user_id);
-             }
-         }
-
-         if( tax_id !== '' ){
-             let iconic = '&iconic_taxa=';
-             if( p_iconic_taxa === 'plantae' ){
-                 iconic += 'insecta';
-             } else {
-                 iconic += p_iconic_taxa;
-             }
-             if( p_obs_field ) {
-                 taxon = furl(github_root+'cncnpc_insects.html?'+query_params+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_field+'&plant_name='+pref_tax_name,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
-             } else {
-                 taxon = furl(github_root+'b.html?'+query_params+'&obs_field='+p_obs_field+'&target_id='+tax_id+'&target_name='+pref_tax_name+iconic+'&title=on Plants'+field_name+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>'); 
-             }
-         }
-
-         if( p_field !== '' ) {
-             values = [
-                  {innerText:i+1},
-                  {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:taxon},
-                  {innerText:rec.count||''},
-                  ];
-         } else {
-             values = [
-                  {innerText:i+1},
-                  {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  {innerHTML:taxon},
-                  ];
-         }
-
-         faddelems('td',brow,values);
-      };
-
-      // buttons to go to prev or next page
-      let nav = faddelem('div',document.body,{id:'nav'});
-      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
-      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
-      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
-      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
    }
-   else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
 
-async function asyncGetData() {
-   await fetch('bugs.json')
+if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
+      let instructions = [
+         {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.  It will default to the "7623 - plant that the organism was found on" observation field if &obs_field=xxx is not passed in.'},
+      ];
+      faddelems('p',document.body,instructions);
+} else {
+   fetch('bugs.json')
      .then(response => response.json())
      .then(data => {
       // Access your data here 
       menu_items  = data.menu_items;
+      fresults(menu_items);
       console.log(data);
    })
      .catch(error => {
       console.error('Error fetching JSON:', error);
    });
-
-   if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
-      let instructions = [
-         {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.  It will default to the "7623 - plant that the organism was found on" observation field if &obs_field=xxx is not passed in.'},
-      ];
-      faddelems('p',document.body,instructions);
-   } else {
-      await fetch(apiurl)
-      .then((response) => {
-         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-         return response.json();
-      })
-      .then((data) => { fresults(data); })
-      .catch((err) => {
-         console.error(err.message);
-         faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-      });
-   }
 }
-
-// need to pull resources from a json file to pass into an api
-// so needs to be asynchronous. 
-const request = async () => {
-   asyncGetData();
-}
-
-request();  
 
 </script>
 </body>
