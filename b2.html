@@ -242,8 +242,7 @@ function fresults(xobj) {
                iconic_taxon_arr.push( results[i].taxon.iconic_taxon_name );
            }
       }
-      console.log( "arr " + iconic_taxon_arr );
-      let array = iconic_taxon_arr.split(",");
+      console.log( "arr " + iconic_taxon_arr[0] );
 
       if( icon_list.length > 0 && p_title && ( p_taxon_id || p_target_name ) ) { 
           let icons = '';
@@ -252,7 +251,7 @@ function fresults(xobj) {
               if( icon_list[i] === "aves" && iconic_taxon_arr.includes("aves") ) {
                   icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=aves','&#128038;')+'</span>');
               }
-              if( icon_list[i] === "insecta" && array.includes(icon_list[i]) ) {
+              if( icon_list[i] === "insecta" && iconic_taxon_arr.includes(icon_list[i]) ) {
                   icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=insecta','&#129714;')+'</span>');
               }
               if( icon_list[i] === "herps" && ( iconic_taxon_arr.includes("amphibia") || iconic_taxon_arr.includes("reptilia") ) ) {
