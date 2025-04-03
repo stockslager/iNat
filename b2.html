@@ -92,6 +92,7 @@ let p_iconic_taxa  = winurlparams.get('iconic_taxa') || 'plantae';
 let p_title        = winurlparams.get('title') || '';
 let p_target_name   = winurlparams.get('target_name') || '';
 let p_target_id     = winurlparams.get('target_id') || '';
+let p_show_menu     = winurlparams.get('show_menu') || 'no';
 let p_menu_array    = winurlparams.get('menu_array') || '';
 let p_field = '';
 let p_field_value = '';
@@ -201,7 +202,7 @@ function fresults(xobj) {
       } else if( p_iconic_taxa === 'plantae' ) {
           prefix = 'found ';
       } else {
-          prefix = 'bugs ';
+          prefix = 'found ';
       }
 
       let proj = '';
@@ -248,7 +249,8 @@ function fresults(xobj) {
           }
       }
 
-      if( icon_list.length > 0 && p_title && ( p_taxon_id || p_target_name ) && iconic_taxon_arr.length > 1 ) { 
+      if( (icon_list.length > 0 && p_title && ( p_taxon_id || p_target_name ) && iconic_taxon_arr.length > 1) ||
+          (icon_list.length > 0 && p_show_menu === 'yes' && iconic_taxon_arr.length > 1) ) { 
           let icons = '';
           for( let i=0; i<icon_list.length; i++ ) {
               let params = ('b2.html'+proj+user+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&menu_array='+iconic_taxon_arr);
