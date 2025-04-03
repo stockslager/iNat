@@ -93,7 +93,6 @@ let p_iconic_taxa  = winurlparams.get('iconic_taxa') || 'plantae';
 let p_title        = winurlparams.get('title') || '';
 let p_target_name   = winurlparams.get('target_name') || '';
 let p_target_id     = winurlparams.get('target_id') || '';
-let p_menu_array    = winurlparams.get('menu_array') || '';
 let p_field = '';
 let p_field_value = '';
 let menu_items = [];
@@ -250,52 +249,6 @@ function fresults(xobj) {
                field_name = ('&field:'+menu_items[i].field_name+'=');
                icon_list  = menu_items[i].icon_list.split(',');
            }
-      }
-
-      let iconic_taxon_arr = [];
-      if( p_menu_array ) {
-          iconic_taxon_arr = p_menu_array;
-      } else {
-          for( let i=0; i<results.length; i++) {
-               if( !iconic_taxon_arr.includes(results[i].taxon.iconic_taxon_name.toLowerCase()) ) {
-                   iconic_taxon_arr.push( results[i].taxon.iconic_taxon_name.toLowerCase() );
-               }
-          }
-      }
-      console.log('icon list ' + icon_list);
-      console.log('title ' + p_title );
-      console.log('iconic ' + p_iconic_taxa);
-      console.log('iconic arr ' + iconic_taxon_arr);
-
-      if( icon_list.length > 0 && p_title && p_iconic_taxa !== 'plantae' && iconic_taxon_arr.length > 1 ) { 
-          let icons = '';
-          for( let i=0; i<icon_list.length; i++ ) {
-              let params = ('b2.html'+proj+user+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&menu_array='+iconic_taxon_arr);
-              if( icon_list[i] === "aves" && iconic_taxon_arr.includes("aves") ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=aves','&#128038;')+'</span>');
-              }
-              if( icon_list[i] === "insecta" && iconic_taxon_arr.includes(icon_list[i]) ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=insecta','&#129714;')+'</span>');
-              }
-              if( icon_list[i] === "herps" && ( iconic_taxon_arr.includes("amphibia") || iconic_taxon_arr.includes("reptilia") ) ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=amphibia,reptilia','&#128056;')+'</span>');
-              }
-              console.log('one');
-              if( icon_list[i] === "arachnida" && iconic_taxon_arr.includes( "arachnida" ) ) {
-                  console.log('two');
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=arachnida','&#128375;')+'</span>');
-              }
-              if( icon_list[i] === "mammalia" && iconic_taxon_arr.includes( "mammalia" ) ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=mammalia','&#128059;')+'</span>');
-              }
-              if( icon_list[i] === "mollusca" && iconic_taxon_arr.includes( "mollusca" ) ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=mollusca','&#128012;')+'</span>');
-              }
-              if( icon_list[i] === "fungi" && iconic_taxon_arr.includes( "fungi" ) ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=fungi','&#127812;')+'</span>');
-              }
-          }
-          faddelem('p',document.body,{innerHTML:icons});
       }
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
