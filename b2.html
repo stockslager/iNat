@@ -335,11 +335,12 @@ function fresults(xobj) {
          }
 
          let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
-       
+         let grid_title  = ('&title='+(pref_tax_name||tax_name)+' '+p_title+' '+p_target_name);
+                                      
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+'&rows=30&columns=3&cellpx=300'+field_name+p_target_id,displayName)},
+                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+grid_title+field_name+p_target_id,displayName)},
                   {innerText:rec.count||''},
                   ];
 
