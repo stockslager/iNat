@@ -110,6 +110,7 @@ let winurlparams = new URLSearchParams(winurlsearchstr);
 var spacerpx = winurlparams.get('spacerpx') || 2;
 var rows = winurlparams.get('rows') || 1;
 var columns = winurlparams.get('columns') || 2;*/
+let title = winurlparams.get('title') || '';
 var cellpx = 300;
 var spacerpx = 3;
 var rows = 30;
@@ -121,11 +122,15 @@ winurlparams.delete('cellpx');
 winurlparams.delete('spacerpx');
 winurlparams.delete('rows');
 winurlparams.delete('columns');
+winurlparams.delete('title');
 var obsurlbase = 'https://www.inaturalist.org/observations';
 var obsurl = obsurlbase+'?'+winurlparams.toString();
 winurlparams.append('per_page',recsmax);
 var apiurlbase = 'https://api.inaturalist.org/v1/observations'
 var apiurl = apiurlbase+'?'+winurlparams.toString();
+
+document.title = title;
+faddelem('h2',document.body,{innerText:title});
 
 function fresults(data) {
    var results = data.results;
