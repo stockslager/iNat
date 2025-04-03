@@ -241,7 +241,7 @@ function fresults(xobj) {
           iconic_taxon_arr = p_menu_array;
       } else {
           for( let i=0; i<results.length; i++) {
-               if( !iconic_taxon_arr.includes(results[i].taxon.iconic_taxon_name) ) {
+               if( !iconic_taxon_arr.includes(results[i].taxon.iconic_taxon_name.toLowerCase()) ) {
                    console.log( "name " + results[i].taxon.iconic_taxon_name );
                    iconic_taxon_arr.push( results[i].taxon.iconic_taxon_name.toLowerCase() );
                }
