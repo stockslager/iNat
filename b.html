@@ -122,6 +122,7 @@ function fresults(menu_items) {
     
       for( let i=0; i<menu_items.length; i++ ){
            let brow = faddelem('tr',tbody);
+           let url = '';
            let plant_list_string = '';
            field_id   = menu_items[i].field_id;
            icon_list  = menu_items[i].icon_list.split(',');
@@ -130,10 +131,12 @@ function fresults(menu_items) {
            params += ('&field:'+menu_items[i].field_name+'=');
            params += ('&show_menu=yes');
 
-           let url = furl((github_root+'b2.html'+params),menu_items[i].title);  
 
            if( menu_items[i].plant_list_name ){
+               url = furl((github_root+'b.html'+params),menu_items[i].title);  
                plant_list_string = '<br><br>"'+menu_items[i].plant_list_name+'" tag to be added for each plant in the plant list.';
+           } else {
+               url = furl((github_root+'b2.html'+params),menu_items[i].title);  
            }
        
            let values = [
