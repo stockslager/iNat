@@ -122,6 +122,7 @@ function fresults(menu_items) {
     
       for( let i=0; i<menu_items.length; i++ ){
            let brow = faddelem('tr',tbody);
+           let plant_list_string = '';
            field_id   = menu_items[i].field_id;
            icon_list  = menu_items[i].icon_list.split(',');
            let params = prj_user_params;
@@ -130,13 +131,17 @@ function fresults(menu_items) {
            params += ('&show_menu=yes');
 
            let url = furl((github_root+'b2.html'+params),('observed '+menu_items[i].title));  
+
+           if( menu_items[i].plant_list_name ){
+               plant_list_string = '<br>also requires that a tag with the name "'+menu_items[i].plant_list_name+'" be added to each plant observation to be displayed in the plant list.';
+           }
        
-         let values = [
+           let values = [
                   {innerHTML:'observed '+url},
-                  {innerHTML:'requires the "'+menu_items[i].field_name+'" observation field. ('+menu_items[i].field_id},
+                  {innerHTML:'requires the "'+menu_items[i].field_name+'" observation field. ('+menu_items[i].field_id+plant_list_string},
                   ];
 
-         faddelems('td',brow,values);               
+           faddelems('td',brow,values);               
       }
    }
 };
