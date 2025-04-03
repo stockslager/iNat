@@ -70,7 +70,7 @@
    body { margin:0px; padding:0px; font:10pt Sans-Serif; }
    img { margin:0px; padding:0px; border:0px; display:block; object-fit:cover; object-position:center; }
    #grid { margin:0px; padding:0px; border:0px; }
-   .gridcell { /*position:absolute;*/ background:#cccccc; text-align:center; display:flex; justify-content:center; align-items:center; }
+   .gridcell { position:absolute; background:#cccccc; text-align:center; display:flex; justify-content:center; align-items:center; }
 </style>
 </head>
 
@@ -129,8 +129,7 @@ winurlparams.append('per_page',recsmax);
 var apiurlbase = 'https://api.inaturalist.org/v1/observations'
 var apiurl = apiurlbase+'?'+winurlparams.toString();
 
-document.title = title;
-faddelem('h2',document.body,{innerText:title});
+document.title = title.toLowerCase();
 
 function fresults(data) {
    var results = data.results;
