@@ -103,16 +103,14 @@ function fresults(menu_items) {
       let icon_list = [];
       let url = '';
       for( let i=0; i<menu_items.length; i++ ){
-           if( menu_items[i].title === p_title ) {
-               field_id   = menu_items[i].field_id;
-               icon_list  = menu_items[i].icon_list.split(',');
-               params += ('&title='+menu_items[i].title);
-               params += ('&field:'+menu_items[i].field_name+'=');
-               params += ('&show_menu=yes');
+           field_id   = menu_items[i].field_id;
+           icon_list  = menu_items[i].icon_list.split(',');
+           params += ('&title='+menu_items[i].title);
+           params += ('&field:'+menu_items[i].field_name+'=');
+           params += ('&show_menu=yes');
                
-               url = furl((github_root+'b2.html?'+params),menu_items[i].title);   
-               faddelem('p',document.body,{innerHTML:url});
-           }
+           url = furl((github_root+'b2.html?'+params),menu_items[i].title);   
+           faddelem('p',document.body,{innerHTML:url});
       }
    }
 };
