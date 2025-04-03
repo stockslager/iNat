@@ -104,6 +104,9 @@ function fresults(menu_items) {
       let field_id = '';
       let field_name = '';
       let icon_list = [];
+
+      let dlString = '<dl><dt><span id="key">interaction:</span></dt> <dd><span id="key">observation field:</span></dd>';
+    
       for( let i=0; i<menu_items.length; i++ ){
            field_id   = menu_items[i].field_id;
            icon_list  = menu_items[i].icon_list.split(',');
@@ -112,9 +115,11 @@ function fresults(menu_items) {
            params += ('&field:'+menu_items[i].field_name+'=');
            params += ('&show_menu=yes');
                
-           let url = furl((github_root+'b2.html'+params),menu_items[i].title);   
-           faddelem('p',document.body,{innerHTML:'observed '+url});
+           let url = furl((github_root+'b2.html'+params),menu_items[i].title);  
+           dlString += '<dt>observed '+url+'</dt> <dd>( '+menu_items[i].field_id+' )'+menu_items[i].field_name+</dd>'
       }
+      dlString += '</dl>';
+      faddelem('p',document.body,{innerHTML:dlString});
    }
 };
 
