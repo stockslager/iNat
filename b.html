@@ -108,21 +108,38 @@ function fresults(menu_items) {
       let field_name = '';
       let icon_list = [];
 
-      let dlString = '<dl><dt><span id="key">interaction:</span></dt> <dd><span id="key">observation field:</span></dd>';
+      let labels = [
+            {innerText:'Interaction:'},
+            {innerText:'Field Id'},
+            {innerText:'Observation Field'}, 
+      ];
+
+      let table = faddelem('table',document.body,{id:'main'});                    
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+      
+      faddelems('th',hrow,labels);
+      let tbody = faddelem('tbody',table);
     
       for( let i=0; i<menu_items.length; i++ ){
+           let brow = faddelem('tr',tbody);
            field_id   = menu_items[i].field_id;
            icon_list  = menu_items[i].icon_list.split(',');
            let params = prj_user_params;
            params += ('&title='+menu_items[i].title);
            params += ('&field:'+menu_items[i].field_name+'=');
            params += ('&show_menu=yes');
-               
+
            let url = furl((github_root+'b2.html'+params),menu_items[i].title);  
-           dlString += ('<dt>observed '+url+'</dt> <dd>( '+menu_items[i].field_id+' )'+menu_items[i].field_name+'</dd>');
+       
+         let values = [
+                  {innerHTML:'observed '+url},
+                  {innerText:menu_items[i].field_id},
+                  {innerHTML:menu_items[i].field_name},
+                  ];
+
+         faddelems('td',brow,values);               
       }
-      dlString += '</dl>';
-      faddelem('p',document.body,{innerHTML:dlString});
    }
 };
 
