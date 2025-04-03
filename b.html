@@ -128,14 +128,13 @@ function fresults(menu_items) {
            icon_list  = menu_items[i].icon_list.split(',');
            let params = prj_user_params;
            params += ('&title='+menu_items[i].title);
-           params += ('&field:'+menu_items[i].field_name+'=');
-           params += ('&show_menu=yes');
-
 
            if( menu_items[i].plant_list_name ){
                url = furl((github_root+'b1.html'+params),menu_items[i].title);  
                plant_list_string = '<br><br>"'+menu_items[i].plant_list_name+'" tag to be added for each plant in the plant list.';
            } else {
+               params += ('&field:'+menu_items[i].field_name+'=');
+               params += ('&show_menu=yes');
                url = furl((github_root+'b2.html'+params),menu_items[i].title);  
            }
        
