@@ -12,10 +12,63 @@
 <link rel="manifest" href="site.webmanifest" />
 <title>Bugs on Plants Grid</title>
 <style>
+   :root { 
+      background: var(--color-base);
+      color: var(--color-text);
+      font: 14px Sans-Serif;
+      --color-base: white;
+      --color-alt: whitesmoke;
+      --color-brand: forestgreen;
+      --color-text: black;
+      --color-text-invert: white;
+      --color-text-link: royalblue;
+      --color-border: lightgray;
+      --color-hover: lightgray;
+      --color-base-translucent: rgba(255,255,255,0.85);
+   }
+   @media (prefers-color-scheme: dark) {
+      :root {
+         --color-base: black;
+         --color-alt: #171717;
+         --color-brand: forestgreen;
+         --color-text: #bababa;
+         --color-text-invert: black;
+         --color-text-link: cornflowerblue;
+         --color-border: #444;
+         --color-hover: #444;
+         --color-base-translucent: rgba(0,0,0,0.85);
+      }
+   }
+   #main { width:fit-content; min-width:375px; }
+   #h2 { font-weight:bold; font-size:20px; }
+   #utf { font-size:1.475em; }
+   #home { font-size:1.200em; float:right; padding-left:5px; padding-right:15px; padding-top:3px; padding-bottom:0px; }
+   #butter2 { font-size:1.475em; padding-left:5px; padding-right:18px; padding-top:0px; padding-bottom:5px; }
+   #butter { font-size:1.475em; position:absolute; z-index:100; }
+   table, td, th { border-collapse:collapse; margin:0; padding:5px; }
+   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
+   th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
+   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }
+   tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
+   tr:nth-child(even) { background:var(--color-base); }
+   .tar { text-align:right; }
+   .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
+   .icon { height:48px; width:48px; border-radius:50%; }
+   .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
+   .flowericon { padding-left:5%; font-size:14px; white-space: nowrap; font-style:normal; }
+   .photo { height:54px; width:54px; border-radius: 5px 5px 5px 5px; }
+   p { margin:15px; width:fit-content; min-width:375px; }
+   a { text-decoration:none; color:var(--color-text-link); }
+   a:hover { background:var(--color-hover); }
+   #nav { margin-left:-8px; position:-webkit-sticky /*Safari*/; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
+   @media print { #nav { display:none; } } 
+   .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
+   .button { background:var(--color-alt); }
+   .button_inactive { background:none; color:var(--color-border); }
+   .bin_true { text-decoration: underline wavy rgba(34,139,34,0.35); }
+   .bin_false { text-decoration: underline wavy rgba(178,34,34,0.35); }  
    body { margin:0px; padding:0px; font:10pt Sans-Serif; }
    img { margin:0px; padding:0px; border:0px; display:block; object-fit:cover; object-position:center; }
-   a { text-decoration:none; color:#006600; }
-   p { margin:15px; width:fit-content; min-width:375px; }
    #grid { margin:0px; padding:0px; border:0px; }
    .gridcell { position:absolute; background:#cccccc; text-align:center; display:flex; justify-content:center; align-items:center; }
 </style>
