@@ -88,14 +88,14 @@ let p_user_id    = winurlparams.get('user_id') || '';
 function fresults(menu_items) {
  
    if (menu_items) {
-      let params = '';
+      let prj_user_params = '';
       if( p_project_id ) {
-          params = ('?project_id='+p_project_id);
+          prj_user_params = ('?project_id='+p_project_id);
           if( p_user_id ) {
-              params += ('&user_id='+p_user_id);
+              prj_user_params += ('&user_id='+p_user_id);
           }
       } else {
-          params = ('?user_id='+p_user_id);
+          prj_user_params = ('?user_id='+p_user_id);
       }
  
       let field_id = '';
@@ -104,6 +104,7 @@ function fresults(menu_items) {
       for( let i=0; i<menu_items.length; i++ ){
            field_id   = menu_items[i].field_id;
            icon_list  = menu_items[i].icon_list.split(',');
+           let params = prj_user_params;
            params += ('&title='+menu_items[i].title);
            params += ('&field:'+menu_items[i].field_name+'=');
            params += ('&show_menu=yes');
