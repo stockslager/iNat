@@ -231,11 +231,13 @@ function fresults(xobj) {
       let field_id = '';
       let field_name = '';
       let icon_list = [];
+      let menu_item = '';
       for( let i=0; i<menu_items.length; i++ ){
            if( menu_items[i].title === p_title ) {
                field_id   = menu_items[i].field_id;
                field_name = ('&field:'+menu_items[i].field_name+'=');
                icon_list  = menu_items[i].icon_list.split(',');
+               menu_item = menu_items[i];
            }
       }
 
@@ -244,8 +246,10 @@ function fresults(xobj) {
           iconic_taxon_arr = p_menu_array;
       } else {
           for( let i=0; i<results.length; i++) {
-               if( iconic_taxon_arr.includes(results[i].taxon.iconic_taxon_name.toLowerCase()) ) {
-                   iconic_taxon_arr.push( results[i].taxon.iconic_taxon_name.toLowerCase() );
+               if( !iconic_taxon_arr.includes(results[i].taxon.iconic_taxon_name.toLowerCase()) ) {
+                   if( menu_item.icon_list.includes(results[i].taxon.iconic_taxon_name.toLowerCase() ) {
+                       iconic_taxon_arr.push( results[i].taxon.iconic_taxon_name.toLowerCase() );
+                   }
                }
           }
       }
