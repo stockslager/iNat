@@ -121,10 +121,10 @@ if( p_omit_project !== '' ){
  
 winurlparams.delete('per_page');
 winurlparams.append('per_page','50');
-winurlparams.delete('order');
+/*winurlparams.delete('order');
 winurlparams.append('order','asc');
 winurlparams.delete('order_by');
-winurlparams.append('order_by','species_guess');
+winurlparams.append('order_by','species_guess');*/
 
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of winurlparams.entries()) {
@@ -284,7 +284,7 @@ function fresults(xobj) {
       let tbody = faddelem('tbody',table);
 
       // may need to revisit this if species_guess is ever null
-      results = sortWithNull(results);
+      //results = sortWithNull(results);
     
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
