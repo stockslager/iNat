@@ -47,7 +47,9 @@
    #butter2 { font-size:1.475em; padding-left:5px; padding-right:18px; padding-top:0px; padding-bottom:5px; }
    #butter { font-size:1.475em; position:absolute; z-index:100; }
    #topright { font-size:1.475em; width:fit-content; float:right; padding-top:0px; padding-bottom:4px; padding-left:4px; padding-right:18px; }
-   dl { width:fit-content; float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; padding-top: 95px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
+   #topright2 { font-size:10px; width:fit-content; padding-top:0px; padding-bottom:10px; padding-left:4px; padding-right:18px; }
+   #topright3 { padding-right:18px; }
+ dl { width:fit-content; float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; padding-top: 95px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
    dt { }
    dd { margin: 0; grid-column-start: 2;}   
    table, td, th { border-collapse:collapse; margin:0; padding:5px; }
@@ -304,14 +306,14 @@ function fresults(xobj) {
               for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                    if( menu_item.sub_icons[j].iconic_taxa === (p_iconic_taxa || iconic_taxon_arr[0]) ) {
                        //if( !sub_icons ) { sub_icons = '<dl><dt></dt><dd></dd><dt>filter bugs</dt><dd></dd>'; }
-                       if( !sub_icons ) { sub_icons = '<span id="topright">filter bugs<br>'; }
+                       if( !sub_icons ) { sub_icons = '<span id="topright">filter bugs</span><span id="topright2">'; }
 
                        //sub_icons += ('<dt><span id="butter2">'+furl(github_root+params+'&iconic_taxa=insecta&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon)+'</span></dt>');
-                       sub_icons += furl(github_root+params+'&iconic_taxa=insecta&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon);
+                       sub_icons += '<span id="topright3">'furl(github_root+params+'&iconic_taxa=insecta&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon)+'</span>';
                    }
               }
               if( sub_icons ) { 
-                  sub_icons += '</span>';
+                  sub_icons += '</span></span>';
                   faddelem('p',document.body,{innerHTML:sub_icons}) 
               };
           }
