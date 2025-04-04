@@ -94,6 +94,7 @@ let p_title        = winurlparams.get('title') || '';
 let p_target_name   = winurlparams.get('target_name') || '';
 let p_target_id     = winurlparams.get('target_id') || '';
 let p_menu          = winurlparams.get('menu') || 'all';
+let p_tag_name      = winurlparams.get('tag_name' || '');
 let p_field = '';
 let p_field_value = '';
 let menu_items = [];
@@ -136,7 +137,12 @@ for (const [key, value] of winurlparams.entries()) {
 if( p_original_iconic === '' ) {
     winurlparams.delete('q');
     winurlparams.delete('search_on');
-    winurlparams.append('q', 'bugs-on-plants');
+
+    if( p_tag_name ) {
+        winurlparams.append('q', p_tag_name);
+    } else {
+        winurlparams.append('q', 'bugs-on-plants');
+    }
     winurlparams.append('search_on', 'tags');
 }
  
