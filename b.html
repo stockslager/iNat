@@ -149,13 +149,13 @@ function fresults(configurations) {
                        }
                   }
           
-                  if( menu_item.plant_list_name ){
+                  if( menu_item.tag_name ){
                       url = furl((github_root+'b1.html'+params),menu_item.title);  
-                      plant_list_string = '<br><br>"'+menu_item.plant_list_name+'" tag to be added for each plant in the plant list.';
+                      plant_list_string = '<br><br>"'+menu_item.tag_name+'" tag to be added for each plant in the plant list.';
                   } else {
                       params += ('&field:'+menu_item.field_name+'=');
                       params += ('&show_menu=yes'); 
-                      url = furl((github_root+'b2.html'+params+'&iconic_taxa='+iconic_arr),menu_item.title);  
+                      url = furl((github_root+'b2.html'+params+'&iconic_taxa='+iconic_arr+'&tag_name='+menu_item.tag_name),menu_item.title);  
                   }
        
                   let values = [
