@@ -94,7 +94,7 @@ function fresults(configurations) {
 
    let foundMenu = '';
    faddelem('h2',document.body,{innerText:("Wildlife Value")});
-   faddelem('p',document.body,{innerText:("What's using those plants?  What's interacting with those things that are using those plants?")});
+   faddelem('p',document.body,{innerText:("illustrated through interactions")});
 
    if( configurations ) {
       let prj_user_params = '';
@@ -126,27 +126,28 @@ function fresults(configurations) {
       for( let m=0; m<configurations.length; m++ ) {
          if( configurations[m].name === p_menu ) {
              foundMenu = 'yes';
-             for( let i=0; i<configurations[i].menu_items.length; i++ ){
+             for( let i=0; i<configurations[m].menu_items.length; i++ ) {
+                  let menu_item = configurations[m].menu_items[i];
                   let brow = faddelem('tr',tbody);
                   let url = '';
                   let plant_list_string = '';
-                  field_id   = menu_items[i].field_id;
-                  icon_list  = menu_items[i].icon_list.split(',');
+                  field_id   = menu_item.field_id;
+                  icon_list  = menu_item.icon_list.split(',');
                   let params = prj_user_params;
-                  params += ('&title='+menu_items[i].title);
+                  params += ('&title='+menu_item.title);
           
-                  if( menu_items[i].plant_list_name ){
-                      url = furl((github_root+'b1.html'+params),menu_items[i].title);  
-                      plant_list_string = '<br><br>"'+menu_items[i].plant_list_name+'" tag to be added for each plant in the plant list.';
+                  if( menu_item.plant_list_name ){
+                      url = furl((github_root+'b1.html'+params),menu_item.title);  
+                      plant_list_string = '<br><br>"'+menu_item.plant_list_name+'" tag to be added for each plant in the plant list.';
                   } else {
-                      params += ('&field:'+menu_items[i].field_name+'=');
+                      params += ('&field:'+menu_item.field_name+'=');
                       params += ('&show_menu=yes'); 
-                      url = furl((github_root+'b2.html'+params),menu_items[i].title);  
+                      url = furl((github_root+'b2.html'+params),menu_item.title);  
                   }
        
                   let values = [
                          {innerHTML:url},
-                         {innerHTML:menu_items[i].field_id+' - '+menu_items[i].field_name+plant_list_string},
+                         {innerHTML:menu_item.field_id+' - '+menu_item.field_name+plant_list_string},
                          ];
 
                   faddelems('td',brow,values);     
