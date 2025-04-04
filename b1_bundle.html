@@ -140,6 +140,19 @@ function sortWithNull(arr, ascending = true) {
   });
   return arr;
 }
+
+function boxRow(field_name, count) {
+    this.count       = count;
+    this.field_name  = field_name;
+}
+
+function fresults(xobj) {
+   let results = xobj.results;
+   let box_array = [];
+
+   for( let f=0; f<field_array.length; f++ ){
+        box_array.push(new boxRow(field_array[f], '') );
+   }
  
 function fresults(xobj) {
    let results = xobj.results;
@@ -205,16 +218,14 @@ function fresults(xobj) {
       faddelems('th',hrow,labels);
       let tbody = faddelem('tbody',table);
 
-      let rec_array = [];
-      var ofvs_arr = new OfvsArray();
+      let box_array = [];
 
      for( let i=0; i<rec.ofvs.length; i++ ) {
            if( rec.ofvs[i].field_id === field_id ) {
-               ofvs_arr.set('field_id', field_id);
-               ofvs_arr.set('ofvs', rec.ofvs);
+               box_array.push(field_id, 1) );
            }
       }
-      console.log('arr '+ofvs_arr);
+      console.log('arr '+box_array);
 
       // may need to revisit this if species_guess is ever null
       results = sortWithNull(results);
