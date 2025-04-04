@@ -108,7 +108,6 @@ for (const [key, value] of winurlparams.entries()) {
       p_field_value = value;
   }
 }  
- console.log('asdf');
 
 winurlparams.delete('options');
 let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
@@ -147,14 +146,6 @@ function boxRow(field_name, count) {
     this.field_name  = field_name;
 }
 
-function fresults(xobj) {
-   let results = xobj.results;
-   let box_array = [];
-
-   for( let f=0; f<field_array.length; f++ ){
-        box_array.push(new boxRow(field_array[f], '') );
-   }
- 
 function fresults(xobj) {
    let results = xobj.results;
    let box_array = [];
