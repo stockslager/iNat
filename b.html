@@ -92,6 +92,7 @@ let p_menu       = winurlparams.get('menu') || 'all';
 
 function fresults(configurations) {
 
+   let foundMenu = '';
    faddelem('h2',document.body,{innerText:("Wildlife Value")});
    faddelem('p',document.body,{innerText:("What's using those plants?  What's interacting with those things that are using those plants?")});
 
@@ -121,7 +122,6 @@ function fresults(configurations) {
       
       faddelems('th',hrow,labels);
       let tbody = faddelem('tbody',table);
-      let foundMenu = '';
 
       for( let m=0; m<configurations.length; m++ ) {
          if( configurations[m].name === p_menu ) {
@@ -153,12 +153,12 @@ function fresults(configurations) {
              }
            }
       }
-      if( !foundMenu ) {
-          let instructions = [ 
-             {innerText:'Menu not found.  A &menu paramater was not passed in or was not found.  Add &menu=xxx to the end of the url where xxx has a matching menu in the bugs.json file.'},
-             ];
-          faddelems('p',document.body,instructions);   
-      }
+   }
+   if( !foundMenu ) {
+       let instructions = [ 
+          {innerText:'Menu not found.  A &menu paramater was not passed in or was not found.  Add &menu=xxx to the end of the url where xxx has a matching menu in the bugs.json file.'},
+          ];
+       faddelems('p',document.body,instructions);   
    }
 };
 
