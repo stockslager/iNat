@@ -83,18 +83,19 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
+let p_menu       = winurlparams.get('menu') || 'all';
 
 </script> 
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
 <script> 
 
-function fresults(menu_items) {
+function fresults(configurations) {
 
    faddelem('h2',document.body,{innerText:("Wildlife Value")});
    faddelem('p',document.body,{innerText:("What's using those plants?  What's interacting with those things that are using those plants?")});
- 
-   if (menu_items) {
+
+   if( configurations ) {
       let prj_user_params = '';
       if( p_project_id ) {
           prj_user_params = ('?project_id='+p_project_id);
@@ -120,31 +121,43 @@ function fresults(menu_items) {
       
       faddelems('th',hrow,labels);
       let tbody = faddelem('tbody',table);
-    
-      for( let i=0; i<menu_items.length; i++ ){
-           let brow = faddelem('tr',tbody);
-           let url = '';
-           let plant_list_string = '';
-           field_id   = menu_items[i].field_id;
-           icon_list  = menu_items[i].icon_list.split(',');
-           let params = prj_user_params;
-           params += ('&title='+menu_items[i].title);
+      let foundMenu = '';
 
-           if( menu_items[i].plant_list_name ){
-               url = furl((github_root+'b1.html'+params),menu_items[i].title);  
-               plant_list_string = '<br><br>"'+menu_items[i].plant_list_name+'" tag to be added for each plant in the plant list.';
-           } else {
-               params += ('&field:'+menu_items[i].field_name+'=');
-               params += ('&show_menu=yes');
-               url = furl((github_root+'b2.html'+params),menu_items[i].title);  
-           }
+      for( let m=0; m<configurations.length; m++ ) {
+         if( configurations[m].name === p_menu ) {
+             foundMenu = 'yes';
+             for( let i=0; i<configurations[i].menu_items.length; i++ ){
+                  let brow = faddelem('tr',tbody);
+                  let url = '';
+                  let plant_list_string = '';
+                  field_id   = menu_items[i].field_id;
+                  icon_list  = menu_items[i].icon_list.split(',');
+                  let params = prj_user_params;
+                  params += ('&title='+menu_items[i].title);
+          
+                  if( menu_items[i].plant_list_name ){
+                      url = furl((github_root+'b1.html'+params),menu_items[i].title);  
+                      plant_list_string = '<br><br>"'+menu_items[i].plant_list_name+'" tag to be added for each plant in the plant list.';
+                  } else {
+                      params += ('&field:'+menu_items[i].field_name+'=');
+                      params += ('&show_menu=yes'); 
+                      url = furl((github_root+'b2.html'+params),menu_items[i].title);  
+                  }
        
-           let values = [
-                  {innerHTML:url},
-                  {innerHTML:menu_items[i].field_id+' - '+menu_items[i].field_name+plant_list_string},
-                  ];
+                  let values = [
+                         {innerHTML:url},
+                         {innerHTML:menu_items[i].field_id+' - '+menu_items[i].field_name+plant_list_string},
+                         ];
 
-           faddelems('td',brow,values);               
+                  faddelems('td',brow,values);     
+             }
+           }
+      }
+      if( !foundMenu ) {
+          let instructions = [ 
+             {innerText:'Menu not found.  A &menu paramater was not passed in or was not found.  Add &menu=xxx to the end of the url where xxx has a matching menu in the bugs.json file.'},
+             ];
+          faddelems('p',document.body,instructions);   
       }
    }
 };
@@ -159,8 +172,7 @@ if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
      .then(response => response.json())
      .then(data => {
       // Access your data here 
-      menu_items  = data.menu_items;
-      fresults(menu_items);
+      fresults(data.configurations);
       console.log(data);
    })
      .catch(error => {
