@@ -212,13 +212,6 @@ function fresults(xobj) {
 
       let box_array = [];
 
-     for( let i=0; i<rec.ofvs.length; i++ ) {
-           if( rec.ofvs[i].field_id === field_id ) {
-               box_array.push(field_id, 1);
-           }
-      }
-      console.log('arr '+box_array);
-
       // may need to revisit this if species_guess is ever null
       results = sortWithNull(results);
     
@@ -232,8 +225,13 @@ function fresults(xobj) {
 
          let brow = faddelem('tr',tbody);
 
-         let ofv = getOfvs(rec);
-
+         for( let i=0; i<rec.ofvs.length; i++ ) {
+              if( rec.ofvs[i].field_id === field_id ) {
+                  box_array.push(field_id, 1);
+              }
+         }
+         console.log('arr '+box_array);
+       
          if( rec.taxon ){
              tax_id = rec.taxon.id;
              tax_name = rec.taxon.name || '';
