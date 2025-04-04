@@ -46,6 +46,9 @@
    #home { font-size:1.200em; float:right; padding-left:5px; padding-right:15px; padding-top:3px; padding-bottom:0px; }
    #butter2 { font-size:1.475em; padding-left:5px; padding-right:18px; padding-top:0px; padding-bottom:5px; }
    #butter { font-size:1.475em; position:absolute; z-index:100; }
+   dl { max-width: 40%; float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
+   dt { }
+   dd { margin: 0; grid-column-start: 2;}   
    table, td, th { border-collapse:collapse; margin:0; padding:5px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
@@ -293,11 +296,13 @@ function fresults(xobj) {
               }
           }
           faddelem('p',document.body,{innerHTML:icons});
-          if( iconic_taxon_arr.length === 1 || p_iconic_taxa === 'insecta' ) {
+          
+          // if there are sub-icons and only that iconic_taxa is being shown (or in focus)...
+          if( (iconic_taxon_arr.length === 1 || p_iconic_taxa === 'insecta') && menu_item.sub_icons ) {
               icons = '';
               for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                    if( menu_item.sub_icons[j].iconic_taxa === (p_iconic_taxa || iconic_taxon_arr[0]) ) {
-                       icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=insecta&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon)+'</span>');
+                       icons += ('<dl><dt></dt><dd></dd><dt>filter bugs</dt><dd></dd><dt><span id="butter2">'+furl(github_root+params+'&iconic_taxa=insecta&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon)+'</span></dt><dd></dd></dl>');
                    }
               }
               if( icons ) { faddelem('p',document.body,{innerHTML:icons}) };
@@ -305,11 +310,6 @@ function fresults(xobj) {
 
       }
 
-      if( iconic_taxon_arr.length === 1 || p_iconic_taxa ) {
-          
-          showSubMenu = 'yes';
-      }
-    
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
