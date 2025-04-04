@@ -85,6 +85,7 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
 let p_menu       = winurlparams.get('menu') || 'all';
+let p_json_url   = winurlparams.get('json_url') || '';
 
 </script> 
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
@@ -180,7 +181,8 @@ if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
       ];
       faddelems('p',document.body,instructions);
 } else {
-   fetch('bugs.json')
+   let json = p_json_url || 'bugs.json';
+   fetch(json)
      .then(response => response.json())
      .then(data => {
       // Access your data here 
