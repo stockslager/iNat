@@ -363,7 +363,15 @@ async function asyncGetData() {
      .then(response => response.json())
      .then(data => {
       // Access your data here 
-      menu_items  = data.menu_items;
+      let found = '';
+      for( let i=0; i<data.configurations.length; i++ ) {
+           if( data.configurations[i].name === p_menu ) {
+               menu_items = data.configurations[i].menu_items;
+           }
+      }
+      if( !found ) {
+          faddelems('p',document.body,'Menu not found.  A &menu paramater was not passed in or was not found.  Add &menu=xxx to the end of the url where xxx has a matching menu in the bugs.json file.');
+      }
       console.log(data);
    })
      .catch(error => {
