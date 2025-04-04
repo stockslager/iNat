@@ -136,6 +136,18 @@ function fresults(configurations) {
                   icon_list  = menu_item.icon_list.split(',');
                   let params = prj_user_params;
                   params += ('&title='+menu_item.title+'&menu='+p_menu);
+
+                  let iconic_arr = '';
+                  for( let n=0; n<icon_list.length; n++ ) {
+                       if( n !== 0 ) {
+                           iconic_arr += ',';
+                       }
+                       if( icon_list[n] === 'herps' ){
+                           iconic_arr += 'reptilia,amphibia';
+                       } else {
+                           iconic_arr += icon_list[n];
+                       }
+                  }
           
                   if( menu_item.plant_list_name ){
                       url = furl((github_root+'b1.html'+params),menu_item.title);  
@@ -143,7 +155,7 @@ function fresults(configurations) {
                   } else {
                       params += ('&field:'+menu_item.field_name+'=');
                       params += ('&show_menu=yes'); 
-                      url = furl((github_root+'b2.html'+params),menu_item.title);  
+                      url = furl((github_root+'b2.html'+params+'&iconic_taxa='+iconic_arr),menu_item.title);  
                   }
        
                   let values = [
