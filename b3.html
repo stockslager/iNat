@@ -86,7 +86,6 @@ let p_omit_users = winurlparams.get('omit_users') || '';
 let p_omit_id = winurlparams.get('omit_id') || '';
 let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_original_iconic = winurlparams.get('iconic_taxa') || '';
-let p_iconic_taxa  = winurlparams.get('iconic_taxa') || 'plantae';
 let p_title        = winurlparams.get('title') || '';
 let p_target_name   = winurlparams.get('target_name') || '';
 let p_target_id     = winurlparams.get('target_id') || '';
@@ -182,27 +181,6 @@ function fresults(xobj) {
       let labels = [];
       let dlString = '';
       let prefix = '';
-
-      if( p_iconic_taxa === 'insecta' ){
-          prefix = 'bugs ';
-      } else if( p_iconic_taxa === 'aves' ) {
-          prefix = 'birds ';
-      } else if( p_iconic_taxa === 'arachnida' ) {
-          prefix = 'spiders ';
-      } else if( p_iconic_taxa === 'amphibia,reptilia' ) {
-          prefix = 'herps ';
-      } else if( p_iconic_taxa === 'mammalia' ) {
-          prefix = 'mammals ';
-      } else if( p_iconic_taxa === 'mollusca' ) {
-          prefix = 'snails ';
-      } else if( p_iconic_taxa === 'fungi' ) {
-          prefix = 'mushrooms ';
-      } else if( p_iconic_taxa === 'plantae' ) {
-          prefix = 'found ';
-      } else {
-          prefix = 'found ';
-      }
-
       let proj = '';
       let user = '';
       if( p_project_id !== '' && p_project_id !== 'null' ) {
