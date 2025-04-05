@@ -257,7 +257,7 @@ function fresults(xobj) {
 
       if( (icon_list.length > 0 && p_title && ( p_taxon_id || p_target_name ) && iconic_taxon_arr.length > 1) ||
           (icon_list.length > 0 && p_show_menu === 'yes' && iconic_taxon_arr.length > 1) ) { 
-          params += '+'&menu_array='+iconic_taxon_arr';
+          params += ('&menu_array='+iconic_taxon_arr);
           for( let i=0; i<icon_list.length; i++ ) {
               if( icon_list[i] === "aves" && iconic_taxon_arr.includes("aves") ) {
                   icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=aves','&#128038;')+'</span>');
