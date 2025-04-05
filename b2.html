@@ -87,7 +87,6 @@ let p_omit_users = winurlparams.get('omit_users') || '';
 let p_omit_id = winurlparams.get('omit_id') || '';
 let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_original_iconic = winurlparams.get('iconic_taxa') || '';
-let p_iconic_taxa  = winurlparams.get('iconic_taxa') || 'plantae';
 let p_title        = winurlparams.get('title') || '';
 let p_target_name   = winurlparams.get('target_name') || '';
 let p_target_id     = winurlparams.get('target_id') || '';
@@ -184,27 +183,6 @@ function fresults(xobj) {
       let labels = [];
       let dlString = '';
       let prefix = '';
-
-      if( p_iconic_taxa === 'insecta' ){
-          prefix = 'bugs ';
-      } else if( p_iconic_taxa === 'aves' ) {
-          prefix = 'birds ';
-      } else if( p_iconic_taxa === 'arachnida' ) {
-          prefix = 'spiders ';
-      } else if( p_iconic_taxa === 'amphibia,reptilia' ) {
-          prefix = 'herps ';
-      } else if( p_iconic_taxa === 'mammalia' ) {
-          prefix = 'mammals ';
-      } else if( p_iconic_taxa === 'mollusca' ) {
-          prefix = 'snails ';
-      } else if( p_iconic_taxa === 'fungi' ) {
-          prefix = 'mushrooms ';
-      } else if( p_iconic_taxa === 'plantae' ) {
-          prefix = 'found ';
-      } else {
-          prefix = 'found ';
-      }
-
       let proj = '';
       let user = '';
       if( p_project_id !== '' && p_project_id !== 'null' ) {
@@ -316,22 +294,6 @@ function fresults(xobj) {
           faddelem('p',document.body,{innerHTML:icons});
       }
     
-      //let sub_icons = '';
-      // if there are sub-icons and only that iconic_taxa is being shown (or in focus)...
-      //if( /*(iconic_taxon_arr.length === 1 || iconic_taxon_arr.includes(p_iconic_taxa) ) &&*/ menu_item.sub_icons ) {
-      /*     console.log('one');
-           for( let j=0; j<menu_item.sub_icons.length; j++ ) {
-                console.log('two');
-                if( menu_item.sub_icons[j].iconic_taxa === p_iconic_taxa || ( iconic_taxon_arr.includes(menu_item.sub_icons[j].iconic_taxa) ) ) { 
-                    console.log('three');
-                    sub_icons += '<span id="topright">' + furl(github_root+params+'&iconic_taxa='+menu_item.sub_icons[j].iconic_taxa+'&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon) + '</span>';
-                }
-           }
-           if( sub_icons ) { 
-               faddelem('p',document.body,{innerHTML:sub_icons}) 
-           };
-      }*/
-
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
