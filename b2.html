@@ -258,9 +258,12 @@ function fresults(xobj) {
           sub_taxon_arr = p_sub_menu_array;
       } else {
           for( let i=0; i<results.length; i++) {
+               console.log('sub_taxon_arr1: '+sub_taxon_arr);
                if( !sub_taxon_arr.includes(results[i].taxon.id) ) {
-                   if( menu_item.icon_list.includes(results[i].taxon.id ) ) {
-                       sub_taxon_arr.push( results[i].taxon.id );
+                   for( let j=0; j<menu_item.sub_icons.lenth; j++ ) {
+                        if( results[i].taxon.ancestor_ids(includes(menu_item.sub_icons[j].taxon_id) ){
+                            sub_taxon_arr.push( menu_item.sub_icons[j].taxon_id );
+                        }
                    }
                }
           }
