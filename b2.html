@@ -87,6 +87,7 @@ let p_omit_users = winurlparams.get('omit_users') || '';
 let p_omit_id = winurlparams.get('omit_id') || '';
 let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_title        = winurlparams.get('title') || '';
+let p_prefix       = winurlparams.get('prefix') || '';
 let p_target_name   = winurlparams.get('target_name') || '';
 let p_target_id     = winurlparams.get('target_id') || '';
 let p_show_menu     = winurlparams.get('show_menu') || 'no';
@@ -181,7 +182,6 @@ function fresults(xobj) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let labels = [];
       let dlString = '';
-      let prefix = '';
       let proj = '';
       let user = '';
       if( p_project_id !== '' && p_project_id !== 'null' ) {
@@ -198,7 +198,7 @@ function fresults(xobj) {
           faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'b1.html'+proj+user+'&obs_field='+p_obs_field,'&#127807;')+'</span>') });
           faddelem('h2',document.body,{innerText:(dlString)});
       } else {
-          dlString = (prefix+p_title+' '+p_target_name);
+          dlString = (p_prefix+' '+p_title+' '+p_target_name);
           faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'b.html'+proj+user+'&menu='+p_menu,'&#127807;')+'</span>') });
           faddelem('h2',document.body,{innerText:(dlString)});
           document.title = dlString;
@@ -243,7 +243,7 @@ function fresults(xobj) {
           if( menu_item.sub_icons ) {
               for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                    if( sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
-                       params += ('&sub_menu_array='+sub_taxon_arr);
+                       params += ('&sub_menu_array='+sub_taxon_arr+'&prefix='+menu_item.sub_icons[j].name);
                        icons += ('<span id="butter2">'+furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon)+'</span>');
                    }
               }
