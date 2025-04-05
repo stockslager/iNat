@@ -46,8 +46,8 @@
    #home { font-size:1.200em; float:right; padding-left:5px; padding-right:15px; padding-top:3px; padding-bottom:0px; }
    #butter2 { font-size:1.475em; padding-left:5px; padding-right:18px; padding-top:0px; padding-bottom:5px; }
    #butter { font-size:1.475em; position:absolute; z-index:100; }
-   #topright { float:right; padding-top:10px; padding-bottom:4px; padding-left:5px; padding-right:18px; }
-   #topright2 { font-size:1.475em; float:right; padding-top:10px; padding-bottom:4px; padding-left:5px; padding-right:18px; }
+   /*#topright { float:right; padding-top:10px; padding-bottom:4px; padding-left:5px; padding-right:18px; }*/
+   #topright { float:right; font-size:1.475em; float:right; padding-top:10px; padding-bottom:4px; padding-left:5px; padding-right:18px; }
    table, td, th { border-collapse:collapse; margin:0; padding:5px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
@@ -300,13 +300,13 @@ function fresults(xobj) {
           // if there are sub-icons and only that iconic_taxa is being shown (or in focus)...
           if( (iconic_taxon_arr.length === 1 || p_iconic_taxa === 'insecta') && menu_item.sub_icons ) {
               for( let j=0; j<menu_item.sub_icons.length; j++ ) {
-                   if( !sub_icons ) { sub_icons += '<span id="topright">'; }
+                   //if( !sub_icons ) { sub_icons += '<span id="topright">'; }
                    if( menu_item.sub_icons[j].iconic_taxa === (p_iconic_taxa || iconic_taxon_arr[0]) ) { 
-                        sub_icons += '<span id="topright2">' + furl(github_root+params+'&iconic_taxa=insecta&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon) + '</span>';
+                        sub_icons += '<span id="topright">' + furl(github_root+params+'&iconic_taxa=insecta&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon) + '</span>';
                    }
               }
               if( sub_icons ) { 
-                  sub_icons += '</span>';
+                  //sub_icons += '</span>';
                   faddelem('p',document.body,{innerHTML:sub_icons}) 
               };
           }
