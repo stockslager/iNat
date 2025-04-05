@@ -261,7 +261,9 @@ function fresults(xobj) {
                console.log('sub_taxon_arr1: '+sub_taxon_arr);
                if( !sub_taxon_arr.includes(results[i].taxon.id) ) {
                    for( let j=0; j<menu_item.sub_icons.lenth; j++ ) {
-                        if( results[i].taxon.ancestor_ids.includes(menu_item.sub_icons[j].taxon_id) ){
+                        console.log('1');
+                        if( results[i].taxon.ancestor_ids.includes(menu_item.sub_icons[j].taxon_id.toString()) ){
+                            console.log('2');
                             sub_taxon_arr.push( menu_item.sub_icons[j].taxon_id );
                         }
                    }
