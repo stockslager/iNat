@@ -235,6 +235,7 @@ function fresults(xobj) {
                field_name = ('&field:'+menu_items[i].field_name+'=');
                icon_list  = menu_items[i].icon_list.split(',');
                menu_item = menu_items[i];
+               sub_icons = menu_items[i].sub_icons;
            }
       }
 
@@ -243,9 +244,9 @@ function fresults(xobj) {
           iconic_taxon_arr = p_menu_array;
       } else {
           for( let i=0; i<results.length; i++) {
-               if( !iconic_taxon_arr.includes(results[i].taxon.iconic_taxon_name.toLowerCase()) ) {
-                   if( menu_item.icon_list.includes(results[i].taxon.iconic_taxon_name.toLowerCase() ) ) {
-                       iconic_taxon_arr.push( results[i].taxon.iconic_taxon_name.toLowerCase() );
+               if( !iconic_taxon_arr.includes(results[i].taxon.id) ) {
+                   if( menu_item.icon_list.includes(results[i].taxon.id ) ) {
+                       iconic_taxon_arr.push( results[i].taxon.id );
                    }
                }
           }
@@ -288,7 +289,7 @@ function fresults(xobj) {
       // if there are sub-icons and only that iconic_taxa is being shown (or in focus)...
       if( menu_item.sub_icons ) {
            for( let j=0; j<menu_item.sub_icons.length; j++ ) {
-                if( iconic_taxon_arr.includes(menu_item.sub_icons[j].iconic_taxa) ) { 
+                if( iconic_taxon_arr.includes(menu_item.sub_icons[j].taxon_id) ) { 
                     sub_icons += '<span id="topright">' + furl(github_root+params+'&iconic_taxa='+menu_item.sub_icons[j].iconic_taxa+'&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon) + '</span>';
                 }
            }
