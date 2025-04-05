@@ -251,59 +251,49 @@ function fresults(xobj) {
                }
           }
       }
-      console.log('icon list: '+menu_item.icon_list);
-      console.log('icon: ' + iconic_taxon_arr);
+
+      let icons = '';
+      let params = ('b2.html'+proj+user+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&menu_array='+iconic_taxon_arr+'&show_menu='+p_show_menu);
 
       if( (icon_list.length > 0 && p_title && ( p_taxon_id || p_target_name ) && iconic_taxon_arr.length > 1) ||
           (icon_list.length > 0 && p_show_menu === 'yes' && iconic_taxon_arr.length > 1) ) { 
-          let icons = '';
-          let inFocus = 0;
-          let params = ('b2.html'+proj+user+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&menu_array='+iconic_taxon_arr+'&show_menu='+p_show_menu);
           for( let i=0; i<icon_list.length; i++ ) {
               if( icon_list[i] === "aves" && iconic_taxon_arr.includes("aves") ) {
-                  inFocus = 1;
                   icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=aves','&#128038;')+'</span>');
               }
               if( icon_list[i] === "insecta" && iconic_taxon_arr.includes(icon_list[i]) ) {
-                  inFocus = 2;
                   icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=insecta',/*'&#129714;'*/'&#129439;')+'</span>');
               }
               if( icon_list[i] === "herps" && ( iconic_taxon_arr.includes("amphibia") || iconic_taxon_arr.includes("reptilia") ) ) {
-                  inFocus = 3;
                   icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=amphibia,reptilia','&#128056;')+'</span>');
               }
               if( icon_list[i] === "arachnida" && iconic_taxon_arr.includes( "arachnida" ) ) {
-                  inFocus = 4;
                   icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=arachnida','&#128375;')+'</span>');
               }
               if( icon_list[i] === "mammalia" && iconic_taxon_arr.includes( "mammalia" ) ) {
-                  inFocus = 5;
                   icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=mammalia','&#128059;')+'</span>');
               }
               if( icon_list[i] === "mollusca" && iconic_taxon_arr.includes( "mollusca" ) ) {
-                  inFocus = 6;
                   icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=mollusca','&#128012;')+'</span>');
               }
               if( icon_list[i] === "fungi" && iconic_taxon_arr.includes( "fungi" ) ) {
-                  inFocus = 7;
                   icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=fungi','&#127812;')+'</span>');
               }
           }
           faddelem('p',document.body,{innerHTML:icons});
-
-          let sub_icons = '';
-          // if there are sub-icons and only that iconic_taxa is being shown (or in focus)...
-          if( (iconic_taxon_arr.length === 1 || p_iconic_taxa === 'insecta') && menu_item.sub_icons ) {
-              for( let j=0; j<menu_item.sub_icons.length; j++ ) {
-                   if( menu_item.sub_icons[j].iconic_taxa === (p_iconic_taxa || iconic_taxon_arr[0]) ) { 
-                        sub_icons += '<span id="topright">' + furl(github_root+params+'&iconic_taxa=insecta&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon) + '</span>';
-                   }
-              }
-              if( sub_icons ) { 
-                  faddelem('p',document.body,{innerHTML:sub_icons}) 
-              };
-          }
-
+      }
+    
+      let sub_icons = '';
+      // if there are sub-icons and only that iconic_taxa is being shown (or in focus)...
+      if( (iconic_taxon_arr.length === 1 || p_iconic_taxa === 'insecta') && menu_item.sub_icons ) {
+           for( let j=0; j<menu_item.sub_icons.length; j++ ) {
+                if( menu_item.sub_icons[j].iconic_taxa === (p_iconic_taxa || iconic_taxon_arr[0]) ) { 
+                    sub_icons += '<span id="topright">' + furl(github_root+params+'&iconic_taxa=insecta&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon) + '</span>';
+                }
+           }
+           if( sub_icons ) { 
+               faddelem('p',document.body,{innerHTML:sub_icons}) 
+           };
       }
 
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
