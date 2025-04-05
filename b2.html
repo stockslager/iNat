@@ -259,7 +259,6 @@ function fresults(xobj) {
           (icon_list.length > 0 && p_show_menu === 'yes' && iconic_taxon_arr.length > 1) ||
           (menu_item.sub_icons) ) { 
           params += ('&menu_array='+iconic_taxon_arr);
-          console.log('params ' + params);
           for( let i=0; i<icon_list.length; i++ ) {
               if( icon_list[i] === "aves" && iconic_taxon_arr.includes("aves") ) {
                   icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=aves','&#128038;')+'</span>');
@@ -288,7 +287,7 @@ function fresults(xobj) {
     
       let sub_icons = '';
       // if there are sub-icons and only that iconic_taxa is being shown (or in focus)...
-      if( (iconic_taxon_arr.length === 1 || iconic_taxon_arr.includes(p_iconic_taxa) ) && menu_item.sub_icons ) {
+      if( /*(iconic_taxon_arr.length === 1 || iconic_taxon_arr.includes(p_iconic_taxa) ) &&*/ menu_item.sub_icons ) {
            console.log('one');
            for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                 console.log('two');
