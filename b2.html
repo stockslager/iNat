@@ -86,7 +86,6 @@ let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_omit_users = winurlparams.get('omit_users') || '';
 let p_omit_id = winurlparams.get('omit_id') || '';
 let p_omit_project = winurlparams.get('omit_projects') || '';
-let p_original_iconic = winurlparams.get('iconic_taxa') || '';
 let p_title        = winurlparams.get('title') || '';
 let p_target_name   = winurlparams.get('target_name') || '';
 let p_target_id     = winurlparams.get('target_id') || '';
@@ -216,19 +215,6 @@ function fresults(xobj) {
            }
       }
 
-      /*let iconic_taxon_arr = [];
-      if( p_menu_array ) {
-          iconic_taxon_arr = p_menu_array;
-      } else {
-          for( let i=0; i<results.length; i++) {
-               if( !iconic_taxon_arr.includes(results[i].taxon.iconic_taxon_name.toLowerCase()) ) {
-                   if( menu_item.icon_list.includes(results[i].taxon.iconic_taxon_name.toLowerCase() ) ) {
-                       iconic_taxon_arr.push( results[i].taxon.iconic_taxon_name.toLowerCase() );
-                   }
-               }
-          }
-      }*/
-
       let sub_taxon_arr = [];
       if( p_sub_menu_array ) {
           sub_taxon_arr = p_sub_menu_array;
@@ -254,36 +240,11 @@ function fresults(xobj) {
       if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
           ( p_show_menu === 'yes' ) ||
           (menu_item.sub_icons) ) { 
-          /*params += ('&menu_array='+iconic_taxon_arr);
-          for( let i=0; i<icon_list.length; i++ ) {
-              if( icon_list[i] === "aves" && iconic_taxon_arr.includes("aves") ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=aves','&#128038;')+'</span>');
-              }
-              if( icon_list[i] === "insecta" && iconic_taxon_arr.includes(icon_list[i]) ) {
-              //'&#129714;'
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=insecta','&#129439;')+'</span>');
-              }
-              if( icon_list[i] === "herps" && ( iconic_taxon_arr.includes("amphibia") || iconic_taxon_arr.includes("reptilia") ) ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=amphibia,reptilia','&#128056;')+'</span>');
-              }
-              if( icon_list[i] === "arachnida" && iconic_taxon_arr.includes( "arachnida" ) ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=arachnida','&#128375;')+'</span>');
-              }
-              if( icon_list[i] === "mammalia" && iconic_taxon_arr.includes( "mammalia" ) ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=mammalia','&#128059;')+'</span>');
-              }
-              if( icon_list[i] === "mollusca" && iconic_taxon_arr.includes( "mollusca" ) ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=mollusca','&#128012;')+'</span>');
-              }
-              if( icon_list[i] === "fungi" && iconic_taxon_arr.includes( "fungi" ) ) {
-                  icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=fungi','&#127812;')+'</span>');
-              }
-          }*/
           if( menu_item.sub_icons ) {
               for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                    if( sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
                        params += ('&sub_menu_array='+sub_taxon_arr);
-                       icons += ('<span id="butter2">'+furl(github_root+params+'&iconic_taxa=insecta'+'&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon)+'</span>');
+                       icons += ('<span id="butter2">'+furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon)+'</span>');
                    }
               }
           }
