@@ -287,7 +287,7 @@ function fresults(xobj) {
       // if there are sub-icons and only that iconic_taxa is being shown (or in focus)...
       if( (iconic_taxon_arr.length === 1 || iconic_taxon_arr.includes(p_iconic_taxa) ) && menu_item.sub_icons ) {
            for( let j=0; j<menu_item.sub_icons.length; j++ ) {
-                if( menu_item.sub_icons[j].iconic_taxa === p_iconic_taxa || iconic_taxon_arr.includes(menu_item.sub_icons[j].iconic_taxa) ) { 
+                if( menu_item.sub_icons[j].iconic_taxa === p_iconic_taxa || ( iconic_taxon_arr.length === 1 && iconic_taxon_arr.includes(menu_item.sub_icons[j].iconic_taxa) ) ) { 
                     sub_icons += '<span id="topright">' + furl(github_root+params+'&iconic_taxa='+menu_item.sub_icons[j].iconic_taxa+'&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon) + '</span>';
                 }
            }
