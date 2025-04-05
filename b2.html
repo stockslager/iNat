@@ -263,11 +263,12 @@ function fresults(xobj) {
                    console.log('aaaa');
                    console.log('subs'+ menu_item.sub_icons);
                    for( let j=0; j<menu_item.sub_icons.length; j++ ) {
-                        let ancestry_arr = results[i].taxon.ancestor_ids.split(',');
-                        console.log('ancestry: '+ancestry_arr);
-                        if( ancestry_arr.includes(menu_item.sub_icons[j].taxon_id.toString()) ){
-                            console.log('2');
-                            sub_taxon_arr.push( menu_item.sub_icons[j].taxon_id );
+                        for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
+                             console.log('ancestry: ');
+                             if( results[i].taxon.ancestor_ids[k] === menu_item.sub_icons[j].taxon_id.toString() ) ){
+                                 console.log('2');
+                                 sub_taxon_arr.push( menu_item.sub_icons[j].taxon_id );
+                             }
                         }
                    }
                }
