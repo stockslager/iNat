@@ -256,7 +256,8 @@ function fresults(xobj) {
       let params = ('b2.html'+proj+user+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu);
 
       if( (icon_list.length > 0 && p_title && ( p_taxon_id || p_target_name ) && iconic_taxon_arr.length > 1) ||
-          (icon_list.length > 0 && p_show_menu === 'yes' && iconic_taxon_arr.length > 1) ) { 
+          (icon_list.length > 0 && p_show_menu === 'yes' && iconic_taxon_arr.length > 1) ||
+          (menu_item.sub_icons) ) { 
           params += ('&menu_array='+iconic_taxon_arr);
           for( let i=0; i<icon_list.length; i++ ) {
               if( icon_list[i] === "aves" && iconic_taxon_arr.includes("aves") ) {
