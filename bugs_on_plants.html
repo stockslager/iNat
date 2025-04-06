@@ -133,8 +133,7 @@ for (const [key, value] of winurlparams.entries()) {
 }  
 
 if( p_list === 'yes' ) {
-    winurlparams.delete('list');
-    winurlparams.append('list', ('&field:garden+list='+p_list));
+    winurlparams.append('&field:garden+list=',p_list);
 }
  
 if( p_original_iconic === '' && !p_list ) {
