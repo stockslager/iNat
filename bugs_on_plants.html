@@ -76,6 +76,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
+let p_place_id   = winurlparams.get('place_id') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
@@ -240,11 +241,11 @@ function fresults(xobj) {
 
       if( p_title === '' ) {
           dlString = 'Bugs on Plants';
-          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants.html'+proj+user+'&obs_field='+p_obs_field,'&#127807;')+'</span>') });
+          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants.html'+proj+user+'&place_id='+p_place_id+'&obs_field='+p_obs_field,'&#127807;')+'</span>') });
           faddelem('h2',document.body,{innerText:(dlString)});
       } else {
           dlString = 'plant list';
-          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants_splash.html'+proj+user+'&menu='+p_menu,'&#127807;')+'</span>') });
+          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants_splash.html'+proj+user+'&place_id='+p_place_id+'&menu='+p_menu,'&#127807;')+'</span>') });
           faddelem('h2',document.body,{innerText:(dlString)});
       }
 
