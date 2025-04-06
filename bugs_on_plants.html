@@ -209,18 +209,17 @@ function fresults(xobj) {
       if( p_list ) {
           list_param = ('&list='+p_list);
       }
-      let place_param = '';
       if( p_place_id ) {
-          place_param = ('&place_id='+p_place_id);
+          list_param = ('&place_id='+p_place_id);
       }
 
       if( p_title === '' ) {
           dlString = 'Bugs on Plants';
-          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants.html'+proj+user+list_param+place_param+'&obs_field='+p_obs_field,'&#127807;')+'</span>') });
+          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants.html'+proj+user+list_param+'&obs_field='+p_obs_field,'&#127807;')+'</span>') });
           faddelem('h2',document.body,{innerText:(dlString)});
       } else {
           dlString = 'plant list';
-          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants_splash.html'+proj+user+list_param+place_param+'&menu='+p_menu,'&#127807;')+'</span>') });
+          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants_splash.html'+proj+user+list_param+'&menu='+p_menu,'&#127807;')+'</span>') });
           faddelem('h2',document.body,{innerText:(dlString)});
       }
 
@@ -294,9 +293,9 @@ function fresults(xobj) {
                  iconic += p_iconic_taxa;
              }
              if( p_obs_field ) {
-                 taxon = furl(github_root+'cncnpc_insects.html?'+query_params+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_field+'&plant_name='+pref_tax_name,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
+                 taxon = furl(github_root+'cncnpc_insects.html?'+query_params+list_param+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_field+'&plant_name='+pref_tax_name,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
              } else {
-                 taxon = furl(github_root+'bugs_on_plants2.html?'+query_params+'&obs_field='+p_obs_field+'&target_id='+tax_id+'&target_name='+pref_tax_name+'&title='+p_title+'&menu='+p_menu+field_name+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>'); 
+                 taxon = furl(github_root+'bugs_on_plants2.html?'+query_params+list_param+'&obs_field='+p_obs_field+'&target_id='+tax_id+'&target_name='+pref_tax_name+'&title='+p_title+'&menu='+p_menu+field_name+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>'); 
              }
          }
 
