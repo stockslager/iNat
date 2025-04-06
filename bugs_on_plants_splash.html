@@ -1,0 +1,187 @@
+<!DOCTYPE html> 
+<html lang="en">    
+  
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Wildlife Value" />
+<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="Wildlife Value" />
+<link rel="manifest" href="bugs.webmanifest" />
+<title>Wildlife Value</title>
+<style>
+   :root { 
+      background: var(--color-base);
+      color: var(--color-text);
+      font: 14px Sans-Serif;
+      --color-base: white;
+      --color-alt: whitesmoke;
+      --color-brand: forestgreen;
+      --color-text: black;
+      --color-text-invert: white;
+      --color-text-link: royalblue;
+      --color-border: lightgray;
+      --color-hover: lightgray;
+      --color-base-translucent: rgba(255,255,255,0.85);
+   }
+   @media (prefers-color-scheme: dark) {
+      :root {
+         --color-base: black;
+         --color-alt: #171717;
+         --color-brand: forestgreen;
+         --color-text: #bababa;
+         --color-text-invert: black;
+         --color-text-link: cornflowerblue;
+         --color-border: #444;
+         --color-hover: #444;
+         --color-base-translucent: rgba(0,0,0,0.85);
+      }
+   }
+   #main { width:fit-content; min-width:375px; }
+   dl { margin-collapse:collapse; margin-bottom:-10px; padding:0; border:none; border-collapse:collapse; display: grid; grid-gap: 0px 0px; grid-template-columns: max-content; font: 14px Sans-Serif; padding-top: 0px; padding-bottom: 0px; padding-left: 10px; padding-right: 10px; }
+   dt { margin-collapse:collapse; }
+   dd { margin-collapse:collapse; margin: 0; grid-column-start: 2; padding-top: 5px; padding-bottom: 5px; }  
+   #h2 { font-weight:bold; font-size:25px; }
+   #h22 { font-style:italic; }
+   #utf { font-size:1.475em; }
+   #butter1 { font-size:1.200em; padding-left:5px; padding-right:20px; padding-top:0px; padding-bottom:50px; }
+   #butter2 { font-size:1.475em; padding-left:5px; padding-right:20px; padding-top:0px; padding-bottom:50px; }
+   #butter { font-size:1.475em; position:absolute; z-index:100; }
+   table, td, th { border-collapse:collapse; margin:0; padding:5px; }
+   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
+   th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
+   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }
+   tbody>tr { vertical-align:text-top; border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
+   tr:nth-child(even) { background:var(--color-base); }
+   td:first-child{ text-align:center; }
+   .tar { text-align:right; }
+   .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
+   .icon { height:48px; width:48px; border-radius:50%; }
+   .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
+   .flowericon { padding-left:5%; font-size:14px; white-space: nowrap; font-style:normal; }
+   .photo { height:54px; width:54px; border-radius: 5px 5px 5px 5px; }
+   img { margin:0; padding:0; border:0; }
+   a { text-decoration:none; color:var(--color-text-link); }
+   a:hover { background:var(--color-hover); }
+   #nav { margin-left:-8px; position:-webkit-sticky /*Safari*/; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
+   @media print { #nav { display:none; } } 
+   .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
+   .button { background:var(--color-alt); }
+   .button_inactive { background:none; color:var(--color-border); }
+   .bin_true { text-decoration: underline wavy rgba(34,139,34,0.35); }
+   .bin_false { text-decoration: underline wavy rgba(178,34,34,0.35); }
+</style>
+</head>
+
+<body>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let p_project_id = winurlparams.get('project_id') || '';
+let p_user_id    = winurlparams.get('user_id') || '';
+let p_menu       = winurlparams.get('menu') || 'all';
+let p_json_url   = winurlparams.get('json_url') || '';
+
+</script> 
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
+<script> 
+
+function fresults(configurations) {
+
+   let foundMenu = '';
+   faddelem('p',document.body,{innerHTML:('<span id="h2">Wildlife Value</span>')});
+   faddelem('p',document.body,{innerHTML:('<span id="h22">illustrated through interactions</span>')});
+
+   if( configurations ) {
+      let prj_user_params = '';
+      if( p_project_id ) {
+          prj_user_params = ('?project_id='+p_project_id);
+          if( p_user_id ) {
+              prj_user_params += ('&user_id='+p_user_id);
+          }
+      } else {
+          prj_user_params = ('?user_id='+p_user_id);
+      }
+ 
+      let field_id = '';
+      let field_name = '';
+      let icon_list = [];
+
+      let labels = [
+            {innerText:'Observed'},
+            {innerText:'Description'}, 
+      ];
+
+      let table = faddelem('table',document.body,{id:'main'});                    
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+      
+      faddelems('th',hrow,labels);
+      let tbody = faddelem('tbody',table);
+
+      for( let m=0; m<configurations.length; m++ ) {
+         if( configurations[m].name === p_menu ) {
+             foundMenu = 'yes';
+             for( let i=0; i<configurations[m].menu_items.length; i++ ) {
+                  let menu_item = configurations[m].menu_items[i];
+                  let brow = faddelem('tr',tbody);
+                  let url = '';
+                  field_id   = menu_item.field_id;
+                  let params = prj_user_params;
+                  params += ('&title='+menu_item.title+'&menu='+p_menu);
+          
+                  if( menu_item.tag_name ){
+                      url = furl((github_root+'bugs_on_plants.html'+params+'&tag_name='+menu_item.tag_name),menu_item.title);  
+                  } else {
+                      params += ('&field:'+menu_item.field_name+'=');
+                      params += ('&show_menu=yes'); 
+                      url = furl((github_root+'bugs_on_plants2.html'+params),menu_item.title);  
+                  }
+       
+                  let values = [
+                         {innerHTML:url},
+                         {innerHTML:menu_item.desc},
+                         ];
+
+                  faddelems('td',brow,values);     
+             }
+           }
+      }
+   }
+   if( !foundMenu ) {
+       let instructions = [ 
+          {innerText:'Menu not found.  A &menu paramater was not passed in or was not found.  Add &menu=xxx to the end of the url where xxx has a matching menu in the bugs.json file.'},
+          ];
+       faddelems('p',document.body,instructions);   
+   }
+};
+
+if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
+      let instructions = [
+         {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.  It will default to the "7623 - plant that the organism was found on" observation field if &obs_field=xxx is not passed in.'},
+      ];
+      faddelems('p',document.body,instructions);
+} else {
+   let json = p_json_url || 'bugs.json';
+   fetch(json)
+     .then(response => response.json())
+     .then(data => {
+      // Access your data here 
+      fresults(data.configurations);
+      console.log(data);
+   })
+     .catch(error => {
+      console.error('Error fetching JSON:', error);
+   });
+}
+
+</script>
+</body>
+
+</html>
