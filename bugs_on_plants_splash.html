@@ -87,6 +87,7 @@ let p_user_id    = winurlparams.get('user_id') || '';
 let p_menu       = winurlparams.get('menu') || 'all';
 let p_json_url   = winurlparams.get('json_url') || '';
 let p_place_id   = winurlparams.get('place_id') || '';
+let p_list       = winurlparams.get('list') || '';
 
 </script> 
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
@@ -135,7 +136,15 @@ function fresults(configurations) {
                   let url = '';
                   field_id   = menu_item.field_id;
                   let params = prj_user_params;
-                  params += ('&title='+menu_item.title+'&menu='+p_menu+'&place_id='+p_place_id);
+
+                  if( p_list ) {
+                      params += ('&list='+p_list);
+                  }
+                  if( p_place_id ) {
+                      params += ('&place_id='+p_place_id);
+                  }
+               
+                  params += ('&title='+menu_item.title+'&menu='+p_menu);
           
                   if( menu_item.tag_name ){
                       url = furl((github_root+'bugs_on_plants.html'+params+'&tag_name='+menu_item.tag_name),menu_item.title);  
