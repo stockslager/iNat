@@ -193,13 +193,21 @@ function fresults(xobj) {
           user = ('?user_id='+p_user_id);
       }
 
+      let leaf_params = '';
+      if( p_list ) {
+          leaf_params += ('&list='+p_list);
+      }
+      if( p_place_id ) {
+          leaf_params += ('&place_id='+p_place_id);
+      }
+
       if( p_title === '' ) {
           dlString = 'Bugs on Plants';
-          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants.html'+proj+user+'&obs_field='+p_obs_field,'&#127807;')+'</span>') });
+          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants.html'+proj+user+leaf_params+'&obs_field='+p_obs_field,'&#127807;')+'</span>') });
           faddelem('h2',document.body,{innerText:(dlString)});
       } else {
           dlString = (p_prefix+' '+p_title+' '+p_target_name);
-          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants_splash.html'+proj+user+'&menu='+p_menu,'&#127807;')+'</span>') });
+          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants_splash.html'+proj+user+leaf_params+'&menu='+p_menu,'&#127807;')+'</span>') });
           faddelem('h2',document.body,{innerText:(dlString)});
           document.title = dlString;
       }
