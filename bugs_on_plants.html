@@ -91,6 +91,7 @@ let p_target_name   = winurlparams.get('target_name') || '';
 let p_target_id     = winurlparams.get('target_id') || '';
 let p_menu          = winurlparams.get('menu') || 'all';
 let p_tag_name      = winurlparams.get('tag_name' || '');
+let p_species_list  = winurlparams.get('s_list' || '');
 let p_field = '';
 let p_field_value = '';
 let menu_items = [];
@@ -129,8 +130,8 @@ for (const [key, value] of winurlparams.entries()) {
       p_field_value = value;
   }
 }  
-
-if( p_original_iconic === '' ) {
+ 
+if( p_original_iconic === '' && !p_s_list ) {
     winurlparams.delete('q');
     winurlparams.delete('search_on');
 
