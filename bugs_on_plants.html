@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">  
  
 <head>
@@ -42,7 +42,7 @@
    }
    #main { width:fit-content; min-width:375px; }
    #h2 { font-weight:bold; font-size:20px; }
-   #utf { font-size:1.475em; }
+   #home { font-size:1.500em; float:right; padding-left:5px; padding-right:15px; padding-top:3px; padding-bottom:0px; }
    table, td, th { border-collapse:collapse; margin:0; padding:5px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
@@ -56,6 +56,7 @@
    .flowericon { padding-left:5%; font-size:14px; white-space: nowrap; font-style:normal; }
    .photo { height:54px; width:54px; border-radius: 5px 5px 5px 5px; }
    img { margin:0; padding:0; border:0; }
+   p { width:fit-content; min-width:375px; }
    a { text-decoration:none; color:var(--color-text-link); }
    a:hover { background:var(--color-hover); }
    #nav { margin-left:-8px; position:-webkit-sticky /*Safari*/; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
@@ -78,14 +79,26 @@ let p_project_id = winurlparams.get('project_id') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
-let p_obs_field  = winurlparams.get('obs_field') || '7623';
+let p_obs_field  = winurlparams.get('obs_field') || '';
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_omit_users = winurlparams.get('omit_users') || '';
 let p_omit_id = winurlparams.get('omit_id') || '';
 let p_omit_project = winurlparams.get('omit_projects') || '';
+let p_original_iconic = winurlparams.get('iconic_taxa') || '';
+let p_iconic_taxa  = winurlparams.get('iconic_taxa') || 'plantae';
+let p_title        = winurlparams.get('title') || '';
+let p_target_name   = winurlparams.get('target_name') || '';
+let p_target_id     = winurlparams.get('target_id') || '';
+let p_menu          = winurlparams.get('menu') || 'all';
+let p_tag_name      = winurlparams.get('tag_name' || '');
 let p_field = '';
 let p_field_value = '';
+let menu_items = [];
 let opts = '';
+
+if( p_title ){
+    p_title = p_title.toLowerCase();
+}
 
 if( p_omit_users !== '' ){
     winurlparams.delete('not_user_id');
@@ -108,8 +121,6 @@ winurlparams.delete('order');
 winurlparams.append('order','asc');
 winurlparams.delete('order_by');
 winurlparams.append('order_by','species_guess');
-winurlparams.delete('iconic_taxa');
-winurlparams.append('iconic_taxa', 'plantae');
 
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of winurlparams.entries()) {
@@ -117,20 +128,26 @@ for (const [key, value] of winurlparams.entries()) {
       p_field = key;
       p_field_value = value;
   }
-}   
+}  
 
-winurlparams.delete('q');
-winurlparams.delete('search_on');
-winurlparams.delete('iconic_taxa');
-winurlparams.append('q', 'bugs-on-plants');
-winurlparams.append('search_on', 'tags');
+if( p_original_iconic === '' ) {
+    winurlparams.delete('q');
+    winurlparams.delete('search_on');
+
+    if( p_tag_name ) {
+        winurlparams.append('q', p_tag_name);
+    } else {
+        winurlparams.append('q', 'bugs-on-plants');
+    }
+    winurlparams.append('search_on', 'tags');
+}
  
 winurlparams.delete('options');
 let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
 winurlparams.delete('idextra_user_id');
 let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
 winurlparams.delete('photo_curl_filename_prefix');
-
+ 
 let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
@@ -141,7 +158,7 @@ let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observa
 <script> 
 
 // remove the field param from the url before building options
-winurlparams.delete(p_field);
+//winurlparams.delete(p_field);
 winurlparams.delete('operator');
 winurlparams.delete('taxon_id');
 winurlparams.delete('not_user_id');
@@ -167,13 +184,29 @@ for (const [key, value] of winurlparams.entries()) {
 
 // add them back after building options...
 winurlparams.append('operator', p_operator);
-winurlparams.append(p_field, p_field_value);
 winurlparams.append('taxon_id', p_taxon_id);
 
 // these are stored in params.json 
 let p_insect_prj = '';
 let p_library_name = '';
 
+function sortWithNull(arr, ascending = true) {
+  for( let i=0; i<arr.length; i++ ) {
+       if( arr[i].taxon.preferred_common_name ){
+           arr[i].taxon.preferred_common_name = arr[i].taxon.preferred_common_name.toLowerCase();
+       }
+  }
+  arr.sort(function(a, b) {
+    if (!a.taxon.preferred_common_name && !b.taxon.preferred_common_name) return 0;
+    if (!a.taxon.preferred_common_name) return ascending ? 1 : -1;
+    if (!b.taxon.preferred_common_name) return ascending ? -1 : 1;
+    if (a.taxon.preferred_common_name < b.taxon.preferred_common_name) return ascending ? -1 : 1;
+    if (a.taxon.preferred_common_name > b.taxon.preferred_common_name) return ascending ? 1 : -1;
+    return 0;
+  });
+  return arr;
+}
+ 
 function fresults(xobj) {
    let results = xobj.results;
    let box_array = [];
@@ -186,10 +219,38 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let labels = [];
+      let dlString = '';
 
-      let dlString = '<span id="h2">Bugs on Plants</span>';
+      let proj = '';
+      let user = '';
+      if( p_project_id !== '' && p_project_id !== 'null' ) {
+          proj = ('?project_id='+p_project_id);
+          if( p_user_id !== '' && p_user_id !== 'null' ) {
+              proj += ('&user_id='+p_user_id);
+          }
+      } else {
+          user = ('?user_id='+p_user_id);
+      }
 
-      faddelem('p',document.body,{innerHTML:dlString});
+      if( p_title === '' ) {
+          dlString = 'Bugs on Plants';
+          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants.html'+proj+user+'&obs_field='+p_obs_field,'&#127807;')+'</span>') });
+          faddelem('h2',document.body,{innerText:(dlString)});
+      } else {
+          dlString = 'plant list';
+          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants_splash.html'+proj+user+'&menu='+p_menu,'&#127807;')+'</span>') });
+          faddelem('h2',document.body,{innerText:(dlString)});
+      }
+
+      let field_id = '';
+      let field_name = '';
+      for( let i=0; i<menu_items.length; i++ ){
+           console.log('menu '+menu_items);
+           if( menu_items[i].title === p_title ) {
+               field_id   = menu_items[i].field_id;
+               field_name = ('&field:'+menu_items[i].field_name+'=');
+           }
+      }
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
@@ -197,7 +258,7 @@ function fresults(xobj) {
 
       labels = [
             {innerText:'#'},
-            {innerText:'Obs Photo'},
+            {innerText:'Photo'},
             {innerText:'Name'}, 
       ];
 
@@ -209,15 +270,14 @@ function fresults(xobj) {
       let tbody = faddelem('tbody',table);
 
       // may need to revisit this if species_guess is ever null
-      results.sort((a, b) => a.species_guess.toLowerCase().localeCompare(b.species_guess.toLowerCase()))
-          
+      results = sortWithNull(results);
+    
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
          let tax_name = '';
          let pref_tax_name = '';
          let tax_photo = '<div class="clipart">&#127807</div>'; 
          let tax_id = '';
-         let values = [];
          let taxon = '';
 
          let brow = faddelem('tr',tbody);
@@ -245,10 +305,20 @@ function fresults(xobj) {
          }
 
          if( tax_id !== '' ){
-             taxon = furl(github_root+'cncnpc_insects.html?'+query_params+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_field+'&plant_name='+pref_tax_name,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
+             let iconic = '&iconic_taxa=';
+             if( p_iconic_taxa === 'plantae' ){
+                 iconic += 'insecta';
+             } else {
+                 iconic += p_iconic_taxa;
+             }
+             if( p_obs_field ) {
+                 taxon = furl(github_root+'cncnpc_insects.html?'+query_params+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_field+'&plant_name='+pref_tax_name,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
+             } else {
+                 taxon = furl(github_root+'bugs_on_plants2.html?'+query_params+'&obs_field='+p_obs_field+'&target_id='+tax_id+'&target_name='+pref_tax_name+'&title='+p_title+'&menu='+p_menu+field_name+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>'); 
+             }
          }
 
-         values = [
+         let values = [
                   {innerText:i+1},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:taxon},
@@ -267,13 +337,33 @@ function fresults(xobj) {
    else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
 
-if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
-   let instructions = [
+async function asyncGetData() {
+   await fetch('bugs.json')
+     .then(response => response.json())
+     .then(data => {
+      // Access your data here 
+      let found = '';
+      for( let i=0; i<data.configurations.length; i++ ) {
+           if( data.configurations[i].name === p_menu ) {
+               menu_items = data.configurations[i].menu_items;
+           }
+      }
+      if( !found ) {
+          faddelems('p',document.body,'Menu not found.  A &menu paramater was not passed in or was not found.  Add &menu=xxx to the end of the url where xxx has a matching menu in the bugs.json file.');
+      }
+      console.log(data);
+   })
+     .catch(error => {
+      console.error('Error fetching JSON:', error);
+   });
+
+   if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
+      let instructions = [
          {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.  It will default to the "7623 - plant that the organism was found on" observation field if &obs_field=xxx is not passed in.'},
-   ];
-   faddelems('p',document.body,instructions);
-} else {
-      fetch(apiurl)
+      ];
+      faddelems('p',document.body,instructions);
+   } else {
+      await fetch(apiurl)
       .then((response) => {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
@@ -283,7 +373,16 @@ if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
       });
-};
+   }
+}
+
+// need to pull resources from a json file to pass into an api
+// so needs to be asynchronous. 
+const request = async () => {
+   asyncGetData();
+}
+
+request();  
 
 </script>
 </body>
