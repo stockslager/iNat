@@ -245,7 +245,7 @@ function fresults(xobj) {
       }
 
       let icons = '';
-      let params = ('bugs_on_plants2.html'+proj+user+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu+'&menu='+p_menu);
+      let params = ('bugs_on_plants2.html'+proj+user+leaf_params+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu+'&menu='+p_menu);
 
       if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
           ( p_show_menu === 'yes' ) ||
@@ -253,8 +253,7 @@ function fresults(xobj) {
           if( menu_item.sub_icons ) {
               for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                    if( sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
-                      // console.log('s '+menu_item.sub_icons[j].nm+menu_item.sub_icons[j].taxon_id);
-                       params += ('&sub_menu_array='+sub_taxon_arr/*+'&prefix='+menu_item.sub_icons[j].nm*/);
+                       params += ('&sub_menu_array='+sub_taxon_arr);
                        icons += ('<span id="butter2">'+furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon)+'</span>');
                    }
               }
