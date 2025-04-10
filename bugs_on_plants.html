@@ -98,6 +98,18 @@ let p_field_value = '';
 let menu_items = [];
 let opts = '';
 
+// there is no project for the nature center so change it to the projet for all of clermont county
+// with a place of 'cincinnat nature center' (128707).
+// if a project is added for the nature center, this could be removed.
+if( p_project_id === 'cincinnati-nature-center' ) {
+    winurlparams.delete('project_id');
+    winurlparams.append('project_id', '203442');
+    p_project_id = '203442';
+    winurlparams.delete('place_id');
+    winurlparams.append('place_id', '128707');
+    p_place_id = '128707';
+}
+
 if( p_title ){
     p_title = p_title.toLowerCase();
 }
@@ -154,10 +166,6 @@ winurlparams.delete('idextra_user_id');
 let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
 winurlparams.delete('photo_curl_filename_prefix');
  
-let apibase = 'https://api.inaturalist.org/v1/observations';
-let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
-
 </script> 
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
@@ -338,7 +346,31 @@ async function asyncGetData() {
       console.error('Error fetching JSON:', error);
    });
 
-   if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
+   let winurlparams_copy = winurlparams;
+
+   let required_params_missing = 'no';
+
+   if( winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
+       required_params_missing = 'yes';
+   } 
+
+   // if the project is the nature center pollinator garden, only limit the 
+   // transaction by "place" since there is no nature center project that includes
+   // casual observations and we need those to appear in the plant list.  in the future
+   // if someone creates a biodiversity of cnc project that includes casual obs, this
+   // logic could be deleted.
+   if( p_project_id === 'cincinnati-nature-center-pollinator-garden' || p_project_id === '220623' ) {
+       winurlparams_copy.delete('project_id');
+       winurlparams_copy.delete('place_id');
+       winurlparams_copy.append('place_id', '128707');
+       required_params_missing = 'no';
+   }
+
+   let apibase = 'https://api.inaturalist.org/v1/observations';
+   let apiurl = apibase+((winurlparams_copy!='')?('?'+winurlparams_copy):'');
+   let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
+
+   if( required_params_missing === 'yes' ) {
       let instructions = [
          {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.  It will default to the "7623 - plant that the organism was found on" observation field if &obs_field=xxx is not passed in.'},
       ];
