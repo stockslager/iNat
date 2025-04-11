@@ -146,7 +146,7 @@ function fresults(configurations) {
                
                   params += ('&title='+menu_item.title+'&menu='+p_menu);
           
-                  if( menu_item.tag_name ){
+                  if( menu_item.tag_name && menu_item.tag_name !== 'macroblitz' ){
                       url = furl((github_root+'bugs_on_plants.html'+params+'&tag_name='+menu_item.tag_name),menu_item.title);  
                   } else {
                       params += ('&field:'+menu_item.field_name+'=');
