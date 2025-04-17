@@ -189,14 +189,13 @@ function fresults(xobj) {
 
          let query_params = ('user_id='+p_user_id);
 
-         if( tax_id !== '' ){
-             taxon = furl(github_root+'bugs_on_plants2.html?'+query_params+list_param+'&obs_field='+p_obs_field+'&target_id='+tax_id+'&target_name='+pref_tax_name+'&title='+p_title+'&menu='+p_menu+field_name+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>'); 
-         }
-
+         let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
+         let grid_title  = ('&title='+(pref_tax_name||tax_name));
+                                      
          let values = [
                   {innerText:i+1},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  {innerHTML:taxon},
+                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+grid_title,displayName)},
                   ];
 
          faddelems('td',brow,values);
