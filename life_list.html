@@ -93,9 +93,11 @@ winurlparams.delete('order_by');
 winurlparams.append('order_by','species_guess');
 winurlparams.delete('q');
 winurlparams.append('q',p_tag_name);
+winurlparams.delete('project_id');
+winurlparams.append('project_id', '239695');
  
 winurlparams.delete('options');
-let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
+let p_idextra_ = winurlparams.get('idextra_user_id')?.split(',') || [];;
 winurlparams.delete('idextra_user_id');
 let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
 winurlparams.delete('photo_curl_filename_prefix');
@@ -215,7 +217,7 @@ function fresults(xobj) {
 
    let required_params_missing = 'no';
 
-   if( winurlsearchstr==='' || p_user_id === '' || p_tag_name === '' ) {
+   if( winurlsearchstr==='' || p_tag_name === '' ) {
        required_params_missing = 'yes';
    } 
 
