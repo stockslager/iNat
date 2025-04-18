@@ -155,7 +155,6 @@ function fresults(xobj) {
       dd_opts_string = sessionStorage.getItem('dd_opts');
 
       if (dd_opts_string) {
-          console.log('arr: ' + dd_opts_string);
           dd_opts = dd_opts_string;
       }
     
@@ -177,6 +176,7 @@ function fresults(xobj) {
          } 
          sessionStorage.setItem('dd_opts', dd_opts);
       } 
+      console.log('opts: ' + dd_opts);
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
