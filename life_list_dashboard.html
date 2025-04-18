@@ -114,15 +114,18 @@ function fresults(xobj) {
          let truncatedText = truncate(stripHtml(longText), 500);
          let lists = '';
 
-         lists += setupLists(rec.id);
-         lists += '&project_title=' + rec.title||'';
+         //target_url += 'https://stockslager.github.io/iNat/reseed_plants_visited.html?project_id='+rec.id+lists;
+         let user_icon = rec.user.icon || '';
          
-         target_url += 'https://stockslager.github.io/iNat/reseed_plants_visited.html?project_id='+rec.id+lists;
+         if( user_icon === '' ){
+            user_icon += '<div class="npcicon">&#x1F464;</div>';
+         } else {
+            user_icon = '<img class="icon" src="'+user_icon+'" />';
+         }
          
          let values = [
-            {innerHTML:'<img class="photo" src="'+((rec.icon)?rec.icon:'')+'" />'},
-            {innerHTML:furl(target_url, (rec.title||'no title'))},
-            {innerText:truncatedText},
+            {innerHTML:user_icon},
+            {innerHTML:furl(root_people+rec.user.login,rec.user.login)}
          ];
          faddelems('td',brow,values);
       };
