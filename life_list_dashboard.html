@@ -126,10 +126,12 @@ function fresults(xobj) {
          } else {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }
+
+         let params = ('?project_id=239695&user_id='+rec.user.login+'&tag_name=lifelist');
          
          let values = [
             {innerHTML:furl(root_people+rec.user.login,user_icon)},
-            {innerHTML:furl(root_people+rec.user.login,rec.user.login)}
+            {innerHTML:furl(github_root+params,rec.user.login)}
          ];
          faddelems('td',brow,values);
       };
