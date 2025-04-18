@@ -151,7 +151,7 @@ function fresults(xobj) {
       }
 
     
-      let dd_array = localStorage.getItem('dd_array') || [];
+      let dd_array = sessionStorage.getItem('dd_array') || [];
       let dd_opts = '';
 
       if( dd_array.length > 0 ) {
@@ -170,7 +170,7 @@ function fresults(xobj) {
          } 
       }
 
-      localStorage.setItem('dd_array', JSON.stringify(dd_array));
+      sessionStorage.setItem('dd_array', JSON.stringify(dd_array));
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
