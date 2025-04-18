@@ -106,6 +106,7 @@ function fresults(xobj) {
       let labels = [
          {innerText:'User Icon'},
          {innerText:'Life List For...'},
+         {innerText:' '},
       ];
       faddelems('th',hrow,labels);
       
@@ -128,6 +129,7 @@ function fresults(xobj) {
          }
 
          let params = ('life_list.html?project_id=239695&user_id='+rec.user.login+'&tag_name=lifelist');
+         let detail_params = ('configurable_obs_field_table.html?project_id=239695&user_id='+rec.user.login+'&obs_fields=17274');
 
          if( rec.user.login === 'uconnbirdfish' ){
              params = ('life_list.html?project_id=239695&user_id='+rec.user.login+'&tag_name=bobslifelist');
@@ -135,7 +137,8 @@ function fresults(xobj) {
          
          let values = [
             {innerHTML:furl(root_people+rec.user.login,user_icon)},
-            {innerHTML:furl(github_root+params,rec.user.login)}
+            {innerHTML:furl(github_root+params,rec.user.login)},
+            {innerHTML:furl(github_root+detail_params,'&#x1F4DA')};       
          ];
          faddelems('td',brow,values);
       };
