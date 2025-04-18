@@ -161,8 +161,8 @@ function fresults(xobj) {
          for( let j=0; j<rec.ofvs.length; j++ ){
               if( rec.ofvs[j].field_id.toString() === '17274' ) {           // Fish Observation Method
                   console.log('vale: ' + rec.ofvs[j].value );
-                  if( !dd_array.includes(rec.ofvs[j].value) ){
-                      dd_array.push(rec.ofvs[j].value);
+                  if( !dd_array.includes(rec.ofvs[j].value.toString()) ){
+                      dd_array.push(rec.ofvs[j].value.toString());
                       dd_opts += ('<option value="life_list.html'+opts+'">'+rec.ofvs[j].value+'</option>')
                   }
               }
