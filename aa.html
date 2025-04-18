@@ -150,17 +150,16 @@ function fresults(xobj) {
           faddelem('h2',document.body,{innerText:(p_title)});
       }
 
+      let dd_opts = '';
       let dd_array = [];
-      const dd_array_string = sessionStorage.getItem('dd_array');
+      dd_opts_string = sessionStorage.getItem('dd_opts');
 
-      if (dd_array_string) {
-          console.log('arr: ' + dd_array_string);
-          dd_array = JSON.parse(dd_array_string);
+      if (dd_opts_string) {
+          console.log('arr: ' + dd_opts_string);
+          dd_opts = dd_opts_string;
       }
     
-      let dd_opts = '';
-
-      if( dd_array.length === 0 ) {
+      if( !dd_opts ) {
           for( let i=0; i<results.length; i++ ) {
              let rec = results[i];
 
@@ -174,9 +173,8 @@ function fresults(xobj) {
                   }
               }
          } 
-      }
-
-      sessionStorage.setItem('dd_array', JSON.stringify(dd_array));
+         sessionStorage.setItem('dd_opts', JSON.stringify(dd_opts));
+      } 
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
