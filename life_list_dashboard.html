@@ -42,9 +42,6 @@
    }  
    #key { color:var(--color-text-link); }
    #main { width:fit-content; min-width:375px; }
-   dl { float: right; display: grid; grid-gap: 1px 12px; grid-template-columns: max-content; font: 14px Sans-Serif; border: 1px solid forestgreen; border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; position: absolute; top: 0px; right: 7px; }
-   dt {  }
-   dd { margin: 0; grid-column-start: 2;}      
    table, td, th { border-collapse:collapse; margin:0px; padding:5px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
@@ -53,6 +50,7 @@
    tr:nth-child(even) { background:var(--color-base); }
    .tar { text-align:right; }
    .icon { height:48px; width:48px; border-radius:50%; }
+   .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
    .photo { height:64px; width:64px; border-radius: 15px 15px 15px 15px; }
    img { margin:0; padding:0; border:0; }
    a { text-decoration:none; color:var(--color-text-link); }
@@ -130,7 +128,7 @@ function fresults(xobj) {
          }
          
          let values = [
-            {innerHTML:user_icon},
+            {innerHTML:furl(root_people+rec.user.login,user_icon},
             {innerHTML:furl(root_people+rec.user.login,rec.user.login)}
          ];
          faddelems('td',brow,values);
@@ -148,7 +146,7 @@ function fresults(xobj) {
 let apibase = 'https://api.inaturalist.org/v1/projects/239695/members';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/projects/239695/members';
-let apirefname = 'iNaturalist Fishing Life List';
+let apirefname = 'iNaturalist Angling Life Lists';
 let apiref = furl(apirefurl,apirefname);
 
 faddelem('h2',document.body,{innerText:apirefname});
