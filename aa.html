@@ -150,22 +150,21 @@ function fresults(xobj) {
           faddelem('h2',document.body,{innerText:(p_title)});
       }
 
+      let dd_array = [];
       let dd_opts = '';
     
       for( let i=0; i<results.length; i++ ) {
-           let rec = results[i];
-
-         let dd_array = [];
+         let rec = results[i];
 
          // build the drop down array from the observation field values
          for( let j=0; j<rec.ofvs.length; j++ ){
               if( rec.ofvs[j].field_id.toString() === '17274' ) {           // Fish Observation Method
                   if( !dd_array.includes(rec.ofvs[j].field_id) ){
                       dd_array.push(rec.ofvs[j].field_id);
-                      dd_opts += ('<option value="life_list.html'+opts+'">'+rec.ofvs[j].value+'</option>')
+                      dd_opts += ('<option value="life_list.html'+opts+'&field:'+rec.ofvs[j].name+'='+rec.ofvs[j].value+'">'+rec.ofvs[j].value+'</option>')
                   }
               }
-         }
+         } 
       }
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
