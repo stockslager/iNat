@@ -67,7 +67,7 @@
    .bin_true { text-decoration: underline wavy rgba(34,139,34,0.35); }
    .bin_false { text-decoration: underline wavy rgba(178,34,34,0.35); }
    /* drop down */
-   .dropbtn { background-color: #04AA6D; color: white; padding: 16px; font-size: 16px; border: none; cursor: pointer; }
+   .dropbtn { background-color:var(--color-brand); /*background-color: #04AA6D;*/ color: white; padding: 16px; font-size: 16px; border: none; cursor: pointer; }
    .dropbtn:hover, .dropbtn:focus { background-color: #3e8e41; }
    #myInput { box-sizing: border-box; background-image: url('searchicon.png'); background-position: 14px 12px; background-repeat: no-repeat; font-size: 16px; padding: 14px 20px 12px 45px; border: none; border-bottom: 1px solid #ddd; }
 
@@ -202,17 +202,17 @@ function fresults(xobj) {
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
 
+    
+faddelem('p',document.body,{innerHTML:'<select onChange="window.location.href=this.value">' +
+    ' <option value="www.google.com">A</option>'+
+   ' <option value="www.aol.com">B</option>' +
+'</select>'});
       faddelem('p',document.body,{innerHTML:'<div class="dropdown">' +
                                                  '<button onclick="myFunction()" class="dropbtn">Dropdown</button>' +
                                                  '<div id="myDropdown" class="dropdown-content">' +
                                                     '<input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">' +
-                                                        '<a href="#about">About</a>' +
-                                                        '<a href="#base">Base</a>' +
-                                                        '<a href="#blog">Blog</a>' +
-                                                        '<a href="#contact">Contact</a>' +
-                                                        '<a href="#custom">Custom</a>' +
-                                                        '<a href="#support">Support</a>' +
-                                                        '<a href="#tools">Tools</a>' +
+                                                        '<a href="#Angling (Conventional)">Angling (Conventional)</a>' +
+                                                        '<a href="#By Hand">By Hand</a>' +
                                                  '</div>' +
                                             '</div>'});
 
