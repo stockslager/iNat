@@ -4,8 +4,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
-<meta name="description" content="Cincinnati Seed Libraries" />
-<title>Seeds</title>
+<meta name="description" content="iNaturalist Angling Lifelists" />
+<title>iNaturalist Angling Lifelists</title>
 <style>
    :root {
       background: var(--color-base); 
@@ -91,7 +91,7 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      faddelem('p',document.body,{innerHTML:'total projects: '+fcomnum(total_results)+')<br />' 
+      faddelem('p',document.body,{innerHTML:'total projects: '+fcomnum(total_results)+'<br />' 
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });
@@ -101,8 +101,7 @@ function fresults(xobj) {
       let hrow = faddelem('tr',thead);
       let labels = [
          {innerText:'Icon'},
-         {innerText:'Title'},
-         {innerText:'Description'},
+         {innerText:'Project Member'},
       ];
       faddelems('th',hrow,labels);
       
