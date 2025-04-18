@@ -150,8 +150,13 @@ function fresults(xobj) {
           faddelem('h2',document.body,{innerText:(p_title)});
       }
 
+      let dd_array = [];
+      const dd_array_string = sessionStorage.getItem('dd_array');
+
+      if (dd_array_string) {
+          dd_array = JSON.parse(dd_array_string);
+      }
     
-      let dd_array = sessionStorage.getItem('dd_array') || [];
       let dd_opts = '';
 
       if( dd_array.length === 0 ) {
