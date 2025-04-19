@@ -246,6 +246,13 @@ function fresults(xobj) {
 
       // may need to revisit this if species_guess is ever null
       //results = sortWithNull(results);
+
+      if( results.length === 0 ) {
+          let instructions = [
+              {innerText:'The "lifelist" tag needs to be added to any observation added to the project that you want to appear in this table.'},
+          ];
+          faddelems('p',document.body,instructions);
+      }
     
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
