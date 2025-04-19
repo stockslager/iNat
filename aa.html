@@ -79,7 +79,7 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
 let p_tag_name   = winurlparams.get('tag_name') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
-let p_title        = winurlparams.get('title') || '';
+let p_title      = winurlparams.get('title') || '';
 
 let opts = ('?project_id='+p_project_id+'&user_id='+p_user_id+'&tag_name='+p_tag_name);
 
@@ -163,7 +163,7 @@ function fresults(xobj) {
 
       let dd_opts = '';
       let dd_array = [];
-      dd_opts_string = sessionStorage.getItem('dd_opts');
+      dd_opts_string = sessionStorage.getItem((p_user_id+'dd_opts'));
 
       if (dd_opts_string) {
           dd_opts = dd_opts_string;
@@ -185,7 +185,7 @@ function fresults(xobj) {
                   }
               }
          } 
-         sessionStorage.setItem('dd_opts', dd_opts);
+         sessionStorage.setItem((p_user_id+'dd_opts'), dd_opts);
       } 
       console.log('opts: ' + dd_opts);
     
