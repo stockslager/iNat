@@ -75,9 +75,10 @@
 .custom-select select {
   appearance: none;
   /*width: 25%;*/
-  font-size: .75rem;
+  font-size: 1.00rem;
   padding: 0.675em 6em 0.675em 1em;
-  background-color: #fff;
+  background-color:var(--color-border); 
+  /*background-color: #fff;*/
   border: 1px solid #caced1;
   border-radius: 0.25rem;
   color: #000;
@@ -195,11 +196,14 @@ function fresults(xobj) {
          sessionStorage.setItem((p_user_id+p_tag_name+'dd_opts'), dd_opts);
       } 
 
+      faddelem('p',document.body,{innerHTML:'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
+                                            '</select></div></span>'});  
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
-             +'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
-                                            '</select></div></span>'+'<br />'});  
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max) 
+             + '<br/>'});
+             /*+'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
+                                            '</select></div></span>'+'<br />'});  */
 
     
       labels = [
