@@ -43,7 +43,7 @@
    #main { width:fit-content; min-width:375px; }
    #h2 { font-weight:bold; font-size:20px; }
    #home { font-size:1.750em; float:right; padding-left:5px; padding-right:15px; padding-top:0px; padding-bottom:0px; }
-   #topright { float:right; padding-left:5px; padding-right:15px; padding-top:3px; padding-bottom:0px; }
+   #topright { float:right; padding-left:5px; padding-right:15px; padding-top:30px; padding-bottom:0px; }
    table, td, th { border-collapse:collapse; margin:0; padding:5px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
@@ -70,7 +70,6 @@
 
 .custom-select {
   /*min-width: 350px;*/
-  max-width:20px;
 }
 
 .custom-select select {
@@ -197,7 +196,6 @@ function fresults(xobj) {
          sessionStorage.setItem((p_user_id+p_tag_name+'dd_opts'), dd_opts);
       } 
 
-      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)});
       faddelem('p',document.body,{innerHTML:'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
                                             '</select></div></span>'});  
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
