@@ -42,7 +42,8 @@
    }
    #main { width:fit-content; min-width:375px; }
    #h2 { font-weight:bold; font-size:20px; }
-   #home { font-size:1.500em; float:right; padding-left:5px; padding-right:15px; padding-top:3px; padding-bottom:0px; }
+   #home { font-size:1.750em; float:right; padding-left:5px; padding-right:15px; padding-top:3px; padding-bottom:0px; }
+   #topright { float:right; padding-left:5px; padding-right:15px; padding-top:3px; padding-bottom:0px; }
    table, td, th { border-collapse:collapse; margin:0; padding:5px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
@@ -75,10 +76,12 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let p_project_id = winurlparams.get('project_id') || '';
 let p_tag_name   = winurlparams.get('tag_name') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
-let p_title        = winurlparams.get('title') || '';
-let opts = '';
+let p_title      = winurlparams.get('title') || '';
+
+let opts = ('?project_id='+p_project_id+'&user_id='+p_user_id+'&tag_name='+p_tag_name);
 
 if( p_title ){
     p_title = p_title.toLowerCase();
@@ -86,7 +89,7 @@ if( p_title ){
 
  
 winurlparams.delete('per_page');
-winurlparams.append('per_page','50');
+winurlparams.append('per_page','200');
 winurlparams.delete('order');
 winurlparams.append('order','asc');
 winurlparams.delete('order_by');
@@ -123,7 +126,7 @@ function sortWithNull(arr, ascending = true) {
   });
   return arr;
 }
- 
+
 function fresults(xobj) {
    let results = xobj.results;
    let box_array = [];
@@ -140,17 +143,49 @@ function fresults(xobj) {
 
       let user = ('?user_id='+p_user_id);
 
+      faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'a.html','&#128031;')+'</span>') });
+ 
       if( p_title === '' ) {
           dlString = 'Life List';
           faddelem('h2',document.body,{innerText:(dlString)});
       } else {
           faddelem('h2',document.body,{innerText:(p_title)});
       }
+
+      let dd_opts = '';
+      let dd_array = [];
+      dd_opts_string = sessionStorage.getItem((p_user_id+'dd_opts'));
+
+      if (dd_opts_string) {
+          dd_opts = dd_opts_string;
+      }
     
+      if( !dd_opts ) {
+          dd_opts = '<option value="" disabled selected hidden>Observation Method</option>';
+          dd_opts += ('<option value="life_list.html'+opts+'">All</option>');
+          for( let i=0; i<results.length; i++ ) {
+             let rec = results[i];
+
+             // build the drop down array from the observation field values
+             for( let j=0; j<rec.ofvs.length; j++ ){
+                  if( rec.ofvs[j].field_id.toString() === '17274' ) {           // Fish Observation Method
+                      if( !dd_array.includes(rec.ofvs[j].value) ){
+                          dd_array.push(rec.ofvs[j].value);
+                          dd_opts += ('<option value="life_list.html'+opts+'&field:'+rec.ofvs[j].name+'='+rec.ofvs[j].value+'">'+rec.ofvs[j].value+'</option>');
+                      }  
+                  }
+              }
+         } 
+         sessionStorage.setItem((p_user_id+'dd_opts'), dd_opts);
+      } 
+
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
+             +'<span id="topright"><select onChange="window.location.href=this.value">' + dd_opts +
+                                            '</select></span>'+'<br />'});  
 
+    
       labels = [
             {innerText:'#'},
             {innerText:'Photo'},
@@ -165,7 +200,7 @@ function fresults(xobj) {
       let tbody = faddelem('tbody',table);
 
       // may need to revisit this if species_guess is ever null
-      results = sortWithNull(results);
+      //results = sortWithNull(results);
     
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
