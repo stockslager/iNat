@@ -43,7 +43,7 @@
    #main { width:fit-content; min-width:375px; }
    #h2 { font-weight:bold; font-size:20px; }
    #home { font-size:1.750em; float:right; padding-left:5px; padding-right:15px; padding-top:0px; padding-bottom:0px; }
-   #topright { float:right; padding-left:5px; padding-right:15px; padding-top:3px; padding-bottom:0px; }
+   #topright { float:right; padding-left:5px; padding-right:15px; padding-top:24px; padding-bottom:0px; }
    table, td, th { border-collapse:collapse; margin:0; padding:5px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
@@ -67,6 +67,48 @@
    .button_inactive { background:none; color:var(--color-border); }
    .bin_true { text-decoration: underline wavy rgba(34,139,34,0.35); }
    .bin_false { text-decoration: underline wavy rgba(178,34,34,0.35); }
+
+.custom-select {
+  /*min-width: 350px;*/
+  position: relative;
+}
+
+.custom-select select {
+  appearance: none;
+  width: fit-content;
+  font-size: 14px;
+  padding: 0.275em 1em 0.25em 1em;
+  /*background-color:var(--color-border); */
+  background-color: whitesmoke;
+  border: 1px solid #caced1;
+  border-radius: 0.25rem;
+  color: #000;
+  cursor: pointer;
+}
+
+.custom-select::before,
+.custom-select::after {
+  --size: 0.275rem;
+  position: absolute;
+  content: "";
+  right: 1rem;
+  pointer-events: none;
+}
+
+.custom-select::before {
+  border-left: var(--size) solid transparent;
+  border-right: var(--size) solid transparent;
+  border-bottom: var(--size) solid black;
+  top: 40%;
+}
+
+.custom-select::after {
+  border-left: var(--size) solid transparent;
+  border-right: var(--size) solid transparent;
+  border-top: var(--size) solid black;
+  top: 55%;
+}
+
 </style>
 </head>
 
@@ -179,11 +221,14 @@ function fresults(xobj) {
          sessionStorage.setItem((p_user_id+p_tag_name+'dd_opts'), dd_opts);
       } 
 
+      faddelem('p',document.body,{innerHTML:'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
+                                            '</select></div></span>'});  
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
-             +'<span id="topright"><select onChange="window.location.href=this.value">' + dd_opts +
-                                            '</select></span>'+'<br />'});  
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max) 
+             + '<br/>'});
+             /*+'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
+                                            '</select></div></span>'+'<br />'});  */
 
     
       labels = [
