@@ -127,6 +127,17 @@ function sortWithNull(arr, ascending = true) {
   return arr;
 }
 
+// Function to clear session data 
+function clearSession() { 
+    sessionStorage.clear(); 
+} 
+ 
+// Listen for the popstate event 
+window.addEventListener('popstate', function(event) { 
+    // Clear session data when navigating back 
+    clearSession(); 
+}); 
+ 
 function fresults(xobj) {
    let results = xobj.results;
    let box_array = [];
