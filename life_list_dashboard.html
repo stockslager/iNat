@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
  
 <head>
@@ -133,6 +133,14 @@ function fresults(xobj) {
          let detail_params = ('configurable_obs_field_table.html?project_id=239695&user_id='+rec.user.login+'&obs_fields=17274');
 
          if( rec.user.login === 'uconnbirdfish' ){
+             params = ('life_list.html?project_id=239695&user_id='+rec.user.login+'&tag_name=pegslifelist');
+             let values = [
+                 {innerHTML:furl(root_people+rec.user.login,'<img class="icon" src="https://inaturalist-open-data.s3.amazonaws.com/photos/487183403/original.jpg"')},
+                 {innerHTML:furl(github_root+params,'peg')},
+                 {innerHTML:furl(github_root+detail_params,'<span class="books">&#x1F4DA</span>')},      
+             ];
+             faddelems('td',brow,values);
+             brow   = faddelem('tr',tbody);
              params = ('life_list.html?project_id=239695&user_id='+rec.user.login+'&tag_name=bobslifelist');
          }
          
