@@ -93,6 +93,7 @@ let p_field = '';
 let p_field_value = '';
 let opts = '';
 let field_array = [];
+let disallows = [];
 
 if( p_obs_field_array !== '' ){
     field_array = p_obs_field_array.split(",");
@@ -160,8 +161,13 @@ async function asyncGetData() {
    await fetch('fish.json')
      .then(response => response.json())
      .then(data => {
+      
       for( let i=0; i<data.places.length; i++ ) {
            console.log('place_id: '+data.places[i].place_id);
+           if( data.places[i].place_id === '21' ) {
+               disallows = data.places[i].disallows;
+               console.log('disallows: ' + disallows);
+           }
       }
    })
      .catch(error => {
