@@ -353,8 +353,8 @@ function fresults(xobj) {
                   for( let k=0; k<config.places[l].disallows.length; k++ ) {
                        if( rec.taxon.id === config.places[l].disallows[k].taxon ) {
                            console.log('warn: ' + config.places[l].disallows[k].message);
-                           warning = ('<div class="popup" onclick="myFunction('+config.places[l].place_id+rec.taxon.id+')"><span style=\"font-size:larger\">&#128712;</span>' +
-                                           '<span class="popuptext" id="myPopup">'+config.places[l].disallows[k].message+'</span>' +
+                           warning = ('<div class="popup" onclick="myFunction('+config.places[l].place_id.toString()+rec.taxon.id.toString()+')"><span style=\"font-size:larger\">&#128712;</span>' +
+                                           '<span class="popuptext" id="'+config.places[l].place_id.toString()+rec.taxon.id.toString()+'">'+config.places[l].disallows[k].message+'</span>' +
                                       '</div>');
                        }
                   }
