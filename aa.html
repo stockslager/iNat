@@ -228,8 +228,6 @@ function fresults(xobj) {
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max) 
              + '<br/>'});
-             /*+'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
-                                            '</select></div></span>'+'<br />'});  */
 
     
       labels = [
@@ -286,7 +284,7 @@ function fresults(xobj) {
          let warning = '';
 
          for( let l=0; l<config.places.length; l++ ) {
-              if( rec.place_ids.includes(config.places[l].place_id) ) {
+              if( rec.place_ids.includes(config.places[l].place_id.toString()) ) {
                   for( let k=0; k<config.places[l].disallows.length; k++ ) {
                        if( rec.taxon.id.toString() === config.places[l].disallows[k].taxon.toString() ) {
                            warning = furl(github_root+'life_list_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+grid_title,'<span style=\"font-size:larger\">&#9432;</span>');             
