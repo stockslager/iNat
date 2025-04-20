@@ -282,12 +282,14 @@ function fresults(xobj) {
          let grid_title  = ('&title='+(pref_tax_name||tax_name));
 
          let warning = '';
-         const place_arr = rec.place_ids.split(",");
 
-         for( let l=0; l<config.places.length; l++ ) {
-              console.log('place_ids: '+place_arr);
+         for( let l=0; l<config.places.length; l++ ) { 
+              if( rec.place_ids.includes("21") ) {
+                  console.log("yep");
+              }
+              console.log('place_ids: '+rec.place_ids);
               console.log('config: '+config.places[l].place_id.toString());
-              if( place_arr.includes(config.places[l].place_id.toString()) ) {
+              if( rec.place_ids.includes(config.places[l].place_id.toString()) ) {
                   for( let k=0; k<config.places[l].disallows.length; k++ ) {
                        if( rec.taxon.id.toString() === config.places[l].disallows[k].taxon.toString() ) {
                            warning = furl(github_root+'life_list_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+grid_title,'<span style=\"font-size:larger\">&#9432;</span>');             
