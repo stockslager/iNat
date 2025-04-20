@@ -183,6 +183,9 @@ let p_user_id    = winurlparams.get('user_id') || '';
 let p_title      = winurlparams.get('title') || '';
 let config       = [];
 
+// close pop-up if they click outside of pop-up
+window.onclick = function(event) { if (event.target == popup) { popup.style.display = "none"; } } 
+
 let opts = ('?project_id='+p_project_id+'&user_id='+p_user_id+'&tag_name='+p_tag_name);
 
 if( p_title ){
