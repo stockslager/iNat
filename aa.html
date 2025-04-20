@@ -352,6 +352,7 @@ function fresults(xobj) {
               if( rec.place_ids.includes(config.places[l].place_id) ) {
                   for( let k=0; k<config.places[l].disallows.length; k++ ) {
                        if( rec.taxon.id === config.places[l].disallows[k].taxon ) {
+                           console.log('warn: ' + config.places[l].disallows[k].message);
                            warning = ('<div class="popup" onclick="myFunction()"><span style=\"font-size:larger\">&#128712;</span>' +
                                            '<span class="popuptext" id="myPopup">'+config.places[l].disallows[k].message+'</span>' +
                                       '</div>');
