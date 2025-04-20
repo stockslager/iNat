@@ -279,6 +279,9 @@ function fresults(xobj) {
          }
 
          let query_params = ('user_id='+p_user_id);
+  
+         let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
+         let grid_title  = ('&title='+(pref_tax_name||tax_name));
 
           let warning = '';
           for( let k=0; k<disallows.length; k++ ) {
@@ -286,9 +289,6 @@ function fresults(xobj) {
                    warning = furl(github_root+'life_list_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+grid_title,'<span style=\"font-size:larger\">&#128683;</span>');             
                }
           }   
-  
-         let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
-         let grid_title  = ('&title='+(pref_tax_name||tax_name));
                                       
          let values = [
                   {innerText:i+1},
