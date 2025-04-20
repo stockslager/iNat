@@ -419,10 +419,17 @@ function fresults(xobj) {
          if( tax_id !== '' ){
              taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
+
+         let warning = '';
+         for( let k=0; k<disallows.length; k++ ) {
+              if( rec.taxon.id === disallows.taxon ) {
+                  warning = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">&#9888;</span>');             
+              }
+         }   
        
          values = [
                   {innerText:i+1},
-                  {innerHTML:tax_photo},
+                  {innerHTML:tax_photo+warning},
                   {innerHTML:taxon},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
               ];
