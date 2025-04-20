@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+
 <html lang="en">  
  
 <head>
@@ -109,6 +109,65 @@
   top: 55%;
 }
 
+/* Popup container - can be anything you want */
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-decoration:none; color:var(--color-text-link);
+}
+
+/* The actual popup */
+.popup .popuptext {
+  visibility: hidden;
+  /*width: 160px;*/
+  width: fit-content;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;} 
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
+
 </style>
 </head>
 
@@ -122,6 +181,10 @@ let p_project_id = winurlparams.get('project_id') || '';
 let p_tag_name   = winurlparams.get('tag_name') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
 let p_title      = winurlparams.get('title') || '';
+let config       = [];
+
+// close pop-up if they click outside of pop-up
+window.onclick = function(event) { if (event.target == popup) { popup.style.display = "none"; } } 
 
 let opts = ('?project_id='+p_project_id+'&user_id='+p_user_id+'&tag_name='+p_tag_name);
 
@@ -167,6 +230,12 @@ function sortWithNull(arr, ascending = true) {
     return 0;
   });
   return arr;
+}
+
+// When the user clicks on info div, open the popup
+function myFunction(name) {
+  var popup = document.getElementById(name);
+  popup.classList.toggle("show");
 }
 
 function fresults(xobj) {
@@ -227,14 +296,13 @@ function fresults(xobj) {
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max) 
              + '<br/>'});
-             /*+'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
-                                            '</select></div></span>'+'<br />'});  */
 
     
       labels = [
             {innerText:'#'},
             {innerText:'Photo'},
             {innerText:'Name'}, 
+            {innerText:' '},
       ];
 
       let table = faddelem('table',document.body,{id:'main'});                    
@@ -277,14 +345,30 @@ function fresults(xobj) {
          }
 
          let query_params = ('user_id='+p_user_id);
-
+  
          let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
          let grid_title  = ('&title='+(pref_tax_name||tax_name));
+
+         let warning = '';
+
+         for( let l=0; l<config.places.length; l++ ) { 
+              if( rec.place_ids.includes(config.places[l].place_id) ) {
+                  for( let k=0; k<config.places[l].disallows.length; k++ ) {
+                       if( rec.taxon.id === config.places[l].disallows[k].taxon ) {
+                           console.log('warn: ' + config.places[l].disallows[k].message);
+                           warning = ('<div class="popup" onclick="myFunction('+config.places[l].place_id.toString()+rec.taxon.id.toString()+')"><span style=\"font-size:larger\">&#128712;</span>' +
+                                           '<span class="popuptext" id="'+config.places[l].place_id.toString()+rec.taxon.id.toString()+'">'+config.places[l].disallows[k].message+'</span>' +
+                                      '</div>');
+                       }
+                  }
+              }
+         }   
                                       
          let values = [
                   {innerText:i+1},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:furl(github_root+'life_list_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+grid_title,displayName)},
+                  {innerHTML:warning},
                   ];
 
          faddelems('td',brow,values);
@@ -299,6 +383,16 @@ function fresults(xobj) {
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
+
+async function asyncGetData() {
+   await fetch('fish.json')
+     .then(response => response.json())
+     .then(data => {
+      config = data;
+   })
+     .catch(error => {
+      console.error('Error fetching JSON:', error);
+   });
 
    let winurlparams_copy = winurlparams;
 
@@ -318,7 +412,7 @@ function fresults(xobj) {
       ];
       faddelems('p',document.body,instructions);
    } else {
-      fetch(apiurl)
+      await fetch(apiurl)
       .then((response) => {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
@@ -329,6 +423,15 @@ function fresults(xobj) {
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
       });
    }
+}
+
+// need to pull resources from a json file to pass into an api
+// so needs to be asynchronous. 
+const request = async () => {
+   asyncGetData();
+}
+
+request();  
   
 </script>
 </body>
