@@ -5,6 +5,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
 <meta name="description" content="Obs Field Table" />
+<link rel="icon" type="image/png" href="fish.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="fish.svg" />
+<link rel="shortcut icon" href="fish.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="fish.png" />
+<meta name="apple-mobile-web-app-title" content="Life List" />
+<link rel="manifest" href="fish.webmanifest" />
 <title>Obs Field Table</title>
 <style>
    :root { 
@@ -154,8 +160,9 @@ async function asyncGetData() {
    await fetch('fish.json')
      .then(response => response.json())
      .then(data => {
-      // Access your data here 
-      console.log('data: '+data);
+      for( let i=0; i<data.places.length; i++ ) {
+           console.log('place_id: '+data.places[i].place_id);
+      }
    })
      .catch(error => {
       console.error('Error fetching JSON:', error);
