@@ -284,6 +284,8 @@ function fresults(xobj) {
          let warning = '';
 
          for( let l=0; l<config.places.length; l++ ) {
+              console.log('place_ids: '+rec.place_ids);
+              console.log('config: '+config.places[l].place_id.toString());
               if( rec.place_ids.includes(config.places[l].place_id.toString()) ) {
                   for( let k=0; k<config.places[l].disallows.length; k++ ) {
                        if( rec.taxon.id.toString() === config.places[l].disallows[k].taxon.toString() ) {
