@@ -407,6 +407,16 @@ function fresults(xobj) {
                      ];
                      faddelems('td',brow,values);
                  }
+                 if( i === results.length ) {
+                     brow = faddelem('tr',tbody);
+                     values = [
+                        {innerHTML:tax_photo},
+                        {innerHTML:furl(github_root+'life_list_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+grid_title,displayName)},
+                        {innerHTML:furl(root_people+rec.user.login,user_icon)},
+                     ];
+                     faddelems('td',brow,values);
+                 }
+       
                  match = 'no';
              } 
          }   
