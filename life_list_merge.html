@@ -184,6 +184,8 @@ let p_user_id    = winurlparams.get('user_id') || '';
 let p_title      = winurlparams.get('title') || '';
 let config       = [];
 
+let user_arr   = p_user_id.split(",");
+
 // close pop-up if they click outside of pop-up
 window.onclick = function(event) { if (event.target == popup) { popup.style.display = "none"; } } 
 
@@ -298,7 +300,6 @@ function fresults(xobj) {
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max) 
              + '<br/>'});
 
-      let user_arr   = p_user_id.split(",");
       let prev_rec = {}; 
      
       labels = [
@@ -323,6 +324,8 @@ function fresults(xobj) {
           ];
           faddelems('p',document.body,instructions);
       }
+
+      let match = 'no';
     
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
@@ -351,7 +354,7 @@ function fresults(xobj) {
                  }
              }
           
-             let query_params = ('user_id='+rec.user.login);
+             let query_params = ('user_id='+p_user_id);
              let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
              let grid_title  = ('&title='+(pref_tax_name||tax_name));
 
@@ -381,11 +384,12 @@ function fresults(xobj) {
                  prev_user_icon = '<img class="icon2" src="'+prev_user_icon+'" />';
              }
 
-             let prev_query_params = ('user_id='+prev_rec.user.login);
+             let prev_query_params = ('user_id='+p_user_id);
              let prev_displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
              let prev_grid_title  = ('&title='+(pref_tax_name||tax_name));
   
              if( rec.taxon.id === prev_rec.taxon.id ) {
+                 match = 'yes';
                  values = [
                         {innerHTML:prev_tax_photo},
                         {innerHTML:furl(github_root+'life_list_grid.html?'+query_params+'&taxon_id='+prev_rec.taxon.id+grid_title,displayName)},
@@ -395,12 +399,15 @@ function fresults(xobj) {
                  faddelems('td',brow,values);
              } else {
                  // build left column only with blank right column.
-                 values = [
+                 if( match === 'no' ) {
+                     values = [
                         {innerHTML:prev_tax_photo},
                         {innerHTML:furl(github_root+'life_list_grid.html?'+prev_query_params+'&taxon_id='+prev_rec.taxon.id+prev_grid_title,prev_displayName)},
                         {innerHTML:furl(root_people+prev_rec.user.login,prev_user_icon)},
-                 ];
-                 faddelems('td',brow,values);
+                     ];
+                     faddelems('td',brow,values);
+                 }
+                 match = 'no';
              } 
          }   
          prev_rec = rec;
@@ -438,7 +445,12 @@ async function asyncGetData() {
    let apiurl = apibase+((winurlparams_copy!='')?('?'+winurlparams_copy):'');
    let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
 
-   if( required_params_missing === 'yes' ) {
+   if( user_arr.length > 2 ) {
+       let instructions = [
+           {innerText:'A maximum of 2 users lifelists can be merged.  More than 2 users were passed in. Please reduce the number of users to two in the &user_id param.'},
+       ];
+       faddelems('p',document.body,instructions);
+   } else if( required_params_missing === 'yes' ) {
       let instructions = [
          {innerText:'This page requires a user_id and a tag_name argument.  Add ?user_id=12345678&tag_name=xxxxxx to the end of the url.  '},
       ];
