@@ -53,6 +53,7 @@
    .tar { text-align:right; }
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
    .icon { height:48px; width:48px; border-radius:50%; }
+   .icon2 { height:24px; width:24px; border-radius:50%; }
    .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
    .flowericon { padding-left:5%; font-size:14px; white-space: nowrap; font-style:normal; }
    .photo { height:54px; width:54px; border-radius: 5px 5px 5px 5px; }
@@ -331,6 +332,7 @@ function fresults(xobj) {
          let tax_id = '';
          let taxon = '';
          let brow = '';
+         let prev_tax_photo = '';
         
          if( i > 0 ) {
 
@@ -357,7 +359,7 @@ function fresults(xobj) {
              if( user_icon === '' ){
                  user_icon += '<div class="npcicon">&#x1F464;</div>';
              } else {
-                 user_icon = '<img class="icon" src="'+user_icon+'" />';
+                 user_icon = '<img class="icon2" src="'+user_icon+'" />';
              }
 
              if( prev_rec.taxon ){
@@ -367,7 +369,7 @@ function fresults(xobj) {
             
                  if( prev_rec.taxon.default_photo ){
                      if( prev_rec.taxon.default_photo.url ){
-                         tax_photo = '<img class="icon" src="'+prev_rec.taxon.default_photo.url+'" />';
+                         prev_tax_photo = '<img class="icon" src="'+prev_rec.taxon.default_photo.url+'" />';
                      }
                  }
              }
@@ -376,7 +378,7 @@ function fresults(xobj) {
              if( prev_user_icon === '' ){
                  prev_user_icon += '<div class="npcicon">&#x1F464;</div>';
              } else {
-                 prev_user_icon = '<img class="icon" src="'+prev_user_icon+'" />';
+                 prev_user_icon = '<img class="icon2" src="'+prev_user_icon+'" />';
              }
 
              let prev_query_params = ('user_id='+prev_rec.user.login);
@@ -385,7 +387,7 @@ function fresults(xobj) {
   
              if( rec.taxon.id === prev_rec.taxon.id ) {
                  values = [
-                        {innerHTML:furl(root_observations+prev_rec.id,'<img class="photo" src="'+((prev_rec.photos&&prev_rec.photos.length>0)?prev_rec.photos[0].url:'')+'" />')},
+                        {innerHTML:prev_tax_photo},
                         {innerHTML:furl(github_root+'life_list_grid.html?'+query_params+'&taxon_id='+prev_rec.taxon.id+grid_title,displayName)},
                         {innerHTML:furl(root_people+prev_rec.user.login,prev_user_icon)+' '+furl(root_people+rec.user.login,user_icon)},
                  ];
@@ -394,7 +396,7 @@ function fresults(xobj) {
              } else {
                  // build left column only with blank right column.
                  values = [
-                        {innerHTML:furl(root_observations+prev_rec.id,'<img class="photo" src="'+((prev_rec.photos&&prev_rec.photos.length>0)?prev_rec.photos[0].url:'')+'" />')},
+                        {innerHTML:prev_tax_photo},
                         {innerHTML:furl(github_root+'life_list_grid.html?'+prev_query_params+'&taxon_id='+prev_rec.taxon.id+prev_grid_title,prev_displayName)},
                         {innerHTML:furl(root_people+prev_rec.user.login,prev_user_icon)},
                  ];
