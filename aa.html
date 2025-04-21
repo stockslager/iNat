@@ -107,8 +107,7 @@ function fresults(xobj) {
       let labels = [
          {innerText:'User Icon'},
          {innerText:'Life List For...'},
-         {innerText:'Obs Ct'},
-         {innerText:'Taxa Ct'},
+         {innerText:'Taxa'},
          {innerText:' '},
       ];
       faddelems('th',hrow,labels);
@@ -139,9 +138,8 @@ function fresults(xobj) {
              let values = [
                  {innerHTML:furl(root_people+rec.user.login,'<img class="icon" src="https://inaturalist-open-data.s3.amazonaws.com/photos/487183403/original.jpg"')},
                  {innerHTML:furl(github_root+params,'peg')},
-                 {innerHTML:furl(github_root+detail_params,'<span class="books">&#128269</span>')},  
-                 {innerText:rec.observations_count},
                  {innerText:rec.taxa_count},
+                 {innerHTML:furl(github_root+detail_params,'<span class="books">&#128269</span>')},  
              ];
              faddelems('td',brow,values);
              brow   = faddelem('tr',tbody);
@@ -151,9 +149,8 @@ function fresults(xobj) {
          let values = [
             {innerHTML:furl(root_people+rec.user.login,user_icon)},
             {innerHTML:furl(github_root+params,rec.user.login)},
-            {innerHTML:furl(github_root+detail_params,'<span class="books">&#128269</span>')}, 
-            {innerText:rec.observations_count},
             {innerText:rec.taxa_count},
+            {innerHTML:furl(github_root+detail_params,'<span class="books">&#128269</span>')}, 
          ];
          faddelems('td',brow,values);
       };
