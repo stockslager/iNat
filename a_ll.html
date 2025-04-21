@@ -261,6 +261,7 @@ function fresults(xobj) {
 
       let user = ('?user_id='+p_user_id);
 
+      console.log('one');
       faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'a_dash.html','&#128031;')+'</span>') });
  
       if( p_title === '' ) {
@@ -296,6 +297,7 @@ function fresults(xobj) {
          } 
          sessionStorage.setItem((p_user_id+p_tag_name+'dd_opts'), dd_opts);
       } 
+     console.log('two');
 
       faddelem('p',document.body,{innerHTML:'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
                                             '</select></div></span>'});  
@@ -328,7 +330,8 @@ function fresults(xobj) {
           ];
           faddelems('p',document.body,instructions);
       }
-    
+
+    console.log('three');
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
          let tax_name = '';
@@ -358,6 +361,7 @@ function fresults(xobj) {
 
          let warning = ' ';
 
+       console.log('four');
          for( let l=0; l<config.places.length; l++ ) { 
               if( rec.place_ids.includes(config.places[l].place_id) ) {
                   for( let k=0; k<config.places[l].disallows.length; k++ ) {
