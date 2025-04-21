@@ -389,9 +389,7 @@ function fresults(xobj) {
                  }
                  
                  faddelems('td',brow,values);
-             }
-           
-             if( prev_rec.user.login === user_arr[0] ){
+             } else if( prev_rec.user.login === user_arr[0] ){
                  // build left column only with blank right column.
                  values = [
                         {innerHTML:furl(root_observations+prev_rec.id,'<img class="photo" src="'+((prev_rec.photos&&prev_rec.photos.length>0)?prev_rec.photos[0].url:'')+'" />')},
@@ -400,9 +398,7 @@ function fresults(xobj) {
                         {innerText:' '},
                  ];
                  faddelems('td',brow,values);
-             }
-
-             if( prev_rec.user.login === user_arr[1] ) {
+             } else if( prev_rec.user.login === user_arr[1] ) {
                  // build right column only with blank left column.
                  values = [
                         {innerText:' '},
