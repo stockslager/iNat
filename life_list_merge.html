@@ -301,10 +301,9 @@ function fresults(xobj) {
       let prev_rec = {}; 
      
       labels = [
-            {innerText:user_arr[0]+' Photo'},
+            {innerText:'Photo'},
             {innerText:'Name'}, 
-            {innerText:user_arr[1]+' Photo'},
-            {innerText:'Name'}, 
+            {innerText:' '}, 
       ];
 
       let table = faddelem('table',document.body,{id:'main'});                    
@@ -354,6 +353,13 @@ function fresults(xobj) {
              let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
              let grid_title  = ('&title='+(pref_tax_name||tax_name));
 
+             let user_icon = rec.user.icon || '';
+             if( user_icon === '' ){
+                 user_icon += '<div class="npcicon">&#x1F464;</div>';
+             } else {
+                 user_icon = '<img class="icon" src="'+user_icon+'" />';
+             }
+
              if( prev_rec.taxon ){
                  tax_id = prev_rec.taxon.id;
                  tax_name = prev_rec.taxon.name || '';
@@ -366,48 +372,34 @@ function fresults(xobj) {
                  }
              }
 
+             let prev_user_icon = prev_rec.user.icon || '';
+             if( prev_user_icon === '' ){
+                 prev_user_icon += '<div class="npcicon">&#x1F464;</div>';
+             } else {
+                 prev_user_icon = '<img class="icon" src="'+prev_user_icon+'" />';
+             }
+
              let prev_query_params = ('user_id='+prev_rec.user.login);
              let prev_displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
              let prev_grid_title  = ('&title='+(pref_tax_name||tax_name));
   
              if( rec.taxon.id === prev_rec.taxon.id ) {
-                 // build left and right columns.
-                 if( prev_rec.user.login === user_arr[0] ) {
-                     values = [
+                 values = [
                         {innerHTML:furl(root_observations+prev_rec.id,'<img class="photo" src="'+((prev_rec.photos&&prev_rec.photos.length>0)?prev_rec.photos[0].url:'')+'" />')},
                         {innerHTML:furl(github_root+'life_list_grid.html?'+query_params+'&taxon_id='+prev_rec.taxon.id+grid_title,displayName)},
-                        {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                        {innerHTML:furl(github_root+'life_list_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+grid_title,displayName)},
-                     ];
-                 } else {
-                     values = [
-                        {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                        {innerHTML:furl(github_root+'life_list_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+grid_title,displayName)},
-                        {innerHTML:furl(root_observations+prev_rec.id,'<img class="photo" src="'+((prev_rec.photos&&prev_rec.photos.length>0)?prev_rec.photos[0].url:'')+'" />')},
-                        {innerHTML:furl(github_root+'life_list_grid.html?'+prev_query_params+'&taxon_id='+prev_rec.taxon.id+prev_grid_title,prev_displayName)},
-                     ];
-                 }
+                        {innerHTML:furl(root_people+prev_rec.user.login,prev_user_icon)+' '+furl(root_people+rec.user.login,user_icon)},
+                 ];
                  
                  faddelems('td',brow,values);
-             } else if( prev_rec.user.login === user_arr[0] ){
+             } else {
                  // build left column only with blank right column.
                  values = [
                         {innerHTML:furl(root_observations+prev_rec.id,'<img class="photo" src="'+((prev_rec.photos&&prev_rec.photos.length>0)?prev_rec.photos[0].url:'')+'" />')},
                         {innerHTML:furl(github_root+'life_list_grid.html?'+prev_query_params+'&taxon_id='+prev_rec.taxon.id+prev_grid_title,prev_displayName)},
-                        {innerText:' '},
-                        {innerText:' '},
+                        {innerHTML:furl(root_people+prev_rec.user.login,prev_user_icon)},
                  ];
                  faddelems('td',brow,values);
-             } else if( prev_rec.user.login === user_arr[1] ) {
-                 // build right column only with blank left column.
-                 values = [
-                        {innerText:' '},
-                        {innerText:' '},
-                        {innerHTML:furl(root_observations+prev_rec.id,'<img class="photo" src="'+((prev_rec.photos&&prev_rec.photos.length>0)?prev_rec.photos[0].url:'')+'" />')},
-                        {innerHTML:furl(github_root+'life_list_grid.html?'+prev_query_params+'&taxon_id='+prev_rec.taxon.id+prev_grid_title,prev_displayName)},
-                 ];
-                 faddelems('td',brow,values);
-             }
+             } 
          }   
          prev_rec = rec;
       };
