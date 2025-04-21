@@ -293,14 +293,10 @@ function fresults(xobj) {
          sessionStorage.setItem((p_user_id+p_tag_name+'dd_opts'), dd_opts);
       } 
 
-      try {
         // Code that might throw an error
         //if (total_results > per_page) {
             throw new Error("Comparison of lifelists only works with one page of data (less than "+per_page+" results.  Filter the merged observations by place or taxa for example.");
         //}
-      } catch (error) {
-        console.error(error.message); // Display the error message
-      }
     
       faddelem('p',document.body,{innerHTML:'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
                                             '</select></div></span>'});  
