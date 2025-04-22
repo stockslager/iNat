@@ -107,6 +107,7 @@ function fresults(xobj) {
       let labels = [
          {innerText:'User Icon'},
          {innerText:'Life List For...'},
+         {innerText:'Count'},
          {innerText:' '},
       ];
       faddelems('th',hrow,labels);
@@ -137,6 +138,7 @@ function fresults(xobj) {
              let values = [
                  {innerHTML:furl(root_people+rec.user.login,'<img class="icon" src="https://inaturalist-open-data.s3.amazonaws.com/photos/487183403/original.jpg"')},
                  {innerHTML:furl(github_root+params,'peg')},
+                 {innerText:' '},
                  {innerHTML:furl(github_root+detail_params,'<span class="books">&#128269</span>')},      
              ];
              faddelems('td',brow,values);
@@ -146,7 +148,8 @@ function fresults(xobj) {
          
          let values = [
             {innerHTML:furl(root_people+rec.user.login,user_icon)},
-            {innerHTML:furl(github_root+params,('( '+rec.taxa_count+' )'+rec.user.login))},
+            {innerHTML:furl(github_root+params,rec.user.login)},
+            {innerText:rec.taxa_count},
             {innerHTML:furl(github_root+detail_params,'<span class="books">&#128269</span>')},      
          ];
          faddelems('td',brow,values);
