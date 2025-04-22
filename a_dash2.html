@@ -90,17 +90,6 @@ winurlparams.delete('activity_data');
 
 function fresults(xobj) {
   
-   // change title to merge if a user_id is passed in
-   if( p_user_id ) {
-      let title = ('Merge '+p_user_id+' with...');
-      faddelem('h2',document.body,{innerText:title});
-      document.title = title;
-   } else {
-      let title = ('iNaturalist Angling Lifelists');
-      faddelem('h2',document.body,{innerText:title});
-      document.title = title;
-   }
- 
    let results = xobj.results;
    if (results) {
       let total_results = xobj.total_results;
@@ -163,11 +152,11 @@ function fresults(xobj) {
 
              if( !p_user_id ) {
                  values = [
-                     {innerHTML:furl(root_people+rec.user.login,'<img class="icon" src="https://inaturalist-open-data.s3.amazonaws.com/photos/487183403/original.jpg"')},
-                     {innerText:'peg'},
-                     {innerText:' '},
-                     {innerHTML:furl(github_root+detail_params,'<span class="mag">&#128269</span>')},      
-                 ];
+                      {innerHTML:furl(root_people+rec.user.login,'<img class="icon" src="https://inaturalist-open-data.s3.amazonaws.com/photos/487183403/original.jpg"')},
+                      {innerHTML:furl(github_root+params,'peg')},
+                      {innerText:' '},
+                      {innerHTML:furl(github_root+detail_params,'<span class="mag">&#128269</span>')},      
+                 ];                 
                  faddelems('td',brow,values);
                  brow   = faddelem('tr',tbody);
              }
@@ -210,8 +199,17 @@ let apirefurl = 'https://api.inaturalist.org/v1/projects/239695/members';
 let apirefname = 'iNaturalist Angling Life Lists';
 let apiref = furl(apirefurl,apirefname);
 
-faddelem('h2',document.body,{innerText:apirefname});
-
+// change title to merge if a user_id is passed in
+if( p_user_id ) {
+    let title = ('Merge '+p_user_id+' with...');
+    faddelem('h2',document.body,{innerText:title});
+    document.title = title;
+} else {
+    let title = ('iNaturalist Angling Lifelists');
+    faddelem('h2',document.body,{innerText:title});
+    document.title = title;
+}
+ 
 fetch(apiurl)
    .then((response) => {
       if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
