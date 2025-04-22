@@ -169,6 +169,68 @@
   to {opacity:1 ;}
 }
 
+ .navbar {
+  overflow: hidden;
+  background-color: #333;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  cursor: pointer;
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn, .dropbtn:focus {
+  background-color: red;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.show {
+  display: block;
+}
+/*
 .navbar {
   overflow: hidden;
   background-color: #333;
@@ -243,7 +305,7 @@
 .show {
   display: block;
 }
-
+*/
 </style>
 </head>
 
@@ -337,6 +399,43 @@ function fresults(xobj) {
 
       let user = ('?user_id='+p_user_id);
 
+     // faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'life_list_dashboard.html','&#128031;')+'</span>') });
+ 
+      if( p_title === '' ) {
+          dlString = 'Life List';
+          faddelem('h2',document.body,{innerText:(dlString)});
+      } else {
+          faddelem('h2',document.body,{innerText:(p_title)});
+      }
+
+      let dd_opts = '';
+      let dd_array = [];
+      dd_opts_string = sessionStorage.getItem((p_user_id+p_tag_name+'dd_opts'));
+
+      if (dd_opts_string) {
+          dd_opts = dd_opts_string;
+      }
+    
+      if( !dd_opts ) {
+          dd_opts = '<option value="" disabled selected hidden>Observation Method</option>';
+          dd_opts += ('<option value="life_list.html'+opts+'">All</option>');
+          for( let i=0; i<results.length; i++ ) {
+             let rec = results[i];
+
+             // build the drop down array from the observation field values
+             for( let j=0; j<rec.ofvs.length; j++ ){
+                  if( rec.ofvs[j].field_id.toString() === '17274' ) {           // Fish Observation Method
+                      if( !dd_array.includes(rec.ofvs[j].value) ){
+                          dd_array.push(rec.ofvs[j].value);
+                          dd_opts += furl(github_root+'a_top.html'+opts+'&field:'+rec.ofvs[j].name+'='+rec.ofvs[j].value,rec.ofvs[j].value);
+                          //dd_opts += ('<option value="life_list.html'+opts+'&field:'+rec.ofvs[j].name+'='+rec.ofvs[j].value+'">'+rec.ofvs[j].value+'</option>');
+                      }  
+                  }
+              }
+         } 
+         sessionStorage.setItem((p_user_id+p_tag_name+'dd_opts'), dd_opts);
+      } 
+
       faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
                                                    /*'<a href="#news">News</a>' +*/
                                                       '<div class="dropdown">' +
@@ -373,50 +472,14 @@ function fresults(xobj) {
                                                            '<button class="dropbtn">Method' +
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
-                                                           '<div class="dropdown-content">' +
-                                                                 furl(github_root+'life_list.html?project_id='+p_project_id+'&user_id='+p_user_id+'&tag_name=saltwater','saltwater') +
-                                                                 '<a href="#">Link 2</a>' +
-                                                                 '<a href="#">Link 3</a>' +
+                                                           '<div class="dropdown-content">' + dd_opts + 
+                                                                 //furl(github_root+'life_list.html?project_id='+p_project_id+'&user_id='+p_user_id+'&tag_name=saltwater','saltwater') +
+                                                                 //'<a href="#">Link 2</a>' +
+                                                                 //'<a href="#">Link 3</a>' +
                                                            '</div>' +
                                                        '</div>' +
                                                    '<span id="home">'+furl(github_root+'life_list_dashboard.html','&#128031;')+'</span>' +
                                               '</div>')});
-
-     // faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'life_list_dashboard.html','&#128031;')+'</span>') });
- 
-      if( p_title === '' ) {
-          dlString = 'Life List';
-          faddelem('h2',document.body,{innerText:(dlString)});
-      } else {
-          faddelem('h2',document.body,{innerText:(p_title)});
-      }
-
-      let dd_opts = '';
-      let dd_array = [];
-      dd_opts_string = sessionStorage.getItem((p_user_id+p_tag_name+'dd_opts'));
-
-      if (dd_opts_string) {
-          dd_opts = dd_opts_string;
-      }
-    
-      if( !dd_opts ) {
-          dd_opts = '<option value="" disabled selected hidden>Observation Method</option>';
-          dd_opts += ('<option value="life_list.html'+opts+'">All</option>');
-          for( let i=0; i<results.length; i++ ) {
-             let rec = results[i];
-
-             // build the drop down array from the observation field values
-             for( let j=0; j<rec.ofvs.length; j++ ){
-                  if( rec.ofvs[j].field_id.toString() === '17274' ) {           // Fish Observation Method
-                      if( !dd_array.includes(rec.ofvs[j].value) ){
-                          dd_array.push(rec.ofvs[j].value);
-                          dd_opts += ('<option value="life_list.html'+opts+'&field:'+rec.ofvs[j].name+'='+rec.ofvs[j].value+'">'+rec.ofvs[j].value+'</option>');
-                      }  
-                  }
-              }
-         } 
-         sessionStorage.setItem((p_user_id+p_tag_name+'dd_opts'), dd_opts);
-      } 
 
       faddelem('p',document.body,{innerHTML:'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
                                             '</select></div></span>'});  
