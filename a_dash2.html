@@ -77,18 +77,6 @@ winurlparams.delete('id');
 winurlparams.append('id', '239695');
 
 let p_user_id = winurlparams.get('user_id') || '';
-
-// change title to merge if a user_id is passed in
-if( p_user_id ) {
- console.log('asdfas');
-    let title = ('Merge '+p_user_id+' with...');
-    faddelem('h2',document.body,{innerText:title});
-    document.title = title;
-} else {
-    let title = ('iNaturalist Angling Lifelists');
-    faddelem('h2',document.body,{innerText:title});
-    document.title = title;
-}
    
 let view = winurlparams.get('view') || '';
 let activity_data = winurlparams.get('activity_data') || 'local';
@@ -101,6 +89,18 @@ winurlparams.delete('activity_data');
 <script>
 
 function fresults(xobj) {
+  
+   // change title to merge if a user_id is passed in
+   if( p_user_id ) {
+      let title = ('Merge '+p_user_id+' with...');
+      faddelem('h2',document.body,{innerText:title});
+      document.title = title;
+   } else {
+      let title = ('iNaturalist Angling Lifelists');
+      faddelem('h2',document.body,{innerText:title});
+      document.title = title;
+   }
+ 
    let results = xobj.results;
    if (results) {
       let total_results = xobj.total_results;
@@ -187,8 +187,8 @@ function fresults(xobj) {
              values = [
                 {innerHTML:furl(root_people+rec.user.login,user_icon)},
                 {innerHTML:furl(github_root+params,rec.user.login)},
-                {innerHTML:'<span class="plus">&#43;</span>'},
-                {innerHTML:furl(github_root+detail_params,'<span class="mag">&#128269</span>')},      
+                {innerText:' '},
+                {innerText:' ')},      
              ];
          } else {
              values = [
