@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="fish.png" />
 <meta name="apple-mobile-web-app-title" content="Life List" />
 <link rel="manifest" href="fish.webmanifest" />
-<title>iNaturalist Angling Lifelists</title>
+<title></title>
 <style>
    :root {
       background: var(--color-base); 
@@ -76,6 +76,17 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 winurlparams.delete('id');
 winurlparams.append('id', '239695');
 
+// change title to merge if a user_id is passed in
+if( p_user_id ) {
+    let title = ('Merge '+p_user_id+' with...');
+    faddelem('h2',document.body,{innerText:title});
+    document.title = title;
+} else {
+    let title = ('iNaturalist Angling Lifelists');
+    faddelem('h2',document.body,{innerText:title});
+    document.title = title;
+}
+
 let p_user_id = winurlparams.get('user_id') || '';
    
 let view = winurlparams.get('view') || '';
@@ -106,22 +117,13 @@ function fresults(xobj) {
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
-      let labels = [];
 
-      if( p_user_id ) {
-          labels = [
-             {innerText:'User Icon'},
-             {innerText:'Life List For...'},
-             {innerText:' '},
-          ];
-      } else {
-          labels = [
+      let labels = [
              {innerText:'User Icon'},
              {innerText:'Life List For...'},
              {innerText:' '},
              {innerText:' '},
           ];
-      }
     
       faddelems('th',hrow,labels);
       
@@ -162,6 +164,7 @@ function fresults(xobj) {
                  values = [
                      {innerHTML:furl(root_people+rec.user.login,'<img class="icon" src="https://inaturalist-open-data.s3.amazonaws.com/photos/487183403/original.jpg"')},
                      {innerText:'peg'},
+                     {innerText:' '},
                      {innerHTML:furl(github_root+detail_params,'<span class="mag">&#128269</span>')},      
                  ];
              } else {
@@ -183,6 +186,7 @@ function fresults(xobj) {
              values = [
                 {innerHTML:furl(root_people+rec.user.login,user_icon)},
                 {innerHTML:furl(github_root+params,rec.user.login)},
+                {innerText:' '},
                 {innerHTML:furl(github_root+detail_params,'<span class="mag">&#128269</span>')},      
              ];
          } else {
