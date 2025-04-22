@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="fish.png" />
 <meta name="apple-mobile-web-app-title" content="Life List" />
 <link rel="manifest" href="fish.webmanifest" />
-<title></title>
+<title>iNaturalist Angling Lifelists</title>
 <style>
    :root {
       background: var(--color-base); 
@@ -51,8 +51,7 @@
    .tar { text-align:right; }
    .icon { height:48px; width:48px; border-radius:50%; }
    .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
-   .mag { font-size:1.500em; }
-   .plus { font-size:1.750em; }
+   .books { font-size:1.500em; }
    .photo { height:64px; width:64px; border-radius: 15px 15px 15px 15px; }
    img { margin:0; padding:0; border:0; }
    a { text-decoration:none; color:var(--color-text-link); }
@@ -62,6 +61,7 @@
    .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
    .button { background:var(--color-alt); }
    .button_inactive { background:none; color:var(--color-border); }
+
 </style>
 </head>
 
@@ -75,8 +75,6 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 // default the id's of the projects to be passed in to the projects api.
 winurlparams.delete('id');
 winurlparams.append('id', '239695');
-
-let p_user_id = winurlparams.get('user_id') || '';
    
 let view = winurlparams.get('view') || '';
 let activity_data = winurlparams.get('activity_data') || 'local';
@@ -89,7 +87,6 @@ winurlparams.delete('activity_data');
 <script>
 
 function fresults(xobj) {
-  
    let results = xobj.results;
    if (results) {
       let total_results = xobj.total_results;
@@ -107,14 +104,11 @@ function fresults(xobj) {
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
-
       let labels = [
-             {innerText:'User Icon'},
-             {innerText:'Life List For...'},
-             {innerText:' '},
-             {innerText:' '},
-          ];
-    
+         {innerText:'User Icon'},
+         {innerText:'Life List For...'},
+         {innerText:' '},
+      ];
       faddelems('th',hrow,labels);
       
       let tbody = faddelem('tbody',table);
@@ -135,52 +129,26 @@ function fresults(xobj) {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }
 
-         let params = '';
-
-         if( p_user_id ) {
-             params = ('life_list_merge.html?project_id=239695&user_id='+rec.user.login+','+p_user_id+'&tag_name=lifelist');
-         } else {
-             params = ('life_list.html?project_id=239695&user_id='+rec.user.login+'&tag_name=lifelist');
-         }
-       
+         let params = ('life_list.html?project_id=239695&user_id='+rec.user.login+'&tag_name=lifelist');
          let detail_params = ('configurable_obs_field_table.html?project_id=239695&user_id='+rec.user.login+'&obs_fields=17274,7615');
-         let compare_params = ('life_list_dashboard.html?user_id='+rec.user.login);
 
          if( rec.user.login === 'uconnbirdfish' ){
              params = ('life_list.html?project_id=239695&user_id='+rec.user.login+'&tag_name=pegslifelist');
-             let values = [];
-
-             if( !p_user_id ) {
-                 values = [
-                      {innerHTML:furl(root_people+rec.user.login,'<img class="icon" src="https://inaturalist-open-data.s3.amazonaws.com/photos/487183403/original.jpg"')},
-                      {innerHTML:furl(github_root+params,'peg')},
-                      {innerText:' '},
-                      {innerHTML:furl(github_root+detail_params,'<span class="mag">&#128269</span>')},      
-                 ];                 
-                 faddelems('td',brow,values);
-                 brow   = faddelem('tr',tbody);
-             }
+             let values = [
+                 {innerHTML:furl(root_people+rec.user.login,'<img class="icon" src="https://inaturalist-open-data.s3.amazonaws.com/photos/487183403/original.jpg"')},
+                 {innerHTML:furl(github_root+params,'peg')},
+                 {innerHTML:furl(github_root+detail_params,'<span class="books">&#128269</span>')},      
+             ];
+             faddelems('td',brow,values);
+             brow   = faddelem('tr',tbody);
              params = ('life_list.html?project_id=239695&user_id='+rec.user.login+'&tag_name=bobslifelist');
          }
-
-         let values = [];
-       
-         if( p_user_id ) {
-             values = [
-                {innerHTML:furl(root_people+rec.user.login,user_icon)},
-                {innerHTML:furl(github_root+params,rec.user.login)},
-                {innerText:' '},
-                {innerText:' '},      
-             ];
-         } else {
-             values = [
-                {innerHTML:furl(root_people+rec.user.login,user_icon)},
-                {innerHTML:furl(github_root+params,rec.user.login)},
-                {innerHTML:furl(github_root+compare_params,'<span class="plus">&#43;</span>')},
-                {innerHTML:furl(github_root+detail_params,'<span class="mag">&#128269</span>')},      
-             ];
-         }
-      
+         
+         let values = [
+            {innerHTML:furl(root_people+rec.user.login,user_icon)},
+            {innerHTML:furl(github_root+params,rec.user.login)},
+            {innerHTML:furl(github_root+detail_params,'<span class="books">&#128269</span>')},      
+         ];
          faddelems('td',brow,values);
       };
 
@@ -199,17 +167,8 @@ let apirefurl = 'https://api.inaturalist.org/v1/projects/239695/members';
 let apirefname = 'iNaturalist Angling Life Lists';
 let apiref = furl(apirefurl,apirefname);
 
-// change title to merge if a user_id is passed in
-if( p_user_id ) {
-    let title = ('Compare '+p_user_id+' with...');
-    faddelem('h2',document.body,{innerText:title});
-    document.title = title;
-} else {
-    let title = ('iNaturalist Angling Lifelists');
-    faddelem('h2',document.body,{innerText:title});
-    document.title = title;
-}
- 
+faddelem('h2',document.body,{innerText:apirefname});
+
 fetch(apiurl)
    .then((response) => {
       if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
