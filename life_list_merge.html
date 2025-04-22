@@ -391,8 +391,9 @@ function fresults(xobj) {
              let prev_query_params = ('user_id='+p_user_id);
              let prev_displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
              let prev_grid_title  = ('&title='+(pref_tax_name||tax_name));
-  
+  console.log('one');
              if( rec.taxon.id === prev_rec.taxon.id ) {
+              console.log('two');
                  match = 'yes';
                  values = [
                         {innerHTML:prev_tax_photo},
@@ -402,6 +403,7 @@ function fresults(xobj) {
                  
                  faddelems('td',brow,values);
              } else {
+              console.log('three');
                  if( match === 'no' ) {
                      values = [
                         {innerHTML:prev_tax_photo},
@@ -411,7 +413,7 @@ function fresults(xobj) {
                      faddelems('td',brow,values);
                  }
                  if( i === (results.length-1) ) {
-                     console.log('asd');
+                     console.log('four');
                      brow = faddelem('tr',tbody);
                      values = [
                         {innerHTML:tax_photo},
