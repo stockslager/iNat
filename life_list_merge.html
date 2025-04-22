@@ -340,9 +340,43 @@ function fresults(xobj) {
          let taxon = '';
          let brow = '';
          let prev_tax_photo = '';
-        console.log('1a');
-        // if( i > 0 ) {
-console.log('2a');
+
+         if( results.length === 1 ) {
+             let values = [];
+             brow = faddelem('tr',tbody);
+           
+             if( rec.taxon ){
+                 tax_id = rec.taxon.id;
+                 tax_name = rec.taxon.name || '';
+                 pref_tax_name = rec.taxon.preferred_common_name || '';
+            
+                 if( rec.taxon.default_photo ){
+                     if( rec.taxon.default_photo.url ){
+                         tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
+                     }
+                 }
+             }
+          
+             let query_params = ('user_id='+p_user_id);
+             let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
+             let grid_title  = ('&title='+(pref_tax_name||tax_name));
+
+             let user_icon = rec.user.icon || '';
+             if( user_icon === '' ){
+                 user_icon += '<div class="npcicon">&#x1F464;</div>';
+             } else {
+                 user_icon = '<img class="icon2" src="'+user_icon+'" />';
+             }
+
+             values = [
+                        {innerHTML:tax_photo},
+                        {innerHTML:furl(github_root+'life_list_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+grid_title,displayName)},
+                        {innerHTML:furl(root_people+rec.user.login,user_icon)},
+             ];
+             faddelems('td',brow,values);
+         }
+       
+         if( i > 0 ) {
              let values = [];
              brow = faddelem('tr',tbody);
            
@@ -391,9 +425,7 @@ console.log('2a');
              let prev_query_params = ('user_id='+p_user_id);
              let prev_displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
              let prev_grid_title  = ('&title='+(pref_tax_name||tax_name));
-  console.log('one');
              if( rec.taxon.id === prev_rec.taxon.id ) {
-              console.log('two');
                  match = 'yes';
                  values = [
                         {innerHTML:prev_tax_photo},
@@ -403,7 +435,6 @@ console.log('2a');
                  
                  faddelems('td',brow,values);
              } else {
-              console.log('three');
                  if( match === 'no' ) {
                      values = [
                         {innerHTML:prev_tax_photo},
@@ -425,7 +456,7 @@ console.log('2a');
        
                  match = 'no';
              } 
-         //}   
+         }   
          prev_rec = rec;
       };
 
