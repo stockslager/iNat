@@ -76,6 +76,8 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 winurlparams.delete('id');
 winurlparams.append('id', '239695');
 
+let p_user_id = winurlparams.get('user_id') || '';
+
 // change title to merge if a user_id is passed in
 if( p_user_id ) {
     let title = ('Merge '+p_user_id+' with...');
@@ -86,8 +88,6 @@ if( p_user_id ) {
     faddelem('h2',document.body,{innerText:title});
     document.title = title;
 }
-
-let p_user_id = winurlparams.get('user_id') || '';
    
 let view = winurlparams.get('view') || '';
 let activity_data = winurlparams.get('activity_data') || 'local';
