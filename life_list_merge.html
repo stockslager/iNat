@@ -276,7 +276,7 @@ function fresults(xobj) {
     
       if( !dd_opts ) {
           dd_opts = '<option value="" disabled selected hidden>Observation Method</option>';
-          dd_opts += ('<option value="life_list.html'+opts+'">All</option>');
+          dd_opts += ('<option value="life_list_merge.html'+opts+'">All</option>');
           for( let i=0; i<results.length; i++ ) {
              let rec = results[i];
 
@@ -285,7 +285,7 @@ function fresults(xobj) {
                   if( rec.ofvs[j].field_id.toString() === '17274' ) {           // Fish Observation Method
                       if( !dd_array.includes(rec.ofvs[j].value) ){
                           dd_array.push(rec.ofvs[j].value);
-                          dd_opts += ('<option value="life_list.html'+opts+'&field:'+rec.ofvs[j].name+'='+rec.ofvs[j].value+'">'+rec.ofvs[j].value+'</option>');
+                          dd_opts += ('<option value="life_list_merge.html'+opts+'&field:'+rec.ofvs[j].name+'='+rec.ofvs[j].value+'">'+rec.ofvs[j].value+'</option>');
                       }  
                   }
               }
