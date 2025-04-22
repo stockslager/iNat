@@ -321,15 +321,17 @@ function fresults(xobj) {
 
       let user = ('?user_id='+p_user_id);
 
+      {innerHTML:furl(github_root+'life_list_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+grid_title,displayName)},
+
       faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
-                                                   '<a href="#home">Home</a>' +
+                                                   'Life List' +
                                                    '<a href="#news">News</a>' +
                                                       '<div class="dropdown">' +
-                                                           '<button class="dropbtn">Dropdown ' +
+                                                           '<button class="dropbtn">Taxa ' +
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
-                                                                 '<a href="#">Link 1</a>' +
+                                                                 furl(github_root+'life_list.html?project_id='+p_project_id+'&user_id='+p_user_id+'&tag_name='+p_tag_name+'&taxon_id=47273','Elasmobranchs') +
                                                                  '<a href="#">Link 2</a>' +
                                                                  '<a href="#">Link 3</a>' +
                                                            '</div>' +
