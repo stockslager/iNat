@@ -268,7 +268,7 @@ let config       = [];
 // close pop-up if they click outside of pop-up
 window.onclick = function(event) { if (event.target == popup) { popup.style.display = "none"; } } 
 
-let opts = ('?project_id='+p_project_id+'&user_id='+p_user_id+'&tag_name='+p_tag_name);
+let opts = ('?project_id='+p_project_id+'&user_id='+p_user_id);
 
 if( p_title ){
     p_title = p_title.toLowerCase();
@@ -365,7 +365,7 @@ function fresults(xobj) {
                   if( rec.ofvs[j].field_id.toString() === '17274' ) {           // Fish Observation Method
                       if( !dd_array.includes(rec.ofvs[j].value) ){
                           dd_array.push(rec.ofvs[j].value);
-                          dd_opts += furl(github_root+'a_top.html'+opts+'&field:'+rec.ofvs[j].name+'='+rec.ofvs[j].value,rec.ofvs[j].value);
+                          dd_opts += furl(github_root+'a_top.html'+opts+'&tag_name='+p_tag_name+'&field:'+rec.ofvs[j].name+'='+rec.ofvs[j].value,rec.ofvs[j].value);
                           //dd_opts += ('<option value="life_list.html'+opts+'&field:'+rec.ofvs[j].name+'='+rec.ofvs[j].value+'">'+rec.ofvs[j].value+'</option>');
                       }  
                   }
