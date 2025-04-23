@@ -58,6 +58,7 @@
    .flowericon { padding-left:5%; font-size:14px; white-space: nowrap; font-style:normal; }
    .photo { height:54px; width:54px; border-radius: 5px 5px 5px 5px; }
    img { margin:0; padding:0; border:0; }
+   h2 { width:fit-content; min-width:375px; }
    p { width:fit-content; min-width:375px; }
    a { text-decoration:none; color:var(--color-text-link); }
    a:hover { background:var(--color-hover); }
@@ -418,9 +419,9 @@ function fresults(xobj) {
       //faddelem('p',document.body,{innerHTML:'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
       //                                      '</select></div></span>'});  
       if( p_title === '' ) {
-          faddelem('p',document.body,{innerHTML:('<span id="topright">Life List</span>')});
+          faddelem('h2',document.body,{innerHTML:('<span id="topright">Life List</span>')});
       } else {
-          faddelem('p',document.body,{innerHTML:('<span id="topright">'+p_title+'</span>')});
+          faddelem('h2',document.body,{innerHTML:('<span id="topright">'+p_title+'</span>')});
       }
 
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
