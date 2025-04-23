@@ -555,7 +555,7 @@ async function asyncGetData() {
 
    let required_params_missing = 'no';
 
-   if( winurlsearchstr==='' || p_tag_name === '' ) {
+   if( winurlsearchstr==='' || p_project_id === '' ) {
        required_params_missing = 'yes';
    } 
 
@@ -565,7 +565,7 @@ async function asyncGetData() {
 
    if( required_params_missing === 'yes' ) {
       let instructions = [
-         {innerText:'This page requires a user_id and a tag_name argument.  Add ?user_id=12345678&tag_name=xxxxxx to the end of the url.  '},
+         {innerText:'This page requires a project_id and a tag_name argument.  Add ?project_id=12345678 to the end of the url.  '},
       ];
       faddelems('p',document.body,instructions);
    } else {
