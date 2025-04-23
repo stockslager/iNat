@@ -49,11 +49,13 @@
    tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
    tr:nth-child(even) { background:var(--color-base); }
    .tar { text-align:right; }
-   .icon { height:48px; width:48px; border-radius:50%; }
+   .icon { height:34px; width:34px; border-radius:50%; }
    .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
    .books { font-size:1.500em; }
    .photo { height:64px; width:64px; border-radius: 15px 15px 15px 15px; }
    img { margin:0; padding:0; border:0; }
+   h2 { width:fit-content; min-width:375px; }
+   p { width:fit-content; min-width:375px; }
    a { text-decoration:none; color:var(--color-text-link); }
    a:hover { background:var(--color-hover); }
    #nav { margin-left:-8px; position:-webkit-sticky /*Safari*/; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
@@ -62,6 +64,80 @@
    .button { background:var(--color-alt); }
    .button_inactive { background:none; color:var(--color-border); }
 
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  border-radius: 5px 5px 5px 5px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.navbar a {
+  float: left;
+  font-size: 14px;
+  color: white;
+  text-align: center;
+  padding: 12px 14px;
+  text-decoration: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  cursor: pointer;
+  font-size: 14px;  
+  border: none;
+  outline: none;
+  color: white;
+  padding: 12px 14px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn, .dropbtn:focus {
+  background-color: black;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 10px 14px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+ 
+.dropdown-content a:first-child {
+  border-radius: 5px 5px 0 0;
+}
+
+.dropdown-content a:last-child {
+  border-radius: 0 0 5px 5px;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.show {
+  display: block;
+}
 </style>
 </head>
 
@@ -73,8 +149,26 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 
 // default the id's of the projects to be passed in to the projects api.
-winurlparams.delete('id');
-winurlparams.append('id', '239695');
+winurlparams.delete('project_id');
+winurlparams.append('project_id', '239695');
+
+let p_place_id = winurlparams.get('place_id') || '';
+let p_taxon_id = winurlparams.get('taxon_id') || '';
+
+let place_opt = '';
+let taxon_opt = '';
+let opts = ''
+
+if( p_place_id ) {
+    place_opt += ('&place_id='+p_place_id);
+    opts      += ('&place_id='+p_place_id);
+
+}
+
+if( p_taxon_id ) {
+    taxon_opt += ('&taxon_id='+p_taxon_id);
+    opts      += ('&taxon_id='+p_taxon_id);
+}
    
 let view = winurlparams.get('view') || '';
 let activity_data = winurlparams.get('activity_data') || 'local';
@@ -105,10 +199,12 @@ function fresults(xobj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
       let labels = [
-         {innerText:'User Icon'},
-         {innerText:'Life List For...'},
+         {innerText:'#'},
+         {innerText:'User'},
          {innerText:' '},
-         {innerText:' '},
+         {innerText:'Map'},
+         {innerText:'Species Count'},
+         {innerText:'Obs Count'},
       ];
       faddelems('th',hrow,labels);
       
@@ -130,27 +226,31 @@ function fresults(xobj) {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }
 
-         let params = ('life_list.html?project_id=239695&user_id='+rec.user.login+'&tag_name=lifelist');
+         let params = ('a_top.html?project_id=239695&user_id='+rec.user.login+'&tag_name=lifelist');
          let detail_params = ('configurable_obs_field_table.html?project_id=239695&user_id='+rec.user.login+'&obs_fields=17274,7615');
 
          if( rec.user.login === 'uconnbirdfish' ){
              params = ('life_list.html?project_id=239695&user_id='+rec.user.login+'&tag_name=pegslifelist');
-             let values = [
+             /*let values = [
                  {innerHTML:furl(root_people+rec.user.login,'<img class="icon" src="https://inaturalist-open-data.s3.amazonaws.com/photos/487183403/original.jpg"')},
-                 {innerHTML:furl(github_root+params,'peg')},
+                 {innerHTML:furl(github_root+params+opts,'peg')},
                  {innerText:' '},
-                 {innerHTML:furl(github_root+detail_params,'<span class="books">&#128269</span>')},      
+                 {innerHTML:furl(github_root+detail_params+opts,'<span class="books">&#128269</span>')},      
              ];
              faddelems('td',brow,values);
-             brow   = faddelem('tr',tbody);
-             params = ('life_list.html?project_id=239695&user_id='+rec.user.login+'&tag_name=bobslifelist');
+             brow   = faddelem('tr',tbody);*/
+             params = ('life_list.html?project_id=239695&user_id='+rec.user.login+opts);
          }
          
          let values = [
-            {innerHTML:furl(root_people+rec.user.login,user_icon)},
-            {innerHTML:furl(github_root+params,rec.user.login)},
-            {innerText:rec.taxa_count},
-            {innerHTML:furl(github_root+detail_params,'<span class="books">&#128269</span>')},      
+            {innerText:i+1},
+            {innerHTML:user_icon},
+            {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
+            //{innerHTML:furl(github_root+params+opts,rec.user.login)},
+            {innerHTML:furl(github_root+'life_list_map.html?project_id=239695'+opts+'&user_id='+rec.user.login,'<span class="books">&#127758</span>')},
+            {innerHTML:furl(github_root+params+opts,rec.species_count)},
+            {innerHTML:furl(github_root+detail_params+opts,rec.observation_count)},      
+            //{innerHTML:furl(github_root+detail_params+opts,'<span class="books">&#128269</span>')},      
          ];
          faddelems('td',brow,values);
       };
@@ -164,13 +264,65 @@ function fresults(xobj) {
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); };
 };
-let apibase = 'https://api.inaturalist.org/v1/projects/239695/members';
+let apibase = 'https://api.inaturalist.org/v1/observations/observers';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-let apirefurl = 'https://api.inaturalist.org/v1/projects/239695/members';
+let apirefurl = 'https://api.inaturalist.org/v1/observations/observers';
 let apirefname = 'iNaturalist Angling Life Lists';
 let apiref = furl(apirefurl,apirefname);
 
-faddelem('h2',document.body,{innerText:apirefname});
+      faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
+                                                   /*'<a href="#news">News</a>' +*/
+                                                      '<div class="dropdown">' +
+                                                           '<button class="dropbtn">Place' +
+                                                             '<i class="fa fa-caret-down"></i>' +
+                                                           '</button>' +
+                                                           '<div class="dropdown-content">' +
+                                                                 furl(github_root+'life_list_dashboard.html?project_id=239695'+taxon_opt,'All') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=14'+opts,'California') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=49'+opts,'Connecticut') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=21'+opts,'Florida') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=35'+opts,'Illinois') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=26'+opts,'Kentucky') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=27'+opts,'Louisiana') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=17'+opts,'Maine') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=2'+opts,'Massachusetts') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=29'+opts,'Michigan') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=31'+opts,'Ohio') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=45'+opts,'Tennessee') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=18'+opts,'Texas') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=32'+opts,'Wisconsin') +
+
+                                                           '</div>' +
+                                                       '</div>' +
+                                                      '<div class="dropdown">' +
+                                                           '<button class="dropbtn">Taxa' +
+                                                             '<i class="fa fa-caret-down"></i>' +
+                                                           '</button>' +
+                                                           '<div class="dropdown-content">' +
+                                                                 furl(github_root+'life_list_dashboard.html?project_id=239695'+place_opt,'All') +
+                                                                 furl(github_root+'life_list_dashboard.html?taxon_id=1303731'+opts,'Centrarchiformes') +
+                                                                 furl(github_root+'life_list_dashboard.html?taxon_id=47273'+opts,'Elasmobranchs') +
+                                                           '</div>' +
+                                                       '</div>' + 
+                                                      /*'<div class="dropdown">' +
+                                                           '<button class="dropbtn">Tags' +
+                                                             '<i class="fa fa-caret-down"></i>' +
+                                                           '</button>' +
+                                                           '<div class="dropdown-content">' + tags +
+                                                           '</div>' +
+                                                       '</div>' +
+                                                      '<div class="dropdown">' +
+                                                           '<button class="dropbtn">Method' +
+                                                             '<i class="fa fa-caret-down"></i>' +
+                                                           '</button>' +
+                                                           '<div class="dropdown-content">' + dd_opts + 
+                                                           '</div>' +
+                                                       '</div>' +
+                                                   //'<div id="home">'+furl(github_root+'life_list_dashboard.html','&#12803')+'</div>' +
+                                                   '<div id="home">'+furl(github_root+'life_list_dashboard.html','Anglers')+'</div>' +*/
+                                              '</div>')});
+
+//faddelem('h2',document.body,{innerText:apirefname});
 
 fetch(apiurl)
    .then((response) => {
