@@ -422,16 +422,16 @@ function fresults(xobj) {
       let user_icon = results[0].user.icon || '';
          
       if( user_icon === '' ){
-          user_icon += '<div style="display:flex; align-items:center;"><div class="npcicon">&#x1F464;</div>';
+          user_icon += '<span id="topright"><div style="display:flex; align-items:center;"><div class="npcicon">&#x1F464;</div>';
       } else {
-          user_icon = '<div style="display:flex; align-items:center; padding-right:20px;"><img class="smallicon" src="'+user_icon+'" />';
+          user_icon = '<span id="topright"><div style="display:flex; align-items:center;"><img class="smallicon" src="'+user_icon+'" />';
           //user_icon = '<img class="smallicon" src="'+user_icon+'" />';
       }
         
       if( p_title === '' ) {
-          faddelem('h2',document.body,{innerHTML:('<span id="topright">'+user_icon+' Life List</span></div>')});
+          faddelem('h2',document.body,{innerHTML:(user_icon+' Life List</div></span>')});
       } else {
-          faddelem('h2',document.body,{innerHTML:('<span id="topright">'+user_icon+' '+p_title+'</span></div>')});
+          faddelem('h2',document.body,{innerHTML:(user_icon+' '+p_title+'</span></div></span>')});
       }
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
