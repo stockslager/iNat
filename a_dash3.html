@@ -190,6 +190,19 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
+      let table = faddelem('table',document.body,{id:'main'});
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+      let labels = [
+         {innerText:'#'},
+         {innerText:' User'},
+         {innerText:' '},
+         {innerText:'Species Count'},
+         {innerText:'obs count'},
+      ];
+      faddelems('th',hrow,labels);
+      
+      let tbody = faddelem('tbody',table);
       for (let i=0; i<results.length; i++) {
          let target_url = '';     
          let brow = faddelem('tr',tbody);
@@ -199,36 +212,20 @@ function fresults(xobj) {
          let lists = '';
          let location = '';
 
-         if( i === 0 ) {
-             let table = faddelem('table',document.body,{id:'main'});
-             let thead = faddelem('thead',table);
-             let hrow = faddelem('tr',thead);
-             let labels = [
-                {innerText:'#'},
-                {innerText:' User'},
-                {innerText:' '},
-                {innerText:'Species Count'},
-                {innerText:'obs count'},
-             ];
-             faddelems('th',hrow,labels);
-      
-             let tbody = faddelem('tbody',table);
-          
-             if( p_place_id ) {
-                 location += p_place_id+' | ';
-                 if( p_taxon_id ) {
-                     location += p_taxon_id;
-                 }
-             } else if( p_taxon_id ) {
+         if( p_place_id ) {
+             location += p_place_id+' | ';
+             if( p_taxon_id ) {
                  location += p_taxon_id;
              }
-             //faddelem('p',document.body,{innerHTML:('<span id="topright">'+location+'</span>')});
-           
-             faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results)+'<br />' 
-                +'per page: '+fcomnum(per_page)+'<br />'
-                +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<span id="topright">'+location+'</span><br />'
-                });
+         } else if( p_taxon_id ) {
+             location += p_taxon_id;
          }
+         faddelem('p',document.body,{innerHTML:('<span id="topright">'+location+'</span>')});
+           
+      faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results)+'<br />' 
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
+            });
        
          //target_url += 'https://stockslager.github.io/iNat/reseed_plants_visited.html?project_id='+rec.id+lists;
          let user_icon = rec.user.icon || '';
