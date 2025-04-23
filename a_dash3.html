@@ -157,13 +157,17 @@ let p_taxon_id = winurlparams.get('taxon_id') || '';
 
 let place_opt = '';
 let taxon_opt = '';
+let opts = ''
 
 if( p_place_id ) {
     place_opt += ('&place_id='+p_place_id);
+    opts      += ('&place_id='+p_place_id);
+
 }
 
 if( p_taxon_id ) {
     taxon_opt += ('&taxon_id='+p_taxon_id);
+    opts      += ('&taxon_id='+p_taxon_id);
 }
    
 let view = winurlparams.get('view') || '';
