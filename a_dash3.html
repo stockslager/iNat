@@ -190,19 +190,6 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let table = faddelem('table',document.body,{id:'main'});
-      let thead = faddelem('thead',table);
-      let hrow = faddelem('tr',thead);
-      let labels = [
-         {innerText:'#'},
-         {innerText:' User'},
-         {innerText:' '},
-         {innerText:'Species Count'},
-         {innerText:'obs count'},
-      ];
-      faddelems('th',hrow,labels);
-      
-      let tbody = faddelem('tbody',table);
       for (let i=0; i<results.length; i++) {
          let target_url = '';     
          let brow = faddelem('tr',tbody);
@@ -213,6 +200,20 @@ function fresults(xobj) {
          let location = '';
 
          if( i === 0 ) {
+             let table = faddelem('table',document.body,{id:'main'});
+             let thead = faddelem('thead',table);
+             let hrow = faddelem('tr',thead);
+             let labels = [
+                {innerText:'#'},
+                {innerText:' User'},
+                {innerText:' '},
+                {innerText:'Species Count'},
+                {innerText:'obs count'},
+             ];
+             faddelems('th',hrow,labels);
+      
+             let tbody = faddelem('tbody',table);
+          
              if( p_place_id ) {
                  location += p_place_id+' | ';
                  if( p_taxon_id ) {
