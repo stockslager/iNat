@@ -335,19 +335,11 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let labels = [];
-      let dlString = '';
 
       let user = ('?user_id='+p_user_id);
 
      // faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'life_list_dashboard.html','&#128031;')+'</span>') });
  
-      if( p_title === '' ) {
-          dlString = 'Life List';
-          faddelem('h2',document.body,{innerText:(dlString)});
-      } else {
-          faddelem('h2',document.body,{innerText:(p_title)});
-      }
-
       let dd_opts = '';
       let dd_array = [];
       dd_opts_string = sessionStorage.getItem((p_user_id+p_tag_name+'dd_opts'));
@@ -423,8 +415,14 @@ function fresults(xobj) {
                                                    '<span id="home">'+furl(github_root+'life_list_dashboard.html','&#128031;')+'</span>' +
                                               '</div>')});
 
-      faddelem('p',document.body,{innerHTML:'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
-                                            '</select></div></span>'});  
+      //faddelem('p',document.body,{innerHTML:'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
+      //                                      '</select></div></span>'});  
+      if( p_title === '' ) {
+          faddelem('h2',document.body,{innerHTML:('<span id="topright">Life List</span>')});
+      } else {
+          faddelem('h2',document.body,{innerHTML:('<span id="topright">'+p_title+'</span>')});
+      }
+
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max) 
