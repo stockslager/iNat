@@ -370,7 +370,20 @@ function fresults(xobj) {
          sessionStorage.setItem((p_user_id+p_tag_name+p_taxon_id+p_place_id+'dd_opts'), dd_opts);
       } 
 
-      console.log('dd: '+dd_opts);
+      let user_icon = rec.user.icon || '';
+         
+      if( user_icon === '' ){
+          user_icon += '<div class="npcicon">&#x1F464;</div>';
+      } else {
+          user_icon = '<img class="icon" src="'+user_icon+'" />';
+      }
+    
+      if( p_title === '' ) {
+          faddelem('h2',document.body,{innerHTML:(user_icon+' Life List')});
+      } else {
+          faddelem('h2',document.body,{innerHTML:user_icon+' '+p_title});
+      }
+    
       faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
                                                    /*'<a href="#news">News</a>' +*/
                                                       '<div class="dropdown">' +
@@ -418,11 +431,6 @@ function fresults(xobj) {
 
       //faddelem('p',document.body,{innerHTML:'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
       //                                      '</select></div></span>'});  
-      if( p_title === '' ) {
-          faddelem('h2',document.body,{innerHTML:('<span id="topright">Life List</span>')});
-      } else {
-          faddelem('h2',document.body,{innerHTML:('<span id="topright">'+p_title+'</span>')});
-      }
 
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
