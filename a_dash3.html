@@ -49,7 +49,7 @@
    tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
    tr:nth-child(even) { background:var(--color-base); }
    .tar { text-align:right; }
-   .icon { height:48px; width:48px; border-radius:50%; }
+   .icon { height:34px; width:34px; border-radius:50%; }
    .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
    .books { font-size:1.500em; }
    .photo { height:64px; width:64px; border-radius: 15px 15px 15px 15px; }
@@ -195,9 +195,8 @@ function fresults(xobj) {
       let hrow = faddelem('tr',thead);
       let labels = [
          {innerText:'User Icon'},
-         {innerText:'Life List For...'},
-         {innerText:' '},
-         {innerText:' '},
+         {innerText:'Species Count'},
+         {innerText:'obs count'},
       ];
       faddelems('th',hrow,labels);
       
@@ -236,10 +235,10 @@ function fresults(xobj) {
          }
          
          let values = [
-            {innerHTML:furl(root_people+rec.user.login,user_icon)},
-            {innerHTML:furl(github_root+params+opts,rec.user.login)},
-            {innerText:rec.species_count},
-            {innerHTML:furl(github_root+detail_params+opts,'<span class="books">rec.observations_count</span>')},      
+            {innerHTML:furl(root_people+rec.user.login,user_icon+' '+rec.user.login)},
+            //{innerHTML:furl(github_root+params+opts,rec.user.login)},
+            {innerHTML:furl(github_root+params+opts,rec.species_count)},
+            {innerHTML:furl(github_root+detail_params+opts,'<span class="books">'rec.observations_count'</span>')},      
             //{innerHTML:furl(github_root+detail_params+opts,'<span class="books">&#128269</span>')},      
          ];
          faddelems('td',brow,values);
