@@ -434,19 +434,26 @@ function fresults(xobj) {
       //faddelem('p',document.body,{innerHTML:'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
       //                                      '</select></div></span>'});  
 
-      let user_icon = results[0].user.icon || '';
+      if( results.length === 0 ) {
+          let instructions = [
+              {innerText:'The "lifelist" tag needs to be added to any observation added to the project that you want to appear in this table.'},
+          ];
+          faddelems('p',document.body,instructions);
+      } else {
+          let user_icon = results[0].user.icon || '';
          
-      if( user_icon === '' ){
-          user_icon += '<span id="topright"><div style="display:flex; align-items:center;"><div class="npcicon">&#x1F464;</div>';
-      } else {
-          user_icon = '<span id="topright"><div style="display:flex; align-items:center;"><img class="smallicon" src="'+user_icon+'" />';
-          //user_icon = '<img class="smallicon" src="'+user_icon+'" />';
-      }
+          if( user_icon === '' ){
+              user_icon += '<span id="topright"><div style="display:flex; align-items:center;"><div class="npcicon">&#x1F464;</div>';
+          } else {
+              user_icon = '<span id="topright"><div style="display:flex; align-items:center;"><img class="smallicon" src="'+user_icon+'" />';
+              //user_icon = '<img class="smallicon" src="'+user_icon+'" />';
+          }
         
-      if( p_title === '' ) {
-          faddelem('h2',document.body,{innerHTML:(user_icon+'<span style="padding-left:10px;">Life List</span></div></span>')});
-      } else {
-          faddelem('h2',document.body,{innerHTML:(user_icon+'<span style="padding-left:10px;">'+p_title+'</span></div></span>')});
+          if( p_title === '' ) {
+              faddelem('h2',document.body,{innerHTML:(user_icon+'<span style="padding-left:10px;">Life List</span></div></span>')});
+          } else {
+              faddelem('h2',document.body,{innerHTML:(user_icon+'<span style="padding-left:10px;">'+p_title+'</span></div></span>')});
+          }
       }
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
@@ -471,13 +478,6 @@ function fresults(xobj) {
 
       // may need to revisit this if species_guess is ever null
       //results = sortWithNull(results);
-
-      if( results.length === 0 ) {
-          let instructions = [
-              {innerText:'The "lifelist" tag needs to be added to any observation added to the project that you want to appear in this table.'},
-          ];
-          faddelems('p',document.body,instructions);
-      }
     
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
