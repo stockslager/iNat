@@ -423,15 +423,16 @@ function fresults(xobj) {
       let user_icon = results[0].user.icon || '';
          
       if( user_icon === '' ){
-          user_icon += '<div class="npcicon">&#x1F464;</div>';
+          user_icon += '<div style="display:flex; align-items:center;"><div class="npcicon">&#x1F464;</div>';
       } else {
-          user_icon = '<img class="smallicon" src="'+user_icon+'" />';
+          user_icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+user_icon+'" />';
+          //user_icon = '<img class="smallicon" src="'+user_icon+'" />';
       }
         
       if( p_title === '' ) {
-          faddelem('h2',document.body,{innerHTML:('<span id="topright">'+user_icon+'<span id="header"> Life List</span></span>')});
+          faddelem('h2',document.body,{innerHTML:('<span id="topright">'+user_icon+' Life List</span></div>')});
       } else {
-          faddelem('h2',document.body,{innerHTML:('<span id="topright">'+user_icon+'<span id="header"> '+p_title+'</span></span>')});
+          faddelem('h2',document.body,{innerHTML:('<span id="topright">'+user_icon+' '+p_title+'</span></div>')});
       }
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
