@@ -42,7 +42,7 @@
    }  
    #key { color:var(--color-text-link); }
    #main { width:fit-content; min-width:375px; }
-   table, td { verticle-align:text-top; }, th { border-collapse:collapse; margin:0px; padding:5px; }
+   table, td, th { border-collapse:collapse; margin:0px; padding:5px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
    th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }   
@@ -194,7 +194,8 @@ function fresults(xobj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
       let labels = [
-         {innerText:'User Icon'},
+         {innerText:' User'},
+         {innerText:' '},
          {innerText:'Species Count'},
          {innerText:'obs count'},
       ];
@@ -235,7 +236,8 @@ function fresults(xobj) {
          }
          
          let values = [
-            {innerHTML:furl(root_people+rec.user.login,'<span style="vertical-align:text-top;">'+user_icon+' '+rec.user.login+'</span>')},
+            {innerHTML:user_icon},
+            {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
             //{innerHTML:furl(github_root+params+opts,rec.user.login)},
             {innerHTML:furl(github_root+params+opts,rec.species_count)},
             {innerHTML:furl(github_root+detail_params+opts,rec.observation_count)},      
