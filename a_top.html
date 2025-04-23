@@ -344,10 +344,13 @@ function fresults(xobj) {
  
       let dd_opts = '';
       let dd_array = [];
-      dd_opts_string = sessionStorage.getItem((p_user_id+p_tag_name+'dd_opts'));
+      let tags = '';
+      let tags_array = [];
+      dd_opts_string = sessionStorage.getItem((p_user_id+p_tag_name+p_taxon_id+p_place_id+'dd_opts'));
 
       if (dd_opts_string) {
           dd_opts = dd_opts_string;
+          tags    = sessionStorage.getItem((p_user_id+p_tag_name+p_taxon_id+p_place_id+'tags'));
       }
     
       if( !dd_opts ) {
@@ -366,9 +369,18 @@ function fresults(xobj) {
                           //dd_opts += ('<option value="life_list.html'+opts+'&field:'+rec.ofvs[j].name+'='+rec.ofvs[j].value+'">'+rec.ofvs[j].value+'</option>');
                       }  
                   }
+                  if( rec.tags ) {
+                      for( let m=0; m<rec.tags.length; m++ ) {
+                           if( !tags_array.includes(rec.tags[m]) ) {
+                               tags_array.push(rec.tags[m]);
+                               tags += furl(github_root+'a_top.html'+opts,rec.tags[m]);
+                           }
+                      }
+                  }
               }
          } 
          sessionStorage.setItem((p_user_id+p_tag_name+p_taxon_id+p_place_id+'dd_opts'), dd_opts);
+         sessionStorage.setItem((p_user_id+p_tag_name+p_taxon_id+p_place_id+'tags'), tags);
       } 
 
       faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
