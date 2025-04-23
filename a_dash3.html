@@ -212,20 +212,22 @@ function fresults(xobj) {
          let lists = '';
          let location = '';
 
-         if( p_place_id ) {
-             location += p_place_id+' | ';
-             if( p_taxon_id ) {
+         if( i === 0 ) {
+             if( p_place_id ) {
+                 location += p_place_id+' | ';
+                 if( p_taxon_id ) {
+                     location += p_taxon_id;
+                 }
+             } else if( p_taxon_id ) {
                  location += p_taxon_id;
              }
-         } else if( p_taxon_id ) {
-             location += p_taxon_id;
-         }
-         faddelem('p',document.body,{innerHTML:('<span id="topright">'+location+'</span>')});
+             //faddelem('p',document.body,{innerHTML:('<span id="topright">'+location+'</span>')});
            
-      faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results)+'<br />' 
-            +'per page: '+fcomnum(per_page)+'<br />'
-            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
-            });
+             faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results)+'<br />' 
+                +'per page: '+fcomnum(per_page)+'<br />'
+                +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<span id="topright">'+location+'</span><br />'
+                });
+         }
        
          //target_url += 'https://stockslager.github.io/iNat/reseed_plants_visited.html?project_id='+rec.id+lists;
          let user_icon = rec.user.icon || '';
