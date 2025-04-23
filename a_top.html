@@ -371,6 +371,14 @@ function fresults(xobj) {
          } 
          sessionStorage.setItem((p_user_id+p_tag_name+p_taxon_id+p_place_id+'dd_opts'), dd_opts);
       } 
+
+      let user_icon = results[0].user.icon || '';
+         
+      if( user_icon === '' ){
+          user_icon += '<div class="npcicon">&#x1F464;</div>';
+      } else {
+          user_icon = '<img class="icon" src="'+user_icon+'" />';
+      }
     
       faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
                                                    user_icon+' Life List' +
@@ -420,13 +428,6 @@ function fresults(xobj) {
 
       //faddelem('p',document.body,{innerHTML:'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
       //                                      '</select></div></span>'});  
-      let user_icon = results[0].user.icon || '';
-         
-      if( user_icon === '' ){
-          user_icon += '<div class="npcicon">&#x1F464;</div>';
-      } else {
-          user_icon = '<img class="icon" src="'+user_icon+'" />';
-      }
     
       if( p_title === '' ) {
           faddelem('h2',document.body,{innerHTML:('<span id="topright">'+user_icon+'<span id="header"> Life List</span></span>')});
