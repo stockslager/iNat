@@ -183,6 +183,10 @@ winurlparams.delete('activity_data');
 function fresults(result) {
  console.log('five '+result.total_results);
    if (result) {
+      // Parse the string back to an object
+      const result = JSON.parse(result);
+      console.log('parsed session ' +result);
+
       let total_results = result.total_results;
       let per_page = result.per_page;
       let page_curr = result.page;
@@ -194,7 +198,7 @@ function fresults(result) {
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });
-console.log('six');
+
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
@@ -214,7 +218,6 @@ console.log('six');
          let brow = faddelem('tr',tbody);
          let rec = result.recs[i];
          let lists = '';
-console.log('seven');
          //target_url += 'https://stockslager.github.io/iNat/reseed_plants_visited.html?project_id='+rec.id+lists;
          let user_icon = rec.user.icon || '';
          
@@ -276,6 +279,26 @@ class Record {
   
 function storeData(xobj) {
    let results = xobj.results;
+
+
+
+
+// Store the string in session storage
+sessionStorage.setItem("myObject", serializedObject);
+
+// Retrieving the object
+const storedObjectString = sessionStorage.getItem("myObject");
+
+// Check if value exists before parsing
+if (storedObjectString) {
+  // Parse the string back to an object
+  const retrievedObject = JSON.parse(storedObjectString);
+  console.log(retrievedObject);
+} else {
+  console.log("No object found in session storage for key 'myObject'");
+}
+
+ 
   
    if (results) {
       let record_array = [];
@@ -285,7 +308,10 @@ function storeData(xobj) {
       }
       console.log( 'tot '+xobj.total_results);
       const result = new Result( xobj.total_results.toString(), xobj.per_page, xobj.page, record_array );
-      sessionStorage.setItem('anglers', result);
+
+      // Serialize the object to JSON string so it can be stored in session
+      const result_string = JSON.stringify(result);
+      sessionStorage.setItem('anglers', result_string);
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); };
 console.log('session: '+sessionStorage.getItem('anglers'));
