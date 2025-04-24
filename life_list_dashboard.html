@@ -1,5 +1,5 @@
 <!DOCTYPE html> 
-<html lang="en">
+<html lang="en"> 
  
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -42,10 +42,12 @@
    }  
    #key { color:var(--color-text-link); }
    #main { width:fit-content; min-width:375px; }
+   #arrows { text-decoration:none; color:black; }
    table, td, th { border-collapse:collapse; margin:0px; padding:5px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
-   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }   
+   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }  
+   .arrow { font-size:1.000em; }
    tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
    tr:nth-child(even) { background:var(--color-base); }
    .tar { text-align:right; }
@@ -147,6 +149,11 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let p_sort       = winurlparams.get('sort') || '';
+
+// cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
+// session storage is only used for sorting of data in columns at this point.
+let p_cache_check = winurlparams.get('cache_check') || 'no';  
 
 // default the id's of the projects to be passed in to the projects api.
 winurlparams.delete('project_id');
@@ -157,6 +164,7 @@ let p_taxon_id = winurlparams.get('taxon_id') || '';
 
 let place_opt = '';
 let taxon_opt = '';
+let sort_opt  = '';
 let opts = ''
 
 if( p_place_id ) {
@@ -169,6 +177,10 @@ if( p_taxon_id ) {
     taxon_opt += ('&taxon_id='+p_taxon_id);
     opts      += ('&taxon_id='+p_taxon_id);
 }
+
+if( p_sort ) {
+    sort_opt += ('&sort='+p_sort);
+}
    
 let view = winurlparams.get('view') || '';
 let activity_data = winurlparams.get('activity_data') || 'local';
@@ -180,12 +192,64 @@ winurlparams.delete('activity_data');
 
 <script>
 
-function fresults(xobj) {
-   let results = xobj.results;
-   if (results) {
-      let total_results = xobj.total_results;
-      let per_page = xobj.per_page;
-      let page_curr = xobj.page;
+function furlArrow(url,txt=url) { return '<a href="'+url+'" id="arrows">'+txt+'</a>'; };
+
+function sortWithNull(arr, ascending) {
+  for( let i=0; i<arr.length; i++ ) {
+       if( arr[i].user_login ){
+           arr[i].user_login = arr[i].user_login.toLowerCase();
+       }
+  }
+  arr.sort(function(a, b) {
+    if (!a.user_login && !b.user_login) return 0;
+    if (!a.user_login) return ascending ? 1 : -1;
+    if (!b.user_login) return ascending ? -1 : 1;
+    if (a.user_login < b.user_login) return ascending ? -1 : 1;
+    if (a.user_login > b.user_login) return ascending ? 1 : -1;
+    return 0;
+  });
+  return arr;
+}
+
+function sortWithNullSpecies(arr, ascending) {
+  arr.sort(function(a, b) {
+    if (!a.species_count && !b.species_count) return 0;
+    if (!a.species_count) return ascending ? 1 : -1;
+    if (!b.species_count) return ascending ? -1 : 1;
+    if (a.species_count < b.species_count) return ascending ? -1 : 1;
+    if (a.species_count > b.species_count) return ascending ? 1 : -1;
+    return 0;
+  });
+  return arr;
+}
+
+function sortWithNullObs(arr, ascending) {
+  arr.sort(function(a, b) {
+    if (!a.obs_count && !b.obs_count) return 0;
+    if (!a.obs_count) return ascending ? 1 : -1;
+    if (!b.obs_count) return ascending ? -1 : 1;
+    if (a.obs_count < b.obs_count) return ascending ? -1 : 1;
+    if (a.obs_count > b.obs_count) return ascending ? 1 : -1;
+    return 0;
+  });
+  return arr;
+}
+ 
+function fresults(result) {
+
+   if (result) {
+
+      // may need to revisit this if there is more than one page of data
+      if( p_sort === 'uuser' )    { result.recs = sortWithNull(result.recs, true); }
+      if( p_sort === 'duser' )    { result.recs = sortWithNull(result.recs, false); }
+      if( p_sort === 'uspecies' ) { result.recs = sortWithNullSpecies(result.recs, true); }
+      if( p_sort === 'dspecies' ) { result.recs = sortWithNullSpecies(result.recs, false); }
+      if( p_sort === 'uobs' )     { result.recs = sortWithNullObs(result.recs, true); }
+      if( p_sort === 'dobs' )     { result.recs = sortWithNullObs(result.recs, false); }
+
+      let total_results = result.total_results;
+      let per_page = result.per_page;
+      let page_curr = result.page;
       let page_max = Math.ceil(total_results/per_page);
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
@@ -198,27 +262,28 @@ function fresults(xobj) {
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
+
+      let sort_url = (github_root+'life_list_dashboard.html?project_id=239695'+opts+'&cache_check=yes');
+
+      
+                      
       let labels = [
          {innerText:'#'},
-         {innerText:'User'},
-         {innerText:' '},
+         {innerText:'User '},
+         {innerHTML:' <div style="display:flex; align-items:center;">'+furlArrow(sort_url+'&sort=duser','&#11015') + furlArrow(sort_url+'&sort=uuser','&#11014</div>')},
          {innerText:'Map'},
-         {innerText:'Species Count'},
-         {innerText:'Obs Count'},
+         {innerHTML:'Species'+furlArrow(sort_url+'&sort=dspecies','&#11015') + furlArrow(sort_url+'&sort=uspecies','&#11014')},
+         {innerHTML:'Obs'+furlArrow(sort_url+'&sort=dobs','&#11015') + furlArrow(sort_url+'&sort=uobs','&#11014')},
       ];
       faddelems('th',hrow,labels);
       
       let tbody = faddelem('tbody',table);
-      for (let i=0; i<results.length; i++) {
+      for (let i=0; i<result.recs.length; i++) {
          let target_url = '';     
          let brow = faddelem('tr',tbody);
-         let rec = results[i];
-         let longText = rec.description||'';
-         let truncatedText = truncate(stripHtml(longText), 500);
+         let rec = result.recs[i];
          let lists = '';
-
-         //target_url += 'https://stockslager.github.io/iNat/reseed_plants_visited.html?project_id='+rec.id+lists;
-         let user_icon = rec.user.icon || '';
+         let user_icon = rec.icon || '';
          
          if( user_icon === '' ){
             user_icon += '<div class="npcicon">&#x1F464;</div>';
@@ -226,30 +291,22 @@ function fresults(xobj) {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }
 
-         let params = ('a_top.html?project_id=239695&user_id='+rec.user.login+'&tag_name=lifelist');
-         let detail_params = ('configurable_obs_field_table.html?project_id=239695&user_id='+rec.user.login+'&obs_fields=17274,7615');
+         let params = ('life_list.html?project_id=239695&user_id='+rec.user_login+'&tag_name=lifelist');
+         let detail_params = ('configurable_obs_field_table.html?project_id=239695&user_id='+rec.user_login+'&obs_fields=17274,7615');
 
-         if( rec.user.login === 'uconnbirdfish' ){
-             params = ('life_list.html?project_id=239695&user_id='+rec.user.login+'&tag_name=pegslifelist');
-             /*let values = [
-                 {innerHTML:furl(root_people+rec.user.login,'<img class="icon" src="https://inaturalist-open-data.s3.amazonaws.com/photos/487183403/original.jpg"')},
-                 {innerHTML:furl(github_root+params+opts,'peg')},
-                 {innerText:' '},
-                 {innerHTML:furl(github_root+detail_params+opts,'<span class="books">&#128269</span>')},      
-             ];
-             faddelems('td',brow,values);
-             brow   = faddelem('tr',tbody);*/
-             params = ('life_list.html?project_id=239695&user_id='+rec.user.login+opts);
+         if( rec.user_login === 'uconnbirdfish' ){
+             params = ('life_list.html?project_id=239695&user_id='+rec.user_login+'&tag_name=pegslifelist');
+             params = ('life_list.html?project_id=239695&user_id='+rec.user_login+opts);
          }
          
          let values = [
             {innerText:i+1},
             {innerHTML:user_icon},
-            {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
-            //{innerHTML:furl(github_root+params+opts,rec.user.login)},
-            {innerHTML:furl(github_root+'life_list_map.html?project_id=239695&view=elevation'+opts+'&user_id='+rec.user.login,'<span class="books">&#127758</span>')},
+            {innerHTML:furl(root_people+rec.user_login,rec.user_login)},
+            //{innerHTML:furl(github_root+params+opts,rec.user_login)},
+            {innerHTML:furl(github_root+'life_list_map.html?project_id=239695&view=elevation'+opts+'&user_id='+rec.user_login,'<span class="books">&#127758</span>')},
             {innerHTML:furl(github_root+params+opts,rec.species_count)},
-            {innerHTML:furl(github_root+detail_params+opts,rec.observation_count)},      
+            {innerHTML:furl(github_root+detail_params+opts,rec.obs_count)},      
             //{innerHTML:furl(github_root+detail_params+opts,'<span class="books">&#128269</span>')},      
          ];
          faddelems('td',brow,values);
@@ -264,6 +321,57 @@ function fresults(xobj) {
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); };
 };
+
+class Result {
+  constructor(total_results, per_page, page, recs) {
+    this.total_results = total_results;
+    this.per_page = per_page;
+    this.page = page;
+    this.recs = recs;
+  }
+}
+
+class Record {
+  constructor(count, icon, user_login, species_count, obs_count) {
+    this.count = count;
+    this.icon = icon;
+    this.user_login = user_login;
+    this.species_count = species_count;
+    this.obs_count = obs_count;
+  }
+}
+  
+function storeData(xobj) {
+   let results = xobj.results;
+
+   if (results) {
+      let record_array = [];
+      for( let i=0; i<results.length; i++ ) {
+           const record = new Record((i+1), results[i].user.icon, results[i].user.login, results[i].species_count, results[i].observation_count);
+           record_array.push(record);
+      }
+      const result = new Result( xobj.total_results, xobj.per_page, xobj.page, JSON.stringify(record_array) );
+
+      // Serialize the object to JSON string so it can be stored in session
+      const result_string = JSON.stringify(result);
+      sessionStorage.setItem('anglers', result_string);
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); };
+}
+
+function parseStoredData(anglers) {
+   // Check if value exists before parsing
+   if( anglers ) {
+       // Parse the string back to an object
+       const retrievedRec = JSON.parse(anglers);
+       retrievedRec.recs = JSON.parse(retrievedRec.recs);
+       return retrievedRec;
+   } else {
+       console.log("No object found in session storage for key 'myObject'");
+       throw new Error("No object found in session storage.");
+   }
+}
+  
 let apibase = 'https://api.inaturalist.org/v1/observations/observers';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/observations/observers';
@@ -277,26 +385,26 @@ let apiref = furl(apirefurl,apirefname);
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
-                                                                 furl(github_root+'life_list_dashboard.html?project_id=239695'+taxon_opt,'All') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=14'+opts,'California') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=49'+opts,'Connecticut') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=21'+opts,'Florida') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=35'+opts,'Illinois') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=26'+opts,'Kentucky') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=27'+opts,'Louisiana') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=17'+opts,'Maine') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=2'+opts,'Massachusetts') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=29'+opts,'Michigan') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=16'+opts,'Montana') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=48'+opts,'New York') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=31'+opts,'Ohio') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=10'+opts,'Oregon') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=44'+opts,'South Dakota') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=45'+opts,'Tennessee') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=18'+opts,'Texas') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=7'+opts,'Virginia') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=32'+opts,'Wisconsin') +
-                                                                 furl(github_root+'life_list_dashboard.html?place_id=15'+opts,'Wyoming') +
+                                                                 furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+taxon_opt,'All') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=14'+opts+sort_opt,'California') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=49'+opts+sort_opt,'Connecticut') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=21'+opts+sort_opt,'Florida') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=35'+opts+sort_opt,'Illinois') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=26'+opts+sort_opt,'Kentucky') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=27'+opts+sort_opt,'Louisiana') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=17'+opts+sort_opt,'Maine') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=2'+opts+sort_opt,'Massachusetts') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=29'+opts+sort_opt,'Michigan') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=16'+opts+sort_opt,'Montana') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=48'+opts+sort_opt,'New York') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=31'+opts+sort_opt,'Ohio') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=10'+opts+sort_opt,'Oregon') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=44'+opts+sort_opt,'South Dakota') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=45'+opts+sort_opt,'Tennessee') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=18'+opts+sort_opt,'Texas') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=7'+opts+sort_opt,'Virginia') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=32'+opts+sort_opt,'Wisconsin') +
+                                                                 furl(github_root+'life_list_dashboard.html?place_id=15'+opts+sort_opt,'Wyoming') +
                                                            '</div>' +
                                                        '</div>' +
                                                       '<div class="dropdown">' +
@@ -304,41 +412,30 @@ let apiref = furl(apirefurl,apirefname);
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
-                                                                 furl(github_root+'life_list_dashboard.html?project_id=239695'+place_opt,'All') +
-                                                                 furl(github_root+'life_list_dashboard.html?taxon_id=1303731'+opts,'Centrarchiformes') +
-                                                                 furl(github_root+'life_list_dashboard.html?taxon_id=47273'+opts,'Elasmobranchs') +
+                                                                 furl(github_root+'life_list_dashboard.html?project_id=239695'+place_opt+sort_opt,'All') +
+                                                                 furl(github_root+'life_list_dashboard.html?taxon_id=1303731'+opts+sort_opt,'Centrarchiformes') +
+                                                                 furl(github_root+'life_list_dashboard.html?taxon_id=47273'+opts+sort_opt,'Elasmobranchs') +
                                                            '</div>' +
                                                        '</div>' + 
-                                                      /*'<div class="dropdown">' +
-                                                           '<button class="dropbtn">Tags' +
-                                                             '<i class="fa fa-caret-down"></i>' +
-                                                           '</button>' +
-                                                           '<div class="dropdown-content">' + tags +
-                                                           '</div>' +
-                                                       '</div>' +
-                                                      '<div class="dropdown">' +
-                                                           '<button class="dropbtn">Method' +
-                                                             '<i class="fa fa-caret-down"></i>' +
-                                                           '</button>' +
-                                                           '<div class="dropdown-content">' + dd_opts + 
-                                                           '</div>' +
-                                                       '</div>' +
-                                                   //'<div id="home">'+furl(github_root+'life_list_dashboard.html','&#12803')+'</div>' +
-                                                   '<div id="home">'+furl(github_root+'life_list_dashboard.html','Anglers')+'</div>' +*/
                                               '</div>')});
 
-//faddelem('h2',document.body,{innerText:apirefname});
-
-fetch(apiurl)
-   .then((response) => {
-      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-      return response.json();
-   })
-   .then((data) => { fresults(data); })
-   .catch((err) => {
-      console.error(err.message);
-      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-});
+// cache check will be set to yes for sorting of columns and
+// and when "anglers" is cicked on subsequent pages
+if( p_cache_check === 'yes' && sessionStorage.getItem('anglers') ) {
+    console.log('found session');
+    fresults( parseStoredData(sessionStorage.getItem('anglers')) );
+} else {
+    fetch(apiurl)
+       .then((response) => {
+          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+          return response.json();
+       })
+       .then((data) => { storeData(data); fresults( parseStoredData(sessionStorage.getItem('anglers')) ); })
+       .catch((err) => {
+          console.error(err.message);
+          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+       })
+};
 </script>
 
 </body>
