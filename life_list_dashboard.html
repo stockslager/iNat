@@ -155,6 +155,16 @@ let p_sort       = winurlparams.get('sort') || '';
 // session storage is only used for sorting of data in columns at this point.
 let p_cache_check = winurlparams.get('cache_check') || 'no';  
 
+// if the user has selected a method, built the opt to pass to the
+// lifelist page.
+let p_field_opt = '';
+// find key/value pair for &field: param if one was passed in
+for (const [key, value] of winurlparams.entries()) {
+  if( key.startsWith('field') ){
+      p_field_opt = ('&'+key+'='+value);
+  }
+}   
+
 // default the id's of the projects to be passed in to the projects api.
 winurlparams.delete('project_id');
 winurlparams.append('project_id', '239695');
@@ -291,7 +301,7 @@ function fresults(result) {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }
 
-         let params = ('life_list.html?project_id=239695&user_id='+rec.user_login+'&tag_name=lifelist');
+         let params = ('life_list.html?project_id=239695&user_id='+rec.user_login+'&tag_name=lifelist'+p_field_opt);
          let detail_params = ('configurable_obs_field_table.html?project_id=239695&user_id='+rec.user_login+'&obs_fields=17274,7615');
 
          if( rec.user_login === 'uconnbirdfish' ){
@@ -415,6 +425,18 @@ let apiref = furl(apirefurl,apirefname);
                                                                  furl(github_root+'life_list_dashboard.html?project_id=239695'+place_opt+sort_opt,'All') +
                                                                  furl(github_root+'life_list_dashboard.html?taxon_id=1303731'+opts+sort_opt,'Centrarchiformes') +
                                                                  furl(github_root+'life_list_dashboard.html?taxon_id=47273'+opts+sort_opt,'Elasmobranchs') +
+                                                           '</div>' +
+                                                       '</div>' + 
+                                                      '<div class="dropdown">' +
+                                                           '<button class="dropbtn">Method' +
+                                                             '<i class="fa fa-caret-down"></i>' +
+                                                           '</button>' +
+                                                           '<div class="dropdown-content">' +
+                                                                 furl(github_root+'life_list_dashboard.html?project_id=239695'+taxon_opt+place_opt+sort_opt,'All') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Angling+(Conventional)'+opts+sort_opt,'Angling (Conventional)') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Microfishing'+opts+sort_opt,'Microfishing') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Fly+Fishing'+opts+sort_opt,'Fly Fishing') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Ice+Angling'+opts+sort_opt,'Ice Angling') +
                                                            '</div>' +
                                                        '</div>' + 
                                               '</div>')});
