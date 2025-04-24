@@ -282,6 +282,7 @@ class Record {
 }
   
 function storeData(xobj) {
+ console.log('one');
    let results = xobj.results;
   
    if (results) {
@@ -295,6 +296,7 @@ function storeData(xobj) {
       sessionStorage.setItem('anglers', result);
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); };
+console.log('session: '+sessionStorage.getItem('anglers'));
 }
   
 let apibase = 'https://api.inaturalist.org/v1/observations/observers';
