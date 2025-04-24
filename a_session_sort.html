@@ -181,11 +181,8 @@ winurlparams.delete('activity_data');
 <script>
 
 function fresults(result) {
- console.log('five '+result.total_results);
+
    if (result) {
-      // Parse the string back to an object
-      const result = JSON.parse(result);
-      console.log('parsed session ' +result);
 
       let total_results = result.total_results;
       let per_page = result.per_page;
@@ -286,7 +283,6 @@ function storeData(xobj) {
            const record = new Record((i+1), results[i].user.icon, results[i].user.login, results[i].user.icon, results[i].species_count, results[i].observation_count);
            record_array.push(record);
       }
-      console.log( 'tot '+xobj.total_results);
       const result = new Result( xobj.total_results.toString(), xobj.per_page, xobj.page, record_array );
 
       // Serialize the object to JSON string so it can be stored in session
@@ -294,7 +290,19 @@ function storeData(xobj) {
       sessionStorage.setItem('anglers', result_string);
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); };
-console.log('session: '+sessionStorage.getItem('anglers'));
+   console.log('session: '+sessionStorage.getItem('anglers'));
+}
+
+function parseStoredData(rec) {
+   // Check if value exists before parsing
+   if( !rec ) {
+       // Parse the string back to an object
+       const retrievedObject = JSON.parse(storedObjectString);
+       console.log('parsed session: '+retrievedObject);
+   } else {
+       console.log("No object found in session storage for key 'myObject'");
+       throw;
+   }
 }
   
 let apibase = 'https://api.inaturalist.org/v1/observations/observers';
@@ -355,7 +363,7 @@ if( sessionStorage.getItem('anglers') ) {
           if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
           return response.json();
        })
-       .then((data) => { storeData(data); fresults( sessionStorage.getItem('anglers')); })
+       .then((data) => { storeData(data); fresults( parseStoredData(sessionStorage.getItem('anglers')) ); })
        .catch((err) => {
           console.error(err.message);
           faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
