@@ -388,7 +388,7 @@ function storePlaces(data) {
    if (data) {
       let places_array = [];
       for( let i=0; i<data.length; i++ ) {
-           const place = new Place(data.place_id, data.place_name);
+           const place = new Place(data[i].place_id, data[i].place_name);
            places_array.push(place);
       }
       const places = new Places( JSON.stringify(places_array) );
@@ -489,7 +489,7 @@ async function asyncGetData() {
      .then(response => response.json())
      .then(data => {
       console.log('data: '+data.places);
-      storePlaces(data);
+      storePlaces(data.places);
    })
      .catch(error => {
       console.error('Error fetching JSON:', error);
