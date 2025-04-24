@@ -164,6 +164,7 @@ let p_taxon_id = winurlparams.get('taxon_id') || '';
 
 let place_opt = '';
 let taxon_opt = '';
+let sort_opt  = '';
 let opts = ''
 
 if( p_place_id ) {
@@ -175,6 +176,10 @@ if( p_place_id ) {
 if( p_taxon_id ) {
     taxon_opt += ('&taxon_id='+p_taxon_id);
     opts      += ('&taxon_id='+p_taxon_id);
+}
+
+if( p_sort ) {
+    sort_opt += ('&sort='+p_sort);
 }
    
 let view = winurlparams.get('view') || '';
@@ -380,26 +385,26 @@ let apiref = furl(apirefurl,apirefname);
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
-                                                                 furl(github_root+'a_session_sort.html?project_id=239695'+taxon_opt,'All') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=14'+opts,'California') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=49'+opts,'Connecticut') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=21'+opts,'Florida') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=35'+opts,'Illinois') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=26'+opts,'Kentucky') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=27'+opts,'Louisiana') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=17'+opts,'Maine') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=2'+opts,'Massachusetts') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=29'+opts,'Michigan') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=16'+opts,'Montana') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=48'+opts,'New York') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=31'+opts,'Ohio') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=10'+opts,'Oregon') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=44'+opts,'South Dakota') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=45'+opts,'Tennessee') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=18'+opts,'Texas') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=7'+opts,'Virginia') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=32'+opts,'Wisconsin') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=15'+opts,'Wyoming') +
+                                                                 furl(github_root+'a_session_sort.html?project_id=239695'+sort_opt+taxon_opt,'All') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=14'+opts+sort_opt,'California') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=49'+opts+sort_opt,'Connecticut') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=21'+opts+sort_opt,'Florida') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=35'+opts+sort_opt,'Illinois') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=26'+opts+sort_opt,'Kentucky') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=27'+opts+sort_opt,'Louisiana') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=17'+opts+sort_opt,'Maine') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=2'+opts+sort_opt,'Massachusetts') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=29'+opts+sort_opt,'Michigan') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=16'+opts+sort_opt,'Montana') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=48'+opts+sort_opt,'New York') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=31'+opts+sort_opt,'Ohio') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=10'+opts+sort_opt,'Oregon') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=44'+opts+sort_opt,'South Dakota') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=45'+opts+sort_opt,'Tennessee') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=18'+opts+sort_opt,'Texas') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=7'+opts+sort_opt,'Virginia') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=32'+opts+sort_opt,'Wisconsin') +
+                                                                 furl(github_root+'a_session_sort.html?place_id=15'+opts+sort_opt,'Wyoming') +
                                                            '</div>' +
                                                        '</div>' +
                                                       '<div class="dropdown">' +
@@ -407,9 +412,9 @@ let apiref = furl(apirefurl,apirefname);
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
-                                                                 furl(github_root+'a_session_sort.html?project_id=239695'+place_opt,'All') +
-                                                                 furl(github_root+'a_session_sort.html?taxon_id=1303731'+opts,'Centrarchiformes') +
-                                                                 furl(github_root+'a_session_sort.html?taxon_id=47273'+opts,'Elasmobranchs') +
+                                                                 furl(github_root+'a_session_sort.html?project_id=239695'+place_opt+sort_opt,'All') +
+                                                                 furl(github_root+'a_session_sort.html?taxon_id=1303731'+opts+sort_opt,'Centrarchiformes') +
+                                                                 furl(github_root+'a_session_sort.html?taxon_id=47273'+opts+sort_opt,'Elasmobranchs') +
                                                            '</div>' +
                                                        '</div>' + 
                                               '</div>')});
