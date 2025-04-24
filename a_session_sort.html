@@ -275,19 +275,15 @@ class Record {
 }
   
 function storeData(xobj) {
- console.log('one');
    let results = xobj.results;
- console.log('two');
   
    if (results) {
       let record_array = [];
-     console.log('three');
       for( let i=0; i<results.length; i++ ) {
-       console.log('four');
            const record = new Record((i+1), results[i].user.icon, results[i].user.login, results[i].user.icon, results[i].species_count, results[i].observation_count);
-       console.log('five');
            record_array.push(record);
       }
+      console.log( 'tot '+xobj.total_results);
       const result = new Result( xobj.total_results, xobj.per_page, xobj.page, record_array );
       sessionStorage.setItem('anglers', result);
    }
