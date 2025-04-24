@@ -181,7 +181,7 @@ winurlparams.delete('activity_data');
 <script>
 
 function fresults(result) {
-/* console.log('five');
+ console.log('five');
    if (result) {
       let total_results = result.total_results;
       let per_page = result.per_page;
@@ -252,7 +252,7 @@ console.log('seven');
       (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
       (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
    }
-   else { faddelem('p',document.body,{innerText:'No results returned.'}); };*/
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); };
 };
 
 class Result {
@@ -292,7 +292,7 @@ function storeData(xobj) {
       sessionStorage.setItem('anglers', result);
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); };
-console.log('session: '+sessionStorage.getItem('anglers'));
+console.log('session: '+sessionStorage.getItem('anglers').toString());
 }
   
 let apibase = 'https://api.inaturalist.org/v1/observations/observers';
