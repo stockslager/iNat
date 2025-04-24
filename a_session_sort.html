@@ -217,8 +217,7 @@ function fresults(result) {
          let lists = '';
          console.log('rec '+rec);
          console.log('species '+rec.species_count);
-         //target_url += 'https://stockslager.github.io/iNat/reseed_plants_visited.html?project_id='+rec.id+lists;
-         let user_icon = rec.user_icon || '';
+         let user_icon = rec.icon || '';
          
          if( user_icon === '' ){
             user_icon += '<div class="npcicon">&#x1F464;</div>';
@@ -241,7 +240,7 @@ function fresults(result) {
             //{innerHTML:furl(github_root+params+opts,rec.user_login)},
             {innerHTML:furl(github_root+'life_list_map.html?project_id=239695&view=elevation'+opts+'&user_id='+rec.user_login,'<span class="books">&#127758</span>')},
             {innerHTML:furl(github_root+params+opts,rec.species_count)},
-            {innerHTML:furl(github_root+detail_params+opts,rec.observation_count)},      
+            {innerHTML:furl(github_root+detail_params+opts,rec.obs_count)},      
             //{innerHTML:furl(github_root+detail_params+opts,'<span class="books">&#128269</span>')},      
          ];
          faddelems('td',brow,values);
