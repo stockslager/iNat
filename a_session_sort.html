@@ -251,6 +251,48 @@ function fresults(result, places) {
 
 console.log('places: ', places);
 console.log('result: ', result);
+
+ // places menu...
+ let places_menu = furl(github_root+'a_session_sort.html?project_id=239695'+sort_opt+taxon_opt,'All');
+ for( let i=0; i<places.length; i++ ) {
+      places_menu += furl(github_root+'a_session_sort.html?project_id=239695'+opts+sort_opt,places[i].place_name);
+ }
+  
+
+      faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
+                                                   /*'<a href="#news">News</a>' +*/
+                                                      '<div class="dropdown">' +
+                                                           '<button class="dropbtn">Place' +
+                                                             '<i class="fa fa-caret-down"></i>' +
+                                                           '</button>' +
+                                                           '<div class="dropdown-content">' +
+                                                                 places_menu +
+                                                           '</div>' +
+                                                       '</div>' +
+                                                      '<div class="dropdown">' +
+                                                           '<button class="dropbtn">Taxa' +
+                                                             '<i class="fa fa-caret-down"></i>' +
+                                                           '</button>' +
+                                                           '<div class="dropdown-content">' +
+                                                                 furl(github_root+'a_session_sort.html?project_id=239695'+place_opt+sort_opt,'All') +
+                                                                 furl(github_root+'a_session_sort.html?taxon_id=1303731'+opts+sort_opt,'Centrarchiformes') +
+                                                                 furl(github_root+'a_session_sort.html?taxon_id=47273'+opts+sort_opt,'Elasmobranchs') +
+                                                           '</div>' +
+                                                       '</div>' + 
+                                                      '<div class="dropdown">' +
+                                                           '<button class="dropbtn">Method' +
+                                                             '<i class="fa fa-caret-down"></i>' +
+                                                           '</button>' +
+                                                           '<div class="dropdown-content">' +
+                                                                 furl(github_root+'a_session_sort.html?project_id=239695'+taxon_opt+place_opt+sort_opt,'All') +
+                                                                 furl(github_root+'a_session_sort.html?field:fish+observation+method=Angling+(Conventional)'+opts+sort_opt,'Angling (Conventional)') +
+                                                                 furl(github_root+'a_session_sort.html?field:fish+observation+method=Microfishing'+opts+sort_opt,'Microfishing') +
+                                                                 furl(github_root+'a_session_sort.html?field:fish+observation+method=Fly+Fishing'+opts+sort_opt,'Fly Fishing') +
+                                                                 furl(github_root+'a_session_sort.html?field:fish+observation+method=Ice+Angling'+opts+sort_opt,'Ice Angling') +
+                                                           '</div>' +
+                                                       '</div>' + 
+                                              '</div>')});
+ 
    if (result) {
 
       // may need to revisit this if there is more than one page of data
@@ -453,40 +495,6 @@ let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/observations/observers';
 let apirefname = 'iNaturalist Angling Life Lists';
 let apiref = furl(apirefurl,apirefname);
-
-      faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
-                                                   /*'<a href="#news">News</a>' +*/
-                                                      '<div class="dropdown">' +
-                                                           '<button class="dropbtn">Place' +
-                                                             '<i class="fa fa-caret-down"></i>' +
-                                                           '</button>' +
-                                                           '<div class="dropdown-content">' +
-                                                                 furl(github_root+'a_session_sort.html?project_id=239695'+sort_opt+taxon_opt,'All') +
-                                                           '</div>' +
-                                                       '</div>' +
-                                                      '<div class="dropdown">' +
-                                                           '<button class="dropbtn">Taxa' +
-                                                             '<i class="fa fa-caret-down"></i>' +
-                                                           '</button>' +
-                                                           '<div class="dropdown-content">' +
-                                                                 furl(github_root+'a_session_sort.html?project_id=239695'+place_opt+sort_opt,'All') +
-                                                                 furl(github_root+'a_session_sort.html?taxon_id=1303731'+opts+sort_opt,'Centrarchiformes') +
-                                                                 furl(github_root+'a_session_sort.html?taxon_id=47273'+opts+sort_opt,'Elasmobranchs') +
-                                                           '</div>' +
-                                                       '</div>' + 
-                                                      '<div class="dropdown">' +
-                                                           '<button class="dropbtn">Method' +
-                                                             '<i class="fa fa-caret-down"></i>' +
-                                                           '</button>' +
-                                                           '<div class="dropdown-content">' +
-                                                                 furl(github_root+'a_session_sort.html?project_id=239695'+taxon_opt+place_opt+sort_opt,'All') +
-                                                                 furl(github_root+'a_session_sort.html?field:fish+observation+method=Angling+(Conventional)'+opts+sort_opt,'Angling (Conventional)') +
-                                                                 furl(github_root+'a_session_sort.html?field:fish+observation+method=Microfishing'+opts+sort_opt,'Microfishing') +
-                                                                 furl(github_root+'a_session_sort.html?field:fish+observation+method=Fly+Fishing'+opts+sort_opt,'Fly Fishing') +
-                                                                 furl(github_root+'a_session_sort.html?field:fish+observation+method=Ice+Angling'+opts+sort_opt,'Ice Angling') +
-                                                           '</div>' +
-                                                       '</div>' + 
-                                              '</div>')});
 
 async function asyncGetData() {
    await fetch('life_list_anglers.json')
