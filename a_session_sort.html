@@ -155,6 +155,16 @@ let p_sort       = winurlparams.get('sort') || '';
 // session storage is only used for sorting of data in columns at this point.
 let p_cache_check = winurlparams.get('cache_check') || 'no';  
 
+// if the user has selected a method, built the opt to pass to the
+// lifelist page.
+let p_field_opt = '';
+// find key/value pair for &field: param if one was passed in
+for (const [key, value] of winurlparams.entries()) {
+  if( key.startsWith('field') ){
+      p_field_opt = ('&'+key+'='+value);
+  }
+}   
+
 // default the id's of the projects to be passed in to the projects api.
 winurlparams.delete('project_id');
 winurlparams.append('project_id', '239695');
@@ -291,7 +301,7 @@ function fresults(result) {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }
 
-         let params = ('life_list.html?project_id=239695&user_id='+rec.user_login+'&tag_name=lifelist');
+         let params = ('life_list.html?project_id=239695&user_id='+rec.user_login+'&tag_name=lifelist'+p_field_opt);
          let detail_params = ('configurable_obs_field_table.html?project_id=239695&user_id='+rec.user_login+'&obs_fields=17274,7615');
 
          if( rec.user_login === 'uconnbirdfish' ){
