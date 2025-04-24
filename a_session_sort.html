@@ -369,7 +369,7 @@ let apiref = furl(apirefurl,apirefname);
 
 if( sessionStorage.getItem('anglers') ) {
     console.log('found session');
-    fresults( sessionStorage.getItem('anglers') );
+    fresults( parseStoredData(sessionStorage.getItem('anglers')) );
 } else {
     fetch(apiurl)
        .then((response) => {
