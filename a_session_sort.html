@@ -57,6 +57,7 @@
    h2 { width:fit-content; min-width:375px; }
    p { width:fit-content; min-width:375px; }
    a { text-decoration:none; color:var(--color-text-link); }
+   .arrow { text-decoration:none; color:black; }
    a:hover { background:var(--color-hover); }
    #nav { margin-left:-8px; position:-webkit-sticky /*Safari*/; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
    @media print { #nav { display:none; } } 
@@ -185,6 +186,8 @@ winurlparams.delete('activity_data');
 
 <script>
 
+function furlArrow(url,txt=url) { return '<a href="'+url+'" class="arrow">'+txt+'</a>'; };
+
 function sortWithNull(arr, ascending = true) {
   for( let i=0; i<arr.length; i++ ) {
        if( arr[i].user_login ){
@@ -207,8 +210,8 @@ function fresults(result) {
    if (result) {
 
       // may need to revisit this if there is more than one page of data
-      if( p_sort === 'uuser' ) { result.recs = sortWithNull(result.recs, false); }
-      if( p_sort === 'duser' ) { result.recs = sortWithNull(result.recs, true); }
+      if( p_sort === 'uuser' ) { result.recs = sortWithNull(result.recs, true); }
+      if( p_sort === 'duser' ) { result.recs = sortWithNull(result.recs, false); }
        
 
       let total_results = result.total_results;
