@@ -148,6 +148,10 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 
+// cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
+// session storage is only used for sorting of data in columns at this point.
+let p_cache_check = winurlparams.get('cache_check') || 'no';  
+
 // default the id's of the projects to be passed in to the projects api.
 winurlparams.delete('project_id');
 winurlparams.append('project_id', '239695');
@@ -201,7 +205,7 @@ function fresults(result) {
       let hrow = faddelem('tr',thead);
       let labels = [
          {innerText:'#'},
-         {innerText:'User'},
+         {innerText:'User &#11014 &#11014'},
          {innerText:' '},
          {innerText:'Map'},
          {innerText:'Species Count'},
@@ -215,8 +219,6 @@ function fresults(result) {
          let brow = faddelem('tr',tbody);
          let rec = result.recs[i];
          let lists = '';
-         console.log('rec '+rec);
-         console.log('species '+rec.species_count);
          let user_icon = rec.icon || '';
          
          if( user_icon === '' ){
@@ -291,7 +293,6 @@ function storeData(xobj) {
       sessionStorage.setItem('anglers', result_string);
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); };
-   console.log('session: '+sessionStorage.getItem('anglers'));
 }
 
 function parseStoredData(anglers) {
@@ -299,18 +300,7 @@ function parseStoredData(anglers) {
    if( anglers ) {
        // Parse the string back to an object
        const retrievedRec = JSON.parse(anglers);
-       console.log('unparsed :'+anglers);
-       console.log('parsed session: '+retrievedRec);
        retrievedRec.recs = JSON.parse(retrievedRec.recs);
-       console.log('lentgh '+retrievedRec.recs.length);
-       if( retrievedRec.recs ) {
-           for( let i=0; i<retrievedRec.recs.length; i++) {
-                console.log('b '+retrievedRec.recs[i]);
-                console.log('parsed b '+retrievedRec.recs[i].user_login);
-                //console.log('rec '+JSON.parse(retrievedRec.recs[i]));
-                
-           }
-       }
        return retrievedRec;
    } else {
        console.log("No object found in session storage for key 'myObject'");
@@ -365,9 +355,9 @@ let apiref = furl(apirefurl,apirefname);
                                                        '</div>' + 
                                               '</div>')});
 
-//faddelem('h2',document.body,{innerText:apirefname});
-
-if( sessionStorage.getItem('anglers') ) {
+// cache check will be set to yes for sorting of columns and
+// and when "anglers" is cicked on subsequent pages
+if( p_cache_check === 'yes' && sessionStorage.getItem('anglers') ) {
     console.log('found session');
     fresults( parseStoredData(sessionStorage.getItem('anglers')) );
 } else {
