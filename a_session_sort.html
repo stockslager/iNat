@@ -283,7 +283,7 @@ function storeData(xobj) {
            const record = new Record((i+1), results[i].user.icon, results[i].user.login, results[i].user.icon, results[i].species_count, results[i].observation_count);
            record_array.push(record);
       }
-      const result = new Result( xobj.total_results.toString(), xobj.per_page, xobj.page, record_array );
+      const result = new Result( xobj.total_results, xobj.per_page, xobj.page, JSON.stringify(record_array) );
 
       // Serialize the object to JSON string so it can be stored in session
       const result_string = JSON.stringify(result);
@@ -298,6 +298,7 @@ function parseStoredData(rec) {
    if( rec ) {
        // Parse the string back to an object
        const retrievedRec = JSON.parse(rec);
+       console.log('unparsed :'+rec);
        console.log('parsed session: '+retrievedRec);
        return retrievedRec;
    } else {
