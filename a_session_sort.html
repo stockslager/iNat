@@ -181,6 +181,7 @@ winurlparams.delete('activity_data');
 <script>
 
 function fresults(result) {
+ console.log('five');
    if (result) {
       let total_results = result.total_results;
       let per_page = result.per_page;
@@ -193,7 +194,7 @@ function fresults(result) {
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });
-
+console.log('six');
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
@@ -213,7 +214,7 @@ function fresults(result) {
          let brow = faddelem('tr',tbody);
          let rec = result.recs[i];
          let lists = '';
-
+console.log('seven');
          //target_url += 'https://stockslager.github.io/iNat/reseed_plants_visited.html?project_id='+rec.id+lists;
          let user_icon = rec.user.icon || '';
          
