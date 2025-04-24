@@ -180,6 +180,23 @@ winurlparams.delete('activity_data');
 
 <script>
 
+function sortWithNull(arr, ascending = true) {
+  for( let i=0; i<arr.length; i++ ) {
+       if( arr[i].user.login ){
+           arr[i].user.login = arr[i].user.login.toLowerCase();
+       }
+  }
+  arr.sort(function(a, b) {
+    if (!a.user.login && !b.user.login) return 0;
+    if (!a.user.login) return ascending ? 1 : -1;
+    if (!b.user.login) return ascending ? -1 : 1;
+    if (a.user.login < b.user.login) return ascending ? -1 : 1;
+    if (a.user.login > b.user.login) return ascending ? 1 : -1;
+    return 0;
+  });
+  return arr;
+}
+
 function fresults(xobj) {
    let results = xobj.results;
    if (results) {
@@ -189,6 +206,9 @@ function fresults(xobj) {
       let page_max = Math.ceil(total_results/per_page);
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
+
+      // may need to revisit this if species_guess is ever null
+      results = sortWithNull(results);
 
       faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results)+'<br />' 
             +'per page: '+fcomnum(per_page)+'<br />'
