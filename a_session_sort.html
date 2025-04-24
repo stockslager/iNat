@@ -297,8 +297,9 @@ function parseStoredData(rec) {
    // Check if value exists before parsing
    if( rec ) {
        // Parse the string back to an object
-       const retrievedObject = JSON.parse(storedObjectString);
-       console.log('parsed session: '+retrievedObject);
+       const retrievedRec = JSON.parse(rec);
+       console.log('parsed session: '+retrievedRec);
+       return retrievedRec;
    } else {
        console.log("No object found in session storage for key 'myObject'");
        throw new Error("No object found in session storage.");
