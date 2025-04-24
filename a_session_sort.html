@@ -270,7 +270,8 @@ console.log('result: ', result);
 
       let nav_position = '';
       if( p_place_id ) {
-          nav_position += p_place_id;
+          const place = findValueByKey(places, 'place_id', p_place_id); 
+          nav_position += place.place_name;
         if( p_taxon_id ) {
             if( p_field_value ) {
             }
@@ -283,7 +284,7 @@ console.log('result: ', result);
       } else if( p_field_value ) {
       }
     
-      faddelem('p',document.body,{innerHTML:(user_icon+'<span id="topright">'+p_place_id+' ~ '+p_taxon_id+'</span></div></span>')});
+      faddelem('p',document.body,{innerHTML:('<span id="topright">'+nav_position+'</span></div></span>')});
 
       faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results)+'<br />' 
             +'per page: '+fcomnum(per_page)+'<br />'
