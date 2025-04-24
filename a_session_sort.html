@@ -304,8 +304,10 @@ function parseStoredData(anglers) {
        console.log('parsed session: '+retrievedRec);
        console.log('lentgh '+retrievedRec.recs.length);
        if( retrievedRec.recs ) {
-           for( let i=0; i<retrievedRec.recs.length; i++) {
-                console.log('rec '+retrievedRec.recs[i]);
+           const s = JSON.parse(retrievedRec.recs);
+           for( let i=0; i<s.recs.length; i++) {
+                console.log('rec '+s.recs[i]);
+                
            }
        }
        return retrievedRec;
