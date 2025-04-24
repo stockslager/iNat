@@ -216,7 +216,7 @@ function fresults(result) {
          let rec = result.recs[i];
          let lists = '';
          console.log('rec '+rec);
-         console.log('user '+JSON.stringify(rec.user.login));
+         console.log('species '+rec.species_count);
          //target_url += 'https://stockslager.github.io/iNat/reseed_plants_visited.html?project_id='+rec.id+lists;
          let user_icon = rec.user.icon || '';
          
@@ -295,12 +295,12 @@ function storeData(xobj) {
    console.log('session: '+sessionStorage.getItem('anglers'));
 }
 
-function parseStoredData(rec) {
+function parseStoredData(anglers) {
    // Check if value exists before parsing
-   if( rec ) {
+   if( anglers ) {
        // Parse the string back to an object
-       const retrievedRec = JSON.parse(rec);
-       console.log('unparsed :'+rec);
+       const retrievedRec = JSON.parse(anglers);
+       console.log('unparsed :'+anglers);
        console.log('parsed session: '+retrievedRec);
        return retrievedRec;
    } else {
