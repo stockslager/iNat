@@ -302,12 +302,12 @@ function parseStoredData(anglers) {
        const retrievedRec = JSON.parse(anglers);
        console.log('unparsed :'+anglers);
        console.log('parsed session: '+retrievedRec);
-       const b = JSON.parse(retrievedRec.recs);
-       console.log('lentgh '+b.length);
+       retrievedRec.recs = JSON.parse(retrievedRec.recs);
+       console.log('lentgh '+retrievedRec.recs.length);
        if( retrievedRec.recs ) {
-           for( let i=0; i<b.length; i++) {
-                console.log('b '+b[i]);
-                console.log('parsed b '+b[i].user_login);
+           for( let i=0; i<retrievedRec.recs.length; i++) {
+                console.log('b '+retrievedRec.recs[i]);
+                console.log('parsed b '+retrievedRec.recs[i].user_login);
                 //console.log('rec '+JSON.parse(retrievedRec.recs[i]));
                 
            }
