@@ -517,7 +517,7 @@ const request = async () => {
 // and when "anglers" is cicked on subsequent pages
 if( p_cache_check === 'yes' && sessionStorage.getItem('anglers') ) {
     console.log('found session');
-    fresults( parseStoredData(sessionStorage.getItem('anglers'), parseStoredPlaces(sessionStorage.getItem('places')) );
+    fresults( parseStoredData(sessionStorage.getItem('anglers')), parseStoredPlaces(sessionStorage.getItem('places')) );
 } else {
     request();  
 }
