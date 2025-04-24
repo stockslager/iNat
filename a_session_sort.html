@@ -158,9 +158,11 @@ let p_cache_check = winurlparams.get('cache_check') || 'no';
 // if the user has selected a method, built the opt to pass to the
 // lifelist page.
 let p_field_opt = '';
+let p_field_value = '';
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
+      p_field_value = value;
       p_field_opt = ('&'+key+'='+value);
   }
 }   
@@ -245,8 +247,9 @@ function sortWithNullObs(arr, ascending) {
   return arr;
 }
  
-function fresults(result) {
+function fresults(result, places) {
 
+console.log('places: ', places);
    if (result) {
 
       // may need to revisit this if there is more than one page of data
@@ -263,6 +266,23 @@ function fresults(result) {
       let page_max = Math.ceil(total_results/per_page);
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
+
+      let nav_position = '';
+      if( p_place_id ) {
+          nav_position += p_place_id;
+        if( p_taxon_id ) {
+            if( p_field_value ) {
+            }
+        } else if( p_field_value ) {
+            
+        }
+      } else if( p_taxon_id ) {
+          if( p_field_value ) {
+          }
+      } else if( p_field_value ) {
+      }
+    
+      faddelem('p',document.body,{innerHTML:(user_icon+'<span id="topright">'+p_place_id+' ~ '+p_taxon_id+'</span></div></span>')});
 
       faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results)+'<br />' 
             +'per page: '+fcomnum(per_page)+'<br />'
@@ -350,6 +370,48 @@ class Record {
     this.obs_count = obs_count;
   }
 }
+
+class Places {
+  constructor(places) {
+    this.places = places;
+  }
+}
+ 
+class Place {
+  constructor(place_id, place_name) {
+    this.place_id = place_id;
+    this.place_name = place_name;
+  }
+}
+
+function storePlaces(data) {
+   if (data) {
+      let places_array = [];
+      for( let i=0; i<data.length; i++ ) {
+           const place = new Place(data.place_id, data.place_name);
+           places_array.push(place);
+      }
+      const places = new Places( JSON.stringify(places_array) );
+
+      // Serialize the object to JSON string so it can be stored in session
+      const place_string = JSON.stringify(places);
+      sessionStorage.setItem('places', place_string);
+   }
+   else { faddelem('p',document.body,{innerText:'No places returned.'}); };
+}
+
+function parseStoredData(places) {
+   // Check if value exists before parsing
+   if( places ) {
+       // Parse the string back to an object
+       const retrievedRec = JSON.parse(places);
+       retrievedRec.places = JSON.parse(retrievedRec.places);
+       return retrievedRec;
+   } else {
+       console.log("No object found in session storage for key 'myObject'");
+       throw new Error("No object found in session storage.");
+   }
+} 
   
 function storeData(xobj) {
    let results = xobj.results;
@@ -396,25 +458,6 @@ let apiref = furl(apirefurl,apirefname);
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
                                                                  furl(github_root+'a_session_sort.html?project_id=239695'+sort_opt+taxon_opt,'All') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=14'+opts+sort_opt,'California') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=49'+opts+sort_opt,'Connecticut') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=21'+opts+sort_opt,'Florida') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=35'+opts+sort_opt,'Illinois') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=26'+opts+sort_opt,'Kentucky') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=27'+opts+sort_opt,'Louisiana') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=17'+opts+sort_opt,'Maine') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=2'+opts+sort_opt,'Massachusetts') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=29'+opts+sort_opt,'Michigan') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=16'+opts+sort_opt,'Montana') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=48'+opts+sort_opt,'New York') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=31'+opts+sort_opt,'Ohio') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=10'+opts+sort_opt,'Oregon') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=44'+opts+sort_opt,'South Dakota') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=45'+opts+sort_opt,'Tennessee') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=18'+opts+sort_opt,'Texas') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=7'+opts+sort_opt,'Virginia') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=32'+opts+sort_opt,'Wisconsin') +
-                                                                 furl(github_root+'a_session_sort.html?place_id=15'+opts+sort_opt,'Wyoming') +
                                                            '</div>' +
                                                        '</div>' +
                                                       '<div class="dropdown">' +
@@ -441,23 +484,44 @@ let apiref = furl(apirefurl,apirefname);
                                                        '</div>' + 
                                               '</div>')});
 
-// cache check will be set to yes for sorting of columns and
-// and when "anglers" is cicked on subsequent pages
-if( p_cache_check === 'yes' && sessionStorage.getItem('anglers') ) {
-    console.log('found session');
-    fresults( parseStoredData(sessionStorage.getItem('anglers')) );
-} else {
-    fetch(apiurl)
-       .then((response) => {
-          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-          return response.json();
-       })
+async function asyncGetData() {
+   await fetch('life_list_anglers.json')
+     .then(response => response.json())
+     .then(data => {
+      storePlaces(data);
+   })
+     .catch(error => {
+      console.error('Error fetching JSON:', error);
+   });
+
+   await fetch(apiurl)
+      .then((response) => {
+         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+         return response.json();
+      })
        .then((data) => { storeData(data); fresults( parseStoredData(sessionStorage.getItem('anglers')) ); })
        .catch((err) => {
           console.error(err.message);
           faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-       })
-};
+      })
+}
+
+
+// need to pull resources from a json file to pass into an api
+// so needs to be asynchronous. 
+const request = async () => {
+   asyncGetData();
+}
+
+// cache check will be set to yes for sorting of columns and
+// and when "anglers" is cicked on subsequent pages
+if( p_cache_check === 'yes' && sessionStorage.getItem('anglers') ) {
+    console.log('found session');
+    fresults( parseStoredData(sessionStorage.getItem('anglers'), parseStoredPlaces(sessionStorage.getItem('places')) );
+} else {
+    request();  
+}
+ 
 </script>
 
 </body>
