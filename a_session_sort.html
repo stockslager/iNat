@@ -280,26 +280,6 @@ class Record {
 function storeData(xobj) {
    let results = xobj.results;
 
-
-
-
-// Store the string in session storage
-sessionStorage.setItem("myObject", serializedObject);
-
-// Retrieving the object
-const storedObjectString = sessionStorage.getItem("myObject");
-
-// Check if value exists before parsing
-if (storedObjectString) {
-  // Parse the string back to an object
-  const retrievedObject = JSON.parse(storedObjectString);
-  console.log(retrievedObject);
-} else {
-  console.log("No object found in session storage for key 'myObject'");
-}
-
- 
-  
    if (results) {
       let record_array = [];
       for( let i=0; i<results.length; i++ ) {
