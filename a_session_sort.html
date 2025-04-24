@@ -147,6 +147,7 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let p_sort       = winurlparams.get('sort') || '';
 
 // cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
 // session storage is only used for sorting of data in columns at this point.
@@ -203,10 +204,14 @@ function fresults(result) {
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
-    
+
+      let sort_url = (github_root+'a_session_sort.html?project_id=239695'+opts+'&cache_check=yes');
+
+      
+                      
       let labels = [
          {innerText:'#'},
-         {innerHTML:'User '+furl(github_root+'a_session_sort.html?project_id=239695'+opts,'&#11115') + furl(github_root+'a_session_sort.html?project_id=239695'+opts,'&#11014')},
+         {innerHTML:'User '+furl(sort_url+'&sort=duser','&#11015') + furl(sort_url+'&sort=uuser','&#11014')},
          {innerText:' '},
          {innerText:'Map'},
          {innerText:'Species Count'},
