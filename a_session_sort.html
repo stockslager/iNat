@@ -282,7 +282,7 @@ function storeData(xobj) {
    if (results) {
       let record_array = [];
       for( let i=0; i<results.length; i++ ) {
-           const record = new Record((i+1), results[i].user.icon, results[i].user.login, results[i].user.icon, results[i].species_count, results[i].observation_count);
+           const record = new Record((i+1), results[i].user.icon, results[i].user.login, results[i].species_count, results[i].observation_count);
            record_array.push(record);
       }
       const result = new Result( xobj.total_results, xobj.per_page, xobj.page, JSON.stringify(record_array) );
