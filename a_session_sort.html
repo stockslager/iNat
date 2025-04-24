@@ -284,7 +284,7 @@ function storeData(xobj) {
            record_array.push(record);
       }
       console.log( 'tot '+xobj.total_results);
-      const result = new Result( xobj.total_results, xobj.per_page, xobj.page, record_array );
+      const result = new Result( xobj.total_results.toString(), xobj.per_page, xobj.page, record_array );
       sessionStorage.setItem('anglers', result);
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); };
