@@ -185,9 +185,31 @@ winurlparams.delete('activity_data');
 
 <script>
 
+function sortWithNull(arr, ascending = true) {
+  for( let i=0; i<arr.length; i++ ) {
+       if( arr[i].user_login ){
+           arr[i].user_login = arr[i].user_login.toLowerCase();
+       }
+  }
+  arr.sort(function(a, b) {
+    if (!a.user_login && !b.user_login) return 0;
+    if (!a.user_login) return ascending ? 1 : -1;
+    if (!b.user_login) return ascending ? -1 : 1;
+    if (a.user_login < b.user_login) return ascending ? -1 : 1;
+    if (a.user_login > b.user_login) return ascending ? 1 : -1;
+    return 0;
+  });
+  return arr;
+}
+
 function fresults(result) {
 
    if (result) {
+
+      // may need to revisit this if there is more than one page of data
+      if( p_sort === uuser ) { result = sortWithNull(result, false); }
+      if( p_sort === duser ) { result = sortWithNull(result, true); }
+       
 
       let total_results = result.total_results;
       let per_page = result.per_page;
