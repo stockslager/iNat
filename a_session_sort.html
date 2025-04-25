@@ -533,6 +533,7 @@ function parseStoredTaxa(taxa) {
        // Parse the string back to an object
        const retrievedRec = JSON.parse(taxa);
        retrievedRec.taxa = JSON.parse(retrievedRec.taxa);
+       console.log('taxa ',retrievedRec.taxa);
        return retrievedRec;
    } else {
        console.log("No object found in session storage");
