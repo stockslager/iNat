@@ -256,13 +256,19 @@ function sortWithNullObs(arr, ascending) {
   return arr;
 }
  
-function fresults(result, places_obj) {
+function fresults(result, places_obj, taxa_obj) {
 
- // places menu...
- let places_menu = furl(github_root+'a_session_sort.html?project_id=239695'+sort_opt+taxon_opt,'All');
- for( let i=0; i<places_obj.places.length; i++ ) {
-      places_menu += furl(github_root+'a_session_sort.html?project_id=239695'+opts+sort_opt+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
- }
+      // places menu...
+      let places_menu = furl(github_root+'a_session_sort.html?project_id=239695'+sort_opt+taxon_opt,'All');
+      for( let i=0; i<places_obj.places.length; i++ ) {
+           places_menu += furl(github_root+'a_session_sort.html?project_id=239695'+opts+sort_opt+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
+      }
+
+      // taxa menu...
+      let taxa_menu = furl(github_root+'a_session_sort.html?project_id=239695'+sort_opt+place_opt,'All');
+      for( let i=0; i<taxa_obj.taxa.length; i++ ) {
+           taxa_menu += furl(github_root+'a_session_sort.html?project_id=239695'+opts+sort_opt+'&taxon_id='+taxa_obj.taxa[i].taxon_id,taxa_obj.taxa[i].taxon_name);
+      }
   
       let place_name  = 'Place';
       let taxon_name  = 'Taxa';
@@ -272,7 +278,8 @@ function fresults(result, places_obj) {
           place_name = place.place_name;
       } 
       if( p_taxon_id ) {
-          taxon_name = 't';
+          const taxon = findValueByKey(taxa_obj.taxa, 'taxon_id', p_taxon_id); 
+          taxon_name = taxon.taxon_name;
       }  
       if( p_field_value ) {
           method_name = p_field_value;
@@ -293,9 +300,7 @@ function fresults(result, places_obj) {
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
-                                                                 furl(github_root+'a_session_sort.html?project_id=239695'+place_opt+sort_opt,'All') +
-                                                                 furl(github_root+'a_session_sort.html?taxon_id=1303731'+opts+sort_opt,'Centrarchiformes') +
-                                                                 furl(github_root+'a_session_sort.html?taxon_id=47273'+opts+sort_opt,'Elasmobranchs') +
+                                                                 taxa_menu +
                                                            '</div>' +
                                                        '</div>' + 
                                                       '<div class="dropdown">' +
@@ -489,7 +494,49 @@ function parseStoredData(anglers) {
        throw new Error("No object found in session storage.");
    }
 }
-  
+
+class Taxa {
+  constructor(taxa) {
+    this.taxa = taxa;
+  }
+}
+ 
+class Taxon {
+  constructor(taxon_id, taxon_name) {
+    this.taxon_id = taxon_id;
+    this.taxon_name = taxon_name;
+  }
+}
+
+function storeTaxa(data) {
+   if (data) {
+      let taxa_array = [];
+      for( let i=0; i<data.length; i++ ) {
+           const taxon = new Taxon(data[i].taxon_id, data[i].taxon_name);
+           taxa_array.push(taxon);
+      }
+      const taxa = new Taxa( JSON.stringify(taxa_array) );
+
+      // Serialize the object to JSON string so it can be stored in session
+      const taxa_string = JSON.stringify(taxa);
+      sessionStorage.setItem('taxa', taxa_string);
+   }
+   else { faddelem('p',document.body,{innerText:'No taxa returned.'}); };
+}
+
+function parseStoredTaxa(taxa) {
+   // Check if value exists before parsing
+   if( taxa ) {
+       // Parse the string back to an object
+       const retrievedRec = JSON.parse(taxa);
+       retrievedRec.taxa = JSON.parse(retrievedRec.taxa);
+       return retrievedRec;
+   } else {
+       console.log("No object found in session storage");
+       throw new Error("No object found in session storage.");
+   }
+} 
+ 
 let apibase = 'https://api.inaturalist.org/v1/observations/observers';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/observations/observers';
@@ -501,6 +548,7 @@ async function asyncGetData() {
      .then(response => response.json())
      .then(data => {
       storePlaces(data.places);
+      storeTaxa(data.taxa);
    })
      .catch(error => {
       console.error('Error fetching JSON:', error);
@@ -512,7 +560,7 @@ async function asyncGetData() {
          return response.json();
       })
        .then((data) => { storeData(data); 
-                         fresults( parseStoredData(sessionStorage.getItem('anglers')), parseStoredPlaces(sessionStorage.getItem('places')) ); 
+                         fresults( parseStoredData(sessionStorage.getItem('anglers')), parseStoredPlaces(sessionStorage.getItem('places')), parseStoredTaxa(sessionStorage.getItem('taxa')) ); 
                        })
        .catch((err) => {
           console.error(err.message);
@@ -531,7 +579,7 @@ const request = async () => {
 // and when "anglers" is cicked on subsequent pages
 if( p_cache_check === 'yes' && sessionStorage.getItem('anglers') ) {
     console.log('found session');
-    fresults( parseStoredData(sessionStorage.getItem('anglers')), parseStoredPlaces(sessionStorage.getItem('places')) );
+    fresults( parseStoredData(sessionStorage.getItem('anglers')), parseStoredPlaces(sessionStorage.getItem('places')), parseStoredTaxa(sessionStorage.getItem('taxa')) );
 } else {
     request();  
 }
