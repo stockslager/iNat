@@ -460,6 +460,7 @@ function parseStoredPlaces(places) {
        // Parse the string back to an object
        const retrievedRec = JSON.parse(places);
        retrievedRec.places = JSON.parse(retrievedRec.places);
+       console.log('pl ',retrievedRec.places);
        return retrievedRec;
    } else {
        console.log("No object found in session storage for key 'myObject'");
