@@ -208,8 +208,6 @@ function furlArrow(url,txt=url) { return '<a href="'+url+'" id="arrows">'+txt+'<
 
 function findValueByKey(arr, key, value) {
   for (let i = 0; i < arr.length; i++) {
-   console.log('val ',value);
-   console.log('ke ',arr[i][key]);
     if (arr[i][key].toString() === value) {
       return arr[i];
     }
@@ -266,11 +264,24 @@ function fresults(result, places_obj) {
       places_menu += furl(github_root+'a_session_sort.html?project_id=239695'+opts+sort_opt+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
  }
   
-
+      let place_name  = 'Place';
+      let taxon_name  = 'Taxa';
+      let method_name = 'Method';
+      if( p_place_id ) {
+          const place = findValueByKey(places_obj.places, 'place_id', p_place_id); 
+          place_name = place.place_name;
+      } 
+      if( p_taxon_id ) {
+          taxon_name = 't';
+      }  
+      if( p_field_value ) {
+          method_name = p_field_value;
+      }
+ 
       faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
                                                    /*'<a href="#news">News</a>' +*/
                                                       '<div class="dropdown">' +
-                                                           '<button class="dropbtn">Place' +
+                                                           '<button class="dropbtn">' + place_name +
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
@@ -278,7 +289,7 @@ function fresults(result, places_obj) {
                                                            '</div>' +
                                                        '</div>' +
                                                       '<div class="dropdown">' +
-                                                           '<button class="dropbtn">Taxa' +
+                                                           '<button class="dropbtn">' + taxon_name +
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
@@ -288,7 +299,7 @@ function fresults(result, places_obj) {
                                                            '</div>' +
                                                        '</div>' + 
                                                       '<div class="dropdown">' +
-                                                           '<button class="dropbtn">Method' +
+                                                           '<button class="dropbtn">' + method_name +
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
@@ -318,25 +329,6 @@ function fresults(result, places_obj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let nav_position = '';
-      if( p_place_id ) {
-          const place = findValueByKey(places_obj.places, 'place_id', p_place_id); 
-       console.log('place ',place);
-          nav_position += place.place_name;
-        if( p_taxon_id ) {
-            if( p_field_value ) {
-                nav_position += (' | '+p_field_value);
-            }
-        } else if( p_field_value ) {
-                nav_position += (' | '+p_field_value);
-        }
-      } else if( p_taxon_id ) {
-          if( p_field_value ) {
-              nav_position += (' | '+p_field_value);
-          }
-      } else if( p_field_value ) {
-          nav_position += p_field_value;
-      }
     
       faddelem('p',document.body,{innerHTML:('<span id="topright">'+nav_position+'</span></div></span>')});
 
