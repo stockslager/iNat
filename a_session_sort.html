@@ -249,15 +249,10 @@ function sortWithNullObs(arr, ascending) {
  
 function fresults(result, places_obj) {
 
-console.log('places: ', places_obj);
-console.log('result: ', result);
-console.log('p ', places_obj.places[0].place_name);
-
  // places menu...
  let places_menu = furl(github_root+'a_session_sort.html?project_id=239695'+sort_opt+taxon_opt,'All');
  for( let i=0; i<places_obj.places.length; i++ ) {
-      console.log(places_obj.places[i].place_name);
-      places_menu += furl(github_root+'a_session_sort.html?project_id=239695'+opts+sort_opt,places_obj.places[i].place_name);
+      places_menu += furl(github_root+'a_session_sort.html?project_id=239695'+opts+sort_opt+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
  }
   
 
@@ -429,9 +424,7 @@ class Place {
 }
 
 function storePlaces(data) {
- console.log('one');
    if (data) {
-    console.log('two');
       let places_array = [];
       for( let i=0; i<data.length; i++ ) {
            const place = new Place(data[i].place_id, data[i].place_name);
@@ -500,7 +493,6 @@ async function asyncGetData() {
    await fetch('life_list_anglers.json')
      .then(response => response.json())
      .then(data => {
-      console.log('data: '+data.places);
       storePlaces(data.places);
    })
      .catch(error => {
