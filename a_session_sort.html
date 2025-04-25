@@ -19,7 +19,7 @@
       font: 14px Sans-Serif;
       --color-base: white;
       --color-alt: whitesmoke;
-      --color-brand: #lightgray;
+      --color-brand: #333;
       --color-text: black;
       --color-text-invert: white;
       --color-text-link: royalblue;
@@ -266,6 +266,9 @@ function fresults(result, places_obj, taxa_obj) {
       }
 
       // taxa menu...
+      console.log('obj ',taxa_obj);
+ console.log('taxa_obj.taxa ',taxa_obj.taxa);
+ console.log('id ',taxa_obj.taxa[0].taxon_id);
       let taxa_menu = furl(github_root+'a_session_sort.html?project_id=239695'+sort_opt+place_opt,'All');
       for( let i=0; i<taxa_obj.taxa.length; i++ ) {
            taxa_menu += furl(github_root+'a_session_sort.html?project_id=239695'+opts+sort_opt+'&taxon_id='+taxa_obj.taxa[i].taxon_id,taxa_obj.taxa[i].taxon_name);
@@ -325,18 +328,9 @@ function fresults(result, places_obj, taxa_obj) {
       if( p_sort === 'duser' )    { result.recs = sortWithNull(result.recs, false); }
       if( p_sort === 'uspecies' ) { result.recs = sortWithNullSpecies(result.recs, true); }
       if( p_sort === 'dspecies' ) { result.recs = sortWithNullSpecies(result.recs, false); }
-      /*if( p_sort === 'uobs' )     { result.recs = sortWithNullObs(result.recs, true); }
-      if( p_sort === 'dobs' )     { result.recs = sortWithNullObs(result.recs, false); }*/
+      if( p_sort === 'uobs' )     { result.recs = sortWithNullObs(result.recs, true); }
+      if( p_sort === 'dobs' )     { result.recs = sortWithNullObs(result.recs, false); }
 
-      // may need to revisit this if there is more than one page of data
-      let sort_url = (github_root+'a_session_sort.html?project_id=239695'+opts+'&cache_check=yes');
-      let name_sort_button    = furlArrow(sort_url+'&sort=uuser','&#11014');
-      let species_sort_button = furlArrow(sort_url+'&sort=uspecies','&#11014');
-      if( p_sort === 'uuser' )    { name_sort_button = furlArrow(sort_url+'&sort=duser',' &#11015 '); }
-      if( p_sort === 'duser' )    { name_sort_button = furlArrow(sort_url+'&sort=uuser','&#11014'); }
-      if( p_sort === 'uspecies' ) { species_sort_button = furlArrow(sort_url+'&sort=dspecies','&#11015'); }
-      if( p_sort === 'dspecies' ) { species_sort_button = furlArrow(sort_url+'&sort=uspecies','&#11014'); }
-    
       let total_results = result.total_results;
       let per_page = result.per_page;
       let page_curr = result.page;
@@ -355,13 +349,15 @@ function fresults(result, places_obj, taxa_obj) {
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
+
+      let sort_url = (github_root+'a_session_sort.html?project_id=239695'+opts+'&cache_check=yes');
                       
       let labels = [
          {innerText:'#'},
          {innerText:'User '},
-         {innerHTML:' <div style="display:flex; align-items:center;">'+name_sort_button+'</div>'},
+         {innerHTML:' <div style="display:flex; align-items:center;">'+furlArrow(sort_url+'&sort=duser',' &#11165; ') + furlArrow(sort_url+'&sort=uuser','&#11014</div>')},
         // {innerText:'Map'},
-         {innerHTML:'Species'+species_sort_button },
+         {innerHTML:'Species'+furlArrow(sort_url+'&sort=dspecies','&#11015') + furlArrow(sort_url+'&sort=uspecies','&#11014')},
         // {innerHTML:'Obs'+furlArrow(sort_url+'&sort=dobs','&#11015') + furlArrow(sort_url+'&sort=uobs','&#11014')},
       ];
       faddelems('th',hrow,labels);
@@ -577,7 +573,6 @@ async function asyncGetData() {
           faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
       })
 }
-
 
 // need to pull resources from a json file to pass into an api
 // so needs to be asynchronous. 
