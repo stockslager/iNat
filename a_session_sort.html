@@ -33,7 +33,7 @@
          --color-alt: #171717;
          --color-brand: #333;
          --color-text: #bababa;
-         --color-text-invert: black;
+         --color-text-invert: white;
          --color-text-link: cornflowerblue;
          --color-border: #444;
          --color-hover: #444;
@@ -44,6 +44,7 @@
    #main { width:fit-content; min-width:375px; }
    #arrows { text-decoration:none; color:black; }
    table, td, th { border-collapse:collapse; margin:0px; padding:5px; }
+  /* th { position:-webkit-sticky; position:sticky; top:0;   font-size: 14px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }*/
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid #333; border-radius: 5px 0px 0px 0px; }
    th:last-child{ border: 0px solid #333; border-radius: 0px 5px 0px 0px; }  
@@ -389,7 +390,7 @@ function fresults(result, places_obj, taxa_obj) {
             {innerHTML:furl(root_people+rec.user_login,rec.user_login)},
             //{innerHTML:furl(github_root+params+opts,rec.user_login)},
             {innerHTML:furl(github_root+'life_list_map.html?project_id=239695&view=elevation'+opts+'&user_id='+rec.user_login,'<span class="books">&#127758</span>')},
-            {innerHTML:furl(github_root+params+opts,rec.species_count)},
+            {innerHTML:furl(github_root+params+opts,<div style="text-align:center;">+rec.species_count+'</div>')},
             {innerHTML:furl(github_root+detail_params+opts,rec.obs_count)},      
             //{innerHTML:furl(github_root+detail_params+opts,'<span class="books">&#128269</span>')},      
          ];
