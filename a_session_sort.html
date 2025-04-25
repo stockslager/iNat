@@ -206,6 +206,15 @@ winurlparams.delete('activity_data');
 
 function furlArrow(url,txt=url) { return '<a href="'+url+'" id="arrows">'+txt+'</a>'; };
 
+function findValueByKey(arr, key, value) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i][key] === value) {
+      return arr[i];
+    }
+  }
+  return undefined;
+}
+
 function sortWithNull(arr, ascending) {
   for( let i=0; i<arr.length; i++ ) {
        if( arr[i].user_login ){
@@ -313,14 +322,17 @@ function fresults(result, places_obj) {
           nav_position += place.place_name;
         if( p_taxon_id ) {
             if( p_field_value ) {
+                nav_position += (' | '+p_field_value);
             }
         } else if( p_field_value ) {
-            
+                nav_position += (' | '+p_field_value);
         }
       } else if( p_taxon_id ) {
           if( p_field_value ) {
+              nav_position += (' | '+p_field_value);
           }
       } else if( p_field_value ) {
+          nav_position += p_field_value;
       }
     
       faddelem('p',document.body,{innerHTML:('<span id="topright">'+nav_position+'</span></div></span>')});
