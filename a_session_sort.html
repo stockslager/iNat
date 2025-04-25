@@ -329,8 +329,9 @@ function fresults(result, places_obj, taxa_obj) {
       if( p_sort === 'dobs' )     { result.recs = sortWithNullObs(result.recs, false); }*/
 
       // may need to revisit this if there is more than one page of data
-      let name_sort_button = furlArrow(sort_url+'&sort=uuser','&#11014');
-      let species_sort_button = '';
+      let sort_url = (github_root+'a_session_sort.html?project_id=239695'+opts+'&cache_check=yes');
+      let name_sort_button    = furlArrow(sort_url+'&sort=uuser','&#11014');
+      let species_sort_button = furlArrow(sort_url+'&sort=uspecies','&#11014');
       if( p_sort === 'uuser' )    { name_sort_button = furlArrow(sort_url+'&sort=duser',' &#11015 '); }
       if( p_sort === 'duser' )    { name_sort_button = furlArrow(sort_url+'&sort=uuser','&#11014'); }
       if( p_sort === 'uspecies' ) { species_sort_button = furlArrow(sort_url+'&sort=dspecies','&#11015'); }
@@ -354,8 +355,6 @@ function fresults(result, places_obj, taxa_obj) {
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
-
-      let sort_url = (github_root+'a_session_sort.html?project_id=239695'+opts+'&cache_check=yes');
                       
       let labels = [
          {innerText:'#'},
