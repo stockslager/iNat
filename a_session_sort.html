@@ -262,13 +262,13 @@ function fresults(result, places_obj, taxa_obj) {
       // places menu...
       let places_menu = furl(github_root+'a_session_sort.html?project_id=239695'+sort_opt+taxon_opt+p_field_opt,'All');
       for( let i=0; i<places_obj.places.length; i++ ) {
-           places_menu += furl(github_root+'a_session_sort.html?project_id=239695'+sort_opt+taxon_opt+p_field_opt'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
+           places_menu += furl(github_root+'a_session_sort.html?project_id=239695'+sort_opt+taxon_opt+p_field_opt+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
       }
 
       // taxa menu...
       let taxa_menu = furl(github_root+'a_session_sort.html?project_id=239695'+sort_opt+place_opt+p_field_opt,'All');
       for( let i=0; i<taxa_obj.taxa.length; i++ ) {
-           taxa_menu += furl(github_root+'a_session_sort.html?project_id=239695'+opts+sort_opt+p_field_opt'&taxon_id='+taxa_obj.taxa[i].taxon_id,taxa_obj.taxa[i].taxon_name);
+           taxa_menu += furl(github_root+'a_session_sort.html?project_id=239695'+opts+sort_opt+p_field_opt+'&taxon_id='+taxa_obj.taxa[i].taxon_id,taxa_obj.taxa[i].taxon_name);
       }
   
       let place_name  = 'Place';
