@@ -74,9 +74,9 @@
 
 
  .menu {
-  // define the height of the menu
+  /* define the height of the menu*/
   --menu-height: 40px;
-  // holder and ul general style
+  /* holder and ul general style*/
   box-sizing: border-box;
   position: fixed;
   top: 0;
@@ -104,8 +104,8 @@
         width: 100%;      
       }      
     }
-    // lets put an arrow down 
-    // to the li`s with dropdown
+    /* lets put an arrow down */
+    /* to the li`s with dropdown */
     li {
       padding-right: 36px;
       &::before {
@@ -122,28 +122,28 @@
       }
     }
     .link {
-      // links dont need arrow
+      /* links dont need arrow */
       &::before {
         padding-right: 0;
         display: none;
       }      
     }
   }
-  // the first ul inside the container
-  // is the menu, so must be visible 
-  // and have its own style
+  /* the first ul inside the container */
+  /* is the menu, so must be visible */
+  /* and have its own style */
   > ul {
     display: flex;
     height: var(--menu-height);
     align-items: center;
     background-color: #000000;
-    // the first ul elements can be a
-    // link or an li with a nested ul. 
-    // the nested ul will be a dropdown
+    /* the first ul elements can be a
+    /* link or an li with a nested ul. 
+    /* the nested ul will be a dropdown */
     li {
       position: relative;
       margin: 0 8px;
-      // the dropdown style
+      /* the dropdown style */
       ul {
         visibility: hidden;
         opacity: 0;        
@@ -156,7 +156,7 @@
         transform: translateX(-50%);
         transition: 200ms;
         transition-delay: 200ms;
-        // the dropdown items style
+        /* the dropdown items style */
         li {
           margin: 0;
           padding: 8px 16px;
@@ -165,9 +165,9 @@
           justify-content: flex-start;
           height: 30px;
           padding-right: 40px;
-          // lets put an arrow right
-          // to the inner li`s with
-          // dropdowns
+          /* lets put an arrow right */
+          /* to the inner li`s with */
+          /* dropdowns */
           &::before {
             width: 0; 
             height: 0; 
@@ -175,8 +175,8 @@
             border-bottom: 5px solid transparent;
             border-left: 5px solid #FFA500;
           }
-          // every dropdown after the
-          // first must open to the right
+          /* every dropdown after the */
+          /* first must open to the right */
           ul {
             top: -2%;
             left: 100%;
@@ -187,8 +187,8 @@
           }
         }
       }
-      // on hover an li (not an <a>)
-      // must show its ul (dropdown)
+      /* on hover an li (not an <a>) */
+      /* must show its ul (dropdown) */
       &:hover {
         > ul {
           opacity: 1;
