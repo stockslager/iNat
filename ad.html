@@ -1,0 +1,587 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+ 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="iNaturalist Angling Lifelists" />
+<link rel="icon" type="image/png" href="fish.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="fish.svg" />
+<link rel="shortcut icon" href="fish.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="fish.png" />
+<meta name="apple-mobile-web-app-title" content="Life List" />
+<link rel="manifest" href="fish.webmanifest" />
+<title>iNaturalist Angling Lifelists</title>
+<style>
+   :root {
+      background: var(--color-base); 
+      color: var(--color-text);
+      font: 14px Sans-Serif;
+      --color-base: white;
+      --color-alt: whitesmoke;
+      --color-brand: #333;
+      --color-text: black;
+      --color-text-invert: white;
+      --color-text-link: royalblue;
+      --color-border: lightgray;
+      --color-hover: lightgray;
+      --color-base-translucent: rgba(255,255,255,0.85);
+   }
+   @media (prefers-color-scheme: dark) {
+      :root {
+         --color-base: black;
+         --color-alt: #171717;
+         --color-brand: #333;
+         --color-text: #bababa;
+         --color-text-invert: white;
+         --color-text-link: cornflowerblue;
+         --color-border: #444;
+         --color-hover: #444;
+         --color-base-translucent: rgba(0,0,0,0.85);
+      }
+   }  
+   #key { color:var(--color-text-link); }
+   #main { width:fit-content; min-width:375px; }
+   #arrows { text-decoration:none; color:black; }
+   table, td, th { border-collapse:collapse; margin:0px; padding:5px; } 
+  /* th { position:-webkit-sticky; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }*/
+   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-size:14px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
+   th:first-child{ border: 0px solid #333; border-radius: 5px 0px 0px 0px; }
+   th:last-child{ border: 0px solid #333; border-radius: 0px 5px 0px 0px; }  
+   .arrow { font-size:1.000em; }
+   tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
+   tr:nth-child(even) { background:var(--color-base); }
+   .tar { text-align:right; }
+   .icon { height:34px; width:34px; border-radius:50%; }
+   .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
+   .books { font-size:1.500em; }
+   .photo { height:64px; width:64px; border-radius: 15px 15px 15px 15px; }
+   img { margin:0; padding:0; border:0; }
+   h2 { width:fit-content; min-width:375px; }
+   p { width:fit-content; min-width:375px; }
+   a { text-decoration:none; color:var(--color-text-link); }
+   a:hover { background:var(--color-hover); }
+   #nav { margin-left:-8px; position:-webkit-sticky /*Safari*/; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
+   @media print { #nav { display:none; } } 
+   .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
+   .button { background:var(--color-alt); }
+   .button_inactive { background:none; color:var(--color-border); }
+
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  border-radius: 5px 5px 5px 5px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.navbar a {
+  float: left;
+  font-size: 14px;
+  color: white;
+  text-align: center;
+  padding: 12px 14px;
+  text-decoration: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  cursor: pointer;
+  font-size: 14px;  
+  border: none;
+  outline: none;
+  color: white;
+  padding: 12px 14px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn, .dropbtn:focus {
+  background-color: black;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 10px 14px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+ 
+.dropdown-content a:first-child {
+  border-radius: 5px 5px 0 0;
+}
+
+.dropdown-content a:last-child {
+  border-radius: 0 0 5px 5px;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.show {
+  display: block;
+}
+</style>
+</head>
+
+<body>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let p_sort       = winurlparams.get('sort') || '';
+
+// cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
+// session storage is only used for sorting of data in columns at this point.
+let p_cache_check = winurlparams.get('cache_check') || 'no';  
+
+// if the user has selected a method, built the opt to pass to the
+// lifelist page.
+let p_field_opt = '';
+let p_field_value = '';
+// find key/value pair for &field: param if one was passed in
+for (const [key, value] of winurlparams.entries()) {
+  if( key.startsWith('field') ){
+      p_field_value = value;
+      p_field_opt = ('&'+key+'='+value);
+  }
+}   
+
+let p_place_id = winurlparams.get('place_id') || '';
+let p_taxon_id = winurlparams.get('taxon_id') || '';
+
+let place_opt = '';
+let taxon_opt = '';
+let sort_opt  = '';
+let opts = ''
+
+if( p_place_id ) {
+    place_opt += ('&place_id='+p_place_id);
+    opts      += ('&place_id='+p_place_id);
+
+}
+
+if( p_taxon_id ) {
+    taxon_opt += ('&taxon_id='+p_taxon_id);
+    opts      += ('&taxon_id='+p_taxon_id);
+}
+
+if( p_sort ) {
+    sort_opt += ('&sort='+p_sort);
+}
+   
+let view = winurlparams.get('view') || '';
+let activity_data = winurlparams.get('activity_data') || 'local';
+winurlparams.delete('activity_data');
+</script>
+   
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v7.js"></script>
+
+<script>
+
+function furlArrow(url,txt=url) { return '<a href="'+url+'" id="arrows">'+txt+'</a>'; };
+
+function findValueByKey(arr, key, value) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i][key].toString() === value) {
+      return arr[i];
+    }
+  }
+  return undefined;
+}
+
+function sortWithNull(arr, ascending) {
+  for( let i=0; i<arr.length; i++ ) {
+       if( arr[i].user_login ){
+           arr[i].user_login = arr[i].user_login.toLowerCase();
+       }
+  }
+  arr.sort(function(a, b) {
+    if (!a.user_login && !b.user_login) return 0;
+    if (!a.user_login) return ascending ? 1 : -1;
+    if (!b.user_login) return ascending ? -1 : 1;
+    if (a.user_login < b.user_login) return ascending ? -1 : 1;
+    if (a.user_login > b.user_login) return ascending ? 1 : -1;
+    return 0;
+  });
+  return arr;
+}
+
+function sortWithNullSpecies(arr, ascending) {
+  arr.sort(function(a, b) {
+    if (!a.species_count && !b.species_count) return 0;
+    if (!a.species_count) return ascending ? 1 : -1;
+    if (!b.species_count) return ascending ? -1 : 1;
+    if (a.species_count < b.species_count) return ascending ? -1 : 1;
+    if (a.species_count > b.species_count) return ascending ? 1 : -1;
+    return 0;
+  });
+  return arr;
+}
+
+function sortWithNullObs(arr, ascending) {
+  arr.sort(function(a, b) {
+    if (!a.obs_count && !b.obs_count) return 0;
+    if (!a.obs_count) return ascending ? 1 : -1;
+    if (!b.obs_count) return ascending ? -1 : 1;
+    if (a.obs_count < b.obs_count) return ascending ? -1 : 1;
+    if (a.obs_count > b.obs_count) return ascending ? 1 : -1;
+    return 0;
+  });
+  return arr;
+}
+ 
+function fresults(result, places_obj, taxa_obj) {
+
+      // places menu...
+      let places_menu = furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+taxon_opt+p_field_opt,'All');
+      for( let i=0; i<places_obj.places.length; i++ ) {
+           places_menu += furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+taxon_opt+p_field_opt+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
+      }
+
+      // taxa menu...
+      let taxa_menu = furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+place_opt+p_field_opt,'All');
+      for( let i=0; i<taxa_obj.taxa.length; i++ ) {
+           taxa_menu += furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+place_opt+p_field_opt+'&taxon_id='+taxa_obj.taxa[i].taxon_id,taxa_obj.taxa[i].taxon_name);
+      }
+  
+      let place_name  = 'Place';
+      let taxon_name  = 'Taxa';
+      let method_name = 'Method';
+      if( p_place_id ) {
+          const place = findValueByKey(places_obj.places, 'place_id', p_place_id); 
+          place_name = place.place_name;
+      } 
+      if( p_taxon_id ) {
+          const taxon = findValueByKey(taxa_obj.taxa, 'taxon_id', p_taxon_id); 
+          taxon_name = taxon.taxon_name;
+      }  
+      if( p_field_value ) {
+          method_name = p_field_value;
+      }
+ 
+      faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
+                                                   /*'<a href="#news">News</a>' +*/
+                                                      '<div class="dropdown">' +
+                                                           '<button class="dropbtn">' + place_name +
+                                                             '<i class="fa fa-caret-down"></i>' +
+                                                           '</button>' +
+                                                           '<div class="dropdown-content">' +
+                                                                 places_menu +
+                                                           '</div>' +
+                                                       '</div>' +
+                                                      '<div class="dropdown">' +
+                                                           '<button class="dropbtn">' + taxon_name +
+                                                             '<i class="fa fa-caret-down"></i>' +
+                                                           '</button>' +
+                                                           '<div class="dropdown-content">' +
+                                                                 taxa_menu +
+                                                           '</div>' +
+                                                       '</div>' + 
+                                                      '<div class="dropdown">' +
+                                                           '<button class="dropbtn">' + method_name +
+                                                             '<i class="fa fa-caret-down"></i>' +
+                                                           '</button>' +
+                                                           '<div class="dropdown-content">' +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Angling+(Conventional)'+opts+sort_opt,'Snorkel Fishing') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Microfishing'+opts+sort_opt,'Dip Net') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Fly+Fishing'+opts+sort_opt,'By Hand') +
+                                                           '</div>' +
+                                                       '</div>' + 
+                                              '</div>')});
+ 
+   if (result) {
+
+      // may need to revisit this if there is more than one page of data
+      if( p_sort === 'uuser' )    { result.recs = sortWithNull(result.recs, true); }
+      if( p_sort === 'duser' )    { result.recs = sortWithNull(result.recs, false); }
+      if( p_sort === 'uspecies' ) { result.recs = sortWithNullSpecies(result.recs, true); }
+      if( p_sort === 'dspecies' ) { result.recs = sortWithNullSpecies(result.recs, false); }
+      if( p_sort === 'uobs' )     { result.recs = sortWithNullObs(result.recs, true); }
+      if( p_sort === 'dobs' )     { result.recs = sortWithNullObs(result.recs, false); }
+
+      let total_results = result.total_results;
+      let per_page = result.per_page;
+      let page_curr = result.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+
+    
+      //faddelem('p',document.body,{innerHTML:('<span id="topright">'+nav_position+'</span></div></span>')});
+
+      faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results)+'<br />' 
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
+            });
+
+      let table = faddelem('table',document.body,{id:'main'});
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+
+      let sort_url = (github_root+'life_list_dashboard.html?project_id=239695'+opts+'&cache_check=yes');
+                      
+      let labels = [
+         {innerText:'#'},
+         {innerText:'User '},
+         {innerHTML:' <div style="display:flex; align-items:center;">'+furlArrow(sort_url+'&sort=duser','&#11015;') + furlArrow(sort_url+'&sort=uuser','&#11014;</div>')},
+        // {innerText:'Map'},
+         {innerHTML:'Spc'+furlArrow(sort_url+'&sort=dspecies','&#11015;') + furlArrow(sort_url+'&sort=uspecies','&#11014;')},
+         //{innerHTML:'Species'+furlArrow(sort_url+'&sort=dspecies','<div style="padding-right:10px; padding-left:10px;">&#11015;</div>') + furlArrow(sort_url+'&sort=uspecies','&#11014;')},
+         {innerHTML:'Obs'+furlArrow(sort_url+'&sort=dobs','&#11015') + furlArrow(sort_url+'&sort=uobs','&#11014')},
+      ];
+      faddelems('th',hrow,labels);
+      
+      let tbody = faddelem('tbody',table);
+      for (let i=0; i<result.recs.length; i++) {
+         let target_url = '';     
+         let brow = faddelem('tr',tbody);
+         let rec = result.recs[i];
+         let lists = '';
+         let user_icon = rec.icon || '';
+         
+         if( user_icon === '' ){
+            user_icon += '<div class="npcicon">&#x1F464;</div>';
+         } else {
+            user_icon = '<img class="icon" src="'+user_icon+'" />';
+         }
+
+         let params = ('life_list.html?project_id=239695&user_id='+rec.user_login/*+'&tag_name=lifelist'*/+p_field_opt);
+         let detail_params = ('configurable_obs_field_table.html?project_id=239695&user_id='+rec.user_login+'&obs_fields=17274,7615');
+
+         if( rec.user_login === 'uconnbirdfish' ){
+             params = ('life_list.html?project_id=239695&user_id='+rec.user_login+'&tag_name=pegslifelist');
+             params = ('life_list.html?project_id=239695&user_id='+rec.user_login+opts);
+         }
+         
+         let values = [
+            {innerText:i+1},
+            {innerHTML:user_icon},
+            {innerHTML:furl(root_people+rec.user_login,rec.user_login)},
+            //{innerHTML:furl(github_root+params+opts,rec.user_login)},
+         //   {innerHTML:furl(github_root+'life_list_map.html?project_id=239695&view=elevation'+opts+'&user_id='+rec.user_login,'<span class="books">&#127758</span>')},
+            {innerHTML:furl(github_root+params+opts,rec.species_count )},
+            {innerHTML:furl(github_root+detail_params+opts,rec.obs_count)},      
+            //{innerHTML:furl(github_root+detail_params+opts,'<span class="books">&#128269</span>')},      
+         ];
+         faddelems('td',brow,values);
+      };
+
+      // buttons to go to prev or next page
+      let nav = faddelem('div',document.body,{id:'nav'});
+      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); };
+};
+
+class Result {
+  constructor(total_results, per_page, page, recs) {
+    this.total_results = total_results;
+    this.per_page = per_page;
+    this.page = page;
+    this.recs = recs;
+  }
+}
+
+class Record {
+  constructor(count, icon, user_login, species_count, obs_count) {
+    this.count = count;
+    this.icon = icon;
+    this.user_login = user_login;
+    this.species_count = species_count;
+    this.obs_count = obs_count;
+  }
+}
+
+class Places {
+  constructor(places) {
+    this.places = places;
+  }
+}
+ 
+class Place {
+  constructor(place_id, place_name) {
+    this.place_id = place_id;
+    this.place_name = place_name;
+  }
+}
+
+function storePlaces(data) {
+   if (data) {
+      let places_array = [];
+      for( let i=0; i<data.length; i++ ) {
+           const place = new Place(data[i].place_id, data[i].place_name);
+           places_array.push(place);
+      }
+      const places = new Places( JSON.stringify(places_array) );
+
+      // Serialize the object to JSON string so it can be stored in session
+      const place_string = JSON.stringify(places);
+      sessionStorage.setItem('places', place_string);
+   }
+   else { faddelem('p',document.body,{innerText:'No places returned.'}); };
+}
+
+function parseStoredPlaces(places) {
+   // Check if value exists before parsing
+   if( places ) {
+       // Parse the string back to an object
+       const retrievedRec = JSON.parse(places);
+       retrievedRec.places = JSON.parse(retrievedRec.places);
+       console.log('pl ',retrievedRec.places);
+       return retrievedRec;
+   } else {
+       console.log("No object found in session storage for key 'myObject'");
+       throw new Error("No object found in session storage.");
+   }
+} 
+  
+function storeData(xobj) {
+   let results = xobj.results;
+
+   if (results) {
+      let record_array = [];
+      for( let i=0; i<results.length; i++ ) {
+           const record = new Record((i+1), results[i].user.icon, results[i].user.login, results[i].species_count, results[i].observation_count);
+           record_array.push(record);
+      }
+      const result = new Result( xobj.total_results, xobj.per_page, xobj.page, JSON.stringify(record_array) );
+
+      // Serialize the object to JSON string so it can be stored in session
+      const result_string = JSON.stringify(result);
+      sessionStorage.setItem('anglers', result_string);
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); };
+}
+
+function parseStoredData(anglers) {
+   // Check if value exists before parsing
+   if( anglers ) {
+       // Parse the string back to an object
+       const retrievedRec = JSON.parse(anglers);
+       retrievedRec.recs = JSON.parse(retrievedRec.recs);
+       return retrievedRec;
+   } else {
+       console.log("No object found in session storage for key 'myObject'");
+       throw new Error("No object found in session storage.");
+   }
+}
+
+class Taxa {
+  constructor(taxa) {
+    this.taxa = taxa;
+  }
+}
+ 
+class Taxon {
+  constructor(taxon_id, taxon_name) {
+    this.taxon_id = taxon_id;
+    this.taxon_name = taxon_name;
+  }
+}
+
+function storeTaxa(data) {
+   if (data) {
+      let taxa_array = [];
+      for( let i=0; i<data.length; i++ ) {
+           const taxon = new Taxon(data[i].taxon_id, data[i].taxon_name);
+           taxa_array.push(taxon);
+      }
+      const taxa = new Taxa( JSON.stringify(taxa_array) );
+
+      // Serialize the object to JSON string so it can be stored in session
+      const taxa_string = JSON.stringify(taxa);
+      sessionStorage.setItem('taxa', taxa_string);
+   }
+   else { faddelem('p',document.body,{innerText:'No taxa returned.'}); };
+}
+
+function parseStoredTaxa(taxa) {
+   // Check if value exists before parsing
+   if( taxa ) {
+       // Parse the string back to an object
+       const retrievedRec = JSON.parse(taxa);
+       retrievedRec.taxa = JSON.parse(retrievedRec.taxa);
+       console.log('taxa ',retrievedRec.taxa);
+       return retrievedRec;
+   } else {
+       console.log("No object found in session storage");
+       throw new Error("No object found in session storage.");
+   }
+} 
+ 
+let apibase = 'https://api.inaturalist.org/v1/observations/observers';
+let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+let apirefurl = 'https://api.inaturalist.org/v1/observations/observers';
+let apirefname = 'iNaturalist Angling Life Lists';
+let apiref = furl(apirefurl,apirefname);
+
+async function asyncGetData() {
+   await fetch('life_list_anglers.json')
+     .then(response => response.json())
+     .then(data => {
+      storePlaces(data.places);
+      storeTaxa(data.taxa);
+   })
+     .catch(error => {
+      console.error('Error fetching JSON:', error);
+   });
+
+   await fetch(apiurl)
+      .then((response) => {
+         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+         return response.json();
+      })
+       .then((data) => { storeData(data); 
+                         fresults( parseStoredData(sessionStorage.getItem('anglers')), parseStoredPlaces(sessionStorage.getItem('places')), parseStoredTaxa(sessionStorage.getItem('taxa')) ); 
+                       })
+       .catch((err) => {
+          console.error(err.message);
+          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+      })
+}
+
+// need to pull resources from a json file to pass into an api
+// so needs to be asynchronous. 
+const request = async () => {
+   asyncGetData();
+}
+
+// cache check will be set to yes for sorting of columns and
+// and when "anglers" is cicked on subsequent pages
+if( p_cache_check === 'yes' && sessionStorage.getItem('anglers') ) {
+    console.log('found session');
+    fresults( parseStoredData(sessionStorage.getItem('anglers')), parseStoredPlaces(sessionStorage.getItem('places')), parseStoredTaxa(sessionStorage.getItem('taxa')) );
+} else {
+    request();  
+}
+ 
+</script>
+
+</body>
+</html>
