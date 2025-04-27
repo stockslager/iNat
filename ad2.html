@@ -481,7 +481,7 @@ function fresults(xobj) {
              }
          }
 
-         let query_params = ('user_id='+p_user_id);
+         let query_params = ('&user_id='+p_user_id);
   
          let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
          let grid_title  = ('&title='+(pref_tax_name||tax_name));
@@ -504,7 +504,7 @@ function fresults(xobj) {
          let values = [
                   {innerText:i+1},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  {innerHTML:furl('https://www.inaturalist.org/observations?subview=map.html?taxon_id='+rec.taxon.id+query_params,displayName)},
+                  {innerHTML:furl('https://www.inaturalist.org/observations?taxon_id='+rec.taxon.id+query_params,displayName)},
                   {innerHTML:warning},
                   ];
 
