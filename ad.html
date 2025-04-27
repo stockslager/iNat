@@ -320,13 +320,14 @@ function fresults(result, places_obj, taxa_obj) {
    if (result) {
 
       // may need to revisit this if there is more than one page of data
-      if( p_sort === 'uuser' )    { result.recs = sortWithNull(result.recs, true); }
-      if( p_sort === 'duser' )    { result.recs = sortWithNull(result.recs, false); }
-      if( p_sort === 'uspecies' ) { result.recs = sortWithNullSpecies(result.recs, true); }
-      if( p_sort === 'dspecies' ) { result.recs = sortWithNullSpecies(result.recs, false); }
-      if( p_sort === 'uobs' )     { result.recs = sortWithNullObs(result.recs, true); }
-      if( p_sort === 'dobs' )     { result.recs = sortWithNullObs(result.recs, false); }
-
+      if( p_sort === 'uuser' )    { result.recs = sortWithNull(result.recs, true); } else
+      if( p_sort === 'duser' )    { result.recs = sortWithNull(result.recs, false); } else
+      if( p_sort === 'uspecies' ) { result.recs = sortWithNullSpecies(result.recs, true); } else
+      if( p_sort === 'dspecies' ) { result.recs = sortWithNullSpecies(result.recs, false); } else
+      if( p_sort === 'uobs' )     { result.recs = sortWithNullObs(result.recs, true); } else
+      if( p_sort === 'dobs' )     { result.recs = sortWithNullObs(result.recs, false); } else
+                                  { result.recs = sortWithNullSpecies(result.recs, false); }
+    
       let total_results = result.total_results;
       let per_page = result.per_page;
       let page_curr = result.page;
