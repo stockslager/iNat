@@ -176,6 +176,7 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr);
 let angler = winurlparams.get('angler') || '';
 let p_project_id = winurlparams.get('p_project_id') || '';
+let p_taxon_id   = winurlparams.get('p_taxon_id') || '';
 var cellpx = winurlparams.get('cellpx') || 122;
 var spacerpx = winurlparams.get('spacerpx') || 4;
 var rows = winurlparams.get('rows') || 30;
@@ -220,8 +221,8 @@ function buildMenu() {
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
-                                                                 furl(github_root+'a_grid.html?user_id='+angler,'This Angler') +
-                                                                 furl(github_root+'a_grid.html?project_id=239695','All Anglers') +
+                                                                 furl(github_root+'a_grid.html?user_id='+angler+'&angler='+angler+'&taxon_id='+p_taxon_id,'This Angler') +
+                                                                 furl(github_root+'a_grid.html?project_id=239695&angler='+angler+'&taxon_id='+p_taxon_id,'All Anglers') +
                                                            '</div>' +
                                                        '</div>' +
                                               '</div>')});  
