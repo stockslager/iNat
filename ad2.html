@@ -348,7 +348,7 @@ function fresults(xobj) {
 
       let user = ('?user_id='+p_user_id);
 
-     // faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'life_list_dashboard.html','&#128031;')+'</span>') });
+     // faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'ad.html','&#128031;')+'</span>') });
  
       let dd_opts = '';
       let dd_array = [];
@@ -362,10 +362,10 @@ function fresults(xobj) {
       }
     
       if( !dd_opts ) {
-          dd_opts = furl(github_root+'life_list.html'+opts+'&tag_name='+p_tag_name,'All');
-          tags = furl(github_root+'life_list.html'+opts,'all');
+          dd_opts = furl(github_root+'ad2.html'+opts+'&tag_name='+p_tag_name,'All');
+          tags = furl(github_root+'ad2.html'+opts,'all');
           //dd_opts = '<option value="" disabled selected hidden>Observation Method</option>';
-          //dd_opts += ('<option value="life_list.html'+opts+'">All</option>');
+          //dd_opts += ('<option value="ad2.html'+opts+'">All</option>');
           for( let i=0; i<results.length; i++ ) {
              let rec = results[i];
 
@@ -374,15 +374,15 @@ function fresults(xobj) {
                   if( rec.ofvs[j].field_id.toString() === '17274' ) {           // Fish Observation Method
                       if( !dd_array.includes(rec.ofvs[j].value) ){
                           dd_array.push(rec.ofvs[j].value);
-                          dd_opts += furl(github_root+'life_list.html'+opts+'&tag_name='+p_tag_name+'&field:'+rec.ofvs[j].name+'='+rec.ofvs[j].value,rec.ofvs[j].value);
-                          //dd_opts += ('<option value="life_list.html'+opts+'&field:'+rec.ofvs[j].name+'='+rec.ofvs[j].value+'">'+rec.ofvs[j].value+'</option>');
+                          dd_opts += furl(github_root+'ad2.html'+opts+'&tag_name='+p_tag_name+'&field:'+rec.ofvs[j].name+'='+rec.ofvs[j].value,rec.ofvs[j].value);
+                          //dd_opts += ('<option value="ad2.html'+opts+'&field:'+rec.ofvs[j].name+'='+rec.ofvs[j].value+'">'+rec.ofvs[j].value+'</option>');
                       }  
                   }
                   if( rec.tags ) {
                       for( let m=0; m<rec.tags.length; m++ ) {
                            if( !tags_array.includes(rec.tags[m]) ) {
                                tags_array.push(rec.tags[m]);
-                               tags += furl(github_root+'life_list.html'+opts+'&tag_name='+rec.tags[m],rec.tags[m]);
+                               tags += furl(github_root+'ad2.html'+opts+'&tag_name='+rec.tags[m],rec.tags[m]);
                            }
                       }
                   }
@@ -407,8 +407,8 @@ function fresults(xobj) {
                                                            '<div class="dropdown-content">' + dd_opts + 
                                                            '</div>' +
                                                        '</div>' +
-                                                   //'<div id="home">'+furl(github_root+'life_list_dashboard.html','&#12803')+'</div>' +
-                                                   '<div id="home">'+furl(github_root+'life_list_dashboard.html','Anglers')+'</div>' +
+                                                   //'<div id="home">'+furl(github_root+'ad.html','&#12803')+'</div>' +
+                                                   '<div id="home">'+furl(github_root+'ad.html','Anglers')+'</div>' +
                                               '</div>')});
 
       //faddelem('p',document.body,{innerHTML:'<span id="topright"><div class="custom-select"><select onChange="window.location.href=this.value">' + dd_opts +
