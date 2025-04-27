@@ -40,22 +40,8 @@
       }
    }
    #main { width:fit-content; min-width:375px; }
-   #h2 { font-weight:bold; font-size:20px; }
-   #utf { font-size:1.475em; }
-   #home { font-size:1.200em; float:right; padding-left:5px; padding-right:15px; padding-top:3px; padding-bottom:0px; }
-   #butter2 { font-size:1.475em; padding-left:5px; padding-right:18px; padding-top:0px; padding-bottom:5px; }
-   #butter { font-size:1.475em; position:absolute; z-index:100; }
-   table, td, th { border-collapse:collapse; margin:0; padding:5px; }
-   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
-   th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
-   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }
-   tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
-   tr:nth-child(even) { background:var(--color-base); }
-   .tar { text-align:right; }
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
    .icon { height:48px; width:48px; border-radius:50%; }
-   .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
-   .flowericon { padding-left:5%; font-size:14px; white-space: nowrap; font-style:normal; }
    .photo { height:54px; width:54px; border-radius: 5px 5px 5px 5px; }
    p { margin:15px; width:fit-content; min-width:375px; }
    a { text-decoration:none; color:var(--color-text-link); }
@@ -183,8 +169,8 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr);
-var cellpx = winurlparams.get('cellpx') || 100;
-var spacerpx = winurlparams.get('spacerpx') || 2;
+var cellpx = winurlparams.get('cellpx') || 98;
+var spacerpx = winurlparams.get('spacerpx') || 1;
 var rows = winurlparams.get('rows') || 30;
 var columns = winurlparams.get('columns') || 3;
 let title = winurlparams.get('title') || '';
@@ -232,10 +218,10 @@ function fresults(data) {
    for (r=1;r<=rows;r++) {
       for (c=1;c<=columns;c++) { 
          var gcell = faddelem('div',grid,{classList:'gridcell',style:{
-            height:cellpx+'px',
-            width:cellpx+'px',
-            top:((r-1)*cellpx+(r<=1?0:r-1)*spacerpx)+'px',
-            left:((c-1)*cellpx+(c<=1?0:c-1)*spacerpx)+'px'
+            height:cellpx+'%',
+            width:cellpx+'%',
+            top:((r-1)*cellpx+(r<=1?0:r-1)*spacerpx)+'%',
+            left:((c-1)*cellpx+(c<=1?0:c-1)*spacerpx)+'%'
             }});
          if (recsfound===0&&data.total_results===0) { 
             gcell.innerHTML = furl(famp(obsurl),'<span>no<br />data</span>');
@@ -248,7 +234,7 @@ function fresults(data) {
                gcell.innerHTML = furl(famp(obsurl),'<span>+'+(fshorten(data.total_results-obsseq))+'<br />more</span>');
             }
             obsseq = 0;
-            if (r===1&&c>1) { grid.style.width = (c*cellpx+(c-1)*spacerpx)+'px'; };
+            if (r===1&&c>1) { grid.style.width = (c*cellpx+(c-1)*spacerpx)+'%'; };
             break;
          }
          else {
@@ -259,17 +245,17 @@ function fresults(data) {
             let obsdt = obs.time_observed_at?fdate(obs.time_observed_at,true):(obs.observed_on||'(Unknown Date)');
             let anchor = faddelem('a',gcell,{href:famp(obsurlbase+'/'+obs.id)});
             let photo = (photourl===null) ? faddelem('span',anchor,{innerText:'❎'})
-               : faddelem('img',anchor,{style:{width:cellpx+'px',height:cellpx+'px'},
+               : faddelem('img',anchor,{style:{width:cellpx+'%',height:cellpx+'%'},
                   title: taxon + ' observed by ' + user + ' on ' + obsdt,
                   src: ((cellpx<=75) ? photourl
                      : (cellpx<=150) ? photourl.replace('square','small')
                      : photourl.replace('square','medium'))
                   });
-            if (r===1&&c>1) { grid.style.width = (c*cellpx+(c-1)*spacerpx)+'px'; };
+            if (r===1&&c>1) { grid.style.width = (c*cellpx+(c-1)*spacerpx)+'%'; };
             obsseq++;
          };
       };
-      if (r>1) { grid.style.height = (r*cellpx+(r-1)*spacerpx)+'px'; };
+      if (r>1) { grid.style.height = (r*cellpx+(r-1)*spacerpx)+'%'; };
       if (obsseq===0) { break; };
    };
 };
