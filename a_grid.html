@@ -183,7 +183,7 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr);
-var cellpx = winurlparams.get('cellpx') || 600;
+var cellpx = winurlparams.get('cellpx') || 100;
 var spacerpx = winurlparams.get('spacerpx') || 2;
 var rows = winurlparams.get('rows') || 30;
 var columns = winurlparams.get('columns') || 3;
@@ -228,7 +228,7 @@ function fresults(data) {
    var results = data.results;
    var recsfound = results ? results.length : 0;
    var obsseq = 0; 
-   var grid = faddelem('div',document.body,{id:'grid',style:{height:100%,width:100%}});
+   var grid = faddelem('div',document.body,{id:'grid',style:{height:cellpx+'%',width:cellpx+'%'}});
    for (r=1;r<=rows;r++) {
       for (c=1;c<=columns;c++) { 
          var gcell = faddelem('div',grid,{classList:'gridcell',style:{
