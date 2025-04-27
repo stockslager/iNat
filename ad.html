@@ -368,12 +368,12 @@ function fresults(result, places_obj, taxa_obj) {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }
 
-         let params = ('ad2.html?project_id=239695&user_id='+rec.user_login/*+'&tag_name=lifelist'*/+p_field_opt);
-         let detail_params = ('configurable_obs_field_table.html?project_id=239695&user_id='+rec.user_login+'&obs_fields=17274,7615');
+         let params = ('ad2.html?user_id='+rec.user_login/*+'&tag_name=lifelist'*/+p_field_opt);
+         let detail_params = ('configurable_obs_field_table.html?user_id='+rec.user_login+'&obs_fields=17274,7615');
 
          if( rec.user_login === 'uconnbirdfish' ){
-             params = ('ad2.html?project_id=239695&user_id='+rec.user_login+'&tag_name=pegslifelist');
-             params = ('ad2.html?project_id=239695&user_id='+rec.user_login+opts);
+             params = ('ad2.html?user_id='+rec.user_login+'&tag_name=pegslifelist');
+             params = ('ad2.html?user_id='+rec.user_login+opts);
          }
          
          let values = [
@@ -381,7 +381,7 @@ function fresults(result, places_obj, taxa_obj) {
             {innerHTML:user_icon},
             {innerHTML:furl(root_people+rec.user_login,rec.user_login)},
             //{innerHTML:furl(github_root+params+opts,rec.user_login)},
-         //   {innerHTML:furl(github_root+'life_list_map.html?project_id=239695&view=elevation'+opts+'&user_id='+rec.user_login,'<span class="books">&#127758</span>')},
+         //   {innerHTML:furl(github_root+'life_list_map.html?view=elevation'+opts+'&user_id='+rec.user_login,'<span class="books">&#127758</span>')},
             {innerHTML:furl(github_root+params+opts,rec.species_count )},
             {innerHTML:furl(github_root+detail_params+opts,rec.obs_count)},      
             //{innerHTML:furl(github_root+detail_params+opts,'<span class="books">&#128269</span>')},      
