@@ -150,7 +150,7 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let p_sort       = winurlparams.get('sort') || '';
+let p_sort       = winurlparams.get('sort') || 'dspecies';
 
 // cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
 // session storage is only used for sorting of data in columns at this point.
@@ -310,9 +310,11 @@ function fresults(result, places_obj, taxa_obj) {
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
-                                                                 furl(github_root+'ad.html?field:fish+observation+method=Angling+(Conventional)'+opts+sort_opt,'Snorkel Fishing') +
-                                                                 furl(github_root+'ad.html?field:fish+observation+method=Microfishing'+opts+sort_opt,'Dip Net') +
-                                                                 furl(github_root+'ad.html?field:fish+observation+method=Fly+Fishing'+opts+sort_opt,'By Hand') +
+                                                                 furl(github_root+'life_list_dashboard.html?project_id=239695'+taxon_opt+place_opt+sort_opt,'All') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Angling+(Conventional)'+opts+sort_opt,'Angling (Conventional)') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Microfishing'+opts+sort_opt,'Microfishing') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Fly+Fishing'+opts+sort_opt,'Fly Fishing') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Ice+Angling'+opts+sort_opt,'Ice Angling') +
                                                            '</div>' +
                                                        '</div>' + 
                                               '</div>')});
@@ -320,13 +322,12 @@ function fresults(result, places_obj, taxa_obj) {
    if (result) {
 
       // may need to revisit this if there is more than one page of data
-      if( p_sort === 'uuser' )    { result.recs = sortWithNull(result.recs, true); } else
-      if( p_sort === 'duser' )    { result.recs = sortWithNull(result.recs, false); } else
-      if( p_sort === 'uspecies' ) { result.recs = sortWithNullSpecies(result.recs, true); } else
-      if( p_sort === 'dspecies' ) { result.recs = sortWithNullSpecies(result.recs, false); } else
-      if( p_sort === 'uobs' )     { result.recs = sortWithNullObs(result.recs, true); } else
-      if( p_sort === 'dobs' )     { result.recs = sortWithNullObs(result.recs, false); } else
-                                  { result.recs = sortWithNullSpecies(result.recs, false); }
+      if( p_sort === 'uuser' )    { result.recs = sortWithNull(result.recs, true); } 
+      if( p_sort === 'duser' )    { result.recs = sortWithNull(result.recs, false); } 
+      if( p_sort === 'uspecies' ) { result.recs = sortWithNullSpecies(result.recs, true); } 
+      if( p_sort === 'dspecies' ) { result.recs = sortWithNullSpecies(result.recs, false); } 
+      if( p_sort === 'uobs' )     { result.recs = sortWithNullObs(result.recs, true); }
+      if( p_sort === 'dobs' )     { result.recs = sortWithNullObs(result.recs, false); } 
     
       let total_results = result.total_results;
       let per_page = result.per_page;
