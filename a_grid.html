@@ -172,6 +172,8 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr);
+let angler = winurlparams.get('angler') || '';
+let p_project_id = winurlparams.get('p_project_id') || '';
 var cellpx = winurlparams.get('cellpx') || 122;
 var spacerpx = winurlparams.get('spacerpx') || 4;
 var rows = winurlparams.get('rows') || 30;
@@ -183,6 +185,16 @@ var rows = 30;
 var columns = 3;*/
 
 var recsmax = columns * rows - 1;
+
+// when entering from lifelist page there won't be 
+// a project id since we show all the angler's 
+// photos not just those from this project.  if 
+// they've clicked show all, there will be a project
+// and we don't want to append user_id.
+winurlparams.delete('user_id');
+if( !p_project_id ) {
+    winurlparams.append('user_id', angler);
+}
 
 winurlparams.delete('cellpx');
 winurlparams.delete('spacerpx');
