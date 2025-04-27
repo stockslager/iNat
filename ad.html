@@ -236,9 +236,9 @@ function sortWithNull(arr, ascending) {
 
 function sortWithNullSpecies(arr, ascending) {
   arr.sort(function(a, b) {
-    if (!a.species_count && !b.species_count) return 0;
-    if (!a.species_count) return ascending ? 1 : -1;
-    if (!b.species_count) return ascending ? -1 : 1;
+    if (!a.species_count && !b.species_count) return 1;
+    if (!a.species_count) return ascending ? -1 : 1;
+    if (!b.species_count) return ascending ? 1 : -1;
     if (a.species_count < b.species_count) return ascending ? -1 : 1;
     if (a.species_count > b.species_count) return ascending ? 1 : -1;
     return 0;
