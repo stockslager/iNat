@@ -196,8 +196,8 @@ var recsmax = columns * rows - 1;
 // photos not just those from this project.  if 
 // they've clicked show all, there will be a project
 // and we don't want to append user_id.
-winurlparams.delete('user_id');
 if( !p_project_id ) {
+    winurlparams.delete('user_id');
     winurlparams.append('user_id', angler);
 }
 
@@ -221,9 +221,7 @@ function buildMenu(data) {
   }
 
   let details_menu = '';
-   console.log('eee');
   if( obs_field_array.includes(9833) ){
-      console.log('fff');
       details_menu = '<div class="dropdown">' +
                            '<button class="dropbtn">' +
                               'Details' +
@@ -251,13 +249,9 @@ function buildMenu(data) {
 
 function checkForObsFields( obs ){
    if( obs.ofvs ) {
-       console.log('aaa');
        for( let i=0; i<obs.ofvs.length; i++ ) {
-            console.log('bbb');
             if( obs.ofvs[i].field_id === 9833 ) {   // describe the bait or lure used
-                console.log('ccc');
                 if( !obs_field_array.includes(9833) ) {
-                    console.log('ddd');
                     obs_field_array.push(obs.ofvs[i].field_id);
                 }
             }
