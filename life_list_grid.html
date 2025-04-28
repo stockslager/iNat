@@ -187,6 +187,8 @@ var spacerpx = 3;
 var rows = 30;
 var columns = 3;*/
 
+let obs_field_array = [];
+
 var recsmax = columns * rows - 1;
 
 // when entering from lifelist page there won't be 
@@ -194,8 +196,8 @@ var recsmax = columns * rows - 1;
 // photos not just those from this project.  if 
 // they've clicked show all, there will be a project
 // and we don't want to append user_id.
-winurlparams.delete('user_id');
 if( !p_project_id ) {
+    winurlparams.delete('user_id');
     winurlparams.append('user_id', angler);
 }
 
@@ -212,7 +214,24 @@ var apiurl = apiurlbase+'?'+winurlparams.toString();
 
 document.title = title.toLowerCase();
 
-function buildMenu() {
+function buildMenu(data) {
+
+  for( let i=0; i<data.results.length; i++ ) {
+       checkForObsFields(data.results[i]);
+  }
+
+  let details_menu = '';
+  if( obs_field_array.includes(9833) ){
+      details_menu = '<div class="dropdown">' +
+                           '<button class="dropbtn">' +
+                              'Details' +
+                              '<i class="fa fa-caret-down"></i>' +
+                           '</button>' +
+                           '<div class="dropdown-content">' +
+                                 furl(github_root+'configurable_obs_field_table.html?project_id=239695&taxon_id='+p_taxon_id+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=9833&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:describe+what+bait+or+lure+was+used','Bait Used') +
+                           '</div>' +
+                     '</div>';
+  }
   
   faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
                                                       '<div class="dropdown">' +
@@ -224,11 +243,25 @@ function buildMenu() {
                                                                  furl(github_root+'life_list_grid.html?user_id='+angler+'&angler='+angler+'&taxon_id='+p_taxon_id,'This Angler') +
                                                                  furl(github_root+'life_list_grid.html?project_id=239695&angler='+angler+'&taxon_id='+p_taxon_id,'All Anglers') +
                                                            '</div>' +
-                                                       '</div>' +
+                                                       '</div>' + details_menu +
                                               '</div>')});  
 }
+
+function checkForObsFields( obs ){
+   if( obs.ofvs ) {
+       for( let i=0; i<obs.ofvs.length; i++ ) {
+            if( obs.ofvs[i].field_id === 9833 ) {   // describe the bait or lure used
+                if( !obs_field_array.includes(9833) ) {
+                    obs_field_array.push(obs.ofvs[i].field_id);
+                }
+            }
+       }
+   }
+}
   
-function fresults(data) {
+function fresults(data) {  
+   buildMenu(data);
+   
    var results = data.results;
    var recsfound = results ? results.length : 0;
    var obsseq = 0; 
@@ -277,8 +310,6 @@ function fresults(data) {
       if (obsseq===0) { break; };
    };
 };
-
-buildMenu();
 
 if (window.location.search==='') {
    faddelem('p',document.body,{innerHTML:'This is a quick and dirty example of a widget to display iNaturalist observations in a grid. It is based on the '+furl('https://api.inaturalist.org/v1/docs/#!/Observations/get_observations','Observation Search API endpoint')+' and can accept any of the parameters for that endpoint. Additionally, it accepts 4 more parameters that will allow the grid to be customized: columns, rows, cellpx, and spacerpx.'});
