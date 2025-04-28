@@ -218,7 +218,7 @@ function buildMenu() {
 
   let details_menu = '';
    console.log('eee');
-  if( obs_field_array.includes(9833) ){
+  if( obs_field_array.includes('9833') ){
       console.log('fff');
       details_menu = '<div class="dropdown">' +
                            '<button class="dropbtn">' +
@@ -241,7 +241,7 @@ function buildMenu() {
                                                                  furl(github_root+'life_list_grid.html?user_id='+angler+'&angler='+angler+'&taxon_id='+p_taxon_id,'This Angler') +
                                                                  furl(github_root+'life_list_grid.html?project_id=239695&angler='+angler+'&taxon_id='+p_taxon_id,'All Anglers') +
                                                            '</div>' +
-                                                       '</div>' +
+                                                       '</div>' + details_menu +
                                               '</div>')});  
 }
 
@@ -250,9 +250,9 @@ function checkForObsFields( obs ){
        console.log('aaa');
        for( let i=0; i<obs.ofvs.length; i++ ) {
             console.log('bbb');
-            if( obs.ofvs.field_id === 9833 ) {   // describe the bait or lure used
+            if( obs.ofvs.field_id === '9833' ) {   // describe the bait or lure used
                 console.log('ccc');
-                if( !obs_field_array.includes(9833) ) {
+                if( !obs_field_array.includes('9833') ) {
                     console.log('ddd');
                     obs_field_array.push(obs.ofvs.field_id);
                 }
