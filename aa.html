@@ -271,32 +271,6 @@ function fresults(xobj) {
       
       let firstCol = 'yes';
       let winurlparams_copy ='';
-      let nf_box_array = [];
-
-      nf_box_array = box_array;
-    
-      for( let e=0; e<nf_box_array.length; e++ ){
-           if( nf_box_array[e].field_name === '' ){
-               if( labelCount === 0 ){
-                   dlString += '<span id="dltest"><table id="tablekey">';
-                   dlString += ('<caption id="cap">not found on this page</caption>');                      
-               } 
-            
-               if( labelCount === 0 || isMultipleOfFour(labelCount) ){
-                   if( labelCount > 0 ) {
-                       dlString += '</tr>';
-                   }
-                   dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+nf_box_array[e].field_id,nf_box_array[e].field_id) + '</td>');
-               } else {
-                   dlString += ('<td id="tdkey">' + furl(root_obs_fields+nf_box_array[e].field_id,nf_box_array[e].field_id) + '</td>');
-               }
-               labelCount++;
-           }
-      }
-
-      if( labelCount > 0 ){
-          dlString += '</table></span>';
-      }
     
       labels.push({innerText:''});
      
