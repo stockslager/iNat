@@ -214,24 +214,32 @@ var apiurl = apiurlbase+'?'+winurlparams.toString();
 
 document.title = title.toLowerCase();
 
+function buildDetailsMenu(data) {
+
+   let details_menu = '<div class="dropdown">' +
+                           '<button class="dropbtn">' +
+                              'Details' +
+                              '<i class="fa fa-caret-down"></i>' +
+                           '</button>' +
+                           '<div class="dropdown-content">';
+   
+   if( obs_field_array.includes(9833) ){
+       details_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695&taxon_id='+p_taxon_id+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=9833&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:describe+what+bait+or+lure+was+used','Bait Used') +
+   }
+
+   details_menu += furl(github_root+'life_list_map.html?project_id=239695&view=elevation&user_id='+(winurlparams.get('user_id')||'')+p_taxon_id,'Map')         
+
+   details_menu +=         '</div>' +
+                     '</div>';
+}
+
 function buildMenu(data) {
 
   for( let i=0; i<data.results.length; i++ ) {
        checkForObsFields(data.results[i]);
   }
 
-  let details_menu = '';
-  if( obs_field_array.includes(9833) ){
-      details_menu = '<div class="dropdown">' +
-                           '<button class="dropbtn">' +
-                              'Details' +
-                              '<i class="fa fa-caret-down"></i>' +
-                           '</button>' +
-                           '<div class="dropdown-content">' +
-                                 furl(github_root+'configurable_obs_field_table.html?project_id=239695&taxon_id='+p_taxon_id+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=9833&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:describe+what+bait+or+lure+was+used','Bait Used') +
-                           '</div>' +
-                     '</div>';
-  }
+  let details_menu = buildDetailsMenu(data);
   
   faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
                                                       '<div class="dropdown">' +
