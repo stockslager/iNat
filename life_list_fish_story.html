@@ -176,72 +176,43 @@ function fresults(xobj) {
          let table = faddelem('table',document.body,{id:'main'});
          let thead = faddelem('thead',table);
          let hrow = faddelem('tr',thead);
+         let labels = [];
+         let tbody = '';
+         let found = 'no';
        
          if(rec.ofvs&&rec.ofvs.length>0){
-            let labels = [ {innerText:'Observation Field'},
-                           {innerText:'Value'},
-                         ];
+            for( let j=0; j<rec.ofvs.length; j++){
+              
+                 if( rec.ofvs[j].field_id === 9833 ) {    // bait
+                     if( found === 'no' ) {
+                         found = 'yes';
+                         labels = [ {innerText:'Observation Field'},
+                                    {innerText:'Value'},
+                           ];
 
-            faddelems('th',hrow,labels);
+                         faddelems('th',hrow,labels);
 
-            let tbody = faddelem('tbody',table);
-            for (let j=0; j<rec.ofvs.length; j++){
+                         tbody = faddelem('tbody',table);
+                     }
+                   
+                     if( rec.ofvs[j].value ){
+                         let brow  = faddelem('tr',tbody);
+                         let nm    = rec.ofvs[j].name || '';
+                         let value = rec.ofvs[j].value || ' ';
+                         let avail = [];
 
-               if( p_custom === 'yes' ) {
-                   if( rec.ofvs[j].value ) {
-                       let brow  = faddelem('tr',tbody);
-                       let nm    = rec.ofvs[j].name || '';
-                       let value = rec.ofvs[j].value || '';
-                       let avail = [];
+                         if( p_strip_html === 'yes' ){
+                             value = stripHtml(value);
+                         }
 
-                       if( p_strip_html === 'yes' ){
-                           value = stripHtml(value);
-                       }
+                         avail = [
+                               {innerText:nm.toLowerCase()},
+                               {innerHTML:value.toLowerCase()},
+                         ];        
 
-                       if( rec.ofvs[j].field_id === 19197 ){
-                           value = furl(root_usda+rec.ofvs[j].value,rec.ofvs[j].value);
-                       }
-                       if( rec.ofvs[j].field_id === 19198 ){
-                           value = furl(root_missouri+rec.ofvs[j].value,rec.ofvs[j].value);
-                       }
-                       
-                       avail = [
-                             {innerText:nm.toLowerCase()},
-                             {innerHTML:value.toLowerCase()},
-                       ];        
-                       
-                       faddelems('td',brow, avail);
-                   }
-               } else {
-                   if( rec.ofvs[j].field_id === 17234 ||   // quantity available
-                       rec.ofvs[j].field_id === 18298 ||   // seed hub location and pickup info
-                       rec.ofvs[j].field_id === 17434 ||   // seed swap
-                       rec.ofvs[j].field_id === 19197 ){   // usda symbol
-                       if( rec.ofvs[j].value ){
-                           let brow  = faddelem('tr',tbody);
-                           let nm    = rec.ofvs[j].name || '';
-                           let value = rec.ofvs[j].value || ' ';
-                           let avail = [];
-
-                           if( p_strip_html === 'yes' ){
-                               value = stripHtml(value);
-                           }
-
-                           if( rec.ofvs[j].field_id === 19197 ){
-                               value = furl(root_usda+rec.ofvs[j].value,rec.ofvs[j].value);
-                           }
-                           if( rec.ofvs[j].field_id === 19198 ){
-                               value = furl(root_missouri+rec.ofvs[j].value,rec.ofvs[j].value);
-                           }
-
-                           avail = [
-                                 {innerText:nm.toLowerCase()},
-                                 {innerHTML:value.toLowerCase()},
-                           ];        
-
-                           faddelems('td',brow, avail);
-                       }
-                   }
+                         faddelems('td',brow, avail);
+                     }
+                  }
                }
             }
          }
