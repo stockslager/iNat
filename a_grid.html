@@ -184,6 +184,7 @@ var rows         = winurlparams.get('rows') || 30;
 var columns      = winurlparams.get('columns') || 3;
 let title        = winurlparams.get('title') || '';
 let fish_story   = 'no';
+let story_param  = '';
 /*var cellpx = 300;
 var spacerpx = 3;
 var rows = 30;
@@ -201,6 +202,10 @@ var recsmax = columns * rows - 1;
 if( !p_project_id ) {
     winurlparams.delete('user_id');
     winurlparams.append('user_id', angler);
+}
+
+if( p_story_id ) {
+    story_param = ('&story_id='+p_story_id);
 }
 
 winurlparams.delete('cellpx');
@@ -265,7 +270,7 @@ function buildMenu(data) {
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
-                                                                 furl(github_root+'life_list_grid.html?project_id='+p_project_id+'&user_id='+(winurlparams.get('user_id')||'')+'&angler='+angler+'&taxon_id='+p_taxon_id,'This Angler') +
+                                                                 furl(github_root+'life_list_grid.html?project_id='+p_project_id+story_param+'&user_id='+(winurlparams.get('user_id')||'')+'&angler='+angler+'&taxon_id='+p_taxon_id,'This Angler') +
                                                                  furl(github_root+'life_list_grid.html?project_id='+p_project_id+'&angler='+angler+'&taxon_id='+p_taxon_id,'All Anglers') +
                                                            '</div>' +
                                                        '</div>' + details_menu +
