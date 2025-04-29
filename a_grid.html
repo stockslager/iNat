@@ -262,6 +262,17 @@ function buildMenu(data) {
   }
 
   let details_menu = buildDetailsMenu(data);
+
+  let this_angler_params = ''; 
+  let all_angler_params  = ''; 
+   
+  if( p_taxon_id ) {
+     this_angler_params = ('?project_id='+p_project_id+story_param+'&user_id='+angler+'&angler='+angler+'&taxon_id='+p_taxon_id);  
+     all_angler_params  = ('?project_id=239695&angler='+angler+'&taxon_id='+p_taxon_id);
+  } else {
+     this_angler_params = ('?project_id=239695'+story_param+'&user_id='+angler+'&angler='+angler);  
+     all_angler_params  = ('?project_id=239695&angler='+angler);
+  }
   
   faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
                                                       '<div class="dropdown">' +
@@ -270,8 +281,8 @@ function buildMenu(data) {
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
-                                                                 furl(github_root+'life_list_grid.html?project_id='+p_project_id+story_param+'&user_id='+angler+'&angler='+angler+'&taxon_id='+p_taxon_id,'This Angler') +
-                                                                 furl(github_root+'life_list_grid.html?project_id='+p_project_id+'&angler='+angler+'&taxon_id='+p_taxon_id,'All Anglers') +
+                                                                 furl(github_root+'life_list_grid.html'+this_angler_params,'This Angler') +
+                                                                 furl(github_root+'life_list_grid.html'+all_angler_params,'All Anglers') +
                                                            '</div>' +
                                                        '</div>' + details_menu +
                                               '</div>')});  
