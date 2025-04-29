@@ -221,13 +221,13 @@ function fresults(xobj) {
            
                              if( rec.ofvs[j].taxon.default_photo ){
                                  if( rec.ofvs[j].taxon.default_photo.url ){
-                                     tax_photo = '<img class="taxaicon" src="'+rec.ofvs[j].taxon.default_photo.url+'" />';
+                                     tax_photo = '<div style="display:flex; align-items:center;"><img class="taxaicon" src="'+rec.ofvs[j].taxon.default_photo.url+'" />';
                                  }
                              }
                          }
   
                          value = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
-                         value = '<span style="display:flex; align-items:center;">'+tax_photo+'</span><span style="padding-left:10px;">'+furl(root_taxa+tax_id,value)+'</span>';
+                         value = tax_photo+'<span style="padding-left:10px;">'+furl(root_taxa+tax_id,value)+'</span></div>';
                      }
 
                      avail = [
