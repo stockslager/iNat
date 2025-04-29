@@ -180,38 +180,37 @@ function fresults(xobj) {
          let tbody = '';
          let found = 'no';
        
-         if(rec.ofvs&&rec.ofvs.length>0){
-            for( let j=0; j<rec.ofvs.length; j++){
+         if( rec.ofvs&&rec.ofvs.length>0){
+             for( let j=0; j<rec.ofvs.length; j++){
               
-                 if( rec.ofvs[j].field_id === 9833 ) {    // bait
-                     if( found === 'no' ) {
-                         found = 'yes';
-                         labels = [ {innerText:'Observation Field'},
-                                    {innerText:'Value'},
-                           ];
+             if( rec.ofvs[j].field_id === 9833 ) {    // bait
+                 if( found === 'no' ) {
+                     found = 'yes';
+                     labels = [ {innerText:'Observation Field'},
+                                {innerText:'Value'},
+                        ];
 
-                         faddelems('th',hrow,labels);
+                     faddelems('th',hrow,labels);
 
-                         tbody = faddelem('tbody',table);
-                     }
+                     tbody = faddelem('tbody',table);
+                 }
                    
-                     if( rec.ofvs[j].value ){
-                         let brow  = faddelem('tr',tbody);
-                         let nm    = rec.ofvs[j].name || '';
-                         let value = rec.ofvs[j].value || ' ';
-                         let avail = [];
+                 if( rec.ofvs[j].value ){
+                     let brow  = faddelem('tr',tbody);
+                     let nm    = rec.ofvs[j].name || '';
+                     let value = rec.ofvs[j].value || ' ';
+                     let avail = [];
 
-                         if( p_strip_html === 'yes' ){
-                             value = stripHtml(value);
-                         }
-
-                         avail = [
-                               {innerText:nm.toLowerCase()},
-                               {innerHTML:value.toLowerCase()},
-                         ];        
-
-                         faddelems('td',brow, avail);
+                     if( p_strip_html === 'yes' ){
+                         value = stripHtml(value);
                      }
+
+                     avail = [
+                         {innerText:nm.toLowerCase()},
+                         {innerHTML:value.toLowerCase()},
+                     ];        
+                    
+                     faddelems('td',brow, avail);
                   }
                }
             }
