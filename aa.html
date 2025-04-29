@@ -51,7 +51,7 @@
    tr:nth-child(even) { background:var(--color-base); }
    .tar { text-align:right; }
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
-   .icon { height:48px; width:48px; border-radius:50%; }
+   .icon { height:34px; width:34px; border-radius:50%; }
    .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
    .flowericon { padding-left:5%; font-size:14px; white-space: nowrap; font-style:normal; }
    .photo { height:64px; width:64px; border-radius: 5px 5px 5px 5px; }
@@ -238,7 +238,6 @@ function fresults(xobj) {
       let merged = 'observation field';
       labels = [
             {innerText:'#'},
-            {innerText:'Icon'},
             {innerText:'User'},
             {innerText:'Species'}, 
             {innerText:'Photo'}];
@@ -339,8 +338,7 @@ function fresults(xobj) {
   
          values = [
                   {innerText:i+1},
-                  {innerHTML:user_icon},
-                  {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
+                  {innerHTML:user_icon+'<br>'+furl(root_people+rec.user.login,rec.user.login) },
                   {innerHTML:taxon},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
               ];
