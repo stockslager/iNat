@@ -177,11 +177,14 @@ let winurlparams = new URLSearchParams(winurlsearchstr);
 let angler = winurlparams.get('angler') || '';
 let p_project_id = winurlparams.get('project_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
-var cellpx = winurlparams.get('cellpx') || 122;
-var spacerpx = winurlparams.get('spacerpx') || 4;
-var rows = winurlparams.get('rows') || 30;
-var columns = winurlparams.get('columns') || 3;
-let title = winurlparams.get('title') || '';
+let p_story_id   = winurlparams.get('story_id') || '';
+var cellpx       = winurlparams.get('cellpx') || 122;
+var spacerpx     = winurlparams.get('spacerpx') || 4;
+var rows         = winurlparams.get('rows') || 30;
+var columns      = winurlparams.get('columns') || 3;
+let title        = winurlparams.get('title') || '';
+let fish_story   = 'no';
+let story_param  = '';
 /*var cellpx = 300;
 var spacerpx = 3;
 var rows = 30;
@@ -201,6 +204,10 @@ if( !p_project_id ) {
     winurlparams.append('user_id', angler);
 }
 
+if( p_story_id ) {
+    story_param = ('&story_id='+p_story_id);
+}
+
 winurlparams.delete('cellpx');
 winurlparams.delete('spacerpx');
 winurlparams.delete('rows');
@@ -216,6 +223,7 @@ document.title = title.toLowerCase();
 
 function buildDetailsMenu(data) {
 
+
    let details_menu = '<div class="dropdown">' +
                            '<button class="dropbtn">' +
                               'Details' +
@@ -223,8 +231,17 @@ function buildDetailsMenu(data) {
                            '</button>' +
                            '<div class="dropdown-content">';
    
-   if( obs_field_array.includes(9833) ){
-       details_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695&taxon_id='+p_taxon_id+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=9833&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:describe+what+bait+or+lure+was+used','Bait Used');
+   if( obs_field_array.includes(9833) ){      // describe what bait or lure was used.
+       details_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695&taxon_id='+p_taxon_id+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=9833&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:describe+what+bait+or+lure+was+used','Tackle Used');
+   }
+   if( obs_field_array.includes(12288) ) {    // bait
+       details_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695&taxon_id='+p_taxon_id+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=9833&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:bait','Bait Used');
+   }
+
+   // if user_id and taxon_id were passed in we can
+   // show the fish story (the notes from the inat obs)
+   if( winurlparams.get('user_id') && p_taxon_id && p_story_id && fish_story === 'yes' ) {
+       details_menu += furl(github_root+'life_list_fish_story.html?project_id=239695&obs_id='+p_story_id,'Fish Story');
    }
 
    details_menu += furl(github_root+'life_list_map.html?project_id=239695&taxon_id='+p_taxon_id+'&user_id='+(winurlparams.get('user_id')||''),'Map');      
@@ -239,6 +256,9 @@ function buildMenu(data) {
 
   for( let i=0; i<data.results.length; i++ ) {
        checkForObsFields(data.results[i]);
+       if( data.results[i].description ) {
+           fish_story = 'yes';
+       }
   }
 
   let details_menu = buildDetailsMenu(data);
@@ -250,8 +270,8 @@ function buildMenu(data) {
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
-                                                                 furl(github_root+'life_list_grid.html?user_id='+angler+'&angler='+angler+'&taxon_id='+p_taxon_id,'This Angler') +
-                                                                 furl(github_root+'life_list_grid.html?project_id=239695&angler='+angler+'&taxon_id='+p_taxon_id,'All Anglers') +
+                                                                 furl(github_root+'life_list_grid.html?project_id='+p_project_id+story_param+'&user_id='+angler+'&angler='+angler+'&taxon_id='+p_taxon_id,'This Angler') +
+                                                                 furl(github_root+'life_list_grid.html?project_id='+p_project_id+'&angler='+angler+'&taxon_id='+p_taxon_id,'All Anglers') +
                                                            '</div>' +
                                                        '</div>' + details_menu +
                                               '</div>')});  
