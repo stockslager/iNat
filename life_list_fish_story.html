@@ -20,7 +20,7 @@
       font: 14px Sans-Serif;
       --color-base: white;
       --color-alt: whitesmoke;
-      --color-brand: forestgreen;
+      --color-brand: #333;
       --color-text: black;
       --color-text-invert: white;
       --color-text-link: royalblue;
@@ -32,9 +32,9 @@
       :root {
          --color-base: black;
          --color-alt: #171717;
-         --color-brand: forestgreen;
+         --color-brand: #333;
          --color-text: #bababa;
-         --color-text-invert: black;
+         --color-text-invert: white;
          --color-text-link: cornflowerblue;
          --color-border: #444;
          --color-hover: #444;
@@ -48,8 +48,8 @@
    dd { margin: 0; grid-column-start: 2;} 
    table, td, th { border-collapse:collapse; margin:0; padding:10px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
-   th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
-   th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }
+   th:first-child{ border: 0px solid #333; border-radius: 5px 0px 0px 0px; }
+   th:last-child{ border: 0px solid #333; border-radius: 0px 5px 0px 0px; }
    tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt); }
  
    .tar { text-align:right; }
@@ -123,12 +123,11 @@ function fresults(xobj) {
  
          faddelem('h2',document.body,{innerHTML:icon+'<span style="padding:10px;">'+header_row+'</span></div>'});  
 
-         // donor table
          let d_table = faddelem('table',document.body,{id:'main'});
          let d_thead = faddelem('thead',d_table);
          let d_hrow = faddelem('tr',d_thead);
 
-         let d_labels = [ {innerText:'Donor Info'},
+         let d_labels = [ {innerText:'Angler Info'},
                          { innerText:' '}, ];
 
          let user_icon = rec.user.icon || '';
@@ -157,7 +156,7 @@ function fresults(xobj) {
 
          let d_row1  = faddelem('tr',d_tbody);
          let d_one = [
-                             {innerText:'donor'},
+                             {innerText:'angler'},
                              {innerHTML:user_icon+'<span style="padding-left:10px;">' + furl(root_people+rec.user.login,rec.user.login)+'</span></div>'},
                        ];        
          faddelems('td',d_row1, d_one);
