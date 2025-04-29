@@ -176,16 +176,15 @@ function fresults(xobj) {
          let table = faddelem('table',document.body,{id:'main'});
          let thead = faddelem('thead',table);
          let hrow = faddelem('tr',thead);
-
-         let labels = [ {innerText:'Observation Field'},
-                       {innerText:'Value'},
-                      ];
-
-         faddelems('th',hrow,labels);
-
-         let tbody = faddelem('tbody',table);
        
          if(rec.ofvs&&rec.ofvs.length>0){
+            let labels = [ {innerText:'Observation Field'},
+                           {innerText:'Value'},
+                         ];
+
+            faddelems('th',hrow,labels);
+
+            let tbody = faddelem('tbody',table);
             for (let j=0; j<rec.ofvs.length; j++){
 
                if( p_custom === 'yes' ) {
