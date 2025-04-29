@@ -239,7 +239,6 @@ function fresults(xobj) {
       let mismatch = '';
       let field_array_copy = field_array;
       let flower = '';
-      let dlString = '<span id="h2">Observation Field Viewer</span>';
       let labelCount = 0;
 
       let merged = 'observation field';
@@ -308,6 +307,9 @@ function fresults(xobj) {
          if( tax_id !== '' ){
              taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
+
+         let dlString = '<span id="h2">'+pref_tax_name+'</span>';
+
 
          let user_icon = rec.user.icon || '';
          
