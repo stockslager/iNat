@@ -201,14 +201,35 @@ function fresults(xobj) {
                      let nm    = rec.ofvs[j].name || '';
                      let value = rec.ofvs[j].value || ' ';
                      let avail = [];
+                     let tax_id = '';
+                     let tax_name = '';
+                     let pref_tax_name = '';
+                     let tax_photo = '';
+
+                     value = value.toLowerCase();
 
                      if( p_strip_html === 'yes' ){
                          value = stripHtml(value);
                      }
 
+                     if( rec.ofvs[j].datatype === 'taxon' ) {
+                         if( rec.ofvs[j].taxon ){
+                             tax_id = rec.ofvs[j].taxon.taxon.id;
+                             tax_name = rec.ofvs[j].taxon.taxon.name || '';
+                             pref_tax_name = rec.ofvs[j].taxon.preferred_common_name || '';
+           
+                             if( rec.ofvs[j].taxon.default_photo ){
+                                 if( rec.ofvs[j].taxon.default_photo.url ){
+                                     tax_photo = '<img class="icon" src="'+rec.ofvs[j].taxon.default_photo.url+'" />';
+                                 }
+                             }
+                         }
+                         value = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
+                     }
+
                      avail = [
                          {innerText:nm.toLowerCase()},
-                         {innerHTML:value.toLowerCase()},
+                         {innerHTML:value},
                      ];        
                     
                      faddelems('td',brow, avail);
