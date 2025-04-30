@@ -108,9 +108,6 @@ let p_options  = winurlparams.get('options') || [];
 let p_place_id = winurlparams.get('place_id') || '';
 let p_q        = winurlparams.get('q') || '';
 
-winurlparams.delete('per_page');
-winurlparams.append('per_page','100');
-
 winurlparams.delete('options');
 let p_idextra_ = winurlparams.get('idextra_user_id')?.split(',') || [];;
 winurlparams.delete('idextra_user_id');
@@ -184,7 +181,6 @@ let apibase    = 'https://api.inaturalist.org/v1/places/autocomplete';
 let apiurl     = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefname = 'Choose Place';
 
-console.log('q: '+p_q);
 if( !p_q ) {
    faddelem('h2',document.body,{innerText:'Enter a full or partial place name.'});
    buildForm();
