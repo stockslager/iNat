@@ -184,7 +184,10 @@ let opts = ''
 if( p_place_id ) {
     place_opt += ('&place_id='+p_place_id);
     opts      += ('&place_id='+p_place_id);
-
+    if( place_name ) {
+        opts      += ('&place_name='+p_place_name);
+        place_opt += ('&place_name='+p_place_name);
+    }
 }
 
 if( p_taxon_id ) {
