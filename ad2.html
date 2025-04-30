@@ -193,10 +193,10 @@ if( p_place_id ) {
 if( p_taxon_id ) {
     taxon_opt += ('&taxon_id='+p_taxon_id);
     opts      += ('&taxon_id='+p_taxon_id);
-}
-
-if( p_tname ) {
-    opts      += ('&tname'+p_tname);
+    if( p_tname ) {
+        taxon_opt += ('&tname='+p_tname);
+        opts      += ('&tname'+p_tname);
+    }
 }
 
 if( p_sort ) {
