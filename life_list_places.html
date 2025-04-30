@@ -108,26 +108,6 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_options  = winurlparams.get('options') || [];
 let p_place_id = winurlparams.get('place_id') || '';
 let p_q        = winurlparams.get('q') || '';
-let p_taxon_id = winurlparams.get('taxon_id') || '';
-let p_sort     = winurlparams.get('sort') || '';
-
-let taxon_param = '';
-if( p_taxon_id ) {
-    taxon_param = ('&taxon_id='+p_taxon_id);
-}
-
-let sort_param = '';
-if( p_sort ) {
-    sort_param = ('&sort='+p_sort);
-}
-
-let field_param = '';
-// find key/value pair for &field: param if one was passed in
-for (const [key, value] of winurlparams.entries()) {
-  if( key.startsWith('field') ){
-      field_param = ('&'+key+'='+value);
-  }
-}   
 
 winurlparams.delete('options');
 let p_idextra_ = winurlparams.get('idextra_user_id')?.split(',') || [];;
@@ -179,7 +159,7 @@ function fresults(xobj) {
 
          let values = [
             {innerText:i+1},
-            {innerHTML:furl(github_root+'life_list_dashboard.html?place_id='+rec.id+taxon_param+field_param+sort_param,rec.display_name)},
+            {innerHTML:furl(github_root+'life_list_dashboard.html?place_id='+rec.id,rec.display_name)},
          ];         
 
          faddelems('td',brow,values);
@@ -200,7 +180,7 @@ function buildForm() {
   faddelem('p',document.body,{innerHTML:('<div>' +
                                            '<form action='+github_root+'life_list_places.html>' +
                                               '<label for="fname">Place Name</label>' +
-                                              '<input type="text" id="pname" name="'+tax_param+sort_param+field_param+'&q" placeholder="Enter a full or partial place name..">' +   
+                                              '<input type="text" id="pname" name="q" placeholder="Enter a full or partial place name..">' +   
                                               '<input type="submit" value="Search">' +
                                            '</form>' +
                                          '</div>')});
