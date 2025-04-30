@@ -168,10 +168,9 @@ for (const [key, value] of winurlparams.entries()) {
   }
 }   
 
-if( !p_field_value ) {
-    winurlparams.append('field:fish+observation+method','');
-    winurlparams.append('sort','dspecies');
-}
+// default the id's of the projects to be passed in to the projects api.
+winurlparams.delete('project_id');
+winurlparams.append('project_id', '239695');
 
 let p_place_id = winurlparams.get('place_id') || '';
 let p_taxon_id = winurlparams.get('taxon_id') || '';
@@ -236,9 +235,9 @@ function sortWithNull(arr, ascending) {
 
 function sortWithNullSpecies(arr, ascending) {
   arr.sort(function(a, b) {
-    if (!a.species_count && !b.species_count) return 1;
-    if (!a.species_count) return ascending ? -1 : 1;
-    if (!b.species_count) return ascending ? 1 : -1;
+    if (!a.species_count && !b.species_count) return 0;
+    if (!a.species_count) return ascending ? 1 : -1;
+    if (!b.species_count) return ascending ? -1 : 1;
     if (a.species_count < b.species_count) return ascending ? -1 : 1;
     if (a.species_count > b.species_count) return ascending ? 1 : -1;
     return 0;
@@ -261,15 +260,16 @@ function sortWithNullObs(arr, ascending) {
 function fresults(result, places_obj, taxa_obj) {
 
       // places menu...
-      let places_menu = furl(github_root+'ad.html?sort='+p_sort+taxon_opt+p_field_opt,'All');
+      let places_menu = furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+taxon_opt+p_field_opt,'All');
       for( let i=0; i<places_obj.places.length; i++ ) {
-           places_menu += furl(github_root+'ad.html?sort='+p_sort+taxon_opt+p_field_opt+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
+           places_menu += furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+taxon_opt+p_field_opt+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
       }
+      places_menu += furl(github_root+'life_list_places.html?project_id=239695'+sort_opt+taxon_opt+p_field_opt,'Select Custom Place');
 
       // taxa menu...
-      let taxa_menu = furl(github_root+'ad.html?sort='+p_sort+place_opt+p_field_opt,'All');
+      let taxa_menu = furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+place_opt+p_field_opt,'All');
       for( let i=0; i<taxa_obj.taxa.length; i++ ) {
-           taxa_menu += furl(github_root+'ad.html??sort='+p_sort+place_opt+p_field_opt+'&taxon_id='+taxa_obj.taxa[i].taxon_id,taxa_obj.taxa[i].taxon_name);
+           taxa_menu += furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+place_opt+p_field_opt+'&taxon_id='+taxa_obj.taxa[i].taxon_id,taxa_obj.taxa[i].taxon_name);
       }
   
       let place_name  = 'Place';
@@ -310,11 +310,11 @@ function fresults(result, places_obj, taxa_obj) {
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
-                                                                 furl(github_root+'ad.html?project_id=239695'+taxon_opt+place_opt+sort_opt,'All') +
-                                                                 furl(github_root+'ad.html?field:fish+observation+method=Angling+(Conventional)'+opts+sort_opt,'Angling (Conventional)') +
-                                                                 furl(github_root+'ad.html?field:fish+observation+method=Microfishing'+opts+sort_opt,'Microfishing') +
-                                                                 furl(github_root+'ad.html?field:fish+observation+method=Fly+Fishing'+opts+sort_opt,'Fly Fishing') +
-                                                                 furl(github_root+'ad.html?field:fish+observation+method=Ice+Angling'+opts+sort_opt,'Ice Angling') +
+                                                                 furl(github_root+'life_list_dashboard.html?project_id=239695'+taxon_opt+place_opt+sort_opt,'All') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Angling+(Conventional)'+opts+sort_opt,'Angling (Conventional)') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Microfishing'+opts+sort_opt,'Microfishing') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Fly+Fishing'+opts+sort_opt,'Fly Fishing') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Ice+Angling'+opts+sort_opt,'Ice Angling') +
                                                            '</div>' +
                                                        '</div>' + 
                                               '</div>')});
@@ -322,13 +322,13 @@ function fresults(result, places_obj, taxa_obj) {
    if (result) {
 
       // may need to revisit this if there is more than one page of data
-      if( p_sort === 'uuser' )    { result.recs = sortWithNull(result.recs, true); } 
-      if( p_sort === 'duser' )    { result.recs = sortWithNull(result.recs, false); } 
-      if( p_sort === 'uspecies' ) { result.recs = sortWithNullSpecies(result.recs, true); } 
-      if( p_sort === 'dspecies' ) { result.recs = sortWithNullSpecies(result.recs, false); } 
+      if( p_sort === 'uuser' )    { result.recs = sortWithNull(result.recs, true); }
+      if( p_sort === 'duser' )    { result.recs = sortWithNull(result.recs, false); }
+      if( p_sort === 'uspecies' ) { result.recs = sortWithNullSpecies(result.recs, true); }
+      if( p_sort === 'dspecies' ) { result.recs = sortWithNullSpecies(result.recs, false); }
       if( p_sort === 'uobs' )     { result.recs = sortWithNullObs(result.recs, true); }
-      if( p_sort === 'dobs' )     { result.recs = sortWithNullObs(result.recs, false); } 
-    
+      if( p_sort === 'dobs' )     { result.recs = sortWithNullObs(result.recs, false); }
+
       let total_results = result.total_results;
       let per_page = result.per_page;
       let page_curr = result.page;
@@ -348,7 +348,7 @@ function fresults(result, places_obj, taxa_obj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
 
-      let sort_url = (github_root+'ad.html?cache_check=yes'+opts);
+      let sort_url = (github_root+'life_list_dashboard.html?project_id=239695'+opts+'&cache_check=yes');
                       
       let labels = [
          {innerText:'#'},
@@ -375,12 +375,12 @@ function fresults(result, places_obj, taxa_obj) {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }
 
-         let params = ('ad2.html?user_id='+rec.user_login/*+'&tag_name=lifelist'*/+p_field_opt);
-         let detail_params = ('configurable_obs_field_table.html?user_id='+rec.user_login+'&field:fish+observation+method='+'&obs_fields=17274,7615');
+         let params = ('life_list.html?project_id=239695&user_id='+rec.user_login/*+'&tag_name=lifelist'*/+p_field_opt);
+         let detail_params = ('configurable_obs_field_table.html?project_id=239695&user_id='+rec.user_login+'&obs_fields=17274,7615');
 
          if( rec.user_login === 'uconnbirdfish' ){
-             params = ('ad2.html?user_id='+rec.user_login+'&tag_name=pegslifelist');
-             params = ('ad2.html?user_id='+rec.user_login+opts);
+             params = ('life_list.html?project_id=239695&user_id='+rec.user_login+'&tag_name=pegslifelist');
+             params = ('life_list.html?project_id=239695&user_id='+rec.user_login+opts);
          }
          
          let values = [
@@ -388,10 +388,10 @@ function fresults(result, places_obj, taxa_obj) {
             {innerHTML:user_icon},
             {innerHTML:furl(root_people+rec.user_login,rec.user_login)},
             //{innerHTML:furl(github_root+params+opts,rec.user_login)},
-         //   {innerHTML:furl(github_root+'life_list_map.html?view=elevation'+opts+'&user_id='+rec.user_login,'<span class="books">&#127758</span>')},
-            {innerHTML:furl(github_root+params+opts+'&field:fish+observation+method',rec.species_count )},
-            {innerHTML:furl(github_root+detail_params+opts,rec.obs_count)},      
-            //{innerHTML:furl(github_root+detail_params+opts,'<span class="books">&#128269</span>')},      
+         //   {innerHTML:furl(github_root+'life_list_map.html?project_id=239695&view=elevation'+opts+'&user_id='+rec.user_login,'<span class="books">&#127758</span>')},
+            {innerHTML:furl(github_root+params+opts,rec.species_count )},
+            {innerHTML:furl(github_root+'life_list_grid.html?project_id=239695&user_id='+rec.user_login+'&angler='+rec.user_login,rec.obs_count)},
+          //{innerHTML:furl(github_root+detail_params+opts,'<span class="books">&#128269</span>')},      
          ];
          faddelems('td',brow,values);
       };
