@@ -42,6 +42,7 @@
       }
    }
    #main { width:fit-content; min-width:375px; }
+   #home { font-size:2.750em; float:right; }
    .icon { height:34px; width:34px; border-radius:50%; }
    .photo { height:64px; width:64px; border-radius: 15px 15px 15px 15px; }
    img { margin:0; padding:0; border:0; }
@@ -176,6 +177,9 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr);
 let angler = winurlparams.get('angler') || '';
 let p_project_id = winurlparams.get('project_id') || '';
+let p_place_name = winurlparams.get('place_name') || '';
+let p_tname      = winurlparams.get('tname') || '';
+let p_place_id   = winurlparams.get('place_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_story_id   = winurlparams.get('story_id') || '';
 var cellpx       = winurlparams.get('cellpx') || 122;
@@ -192,6 +196,30 @@ var columns = 3;*/
 
 let obs_field_array = [];
 
+// if the user has selected a method, built the opt to pass to the
+// lifelist page.
+// find key/value pair for &field: param if one was passed in
+let opts = ''
+for (const [key, value] of winurlparams.entries()) {
+  if( key.startsWith('field') ){
+      opts += ('&'+key+'='+value);
+  }
+}   
+
+if( p_place_id ) {
+    opts      += ('&place_id='+p_place_id);
+    if( p_place_name ) {
+        opts      += ('&place_name='+p_place_name);
+    }
+}
+
+if( p_taxon_id ) {
+    opts      += ('&taxon_id='+p_taxon_id);
+    if( p_tname ) {
+        opts      += ('&tname'+p_tname);
+    }
+}
+
 var recsmax = columns * rows - 1;
 
 // when entering from lifelist page there won't be 
@@ -202,8 +230,6 @@ var recsmax = columns * rows - 1;
 if( !p_project_id ) {
     winurlparams.delete('user_id');
     winurlparams.append('user_id', angler);
-} else {
-    angler = winurlparams.get('user_id');
 }
 
 if( p_story_id ) {
@@ -237,7 +263,7 @@ function buildDetailsMenu(data) {
        details_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695&taxon_id='+p_taxon_id+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=9833&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:describe+what+bait+or+lure+was+used','Tackle Used');
    }
    if( obs_field_array.includes(12288) ) {    // bait
-       details_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695&taxon_id='+p_taxon_id+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=9833&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:bait','Bait Used');
+       details_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695&taxon_id='+p_taxon_id+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=12288&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:bait','Bait Used');
    }
 
    // if user_id and taxon_id were passed in we can
@@ -269,11 +295,11 @@ function buildMenu(data) {
   let all_angler_params  = ''; 
    
   if( p_taxon_id ) {
-     this_angler_params = ('?project_id='+p_project_id+story_param+'&user_id='+angler+'&angler='+angler+'&taxon_id='+p_taxon_id);  
-     all_angler_params  = ('?project_id=239695&angler='+angler+'&taxon_id='+p_taxon_id);
+     this_angler_params = ('?project_id='+story_param+'&user_id='+angler+'&angler='+angler+opts);  
+     all_angler_params  = ('?project_id=239695&angler='+angler+story_param+opts);
   } else {
-     this_angler_params = ('?project_id=239695'+story_param+'&user_id='+angler+'&angler='+angler);  
-     all_angler_params  = ('?project_id=239695&angler='+angler);
+     this_angler_params = ('?project_id=239695'+story_param+'&user_id='+angler+'&angler='+angler+opts);  
+     all_angler_params  = ('?project_id=239695&angler='+angler+opts);
   }
   
   faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
@@ -287,6 +313,7 @@ function buildMenu(data) {
                                                                  furl(github_root+'life_list_grid.html'+all_angler_params,'All Anglers') +
                                                            '</div>' +
                                                        '</div>' + details_menu +
+                                                       '<div id="home">'+furl(github_root+'life_list_dashboard.html','Anglers')+'</div>' +
                                               '</div>')});  
 }
 
@@ -295,6 +322,11 @@ function checkForObsFields( obs ){
        for( let i=0; i<obs.ofvs.length; i++ ) {
             if( obs.ofvs[i].field_id === 9833 ) {   // describe the bait or lure used
                 if( !obs_field_array.includes(9833) ) {
+                    obs_field_array.push(obs.ofvs[i].field_id);
+                }
+            }
+            if( obs.ofvs[i].field_id === 12288 ) {   // bait
+                if( !obs_field_array.includes(12288) ) {
                     obs_field_array.push(obs.ofvs[i].field_id);
                 }
             }
