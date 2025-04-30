@@ -63,7 +63,7 @@
    .button_inactive { background:none; color:var(--color-border); }
 
 input[type=text], select {
-  width: 100%;
+  width: fit-content;
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
@@ -73,7 +73,7 @@ input[type=text], select {
 }
 
 input[type=submit] {
-  width: 100%;
+  width: fit-content;
   background-color: #4CAF50;
   color: white;
   padding: 14px 20px;
@@ -111,6 +111,12 @@ let p_q        = winurlparams.get('q') || '';
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
 
+winurlparams.delete('options');
+let p_idextra_ = winurlparams.get('idextra_user_id')?.split(',') || [];;
+winurlparams.delete('idextra_user_id');
+let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
+winurlparams.delete('photo_curl_filename_prefix');
+
 function fresults(xobj) {
 
    let results = xobj.results;
@@ -125,8 +131,7 @@ function fresults(xobj) {
       let args = '';
 
 
-      faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' ('
-            +')'+' <br />'
+      faddelem('p',document.body,{innerHTML:'total leaf taxa: '+fcomnum(total_results)+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
             +'<br />'
