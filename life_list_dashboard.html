@@ -152,10 +152,17 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_sort       = winurlparams.get('sort') || 'dspecies';
 let p_place_name = winurlparams.get('place_name') || '';
+let p_tname      = winurlparams.get('tname') || '';
+let p_place_id   = winurlparams.get('place_id') || '';
+let p_taxon_id   = winurlparams.get('taxon_id') || '';
 
 // cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
 // session storage is only used for sorting of data in columns at this point.
 let p_cache_check = winurlparams.get('cache_check') || 'no';  
+ 
+// default the id's of the projects to be passed in to the projects api.
+winurlparams.delete('project_id');
+winurlparams.append('project_id', '239695');
 
 // if the user has selected a method, built the opt to pass to the
 // lifelist page.
@@ -169,13 +176,6 @@ for (const [key, value] of winurlparams.entries()) {
   }
 }   
 
-// default the id's of the projects to be passed in to the projects api.
-winurlparams.delete('project_id');
-winurlparams.append('project_id', '239695');
-
-let p_place_id = winurlparams.get('place_id') || '';
-let p_taxon_id = winurlparams.get('taxon_id') || '';
-
 let place_opt = '';
 let taxon_opt = '';
 let sort_opt  = '';
@@ -184,12 +184,19 @@ let opts = ''
 if( p_place_id ) {
     place_opt += ('&place_id='+p_place_id);
     opts      += ('&place_id='+p_place_id);
-
+    if( p_place_name ) {
+        opts      += ('&place_name='+p_place_name);
+        place_opt += ('&place_name='+p_place_name);
+    }
 }
 
 if( p_taxon_id ) {
     taxon_opt += ('&taxon_id='+p_taxon_id);
     opts      += ('&taxon_id='+p_taxon_id);
+    if( p_tname ) {
+        taxon_opt += ('&tname='+p_tname);
+        opts      += ('&tname'+p_tname);
+    }
 }
 
 if( p_sort ) {
@@ -270,7 +277,7 @@ function fresults(result, places_obj, taxa_obj) {
       // taxa menu...
       let taxa_menu = furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+place_opt+p_field_opt,'All');
       for( let i=0; i<taxa_obj.taxa.length; i++ ) {
-           taxa_menu += furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+place_opt+p_field_opt+'&taxon_id='+taxa_obj.taxa[i].taxon_id,taxa_obj.taxa[i].taxon_name);
+           taxa_menu += furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+place_opt+p_field_opt+'&taxon_id='+taxa_obj.taxa[i].taxon_id+'&tname='+taxa_obj.taxa[i].taxon_name,taxa_obj.taxa[i].taxon_name);
       }
   
       let place_name  = 'Place';
@@ -395,7 +402,7 @@ function fresults(result, places_obj, taxa_obj) {
             //{innerHTML:furl(github_root+params+opts,rec.user_login)},
          //   {innerHTML:furl(github_root+'life_list_map.html?project_id=239695&view=elevation'+opts+'&user_id='+rec.user_login,'<span class="books">&#127758</span>')},
             {innerHTML:furl(github_root+params+opts,rec.species_count )},
-            {innerHTML:furl(github_root+'life_list_grid.html?project_id=239695&user_id='+rec.user_login+'&angler='+rec.user_login,rec.obs_count)},
+            {innerHTML:furl(github_root+'life_list_grid.html?project_id=239695&user_id='+rec.user_login+'&angler='+rec.user_login+opts,rec.obs_count)},
           //{innerHTML:furl(github_root+detail_params+opts,'<span class="books">&#128269</span>')},      
          ];
          faddelems('td',brow,values);
