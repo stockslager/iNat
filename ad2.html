@@ -182,11 +182,9 @@ let sort_opt  = '';
 let opts = ''
 
 if( p_place_id ) {
- console.log('one');
     place_opt += ('&place_id='+p_place_id);
     opts      += ('&place_id='+p_place_id);
-    if( place_name ) {
-     console.log('two');
+    if( p_place_name ) {
         opts      += ('&place_name='+p_place_name);
         place_opt += ('&place_name='+p_place_name);
     }
@@ -195,10 +193,6 @@ if( p_place_id ) {
 if( p_taxon_id ) {
     taxon_opt += ('&taxon_id='+p_taxon_id);
     opts      += ('&taxon_id='+p_taxon_id);
-}
-
-if( p_place_name ) {
-    opts      += ('&place_name='+p_place_name);
 }
 
 if( p_taxon_name ) {
