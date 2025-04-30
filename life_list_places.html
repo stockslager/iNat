@@ -179,11 +179,13 @@ let apibase    = 'https://api.inaturalist.org/v1/places/autocomplete';
 let apiurl     = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefname = 'Choose Place';
 
+console.log('q: '+p_q);
 if( !p_q ) {
    faddelem('h2',document.body,{innerText:'Enter a full or partial place name.'});
    buildForm();
 } else {
    faddelem('h2',document.body,{innerText:apirefname});
+   buildForm();
    faddelem('p',document.body,{innerText:'List of places found.  Select one to view life list counts from that place.'});
    fetch(apiurl)
       .then((response) => {
