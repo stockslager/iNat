@@ -127,7 +127,6 @@ function fresults(xobj) {
       let toggle_args = '';
       let args = '';
 
-
       faddelem('p',document.body,{innerHTML:'total places: '+fcomnum(total_results)+' <br />'
             +'per page: '+fcomnum(per_page)+'<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
@@ -145,7 +144,15 @@ function fresults(xobj) {
       faddelems('th',hrow,labels);
 
       let tbody = faddelem('tbody',table);
-      for (let i=0; i<results.length; i++) {
+
+      let length = 0;
+      if( results.length > 10 ) {
+          length = 10;
+      } else {
+          length = results.length;
+      }
+      
+      for (let i=0; i<length; i++) {
          let brow = faddelem('tr',tbody);
          let rec = results[i];
 
