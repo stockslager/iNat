@@ -177,6 +177,9 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr);
 let angler = winurlparams.get('angler') || '';
 let p_project_id = winurlparams.get('project_id') || '';
+let p_place_name = winurlparams.get('place_name') || '';
+let p_tname      = winurlparams.get('tname') || '';
+let p_place_id   = winurlparams.get('place_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_story_id   = winurlparams.get('story_id') || '';
 var cellpx       = winurlparams.get('cellpx') || 122;
@@ -192,6 +195,30 @@ var rows = 30;
 var columns = 3;*/
 
 let obs_field_array = [];
+
+// if the user has selected a method, built the opt to pass to the
+// lifelist page.
+// find key/value pair for &field: param if one was passed in
+let opts = ''
+for (const [key, value] of winurlparams.entries()) {
+  if( key.startsWith('field') ){
+      opts += ('&'+key+'='+value);
+  }
+}   
+
+if( p_place_id ) {
+    opts      += ('&place_id='+p_place_id);
+    if( p_place_name ) {
+        opts      += ('&place_name='+p_place_name);
+    }
+}
+
+if( p_taxon_id ) {
+    opts      += ('&taxon_id='+p_taxon_id);
+    if( p_tname ) {
+        opts      += ('&tname'+p_tname);
+    }
+}
 
 var recsmax = columns * rows - 1;
 
@@ -233,10 +260,10 @@ function buildDetailsMenu(data) {
                            '<div class="dropdown-content">';
    
    if( obs_field_array.includes(9833) ){      // describe what bait or lure was used.
-       details_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695&taxon_id='+p_taxon_id+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=9833&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:describe+what+bait+or+lure+was+used','Tackle Used');
+       details_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695'+opts+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=9833&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:describe+what+bait+or+lure+was+used','Tackle Used');
    }
    if( obs_field_array.includes(12288) ) {    // bait
-       details_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695&taxon_id='+p_taxon_id+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=12288&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:bait','Bait Used');
+       details_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695'+opts+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=12288&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:bait','Bait Used');
    }
 
    // if user_id and taxon_id were passed in we can
@@ -245,7 +272,7 @@ function buildDetailsMenu(data) {
        details_menu += furl(github_root+'life_list_fish_story.html?project_id=239695&obs_id='+p_story_id,'Fish Story');
    }
 
-   details_menu += furl(github_root+'life_list_map.html?project_id=239695&taxon_id='+p_taxon_id+'&user_id='+(winurlparams.get('user_id')||''),'Map');      
+   details_menu += furl(github_root+'life_list_map.html?project_id=239695'+opts+'&user_id='+(winurlparams.get('user_id')||''),'Map');      
 
    details_menu +=         '</div>' +
                      '</div>';
@@ -268,11 +295,11 @@ function buildMenu(data) {
   let all_angler_params  = ''; 
    
   if( p_taxon_id ) {
-     this_angler_params = ('?project_id='+story_param+'&user_id='+angler+'&angler='+angler+'&taxon_id='+p_taxon_id);  
-     all_angler_params  = ('?project_id=239695&angler='+angler+story_param+'&taxon_id='+p_taxon_id);
+     this_angler_params = ('?project_id='+story_param+'&user_id='+angler+'&angler='+angler+opts);  
+     all_angler_params  = ('?project_id=239695&angler='+angler+story_param+opts);
   } else {
-     this_angler_params = ('?project_id=239695'+story_param+'&user_id='+angler+'&angler='+angler);  
-     all_angler_params  = ('?project_id=239695&angler='+angler);
+     this_angler_params = ('?project_id=239695'+story_param+'&user_id='+angler+'&angler='+angler+opts);  
+     all_angler_params  = ('?project_id=239695&angler='+angler+opts);
   }
   
   faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
