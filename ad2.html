@@ -152,7 +152,7 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_sort       = winurlparams.get('sort') || 'dspecies';
 let p_place_name = winurlparams.get('place_name') || '';
-let p_taxon_name = winurlparams.get('taxon_name') || '';
+let p_tname      = winurlparams.get('tname') || '';
 let p_place_id   = winurlparams.get('place_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 
@@ -195,8 +195,8 @@ if( p_taxon_id ) {
     opts      += ('&taxon_id='+p_taxon_id);
 }
 
-if( p_taxon_name ) {
-    opts      += ('&taxon_name'+p_taxon_name);
+if( p_tname ) {
+    opts      += ('&tname'+p_tname);
 }
 
 if( p_sort ) {
