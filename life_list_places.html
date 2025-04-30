@@ -104,11 +104,11 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let p_options = winurlparams.get('options') || [];
+let p_options  = winurlparams.get('options') || [];
+let p_place_id = winurlparams.get('place_id') || '';
 
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
-
 
 function fresults(xobj) {
 
