@@ -196,10 +196,11 @@ function fresults(xobj) {
 };
 
 function buildForm() {
+  let tax_param = ('?taxon_id=' + p_taxon_id);
   faddelem('p',document.body,{innerHTML:('<div>' +
-                                           '<form action='+github_root+'life_list_places.html?taxon_id>' +
+                                           '<form action='+github_root+'life_list_places.html>' +
                                               '<label for="fname">Place Name</label>' +
-                                              '<input type="text" id="pname" name="q" placeholder="Enter a full or partial place name..">' +   
+                                              '<input type="text" id="pname" name="'+tax_param+sort_param+field_param+'&q" placeholder="Enter a full or partial place name..">' +   
                                               '<input type="submit" value="Search">' +
                                            '</form>' +
                                          '</div>')});
