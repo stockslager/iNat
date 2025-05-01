@@ -331,12 +331,15 @@ function fresults(result, places_obj, taxa_obj) {
    if (result) {
 
       // may need to revisit this if there is more than one page of data
-      if( p_sort === 'uuser' )    { result.recs = sortWithNull(result.recs, true); }
-      if( p_sort === 'duser' )    { result.recs = sortWithNull(result.recs, false); }
-      if( p_sort === 'uspecies' ) { result.recs = sortWithNullSpecies(result.recs, true); }
-      if( p_sort === 'dspecies' ) { result.recs = sortWithNullSpecies(result.recs, false); }
-      if( p_sort === 'uobs' )     { result.recs = sortWithNullObs(result.recs, true); }
-      if( p_sort === 'dobs' )     { result.recs = sortWithNullObs(result.recs, false); }
+      let user_toggle    = 'uuser';
+      let species_toggle = 'dspecies';
+      let obs_toggle     = 'dobs';
+      if( p_sort === 'uuser' )    { result.recs = sortWithNull(result.recs, true);         user_toggle='duser'; }
+      if( p_sort === 'duser' )    { result.recs = sortWithNull(result.recs, false);        user_toggle='uuser'; }
+      if( p_sort === 'uspecies' ) { result.recs = sortWithNullSpecies(result.recs, true);  species_toggle='dspecies'; }
+      if( p_sort === 'dspecies' ) { result.recs = sortWithNullSpecies(result.recs, false); species_toggle='uspecies'; }
+      if( p_sort === 'uobs' )     { result.recs = sortWithNullObs(result.recs, true);      obs_toggle='dobs'; }
+      if( p_sort === 'dobs' )     { result.recs = sortWithNullObs(result.recs, false);     obs_toggle='uobs'; }
 
       let total_results = result.total_results;
       let per_page = result.per_page;
