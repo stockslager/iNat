@@ -403,11 +403,8 @@ function fresults(result, places_obj, taxa_obj) {
             {innerText:i+1},
             {innerHTML:user_icon},
             {innerHTML:furl(root_people+rec.user_login,rec.user_login)+map},
-            //{innerHTML:furl(github_root+params+opts,rec.user_login)},
-         //   {innerHTML:furl(github_root+'life_list_map.html?project_id=239695&view=elevation'+opts+'&user_id='+rec.user_login,'<span class="books">&#127758</span>')},
             {innerHTML:furl(github_root+params+opts,rec.species_count )},
             {innerHTML:furl(github_root+'life_list_grid.html?project_id=239695&user_id='+rec.user_login+'&angler='+rec.user_login+opts+p_field_opt,rec.obs_count)},
-          //{innerHTML:furl(github_root+detail_params+opts,'<span class="books">&#128269</span>')},      
          ];
          faddelems('td',brow,values);
       };
@@ -476,7 +473,6 @@ function parseStoredPlaces(places) {
        // Parse the string back to an object
        const retrievedRec = JSON.parse(places);
        retrievedRec.places = JSON.parse(retrievedRec.places);
-       console.log('pl ',retrievedRec.places);
        return retrievedRec;
    } else {
        console.log("No object found in session storage for key 'myObject'");
@@ -550,7 +546,6 @@ function parseStoredTaxa(taxa) {
        // Parse the string back to an object
        const retrievedRec = JSON.parse(taxa);
        retrievedRec.taxa = JSON.parse(retrievedRec.taxa);
-       console.log('taxa ',retrievedRec.taxa);
        return retrievedRec;
    } else {
        console.log("No object found in session storage");
