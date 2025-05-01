@@ -361,6 +361,7 @@ function fresults(result, places_obj, taxa_obj) {
       let hrow = faddelem('tr',thead);
 
       let sort_url = (github_root+'life_list_dashboard.html?project_id=239695'+opts+'&cache_check=yes');
+      let arrows = '<img src="'+github_root+'arrows.png+'"/>';
                       
       let labels = [
          {innerText:'#'},
@@ -369,7 +370,7 @@ function fresults(result, places_obj, taxa_obj) {
         // {innerText:'Map'},
          {innerHTML:'Spc'+furlArrow(sort_url+'&sort=dspecies','&#11015;') + furlArrow(sort_url+'&sort=uspecies','&#11014;')},
          //{innerHTML:'Species'+furlArrow(sort_url+'&sort=dspecies','<div style="padding-right:10px; padding-left:10px;">&#11015;</div>') + furlArrow(sort_url+'&sort=uspecies','&#11014;')},
-         {innerHTML:'Obs'+furlArrow(sort_url+'&sort=dobs','&#11015') + furlArrow(sort_url+'&sort=uobs','&#11014')},
+         {innerHTML:'Obs'+furlArrow(sort_url+'&sort=dobs',arrows) /*+ furlArrow(sort_url+'&sort=uobs','&#11014')*/},
       ];
       faddelems('th',hrow,labels);
       
