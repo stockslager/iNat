@@ -1,5 +1,5 @@
 <!DOCTYPE html> 
-<html lang="en"> 
+<html lang="en">  
  
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -42,19 +42,19 @@
    }  
    #key { color:var(--color-text-link); }
    #main { width:fit-content; min-width:375px; }
-   #arrows { text-decoration:none; color:black; }
+   #arrow { color:var(--color-text-invert); }
    table, td, th { border-collapse:collapse; margin:0px; padding:5px; } 
   /* th { position:-webkit-sticky; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }*/
-   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-size:14px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
+   th { padding-top:10px; padding-bottom:10px; position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-size:14px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid #333; border-radius: 5px 0px 0px 0px; }
    th:last-child{ border: 0px solid #333; border-radius: 0px 5px 0px 0px; }  
-   .arrow { font-size:1.000em; }
+   .arrows { width:14px; height:14px; }
    tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
    tr:nth-child(even) { background:var(--color-base); }
    .tar { text-align:right; }
    .icon { height:34px; width:34px; border-radius:50%; }
    .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
-   .books { font-size:1.500em; }
+   .books { font-size:1.000em; float:right; padding-right:5px; }
    .photo { height:64px; width:64px; border-radius: 15px 15px 15px 15px; }
    img { margin:0; padding:0; border:0; }
    h2 { width:fit-content; min-width:375px; }
@@ -213,7 +213,7 @@ winurlparams.delete('activity_data');
 
 <script>
 
-function furlArrow(url,txt=url) { return '<a href="'+url+'" id="arrows">'+txt+'</a>'; };
+function furlArrow(url,txt=url) { return '<a href="'+url+'" id="arrow">'+txt+'</a>'; };
 
 function findValueByKey(arr, key, value) {
   for (let i = 0; i < arr.length; i++) {
@@ -270,7 +270,7 @@ function fresults(result, places_obj, taxa_obj) {
       // places menu...
       let places_menu = furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+taxon_opt+p_field_opt,'All');
       for( let i=0; i<places_obj.places.length; i++ ) {
-           places_menu += furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+taxon_opt+p_field_opt+'&place_id='+places_obj.places[i].place_id+'&place_name='+places_obj.places[i].place_name,places_obj.places[i].place_name);
+           places_menu += furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+taxon_opt+p_field_opt+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
       }
       places_menu += furl(github_root+'life_list_places.html','Select Custom Place');
 
@@ -334,12 +334,15 @@ function fresults(result, places_obj, taxa_obj) {
    if (result) {
 
       // may need to revisit this if there is more than one page of data
-      if( p_sort === 'uuser' )    { result.recs = sortWithNull(result.recs, true); }
-      if( p_sort === 'duser' )    { result.recs = sortWithNull(result.recs, false); }
-      if( p_sort === 'uspecies' ) { result.recs = sortWithNullSpecies(result.recs, true); }
-      if( p_sort === 'dspecies' ) { result.recs = sortWithNullSpecies(result.recs, false); }
-      if( p_sort === 'uobs' )     { result.recs = sortWithNullObs(result.recs, true); }
-      if( p_sort === 'dobs' )     { result.recs = sortWithNullObs(result.recs, false); }
+      let user_toggle    = 'uuser';
+      let species_toggle = 'dspecies';
+      let obs_toggle     = 'dobs';
+      if( p_sort === 'uuser' )    { result.recs = sortWithNull(result.recs, true);         user_toggle='duser'; }
+      if( p_sort === 'duser' )    { result.recs = sortWithNull(result.recs, false);        user_toggle='uuser'; }
+      if( p_sort === 'uspecies' ) { result.recs = sortWithNullSpecies(result.recs, true);  species_toggle='dspecies'; }
+      if( p_sort === 'dspecies' ) { result.recs = sortWithNullSpecies(result.recs, false); species_toggle='uspecies'; }
+      if( p_sort === 'uobs' )     { result.recs = sortWithNullObs(result.recs, true);      obs_toggle='dobs'; }
+      if( p_sort === 'dobs' )     { result.recs = sortWithNullObs(result.recs, false);     obs_toggle='uobs'; }
 
       let total_results = result.total_results;
       let per_page = result.per_page;
@@ -361,15 +364,14 @@ function fresults(result, places_obj, taxa_obj) {
       let hrow = faddelem('tr',thead);
 
       let sort_url = (github_root+'life_list_dashboard.html?project_id=239695'+opts+'&cache_check=yes');
+      let arrows = ('<img class="arrows" src="'+github_root+'arrows.png"/>');
                       
       let labels = [
          {innerText:'#'},
-         {innerText:'User '},
-         {innerHTML:' <div style="display:flex; align-items:center;">'+furlArrow(sort_url+'&sort=duser','&#11015;') + furlArrow(sort_url+'&sort=uuser','&#11014;</div>')},
-        // {innerText:'Map'},
-         {innerHTML:'Spc'+furlArrow(sort_url+'&sort=dspecies','&#11015;') + furlArrow(sort_url+'&sort=uspecies','&#11014;')},
-         //{innerHTML:'Species'+furlArrow(sort_url+'&sort=dspecies','<div style="padding-right:10px; padding-left:10px;">&#11015;</div>') + furlArrow(sort_url+'&sort=uspecies','&#11014;')},
-         {innerHTML:'Obs'+furlArrow(sort_url+'&sort=dobs','&#11015') + furlArrow(sort_url+'&sort=uobs','&#11014')},
+         {innerText:'Icon '},
+         {innerHTML:furlArrow(sort_url+'&sort='+user_toggle,'Name'+arrows)},
+         {innerHTML:furlArrow(sort_url+'&sort='+species_toggle,'Spc'+arrows)},
+         {innerHTML:furlArrow(sort_url+'&sort='+obs_toggle,'Obs'+arrows)},
       ];
       faddelems('th',hrow,labels);
       
@@ -394,16 +396,15 @@ function fresults(result, places_obj, taxa_obj) {
              params = ('life_list.html?project_id=239695&user_id='+rec.user_login+'&tag_name=pegslifelist');
              params = ('life_list.html?project_id=239695&user_id='+rec.user_login+opts);
          }
-         
+
+         let map = furl(github_root+'life_list_map.html?project_id=239695'+opts+'&user_id='+rec.user_login,'<span class="books">&#127758</span>');
+       
          let values = [
             {innerText:i+1},
             {innerHTML:user_icon},
-            {innerHTML:furl(root_people+rec.user_login,rec.user_login)},
-            //{innerHTML:furl(github_root+params+opts,rec.user_login)},
-         //   {innerHTML:furl(github_root+'life_list_map.html?project_id=239695&view=elevation'+opts+'&user_id='+rec.user_login,'<span class="books">&#127758</span>')},
+            {innerHTML:furl(root_people+rec.user_login,rec.user_login)+map},
             {innerHTML:furl(github_root+params+opts,rec.species_count )},
             {innerHTML:furl(github_root+'life_list_grid.html?project_id=239695&user_id='+rec.user_login+'&angler='+rec.user_login+opts+p_field_opt,rec.obs_count)},
-          //{innerHTML:furl(github_root+detail_params+opts,'<span class="books">&#128269</span>')},      
          ];
          faddelems('td',brow,values);
       };
@@ -472,7 +473,6 @@ function parseStoredPlaces(places) {
        // Parse the string back to an object
        const retrievedRec = JSON.parse(places);
        retrievedRec.places = JSON.parse(retrievedRec.places);
-       console.log('pl ',retrievedRec.places);
        return retrievedRec;
    } else {
        console.log("No object found in session storage for key 'myObject'");
@@ -546,7 +546,6 @@ function parseStoredTaxa(taxa) {
        // Parse the string back to an object
        const retrievedRec = JSON.parse(taxa);
        retrievedRec.taxa = JSON.parse(retrievedRec.taxa);
-       console.log('taxa ',retrievedRec.taxa);
        return retrievedRec;
    } else {
        console.log("No object found in session storage");
