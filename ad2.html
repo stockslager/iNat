@@ -42,13 +42,12 @@
    }  
    #key { color:var(--color-text-link); }
    #main { width:fit-content; min-width:375px; }
-   #arrows { text-decoration:none; color:black; }
    table, td, th { border-collapse:collapse; margin:0px; padding:5px; } 
   /* th { position:-webkit-sticky; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }*/
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-size:14px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid #333; border-radius: 5px 0px 0px 0px; }
    th:last-child{ border: 0px solid #333; border-radius: 0px 5px 0px 0px; }  
-   .arrow { font-size:1.000em; }
+   .arrows { width:14px; height:14px; }
    tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
    tr:nth-child(even) { background:var(--color-base); }
    .tar { text-align:right; }
@@ -213,8 +212,6 @@ winurlparams.delete('activity_data');
 
 <script>
 
-function furlArrow(url,txt=url) { return '<a href="'+url+'" id="arrows">'+txt+'</a>'; };
-
 function findValueByKey(arr, key, value) {
   for (let i = 0; i < arr.length; i++) {
     if (arr[i][key].toString() === value) {
@@ -361,16 +358,16 @@ function fresults(result, places_obj, taxa_obj) {
       let hrow = faddelem('tr',thead);
 
       let sort_url = (github_root+'life_list_dashboard.html?project_id=239695'+opts+'&cache_check=yes');
-      let arrows = ('<img src="'+github_root+'arrows.png"/>');
+      let arrows = ('<img class="arrows" src="'+github_root+'arrows.png"/>');
                       
       let labels = [
          {innerText:'#'},
          {innerText:'Icon '},
-         {innerHTML:'Name<div style="display:flex; align-items:center;">'+furlArrow(sort_url+'&sort=duser',arrows/*'&#11015;') + furlArrow(sort_url+'&sort=uuser','&#11014;</div>'*/)},
+         {innerHTML:'Name<div style="display:flex; align-items:center;">'+furl(sort_url+'&sort=duser',arrows/*'&#11015;') + furlArrow(sort_url+'&sort=uuser','&#11014;</div>'*/)},
         // {innerText:'Map'},
-         {innerHTML:'Spc'+furlArrow(sort_url+'&sort=dspecies',arrows/*'&#11015;') + furlArrow(sort_url+'&sort=uspecies','&#11014;'*/)},
+         {innerHTML:'Spc'+furl(sort_url+'&sort=dspecies',arrows/*'&#11015;') + furlArrow(sort_url+'&sort=uspecies','&#11014;'*/)},
          //{innerHTML:'Species'+furlArrow(sort_url+'&sort=dspecies','<div style="padding-right:10px; padding-left:10px;">&#11015;</div>') + furlArrow(sort_url+'&sort=uspecies','&#11014;')},
-         {innerHTML:'Obs'+furlArrow(sort_url+'&sort=dobs',arrows) /*+ furlArrow(sort_url+'&sort=uobs','&#11014')*/},
+         {innerHTML:'Obs'+furl(sort_url+'&sort=dobs',arrows) /*+ furlArrow(sort_url+'&sort=uobs','&#11014')*/},
       ];
       faddelems('th',hrow,labels);
       
