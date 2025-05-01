@@ -395,7 +395,24 @@ function fresults(xobj) {
          } 
          sessionStorage.setItem((p_user_id+p_tag_name+p_taxon_id+p_place_id+'dd_opts'), dd_opts);
          //sessionStorage.setItem((p_user_id+p_tag_name+p_taxon_id+p_place_id+'tags'), tags);
-      } 
+      } else {
+          tags = furl(github_root+'life_list.html'+opts,'all');
+          for( let i=0; i<results.length; i++ ) {
+             let rec = results[i];
+
+             // build the drop down array from the observation field values
+             for( let j=0; j<rec.ofvs.length; j++ ){
+                  if( rec.tags ) {
+                      for( let m=0; m<rec.tags.length; m++ ) {
+                           if( !tags_array.includes(rec.tags[m]) ) {
+                               tags_array.push(rec.tags[m]);
+                               tags += furl(github_root+'life_list.html'+opts+'&tag_name='+rec.tags[m],rec.tags[m]);
+                           }
+                      }
+                  }
+              }
+         } 
+      }
 
       faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
                                                       '<div class="dropdown">' +
