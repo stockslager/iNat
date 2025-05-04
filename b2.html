@@ -209,7 +209,9 @@ for (const [key, value] of winurlparams.entries()) {
   if( key === 'page' ){
       all_opts += '1';
   } else {
-      all_opts += value;
+      if( key !== term_id && key !== term_value_id ) {
+          all_opts += value;
+      }
   }
 }      
 
