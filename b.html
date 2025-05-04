@@ -253,12 +253,12 @@ function fresults(xobj) {
           ( p_show_menu === 'yes' ) ||
           (menu_item.sub_icons) ) { 
           if( menu_item.sub_icons ) {
-              for( let j=0; j<menu_item.sub_icons.length; j++ ) {
+              //for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                    if( sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
                        params += ('&sub_menu_array='+sub_taxon_arr);
                        icons += ('<span id="butter2">'+furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon)+'</span>');
                    }
-              }
+              //}
           }
           faddelem('p',document.body,{innerHTML:icons});
       }
