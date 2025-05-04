@@ -423,7 +423,7 @@ function fresults(data) {
             let anchor = faddelem('a',gcell,{href:famp(obsurlbase+'/'+obs.id)});
             let photo = (photourl===null) ? faddelem('span',anchor,{innerText:'❎'})
                : faddelem('img',anchor,{style:{width:cellpx+'px',height:cellpx+'px'},
-                  title: taxon + 'on<br/>' + taxon2 + '<br/>observed by ' + user + '<br/>on ' + obsdt,
+                  title: taxon + 'on<br>' + taxon2 + '<\n>observed by ' + user + '<br>on ' + obsdt,
                   src: ((cellpx<=75) ? photourl
                      : (cellpx<=150) ? photourl.replace('square','small')
                      : photourl.replace('square','medium'))
