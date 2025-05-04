@@ -94,6 +94,7 @@ let p_target_name   = winurlparams.get('target_name') || '';
 let p_target_id     = winurlparams.get('target_id') || '';
 let p_show_menu     = winurlparams.get('show_menu') || 'no';
 let p_menu_array    = winurlparams.get('menu_array') || '';
+let p_tag_name      = winurlparams.get('tag_name') || '';
 let p_sub_menu_array    = winurlparams.get('sub_menu_array') || '';
 let p_menu          = winurlparams.get('menu') || 'all';
 let p_field = '';
@@ -107,6 +108,14 @@ if( p_list ) {
 
 if( p_menu ) {
     opts += ('&menu='+p_menu);
+}
+
+if( p_tag_name ) {
+    opts += ('&tag_name='+p_tag_name);
+}
+
+if( p_title ) {
+    opts += ('&title='+p_title);
 }
  
 if( p_omit_users !== '' ){
