@@ -251,11 +251,11 @@ function fresults(xobj) {
           }
       }
 
-      faddelem('p',document.body,{innerHTML:furl(github_root+'b.html?'+query_params+list_param+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&menu='+p_menu+field_name,'<span id="topright">'+p_title+' all plants</span>')});
+      let on_all = furl(github_root+'b.html?'+query_params+list_param+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&menu='+p_menu+field_name,'<span id="topright">'+p_title+' all plants</span>');
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+on_all+'<br />'});  
 
       labels = [
             {innerText:'#'},
