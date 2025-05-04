@@ -207,16 +207,6 @@ if( p_taxon_id ) {
 
 var recsmax = columns * rows - 1;
 
-// when entering from lifelist page there won't be 
-// a project id since we show all the angler's 
-// photos not just those from this project.  if 
-// they've clicked show all, there will be a project
-// and we don't want to append user_id.
-if( !p_project_id ) {
-    winurlparams.delete('user_id');
-    winurlparams.append('user_id', angler);
-}
-
 winurlparams.delete('cellpx');
 winurlparams.delete('spacerpx');
 winurlparams.delete('rows');
@@ -264,17 +254,6 @@ function buildMenu(data) {
 
   let details_menu = buildDetailsMenu(data);
 
-  let this_angler_params = ''; 
-  let all_angler_params  = ''; 
-   
-  if( p_taxon_id ) {
-     this_angler_params = ('?project_id='+story_param+'&user_id='+angler+'&angler='+angler+opts);  
-     all_angler_params  = ('?project_id=239695&angler='+angler+story_param+opts);
-  } else {
-     this_angler_params = ('?project_id=239695'+story_param+'&user_id='+angler+'&angler='+angler+opts);  
-     all_angler_params  = ('?project_id=239695&angler='+angler+opts);
-  }
-  
   faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
                                                       '<div class="dropdown">' +
                                                            '<button class="dropbtn">' +
@@ -282,9 +261,9 @@ function buildMenu(data) {
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
-                                                                 furl(github_root+'life_list_grid.html'+this_angler_params,'This Angler') +
-                                                                 furl(github_root+'life_list_grid.html'+all_angler_params,'All Anglers') +
-                                                                 furl(github_root+'life_list_grid.html'+all_angler_params+'&order_by=votes','All By Faves') +
+                                                                 furl(github_root+'life_list_grid.html','This Angler') +
+                                                                 furl(github_root+'life_list_grid.html','All Anglers') +
+                                                                 furl(github_root+'life_list_grid.html','All By Faves') +
                                                            '</div>' +
                                                        '</div>' +
                                                        '<div id="home">'+furl(github_root+'bugs_on_plants.html?project_id=220623&list=yes&title=on&menu=cnc&tag_name=bugs-on-plants','Plant List')+'</div>' +
