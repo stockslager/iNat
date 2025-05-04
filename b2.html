@@ -219,10 +219,12 @@ for (const [key, value] of winurlparams.entries()) {
 // if the user has selected a method, built the opt to pass to the
 // lifelist page.
 // find key/value pair for &field: param if one was passed in
-let opts = ''
+let field = '';
+let opts = '';
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
       opts += ('&'+key+'='+value);
+      field = ('&'+key+'='+value);
   }
 }   
 
@@ -270,8 +272,12 @@ function buildDetailsMenu(data) {
 
 function buildLifeStageMenu(data) {
 
+   let cache_key = ('project_id='+p_project_id+'taxon_id='+p_taxon_id+'field='+field);
+
    if( p_cache_check === 'yes' ) {
-       return( sessionStorage.getItem(all_opts) );
+       if( sessionStorage.getItem(all_opts) ) {
+           return( sessionStorage.getItem(cache_key) );
+       }
    }
    
    let life_stage_menu = '<div class="dropdown">' +
@@ -300,7 +306,7 @@ function buildLifeStageMenu(data) {
    life_stage_menu +=         '</div>' +
                      '</div>';
 
-   sessionStorage.setItem(all_opts, life_stage_menu);
+   sessionStorage.setItem(cache_key, life_stage_menu);
    
    return life_stage_menu;
 }
