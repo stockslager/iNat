@@ -232,13 +232,13 @@ function fresults(xobj) {
           if( menu_item.sub_icons ) {
               for( let i=0; i<results.length; i++) {
                    if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
-                       for( let j=0; j<menu_item.sub_icons.length; j++ ) {
+                       //for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                             for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
                                  if( results[i].taxon.ancestor_ids[k].toString() === menu_item.sub_icons[j].taxon_id.toString() ){
                                      sub_taxon_arr.push( menu_item.sub_icons[j].taxon_id );
                                  }
                              }
-                        }
+                       // }
                    }
                }
           }
