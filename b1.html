@@ -240,6 +240,18 @@ function fresults(xobj) {
                field_name = ('&field:'+menu_items[i].field_name+'=');
            }
       }
+
+      let query_params = '';
+      if( p_project_id === '' || p_project_id === 'null' ){
+          query_params = ('user_id='+p_user_id);
+      } else {
+          query_params = ('project_id='+p_project_id);
+          if( p_user_id !== '' ){
+              query_params += ('&user_id='+p_user_id);
+          }
+      }
+
+      faddelem('h2',document.body,{innerHTML:furl(github_root+'b.html?'+query_params+list_param+'&obs_field='+p_obs_field+'&title='+p_title+'&menu='+p_menu+field_name,'<span id="topright">'+p_title+' all plants</span>')});
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
@@ -280,16 +292,6 @@ function fresults(xobj) {
                  if( rec.taxon.default_photo.url ){
                      tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
                  }
-             }
-         }
-
-         let query_params = '';
-         if( p_project_id === '' || p_project_id === 'null' ){
-             query_params = ('user_id='+p_user_id);
-         } else {
-             query_params = ('project_id='+p_project_id);
-             if( p_user_id !== '' ){
-                 query_params += ('&user_id='+p_user_id);
              }
          }
 
