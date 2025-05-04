@@ -194,6 +194,24 @@ var rows = 30;
 var columns = 3;*/
 
 let obs_field_array = [];
+let annotations_array = [];
+
+let all_opts = '';
+for (const [key, value] of winurlparams.entries()) { 
+  if( all_opts === '' ){
+      all_opts += "?";
+  } else {
+      all_opts += "&";
+  }
+  all_opts += key;
+  all_opts += "=";
+
+  if( key === 'page' ){
+      all_opts += '1';
+  } else {
+      all_opts += value;
+  }
+}      
 
 // if the user has selected a method, built the opt to pass to the
 // lifelist page.
@@ -247,29 +265,51 @@ function buildDetailsMenu(data) {
    return details_menu;
 }
 
+function buildLifeStageMenu(data) {
+
+
+   let life_stage_menu = '<div class="dropdown">' +
+                           '<button class="dropbtn">' +
+                              'Life Stage' +
+                              '<i class="fa fa-caret-down"></i>' +
+                           '</button>' +
+                           '<div class="dropdown-content">';
+   
+   if( annotations_array.includes(2) ){      // adult.
+       life_stage_menu += furl(github_root+'b2.html'+all_opts+'&term_id=1&term_value_id=2,'Adults');
+   }
+   if( annotations_array.includes(4) ) {    // pupa
+       life_stage_menu += furl(github_root+'b2.html'+all_opts+'&term_id=1&term_value_id=4,'Pupa');
+   }
+   if( annotations_array.includes(6) ){      // larva.
+       life_stage_menu += furl(github_root+'b2.html'+all_opts+'&term_id=1&term_value_id=6,'Larva');
+   }
+   if( annotations_array.includes(7) ) {    // egg
+       life_stage_menu += furl(github_root+'b2.html'+all_opts+'&term_id=1&term_value_id=7,'Egg');
+   }
+
+   life_stage_menu +=         '</div>' +
+                     '</div>';
+   
+   return life_stage_menu;
+}
+
 function buildMenu(data) {
 
+  //for( let i=0; i<data.results.length; i++ ) {
+  //     checkForObsFields(data.results[i]);
+  //     if( data.results[i].description ) {
+  //         fish_story = 'yes';
+  //     }
+  //}
+
   for( let i=0; i<data.results.length; i++ ) {
-       checkForObsFields(data.results[i]);
-       if( data.results[i].description ) {
-           fish_story = 'yes';
-       }
+       checkForAnnotations(data.results[i]);
   }
 
-  let details_menu = buildDetailsMenu(data);
+  //let details_menu = buildDetailsMenu(data);
 
-  faddelem('p',document.body,{innerHTML:('<div class="navbar">' +
-                                                      '<div class="dropdown">' +
-                                                           '<button class="dropbtn">' +
-                                                                  'Life Stage' +
-                                                             '<i class="fa fa-caret-down"></i>' +
-                                                           '</button>' +
-                                                           '<div class="dropdown-content">' +
-                                                                 furl(github_root+'life_list_grid.html','This Angler') +
-                                                                 furl(github_root+'life_list_grid.html','All Anglers') +
-                                                                 furl(github_root+'life_list_grid.html','All By Faves') +
-                                                           '</div>' +
-                                                       '</div>' +
+  faddelem('p',document.body,{innerHTML:('<div class="navbar">' + buildLifeStageMenu(data) + 
                                                        '<div id="home">'+furl(github_root+'b.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'Plant List')+'</div>' +
                                               '</div>')});  
 }
@@ -286,6 +326,39 @@ function checkForObsFields( obs ){
                 if( !obs_field_array.includes(12288) ) {
                     obs_field_array.push(obs.ofvs[i].field_id);
                 }
+            }
+       }
+   }
+}
+
+function checkForAnnotations( obs ){
+   if( obs.annotations ) {
+       for( let i=0; i<obs.annotations.length; i++ ) {
+            // eventually this hard coding would need to be removed.
+            // it should call the get_observations_popular_field_values on page load
+            // and store the results in session for use when the menu is clicked.
+            // replace session on re-load of page.
+            if( obs.annotations[i].controlled_attribute_id === 1 ) {   // life stage
+                if( obs.annotations[i].controlled_value_id === 2 ) {   // adult
+                    if( !annotations_array.includes(2) ) {
+                        annotations_array.push(obs.annotations[i].controlled_value_id);
+                    }
+                }           
+                if( obs.annotations[i].controlled_value_id === 4 ) {   // pupa
+                    if( !annotations_array.includes(4) ) {
+                        annotations_array.push(obs.annotations[i].controlled_value_id);
+                    }
+                }               
+                if( obs.annotations[i].controlled_value_id === 6 ) {   // larva
+                    if( !annotations_array.includes(6) ) {
+                        annotations_array.push(obs.annotations[i].controlled_value_id);
+                    }
+                }     
+                if( obs.annotations[i].controlled_value_id === 7 ) {   // egg
+                    if( !annotations_array.includes(7) ) {
+                        annotations_array.push(obs.annotations[i].controlled_value_id);
+                    }
+                }               
             }
        }
    }
