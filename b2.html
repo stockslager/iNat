@@ -410,7 +410,7 @@ function fresults(data) {
          else {
             let obs = results[obsseq];
             let photourl = (obs.photos.length>0) ? obs.photos[0].url : null;
-            let taxon = obs.taxon?(obs.taxon.preferred_common_name?(obs.taxon.preferred_common_name+' ('')'):obs.taxon.name):'(Unknown Taxon)';
+            let taxon = obs.taxon?(obs.taxon.preferred_common_name?(obs.taxon.preferred_common_name):obs.taxon.name):'(Unknown Taxon)';
             let user = obs.user.login+((obs.user.name&&obs.user.name!='')?(' ('+obs.user.name+')'):'');
             let obsdt = obs.time_observed_at?fdate(obs.time_observed_at,true):(obs.observed_on||'(Unknown Date)');
             let anchor = faddelem('a',gcell,{href:famp(obsurlbase+'/'+obs.id)});
