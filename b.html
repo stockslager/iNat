@@ -101,6 +101,14 @@ let p_field_value = '';
 let menu_items = [];
 let opts = '';
 
+if( p_list ) {
+    opts += ('&list='+p_list);
+}
+
+if( p_menu ) {
+    opts += ('&menu='+p_menu);
+}
+ 
 if( p_omit_users !== '' ){
     winurlparams.delete('not_user_id');
     winurlparams.append('not_user_id', p_omit_users);
@@ -148,23 +156,6 @@ winurlparams.delete('taxon_id');
 winurlparams.delete('not_user_id');
 winurlparams.delete('not_id');
 winurlparams.delete('not_in_project');
-
-// build param list for url's used in fresults
-for (const [key, value] of winurlparams.entries()) { 
-  if( opts === '' ){
-      opts += "?";
-  } else {
-      opts += "&";
-  }
-  opts += key;
-  opts += "=";
-
-  if( key === 'page' ){
-      opts += '1';
-  } else {
-      opts += value;
-  }
-}   
 
 // add them back after building options...
 winurlparams.append('operator', p_operator);
@@ -320,7 +311,7 @@ function fresults(xobj) {
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'b2.html?'+opts+query_params+'&taxon_id='+rec.taxon.id+grid_title+field_name+p_target_id,displayName)},
+                  {innerHTML:furl(github_root+'b2.html?'+query_params+opts+'&taxon_id='+rec.taxon.id+grid_title+field_name+p_target_id,displayName)},
                   {innerText:rec.count||''},
                   ];
         
