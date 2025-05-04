@@ -370,26 +370,9 @@ function checkForAnnotations( obs ){
             // and store the results in session for use when the menu is clicked.
             // replace session on re-load of page.
             if( obs.annotations[i].controlled_attribute_id === 1 ) {   // life stage
-                if( obs.annotations[i].controlled_value_id === 2 ) {   // adult
-                    if( !annotations_array.includes(2) ) {
-                        annotations_array.push(obs.annotations[i].controlled_value_id);
-                    }
-                }           
-                if( obs.annotations[i].controlled_value_id === 4 ) {   // pupa
-                    if( !annotations_array.includes(4) ) {
-                        annotations_array.push(obs.annotations[i].controlled_value_id);
-                    }
-                }               
-                if( obs.annotations[i].controlled_value_id === 6 ) {   // larva
-                    if( !annotations_array.includes(6) ) {
-                        annotations_array.push(obs.annotations[i].controlled_value_id);
-                    }
-                }     
-                if( obs.annotations[i].controlled_value_id === 7 ) {   // egg
-                    if( !annotations_array.includes(7) ) {
-                        annotations_array.push(obs.annotations[i].controlled_value_id);
-                    }
-                }               
+                if( !annotations_array.includes(obs.annotations[i].controlled_value_id) ) {
+                    annotations_array.push(obs.annotations[i].controlled_value_id);
+                }
             }
        }
    }
