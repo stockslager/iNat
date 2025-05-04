@@ -275,7 +275,8 @@ function buildLifeStageMenu(data) {
    let cache_key = ('project_id='+p_project_id+'taxon_id='+p_taxon_id+'field='+field);
 
    if( p_cache_check === 'yes' ) {
-       if( sessionStorage.getItem(all_opts) ) {
+       if( sessionStorage.getItem(cache_key) ) {
+           console.log('found cache..: '+cache_key+'==='+sessionStorage.getItem(cache_key));
            return( sessionStorage.getItem(cache_key) );
        }
    }
