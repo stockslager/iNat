@@ -186,9 +186,9 @@ function fresults(xobj) {
       let dlString = '';
       let proj = '';
       let user = '';
-      if( p_project_id !== '' && p_project_id !== 'null' ) {
+      if( p_project_id ) {
           proj = ('?project_id='+p_project_id);
-          if( p_user_id !== '' && p_user_id !== 'null' ) {
+          if( p_user_id ) {
               proj += ('&user_id='+p_user_id);
           }
       } else {
@@ -262,10 +262,16 @@ function fresults(xobj) {
           }
           faddelem('p',document.body,{innerHTML:icons});
       }
+
+      let all = '';
+
+      if( !p_field_value ) {
+          all = furl(github_root+'b2.html?'+proj+user+leaf_params+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&menu='+p_menu+field_name,'<span id="topright">all insects'+p_title+' any plant</span>');
+      }
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+all+'<br />'});  
 
       labels = [
             {innerText:'#'},
