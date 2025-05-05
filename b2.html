@@ -264,10 +264,11 @@ document.title = title.toLowerCase();
 
 function buildBehaviorsMenu(ofvs_array) {
 
+   let foundOne = 'no';
 
    let behaviors_menu = '<div class="dropdown">' +
                            '<button class="dropbtn">' +
-                              'Details' +
+                              'Behavior' +
                               '<i class="fa fa-caret-down"></i>' +
                            '</button>' +
                            '<div class="dropdown-content">';
@@ -278,16 +279,25 @@ function buildBehaviorsMenu(ofvs_array) {
    if( obs_field_array.includes(13) ){      // eating
        for( let i=0; i<ofvs_array.length; i++ ) {
             if( ofvs_array[i].field_id === 13 ) {
+                foundOne = 'yes';
                 behaviors_menu += furl(github_root+'b2.html'+all_opts+'&field:'+ofvs_array[i].name+'='+ofvs_array[i].value, 'Eating');
             }
        }
    }
-   //if( obs_field_array.includes(6637) ) {    // behavior: mating
-   //    behaviors_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695'+opts+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=6637&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:bait','Bait Used');
-   //}
+   if( obs_field_array.includes(6637) ){      // behavior: mating
+       for( let i=0; i<ofvs_array.length; i++ ) {
+            if( ofvs_array[i].field_id === 6637 ) {
+                foundOne = 'yes';
+                behaviors_menu += furl(github_root+'b2.html'+all_opts+'&field:'+ofvs_array[i].name+'='+ofvs_array[i].value, 'Mating');
+            }
+       }
+   }
 
-   behaviors_menu +=         '</div>' +
-                     '</div>';
+   behaviors_menu += '</div></div>';
+   
+   if( foundOne === 'no' ) {
+       behaviors_menu = '';
+   }
    
    return behaviors_menu;
 }
