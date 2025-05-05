@@ -190,6 +190,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr);
 let p_project_id = winurlparams.get('project_id') || '';
+let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 var cellpx       = winurlparams.get('cellpx') || 122;
 var spacerpx     = winurlparams.get('spacerpx') || 4;
@@ -207,6 +208,17 @@ let story_param  = '';
 var spacerpx = 3;
 var rows = 30;
 var columns = 3;*/
+
+let proj_param = '';
+let user_param = '';
+if( p_project_id ) {
+    proj_param = ('?project_id='+p_project_id); 
+    if( p_user_id ) {
+        proj_param += ('&user_id='+p_user_id);
+    }
+} else {
+    user_param = ('?user_id='+p_user_id);
+}
 
 let obs_field_array = [];
 let annotations_array = [];
@@ -355,7 +367,7 @@ function buildMenu(data) {
   //let details_menu = buildDetailsMenu(data);
 
   faddelem('p',document.body,{innerHTML:('<div class="navbar">' + buildLifeStageMenu(data) + 
-                                                       '<div id="home">'+furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div>' +
+                                                       '<div id="home">'+furl(github_root+'bugs_on_plants.html'+proj_param+user_param+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div>' +
                                               '</div>')});  
 }
 
