@@ -229,8 +229,27 @@ for (const [key, value] of winurlparams.entries()) {
           all_opts += value;
       }
   }
-}      
+}   
 
+let all_except_field = '';
+for (const [key, value] of winurlparams.entries()) { 
+  if( !key.startsWith('field') ) {
+      if( all_except_field === '' ){
+          all_except_field += "?";
+      } else {
+          all_except_field += "&";
+      }
+      all_except_field += key;
+      all_except_field += "=";
+
+      if( key === 'page' ){
+          all_except_field += '1';
+      } else {
+          all_except_field += value;
+      }
+  }
+}   
+   
 // if the user has selected a method, built the opt to pass to the
 // lifelist page.
 // find key/value pair for &field: param if one was passed in
@@ -274,13 +293,13 @@ function buildBehaviorsMenu(ofvs_array) {
                            '<div class="dropdown-content">';
 
    // all should always appear...
-   behaviors_menu += furl(github_root+'b2.html'+all_opts+'&cache_check=yes','All');
+   behaviors_menu += furl(github_root+'b2.html'+all_except_field+'&cache_check=yes','All');
       
    if( obs_field_array.includes(13) ){      // eating
        for( let i=0; i<ofvs_array.length; i++ ) {
             if( ofvs_array[i].field_id === 13 ) {
                 foundOne = 'yes';
-                behaviors_menu += furl(github_root+'b2.html'+all_opts+'&field:'+ofvs_array[i].name+'='+ofvs_array[i].value, 'Eating');
+                behaviors_menu += furl(github_root+'b2.html'+all_except_field+'&cache_check=yes&field:'+ofvs_array[i].name+'='+ofvs_array[i].value, 'Eating');
             }
        }
    }
@@ -288,7 +307,7 @@ function buildBehaviorsMenu(ofvs_array) {
        for( let i=0; i<ofvs_array.length; i++ ) {
             if( ofvs_array[i].field_id === 6637 ) {
                 foundOne = 'yes';
-                behaviors_menu += furl(github_root+'b2.html'+all_opts+'&field:'+ofvs_array[i].name+'='+ofvs_array[i].value, 'Mating');
+                behaviors_menu += furl(github_root+'b2.html'+all_except_field+'&cache_check=yes&field:'+ofvs_array[i].name+'='+ofvs_array[i].value, 'Mating');
             }
        }
    }
