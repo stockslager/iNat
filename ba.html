@@ -255,61 +255,6 @@ function capitalizeWords(str) {
   }).join(' ');
 }
  
-function buildTaxaMenu(data) {
-
-   //let cache_key = ('project_id='+p_project_id+'taxon_id='+p_taxon_id+'field='+field);
-
-   //if( p_cache_check === 'yes' ) {
-   //    if( sessionStorage.getItem(cache_key) ) {
-   //        console.log('found cache..: '+cache_key+'==='+sessionStorage.getItem(cache_key));
-   //        return( sessionStorage.getItem(cache_key) );
-   //    }
-   //}
-   
-   let life_stage_menu = '<div class="dropdown">' +
-                           '<button class="dropbtn">' +
-                              'Life Stage' +
-                              '<i class="fa fa-caret-down"></i>' +
-                           '</button>' +
-                           '<div class="dropdown-content">';
-
-   // all should always appear...
-   life_stage_menu += furl(github_root+'b2.html'+all_opts+'&cache_check=yes','All');
-   
-   if( annotations_array.includes(2) ){      // adult
-       life_stage_menu += furl(github_root+'b2.html'+all_opts+'&term_id=1&term_value_id=2&cache_check=yes','Adults');
-   }
-   if( annotations_array.includes(3) ){      // teneral
-       life_stage_menu += furl(github_root+'b2.html'+all_opts+'&term_id=1&term_value_id=3&cache_check=yes','Teneral');
-   }
-   if( annotations_array.includes(4) ) {    // pupa
-       life_stage_menu += furl(github_root+'b2.html'+all_opts+'&term_id=1&term_value_id=4&cache_check=yes','Pupa');
-   }
-   if( annotations_array.includes(5) ) {    // nymph
-       life_stage_menu += furl(github_root+'b2.html'+all_opts+'&term_id=1&term_value_id=5&cache_check=yes','Nymph');
-   }
-   if( annotations_array.includes(6) ){      // larva.
-       life_stage_menu += furl(github_root+'b2.html'+all_opts+'&term_id=1&term_value_id=6&cache_check=yes','Larva');
-   }
-   if( annotations_array.includes(7) ) {    // egg
-       life_stage_menu += furl(github_root+'b2.html'+all_opts+'&term_id=1&term_value_id=7&cache_check=yes','Egg');
-   }
-   if( annotations_array.includes(8) ) {    // juvenile
-       life_stage_menu += furl(github_root+'b2.html'+all_opts+'&term_id=1&term_value_id=8&cache_check=yes','Juvenile');
-   }
-   if( annotations_array.includes(16) ) {    // subimago
-       life_stage_menu += furl(github_root+'b2.html'+all_opts+'&term_id=1&term_value_id=16&cache_check=yes','Subimago');
-   }
-
-
-   life_stage_menu +=         '</div>' +
-                     '</div>';
-
-   //sessionStorage.setItem(cache_key, life_stage_menu);
-   
-   return life_stage_menu;
-}
-
 function fresults(xobj) {
    let results = xobj.results;
    let box_array = [];
@@ -397,7 +342,7 @@ function fresults(xobj) {
                                 '</button>' +
                              '<div class="dropdown-content">';
               params += ('&sub_menu_array='+sub_taxon_arr);
-              menu_string += (furl(github_root+params,'  All' ));
+              menu_string += (furl(github_root+params,'&#43; all' ));
               for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                    if( sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
                        menu_string += (furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon+' '+menu_item.sub_icons[j].nm ));
