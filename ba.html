@@ -190,25 +190,6 @@ let p_field_value = '';
 let menu_items = [];
 let opts = '';
 
-let proj = '';
-let user = '';
-if( p_project_id ) {
-    proj = ('?project_id='+p_project_id);
-    if( p_user_id ) {
-        proj += ('&user_id='+p_user_id);
-    }
-} else {
-    user = ('?user_id='+p_user_id);
-}
-
-let leaf_params = '';
-if( p_list ) {
-    leaf_params += ('&list='+p_list);
-}
-if( p_place_id ) {
-    leaf_params += ('&place_id='+p_place_id);
-}
-
 if( p_list ) {
     opts += ('&list='+p_list);
 }
@@ -283,48 +264,85 @@ function capitalizeWords(str) {
     return word.charAt(0).toUpperCase() + word.slice(1);
   }).join(' ');
 }
+ 
+function fresults(xobj) {
+   let results = xobj.results;
+   let box_array = [];
+ 
+   if (results) {
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+      let labels = [];
+      let dlString = '';
+      let proj = '';
+      let user = '';
+      if( p_project_id ) {
+          proj = ('?project_id='+p_project_id);
+          if( p_user_id ) {
+              proj += ('&user_id='+p_user_id);
+          }
+      } else {
+          user = ('?user_id='+p_user_id);
+      }
 
-function buildTaxaMenu( obs ){ 
-  let field_id = '';
-  //let field_name = '';
-  let menu_item = '';
+      let leaf_params = '';
+      if( p_list ) {
+          leaf_params += ('&list='+p_list);
+      }
+      if( p_place_id ) {
+          leaf_params += ('&place_id='+p_place_id);
+      }
 
-  for( let i=0; i<menu_items.length; i++ ){
-       if( menu_items[i].title === p_title ) {
-           field_id   = menu_items[i].field_id;
-          // field_name = ('&field:'+menu_items[i].field_name+'=');
-           menu_item = menu_items[i];
-       }
-  }
+      if( p_title === '' ) {
+          dlString = 'Bugs on Plants';
+      } else {
+          dlString = (p_prefix+' '+p_title+' '+p_target_name);
+          document.title = dlString;
+      }
 
-  let sub_taxon_arr = [];
-  if( p_sub_menu_array ) {
-      sub_taxon_arr = p_sub_menu_array;
-  } else {
-      if( menu_item.sub_icons ) {
-       console.log('1');
-          if( !sub_taxon_arr.includes(obs.taxon.id.toString()) ) {
-           console.log('2');
-              for( let j=0; j<menu_item.sub_icons.length; j++ ) {
-                   for( let k=0; k<obs.taxon.ancestor_ids.length; k++ ) {
-                        if( obs.taxon.ancestor_ids[k].toString() === menu_item.sub_icons[j].taxon_id.toString() ){
-                            if( !sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
-                                sub_taxon_arr.push( menu_item.sub_icons[j].taxon_id );
-                            }
+      let field_id = '';
+      let field_name = '';
+      let menu_item = '';
+      for( let i=0; i<menu_items.length; i++ ){
+           if( menu_items[i].title === p_title ) {
+               field_id   = menu_items[i].field_id;
+               field_name = ('&field:'+menu_items[i].field_name+'=');
+               menu_item = menu_items[i];
+           }
+      }
+
+      let sub_taxon_arr = [];
+      if( p_sub_menu_array ) {
+          sub_taxon_arr = p_sub_menu_array;
+      } else {
+          if( menu_item.sub_icons ) {
+              for( let i=0; i<results.length; i++) {
+                   if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
+                       for( let j=0; j<menu_item.sub_icons.length; j++ ) {
+                            for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
+                                 if( results[i].taxon.ancestor_ids[k].toString() === menu_item.sub_icons[j].taxon_id.toString() ){
+                                     if( !sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
+                                         sub_taxon_arr.push( menu_item.sub_icons[j].taxon_id );
+                                     }
+                                 }
+                             }
                         }
                    }
-              }
+               }
           }
       }
-  }
 
-  let icons = '';
-  let menu_string = '';
-  let params = ('b.html'+proj+user+leaf_params+'&'+p_field+'='+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu+'&menu='+p_menu);
+      let icons = '';
+      let menu_string = '';
+      let params = ('b.html'+proj+user+leaf_params+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu+'&menu='+p_menu);
 
-  if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
-      ( p_show_menu === 'yes' ) ||
-      ( menu_item.sub_icons ) ) { 
+      if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
+          ( p_show_menu === 'yes' ) ||
+          (menu_item.sub_icons) ) { 
           if( menu_item.sub_icons ) {
               menu_string = '<div class="navbar">';
               menu_string += '<div class="dropdown">' +
@@ -341,61 +359,13 @@ function buildTaxaMenu( obs ){
                    }
               }
               menu_string += ('</div></div>');
+              menu_string += ('<div id="home">'+furl(github_root+'b1.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_title+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div></div>');
           }
-  }
-  return menu_string;
-}
-
-function checkForObsFields( obs ){
-   if( obs.ofvs ) {
-       for( let i=0; i<obs.ofvs.length; i++ ) {
-            if( obs.ofvs[i].field_id === 9833 ) {   // describe the bait or lure used
-                if( !obs_field_array.includes(9833) ) {
-                    obs_field_array.push(obs.ofvs[i].field_id);
-                }
-            }
-            if( obs.ofvs[i].field_id === 12288 ) {   // bait
-                if( !obs_field_array.includes(12288) ) {
-                    obs_field_array.push(obs.ofvs[i].field_id);
-                }
-            }
-       }
-   }
-}
-
-function buildMenu(obs) {
-
-  buildTaxaMenu(obs);
-
-  faddelem('p',document.body,{innerHTML:('<div class="navbar">' + 
-                                            buildTaxaMenu() + 
-                                            '<div id="home">'+furl(github_root+'b1.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_title+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div>' +
-                                         '</div>')});  
-}
- 
-function fresults(xobj) {
-   let results = xobj.results;
-   let box_array = [];
- 
-   if (results) {
-      let total_results = xobj.total_results;
-      let per_page = xobj.per_page;
-      let page_curr = xobj.page;
-      let page_max = Math.ceil(total_results/per_page);
-      let page_prev = ((page_curr>1)?page_curr-1:null);
-      let page_next = ((page_curr<page_max)?page_curr+1:null);
-      let labels = [];
-      let dlString = '';
-
-      if( p_title === '' ) {
-          dlString = 'Bugs on Plants';
-      } else {
-          dlString = (p_prefix+' '+p_title+' '+p_target_name);
-          document.title = dlString;
+          faddelem('p',document.body,{innerHTML:(menu_string)});  
       }
 
       if( !p_field_value ) {
-          dlString = furl(github_root+'b2.html'+proj+user+leaf_params+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&action='+p_title+'&menu='+p_menu+'&'+p_field+'=','<span id="topright">all organisms '+p_title+' any plant</span>');
+          dlString = furl(github_root+'b2.html'+proj+user+leaf_params+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&action='+p_title+'&menu='+p_menu+field_name,'<span id="topright">all organisms '+p_title+' any plant</span>');
       } else {
           dlString = ('<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
       }
@@ -428,8 +398,6 @@ function fresults(xobj) {
          let tax_photo = '<div class="clipart">&#127807</div>'; 
          let tax_id = '';
          let taxon = '';
-
-         buildMenu(rec);
 
          let brow = faddelem('tr',tbody);
 
