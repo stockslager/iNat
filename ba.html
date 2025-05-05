@@ -386,10 +386,16 @@ function fresults(xobj) {
           (menu_item.sub_icons) ) { 
           if( menu_item.sub_icons ) {
               menu_string = '<div class="navbar">';
+              menu_string += '<div class="dropdown">' +
+                                '<button class="dropbtn">' +
+                                    'Show' +
+                                    '<i class="fa fa-caret-down"></i>' +
+                                '</button>' +
+                             '<div class="dropdown-content">';
               params += ('&sub_menu_array='+sub_taxon_arr);
               for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                    if( sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
-                       menu_string += ('<span id="butter2">'+furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon)+'</span>');
+                       menu_string += (furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon));
                    }
               }
               menu_string += ('<div id="home">'+furl(github_root+'b1.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_title+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div></div>');
