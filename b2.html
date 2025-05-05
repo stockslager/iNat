@@ -251,6 +251,25 @@ for (const [key, value] of winurlparams.entries()) {
       }
   }
 }   
+
+let all_except_life_stage = '';
+for (const [key, value] of winurlparams.entries()) { 
+  if( key !== 'life') {
+      if( all_except_field === '' ){
+          all_except_field += "?";
+      } else {
+          all_except_field += "&";
+      }
+      all_except_field += key;
+      all_except_field += "=";
+
+      if( key === 'page' ){
+          all_except_field += '1';
+      } else {
+          all_except_field += value;
+      }
+  }
+}   
    
 // if the user has selected a method, built the opt to pass to the
 // lifelist page.
@@ -344,31 +363,31 @@ function buildLifeStageMenu(data) {
                            '<div class="dropdown-content">';
    if( !life_stage_urls ) {
        // all should always appear...
-       life_stage_urls += furl(github_root+'b2.html'+all_opts+'&life=&cache_check=yes','All');
+       life_stage_urls += furl(github_root+'b2.html'+all_except_life_stage+'&life=&cache_check=yes','All');
    
        if( annotations_array.includes(2) ){      // adult
-           life_stage_urls += furl(github_root+'b2.html'+all_opts+'&life=Adults&term_id=1&term_value_id=2&cache_check=yes','Adults');
+           life_stage_urls += furl(github_root+'b2.html'+all_except_life_stage+'&life=Adults&term_id=1&term_value_id=2&cache_check=yes','Adults');
        }
        if( annotations_array.includes(3) ){      // teneral
-           life_stage_urls += furl(github_root+'b2.html'+all_opts+'&life=Teneral&term_id=1&term_value_id=3&cache_check=yes','Teneral');
+           life_stage_urls += furl(github_root+'b2.html'+all_except_life_stage+'&life=Teneral&term_id=1&term_value_id=3&cache_check=yes','Teneral');
        }
        if( annotations_array.includes(4) ) {    // pupa
-           life_stage_urls += furl(github_root+'b2.html'+all_opts+'&life=Pupa&term_id=1&term_value_id=4&cache_check=yes','Pupa');
+           life_stage_urls += furl(github_root+'b2.html'+all_except_life_stage+'&life=Pupa&term_id=1&term_value_id=4&cache_check=yes','Pupa');
        }
        if( annotations_array.includes(5) ) {    // nymph
-           life_stage_urls += furl(github_root+'b2.html'+all_opts+'&life=Nymph&term_id=1&term_value_id=5&cache_check=yes','Nymph');
+           life_stage_urls += furl(github_root+'b2.html'+all_except_life_stage+'&life=Nymph&term_id=1&term_value_id=5&cache_check=yes','Nymph');
        }
        if( annotations_array.includes(6) ){      // larva.
-           life_stage_urls += furl(github_root+'b2.html'+all_opts+'&life=Larva&term_id=1&term_value_id=6&cache_check=yes','Larva');
+           life_stage_urls += furl(github_root+'b2.html'+all_except_life_stage+'&life=Larva&term_id=1&term_value_id=6&cache_check=yes','Larva');
        }
        if( annotations_array.includes(7) ) {    // egg
-           life_stage_urls += furl(github_root+'b2.html'+all_opts+'&life=Egg&term_id=1&term_value_id=7&cache_check=yes','Egg');
+           life_stage_urls += furl(github_root+'b2.html'+all_except_life_stage+'&life=Egg&term_id=1&term_value_id=7&cache_check=yes','Egg');
        }
        if( annotations_array.includes(8) ) {    // juvenile
-           life_stage_urls += furl(github_root+'b2.html'+all_opts+'&life=Juvenile&term_id=1&term_value_id=8&cache_check=yes','Juvenile');
+           life_stage_urls += furl(github_root+'b2.html'+all_except_life_stage+'&life=Juvenile&term_id=1&term_value_id=8&cache_check=yes','Juvenile');
        }
        if( annotations_array.includes(16) ) {    // subimago
-           life_stage_urls += furl(github_root+'b2.html'+all_opts+'&life=Subimago&term_id=1&term_value_id=16&cache_check=yes','Subimago');
+           life_stage_urls += furl(github_root+'b2.html'+all_except_life_stage+'&life=Subimago&term_id=1&term_value_id=16&cache_check=yes','Subimago');
        }
        sessionStorage.setItem(cache_key, life_stage_urls);
    }
