@@ -188,7 +188,6 @@ let p_menu          = winurlparams.get('menu') || 'all';
 let p_field = '';
 let p_field_value = '';
 let menu_items = [];
-let menu_item = '';
 let opts = '';
 
 let proj = '';
@@ -285,9 +284,11 @@ function capitalizeWords(str) {
   }).join(' ');
 }
 
-function checkForTaxa( obs ){ 
+function buildTaxaMenu( obs ){ 
   let field_id = '';
   //let field_name = '';
+  let menu_item = '';
+
   for( let i=0; i<menu_items.length; i++ ){
        if( menu_items[i].title === p_title ) {
            field_id   = menu_items[i].field_id;
@@ -314,6 +315,33 @@ function checkForTaxa( obs ){
           }
       }
   }
+
+  let icons = '';
+  let menu_string = '';
+  let params = ('b.html'+proj+user+leaf_params+'&'+p_field+'='+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu+'&menu='+p_menu);
+
+  if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
+      ( p_show_menu === 'yes' ) ||
+      ( menu_item.sub_icons ) ) { 
+          if( menu_item.sub_icons ) {
+              menu_string = '<div class="navbar">';
+              menu_string += '<div class="dropdown">' +
+                                '<button class="dropbtn">' +
+                                    'Show' +
+                                    '<i class="fa fa-caret-down"></i>' +
+                                '</button>' +
+                             '<div class="dropdown-content">';
+              params += ('&sub_menu_array='+sub_taxon_arr);
+              menu_string += (furl(github_root+params,'<span style="padding-right:20px;">&#10133;</span>all' ));
+              for( let j=0; j<menu_item.sub_icons.length; j++ ) {
+                   if( sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
+                       menu_string += (furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id,'<span style="padding-right:20px;">'+menu_item.sub_icons[j].icon+'</span>'+menu_item.sub_icons[j].nm ));
+                   }
+              }
+              menu_string += ('</div></div>');
+          }
+  }
+  return menu_string;
 }
 
 function checkForObsFields( obs ){
@@ -333,38 +361,9 @@ function checkForObsFields( obs ){
    }
 }
 
-function buildTaxaMenu(){
-      let icons = '';
-      let menu_string = '';
-      let params = ('b.html'+proj+user+leaf_params+'&'+p_field+'='+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu+'&menu='+p_menu);
-
-      if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
-          ( p_show_menu === 'yes' ) ||
-          (menu_item.sub_icons) ) { 
-          if( menu_item.sub_icons ) {
-              menu_string = '<div class="navbar">';
-              menu_string += '<div class="dropdown">' +
-                                '<button class="dropbtn">' +
-                                    'Show' +
-                                    '<i class="fa fa-caret-down"></i>' +
-                                '</button>' +
-                             '<div class="dropdown-content">';
-              params += ('&sub_menu_array='+sub_taxon_arr);
-              menu_string += (furl(github_root+params,'<span style="padding-right:20px;">&#10133;</span>all' ));
-              for( let j=0; j<menu_item.sub_icons.length; j++ ) {
-                   if( sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
-                       menu_string += (furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id,'<span style="padding-right:20px;">'+menu_item.sub_icons[j].icon+'</span>'+menu_item.sub_icons[j].nm ));
-                   }
-              }
-              menu_string += ('</div></div>');
-          }
-      }
-      return menu_string;
-}
-
 function buildMenu(obs) {
 
-  checkForTaxa(obs);
+  buildTaxaMenu(obs);
 
   faddelem('p',document.body,{innerHTML:('<div class="navbar">' + 
                                             buildTaxaMenu() + 
