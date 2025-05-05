@@ -210,6 +210,7 @@ var columns = 3;*/
 
 let obs_field_array = [];
 let annotations_array = [];
+let ofvs_array = [];
 
 let all_opts = '';
 for (const [key, value] of winurlparams.entries()) { 
@@ -347,26 +348,8 @@ function buildLifeStageMenu(data) {
 }
 
 function buildMenu(data) {
-
-  let ofvs_array = [];
    
   for( let i=0; i<data.results.length; i++ ) {
-       checkForBehaviors(data.results[i], ofvs_array);
-  }
-
-  for( let i=0; i<data.results.length; i++ ) {
-       checkForAnnotations(data.results[i]);
-  }
-
-  let behaviors_menu = buildBehaviorsMenu(ofvs_array);
-
-  faddelem('p',document.body,{innerHTML:('<div class="navbar">' + buildLifeStageMenu(data) + 
-                                                       '<div id="home">'+furl(github_root+'b1.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div>' +
-                                              '</div>')});  
-}
-
-function checkForBehaviors( obs, ofvs_array ){
-   console.log('one');
        for( let i=0; i<obs.ofvs.length; i++ ) {
             if( obs.ofvs[i].field_id === 13 ) {   // eating
                 if( !obs_field_array.includes(13) ) {
@@ -381,7 +364,36 @@ function checkForBehaviors( obs, ofvs_array ){
                 }
             }
        }
-   console.log('two');
+  }
+
+  for( let i=0; i<data.results.length; i++ ) {
+       checkForAnnotations(data.results[i]);
+  }
+
+  let behaviors_menu = buildBehaviorsMenu(ofvs_array);
+
+  faddelem('p',document.body,{innerHTML:('<div class="navbar">' + buildLifeStageMenu(data) + 
+                                                       '<div id="home">'+furl(github_root+'b1.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div>' +
+                                              '</div>')});  
+}
+
+function checkForBehaviors( obs ){
+   if( obs.ofvs ) {
+       for( let i=0; i<obs.ofvs.length; i++ ) {
+            if( obs.ofvs[i].field_id === 13 ) {   // eating
+                if( !obs_field_array.includes(13) ) {
+                    obs_field_array.push(obs.ofvs[i].field_id);
+                    ofvs_array.push(ofvs[i]);
+                }
+            }
+            if( obs.ofvs[i].field_id === 6637 ) {   // behavior: mating
+                if( !obs_field_array.includes(6637) ) {
+                    obs_field_array.push(obs.ofvs[i].field_id);
+                    ofvs_array.push(ofvs[i]);
+                }
+            }
+       }
+   }
 }
 
 function checkForAnnotations( obs ){
