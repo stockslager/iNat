@@ -121,6 +121,7 @@
 .dropdown-content {
   display: none;
   position: absolute;
+  font-size: 16px;
   background-color: #f9f9f9;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -353,10 +354,10 @@ function fresults(xobj) {
                                 '</button>' +
                              '<div class="dropdown-content">';
               params += ('&sub_menu_array='+sub_taxon_arr);
-              menu_string += (furl(github_root+params,'&#10133; all' ));
+              menu_string += (furl(github_root+params,'<span style="padding-right:10px;">&#10133;</span>all' ));
               for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                    if( sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
-                       menu_string += (furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon+' '+menu_item.sub_icons[j].nm ));
+                       menu_string += (furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id,'<span style="padding-right:10px;">'+menu_item.sub_icons[j].icon+'</span>'+menu_item.sub_icons[j].nm ));
                    }
               }
               menu_string += ('</div></div>');
