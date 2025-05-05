@@ -254,19 +254,19 @@ for (const [key, value] of winurlparams.entries()) {
 
 let all_except_life_stage = '';
 for (const [key, value] of winurlparams.entries()) { 
-  if( key !== 'life') {
-      if( all_except_field === '' ){
-          all_except_field += "?";
+  if( key !== 'life' && key !== 'term_id' && key !== 'term_value_id' ) {
+      if( all_except_life_stage === '' ){
+          all_except_life_stage += "?";
       } else {
-          all_except_field += "&";
+          all_except_life_stage += "&";
       }
-      all_except_field += key;
-      all_except_field += "=";
+      all_except_life_stage += key;
+      all_except_life_stage += "=";
 
       if( key === 'page' ){
-          all_except_field += '1';
+          all_except_life_stage += '1';
       } else {
-          all_except_field += value;
+          all_except_life_stage += value;
       }
   }
 }   
