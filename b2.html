@@ -261,7 +261,7 @@ var apiurl = apiurlbase+'?'+winurlparams.toString();
 
 document.title = title.toLowerCase();
 
-function buildBehaviorsMenu(data, ofvs_array) {
+function buildBehaviorsMenu(ofvs_array) {
 
 
    let behaviors_menu = '<div class="dropdown">' +
@@ -358,7 +358,7 @@ function buildMenu(data) {
        checkForAnnotations(data.results[i]);
   }
 
-  let behaviors_menu = buildBehaviorsMenu(data, ofvs_array);
+  let behaviors_menu = buildBehaviorsMenu(ofvs_array);
 
   faddelem('p',document.body,{innerHTML:('<div class="navbar">' + buildLifeStageMenu(data) + 
                                                        '<div id="home">'+furl(github_root+'b1.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div>' +
@@ -366,7 +366,7 @@ function buildMenu(data) {
 }
 
 function checkForBehaviors( obs, ofvs_array ){
-   if( obs.ofvs ) {
+   console.log('one');
        for( let i=0; i<obs.ofvs.length; i++ ) {
             if( obs.ofvs[i].field_id === 13 ) {   // eating
                 if( !obs_field_array.includes(13) ) {
@@ -381,7 +381,7 @@ function checkForBehaviors( obs, ofvs_array ){
                 }
             }
        }
-   }
+   console.log('two');
 }
 
 function checkForAnnotations( obs ){
