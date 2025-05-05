@@ -45,6 +45,7 @@
    /*#home { font-size:1.500em; float:right; padding-left:5px; padding-right:15px; padding-top:3px; padding-bottom:0px; }*/
    #home { font-size:1.500em; float:right; }
    #topright { float:right; padding-right:15px; }
+   #headerright { float:right; padding-right:15px; font-size:1.5em; }
    #butter2 { font-size:1.675em; padding-left:5px; padding-right:18px; padding-top:0px; padding-bottom:5px; }
    table, td, th { border-collapse:collapse; margin:0; padding:5px; }
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
@@ -248,10 +249,12 @@ winurlparams.append('operator', p_operator);
 winurlparams.append('taxon_id', p_taxon_id);
 winurlparams.append('target_id', p_target_id);
 
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+function capitalizeWords(str) {
+  return str.toLowerCase().split(' ').map(function(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }).join(' ');
 }
-
+ 
 function buildTaxaMenu(data) {
 
    //let cache_key = ('project_id='+p_project_id+'taxon_id='+p_taxon_id+'field='+field);
@@ -409,7 +412,7 @@ function fresults(xobj) {
       if( !p_field_value ) {
           dlString = furl(github_root+'b2.html'+proj+user+leaf_params+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&action='+p_title+'&menu='+p_menu+field_name,'<span id="topright">all organisms '+p_title+' any plant</span>');
       } else {
-          dlString = furl(github_root+'b2.html'+proj+user+leaf_params+'&target_name='+p_target_name+'&obs_field='+p_obs_field+'&title='+p_title+'&action='+p_title+'&menu='+p_menu+field_name+p_field_value,'<span id="topright">all organisms '+dlString+'</span>');
+          dlString = ('<span id="headerright">'+capitalizeWords(dlString)+'</span>');
       }
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
@@ -419,7 +422,7 @@ function fresults(xobj) {
       labels = [
             {innerText:'#'},
             {innerText:'Photo'},
-            {innerText:('On '+capitalizeFirstLetter(p_target_name)+'...')}, 
+            {innerText:'Name'}, 
       ];
 
       if( p_field !== '' ) {
