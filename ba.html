@@ -302,7 +302,9 @@ function buildTaxaMenu( obs ){
       sub_taxon_arr = p_sub_menu_array;
   } else {
       if( menu_item.sub_icons ) {
+       console.log('1');
           if( !sub_taxon_arr.includes(obs.taxon.id.toString()) ) {
+           console.log('2');
               for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                    for( let k=0; k<obs.taxon.ancestor_ids.length; k++ ) {
                         if( obs.taxon.ancestor_ids[k].toString() === menu_item.sub_icons[j].taxon_id.toString() ){
