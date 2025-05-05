@@ -350,20 +350,7 @@ function buildLifeStageMenu(data) {
 function buildMenu(data) {
    
   for( let i=0; i<data.results.length; i++ ) {
-       for( let i=0; i<obs.ofvs.length; i++ ) {
-            if( obs.ofvs[i].field_id === 13 ) {   // eating
-                if( !obs_field_array.includes(13) ) {
-                    obs_field_array.push(obs.ofvs[i].field_id);
-                    ofvs_array.push(ofvs[i]);
-                }
-            }
-            if( obs.ofvs[i].field_id === 6637 ) {   // behavior: mating
-                if( !obs_field_array.includes(6637) ) {
-                    obs_field_array.push(obs.ofvs[i].field_id);
-                    ofvs_array.push(ofvs[i]);
-                }
-            }
-       }
+       checkForBehaviors(data.results[i]);
   }
 
   for( let i=0; i<data.results.length; i++ ) {
