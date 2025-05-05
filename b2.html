@@ -201,6 +201,7 @@ let p_list       = winurlparams.get('list') || '';
 let p_tag_name   = winurlparams.get('tag_name') || '';
 let p_menu       = winurlparams.get('menu') || '';
 let p_cache_check = winurlparams.get('cache_check') || '';
+let p_behavior   = winurlparams.get('behavior') || 'Behavior';
 let fish_story   = 'no';
 let story_param  = '';
 /*var cellpx = 300;
@@ -287,7 +288,7 @@ function buildBehaviorsMenu(ofvs_array) {
 
    let behaviors_menu = '<div class="dropdown">' +
                            '<button class="dropbtn">' +
-                              'Behavior' +
+                              p_behavior +
                               '<i class="fa fa-caret-down"></i>' +
                            '</button>' +
                            '<div class="dropdown-content">';
@@ -299,7 +300,7 @@ function buildBehaviorsMenu(ofvs_array) {
        for( let i=0; i<ofvs_array.length; i++ ) {
             if( ofvs_array[i].field_id === 13 ) {
                 foundOne = 'yes';
-                behaviors_menu += furl(github_root+'b2.html'+all_except_field+'&cache_check=yes&field:'+ofvs_array[i].name+'=', 'Eating');
+                behaviors_menu += furl(github_root+'b2.html'+all_except_field+'&behavior=Eating&cache_check=yes&field:'+ofvs_array[i].name+'=', 'Eating');
             }
        }
    }
@@ -307,7 +308,7 @@ function buildBehaviorsMenu(ofvs_array) {
        for( let i=0; i<ofvs_array.length; i++ ) {
             if( ofvs_array[i].field_id === 6637 ) {
                 foundOne = 'yes';
-                behaviors_menu += furl(github_root+'b2.html'+all_except_field+'&cache_check=yes&field:'+ofvs_array[i].name+'=', 'Mating');
+                behaviors_menu += furl(github_root+'b2.html'+all_except_field+'&behavior=Mating&cache_check=yes&field:'+ofvs_array[i].name+'=', 'Mating');
             }
        }
    }
