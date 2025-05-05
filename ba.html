@@ -267,12 +267,12 @@ function capitalizeWords(str) {
 
 function checkForTaxa( obs ){ 
   let field_id = '';
-  let field_name = '';
+  //let field_name = '';
   let menu_item = '';
   for( let i=0; i<menu_items.length; i++ ){
        if( menu_items[i].title === p_title ) {
            field_id   = menu_items[i].field_id;
-           field_name = ('&field:'+menu_items[i].field_name+'=');
+          // field_name = ('&field:'+menu_items[i].field_name+'=');
            menu_item = menu_items[i];
        }
   }
@@ -317,7 +317,7 @@ function checkForObsFields( obs ){
 function buildTaxaMenu(){
       let icons = '';
       let menu_string = '';
-      let params = ('b.html'+proj+user+leaf_params+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu+'&menu='+p_menu);
+      let params = ('b.html'+proj+user+leaf_params+'&'+p_field+'='+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu+'&menu='+p_menu);
 
       if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
           ( p_show_menu === 'yes' ) ||
