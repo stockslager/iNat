@@ -261,27 +261,34 @@ var apiurl = apiurlbase+'?'+winurlparams.toString();
 
 document.title = title.toLowerCase();
 
-function buildDetailsMenu(data) {
+function buildBehaviorsMenu(data, ofvs_array) {
 
 
-   let details_menu = '<div class="dropdown">' +
+   let behaviors_menu = '<div class="dropdown">' +
                            '<button class="dropbtn">' +
                               'Details' +
                               '<i class="fa fa-caret-down"></i>' +
                            '</button>' +
                            '<div class="dropdown-content">';
-   
-   if( obs_field_array.includes(9833) ){      // describe what bait or lure was used.
-       details_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695'+opts+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=9833&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:describe+what+bait+or+lure+was+used','Tackle Used');
-   }
-   if( obs_field_array.includes(12288) ) {    // bait
-       details_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695'+opts+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=12288&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:bait','Bait Used');
-   }
 
-   details_menu +=         '</div>' +
+   // all should always appear...
+   behaviors_menu += furl(github_root+'b2.html'+all_opts+'&cache_check=yes','All');
+      
+   if( obs_field_array.includes(13) ){      // eating
+       for( let i=0; i<ofvs_array.length; i++ ) {
+            if( ofvs_array[i].field_id === 13 ) {
+                behaviors_menu += furl(github_root+'b2.html'+all_opts+'&field:'+ofvs_array[i].name+'='+ofvs_array[i].value, 'Eating');
+            }
+       }
+   }
+   //if( obs_field_array.includes(6637) ) {    // behavior: mating
+   //    behaviors_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695'+opts+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=6637&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:bait','Bait Used');
+   //}
+
+   behaviors_menu +=         '</div>' +
                      '</div>';
    
-   return details_menu;
+   return behaviors_menu;
 }
 
 function buildLifeStageMenu(data) {
@@ -341,35 +348,36 @@ function buildLifeStageMenu(data) {
 
 function buildMenu(data) {
 
-  //for( let i=0; i<data.results.length; i++ ) {
-  //     checkForObsFields(data.results[i]);
-  //     if( data.results[i].description ) {
-  //         fish_story = 'yes';
-  //     }
-  //}
+  let ofvs_array = [];
+   
+  for( let i=0; i<data.results.length; i++ ) {
+       checkForBehaviors(data.results[i], ofvs_array);
+  }
 
   for( let i=0; i<data.results.length; i++ ) {
        checkForAnnotations(data.results[i]);
   }
 
-  //let details_menu = buildDetailsMenu(data);
+  let behaviors_menu = buildBehaviorsMenu(data, ofvs_array);
 
   faddelem('p',document.body,{innerHTML:('<div class="navbar">' + buildLifeStageMenu(data) + 
                                                        '<div id="home">'+furl(github_root+'b1.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div>' +
                                               '</div>')});  
 }
 
-function checkForObsFields( obs ){
+function checkForBehaviors( obs, ofvs_array ){
    if( obs.ofvs ) {
        for( let i=0; i<obs.ofvs.length; i++ ) {
-            if( obs.ofvs[i].field_id === 9833 ) {   // describe the bait or lure used
-                if( !obs_field_array.includes(9833) ) {
+            if( obs.ofvs[i].field_id === 13 ) {   // eating
+                if( !obs_field_array.includes(13) ) {
                     obs_field_array.push(obs.ofvs[i].field_id);
+                    ofvs_array.push(ofvs[i]);
                 }
             }
-            if( obs.ofvs[i].field_id === 12288 ) {   // bait
-                if( !obs_field_array.includes(12288) ) {
+            if( obs.ofvs[i].field_id === 6637 ) {   // behavior: mating
+                if( !obs_field_array.includes(6637) ) {
                     obs_field_array.push(obs.ofvs[i].field_id);
+                    ofvs_array.push(ofvs[i]);
                 }
             }
        }
