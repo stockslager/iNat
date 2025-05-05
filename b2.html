@@ -235,7 +235,7 @@ for (const [key, value] of winurlparams.entries()) {
 
 let all_except_field = '';
 for (const [key, value] of winurlparams.entries()) { 
-  if( !key.startsWith('field') ) {
+  if( !key.startsWith('field') && key !== 'behavior') {
       if( all_except_field === '' ){
           all_except_field += "?";
       } else {
