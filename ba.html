@@ -248,6 +248,10 @@ winurlparams.append('operator', p_operator);
 winurlparams.append('taxon_id', p_taxon_id);
 winurlparams.append('target_id', p_target_id);
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function buildTaxaMenu(data) {
 
    //let cache_key = ('project_id='+p_project_id+'taxon_id='+p_taxon_id+'field='+field);
@@ -338,7 +342,7 @@ function fresults(xobj) {
       if( p_title === '' ) {
           dlString = 'Bugs on Plants';
       } else {
-          dlString = (p_prefix+' '+p_title+' '+p_target_name+'...');
+          dlString = (p_prefix+' '+p_title+' '+p_target_name);
           document.title = dlString;
       }
 
@@ -414,7 +418,7 @@ function fresults(xobj) {
       labels = [
             {innerText:'#'},
             {innerText:'Photo'},
-            {innerText:('On '+p_target_name)}, 
+            {innerText:('On '+capitalizeFirstLetter(p_target_name)+'...')}, 
       ];
 
       if( p_field !== '' ) {
