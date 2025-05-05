@@ -399,13 +399,12 @@ function fresults(xobj) {
               menu_string += ('<div id="home">'+furl(github_root+'b1.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_title+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div></div>');
           }
           faddelem('p',document.body,{innerHTML:(menu_string)});  
-          //faddelem('p',document.body,{innerHTML:icons});
       }
 
       if( !p_field_value ) {
           dlString = furl(github_root+'b2.html'+proj+user+leaf_params+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&action='+p_title+'&menu='+p_menu+field_name,'<span id="topright">all organisms '+p_title+' any plant</span>');
       } else {
-          dlString = '<span id="topright">'+dlString+'</span>';
+          dlString = '<span id="topright">all organisms '+dlString+'</span>';
       }
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
