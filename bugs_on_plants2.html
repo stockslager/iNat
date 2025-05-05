@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>  
 <html lang="en">  
  
 <head>
@@ -19,7 +19,7 @@
       font: 14px Sans-Serif;
       --color-base: white;
       --color-alt: whitesmoke;
-      --color-brand: forestgreen;
+      --color-brand: #333;
       --color-text: black;
       --color-text-invert: white;
       --color-text-link: royalblue;
@@ -31,9 +31,9 @@
       :root {
          --color-base: black;
          --color-alt: #171717;
-         --color-brand: forestgreen;
+         --color-brand: #333;
          --color-text: #bababa;
-         --color-text-invert: black;
+         --color-text-invert: white;
          --color-text-link: cornflowerblue;
          --color-border: #444;
          --color-hover: #444;
@@ -42,20 +42,18 @@
    }
    #main { width:fit-content; min-width:375px; }
    #h2 { font-weight:bold; font-size:20px; }
-   #home { font-size:1.500em; float:right; padding-left:5px; padding-right:15px; padding-top:3px; padding-bottom:0px; }
-   #butter2 { font-size:1.675em; padding-left:5px; padding-right:18px; padding-top:0px; padding-bottom:5px; }
-   #topright { float:right; font-size:1.675em; float:right; padding-top:25px; padding-bottom:4px; padding-left:8px; padding-right:15px; }
+   /*#home { font-size:1.500em; float:right; padding-left:5px; padding-right:15px; padding-top:3px; padding-bottom:0px; }*/
+   #home { font-size:16px; float:right; }
+   #topright { float:right; padding-right:15px; }
+   #toprightbold { float:right; padding-right:15px; font-weight:bold; }
    table, td, th { border-collapse:collapse; margin:0; padding:5px; }
-   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
+   th { padding-top:10px; padding-bottom:10px; position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:400; font-size:16px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    th:first-child{ border: 0px solid forestgreen; border-radius: 5px 0px 0px 0px; }
    th:last-child{ border: 0px solid forestgreen; border-radius: 0px 5px 0px 0px; }
    tbody>tr { width:fit-content; border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
    tr:nth-child(even) { background:var(--color-base); }
    .tar { text-align:right; }
-   .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
    .icon { height:48px; width:48px; border-radius:50%; }
-   .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
-   .flowericon { padding-left:5%; font-size:14px; white-space: nowrap; font-style:normal; }
    .photo { height:54px; width:54px; border-radius: 5px 5px 5px 5px; }
    img { margin:0; padding:0; border:0; }
    p { width:fit-content; min-width:375px; }
@@ -68,6 +66,96 @@
    .button_inactive { background:none; color:var(--color-border); }
    .bin_true { text-decoration: underline wavy rgba(34,139,34,0.35); }
    .bin_false { text-decoration: underline wavy rgba(178,34,34,0.35); }
+
+.navbar {
+  overflow: hidden;
+  background-color: var(--color-brand);
+  border-radius: 5px 5px 5px 5px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 15px 14px 12px 14px;
+  /*padding: 12px 14px;*/
+  text-decoration: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown {
+  cursor: pointer;
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: white;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.dropbtn {
+  cursor: pointer;
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: white;
+  padding: 17px 14px 12px 14px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn, .dropbtn:focus {
+  background-color: black;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  font-size: 16px;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 10px 14px 10px 14px;
+  /*padding: 10px 14px;*/
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+ 
+.dropdown-content a:first-child {
+  border-radius: 5px 5px 0 0;
+}
+
+.dropdown-content a:last-child {
+  border-radius: 0 0 5px 5px;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.show {
+  display: block;
+}
+
 </style>
 </head>
 
@@ -94,13 +182,31 @@ let p_target_name   = winurlparams.get('target_name') || '';
 let p_target_id     = winurlparams.get('target_id') || '';
 let p_show_menu     = winurlparams.get('show_menu') || 'no';
 let p_menu_array    = winurlparams.get('menu_array') || '';
+let p_tag_name      = winurlparams.get('tag_name') || '';
 let p_sub_menu_array    = winurlparams.get('sub_menu_array') || '';
 let p_menu          = winurlparams.get('menu') || 'all';
 let p_field = '';
 let p_field_value = '';
 let menu_items = [];
 let opts = '';
+let obs_field_array = [];
 
+if( p_list ) {
+    opts += ('&list='+p_list);
+}
+
+if( p_menu ) {
+    opts += ('&menu='+p_menu);
+}
+
+if( p_tag_name ) {
+    opts += ('&tag_name='+p_tag_name);
+}
+
+if( p_title ) {
+    opts += ('&title='+p_title);
+}
+ 
 if( p_omit_users !== '' ){
     winurlparams.delete('not_user_id');
     winurlparams.append('not_user_id', p_omit_users);
@@ -149,27 +255,16 @@ winurlparams.delete('not_user_id');
 winurlparams.delete('not_id');
 winurlparams.delete('not_in_project');
 
-// build param list for url's used in fresults
-for (const [key, value] of winurlparams.entries()) { 
-  if( opts === '' ){
-      opts += "?";
-  } else {
-      opts += "&";
-  }
-  opts += key;
-  opts += "=";
-
-  if( key === 'page' ){
-      opts += '1';
-  } else {
-      opts += value;
-  }
-}   
-
 // add them back after building options...
 winurlparams.append('operator', p_operator);
 winurlparams.append('taxon_id', p_taxon_id);
 winurlparams.append('target_id', p_target_id);
+
+function capitalizeWords(str) {
+  return str.toLowerCase().split(' ').map(function(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }).join(' ');
+}
 
 function fresults(xobj) {
    let results = xobj.results;
@@ -186,9 +281,9 @@ function fresults(xobj) {
       let dlString = '';
       let proj = '';
       let user = '';
-      if( p_project_id !== '' && p_project_id !== 'null' ) {
+      if( p_project_id ) {
           proj = ('?project_id='+p_project_id);
-          if( p_user_id !== '' && p_user_id !== 'null' ) {
+          if( p_user_id ) {
               proj += ('&user_id='+p_user_id);
           }
       } else {
@@ -205,12 +300,8 @@ function fresults(xobj) {
 
       if( p_title === '' ) {
           dlString = 'Bugs on Plants';
-          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants.html'+proj+user+leaf_params+'&obs_field='+p_obs_field,'&#127807;')+'</span>') });
-          faddelem('h2',document.body,{innerText:(dlString)});
       } else {
           dlString = (p_prefix+' '+p_title+' '+p_target_name);
-          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants_splash.html'+proj+user+leaf_params+'&menu='+p_menu,'&#127807;')+'</span>') });
-          faddelem('h2',document.body,{innerText:(dlString)});
           document.title = dlString;
       }
 
@@ -231,11 +322,13 @@ function fresults(xobj) {
       } else {
           if( menu_item.sub_icons ) {
               for( let i=0; i<results.length; i++) {
-                   if( !sub_taxon_arr.includes(results[i].taxon.id) ) {
+                   if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
                        for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                             for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
                                  if( results[i].taxon.ancestor_ids[k].toString() === menu_item.sub_icons[j].taxon_id.toString() ){
-                                     sub_taxon_arr.push( menu_item.sub_icons[j].taxon_id );
+                                     if( !sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
+                                         sub_taxon_arr.push( menu_item.sub_icons[j].taxon_id );
+                                     }
                                  }
                              }
                         }
@@ -245,25 +338,42 @@ function fresults(xobj) {
       }
 
       let icons = '';
+      let menu_string = '';
       let params = ('bugs_on_plants2.html'+proj+user+leaf_params+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu+'&menu='+p_menu);
 
       if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
           ( p_show_menu === 'yes' ) ||
           (menu_item.sub_icons) ) { 
           if( menu_item.sub_icons ) {
+              menu_string = '<div class="navbar">';
+              menu_string += '<div class="dropdown">' +
+                                '<button class="dropbtn">' +
+                                    'Show' +
+                                    '<i class="fa fa-caret-down"></i>' +
+                                '</button>' +
+                             '<div class="dropdown-content">';
+              params += ('&sub_menu_array='+sub_taxon_arr);
+              menu_string += (furl(github_root+params,'<span style="padding-right:20px;">&#10133;</span>all' ));
               for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                    if( sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
-                       params += ('&sub_menu_array='+sub_taxon_arr);
-                       icons += ('<span id="butter2">'+furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id,menu_item.sub_icons[j].icon)+'</span>');
+                       menu_string += (furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id,'<span style="padding-right:20px;">'+menu_item.sub_icons[j].icon+'</span>'+menu_item.sub_icons[j].nm ));
                    }
               }
+              menu_string += ('</div></div>');
+              menu_string += ('<div id="home">'+furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_title+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div></div>');
           }
-          faddelem('p',document.body,{innerHTML:icons});
+          faddelem('p',document.body,{innerHTML:(menu_string)});  
+      }
+
+      if( !p_field_value ) {
+          dlString = furl(github_root+'bugs_on_plants_grid.html'+proj+user+leaf_params+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&action='+p_title+'&menu='+p_menu+field_name,'<span id="topright">all organisms '+p_title+' any plant</span>');
+      } else {
+          dlString = ('<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
       }
     
-      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
+      faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+dlString+'<br />'});  
 
       labels = [
             {innerText:'#'},
@@ -315,15 +425,15 @@ function fresults(xobj) {
          }
 
          let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
-         let grid_title  = ('&title='+(pref_tax_name||tax_name)+' '+p_title+' '+p_target_name);
+         let grid_title  = ('&action='+p_title+'&title='+(pref_tax_name||tax_name)+' '+p_title+' '+p_target_name);
                                       
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html?'+query_params+'&taxon_id='+rec.taxon.id+grid_title+field_name+p_target_id,displayName)},
+                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html?'+query_params+opts+'&taxon_id='+rec.taxon.id+grid_title+field_name+p_target_id,displayName)},
                   {innerText:rec.count||''},
                   ];
-
+        
          faddelems('td',brow,values);
       };
 
