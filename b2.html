@@ -280,6 +280,9 @@ for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
       opts += ('&'+key+'='+value);
       field = ('&'+key+'='+value);
+      if( !winurlparams.get('saved_field') ) {
+          winurlparams.append('saved_field', (key+'='+value));
+      }
   }
 }   
 
@@ -314,21 +317,13 @@ function buildBehaviorsMenu(ofvs_array) {
                            '<div class="dropdown-content">';
 
    // all should always appear...
-   behaviors_menu += furl(github_root+'b2.html'+all_except_field+'&behavior=&cache_check=yes','All');
+   behaviors_menu += furl(github_root+'b2.html'+all_except_field+'&'+winurlparams.get('saved_field')+'&behavior=&cache_check=yes','All');
       
-   if( obs_field_array.includes(13) ){      // eating
+   if( obs_field_array.includes(498) ){      // nectar plant
        for( let i=0; i<ofvs_array.length; i++ ) {
-            if( ofvs_array[i].field_id === 13 ) {
+            if( ofvs_array[i].field_id === 498 ) {
                 foundOne = 'yes';
-                behaviors_menu += furl(github_root+'b2.html'+all_except_field+'&behavior=Eating&cache_check=yes&field:'+ofvs_array[i].name+'=', 'Eating');
-            }
-       }
-   }
-   if( obs_field_array.includes(6637) ){      // behavior: mating
-       for( let i=0; i<ofvs_array.length; i++ ) {
-            if( ofvs_array[i].field_id === 6637 ) {
-                foundOne = 'yes';
-                behaviors_menu += furl(github_root+'b2.html'+all_except_field+'&behavior=Mating&cache_check=yes&field:'+ofvs_array[i].name+'=', 'Mating');
+                behaviors_menu += furl(github_root+'b2.html'+all_except_field+'&behavior=Nectaring&cache_check=yes&field:'+ofvs_array[i].name+'='+value, 'Nectaring');
             }
        }
    }
@@ -418,14 +413,8 @@ function buildMenu(data) {
 function checkForBehaviors( obs ){
    if( obs.ofvs ) {
        for( let i=0; i<obs.ofvs.length; i++ ) {
-            if( obs.ofvs[i].field_id === 13 ) {   // eating
-                if( !obs_field_array.includes(13) ) {
-                    obs_field_array.push(obs.ofvs[i].field_id);
-                    ofvs_array.push(obs.ofvs[i]);
-                }
-            }
-            if( obs.ofvs[i].field_id === 6637 ) {   // behavior: mating
-                if( !obs_field_array.includes(6637) ) {
+            if( obs.ofvs[i].field_id === 498 ) {   // nectaring
+                if( !obs_field_array.includes(498) ) {
                     obs_field_array.push(obs.ofvs[i].field_id);
                     ofvs_array.push(obs.ofvs[i]);
                 }
