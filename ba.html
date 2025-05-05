@@ -79,7 +79,7 @@
 
 .navbar a {
   float: left;
-  font-size: 14px;
+  font-size: 16px;
   color: white;
   text-align: center;
   padding: 12px 14px;
@@ -337,12 +337,8 @@ function fresults(xobj) {
 
       if( p_title === '' ) {
           dlString = 'Bugs on Plants';
-          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'b1.html'+proj+user+leaf_params+'&obs_field='+p_obs_field,'&#127807;')+'</span>') });
-          faddelem('h2',document.body,{innerText:(dlString)});
       } else {
           dlString = (p_prefix+' '+p_title+' '+p_target_name);
-          faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'b1.html'+proj+user+leaf_params+'&title='+p_title+'&menu='+p_menu,'&#127807;')+'</span>') });
-          faddelem('h2',document.body,{innerText:(dlString)});
           document.title = dlString;
       }
 
@@ -406,15 +402,13 @@ function fresults(xobj) {
           //faddelem('p',document.body,{innerHTML:icons});
       }
 
-      let all = '';
-
       if( !p_field_value ) {
-          all = furl(github_root+'b2.html'+proj+user+leaf_params+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&action='+p_title+'&menu='+p_menu+field_name,'<span id="topright">all organisms '+p_title+' any plant</span>');
-      }
+          dlString = furl(github_root+'b2.html'+proj+user+leaf_params+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&action='+p_title+'&menu='+p_menu+field_name,'<span id="topright">all organisms '+p_title+' any plant</span>');
+      } 
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+all+'<br />'});  
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+dlString+'<br />'});  
 
       labels = [
             {innerText:'#'},
