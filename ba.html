@@ -266,38 +266,6 @@ function capitalizeWords(str) {
   }).join(' ');
 }
 
-function checkForObsFields( obs ){
-   if( obs.ofvs ) {
-       for( let i=0; i<obs.ofvs.length; i++ ) {
-            if( obs.ofvs[i].field_id === 13 ) {   // eating
-                if( !obs_field_array.includes(13) ) {
-                    obs_field_array.push(obs.ofvs[i].field_id);
-                }
-            }
-       }
-   }
-}
-
-function buildActionsMenu(data) {
-
-
-   let actions_menu = '<div class="dropdown">' +
-                           '<button class="dropbtn">' +
-                              'Actions' +
-                              '<i class="fa fa-caret-down"></i>' +
-                           '</button>' +
-                           '<div class="dropdown-content">';
-   
-   if( obs_field_array.includes(13) ){      // eating.
-       actions_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695'+opts+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=9833&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:describe+what+bait+or+lure+was+used','Tackle Used');
-   }
-
-   actions_menu +=         '</div>' +
-                     '</div>';
-   
-   return actions_menu;
-}
- 
 function fresults(xobj) {
    let results = xobj.results;
    let box_array = [];
@@ -354,7 +322,6 @@ function fresults(xobj) {
       } else {
           if( menu_item.sub_icons ) {
               for( let i=0; i<results.length; i++) {
-                   checkForObsField(results[i]);
                    if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
                        for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                             for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
@@ -393,7 +360,6 @@ function fresults(xobj) {
                    }
               }
               menu_string += ('</div></div>');
-              menu_string += buildActionsMenu(results);
               menu_string += ('<div id="home">'+furl(github_root+'b1.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_title+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div></div>');
           }
           faddelem('p',document.body,{innerHTML:(menu_string)});  
