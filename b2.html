@@ -276,10 +276,12 @@ for (const [key, value] of winurlparams.entries()) {
 // find key/value pair for &field: param if one was passed in
 let field = '';
 let opts = '';
+let field_value = '';
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
       opts += ('&'+key+'='+value);
       field = ('&'+key+'='+value);
+      field_value = value;
       if( !winurlparams.get('saved_field') ) {
           winurlparams.append('saved_field', (key+'='+value));
       }
@@ -323,7 +325,7 @@ function buildBehaviorsMenu(ofvs_array) {
        for( let i=0; i<ofvs_array.length; i++ ) {
             if( ofvs_array[i].field_id === 498 ) {
                 foundOne = 'yes';
-                behaviors_menu += furl(github_root+'b2.html'+all_except_field+'&behavior=Nectaring&cache_check=yes&field:'+ofvs_array[i].name+'='+value, 'Nectaring');
+                behaviors_menu += furl(github_root+'b2.html'+all_except_field+'&behavior=Nectaring&cache_check=yes&field:'+ofvs_array[i].name+'='+field_value, 'Nectaring');
             }
        }
    }
