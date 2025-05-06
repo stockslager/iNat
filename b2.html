@@ -233,7 +233,7 @@ for (const [key, value] of winurlparams.entries()) {
   }
 }   
 
-let all_except_field = '';
+/*let all_except_field = '';
 for (const [key, value] of winurlparams.entries()) { 
   if( !key.startsWith('field') && key !== 'behavior') {
       if( all_except_field === '' ){
@@ -250,7 +250,7 @@ for (const [key, value] of winurlparams.entries()) {
           all_except_field += value;
       }
   }
-}   
+}   */
 
 let all_except_life_stage = '';
 for (const [key, value] of winurlparams.entries()) { 
@@ -276,15 +276,10 @@ for (const [key, value] of winurlparams.entries()) {
 // find key/value pair for &field: param if one was passed in
 let field = '';
 let opts = '';
-let field_value = '';
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
       opts += ('&'+key+'='+value);
       field = ('&'+key+'='+value);
-      field_value = value;
-      if( !winurlparams.get('saved_field') ) {
-          winurlparams.append('saved_field', (key+'='+value));
-      }
   }
 }   
 
@@ -306,38 +301,6 @@ var apiurlbase = 'https://api.inaturalist.org/v1/observations'
 var apiurl = apiurlbase+'?'+winurlparams.toString();
 
 document.title = title.toLowerCase();
-
-function buildBehaviorsMenu(ofvs_array) {
-
-   let foundOne = 'no';
-
-   let behaviors_menu = '<div class="dropdown">' +
-                           '<button class="dropbtn">' +
-                              p_behavior +
-                              '<i class="fa fa-caret-down"></i>' +
-                           '</button>' +
-                           '<div class="dropdown-content">';
-
-   // all should always appear...
-   behaviors_menu += furl(github_root+'b2.html'+all_except_field+'&'+winurlparams.get('saved_field')+'&behavior=&cache_check=yes','All');
-      
-   if( obs_field_array.includes(498) ){      // nectar plant
-       for( let i=0; i<ofvs_array.length; i++ ) {
-            if( ofvs_array[i].field_id === 498 ) {
-                foundOne = 'yes';
-                behaviors_menu += furl(github_root+'b2.html'+all_except_field+'&behavior=Nectaring&cache_check=yes&field:'+ofvs_array[i].name+'='+field_value, 'Nectaring');
-            }
-       }
-   }
-
-   behaviors_menu += '</div></div>';
-   
-   if( foundOne === 'no' ) {
-       behaviors_menu = '';
-   }
-   
-   return behaviors_menu;
-}
 
 function buildLifeStageMenu(data) {
 
@@ -397,32 +360,15 @@ function buildLifeStageMenu(data) {
 
 function buildMenu(data) {
    
-  for( let i=0; i<data.results.length; i++ ) {
-       checkForBehaviors(data.results[i]);
-  }
-
   for( let j=0; j<data.results.length; j++ ) {
        checkForAnnotations(data.results[j]);
   }
 
   let behaviors_menu = buildBehaviorsMenu(ofvs_array);
 
-  faddelem('p',document.body,{innerHTML:('<div class="navbar">' + buildLifeStageMenu(data) + behaviors_menu +
+  faddelem('p',document.body,{innerHTML:('<div class="navbar">' + buildLifeStageMenu(data) + 
                                                        '<div id="home">'+furl(github_root+'b1.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div>' +
                                               '</div>')});  
-}
-
-function checkForBehaviors( obs ){
-   if( obs.ofvs ) {
-       for( let i=0; i<obs.ofvs.length; i++ ) {
-            if( obs.ofvs[i].field_id === 498 ) {   // nectaring
-                if( !obs_field_array.includes(498) ) {
-                    obs_field_array.push(obs.ofvs[i].field_id);
-                    ofvs_array.push(obs.ofvs[i]);
-                }
-            }
-       }
-   }
 }
 
 function checkForAnnotations( obs ){
