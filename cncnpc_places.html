@@ -108,7 +108,23 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_options  = winurlparams.get('options') || [];
 let p_project_id = winurlparams.get('project_id') || '';
 let p_place_id = winurlparams.get('place_id') || '';
+let p_tag      = winurlparams.get('tag') || '';
 let p_q        = winurlparams.get('q') || '';
+
+// find key/value pair for &field: param if one was passed in
+let field_param = '';
+for (const [key, value] of winurlparams.entries()) {
+  if( key.startsWith('field') ){
+      p_field = key;
+      p_field_value = value;
+      field_param = '&'+p_field+'='+p_field_value;
+  }
+}   
+
+let tags_param = '';
+if( p_tag ) {
+    tags_param = '&q='+p_tag;
+}
 
 winurlparams.delete('options');
 let p_idextra_ = winurlparams.get('idextra_user_id')?.split(',') || [];;
@@ -160,7 +176,7 @@ function fresults(xobj) {
 
          let values = [
             {innerText:i+1},
-            {innerHTML:furl(github_root+'bd.html?project_id='+p_project_id+'&place_id='+rec.id+'&place_name='+rec.display_name,rec.display_name)},
+            {innerHTML:furl(github_root+'bd.html?project_id='+p_project_id+tags_param+field_param+'&place_id='+rec.id+'&place_name='+rec.display_name,rec.display_name)},
          ];         
 
          faddelems('td',brow,values);
@@ -181,6 +197,8 @@ function buildForm() {
                                            '<form action='+github_root+'cncnpc_places.html>' +
                                               '<label for="fname">Place Name</label>' +
                                               '<input type="hidden" name="project_id" id="project_id" value="' + p_project_id + '">' +
+                                              '<input type="hidden" name="tag" id="tag" value="' + p_tag + '">' +
+                                              '<input type="hidden" name="field:layer" id="field:layer" value="' + p_field_value + '">' +
                                               '<input type="text" id="pname" name="q" placeholder="Enter a full or partial place name..">' +   
                                               '<input type="submit" value="Search">' +
                                            '</form>' +
