@@ -109,26 +109,6 @@ let p_options  = winurlparams.get('options') || [];
 let p_project_id = winurlparams.get('project_id') || '';
 let p_place_id = winurlparams.get('place_id') || '';
 let p_q        = winurlparams.get('q') || '';
-let opts = '';
-
-// build param list for url's used in fresults
-for (const [key, value] of winurlparams.entries()) { 
-  if( key !== 'place_id' ) {
-      if( opts === '' ){
-          opts += "?";
-      } else {
-          opts += "&";
-      }
-      opts += key;
-      opts += "=";
-
-      if( key === 'page' ){
-          opts += '1';
-      } else {
-          opts += value;
-      }
-  }
-}   
 
 winurlparams.delete('options');
 let p_idextra_ = winurlparams.get('idextra_user_id')?.split(',') || [];;
@@ -180,7 +160,7 @@ function fresults(xobj) {
 
          let values = [
             {innerText:i+1},
-            {innerHTML:furl(github_root+'bd.html'+opts+'&place_id='+rec.id+'&place_name='+rec.display_name,rec.display_name)},
+            {innerHTML:furl(github_root+'bd.html?project_id='+p_project_id+'&place_id='+rec.id+'&place_name='+rec.display_name,rec.display_name)},
          ];         
 
          faddelems('td',brow,values);
@@ -198,10 +178,10 @@ function fresults(xobj) {
 
 function buildForm() {
   faddelem('p',document.body,{innerHTML:('<div>' +
-                                           '<form action='+github_root+'cncnpc_places.html'+opts+'>' +
+                                           '<form action='+github_root+'cncnpc_places.html>' +
                                               '<label for="fname">Place Name</label>' +
-                                              '<input type="text" id="pname" name="q" placeholder="Enter a full or partial place name..">' +   
                                               '<input type="hidden" name="project_id" id="project_id" value="' + p_project_id + '">' +
+                                              '<input type="text" id="pname" name="q" placeholder="Enter a full or partial place name..">' +   
                                               '<input type="submit" value="Search">' +
                                            '</form>' +
                                          '</div>')});
