@@ -182,7 +182,7 @@ let opts = '';
 
 // build param list for url's used in fresults
 for (const [key, value] of winurlparams.entries()) { 
-  if( key !== 'place_id' ) {
+  if( key !== 'place_id' && key !== 'place_name' ) {
       if( opts === '' ){
           opts += "?";
       } else {
@@ -192,7 +192,7 @@ for (const [key, value] of winurlparams.entries()) {
       opts += "=";
 
       if( key === 'page' ){
-          opts += '1';
+           += '1';
       } else {
           opts += value;
       }
@@ -322,6 +322,15 @@ function fresults(xobj, places_obj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let labels = [];
+      let field_param = '';
+
+      if( p_obs_id === '7623' ) {
+          field_param = '&title=on&field:plant+that+the+organism+was+found+on=';
+      } else if( p_obsa_id === '498' ) {
+          field_param = '&title=nectaring+at&field:nectar+plant=';
+      } else {
+          field_param = '&title=on&field:plant+that+the+organism+was+found+on=';
+      }
 
       faddelem('p',document.body,{innerHTML:buildMenu(places_obj)});
 
@@ -381,7 +390,7 @@ function fresults(xobj, places_obj) {
                   {innerText:i+1},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:taxon},
-                  {innerHTML:furl(github_root+'bugs_on_plants.html?user_id='+rec.user.id+'&list=yes&title=on&menu=all','<span id=\"utf\">&#129419;;</span>')},
+                  {innerHTML:furl(github_root+'bugs_on_plants2.html?user_id='+rec.user.id+'&list=yes&menu=all&target_name='+pref_tax_name+field_param+rec.taxon.id,'<span id=\"utf\">&#129419;</span>')},
                   ];
 
          faddelems('td',brow,values);
