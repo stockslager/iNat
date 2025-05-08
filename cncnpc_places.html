@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Choose Place" />
+<meta charset="utf-8">
+<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="Seeds" />
+<link rel="manifest" href="site.webmanifest" />
+<title>Choose Place</title>
+<style>
+   :root {
+      background: var(--color-base);
+      color: var(--color-text); 
+      font: 14px Sans-Serif;
+      --color-base: white;
+      --color-alt: whitesmoke;
+      --color-brand: #333;
+      --color-text: black;
+      --color-text-invert: white;
+      --color-text-link: royalblue;
+      --color-border: lightgray;
+      --color-hover: lightgray;
+      --color-base-translucent: rgba(255,255,255,0.85);
+   }
+   @media (prefers-color-scheme: dark) {
+      :root {
+         --color-base: black;
+         --color-alt: #171717;
+         --color-brand: #333;
+         --color-text: #bababa;
+         --color-text-invert: white;
+         --color-text-link: cornflowerblue;
+         --color-border: #444;
+         --color-hover: #444;
+         --color-base-translucent: rgba(0,0,0,0.85);
+      }
+   }
+   #main { width:fit-content; min-width:375px; }
+   table, td, th { border-collapse:collapse; margin:0; padding:4px; }
+   th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
+   th:first-child{ border: 0px solid #333; border-radius: 5px 0px 0px 0px; }
+   th:last-child{ border: 0px solid #333; border-radius: 0px 5px 0px 0px; }
+   tbody>tr { border-width:1px 0px; padding:10px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
+   tr:nth-child(even) { background:var(--color-base); }
+   .tar { text-align:right; }
+   .icon { height:48px; width:48px; border-radius:50%; }
+   .icon_big { height:250px; width:250px; border-radius:10%; object-fit: cover; object-position: center; }
+   .photo { height:64px; width:64px; }
+   img { margin:0; padding:0; border:0; }
+   p { width:fit-content; }
+   a { text-decoration:none; color:var(--color-text-link); }
+   a:hover { background:var(--color-hover); }
+   #nav { margin-left:-8px; position:-webkit-sticky /*Safari*/; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
+   @media print { #nav { display:none; } } 
+   .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
+   .button { background:var(--color-alt); }
+   .button_inactive { background:none; color:var(--color-border); }
+
+input[type=text], select {
+  width: 95%;
+  padding: 6px 10px;
+  margin: 4px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  width: fit-content;
+  background-color: #333;
+  color: white;
+  padding: 7px 10px;
+  margin: 4px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #171717;
+}
+
+div {
+  min-width: 355px;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 10px;
+}
+
+</style>
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v5.js"></script>  
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>  
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let p_options  = winurlparams.get('options') || [];
+let p_place_id = winurlparams.get('place_id') || '';
+let p_q        = winurlparams.get('q') || '';
+let opts = '';
+
+// build param list for url's used in fresults
+for (const [key, value] of winurlparams.entries()) { 
+  if( key !== 'place_id' ) {
+      if( opts === '' ){
+          opts += "?";
+      } else {
+          opts += "&";
+      }
+      opts += key;
+      opts += "=";
+
+      if( key === 'page' ){
+          opts += '1';
+      } else {
+          opts += value;
+      }
+  }
+}   
+
+winurlparams.delete('options');
+let p_idextra_ = winurlparams.get('idextra_user_id')?.split(',') || [];;
+winurlparams.delete('idextra_user_id');
+let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
+winurlparams.delete('photo_curl_filename_prefix');
+
+function fresults(xobj) {
+
+   let results = xobj.results;
+   if (results) {
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+      let toggle_args = '';
+      let args = '';
+
+      /*faddelem('p',document.body,{innerHTML:'total places: '+fcomnum(total_results)+' <br />'
+            +'per page: '+fcomnum(per_page)+'<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
+            +'<br />'
+      });*/
+
+      let table = faddelem('table',document.body,{id:'main'});
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+      let labels = [
+            {innerText:('#')},
+            {innerText:'Place Name'},   
+      ];
+
+      faddelems('th',hrow,labels);
+
+      let tbody = faddelem('tbody',table);
+
+      let length = 0;
+      if( results.length > 10 ) {
+          length = 10;
+      } else {
+          length = results.length;
+      }
+      
+      for (let i=0; i<length; i++) {
+         let brow = faddelem('tr',tbody);
+         let rec = results[i];
+
+         let values = [
+            {innerText:i+1},
+            {innerHTML:furl(github_root+'bd.html'+opts+'&place_id='+rec.id+'&place_name='+rec.display_name,rec.display_name)},
+         ];         
+
+         faddelems('td',brow,values);
+      };
+
+      // buttons to go to prev or next page
+      //let nav = faddelem('div',document.body,{id:'nav'});
+      //(page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+      //(page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+      //(page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+      //(page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); };
+};
+
+function buildForm() {
+  faddelem('p',document.body,{innerHTML:('<div>' +
+                                           '<form action='+github_root+'life_list_places.html>' +
+                                              '<label for="fname">Place Name</label>' +
+                                              '<input type="text" id="pname" name="q" placeholder="Enter a full or partial place name..">' +   
+                                              '<input type="submit" value="Search">' +
+                                           '</form>' +
+                                         '</div>')});
+}
+  
+let apibase    = 'https://api.inaturalist.org/v1/places/autocomplete';
+let apiurl     = apibase+((winurlparams!='')?('?'+winurlparams):'');
+let apirefname = 'Choose Place';
+
+if( !p_q ) {
+   faddelem('h2',document.body,{innerText:'Enter a full or partial place name.'});
+   buildForm();
+} else {
+   faddelem('h2',document.body,{innerText:apirefname});
+   buildForm();
+   faddelem('p',document.body,{innerText:'List of places found.  Select one to view life list counts from that place.'});
+   fetch(apiurl)
+      .then((response) => {
+         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+         return response.json();
+      })
+      .then((data) => { fresults(data); })
+      .catch((err) => {
+         console.error(err.message);
+         faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+      })
+};
+
+</script>
+</body>
+
+</html>
