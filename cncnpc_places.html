@@ -106,6 +106,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_options  = winurlparams.get('options') || [];
+let p_project_id = winurlparams.get('project_id') || '';
 let p_place_id = winurlparams.get('place_id') || '';
 let p_q        = winurlparams.get('q') || '';
 let opts = '';
@@ -200,6 +201,7 @@ function buildForm() {
                                            '<form action='+github_root+'cncnpc_places.html'+opts+'>' +
                                               '<label for="fname">Place Name</label>' +
                                               '<input type="text" id="pname" name="q" placeholder="Enter a full or partial place name..">' +   
+                                              '<input type="hidden" name="project_id" id="project_id" value="' + p_project_id + '>' +
                                               '<input type="submit" value="Search">' +
                                            '</form>' +
                                          '</div>')});
