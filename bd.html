@@ -275,6 +275,12 @@ function findValueByKey(arr, key, value) {
   return undefined;
 }
 
+function capitalizeWords(str) {
+  return str.toLowerCase().split(' ').map(function(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }).join(' ');
+}
+ 
 function buildDD( name, content ) {
   let dd = '<div class="dropdown">' +
                  '<button class="dropbtn">' + name +
@@ -327,8 +333,8 @@ function buildMenu( places_obj ) {
 
   //tags drop down...
   let tags_menu = furl(github_root+'bd.html'+opts+layer_param+place_params, 'All');
-  tags_menu    += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q=flowering', 'Flowering'); 
-  tags_menu    += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q=edge', 'Edge');
+  tags_menu    += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q=Flowering', 'Flowering'); 
+  tags_menu    += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q=Edge', 'Edge');
 
   // places drop down...
   let places_menu = furl(github_root+'bd.html'+opts+layer_param+tag_param,'All');
