@@ -304,7 +304,7 @@ function buildMenu( places_obj ) {
   let layer_param  = '';
   let place_params = '';
   if( p_tag_name ) {
-      tag_param += '&tag_name='+p_tag_name;
+      tag_param += '&q='+p_tag_name;
   }
 
   if( p_layer ) {
@@ -323,8 +323,8 @@ function buildMenu( places_obj ) {
 
   //tags drop down...
   let tags_menu = furl(github_root+'bd.html'+opts+layer_param+place_params, 'All');
-  tags_menu    += furl(github_root+'bd.html'+opts+layer_param+place_params'&q=flowering', 'Flowering'); 
-  tags_menu    += furl(github_root+'bd.html'+opts+layer_param+place_params'&q=edge', 'Edge');
+  tags_menu    += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q=flowering', 'Flowering'); 
+  tags_menu    += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q=edge', 'Edge');
 
   // places drop down...
   let places_menu = furl(github_root+'bd.html'+opts+layer_param+tag_param,'All');
