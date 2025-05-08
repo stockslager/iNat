@@ -291,6 +291,8 @@ function buildDD( name, content ) {
 function buildMenu( places_obj ) {
 
   let place_name  = 'Place';
+  let tag_name    = 'Tags';
+  let layer_name  = 'Layer';
   if( p_place_id ) {
       if( p_place_name ) {
           place_name = p_place_name;
@@ -305,10 +307,12 @@ function buildMenu( places_obj ) {
   let place_params = '';
   if( p_q ) {
       tag_param += '&q='+p_q;
+      tag_name = p_q;
   }
 
   if( p_field_value ) {
       layer_param += '&field:layer='+p_field_value;
+      layer_name = p_field_value;
   }
 
   if( p_place_id ) {
@@ -334,8 +338,8 @@ function buildMenu( places_obj ) {
   places_menu += furl(github_root+'cncnpc_places.html'+opts+layer_param+tag_param,'Select Custom Place');
  
   let menu = '<div class="navbar">' + buildDD( place_name, places_menu ) + 
-                                      buildDD( 'Layer',    layer_menu )  +
-                                      buildDD( 'Tags',     tags_menu )   +  '</div>';
+                                      buildDD( layer_name, layer_menu )  +
+                                      buildDD( tag_name,   tags_menu )   +  '</div>';
 
   return( menu );
 } 
