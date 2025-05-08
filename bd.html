@@ -341,7 +341,7 @@ function buildMenu( places_obj ) {
   for( let i=0; i<places_obj.places.length; i++ ) {
        places_menu += furl(github_root+'bd.html'+opts+layer_param+tag_param+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
   }
-  places_menu += furl(github_root+'cncnpc_places.html'+opts+layer_param+tag_param,'Select Custom Place');
+  places_menu += furl(github_root+'cncnpc_places.html'+opts+layer_param+'&tag='+p_q,'Select Custom Place');
  
   let menu = '<div class="navbar">' + buildDD( place_name, places_menu ) + 
                                       buildDD( layer_name, layer_menu )  +
