@@ -173,7 +173,7 @@ let p_operator   = winurlparams.get('operator') || '';
 let p_place_name = winurlparams.get('place_name') || '';
 let p_place_id   = winurlparams.get('place_id') || '';
 let p_layer      = winurlparams.get('layer') || '';
-let p_tag_name   = winurlparams.get('tag_name') || '';
+let p_q          = winurlparams.get('q') || '';
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_omit_users = winurlparams.get('omit_users') || '';
 let p_omit_id = winurlparams.get('omit_id') || '';
@@ -303,12 +303,12 @@ function buildMenu( places_obj ) {
   let tag_param = '';
   let layer_param  = '';
   let place_params = '';
-  if( p_tag_name ) {
-      tag_param += '&q='+p_tag_name;
+  if( p_q ) {
+      tag_param += '&q='+p_q;
   }
 
-  if( p_layer ) {
-      layer_param += '&field:layer='+p_layer;
+  if( p_field_value ) {
+      layer_param += '&field:layer='+p_field_value;
   }
 
   if( p_place_id ) {
