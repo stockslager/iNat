@@ -295,11 +295,11 @@ function buildMenu( places_obj ) {
   } 
 
   // places drop down...
-  let places_menu = furl(github_root+'b1.html'+opts,'All');
+  let places_menu = furl(github_root+'bd.html'+opts,'All');
   for( let i=0; i<places_obj.places.length; i++ ) {
-       places_menu += furl(github_root+'b1.html'+opts+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
+       places_menu += furl(github_root+'bd.html'+opts+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
   }
-  places_menu += furl(github_root+'life_list_places.html','Select Custom Place');
+  places_menu += furl(github_root+'cncnpc_places.html'+opts,'Select Custom Place');
  
   let menu = '<div class="navbar">' + buildDD( place_name, places_menu ) + '</div>';
 
@@ -331,7 +331,7 @@ function fresults(xobj, places_obj) {
 
       labels = [
             {innerText:'#'},
-            {innerText:'Obs Photo'},
+            {innerText:'Image'},
             {innerText:'Name'}, 
             {innerText:' '},
       ];
