@@ -186,6 +186,7 @@ let p_tag_name      = winurlparams.get('tag_name') || '';
 let p_sub_menu_array    = winurlparams.get('sub_menu_array') || '';
 let p_menu          = winurlparams.get('menu') || 'all';
 let p_seed_project  = winurlparams.get('seed_project') || '';
+let p_taxon_nm      = winurlparams.get('taxon_nm') || 'Show';
 let p_field = '';
 let p_field_value = '';
 let menu_items = [];
@@ -355,7 +356,7 @@ function fresults(xobj) {
               menu_string = '<div class="navbar">';
               menu_string += '<div class="dropdown">' +
                                 '<button class="dropbtn">' +
-                                    'Show' +
+                                    p_taxon_nm +
                                     '<i class="fa fa-caret-down"></i>' +
                                 '</button>' +
                              '<div class="dropdown-content">';
@@ -363,7 +364,7 @@ function fresults(xobj) {
               menu_string += (furl(github_root+params,'<span style="padding-right:20px;">&#10133;</span>all' ));
               for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                    if( sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
-                       menu_string += (furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id,'<span style="padding-right:20px;">'+menu_item.sub_icons[j].icon+'</span>'+menu_item.sub_icons[j].nm ));
+                       menu_string += (furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id+'&taxon_nm='+menu_item.sub_icons[j].nm,'<span style="padding-right:20px;">'+menu_item.sub_icons[j].icon+'</span>'+menu_item.sub_icons[j].nm ));
                    }
               }
               menu_string += ('</div></div>');
