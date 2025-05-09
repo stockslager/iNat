@@ -42,6 +42,7 @@
    }
    #main { width:fit-content; min-width:375px; }
    #h2 { font-weight:bold; font-size:20px; }
+   #toprightbold { float:right; padding-right:15px; font-weight:bold; }
    #utf { font-size:1.475em; }
    table, td, th { border-collapse:collapse; margin:0; padding:5px; }
    th { padding-top:10px; padding-bottom:10px; position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:400; font-size:16px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
@@ -375,13 +376,11 @@ function fresults(xobj, places_obj) {
 
       faddelem('p',document.body,{innerHTML:buildMenu(places_obj)});
 
-      let dlString = '<span id="h2">'+p_library_name+'</span>';
+      let dlString = '<span id="toprightbold">'+p_library_name+'</span>';
 
-      faddelem('p',document.body,{innerHTML:dlString});
-    
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+dlString+'<br />'});  
 
       labels = [
             {innerText:'#'},
