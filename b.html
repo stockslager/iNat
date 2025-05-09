@@ -185,6 +185,8 @@ let p_menu_array    = winurlparams.get('menu_array') || '';
 let p_tag_name      = winurlparams.get('tag_name') || '';
 let p_sub_menu_array    = winurlparams.get('sub_menu_array') || '';
 let p_menu          = winurlparams.get('menu') || 'all';
+let p_seeds         = winurlparams.get('seeds') || 'no';
+let p_seed_project  = winurlparams.get('seed_project') || '';
 let p_field = '';
 let p_field_value = '';
 let menu_items = [];
@@ -360,7 +362,13 @@ function fresults(xobj) {
                    }
               }
               menu_string += ('</div></div>');
-              menu_string += ('<div id="home">'+furl(github_root+'b1.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_title+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div></div>');
+
+              // check to see if they entered the flow from a seed library.  if so, return control there.
+              if( p_seeds === 'yes' ) {
+                  menu_string += ('<div id="home">'+furl(github_root+'bd.html?project_id='+p_seed_project,'&#127807;')+'</div></div>');
+              } else {
+                  menu_string += ('<div id="home">'+furl(github_root+'b1.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_title+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div></div>');
+              }
           }
           faddelem('p',document.body,{innerHTML:(menu_string)});  
       }
