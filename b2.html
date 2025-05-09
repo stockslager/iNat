@@ -203,6 +203,7 @@ let p_menu       = winurlparams.get('menu') || '';
 let p_cache_check = winurlparams.get('cache_check') || '';
 let p_behavior   = winurlparams.get('behavior') || 'Behavior';
 let p_life       = winurlparams.get('life') || 'Life Stage';
+let p_seed_project = winurlparams.get('seed_project') || '';
 let fish_story   = 'no';
 let story_param  = '';
 /*var cellpx = 300;
@@ -213,6 +214,11 @@ var columns = 3;*/
 let obs_field_array = [];
 let annotations_array = [];
 let ofvs_array = [];
+
+let seed_param = '';
+if( p_seed_project ) {
+    seed_param = '&seed_project='+p_seed_project;
+}
 
 let all_opts = '';
 for (const [key, value] of winurlparams.entries()) { 
@@ -364,9 +370,15 @@ function buildMenu(data) {
        checkForAnnotations(data.results[j]);
   }
 
-  faddelem('p',document.body,{innerHTML:('<div class="navbar">' + buildLifeStageMenu(data) + 
+  if( p_seed_project ) {
+      faddelem('p',document.body,{innerHTML:('<div class="navbar">' + buildLifeStageMenu(data) + 
+                                                       '<div id="home">'+furl(github_root+'bd.html?project_id='+p_seed_project,'&#127807;')+'</div>' +
+                                              '</div>')});  
+  } else {
+      faddelem('p',document.body,{innerHTML:('<div class="navbar">' + buildLifeStageMenu(data) + 
                                                        '<div id="home">'+furl(github_root+'b1.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div>' +
                                               '</div>')});  
+  }
 }
 
 function checkForAnnotations( obs ){
