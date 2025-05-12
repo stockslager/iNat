@@ -304,6 +304,8 @@ function buildMenu( places_obj, tags_obj ) {
   let place_params = '';
   let layer_param  = '';
   let tag_param    = '';
+  let places_menu  = '';
+  let tags_menu    = '';
 
   if( p_place_id ) {
       place_params += '&place_id='+p_place_id+'&place_name='+place_name;
@@ -330,7 +332,7 @@ function buildMenu( places_obj, tags_obj ) {
           }
       }
    
-      let places_menu = furl(github_root+'bd.html'+opts+layer_param+tag_param,'All');
+      places_menu = furl(github_root+'bd.html'+opts+layer_param+tag_param,'All');
       for( let i=0; i<places_obj.places.length; i++ ) {
            places_menu += furl(github_root+'bd.html'+opts+layer_param+tag_param+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
       }
@@ -339,7 +341,7 @@ function buildMenu( places_obj, tags_obj ) {
 
   //tags drop down...
   if( tags_obj ) { 
-      let tags_menu = furl(github_root+'bd.html'+opts+layer_param+place_params, 'All');
+      tags_menu = furl(github_root+'bd.html'+opts+layer_param+place_params, 'All');
       for( let i=0; i<tags_obj.tags.length; i++ ) {
            tags_menu += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q='+tags_obj.tags[i].tag_name,tags_obj.tags[i].tag_name);
       }
