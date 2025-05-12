@@ -562,7 +562,7 @@ async function asyncGetData() {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
       })
-      .then((data) => { fresults(data, parseStoredPlaces(sessionStorage.getItem('places')), parseStoredTags(sessionStorage.getItem('tags') ); })
+      .then((data) => { fresults(data, parseStoredPlaces(sessionStorage.getItem('places')), parseStoredTags(sessionStorage.getItem('tags') )); })
       .catch((err) => {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
