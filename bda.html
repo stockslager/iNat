@@ -11,6 +11,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="Seeds" />
 <link rel="manifest" href="site.webmanifest" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <title>Seeds</title>
 <style>
    :root { 
@@ -278,13 +279,13 @@ let p_obs_id   = '';
 let p_insect_prj = '';
 let p_library_name = '';
 
-/*document.ready(function(){
-  '.dropdown-submenu a.test'.on("click", function(e){
-    this.next('ul').toggle();
+$(document).ready(function(){
+  $('.dropdown-submenu a.test').on("click", function(e){
+    $(this).next('ul').toggle();
     e.stopPropagation();
     e.preventDefault();
   });
-});*/
+});
 
 function findValueByKey(arr, key, value) {
   for (let i = 0; i < arr.length; i++) {
@@ -400,7 +401,7 @@ function buildMenu( places_obj, tags_obj ) {
   }
   places_menu += furl(github_root+'cncnpc_places.html'+opts+layer_param+'&tag='+p_q,'Select Custom Place');
  
-  let menu = '<div class="navbar">' + buildDD( place_name, places_menu ) + 
+  let menu = '<div class="navbar">' + buildDD2( place_name, places_menu ) + 
                                       buildDD( layer_name, layer_menu )  +
                                       buildDD( tag_name,   tags_menu )   +  '</div>';
 
