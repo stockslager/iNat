@@ -355,14 +355,14 @@ function buildMenu( places_obj, tags_obj ) {
 
   let menu = '';
 
-  if( places_obj && tags_obj ) {
+  if( places_obj.places.length > 0 && tags_obj.tags.length > 0 ) {
       menu = '<div class="navbar">' + buildDD( place_name, places_menu ) + 
                                       buildDD( layer_name, layer_menu )  +
                                       buildDD( tag_name,   tags_menu )   +  '</div>';
-  } else if( places_obj ) {
+  } else if( places_obj.places.length > 0 ) {
       menu = '<div class="navbar">' + buildDD( place_name, places_menu ) + 
                                       buildDD( layer_name, layer_menu )  +  '</div>';
-  } else if( tags_obj ) {
+  } else if( tags_obj.tags.length > 0 ) {
       menu = '<div class="navbar">' + buildDD( layer_name, layer_menu )  +
                                       buildDD( tag_name,   tags_menu )   +  '</div>';
   } else {
