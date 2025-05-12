@@ -335,27 +335,27 @@ function buildMenu( places_obj, tags_obj, fields_obj ) {
           }
       }
    
-      places_menu = furl(github_root+'bd.html'+opts+layer_param+tag_param,'All');
+      places_menu = furl(github_root+'bda.html'+opts+layer_param+tag_param,'All');
       for( let i=0; i<places_obj.places.length; i++ ) {
-           places_menu += furl(github_root+'bd.html'+opts+layer_param+tag_param+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
+           places_menu += furl(github_root+'bda.html'+opts+layer_param+tag_param+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
       }
       places_menu += furl(github_root+'cncnpc_places.html'+opts+layer_param+'&tag='+p_q,'Select Custom Place');
   }
 
   //tags drop down...
   if( tags_obj ) { 
-      tags_menu = furl(github_root+'bd.html'+opts+layer_param+place_params, 'All');
+      tags_menu = furl(github_root+'bda.html'+opts+layer_param+place_params, 'All');
       for( let i=0; i<tags_obj.tags.length; i++ ) {
-           tags_menu += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q='+tags_obj.tags[i].tag_name,tags_obj.tags[i].tag_name);
+           tags_menu += furl(github_root+'bda.html'+opts+layer_param+place_params+'&q='+tags_obj.tags[i].tag_name,tags_obj.tags[i].tag_name);
       }
   }
 
   // layer drop down...
   if( fields_obj ) {
-      layer_menu = furl(github_root+'bd.html'+opts+tag_param+place_params, 'All');
+      layer_menu = furl(github_root+'bda.html'+opts+tag_param+place_params, 'All');
       for( let i=0; i<fields_obj.fields.length; i++ ) {
            for( let j=0; j<fields_obj.fields[i].values.length; j++ ) {
-                layer_menu    += furl(github_root+'bd.html'+opts+tag_param+place_params+'&field:'+fields_obj.fields[i].field_name+'='+fields_obj.fields[i].values[j].field_value, fields_obj.fields[i].values[j].field_value);
+                layer_menu    += furl(github_root+'bda.html'+opts+tag_param+place_params+'&field:'+fields_obj.fields[i].field_name+'='+fields_obj.fields[i].values[j].field_value, fields_obj.fields[i].values[j].field_value);
            }
       }
   }
