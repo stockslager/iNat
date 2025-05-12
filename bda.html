@@ -298,7 +298,7 @@ function buildDD( name, content ) {
   return( dd );
 }
 
-function buildMenu( places_obj, tags_obj ) {
+function buildMenu( places_obj, tags_obj, fields_obj ) {
 
   let place_name  = 'Place';
   let tag_name    = 'Tags';
@@ -308,6 +308,7 @@ function buildMenu( places_obj, tags_obj ) {
   let tag_param    = '';
   let places_menu  = '';
   let tags_menu    = '';
+  let layer_menu   = '';
 
   if( p_place_id ) {
       place_params += '&place_id='+p_place_id+'&place_name='+place_name;
@@ -350,31 +351,33 @@ function buildMenu( places_obj, tags_obj ) {
   }
 
   // layer drop down...
-  let layer_menu = furl(github_root+'bd.html'+opts+tag_param+place_params, 'All');
-  layer_menu    += furl(github_root+'bd.html'+opts+tag_param+place_params+'&field:layer=Canopy', 'Canopy');
-  layer_menu    += furl(github_root+'bd.html'+opts+tag_param+place_params+'&field:layer=Understory', 'Understory');
-  layer_menu    += furl(github_root+'bd.html'+opts+tag_param+place_params+'&field:layer=Herbaceous', 'Herbaceous');
+  if( fields_obj ) {
+      layer_menu = furl(github_root+'bd.html'+opts+tag_param+place_params, 'All');
+      for( let i=0; i<fields_obj.fields.length; i++ ) {
+           for( let j=0; j<fields_obj.fields[i].values.length; j++ ) {
+                layer_menu    += furl(github_root+'bd.html'+opts+tag_param+place_params+'&field:'+fields_obj.fields[i].field_name+'='+fields_obj.fields[i].values[j].field_value, fields_obj.fields[i].values[j].field_value);
+           }
+      }
+  }
 
   let menu = '';
 
-  if( places_obj.places.length > 0 && tags_obj.tags.length > 0 ) {
-      menu = '<div class="navbar">' + buildDD( place_name, places_menu ) + 
-                                      buildDD( layer_name, layer_menu )  +
-                                      buildDD( tag_name,   tags_menu )   +  '</div>';
-  } else if( places_obj.places.length > 0 ) {
-      menu = '<div class="navbar">' + buildDD( place_name, places_menu ) + 
-                                      buildDD( layer_name, layer_menu )  +  '</div>';
-  } else if( tags_obj.tags.length > 0 ) {
-      menu = '<div class="navbar">' + buildDD( layer_name, layer_menu )  +
-                                      buildDD( tag_name,   tags_menu )   +  '</div>';
-  } else {
-      menu = '<div class="navbar">' + buildDD( layer_name, layer_menu )  +  '</div>';
+  if( places_obj.places.length > 0 || tags_obj.tags.length > 0 || fields_obj.fields.length > 0 ) {
+      menu += '<div class="navbar">';
+  }
+
+  if( places_obj.places.length > 0 ) { menu += buildDD( place_name, places_menu ); }
+  if( tags_obj.tags.length > 0 )     { menu += buildDD( tag_name,   tags_menu ); }
+  if( fields_obj.fields.length > 0 ) { menu += buildDD( layer_name, layer_menu ); }  
+
+  if( places_obj.places.length > 0 || tags_obj.tags.length > 0 || fields_obj.fields.length > 0 ) {
+      menu += '</div>';
   }
 
   return( menu );
 } 
 
-function fresults(xobj, places_obj, tags_obj) {
+function fresults(xobj, places_obj, tags_obj, fields_obj) {
    let results = xobj.results;
    let box_array = [];
  
@@ -396,7 +399,7 @@ function fresults(xobj, places_obj, tags_obj) {
           field_param = '&title=on&field:plant+that+the+organism+was+found+on=';
       }
 
-      faddelem('p',document.body,{innerHTML:buildMenu(places_obj, tags_obj)});
+      faddelem('p',document.body,{innerHTML:buildMenu(places_obj, tags_obj, fields_obj)});
 
       let dlString = '<span id="toprightbold">'+p_library_name+'</span>';
 
@@ -467,6 +470,48 @@ function fresults(xobj, places_obj, tags_obj) {
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
+
+class Fields {
+  constructor(fields) {
+    this.fields = fields;
+  }
+}
+ 
+class Field {
+  constructor(field_name, values) {
+    this.field_name = field_name;
+    this.values = field_values;
+  }
+}
+
+function storeFields(data) {
+   if (data) {
+      let fields_array = [];
+      for( let i=0; i<data.length; i++ ) {
+           const field = new Field(data[i].field_name, data[i].values);
+           fields_array.push(field);
+      }
+      const fields = new Fields( JSON.stringify(fields_array) );
+
+      // Serialize the object to JSON string so it can be stored in session
+      const field_string = JSON.stringify(fields);
+      sessionStorage.setItem('fields', field_string);
+   }
+   else { faddelem('p',document.body,{innerText:'No fields returned.'}); };
+}
+
+function parseStoredFields(fields) {
+   // Check if value exists before parsing
+   if( fields ) {
+       // Parse the string back to an object
+       const retrievedRec = JSON.parse(fields);
+       retrievedRec.fields = JSON.parse(retrievedRec.fields);
+       return retrievedRec;
+   } else {
+       console.log("No fields object found in session storage.");
+       throw new Error("No fields object found in session storage.");
+   }
+} 
 
 class Tags {
   constructor(tags) {
@@ -559,6 +604,7 @@ async function asyncGetData() {
       const pref     = data.prefs.find(item => item.seed_library_prj_id === p_project_id);
       storePlaces(pref.places);
       storeTags(pref.tags);
+      storeFields(pref.fields);
       p_obs_id       = pref.preferred_obs_field;
       p_insect_prj   = pref.insect_prj;
       p_library_name = pref.library_name; 
@@ -580,7 +626,7 @@ async function asyncGetData() {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
       })
-      .then((data) => { fresults(data, parseStoredPlaces(sessionStorage.getItem('places')), parseStoredTags(sessionStorage.getItem('tags') )); })
+      .then((data) => { fresults(data, parseStoredPlaces(sessionStorage.getItem('places')), parseStoredTags(sessionStorage.getItem('tags')), parseStoredFields(sessionStorage.getItem('fields'))); })
       .catch((err) => {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
