@@ -298,24 +298,43 @@ function buildDD( name, content ) {
 
 function buildMenu( places_obj, tags_obj ) {
 
-  let place_name  = 'Place';
-  let tag_name    = 'Tags';
-  let layer_name  = 'Layer';
-  if( p_place_id ) {
-      if( p_place_name ) {
-          place_name = p_place_name;
-      } else {
-          const place = findValueByKey(places_obj.places, 'place_id', p_place_id); 
-          place_name = place.place_name;
+  // places drop down...
+  if( places_obs ) {
+      let place_name  = 'Place';
+      let place_params = '';
+      if( p_place_id ) {
+          if( p_place_name ) {
+              place_name = p_place_name;
+          } else {
+              const place = findValueByKey(places_obj.places, 'place_id', p_place_id); 
+              place_name = place.place_name;
+          }
       }
-  } 
+   
+      if( p_place_id ) {
+          place_params += '&place_id='+p_place_id+'&place_name='+place_name;
+      }
 
-  let tag_param = '';
-  let layer_param  = '';
-  let place_params = '';
-  if( p_q ) {
-      tag_param += '&q='+p_q;
-      tag_name = p_q;
+      let places_menu = furl(github_root+'bd.html'+opts+layer_param+tag_param,'All');
+      for( let i=0; i<places_obj.places.length; i++ ) {
+           places_menu += furl(github_root+'bd.html'+opts+layer_param+tag_param+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
+      }
+      places_menu += furl(github_root+'cncnpc_places.html'+opts+layer_param+'&tag='+p_q,'Select Custom Place');
+  }
+
+  //tags drop down...
+  if( tags_obj ) {
+      if( p_q ) {
+          tag_param += '&q='+p_q;
+          tag_name = p_q;
+      }
+      let tag_name    = 'Tags';
+      let tag_param   = '';
+ 
+      let tags_menu = furl(github_root+'bd.html'+opts+layer_param+place_params, 'All');
+      for( let i=0; i<tags_obj.tags.length; i++ ) {
+           tags_menu += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q='+tags_obj.tags[i].tag_name,tags_obj.tags[i].tag_name);
+      }
   }
 
   if( p_field_value ) {
@@ -323,28 +342,14 @@ function buildMenu( places_obj, tags_obj ) {
       layer_name = p_field_value;
   }
 
-  if( p_place_id ) {
-      place_params += '&place_id='+p_place_id+'&place_name='+place_name;
-  }
-
   // layer drop down...
+  let layer_name   = 'Layer';
+  let layer_param  = '';
+       
   let layer_menu = furl(github_root+'bd.html'+opts+tag_param+place_params, 'All');
   layer_menu    += furl(github_root+'bd.html'+opts+tag_param+place_params+'&field:layer=Canopy', 'Canopy');
   layer_menu    += furl(github_root+'bd.html'+opts+tag_param+place_params+'&field:layer=Understory', 'Understory');
   layer_menu    += furl(github_root+'bd.html'+opts+tag_param+place_params+'&field:layer=Herbaceous', 'Herbaceous');
-
-  //tags drop down...
-  let tags_menu = furl(github_root+'bd.html'+opts+layer_param+place_params, 'All');
-  for( let i=0; i<tags_obj.tags.length; i++ ) {
-       tags_menu += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q='+tags_obj.tags[i].tag_name,tags_obj.tags[i].tag_name);
-  }
-
-  // places drop down...
-  let places_menu = furl(github_root+'bd.html'+opts+layer_param+tag_param,'All');
-  for( let i=0; i<places_obj.places.length; i++ ) {
-       places_menu += furl(github_root+'bd.html'+opts+layer_param+tag_param+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
-  }
-  places_menu += furl(github_root+'cncnpc_places.html'+opts+layer_param+'&tag='+p_q,'Select Custom Place');
  
   let menu = '<div class="navbar">' + buildDD( place_name, places_menu ) + 
                                       buildDD( layer_name, layer_menu )  +
