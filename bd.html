@@ -296,7 +296,7 @@ function buildDD( name, content ) {
   return( dd );
 }
 
-function buildMenu( places_obj ) {
+function buildMenu( places_obj, tags_obj ) {
 
   let place_name  = 'Place';
   let tag_name    = 'Tags';
@@ -335,9 +335,12 @@ function buildMenu( places_obj ) {
 
   //tags drop down...
   let tags_menu = furl(github_root+'bd.html'+opts+layer_param+place_params, 'All');
-  tags_menu    += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q=Fall Color', 'Fall Color'); 
-  tags_menu    += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q=Flowering', 'Flowering'); 
-  tags_menu    += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q=Edge', 'Edge');
+  for( let i=0; i<tags_obj.tags.length; i++ ) {
+       tags_menu += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q='+tags_obj.tags[i].tag_name,tagss_obj.tags[i].tag_name);
+  }
+  //tags_menu    += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q=Fall Color', 'Fall Color'); 
+  //tags_menu    += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q=Flowering', 'Flowering'); 
+  //tags_menu    += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q=Edge', 'Edge');
 
   // places drop down...
   let places_menu = furl(github_root+'bd.html'+opts+layer_param+tag_param,'All');
@@ -353,7 +356,7 @@ function buildMenu( places_obj ) {
   return( menu );
 } 
 
-function fresults(xobj, places_obj) {
+function fresults(xobj, places_obj, tags_obj) {
    let results = xobj.results;
    let box_array = [];
  
@@ -375,7 +378,7 @@ function fresults(xobj, places_obj) {
           field_param = '&title=on&field:plant+that+the+organism+was+found+on=';
       }
 
-      faddelem('p',document.body,{innerHTML:buildMenu(places_obj)});
+      faddelem('p',document.body,{innerHTML:buildMenu(places_obj, tags_obj)});
 
       let dlString = '<span id="toprightbold">'+p_library_name+'</span>';
 
@@ -447,7 +450,48 @@ function fresults(xobj, places_obj) {
    else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
 
- class Places {
+class Tags {
+  constructor(tags) {
+    this.tags = tags;
+  }
+}
+ 
+class Tag {
+  constructor(tag_name) {
+    this.tag_name = tag_name;
+  }
+}
+
+function storeTags(data) {
+   if (data) {
+      let tags_array = [];
+      for( let i=0; i<data.length; i++ ) {
+           const tag = new Tag(data[i].tag_name);
+           tagss_array.push(tag);
+      }
+      const tags = new Tags( JSON.stringify(tags_array) );
+
+      // Serialize the object to JSON string so it can be stored in session
+      const tag_string = JSON.stringify(tags);
+      sessionStorage.setItem('tags', tag_string);
+   }
+   else { faddelem('p',document.body,{innerText:'No tags returned.'}); };
+}
+
+function parseStoredTags(tags) {
+   // Check if value exists before parsing
+   if( tags ) {
+       // Parse the string back to an object
+       const retrievedRec = JSON.parse(tags);
+       retrievedRec.tags = JSON.parse(retrievedRec.tags);
+       return retrievedRec;
+   } else {
+       console.log("No object found in session storage for key 'myObject'");
+       throw new Error("No object found in session storage.");
+   }
+} 
+
+class Places {
   constructor(places) {
     this.places = places;
   }
@@ -495,6 +539,7 @@ async function asyncGetData() {
      .then(data => {
       // Access your data here 
       storePlaces(data.places);
+      storeTags(data.tags);
       const pref     = data.prefs.find(item => item.seed_library_prj_id === p_project_id);
       p_obs_id       = pref.preferred_obs_field;
       p_insect_prj   = pref.insect_prj;
@@ -517,7 +562,7 @@ async function asyncGetData() {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
       })
-      .then((data) => { fresults(data, parseStoredPlaces(sessionStorage.getItem('places')) ); })
+      .then((data) => { fresults(data, parseStoredPlaces(sessionStorage.getItem('places')), parseStoredTags(sessionStorage.getItem('tags') ); })
       .catch((err) => {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
