@@ -480,7 +480,7 @@ class Fields {
 class Field {
   constructor(field_name, values) {
     this.field_name = field_name;
-    this.values = field_values;
+    this.values = values;
   }
 }
 
@@ -496,7 +496,6 @@ function storeFields(data) {
       // Serialize the object to JSON string so it can be stored in session
       const field_string = JSON.stringify(fields);
       sessionStorage.setItem('fields', field_string);
-      console.log( 'fields: ' + sessionStorage.getItem('fields'));
    }
    else { faddelem('p',document.body,{innerText:'No fields returned.'}); };
 }
