@@ -336,7 +336,7 @@ function buildMenu( places_obj, tags_obj ) {
   //tags drop down...
   let tags_menu = furl(github_root+'bd.html'+opts+layer_param+place_params, 'All');
   for( let i=0; i<tags_obj.tags.length; i++ ) {
-       tags_menu += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q='+tags_obj.tags[i].tag_name,tagss_obj.tags[i].tag_name);
+       tags_menu += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q='+tags_obj.tags[i].tag_name,tags_obj.tags[i].tag_name);
   }
   //tags_menu    += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q=Fall Color', 'Fall Color'); 
   //tags_menu    += furl(github_root+'bd.html'+opts+layer_param+place_params+'&q=Flowering', 'Flowering'); 
@@ -467,7 +467,7 @@ function storeTags(data) {
       let tags_array = [];
       for( let i=0; i<data.length; i++ ) {
            const tag = new Tag(data[i].tag_name);
-           tagss_array.push(tag);
+           tags_array.push(tag);
       }
       const tags = new Tags( JSON.stringify(tags_array) );
 
