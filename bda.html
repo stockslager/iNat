@@ -496,6 +496,7 @@ function storeFields(data) {
       // Serialize the object to JSON string so it can be stored in session
       const field_string = JSON.stringify(fields);
       sessionStorage.setItem('fields', field_string);
+      console.log( 'fields: ' + sessionStorage.getItem('fields'));
    }
    else { faddelem('p',document.body,{innerText:'No fields returned.'}); };
 }
