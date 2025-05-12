@@ -278,6 +278,14 @@ let p_obs_id   = '';
 let p_insect_prj = '';
 let p_library_name = '';
 
+$(document).ready(function(){
+  $('.dropdown-submenu a.test').on("click", function(e){
+    $(this).next('ul').toggle();
+    e.stopPropagation();
+    e.preventDefault();
+  });
+});
+
 function findValueByKey(arr, key, value) {
   for (let i = 0; i < arr.length; i++) {
     if (arr[i][key].toString() === value) {
