@@ -77,19 +77,8 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_obs_date    = winurlparams.get('obs_date') || '';
-let p_page        = winurlparams.get('page') || '1';
-let p_per_page    = winurlparams.get('per_page') || '1';
 
-function removeURLParams() {
-  const url = new URL(window.location.href);
-  url.search = '';
-  window.history.pushState({}, document.title, url.toString());
-}
- 
-removeURLParams();  
-
-winurlparams.append('page',p_page);
-winurlparams.append('per_page',p_per_page);
+winurlparams.append('per_page','1');
 winurlparams.append('order','desc');
 winurlparams.append('order_by','observed_on');
 winurlparams.append('observed_on', p_obs_date);
