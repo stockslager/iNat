@@ -297,7 +297,7 @@ function buildDD( name, content ) {
   return( dd );
 }
 
-function buildMenu( places_obj, tags_obj, fields_obj ) {
+function buildHeader( places_obj, tags_obj, fields_obj ) {
 
   let place_name  = 'Place';
   let tag_name    = 'Tags';
@@ -379,13 +379,20 @@ function buildMenu( places_obj, tags_obj, fields_obj ) {
   if( tags_obj.tags.length > 0 )     { menu += buildDD( tag_name,   tags_menu ); }
   if( fields_obj.fields.length > 0 ) { menu += buildDD( field_name, fields_menu ); }  
 
+  let lib_title = '';
   if( places_obj.places.length === 0 && tags_obj.tags.length === 0 && fields_obj.fields.length === 0 ) {
       faddelem('h2',document.body,{innerText:p_library_name});
+  } else {
+      lib_title = '<span id="toprightbold">'+p_library_name+'</span>';
   }
 
   if( places_obj.places.length > 0 || tags_obj.tags.length > 0 || fields_obj.fields.length > 0 ) {
       menu += '</div>';
   }
+
+  faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
+             +'per page: '+fcomnum(per_page)+'<br />'
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+lib_title+'<br />'});  
 
   return( menu );
 } 
@@ -412,13 +419,7 @@ function fresults(xobj, places_obj, tags_obj, fields_obj) {
           field_param = '&title=on&field:plant+that+the+organism+was+found+on=';
       }
 
-      faddelem('p',document.body,{innerHTML:buildMenu(places_obj, tags_obj, fields_obj)});
-
-      let dlString = '<span id="toprightbold">'+p_library_name+'</span>';
-
-      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
-             +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+dlString+'<br />'});  
+      faddelem('p',document.body,{innerHTML:buildHeader(places_obj, tags_obj, fields_obj)});
 
       labels = [
             {innerText:'#'},
