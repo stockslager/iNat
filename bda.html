@@ -307,7 +307,7 @@ function buildMenu( places_obj, tags_obj, fields_obj ) {
   let tag_param    = '';
   let places_menu  = '';
   let tags_menu    = '';
-  let field_menu   = '';
+  let fields_menu   = '';
 
   if( p_place_id ) {
       place_params += '&place_id='+p_place_id+'&place_name='+place_name;
@@ -367,7 +367,7 @@ function buildMenu( places_obj, tags_obj, fields_obj ) {
 
   if( places_obj.places.length > 0 ) { menu += buildDD( place_name, places_menu ); }
   if( tags_obj.tags.length > 0 )     { menu += buildDD( tag_name,   tags_menu ); }
-  if( fields_obj.fields.length > 0 ) { menu += buildDD( field_name, field_menu ); }  
+  if( fields_obj.fields.length > 0 ) { menu += buildDD( field_name, fields_menu ); }  
 
   if( places_obj.places.length > 0 || tags_obj.tags.length > 0 || fields_obj.fields.length > 0 ) {
       menu += '</div>';
