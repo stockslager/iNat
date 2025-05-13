@@ -146,7 +146,11 @@ for (const [key, value] of winurlparams.entries()) {
 }  
 
 if( p_list === 'yes' ) {
-    winurlparams.append('field:garden+list',p_list);
+    if( p_project_id === '135795' ) {  // grovedale
+        winurlparams.append('field:seeds+available+in+library?',p_list);
+    } else {
+        winurlparams.append('field:garden+list',p_list);
+    }
 }
  
 if( p_original_iconic === '' && !p_list ) {
@@ -224,11 +228,9 @@ function fresults(xobj) {
 
       if( p_title === '' ) {
           dlString = 'Bugs on Plants';
-          //faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants.html'+proj+user+list_param+'&obs_field='+p_obs_field,'&#127807;')+'</span>') });
           faddelem('h2',document.body,{innerText:(dlString)});
       } else {
           dlString = 'Plant List';
-          //faddelem('p',document.body,{innerHTML:('<span id="home">'+furl(github_root+'bugs_on_plants_splash.html'+proj+user+list_param+'&menu='+p_menu,'&#127807;')+'</span>') });
           faddelem('h2',document.body,{innerText:(dlString)});
       }
 
@@ -303,7 +305,11 @@ function fresults(xobj) {
              } else {
                  iconic += p_iconic_taxa;
              }
-             taxon = furl(github_root+'bugs_on_plants2.html?'+query_params+list_param+'&obs_field='+p_obs_field+'&target_id='+tax_id+'&target_name='+pref_tax_name+'&title='+p_title+'&menu='+p_menu+field_name+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>'); 
+             if( p_obs_field ) {
+                 taxon = furl(github_root+'cncnpc_insects.html?'+query_params+list_param+'&plant_id='+rec.taxon.id+'&obs_field='+p_obs_field+'&plant_name='+pref_tax_name,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
+             } else {
+                 taxon = furl(github_root+'bugs_on_plants2.html?'+query_params+list_param+'&obs_field='+p_obs_field+'&target_id='+tax_id+'&target_name='+pref_tax_name+'&title='+p_title+'&menu='+p_menu+field_name+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>'); 
+             }
          }
 
          let values = [
