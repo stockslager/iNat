@@ -342,7 +342,7 @@ function buildMenu( places_obj, tags_obj, fields_obj ) {
    
       places_menu = furl(github_root+'bda.html'+opts+field_param+tag_param,'All');
       for( let i=0; i<places_obj.places.length; i++ ) {
-           places_menu += furl(github_root+'bda.html'+opts+field_param+tag_param+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
+           places_menu += furl(github_root+'bda.html'+opts+field_param+tag_param+'&place_id='+places_obj.places[i].place_id+'&place_name='+places_obj.places[i].place_name,places_obj.places[i].place_name);
       }
       places_menu += furl(github_root+'cncnpc_places.html'+opts+field_param+'&tag='+p_q,'Select Custom Place');
   }
