@@ -301,13 +301,17 @@ function buildMenu( places_obj, tags_obj, fields_obj ) {
 
   let place_name  = 'Place';
   let tag_name    = 'Tags';
-  let field_name  = fields_obj.fields[0].field_name;   
   let place_params = '';
   let field_param  = '';
   let tag_param    = '';
   let places_menu  = '';
   let tags_menu    = '';
   let fields_menu   = '';
+  let field_name = ''; 
+
+  if( fields_obj.fields[0] ) {
+      field_name  = fields_obj.fields[0].field_name;
+  }    
 
   if( p_place_id ) {
       if( p_place_name ) {
