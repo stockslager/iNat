@@ -379,10 +379,6 @@ function buildMenu( places_obj, tags_obj, fields_obj ) {
   if( tags_obj.tags.length > 0 )     { menu += buildDD( tag_name,   tags_menu ); }
   if( fields_obj.fields.length > 0 ) { menu += buildDD( field_name, fields_menu ); }  
 
-  if( places_obj.places.length === 0 && tags_obj.tags.length === 0 && fields_obj.fields.length === 0 ) {
-      faddelem('h2',document.body,{innerText:p_library_name});
-  } 
-
   if( places_obj.places.length > 0 || tags_obj.tags.length > 0 || fields_obj.fields.length > 0 ) {
       menu += '</div>';
   }
@@ -417,8 +413,9 @@ function fresults(xobj, places_obj, tags_obj, fields_obj) {
 
       if( menu ) {
           faddelem('p',document.body,{innerHTML:menu});
-      } else {
           lib_title = '<span id="toprightbold">'+p_library_name+'</span>';
+      } else {
+          faddelem('h2',document.body,{innerText:p_library_name});
       }
 
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
