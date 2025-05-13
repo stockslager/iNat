@@ -190,7 +190,6 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr);
 let p_project_id = winurlparams.get('project_id') || '';
-let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 var cellpx       = winurlparams.get('cellpx') || 122;
 var spacerpx     = winurlparams.get('spacerpx') || 4;
@@ -202,6 +201,9 @@ let p_list       = winurlparams.get('list') || '';
 let p_tag_name   = winurlparams.get('tag_name') || '';
 let p_menu       = winurlparams.get('menu') || '';
 let p_cache_check = winurlparams.get('cache_check') || '';
+let p_behavior   = winurlparams.get('behavior') || 'Behavior';
+let p_life       = winurlparams.get('life') || 'Life Stage';
+let p_seed_project = winurlparams.get('seed_project') || '';
 let fish_story   = 'no';
 let story_param  = '';
 /*var cellpx = 300;
@@ -209,19 +211,14 @@ var spacerpx = 3;
 var rows = 30;
 var columns = 3;*/
 
-let proj_param = '';
-let user_param = '';
-if( p_project_id ) {
-    proj_param = ('?project_id='+p_project_id); 
-    if( p_user_id ) {
-        proj_param += ('&user_id='+p_user_id);
-    }
-} else {
-    user_param = ('?user_id='+p_user_id);
-}
-
 let obs_field_array = [];
 let annotations_array = [];
+let ofvs_array = [];
+
+let seed_param = '';
+if( p_seed_project ) {
+    seed_param = '&seed_project='+p_seed_project;
+}
 
 let all_opts = '';
 for (const [key, value] of winurlparams.entries()) { 
@@ -240,8 +237,46 @@ for (const [key, value] of winurlparams.entries()) {
           all_opts += value;
       }
   }
-}      
+}   
 
+/*let all_except_field = '';
+for (const [key, value] of winurlparams.entries()) { 
+  if( !key.startsWith('field') && key !== 'behavior') {
+      if( all_except_field === '' ){
+          all_except_field += "?";
+      } else {
+          all_except_field += "&";
+      }
+      all_except_field += key;
+      all_except_field += "=";
+
+      if( key === 'page' ){
+          all_except_field += '1';
+      } else {
+          all_except_field += value;
+      }
+  }
+}   */
+
+let all_except_life_stage = '';
+for (const [key, value] of winurlparams.entries()) { 
+  if( key !== 'life' && key !== 'term_id' && key !== 'term_value_id' ) {
+      if( all_except_life_stage === '' ){
+          all_except_life_stage += "?";
+      } else {
+          all_except_life_stage += "&";
+      }
+      all_except_life_stage += key;
+      all_except_life_stage += "=";
+
+      if( key === 'page' ){
+          all_except_life_stage += '1';
+      } else {
+          all_except_life_stage += value;
+      }
+  }
+}   
+   
 // if the user has selected a method, built the opt to pass to the
 // lifelist page.
 // find key/value pair for &field: param if one was passed in
@@ -273,119 +308,77 @@ var apiurl = apiurlbase+'?'+winurlparams.toString();
 
 document.title = title.toLowerCase();
 
-function buildDetailsMenu(data) {
-
-
-   let details_menu = '<div class="dropdown">' +
-                           '<button class="dropbtn">' +
-                              'Details' +
-                              '<i class="fa fa-caret-down"></i>' +
-                           '</button>' +
-                           '<div class="dropdown-content">';
-   
-   if( obs_field_array.includes(9833) ){      // describe what bait or lure was used.
-       details_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695'+opts+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=9833&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:describe+what+bait+or+lure+was+used','Tackle Used');
-   }
-   if( obs_field_array.includes(12288) ) {    // bait
-       details_menu += furl(github_root+'configurable_obs_field_table.html?project_id=239695'+opts+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=12288&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:bait','Bait Used');
-   }
-
-   details_menu +=         '</div>' +
-                     '</div>';
-   
-   return details_menu;
-}
-
 function buildLifeStageMenu(data) {
 
    let cache_key = ('project_id='+p_project_id+'taxon_id='+p_taxon_id+'field='+field);
 
+   let life_stage_urls = '';
+   
    if( p_cache_check === 'yes' ) {
        if( sessionStorage.getItem(cache_key) ) {
            console.log('found cache..: '+cache_key+'==='+sessionStorage.getItem(cache_key));
-           return( sessionStorage.getItem(cache_key) );
+           life_stage_urls = sessionStorage.getItem(cache_key);
        }
    }
    
    let life_stage_menu = '<div class="dropdown">' +
                            '<button class="dropbtn">' +
-                              'Life Stage' +
+                              p_life +
                               '<i class="fa fa-caret-down"></i>' +
                            '</button>' +
                            '<div class="dropdown-content">';
-
-   // all should always appear...
-   life_stage_menu += furl(github_root+'bugs_on_plants_grid.html'+all_opts+'&cache_check=yes','All');
+   if( !life_stage_urls ) {
+       // all should always appear...
+       life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=&cache_check=yes','All');
    
-   if( annotations_array.includes(2) ){      // adult
-       life_stage_menu += furl(github_root+'bugs_on_plants_grid.html'+all_opts+'&term_id=1&term_value_id=2&cache_check=yes','Adults');
-   }
-   if( annotations_array.includes(3) ){      // teneral
-       life_stage_menu += furl(github_root+'bugs_on_plants_grid.html'+all_opts+'&term_id=1&term_value_id=3&cache_check=yes','Teneral');
-   }
-   if( annotations_array.includes(4) ) {    // pupa
-       life_stage_menu += furl(github_root+'bugs_on_plants_grid.html'+all_opts+'&term_id=1&term_value_id=4&cache_check=yes','Pupa');
-   }
-   if( annotations_array.includes(5) ) {    // nymph
-       life_stage_menu += furl(github_root+'bugs_on_plants_grid.html'+all_opts+'&term_id=1&term_value_id=5&cache_check=yes','Nymph');
-   }
-   if( annotations_array.includes(6) ){      // larva.
-       life_stage_menu += furl(github_root+'bugs_on_plants_grid.html'+all_opts+'&term_id=1&term_value_id=6&cache_check=yes','Larva');
-   }
-   if( annotations_array.includes(7) ) {    // egg
-       life_stage_menu += furl(github_root+'bugs_on_plants_grid.html'+all_opts+'&term_id=1&term_value_id=7&cache_check=yes','Egg');
-   }
-   if( annotations_array.includes(8) ) {    // juvenile
-       life_stage_menu += furl(github_root+'bugs_on_plants_grid.html'+all_opts+'&term_id=1&term_value_id=8&cache_check=yes','Juvenile');
-   }
-   if( annotations_array.includes(16) ) {    // subimago
-       life_stage_menu += furl(github_root+'bugs_on_plants_grid.html'+all_opts+'&term_id=1&term_value_id=16&cache_check=yes','Subimago');
+       if( annotations_array.includes(2) ){      // adult
+           life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Adults&term_id=1&term_value_id=2&cache_check=yes','Adults');
+       }
+       if( annotations_array.includes(3) ){      // teneral
+           life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Teneral&term_id=1&term_value_id=3&cache_check=yes','Teneral');
+       }
+       if( annotations_array.includes(4) ) {    // pupa
+           life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Pupa&term_id=1&term_value_id=4&cache_check=yes','Pupa');
+       }
+       if( annotations_array.includes(5) ) {    // nymph
+           life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Nymph&term_id=1&term_value_id=5&cache_check=yes','Nymph');
+       }
+       if( annotations_array.includes(6) ){      // larva.
+           life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Larva&term_id=1&term_value_id=6&cache_check=yes','Larva');
+       }
+       if( annotations_array.includes(7) ) {    // egg
+           life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Egg&term_id=1&term_value_id=7&cache_check=yes','Egg');
+       }
+       if( annotations_array.includes(8) ) {    // juvenile
+           life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Juvenile&term_id=1&term_value_id=8&cache_check=yes','Juvenile');
+       }
+       if( annotations_array.includes(16) ) {    // subimago
+           life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Subimago&term_id=1&term_value_id=16&cache_check=yes','Subimago');
+       }
+       sessionStorage.setItem(cache_key, life_stage_urls);
    }
 
-
-   life_stage_menu +=         '</div>' +
-                     '</div>';
-
-   sessionStorage.setItem(cache_key, life_stage_menu);
+   life_stage_menu += life_stage_urls;
+   life_stage_menu += '</div></div>';
    
    return life_stage_menu;
 }
 
 function buildMenu(data) {
-
-  //for( let i=0; i<data.results.length; i++ ) {
-  //     checkForObsFields(data.results[i]);
-  //     if( data.results[i].description ) {
-  //         fish_story = 'yes';
-  //     }
-  //}
-
-  for( let i=0; i<data.results.length; i++ ) {
-       checkForAnnotations(data.results[i]);
+   
+  for( let j=0; j<data.results.length; j++ ) {
+       checkForAnnotations(data.results[j]);
   }
 
-  //let details_menu = buildDetailsMenu(data);
-
-  faddelem('p',document.body,{innerHTML:('<div class="navbar">' + buildLifeStageMenu(data) + 
-                                                       '<div id="home">'+furl(github_root+'bugs_on_plants.html'+proj_param+user_param+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div>' +
+  if( p_seed_project ) {
+      faddelem('p',document.body,{innerHTML:('<div class="navbar">' + buildLifeStageMenu(data) + 
+                                                       '<div id="home">'+furl(github_root+'cncnpc_plants.html?project_id='+p_seed_project,'&#127807;')+'</div>' +
                                               '</div>')});  
-}
-
-function checkForObsFields( obs ){
-   if( obs.ofvs ) {
-       for( let i=0; i<obs.ofvs.length; i++ ) {
-            if( obs.ofvs[i].field_id === 9833 ) {   // describe the bait or lure used
-                if( !obs_field_array.includes(9833) ) {
-                    obs_field_array.push(obs.ofvs[i].field_id);
-                }
-            }
-            if( obs.ofvs[i].field_id === 12288 ) {   // bait
-                if( !obs_field_array.includes(12288) ) {
-                    obs_field_array.push(obs.ofvs[i].field_id);
-                }
-            }
-       }
-   }
+  } else {
+      faddelem('p',document.body,{innerHTML:('<div class="navbar">' + buildLifeStageMenu(data) + 
+                                                       '<div id="home">'+furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div>' +
+                                              '</div>')});  
+  }
 }
 
 function checkForAnnotations( obs ){
