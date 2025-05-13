@@ -466,11 +466,20 @@ function fresults(xobj, places_obj, tags_obj, fields_obj) {
              taxon = furl(github_root+'cncnpc_seeds_fields.html?project_id='+p_project_id+'&obs_id='+rec.id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
 
+         // if an insect project was specified in params.json show insect observaitons from that donor
+         // project rather than from the user_id on the parent plant observation.
+         let insect_param = '';
+         if( p_insect_prj ) {
+             insect_param += 'project_id='+p_insect_prj;
+         } else {
+             insect_param += 'user_id='+rec.user.id;
+         }
+
          values = [
                   {innerText:i+1},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
                   {innerHTML:taxon},
-                  {innerHTML:furl(github_root+'b.html?user_id='+rec.user.id+'&seed_project='+p_project_id+'&list=yes&seeds=yes&menu=all&target_name='+pref_tax_name+'&target_id='+rec.taxon.id+field_param+rec.taxon.id,'<span id=\"utf\">&#129419;</span>')},
+                  {innerHTML:furl(github_root+'b.html?'+insect_param+'&seed_project='+p_project_id+'&list=yes&seeds=yes&menu=all&target_name='+pref_tax_name+'&target_id='+rec.taxon.id+field_param+rec.taxon.id,'<span id=\"utf\">&#129419;</span>')},
                   ];
 
          faddelems('td',brow,values);
