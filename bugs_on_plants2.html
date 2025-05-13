@@ -185,11 +185,19 @@ let p_menu_array    = winurlparams.get('menu_array') || '';
 let p_tag_name      = winurlparams.get('tag_name') || '';
 let p_sub_menu_array    = winurlparams.get('sub_menu_array') || '';
 let p_menu          = winurlparams.get('menu') || 'all';
+let p_seed_project  = winurlparams.get('seed_project') || '';
+let p_taxon_nm      = winurlparams.get('taxon_nm') || 'Show';
 let p_field = '';
 let p_field_value = '';
 let menu_items = [];
 let opts = '';
 let obs_field_array = [];
+let seed_param = '';
+
+if( p_seed_project ) {
+    opts += ('&seed_project='+p_seed_project);
+    seed_param = '&seed_project='+p_seed_project;
+}
 
 if( p_list ) {
     opts += ('&list='+p_list);
@@ -339,7 +347,7 @@ function fresults(xobj) {
 
       let icons = '';
       let menu_string = '';
-      let params = ('bugs_on_plants2.html'+proj+user+leaf_params+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu+'&menu='+p_menu);
+      let params = ('bugs_on_plants2.html'+proj+user+seed_param+leaf_params+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu+'&menu='+p_menu);
 
       if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
           ( p_show_menu === 'yes' ) ||
@@ -348,7 +356,7 @@ function fresults(xobj) {
               menu_string = '<div class="navbar">';
               menu_string += '<div class="dropdown">' +
                                 '<button class="dropbtn">' +
-                                    'Show' +
+                                    capitalizeWords(p_taxon_nm) +
                                     '<i class="fa fa-caret-down"></i>' +
                                 '</button>' +
                              '<div class="dropdown-content">';
@@ -356,17 +364,23 @@ function fresults(xobj) {
               menu_string += (furl(github_root+params,'<span style="padding-right:20px;">&#10133;</span>all' ));
               for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                    if( sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
-                       menu_string += (furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id,'<span style="padding-right:20px;">'+menu_item.sub_icons[j].icon+'</span>'+menu_item.sub_icons[j].nm ));
+                       menu_string += (furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id+'&taxon_nm='+menu_item.sub_icons[j].nm,'<span style="padding-right:20px;">'+menu_item.sub_icons[j].icon+'</span>'+menu_item.sub_icons[j].nm ));
                    }
               }
               menu_string += ('</div></div>');
-              menu_string += ('<div id="home">'+furl(github_root+'bugs_on_plants.html'+proj+user+'&list='+p_list+'&title='+p_title+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div></div>');
+
+              // check to see if they entered the flow from a seed library.  if so, return control there.
+              if( p_seed_project ) {
+                  menu_string += ('<div id="home">'+furl(github_root+'cncnpc_plants.html?project_id='+p_seed_project,'&#127807;')+'</div></div>');
+              } else {
+                  menu_string += ('<div id="home">'+furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_title+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div></div>');
+              }
           }
           faddelem('p',document.body,{innerHTML:(menu_string)});  
       }
 
       if( !p_field_value ) {
-          dlString = furl(github_root+'bugs_on_plants_grid.html'+proj+user+leaf_params+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&action='+p_title+'&menu='+p_menu+field_name,'<span id="topright">all organisms '+p_title+' any plant</span>');
+          dlString = furl(github_root+'bugs_on_plants_grid.html'+proj+user+seed_param+leaf_params+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&action='+p_title+'&menu='+p_menu+field_name,'<span id="topright">all organisms '+p_title+' any plant</span>');
       } else {
           dlString = ('<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
       }
@@ -379,8 +393,11 @@ function fresults(xobj) {
             {innerText:'#'},
             {innerText:'Photo'},
             {innerText:'Name'}, 
-            {innerText:' '},
       ];
+
+      if( p_field !== '' ) {
+          labels.push({innerText:' '});
+      }
 
       let table = faddelem('table',document.body,{id:'main'});                    
       let thead = faddelem('thead',table);
