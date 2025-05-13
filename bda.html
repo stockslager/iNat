@@ -174,7 +174,7 @@ let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
 let p_place_name = winurlparams.get('place_name') || '';
 let p_place_id   = winurlparams.get('place_id') || '';
-let p_layer      = winurlparams.get('layer') || '';
+let p_field      = winurlparams.get('field') || '';
 let p_q          = winurlparams.get('q') || '';
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_omit_users = winurlparams.get('omit_users') || '';
@@ -302,21 +302,21 @@ function buildMenu( places_obj, tags_obj, fields_obj ) {
 
   let place_name  = 'Place';
   let tag_name    = 'Tags';
-  let layer_name  = 'Layer';   
+  let field_name  = fields_obj.fields[0].field_name;   
   let place_params = '';
-  let layer_param  = '';
+  let field_param  = '';
   let tag_param    = '';
   let places_menu  = '';
   let tags_menu    = '';
-  let layer_menu   = '';
+  let field_menu   = '';
 
   if( p_place_id ) {
       place_params += '&place_id='+p_place_id+'&place_name='+place_name;
   }
 
   if( p_field_value ) {
-      layer_param += '&field:layer='+p_field_value;
-      layer_name = p_field_value;
+      field_param += '&field:'+field_name+'='+p_field_value;
+      field_name = p_field_value;
   }
 
   if( p_q ) {
@@ -335,27 +335,27 @@ function buildMenu( places_obj, tags_obj, fields_obj ) {
           }
       }
    
-      places_menu = furl(github_root+'bda.html'+opts+layer_param+tag_param,'All');
+      places_menu = furl(github_root+'bda.html'+opts+field_param+tag_param,'All');
       for( let i=0; i<places_obj.places.length; i++ ) {
-           places_menu += furl(github_root+'bda.html'+opts+layer_param+tag_param+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
+           places_menu += furl(github_root+'bda.html'+opts+field_param+tag_param+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
       }
-      places_menu += furl(github_root+'cncnpc_places.html'+opts+layer_param+'&tag='+p_q,'Select Custom Place');
+      places_menu += furl(github_root+'cncnpc_places.html'+opts+field_param+'&tag='+p_q,'Select Custom Place');
   }
 
   //tags drop down...
   if( tags_obj ) { 
-      tags_menu = furl(github_root+'bda.html'+opts+layer_param+place_params, 'All');
+      tags_menu = furl(github_root+'bda.html'+opts+field_param+place_params, 'All');
       for( let i=0; i<tags_obj.tags.length; i++ ) {
-           tags_menu += furl(github_root+'bda.html'+opts+layer_param+place_params+'&q='+tags_obj.tags[i].tag_name,tags_obj.tags[i].tag_name);
+           tags_menu += furl(github_root+'bda.html'+opts+field_param+place_params+'&q='+tags_obj.tags[i].tag_name,tags_obj.tags[i].tag_name);
       }
   }
 
-  // layer drop down...
+  // obs field drop down...
   if( fields_obj ) {
-      layer_menu = furl(github_root+'bda.html'+opts+tag_param+place_params, 'All');
+      fields_menu = furl(github_root+'bda.html'+opts+tag_param+place_params, 'All');
       for( let i=0; i<fields_obj.fields.length; i++ ) {
            for( let j=0; j<fields_obj.fields[i].values.length; j++ ) {
-                layer_menu    += furl(github_root+'bda.html'+opts+tag_param+place_params+'&field:'+fields_obj.fields[i].field_name+'='+fields_obj.fields[i].values[j].field_value, fields_obj.fields[i].values[j].field_value);
+                fields_menu    += furl(github_root+'bda.html'+opts+tag_param+place_params+'&field:'+fields_obj.fields[i].field_name+'='+fields_obj.fields[i].values[j].field_value, fields_obj.fields[i].values[j].field_value);
            }
       }
   }
@@ -368,7 +368,7 @@ function buildMenu( places_obj, tags_obj, fields_obj ) {
 
   if( places_obj.places.length > 0 ) { menu += buildDD( place_name, places_menu ); }
   if( tags_obj.tags.length > 0 )     { menu += buildDD( tag_name,   tags_menu ); }
-  if( fields_obj.fields.length > 0 ) { menu += buildDD( layer_name, layer_menu ); }  
+  if( fields_obj.fields.length > 0 ) { menu += buildDD( field_name, field_menu ); }  
 
   if( places_obj.places.length > 0 || tags_obj.tags.length > 0 || fields_obj.fields.length > 0 ) {
       menu += '</div>';
