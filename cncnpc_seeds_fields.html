@@ -83,6 +83,19 @@ let p_project_id = winurlparams.get('project_id') || '';
 let p_obs_id     = winurlparams.get('obs_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 
+let babies = winurlparams;
+babies.delete('id');
+babies.delete('project_id');
+babies.delete('taxon_id');
+
+// find key/value pair for &field: param if one was passed in
+for (const [key, value] of babies.entries()) {
+  if( key.startsWith('field') ){
+      babies.delete(key);
+  }
+}  
+babies.append('field:parent+colony', p_obs_id);
+  
 // set id to the obs_id passed in for call to api...
 winurlparams.delete('id');
 winurlparams.append('id', p_obs_id);
@@ -93,11 +106,11 @@ winurlparams.append('per_page','30');
 let apiurl = ('https://api.inaturalist.org/v1/observations?project_id='+p_project_id+'&id='+p_obs_id+'&taxon_id='+p_taxon_id);
 
 if( p_obs_id !== '' ){
-    apiurl = ('https://api.inaturalist.org/v1/observations/'+p_obs_id);
+    apiurl    = ('https://api.inaturalist.org/v1/observations/'+p_obs_id);
+    let apibabiesbase = 'https://api.inaturalist.org/v1/observations';
+    let apibabiesurl = apibabiesbase+((babies!='')?('?'+babies):'');
 }
   
-let apirefurl = 'https://stockslager.github.io/iNat/reseed_plant_inspector.html';
-
 let p_custom     = 'no';
 let p_strip_html = 'yes';
   
@@ -259,6 +272,58 @@ function fresults(xobj) {
    }
 };
 
+function fresultsBabies(xobj) {
+   let results = xobj.results;
+   if (results) {
+      let total_results = xobj.total_results;
+               
+      for (let i=0; i<results.length; i++) {
+         let rec = results[i];
+         let tax_name = '';
+         let pref_tax_name = '';  
+         let tax_photo = '';
+         let availability = 'Out of Stock';
+         let header_row = '';
+         let wild = '';
+
+         let icon = '<div style="display:flex; align-items:center;"><img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
+         if( rec.taxon ){
+             if( rec.taxon.preferred_common_name !== '' ){
+                 header_row += ((rec.taxon.preferred_common_name||''));
+             }
+         }
+ 
+         faddelem('h2',document.body,{innerHTML:icon+'<span style="padding:10px;">'+header_row+'</span></div>'});  
+
+         // donor table
+         let d_table = faddelem('table',document.body,{id:'main'});
+         let d_thead = faddelem('thead',d_table);
+         let d_hrow = faddelem('tr',d_thead);
+
+         let d_labels = [ {innerText:'Propagator'},
+                          {innerText:'Descendants'}, ];
+
+         let user_icon = rec.user.icon || '';
+         if( user_icon === '' ){
+            user_icon += '<div style="display:flex; align-items:center;">&#x1F464;';
+         } else {
+            user_icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+user_icon+'" />';
+         }
+
+         faddelems('th',d_hrow,d_labels);
+         let d_tbody = faddelem('tbody',d_table);
+
+         let d_row1  = faddelem('tr',d_tbody);
+         let d_one = [
+                          {innerHTML:user_icon+'<span style="padding-left:10px;">' + furl(root_people+rec.user.login,rec.user.login)+'</span></div>'},
+                          {innerText:rec.id},
+                       ];        
+         faddelems('td',d_row1, d_one);
+
+      }  
+   }
+};
+
 async function asyncGetData(){
    await fetch('params.json')
      .then(response => response.json())
@@ -291,6 +356,16 @@ async function asyncGetData(){
          return response.json();
       })
       .then((data) => { fresults(data); })
+      .catch((err) => {
+         console.error(err.message);
+         faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+      });
+      await fetch(apibabiesurl)
+      .then((response) => {
+         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+         return response.json();
+      })
+      .then((data) => { fresultsBabies(data); })
       .catch((err) => {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
