@@ -628,9 +628,6 @@ async function asyncGetData() {
      .then(data => {
       // Access your data here 
       const pref     = data.prefs.find(item => item.seed_library_prj_id === p_project_id);
-      if( pref.seed_library_prj_id !== p_project_id ) {
-          instructions = 'Invalid project.  The project must be configured in params.json.';
-      }
       storePlaces(pref.places);
       storeTags(pref.tags);
       storeFields(pref.fields);
@@ -641,6 +638,7 @@ async function asyncGetData() {
    })
      .catch(error => {
       console.error('Error fetching JSON:', error);
+      instructions = 'Error fetching JSON for project.  The project must be configured in params.json.';
    });
 
    if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
