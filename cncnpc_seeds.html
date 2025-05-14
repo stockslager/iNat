@@ -427,11 +427,10 @@ function fresults(xobj, places_obj, tags_obj, fields_obj) {
       let lib_title = '';
       let menu = buildMenu(places_obj, tags_obj, fields_obj);
 
-      let map = furl(github_root+'life_list_map.html?project_id='+p_project_id+all_opts,'<span class="earth">&#127758</span>');
-
       if( menu ) {
+          let map = '<span id="toprightbold">'+furl(github_root+'life_list_map.html?project_id='+p_project_id+all_opts,'<span class="earth">&#127758</span>');
           faddelem('p',document.body,{innerHTML:menu});
-          lib_title = map+'<span id="toprightbold">'+p_library_name+'</span>';
+          lib_title = map+p_library_name+'</span>';
       } else {
           faddelem('h2',document.body,{innerText:p_library_name});
       }
