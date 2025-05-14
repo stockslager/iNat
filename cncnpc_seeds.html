@@ -53,6 +53,7 @@
    .tar { text-align:right; }
    .clipart { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999; border: 1px solid forestgreen; padding: 15px; border-radius: 50px; }
    .icon { height:48px; width:48px; border-radius:50%; }
+   .earth { display:flex; align-items:center; font-size:1.000em; padding-right:10px; }
    .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
    .flowericon { padding-left:5%; font-size:14px; white-space: nowrap; font-style:normal; }
    .photo { height:54px; width:54px; border-radius: 5px 5px 5px 5px; }
@@ -182,6 +183,7 @@ let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_field = '';
 let p_field_value = '';
 let opts = '';
+let all_opts = '';
 
 // build param list for url's used in fresults
 for (const [key, value] of winurlparams.entries()) { 
@@ -198,6 +200,20 @@ for (const [key, value] of winurlparams.entries()) {
           opts += '1';
       } else {
           opts += value;
+      }
+  } else {
+      if( all_opts === '' ){
+          all_opts += "?";
+      } else {
+          all_opts += "&";
+      }
+      all_opts += key;
+      all_opts += "=";
+
+      if( key === 'page' ){
+          all_opts += '1';
+      } else {
+          all_opts += value;
       }
   }
 }   
@@ -411,9 +427,11 @@ function fresults(xobj, places_obj, tags_obj, fields_obj) {
       let lib_title = '';
       let menu = buildMenu(places_obj, tags_obj, fields_obj);
 
+      let map = furl(github_root+'life_list_map.html?project_id='+p_project_id+all_opts,'<span class="earth">&#127758</span>');
+
       if( menu ) {
           faddelem('p',document.body,{innerHTML:menu});
-          lib_title = '<span id="toprightbold">'+p_library_name+'</span>';
+          lib_title = map+'<span id="toprightbold">'+p_library_name+'</span>';
       } else {
           faddelem('h2',document.body,{innerText:p_library_name});
       }
