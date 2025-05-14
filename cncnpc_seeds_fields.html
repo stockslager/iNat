@@ -277,7 +277,6 @@ function fresults(xobj) {
 };
 
 function fresultsBabies(xobj) {
-  console.log('dfasfafd');
    let results = xobj.results;
    if (results) {
       let total_results = xobj.total_results;
@@ -314,9 +313,8 @@ function fresultsBabies(xobj) {
          let d_row1  = faddelem('tr',d_tbody);
          let d_one = [
                           {innerHTML:user_icon+'<span style="padding-left:10px;">' + furl(root_people+rec.user.login,rec.user.login)+'</span></div>'},
-                          {innerHTML:furl(root_observations+rec.id,(icon+' '+rec.id))},
+                          {innerHTML:furl(root_observations+rec.id,(icon+' '+rec.id+'</div>))},
                        ];        
-        console.log('hsadfsadfas');
          faddelems('td',d_row1, d_one);
 
       }  
@@ -359,7 +357,6 @@ async function asyncGetData(){
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
       });
-      console.log('url: '+apibabiesurl);
       await fetch(apibabiesurl)
       .then((response) => {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
