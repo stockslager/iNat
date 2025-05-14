@@ -125,9 +125,6 @@ function fresults(xobj) {
                
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
-         let tax_name = '';
-         let pref_tax_name = '';  
-         let tax_photo = '';
          let availability = 'Out of Stock';
          let header_row = '';
          let wild = '';
@@ -279,44 +276,39 @@ function fresults(xobj) {
 function fresultsBabies(xobj) {
    let results = xobj.results;
    if (results) {
-      let total_results = xobj.total_results;
-               
-      for (let i=0; i<results.length; i++) {
-         let rec = results[i];
-         let tax_name = '';
-         let pref_tax_name = '';  
-         let tax_photo = '';
-         let availability = 'Out of Stock';
-         let header_row = '';
-         let wild = '';
 
-         let icon = '<div style="display:flex; align-items:center;"><img class="descendant" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
- 
-         // donor table
-         let d_table = faddelem('table',document.body,{id:'main'});
-         let d_thead = faddelem('thead',d_table);
-         let d_hrow = faddelem('tr',d_thead);
+      if( results.length > 0 ) {
+          // descendants table
+          let d_table = faddelem('table',document.body,{id:'main'});
+          let d_thead = faddelem('thead',d_table);
+          let d_hrow = faddelem('tr',d_thead);
+          let header_row = '';
 
-         let d_labels = [ {innerText:'Propagator'},
+          let d_labels = [ {innerText:'Propagator'},
                           {innerText:'Descendants'}, ];
 
-         let user_icon = rec.user.icon || '';
-         if( user_icon === '' ){
-            user_icon += '<div style="display:flex; align-items:center;">&#x1F464;';
-         } else {
-            user_icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+user_icon+'" />';
-         }
+          faddelems('th',d_hrow,d_labels);
+          let d_tbody = faddelem('tbody',d_table);
+       
+          for( let i=0; i<results.length; i++) {
+               let rec = results[i];
 
-         faddelems('th',d_hrow,d_labels);
-         let d_tbody = faddelem('tbody',d_table);
+               let icon = '<div style="display:flex; align-items:center;"><img class="descendant" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
+ 
+               let user_icon = rec.user.icon || '';
+               if( user_icon === '' ){
+                   user_icon += '<div style="display:flex; align-items:center;">&#x1F464;';
+               } else {
+                   user_icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+user_icon+'" />';
+               }
 
-         let d_row1  = faddelem('tr',d_tbody);
-         let d_one = [
+               let d_row1  = faddelem('tr',d_tbody);
+               let d_one = [
                           {innerHTML:user_icon+'<span style="padding-left:10px;">' + furl(root_people+rec.user.login,rec.user.login)+'</span></div>'},
                           {innerHTML:furl(root_observations+rec.id,(icon+'<span style="padding-left:10px;">'+rec.id+'</span></div>'))},
                        ];        
-         faddelems('td',d_row1, d_one);
-
+               faddelems('td',d_row1, d_one);
+          }
       }  
    }
 };
