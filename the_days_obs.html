@@ -108,9 +108,7 @@ function fresults(xobj) {
       let labels = [];
       let dlString = '';
 
-      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
-             +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
+      faddelem('h2',document.body,{innerHTML:'Todays Observations: '+fcomnum(page_curr)+' of '+fcomnum(total_results)+' <br/>'});  
 
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
@@ -126,6 +124,7 @@ function fresults(xobj) {
          photo_url = photo_url.replace('square', 'original');
        
          faddelem('p', document.body, {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+photo_url+'" />')});
+         faddelem('p', document.body, {innerHTML:rec.description});
       };
 
       // buttons to go to prev or next page
