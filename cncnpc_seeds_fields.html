@@ -104,11 +104,13 @@ winurlparams.delete('per_page');
 winurlparams.append('per_page','30');
 
 let apiurl = ('https://api.inaturalist.org/v1/observations?project_id='+p_project_id+'&id='+p_obs_id+'&taxon_id='+p_taxon_id);
+let apibabiesurl = '';
+let apibabiesbase = '';
 
-if( p_obs_id !== '' ){
+if( p_obs_id ){
     apiurl    = ('https://api.inaturalist.org/v1/observations/'+p_obs_id);
-    let apibabiesbase = 'https://api.inaturalist.org/v1/observations';
-    let apibabiesurl = apibabiesbase+((babies!='')?('?'+babies):'');
+    apibabiesbase = 'https://api.inaturalist.org/v1/observations';
+    apibabiesurl = apibabiesbase+((babies!='')?('?'+babies):'');
 }
   
 let p_custom     = 'no';
