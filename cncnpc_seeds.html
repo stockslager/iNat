@@ -627,7 +627,7 @@ async function asyncGetData() {
       // Access your data here 
       const pref     = data.prefs.find(item => item.seed_library_prj_id === p_project_id);
       if( pref.seed_library_prj_id !== p_project_id ) {
-          throw new Error('Invalid project.  The project must be configured in params.json.);      
+          throw new Error('Invalid project.  The project must be configured in params.json.');      
       }
       storePlaces(pref.places);
       storeTags(pref.tags);
