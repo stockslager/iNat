@@ -42,7 +42,7 @@
    }
    #main { width:fit-content; min-width:375px; }
    #h2 { font-weight:bold; font-size:20px; }
-   #toprightbold { float:right; padding-right:15px; font-weight:bold; }
+   #toprightbold { verticle-align:middle; float:right; padding-right:15px; font-weight:bold; }
    #utf { font-size:1.475em; }
    table, td, th { border-collapse:collapse; margin:0; padding:5px; }
    th { padding-top:10px; padding-bottom:10px; position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:400; font-size:16px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
@@ -428,9 +428,9 @@ function fresults(xobj, places_obj, tags_obj, fields_obj) {
       let menu = buildMenu(places_obj, tags_obj, fields_obj);
 
       if( menu ) {
-          let map = '<span id="toprightbold">'+furl(github_root+'life_list_map.html?project_id='+p_project_id+all_opts,'<span class="earth">&#127758</span>');
+          let map = '<span id="toprightbold"><div style="display:flex; align-items:center;">'+furl(github_root+'life_list_map.html?project_id='+p_project_id+all_opts,'<span class="earth">&#127758</span>');
           faddelem('p',document.body,{innerHTML:menu});
-          lib_title = map+p_library_name+'</span>';
+          lib_title = map+p_library_name+'</div></span>';
       } else {
           faddelem('h2',document.body,{innerText:p_library_name});
       }
