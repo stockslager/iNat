@@ -300,14 +300,14 @@ function fresultsBabies(xobj) {
  
                let user_icon = rec.user.icon || '';
                if( user_icon === '' ){
-                   user_icon = '<div class="npcicon">&#x1F464;</div>';
+                   user_icon = '<div class="npcicon">&#x1F464;<span>';
                } else {
-                   user_icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+user_icon+'" />';
+                   user_icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+user_icon+'" /><span style="padding-left:10px;">';
                }
 
                let d_row1  = faddelem('tr',d_tbody);
                let d_one = [
-                          {innerHTML:user_icon+'<span style="padding-left:10px;">' + furl(root_people+rec.user.login,rec.user.login)+'</span></div>'},
+                          {innerHTML:user_icon + furl(root_people+rec.user.login,rec.user.login)+'</span></div>'},
                           {innerHTML:furl(root_observations+rec.id,(icon+'<span style="padding-left:10px;">'+rec.id+'</span></div>'))},
                        ];        
                faddelems('td',d_row1, d_one);
