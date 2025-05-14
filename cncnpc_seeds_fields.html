@@ -97,7 +97,7 @@ for (const [key, value] of babies.entries()) {
   }
 }  
 babies.append('field:parent+colony', p_obs_id);
-let opts = '&field:parent+colony='+p_obs_id;
+let opts = '?field:parent+colony='+p_obs_id;
   
 // set id to the obs_id passed in for call to api...
 winurlparams.delete('id');
@@ -288,7 +288,7 @@ function fresultsBabies(xobj) {
           let map = '<span id="toprightbold"><div style="display:flex; align-items:center;">'+furl(github_root+'cncnpc_map.html'+opts+'&centerlat=39.10445934350343&centerlng=-84.5196921535475&defaultzoom=9','<span class="earth">&#127758</span>');
 
           let d_labels = [ {innerText:'Propagator'},
-                          {innerHTML:'Descendants ( '+map+' )'}, ];
+                          {innerHTML:'Descendants '+map}, ];
 
           faddelems('th',d_hrow,d_labels);
           let d_tbody = faddelem('tbody',d_table);
