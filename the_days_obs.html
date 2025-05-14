@@ -86,8 +86,8 @@ winurlparams.delete('order_by');
 winurlparams.append('order_by','observed_on');
 winurlparams.delete('observed_on');
 winurlparams.append('observed_on', p_obs_date);
-winurlparams.delete('place_id');
-winurlparams.append('place_id', '205674');
+winurlparams.delete('user_id');
+winurlparams.append('user_id', 'stockslager');
  
 </script> 
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
@@ -121,7 +121,11 @@ function fresults(xobj) {
              pref_tax_name = rec.taxon.preferred_common_name || '';
          }
 
-         faddelem('p', document.body, {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')});
+         let photo_url = ((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'');
+
+         photo_url = photo_url.replace('square', 'original');
+       
+         faddelem('p', document.body, {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+photo_url+'" />')});
       };
 
       // buttons to go to prev or next page
