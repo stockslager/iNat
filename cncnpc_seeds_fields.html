@@ -87,6 +87,7 @@ let p_taxon_id   = winurlparams.get('taxon_id') || '';
 babies.delete('id');
 babies.delete('project_id');
 babies.delete('taxon_id');
+babies.delete('obs_id');
 
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of babies.entries()) {
@@ -290,14 +291,7 @@ function fresultsBabies(xobj) {
          let wild = '';
 
          let icon = '<div style="display:flex; align-items:center;"><img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
-         if( rec.taxon ){
-             if( rec.taxon.preferred_common_name !== '' ){
-                 header_row += ((rec.taxon.preferred_common_name||''));
-             }
-         }
  
-         faddelem('h2',document.body,{innerHTML:icon+'<span style="padding:10px;">'+header_row+'</span></div>'});  
-
          // donor table
          let d_table = faddelem('table',document.body,{id:'main'});
          let d_thead = faddelem('thead',d_table);
@@ -319,7 +313,7 @@ function fresultsBabies(xobj) {
          let d_row1  = faddelem('tr',d_tbody);
          let d_one = [
                           {innerHTML:user_icon+'<span style="padding-left:10px;">' + furl(root_people+rec.user.login,rec.user.login)+'</span></div>'},
-                          {innerText:rec.id},
+                          {innerText:icon+' '+rec.id},
                        ];        
         console.log('hsadfsadfas');
          faddelems('td',d_row1, d_one);
