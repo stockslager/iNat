@@ -78,12 +78,12 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let babies       = new URLSearchParams(winurlsearchstr.substring(1));
 
 let p_project_id = winurlparams.get('project_id') || '';
 let p_obs_id     = winurlparams.get('obs_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 
-let babies = winurlparams;
 babies.delete('id');
 babies.delete('project_id');
 babies.delete('taxon_id');
