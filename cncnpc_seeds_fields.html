@@ -364,6 +364,7 @@ async function asyncGetData(){
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
       });
+      console.log('url: '+apibabiesurl);
       await fetch(apibabiesurl)
       .then((response) => {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
