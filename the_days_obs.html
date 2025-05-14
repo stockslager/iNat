@@ -55,7 +55,7 @@
    .icon { height:48px; width:48px; border-radius:50%; }
    .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
    .flowericon { padding-left:5%; font-size:14px; white-space: nowrap; font-style:normal; }
-   .photo { height:54px; width:54px; border-radius: 5px 5px 5px 5px; }
+   .photo { height:375px; width:375px; border-radius: 5px 5px 5px 5px; }
    img { margin:0; padding:0; border:0; }
    p { width:fit-content; min-width:375px; }
    a { text-decoration:none; color:var(--color-text-link); }
@@ -112,21 +112,8 @@ function fresults(xobj) {
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
 
-      labels = [
-            {innerText:' '},
-      ];
-
-      let table = faddelem('table',document.body,{id:'main'});                    
-      let thead = faddelem('thead',table);
-      let hrow = faddelem('tr',thead);
-      
-      faddelems('th',hrow,labels);
-      let tbody = faddelem('tbody',table);
-
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
-
-         let brow = faddelem('tr',tbody);
 
          if( rec.taxon ){
              tax_id = rec.taxon.id;
@@ -134,11 +121,7 @@ function fresults(xobj) {
              pref_tax_name = rec.taxon.preferred_common_name || '';
          }
 
-         let values = [
-                  {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  ];
-
-         faddelems('td',brow,values);
+         faddelem('p', document.body, {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')});
       };
 
       // buttons to go to prev or next page
