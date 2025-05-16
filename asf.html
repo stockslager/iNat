@@ -115,13 +115,13 @@ function fresults(xobj) {
              wild = (rec.quality_grade + ' (wild)');
              for( let i=0; i<rec.outlinks.length; i++ ){
                   if( rec.outlinks[i].source === 'GBIF' ){
-                      wild = furl(rec.outlinks[i].url, (rec.quality_grade + ' (wild)'));
+                      wild = furl(rec.outlinks[i].url, ('wild - (naturally occurring)'));
                   } 
              }
          } else if( rec.quality_grade === 'casual' ){
-             wild = (rec.quality_grade + ' (cultivated)');
+             wild = ('cultivated');
          } else {
-             wild = rec.quality_grade;
+             wild = 'wild - (naturally occurring)';
          }
 
          // seed info
@@ -219,7 +219,7 @@ function fresults(xobj) {
                                if( rec.ofvs[j].field_id === 18295 ) {
                                    avail_field = [
                                      {innerText:nm.toLowerCase()},
-                                     {innerHTML:'<div style="display:flex; align-items:center;">&#128994;'+value.toLowerCase()+'</div>'},
+                                     {innerHTML:'<div style="display:flex; align-items:center; font-size:28px;">&#128994;<span style="padding-left:10px;">'+value.toLowerCase()+'</span></div>'},
                                    ];
                                } else {
                                    qty_field = [
