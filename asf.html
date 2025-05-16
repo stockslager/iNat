@@ -168,7 +168,7 @@ function fresults(xobj) {
 
                if( p_custom === 'yes' ) {
                    if( rec.ofvs[j].value ) {
-                       let brow  = faddelem('tr',tbody);
+                       //let brow  = faddelem('tr',tbody);
                        let nm    = rec.ofvs[j].name || '';
                        let value = rec.ofvs[j].value || '';
                        let obs_field = [];
@@ -189,7 +189,7 @@ function fresults(xobj) {
                              {innerHTML:value.toLowerCase()},
                        ];        
                        
-                       faddelems('td',brow, obs_field);
+                       //faddelems('td',brow, obs_field);
                    }
                } else {
                    if( rec.ofvs[j].field_id === 18295 ||   // availability
@@ -198,7 +198,7 @@ function fresults(xobj) {
                        rec.ofvs[j].field_id === 17434 ||   // seed swap
                        rec.ofvs[j].field_id === 19197 ){   // usda symbol
                        if( rec.ofvs[j].value ){
-                           let brow  = faddelem('tr',tbody);
+                           //let brow  = faddelem('tr',tbody);
                            let nm    = rec.ofvs[j].name || '';
                            let value = rec.ofvs[j].value || ' ';
                            let obs_field = [];
@@ -216,9 +216,7 @@ function fresults(xobj) {
 
                            if( rec.ofvs[j].field_id === 17234   ||    // qty avail
                                rec.ofvs[j].field_id === 18295 ) {     // availability
-                             console.log('one');
                                if( rec.ofvs[j].field_id === 18295 ) {
-                                 console.log('two');
                                    avail_field = [
                                      {innerText:nm.toLowerCase()},
                                      {innerHTML:'<div style="display:flex; align-items:center;">&#128994;'+value.toLowerCase()+'</div>'},
@@ -236,7 +234,7 @@ function fresults(xobj) {
                                ];
                            }                         
 
-                           faddelems('td',brow, obs_field);
+                           //faddelems('td',brow, obs_field);
                        }
                    }
                }
@@ -244,7 +242,6 @@ function fresults(xobj) {
          }
         
          // seed info
-         console.log('avail_field: '+avail_field);
          let s_row1 = faddelem('tr',s_tbody);
          faddelems('td',s_row1, avail_field);
 
