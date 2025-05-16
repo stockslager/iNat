@@ -12,6 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="Seeds" />
 <link rel="manifest" href="site.webmanifest" />
 <script type="text/javascript" src='common_func.js'> </script>
+<script type="text/javascript" src='nav_bar.js'> </script>
 <title>Seed Availability</title>
 <style>
    :root { 
@@ -73,7 +74,6 @@
 
 <body>
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v7.js"></script>
-<!-- <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>-->
 <script>
   
 let winurlstr = window.location.href;
@@ -119,9 +119,25 @@ if( p_obs_id ){
   
 let p_custom     = 'no';
 let p_strip_html = 'yes';
+
+function buildMenu() {
+      let icons = '';
+      let menu_string = '';
+      let params = ('bugs_on_plants2.html'+proj+user+seed_param+leaf_params+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu+'&menu='+p_menu);
+      let links = '';
+  
+      menu_string = '<div class="navbar">';
+      menu_string += buildDD('Descendants', links);
+
+      menu_string += ('<div id="home">'+furl(github_root+'cncnpc_seeds.html?project_id='+p_project_id,'&#127807;')+'</div></div>');
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
   
 function fresults(xobj) {
    let results = xobj.results;
+
+   buildMenu();
+  
    if (results) {
       let total_results = xobj.total_results;
                
