@@ -58,10 +58,6 @@ function buildDD( name, content ) {
   return( dd );
 }
 
-function buildURL( url ) {
+function buildHome( url ) {
    return ('<div id="home">'+url+'</div>');
-}
-
-function buildTitle( title ) {
-   return ('<div id=menu_title>'+title+'</div>');
 }
