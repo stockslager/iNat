@@ -290,97 +290,23 @@ var apiurl = apiurlbase+'?'+winurlparams.toString();
 
 document.title = title.toLowerCase();
 
-function buildLifeStageMenu(data) {
+function buildMenu() {
+      let menu_string = '';
+      let links = '';
 
-   let cache_key = ('project_id='+p_project_id+'taxon_id='+p_taxon_id+'field='+field);
+      links += furl(github_root+'descendants_grid.html?field:parent+colony='+p_obs_id,"Grid");
+      links += furl(github_root+'descendants_grid.html?field:parent+colony='+p_obs_id,"List");
+      links += furl(github_root+'descendants_grid.html?field:parent+colony='+p_obs_id,"Map");
+  
+      menu_string = '<div class="navbar">';
+      menu_string += buildDD('Descendants', links);
 
-   let life_stage_urls = '';
-   
-   if( p_cache_check === 'yes' ) {
-       if( sessionStorage.getItem(cache_key) ) {
-           console.log('found cache..: '+cache_key+'==='+sessionStorage.getItem(cache_key));
-           life_stage_urls = sessionStorage.getItem(cache_key);
-       }
-   }
-   
-   let life_stage_menu = '<div class="dropdown">' +
-                           '<button class="dropbtn">' +
-                              p_life +
-                              '<i class="fa fa-caret-down"></i>' +
-                           '</button>' +
-                           '<div class="dropdown-content">';
-   if( !life_stage_urls ) {
-       // all should always appear...
-       life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=&cache_check=yes','All');
-   
-       if( annotations_array.includes(2) ){      // adult
-           life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Adults&term_id=1&term_value_id=2&cache_check=yes','Adults');
-       }
-       if( annotations_array.includes(3) ){      // teneral
-           life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Teneral&term_id=1&term_value_id=3&cache_check=yes','Teneral');
-       }
-       if( annotations_array.includes(4) ) {    // pupa
-           life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Pupa&term_id=1&term_value_id=4&cache_check=yes','Pupa');
-       }
-       if( annotations_array.includes(5) ) {    // nymph
-           life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Nymph&term_id=1&term_value_id=5&cache_check=yes','Nymph');
-       }
-       if( annotations_array.includes(6) ){      // larva.
-           life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Larva&term_id=1&term_value_id=6&cache_check=yes','Larva');
-       }
-       if( annotations_array.includes(7) ) {    // egg
-           life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Egg&term_id=1&term_value_id=7&cache_check=yes','Egg');
-       }
-       if( annotations_array.includes(8) ) {    // juvenile
-           life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Juvenile&term_id=1&term_value_id=8&cache_check=yes','Juvenile');
-       }
-       if( annotations_array.includes(16) ) {    // subimago
-           life_stage_urls += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Subimago&term_id=1&term_value_id=16&cache_check=yes','Subimago');
-       }
-       sessionStorage.setItem(cache_key, life_stage_urls);
-   }
-
-   life_stage_menu += life_stage_urls;
-   life_stage_menu += '</div></div>';
-   
-   return life_stage_menu;
-}
-
-function buildMenu(data) {
-   
-  for( let j=0; j<data.results.length; j++ ) {
-       checkForAnnotations(data.results[j]);
-  }
-
-  if( p_seed_project ) {
-      faddelem('p',document.body,{innerHTML:('<div class="navbar">' + buildLifeStageMenu(data) + 
-                                                       '<div id="home">'+furl(github_root+'cncnpc_seeds.html?project_id='+p_seed_project,'&#127807;')+'</div>' +
-                                              '</div>')});  
-  } else {
-      faddelem('p',document.body,{innerHTML:('<div class="navbar">' + buildLifeStageMenu(data) + 
-                                                       '<div id="home">'+furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div>' +
-                                              '</div>')});  
-  }
-}
-
-function checkForAnnotations( obs ){
-   if( obs.annotations ) {
-       for( let i=0; i<obs.annotations.length; i++ ) {
-            // eventually this hard coding would need to be removed.
-            // it should call the get_observations_popular_field_values on page load
-            // and store the results in session for use when the menu is clicked.
-            // replace session on re-load of page.
-            if( obs.annotations[i].controlled_attribute_id === 1 ) {   // life stage
-                if( !annotations_array.includes(obs.annotations[i].controlled_value_id) ) {
-                    annotations_array.push(obs.annotations[i].controlled_value_id);
-                }
-            }
-       }
-   }
+      menu_string += ('<div id="home">'+furl(github_root+'cncnpc_seeds.html?project_id='+p_project_id,'&#127807;')+'</div></div>');
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
   
 function fresults(data) {  
-   buildMenu(data);
+   buildMenu();
    buildGrid(data);
 };
 
