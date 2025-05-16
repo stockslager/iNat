@@ -43,6 +43,8 @@ function truncate(str, maxLength) {
 function stripHtml(html) {
   return html.replace(/<[^>]*>/g, '');
 }
+
+// functions for menu bar
 function buildDD( name, content ) {
   let dd = '<div class="dropdown">' +
                  '<button class="dropbtn">' + name +
@@ -54,4 +56,12 @@ function buildDD( name, content ) {
            '</div>';
 
   return( dd );
+}
+
+function buildURL( url ) {
+   return ('<div id="home">'+url+'</div>');
+}
+
+function buildTitle( title ) {
+   return ('<div id=menu_title>+title+</div>);
 }
