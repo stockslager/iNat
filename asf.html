@@ -276,10 +276,26 @@ function fresults(xobj) {
          faddelem('p',document.body,{innerText:' '});
 
          if( rec.description ){
-             faddelem('p',document.body,{innerHTML:'<dl>'
+             // set up donor info table
+             let d_table = faddelem('table',document.body,{id:'main'});
+             let d_thead = faddelem('thead',d_table);
+             let d_hrow = faddelem('tr',d_thead);
+
+             let d_labels = [ {innerText:'Donor Colony Notes'}, ];
+
+             faddelems('th',d_hrow,d_labels);
+             let d_tbody = faddelem('tbody',d_table);
+
+             let d_row1     = faddelem('tr',s_tbody);
+             let s_one    = [   
+                             {innerText:rec.description},
+                            ];        
+             faddelems('td',s_row1, s_one);
+           
+             /*faddelem('p',document.body,{innerHTML:'<dl>'
                             + '<dt></dt><span id="key"><dd>Notes ~ </dd></span>'
                             + '<dt></dt><dd>'+rec.description.toLowerCase()+'</dd>'
-                            + '</dl>'});       
+                            + '</dl>'});    */   
          }
       };    
    }
