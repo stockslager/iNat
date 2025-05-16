@@ -91,3 +91,16 @@
 }
 
 </style>
+
+function buildDD( name, content ) {
+  let dd = '<div class="dropdown">' +
+                 '<button class="dropbtn">' + name +
+                    '<i class="fa fa-caret-down"></i>' +
+                 '</button>' +
+                    '<div class="dropdown-content">' +
+                          content +
+                    '</div>' +
+           '</div>';
+
+  return( dd );
+}
