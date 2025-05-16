@@ -63,5 +63,5 @@ function buildURL( url ) {
 }
 
 function buildTitle( title ) {
-   return ('<div id=menu_title>+title+</div>);
+   return ('<div id=menu_title>'+title+'</div>');
 }
