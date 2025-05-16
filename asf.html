@@ -124,17 +124,20 @@ function fresults(xobj) {
              wild = rec.quality_grade;
          }
 
-         // set up donor info table
-         let d_table = faddelem('table',document.body,{id:'main'});
-         let d_thead = faddelem('thead',d_table);
-         let d_hrow = faddelem('tr',d_thead);
+         // set up seed info table
+         // seed info
+         let s_table = faddelem('table',document.body,{id:'main'});
+         let s_thead = faddelem('thead',s_table);
+         let s_hrow = faddelem('tr',s_thead);
 
-         let d_labels = [ {innerText:'Donor Info'},
+         let s_labels = [ {innerText:'Seed Info'},
                          { innerText:' '}, ];
 
-         faddelems('th',d_hrow,d_labels);
-         let d_tbody = faddelem('tbody',d_table);
+         faddelems('th',s_hrow,s_labels);
+         let s_tbody = faddelem('tbody',s_table);
 
+         faddelem('p',document.body,{innerText:' '});
+        
          // set up observation fields table
          let table = faddelem('table',document.body,{id:'main'});
          let thead = faddelem('thead',table);
@@ -148,17 +151,18 @@ function fresults(xobj) {
 
          let tbody = faddelem('tbody',table);
 
-         // set up seed info table
-         // seed info
-         let s_table = faddelem('table',document.body,{id:'main'});
-         let s_thead = faddelem('thead',s_table);
-         let s_hrow = faddelem('tr',s_thead);
+         faddelem('p',document.body,{innerText:' '});
 
-         let s_labels = [ {innerText:'Seed Info'},
+         // set up donor info table
+         let d_table = faddelem('table',document.body,{id:'main'});
+         let d_thead = faddelem('thead',d_table);
+         let d_hrow = faddelem('tr',d_thead);
+
+         let d_labels = [ {innerText:'Donor Info'},
                          { innerText:' '}, ];
 
-         faddelems('th',s_hrow,s_labels);
-         let s_tbody = faddelem('tbody',s_table);
+         faddelems('th',d_hrow,d_labels);
+         let d_tbody = faddelem('tbody',d_table);
 
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
@@ -237,7 +241,7 @@ function fresults(xobj) {
                }
             }
          }
-
+        
          // seed info
          let s_row1 = faddelem('tr',s_tbody);
          faddelems('td',s_row1, avail_field);
@@ -249,9 +253,7 @@ function fresults(xobj) {
          let s_three    = [     {innerText:'quality grade'},
                                 {innerHTML:wild},];        
          faddelems('td',s_row3, s_three);
-        
-         faddelem('p',document.body,{innerText:' '});
-     
+             
          // donor info
          let d_row1  = faddelem('tr',d_tbody);
          let d_one = [
