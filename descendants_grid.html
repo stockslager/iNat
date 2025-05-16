@@ -264,10 +264,12 @@ for (const [key, value] of winurlparams.entries()) {
 // find key/value pair for &field: param if one was passed in
 let field = '';
 let opts = '';
+let p_obs_id = '';
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
       opts += ('&'+key+'='+value);
       field = ('&'+key+'='+value);
+      p_obs_id = value;
   }
 }   
 
