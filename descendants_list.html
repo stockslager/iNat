@@ -44,13 +44,8 @@ for (const [key, value] of winurlparams.entries()) {
 winurlparams.delete('per_page');
 winurlparams.append('per_page','30');
 
-let apiurl = '';
-let apibase = '';
-
-if( p_obs_id ){
-    apibase = 'https://api.inaturalist.org/v1/observations';
-    apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-}
+let apibase = 'https://api.inaturalist.org/v1/observations';
+let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
   
 let p_custom     = 'no';
 let p_strip_html = 'yes';
