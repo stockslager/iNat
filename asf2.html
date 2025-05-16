@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />   
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Seed Availability" /> 
+<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="stylesheet" type="text/css" href="seed_library.css" />
+<meta name="apple-mobile-web-app-title" content="Seeds" />
+<link rel="manifest" href="site.webmanifest" />
+<script type="text/javascript" src='common_func.js'> </script>
+<title>Seed Availability</title>
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v7.js"></script>
+<script>
+  
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let babies       = new URLSearchParams(winurlsearchstr.substring(1));
+
+let p_project_id = winurlparams.get('project_id') || '';
+let p_obs_id     = winurlparams.get('obs_id') || '';
+let p_taxon_id   = winurlparams.get('taxon_id') || '';
+
+babies.delete('id');
+babies.delete('project_id');
+babies.delete('taxon_id');
+babies.delete('obs_id');
+
+// find key/value pair for &field: param if one was passed in
+for (const [key, value] of babies.entries()) {
+  if( key.startsWith('field') ){
+      babies.delete(key);
+  }
+}  
+babies.append('field:parent+colony', p_obs_id);
+let opts = '?field:parent+colony='+p_obs_id;
+  
+// set id to the obs_id passed in for call to api...
+winurlparams.delete('id');
+winurlparams.append('id', p_obs_id);
+
+winurlparams.delete('per_page');
+winurlparams.append('per_page','30');
+
+let apiurl = ('https://api.inaturalist.org/v1/observations?project_id='+p_project_id+'&id='+p_obs_id+'&taxon_id='+p_taxon_id);
+let apibabiesurl = '';
+let apibabiesbase = '';
+
+if( p_obs_id ){
+    apiurl    = ('https://api.inaturalist.org/v1/observations/'+p_obs_id);
+    apibabiesbase = 'https://api.inaturalist.org/v1/observations';
+    apibabiesurl = apibabiesbase+((babies!='')?('?'+babies):'');
+}
+  
+let p_custom     = 'no';
+let p_strip_html = 'yes';
+
+function buildMenu() {
+      let menu_string = '';
+      let links = '';
+
+      links += furl(github_root+'descendants_grid.html?field:parent+colony='+p_obs_id,"Grid");
+      links += furl(github_root+'descendants_list.html?field:parent+colony='+p_obs_id,"List");
+      links += furl(github_root+'descendants_grid.html?field:parent+colony='+p_obs_id,"Map");
+  
+      menu_string = '<div class="navbar">';
+      menu_string += buildDD('Descendants', links);
+
+      menu_string += buildHome(furl(github_root+'cncnpc_seeds.html?project_id='+p_project_id,'&#127807;'));
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+  
+function fresults(xobj) {
+   let results = xobj.results;
+
+   buildMenu();
+  
+   if (results) {
+      let total_results = xobj.total_results;
+               
+      for (let i=0; i<results.length; i++) {
+         let rec = results[i];
+         let availability = 'Out of Stock';
+         let header_row = '';
+         let wild = '';
+
+         let icon = '<div style="display:flex; align-items:center;"><img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
+         if( rec.taxon ){
+             if( rec.taxon.preferred_common_name !== '' ){
+                 header_row += ((rec.taxon.preferred_common_name||''));
+             }
+         }
+
+         let avail_dot = '<span id="toprightbold"><div style="display:flex; align-items:center;"><span class="earth">&#128994;</span>');
+         lib_title = avail_dot+availability+'</div></span>';
+ 
+         faddelem('h2',document.body,{innerHTML:icon+'<span style="padding:10px;">'+header_row+'</span></div>'});  
+
+         let user_icon = rec.user.icon || '';
+         if( user_icon === '' ){
+            user_icon += '<div style="display:flex; align-items:center;">&#x1F464;';
+            //user_icon += '<div class="npcicon">&#x1F464;</div>';
+         } else {
+            user_icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+user_icon+'" />';
+         }
+
+         if( rec.quality_grade === 'research' ) {
+             wild = (rec.quality_grade + ' (wild)');
+             for( let i=0; i<rec.outlinks.length; i++ ){
+                  if( rec.outlinks[i].source === 'GBIF' ){
+                      wild = furl(rec.outlinks[i].url, (rec.quality_grade + ' (wild)'));
+                  } 
+             }
+         } else if( rec.quality_grade === 'casual' ){
+             wild = (rec.quality_grade + ' (cultivated)');
+         } else {
+             wild = rec.quality_grade;
+         }
+
+         faddelem('p',document.body,{innerHTML:('donor name......: '+user_icon+'<span style="padding-left:10px;">' + furl(root_people+rec.user.login,rec.user.login)+'</span></div>')});
+         faddelem('p',document.body,{innerHTML:('quality grade...: '+wild)});
+         faddelem('p',document.body,{innerHTML:('inat observation: '+furl(root_observations+rec.id,rec.id))+lib_title});
+         faddelem('p',document.body,{innerText:' '});
+
+         let table = faddelem('table',document.body,{id:'main'});
+         let thead = faddelem('thead',table);
+         let hrow = faddelem('tr',thead);
+
+         let labels = [ {innerText:'Observation Field'},
+                       {innerText:'Value'},
+                      ];
+
+         faddelems('th',hrow,labels);
+
+         let tbody = faddelem('tbody',table);
+       
+         if(rec.ofvs&&rec.ofvs.length>0){
+            for (let j=0; j<rec.ofvs.length; j++){
+
+               if( p_custom === 'yes' ) {
+                   if( rec.ofvs[j].value ) {
+                       let brow  = faddelem('tr',tbody);
+                       let nm    = rec.ofvs[j].name || '';
+                       let value = rec.ofvs[j].value || '';
+                       let avail = [];
+
+                       if( p_strip_html === 'yes' ){
+                           value = stripHtml(value);
+                       }
+
+                       if( rec.ofvs[j].field_id === 19197 ){
+                           value = furl(root_usda+rec.ofvs[j].value,rec.ofvs[j].value);
+                       }
+                       if( rec.ofvs[j].field_id === 19198 ){
+                           value = furl(root_missouri+rec.ofvs[j].value,rec.ofvs[j].value);
+                       }
+                       
+                       avail = [
+                             {innerText:nm.toLowerCase()},
+                             {innerHTML:value.toLowerCase()},
+                       ];        
+                       
+                       faddelems('td',brow, avail);
+                   }
+               } else {
+                   if( rec.ofvs[j].field_id === 17234 ||   // quantity available
+                       rec.ofvs[j].field_id === 18298 ||   // seed hub location and pickup info
+                       rec.ofvs[j].field_id === 17434 ||   // seed swap
+                       rec.ofvs[j].field_id === 19197 ){   // usda symbol
+                       if( rec.ofvs[j].value ){
+                           let brow  = faddelem('tr',tbody);
+                           let nm    = rec.ofvs[j].name || '';
+                           let value = rec.ofvs[j].value || ' ';
+                           let avail = [];
+
+                           if( p_strip_html === 'yes' ){
+                               value = stripHtml(value);
+                           }
+
+                           if( rec.ofvs[j].field_id === 19197 ){
+                               value = furl(root_usda+rec.ofvs[j].value,rec.ofvs[j].value);
+                           }
+                           if( rec.ofvs[j].field_id === 19198 ){
+                               value = furl(root_missouri+rec.ofvs[j].value,rec.ofvs[j].value);
+                           }
+
+                           avail = [
+                                 {innerText:nm.toLowerCase()},
+                                 {innerHTML:value.toLowerCase()},
+                           ];        
+
+                           faddelems('td',brow, avail);
+                       }
+                   }
+               }
+            }
+         }
+         
+         if( rec.description ){
+             faddelem('p',document.body,{innerHTML:'<dl>'
+                            + '<dt></dt><span id="key"><dd>Notes ~ </dd></span>'
+                            + '<dt></dt><dd>'+rec.description.toLowerCase()+'</dd>'
+                            + '</dl>'});       
+         }
+      };    
+   }
+};
+
+async function asyncGetData(){
+   await fetch('params.json')
+     .then(response => response.json())
+     .then(data => {
+       // Access your data here 
+       const pref   = data.prefs.find(item => item.seed_library_prj_id === p_project_id);
+       p_custom     = pref.custom_obs_fields; 
+       p_strip_html = pref.strip_html;
+       console.log(data);
+     })
+     .catch(error => {
+       console.error('Error fetching JSON:', error);
+   });
+
+   if( p_project_id === '' ){
+      let instructions = [
+         {innerHTML:'Invalid parameter list.  A project id is required.  Please add &project_id=xxxxxxxxx to the url.'},
+      ];
+      faddelems('p',document.body,instructions);
+   } else if (winurlsearchstr==='' || (p_obs_id === '' && p_taxon_id === '') ) {
+      let instructions = [
+         {innerHTML:'Invalid parameter list.  An observation id or taxon_id is required.  Please add &obs_id=xxxxxxxxx or &taxon_id=xxxxxx'},
+      ];
+      faddelems('p',document.body,instructions);
+   }
+   else {
+      await fetch(apiurl)
+      .then((response) => {
+         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+         return response.json();
+      })
+      .then((data) => { fresults(data); })
+      .catch((err) => {
+         console.error(err.message);
+         faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+      });
+   };
+}
+
+// need to pull resources from a json file to pass into an api
+// so needs to be asynchronous. 
+const request = async () => {
+   asyncGetData();
+}
+
+request()   
+  
+</script>
+</body>
+
+</html>
