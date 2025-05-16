@@ -24,26 +24,11 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let babies       = new URLSearchParams(winurlsearchstr.substring(1));
 
 let p_project_id = winurlparams.get('project_id') || '';
 let p_obs_id     = winurlparams.get('obs_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 
-babies.delete('id');
-babies.delete('project_id');
-babies.delete('taxon_id');
-babies.delete('obs_id');
-
-// find key/value pair for &field: param if one was passed in
-for (const [key, value] of babies.entries()) {
-  if( key.startsWith('field') ){
-      babies.delete(key);
-  }
-}  
-babies.append('field:parent+colony', p_obs_id);
-let opts = '?field:parent+colony='+p_obs_id;
-  
 // set id to the obs_id passed in for call to api...
 winurlparams.delete('id');
 winurlparams.append('id', p_obs_id);
@@ -52,13 +37,9 @@ winurlparams.delete('per_page');
 winurlparams.append('per_page','30');
 
 let apiurl = ('https://api.inaturalist.org/v1/observations?project_id='+p_project_id+'&id='+p_obs_id+'&taxon_id='+p_taxon_id);
-let apibabiesurl = '';
-let apibabiesbase = '';
 
 if( p_obs_id ){
     apiurl    = ('https://api.inaturalist.org/v1/observations/'+p_obs_id);
-    apibabiesbase = 'https://api.inaturalist.org/v1/observations';
-    apibabiesurl = apibabiesbase+((babies!='')?('?'+babies):'');
 }
   
 let p_custom     = 'no';
@@ -301,48 +282,6 @@ function fresults(xobj) {
    }
 };
 
-function fresultsBabies(xobj) {
-   let results = xobj.results;
-   if (results) {
-
-      if( results.length > 0 ) {
-          // descendants table
-          let d_table = faddelem('table',document.body,{id:'main'});
-          let d_thead = faddelem('thead',d_table);
-          let d_hrow = faddelem('tr',d_thead);
-          let header_row = '';
-
-          let map = furl(github_root+'cncnpc_map.html'+opts+'&centerlat=39.10445934350343&centerlng=-84.5196921535475&defaultzoom=9','<span class="earth">&#127758</span>');
-
-          let d_labels = [ {innerText:'Propagator'},
-                          {innerHTML:'<div style="display:flex; verticle-align:bottom;">Descendants '+map+'</div>'}, ];
-
-          faddelems('th',d_hrow,d_labels);
-          let d_tbody = faddelem('tbody',d_table);
-       
-          for( let i=0; i<results.length; i++) {
-               let rec = results[i];
-
-               let icon = '<div style="display:flex; align-items:center;"><img class="descendant" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
- 
-               let user_icon = rec.user.icon || '';
-               if( user_icon === '' ){
-                   user_icon = '<div style="display:flex; align-items:center;"><span class="npcicon">&#x1F464;</span><span style="padding-left:10px;">';
-               } else {
-                   user_icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+user_icon+'" /><span style="padding-left:10px;">';
-               }
-
-               let d_row1  = faddelem('tr',d_tbody);
-               let d_one = [
-                          {innerHTML:user_icon + furl(root_people+rec.user.login,rec.user.login)+'</span></div>'},
-                          {innerHTML:furl(root_observations+rec.id,(icon+'<span style="padding-left:10px;">'+rec.id+'</span></div>'))},
-                       ];        
-               faddelems('td',d_row1, d_one);
-          }
-      }  
-   }
-};
-
 async function asyncGetData(){
    await fetch('params.json')
      .then(response => response.json())
@@ -357,12 +296,8 @@ async function asyncGetData(){
        console.error('Error fetching JSON:', error);
    });
 
-   if( p_project_id === '' ){
-      let instructions = [
-         {innerHTML:'Invalid parameter list.  A project id is required.  Please add &project_id=xxxxxxxxx to the url.'},
-      ];
-      faddelems('p',document.body,instructions);
-   } else if (winurlsearchstr==='' || (p_obs_id === '' && p_taxon_id === '') ) {
+
+   if (winurlsearchstr==='' || p_obs_id === '' ) {
       let instructions = [
          {innerHTML:'Invalid parameter list.  An observation id or taxon_id is required.  Please add &obs_id=xxxxxxxxx or &taxon_id=xxxxxx'},
       ];
@@ -375,16 +310,6 @@ async function asyncGetData(){
          return response.json();
       })
       .then((data) => { fresults(data); })
-      .catch((err) => {
-         console.error(err.message);
-         faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-      });
-      await fetch(apibabiesurl)
-      .then((response) => {
-         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-         return response.json();
-      })
-      .then((data) => { fresultsBabies(data); })
       .catch((err) => {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
