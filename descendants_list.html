@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />   
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Descendants List" /> 
+<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="stylesheet" type="text/css" href="seed_library.css" />
+<meta name="apple-mobile-web-app-title" content="Seeds" />
+<link rel="manifest" href="site.webmanifest" />
+<script type="text/javascript" src='common_func.js'> </script>
+<title>Descendants List</title>
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v7.js"></script>
+<script>
+  
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+
+let p_project_id = winurlparams.get('project_id') || '';
+let p_obs_id     = winurlparams.get('obs_id') || '';
+
+winurlparams.delete('project_id');
+winurlparams.delete('obs_id');
+
+// find key/value pair for &field: param if one was passed in
+for (const [key, value] of winurlparams.entries()) {
+  if( key.startsWith('field') ){
+      winurlparams.delete(key);
+  }
+}  
+winurlparams.append('field:parent+colony', p_obs_id);
+let opts = '?field:parent+colony='+p_obs_id;
+  
+winurlparams.delete('per_page');
+winurlparams.append('per_page','30');
+
+let apiurl = '';
+let apibase = '';
+
+if( p_obs_id ){
+    apibase = 'https://api.inaturalist.org/v1/observations';
+    apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+}
+  
+let p_custom     = 'no';
+let p_strip_html = 'yes';
+
+function buildMenu() {
+      let menu_string = '';
+      let links = '';
+
+      links += furl(github_root+'descendants_grid.html?field:parent+colony='+p_obs_id,"Grid");
+      links += furl(github_root+'descendants_grid.html?field:parent+colony='+p_obs_id,"List");
+      links += furl(github_root+'descendants_grid.html?field:parent+colony='+p_obs_id,"Map");
+  
+      menu_string = '<div class="navbar">';
+      menu_string += buildDD('Descendants', links);
+
+      menu_string += buildHome(furl(github_root+'cncnpc_seeds.html?project_id='+p_project_id,'&#127807;'));
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+
+function fresults(xobj) {
+   let results = xobj.results;
+  
+   if( results ) {
+      if( results.length > 0 ) {
+
+          buildMenu();
+        
+          // descendants table
+          let d_table = faddelem('table',document.body,{id:'main'});
+          let d_thead = faddelem('thead',d_table);
+          let d_hrow = faddelem('tr',d_thead);
+          let header_row = '';
+
+          let map = furl(github_root+'cncnpc_map.html'+opts+'&centerlat=39.10445934350343&centerlng=-84.5196921535475&defaultzoom=9','<span class="earth">&#127758</span>');
+
+          let d_labels = [ {innerText:'Propagator'},
+                          {innerHTML:'<div style="display:flex; verticle-align:bottom;">Descendants '+map+'</div>'}, ];
+
+          faddelems('th',d_hrow,d_labels);
+          let d_tbody = faddelem('tbody',d_table);
+       
+          for( let i=0; i<results.length; i++) {
+               let rec = results[i];
+
+               let icon = '<div style="display:flex; align-items:center;"><img class="descendant" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
+ 
+               let user_icon = rec.user.icon || '';
+               if( user_icon === '' ){
+                   user_icon = '<div style="display:flex; align-items:center;"><span class="npcicon">&#x1F464;</span><span style="padding-left:10px;">';
+               } else {
+                   user_icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+user_icon+'" /><span style="padding-left:10px;">';
+               }
+
+               let d_row1  = faddelem('tr',d_tbody);
+               let d_one = [
+                          {innerHTML:user_icon + furl(root_people+rec.user.login,rec.user.login)+'</span></div>'},
+                          {innerHTML:furl(root_observations+rec.id,(icon+'<span style="padding-left:10px;">'+rec.id+'</span></div>'))},
+                       ];        
+               faddelems('td',d_row1, d_one);
+          }
+      }  
+   }
+};
+
+if( winurlsearchstr==='' || (p_obs_id === '' ) ) {
+    let instructions = [
+         {innerHTML:'Invalid parameter list.  An observation id or taxon_id is required.  Please add &obs_id=xxxxxxxxx or &taxon_id=xxxxxx'},
+      ];
+    faddelems('p',document.body,instructions);
+} else {
+    fetch(apiurl)
+      .then((response) => {
+         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+         return response.json();
+      })
+      .then((data) => { fresults(data); })
+      .catch((err) => {
+         console.error(err.message);
+         faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+      });
+   };
+}
+  
+</script>
+</body>
+
+</html>
