@@ -169,7 +169,7 @@ let p_project_id = winurlparams.get('project_id') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
 
 // params .json??????
-let p_iconic_taxa = winurlparams.get('iconic_taxa') || 'aves';
+winurlparams.append('iconic_taxa', 'aves');
 
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of winurlparams.entries()) {
@@ -275,7 +275,7 @@ function fresults(xobj) {
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
-   
+
 if( winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
     let instructions = [
          {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.  It will default to the "7623 - plant that the organism was found on" observation field if &obs_field=xxx is not passed in.'},
