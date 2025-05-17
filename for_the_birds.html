@@ -28,6 +28,7 @@ let p_user_id    = winurlparams.get('user_id') || '';
 winurlparams.append('iconic_taxa', 'aves');
 
 // find key/value pair for &field: param if one was passed in
+let p_field = '';  let p_field_value = '';
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
       p_field = key;
