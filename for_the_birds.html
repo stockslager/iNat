@@ -168,6 +168,9 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
 
+// params .json??????
+let p_iconic_taxa = winurlparams.get('iconic_taxa') || 'aves';
+
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
