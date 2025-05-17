@@ -45,26 +45,9 @@ if( p_obs_id ){
 let p_custom     = 'no';
 let p_strip_html = 'yes';
 
-function buildMenu() {
-      let menu_string = '';
-      let links = '';
-
-      links += furl(github_root+'descendants_grid.html?field:parent+colony='+p_obs_id,"Grid");
-      links += furl(github_root+'descendants_list.html?field:parent+colony='+p_obs_id,"List");
-      links += furl(github_root+'descendants_grid.html?field:parent+colony='+p_obs_id,"Map");
-  
-      menu_string = '<div class="navbar">';
-      menu_string += buildDD('Descendants', links);
-
-      menu_string += buildHome(furl(github_root+'cncnpc_seeds.html?project_id='+p_project_id,'&#127807;'));
-      faddelem('p',document.body,{innerHTML:(menu_string)});  
-}
-  
 function fresults(xobj) {
    let results = xobj.results;
 
-   //buildMenu();
-  
    if (results) {
       let total_results = xobj.total_results;
                
@@ -87,7 +70,6 @@ function fresults(xobj) {
          let user_icon = rec.user.icon || '';
          if( user_icon === '' ){
             user_icon += '<div style="display:flex; align-items:center;">&#x1F464;';
-            //user_icon += '<div class="npcicon">&#x1F464;</div>';
          } else {
             user_icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+user_icon+'" />';
          }
@@ -116,40 +98,13 @@ function fresults(xobj) {
          faddelems('th',s_hrow,s_labels);
          let s_tbody = faddelem('tbody',s_table);
 
-         faddelem('p',document.body,{innerText:' '});
-        
-         // set up observation fields table
-         /*let table = faddelem('table',document.body,{id:'main'});
-         let thead = faddelem('thead',table);
-         let hrow = faddelem('tr',thead);
-
-         let labels = [ {innerText:'Observation Field'},
-                       {innerText:'Value'},
-                      ];
-
-         faddelems('th',hrow,labels);
-
-         let tbody = faddelem('tbody',table);
-
-         faddelem('p',document.body,{innerText:' '});*/
-
-         // set up donor info table
-         /*let d_table = faddelem('table',document.body,{id:'main'});
-         let d_thead = faddelem('thead',d_table);
-         let d_hrow = faddelem('tr',d_thead);
-
-         let d_labels = [ {innerText:'Donor Info'},
-                         { innerText:' '}, ];
-
-         faddelems('th',d_hrow,d_labels);
-         let d_tbody = faddelem('tbody',d_table);*/
+         faddelem('p',document.body,{innerText:' '});        
 
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
 
                if( p_custom === 'yes' ) {
                    if( rec.ofvs[j].value ) {
-                       //let brow  = faddelem('tr',tbody);
                        let nm    = rec.ofvs[j].name || '';
                        let value = rec.ofvs[j].value || '';
                        let obs_field = [];
@@ -169,8 +124,6 @@ function fresults(xobj) {
                              {innerText:nm.toLowerCase()},
                              {innerHTML:value.toLowerCase()},
                        ];        
-                       
-                       //faddelems('td',brow, obs_field);
                    }
                } else {
                    if( rec.ofvs[j].field_id === 18295 ||   // availability
@@ -179,7 +132,6 @@ function fresults(xobj) {
                        rec.ofvs[j].field_id === 17434 ||   // seed swap
                        rec.ofvs[j].field_id === 19197 ){   // usda symbol
                        if( rec.ofvs[j].value ){
-                           //let brow  = faddelem('tr',tbody);
                            let nm    = rec.ofvs[j].name || '';
                            let value = rec.ofvs[j].value || ' ';
                            let obs_field = [];
@@ -214,8 +166,6 @@ function fresults(xobj) {
                                  {innerHTML:value.toLowerCase()},
                                ];
                            }                         
-
-                           //faddelems('td',brow, obs_field);
                        }
                    }
                }
@@ -237,24 +187,10 @@ function fresults(xobj) {
          let s_row4     = faddelem('tr',s_tbody);
          let s_four    = [   
                              {innerText:'donor'},
-                             {innerHTML:/*user_icon+'<span style="padding-left:10px;">' +*/ furl(root_people+rec.user.login,rec.user.login)/*+'</span></div>'*/},
+                             {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
                          ];        
          faddelems('td',s_row4, s_four);
              
-         // donor info
-         /*let d_row1  = faddelem('tr',d_tbody);
-         let d_one = [
-                             {innerText:'donor'},
-                             {innerHTML:user_icon+'<span style="padding-left:10px;">' + furl(root_people+rec.user.login,rec.user.login)+'</span></div>'},
-                       ];        
-         faddelems('td',d_row1, d_one);
-        
-         let d_row2 = faddelem('tr',d_tbody);
-         let d_two  = [     {innerText:'inat observation'},
-                             {innerHTML:furl(root_observations+rec.id,rec.id)},];        
-         faddelems('td',d_row2, d_two);*/
-
-         faddelem('p',document.body,{innerText:' '});
          faddelem('p',document.body,{innerText:' '});
 
          if( rec.description ){
@@ -274,11 +210,6 @@ function fresults(xobj) {
                                             furl(github_root+'descendants_grid.html?field:parent+colony='+p_obs_id,"Propagated Descendants from these Seeds")},
                             ];        
              faddelems('td',d_row1, d_one);
-           
-             /*faddelem('p',document.body,{innerHTML:'<dl>'
-                            + '<dt></dt><span id="key"><dd>Notes ~ </dd></span>'
-                            + '<dt></dt><dd>'+rec.description.toLowerCase()+'</dd>'
-                            + '</dl>'});    */   
          }
       };    
    }
