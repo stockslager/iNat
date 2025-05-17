@@ -57,6 +57,21 @@ function capitalizeWords(str) {
   }).join(' ');
 }
 
+function buildMenu() {
+      let menu_string = '';
+      let links = '';
+
+      links += furl(github_root+'descendants_grid.html?field:nest+box+or+artificial+hollow=',"All");
+      links += furl(github_root+'descendants_grid.html?field:eggs+present=yes',"Eggs");
+      links += furl(github_root+'descendants_grid.html?field:count=3',"Count = 3");
+  
+      menu_string = '<div class="navbar">';
+      menu_string += buildDD('Show', links);
+
+      //menu_string += ('<div id="home">'+furl(github_root+'cncnpc_seeds.html?project_id='+p_project_id,'&#127807;')+'</div></div>');
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+
 function fresults(xobj) {
    let results = xobj.results;
    let box_array = [];
@@ -68,6 +83,8 @@ function fresults(xobj) {
       let page_max = Math.ceil(total_results/per_page);
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
+
+      buildMenu();
 
       dlString = ('<span id="toprightbold">'+'For the Birds'+'</span>');
       
