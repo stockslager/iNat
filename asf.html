@@ -269,7 +269,9 @@ function fresults(xobj) {
 
              let d_row1     = faddelem('tr',d_tbody);
              let d_one    = [   
-                             {innerText:rec.description},
+                             {innerHTML:rec.description+<br> +
+                                            furl(github_root+'descendants_grid.html?field:parent+colony='+p_obs_id,"Propagated Descendants from these Seeds");
+},
                             ];        
              faddelems('td',d_row1, d_one);
            
