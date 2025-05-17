@@ -218,7 +218,9 @@ function fresults(xobj) {
              let d_row1     = faddelem('tr',d_tbody);
              let d_one    = [   
                              {innerHTML:rec.description + '<br><br>' +
-                                            furl(github_root+'descendants_grid.html?field:parent+colony='+p_obs_id,"Propagated Descendants from these Seeds")},
+                                            furl(github_root+'descendants_grid.html?field:parent+colony='+p_obs_id,"Propagated Descendants") + '<br><br>' +
+                                            furl(github_root+'descendants_list.html?field:parent+colony='+p_obs_id,"List of Propagators") + '<br><br>' + 
+                                            furl(github_root+'descendants_map.html?field:parant+colony='+p_obs_id, "Geographic Spread of Descendants")},
                              {innerText:''},
                             ];        
              faddelems('td',d_row1, d_one);
