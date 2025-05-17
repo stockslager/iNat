@@ -1,0 +1,198 @@
+<!DOCTYPE html> 
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Bird Grid" />
+<meta charset="utf-8">
+<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="stylesheet" type="text/css" href="seed_library.css" />
+<meta name="apple-mobile-web-app-title" content="Bugs" />
+<link rel="manifest" href="site.webmanifest" />
+<script type="text/javascript" src='common_func.js'> </script>
+<script type="text/javascript" src='observations_grid.js'> </script>
+<title>Bird Grid</title>
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
+
+<script>
+function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
+function famp(str) { return str.replace(/&/g,'&amp;'); };
+function fshorten(num) { return num<10000 ? num : num<1000000 ? (num/1000).toFixed(1)+'K' : (num/1000000).toFixed(1)+'M'; };
+function faddelem(etype,eparent=null,eattributes={}) {
+   var eobj = document.createElement(etype);
+   for (let [key,value] of Object.entries(eattributes)) {
+      if ( typeof value === 'object' && value !== null ) {
+         for (let [subkey,subvalue] of Object.entries(value)) { eobj[key][subkey] = subvalue; };
+      }
+      else { eobj[key] = value; };
+    };
+   if (eparent) { eparent.appendChild(eobj); };
+   return eobj;
+};
+function fdate(str,dateonly=false) {
+   str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
+   if (dateonly) { str = str.split(' ')[0]; }
+   else {
+      str = str.replace(/([+-]\d{2}\:?\d{2})/,' ($1)'); //puts parenthesis around time zone offset
+      str = str.replace(/z/i,' (+00:00)'); //replaces Z (case insensitve) with UTC
+      str = str.replace('+00:00','±00:00');
+   };
+   return str;
+};
+
+//get parameters from the url
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr);
+let p_project_id = winurlparams.get('project_id') || '';
+let p_taxon_id   = winurlparams.get('taxon_id') || '';
+var cellpx       = winurlparams.get('cellpx') || 122;
+var spacerpx     = winurlparams.get('spacerpx') || 4;
+var rows         = winurlparams.get('rows') || 30;
+var columns      = winurlparams.get('columns') || 3;
+let title        = winurlparams.get('title') || '';
+let p_action     = winurlparams.get('action') || '';
+let p_list       = winurlparams.get('list') || '';
+let p_tag_name   = winurlparams.get('tag_name') || '';
+let p_menu       = winurlparams.get('menu') || '';
+let p_cache_check = winurlparams.get('cache_check') || '';
+let p_behavior   = winurlparams.get('behavior') || 'Behavior';
+let p_life       = winurlparams.get('life') || 'Life Stage';
+let p_seed_project = winurlparams.get('seed_project') || '';
+let fish_story   = 'no';
+let story_param  = '';
+/*var cellpx = 300;
+var spacerpx = 3;
+var rows = 30;
+var columns = 3;*/
+
+let obs_field_array = [];
+let annotations_array = [];
+let ofvs_array = [];
+
+let seed_param = '';
+if( p_seed_project ) {
+    seed_param = '&seed_project='+p_seed_project;
+}
+
+let all_opts = '';
+for (const [key, value] of winurlparams.entries()) { 
+  if( key !== 'term_id' && key !== 'term_value_id' ) {
+      if( all_opts === '' ){
+          all_opts += "?";
+      } else {
+          all_opts += "&";
+      }
+      all_opts += key;
+      all_opts += "=";
+
+      if( key === 'page' ){
+          all_opts += '1';
+      } else {
+          all_opts += value;
+      }
+  }
+}   
+
+let all_except_life_stage = '';
+for (const [key, value] of winurlparams.entries()) { 
+  if( key !== 'life' && key !== 'term_id' && key !== 'term_value_id' ) {
+      if( all_except_life_stage === '' ){
+          all_except_life_stage += "?";
+      } else {
+          all_except_life_stage += "&";
+      }
+      all_except_life_stage += key;
+      all_except_life_stage += "=";
+
+      if( key === 'page' ){
+          all_except_life_stage += '1';
+      } else {
+          all_except_life_stage += value;
+      }
+  }
+}   
+   
+// if the user has selected a method, built the opt to pass to the
+// lifelist page.
+// find key/value pair for &field: param if one was passed in
+let field = '';
+let opts = '';
+let p_obs_id = '';
+for (const [key, value] of winurlparams.entries()) {
+  if( key.startsWith('field') ){
+      opts += ('&'+key+'='+value);
+      field = ('&'+key+'='+value);
+      p_obs_id = value;
+  }
+}   
+
+if( p_taxon_id ) {
+    opts      += ('&taxon_id='+p_taxon_id);
+}
+
+var recsmax = columns * rows - 1;
+
+winurlparams.delete('cellpx');
+winurlparams.delete('spacerpx');
+winurlparams.delete('rows');
+winurlparams.delete('columns');
+winurlparams.delete('title');
+var obsurlbase = 'https://www.inaturalist.org/observations';
+var obsurl = obsurlbase+'?'+winurlparams.toString();
+winurlparams.append('per_page',recsmax);
+var apiurlbase = 'https://api.inaturalist.org/v1/observations'
+var apiurl = apiurlbase+'?'+winurlparams.toString();
+
+document.title = title.toLowerCase();
+
+function buildMenu() {
+      let menu_string = '';
+      let links = '';
+
+      links += furl(github_root+'descendants_grid.html?field:parent+colony=',"Grid");
+      links += furl(github_root+'descendants_grid.html?field:parent+colony=',"List");
+      links += furl(github_root+'descendants_grid.html?field:parent+colony=',"Map");
+  
+      menu_string = '<div class="navbar">';
+      menu_string += buildDD('Show', links);
+
+      //menu_string += ('<div id="home">'+furl(github_root+'cncnpc_seeds.html?project_id='+p_project_id,'&#127807;')+'</div></div>');
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+  
+function fresults(data) {  
+   buildMenu();
+   buildGrid(data);
+};
+
+if (window.location.search==='') {
+   faddelem('p',document.body,{innerHTML:'This is a quick and dirty example of a widget to display iNaturalist observations in a grid. It is based on the '+furl('https://api.inaturalist.org/v1/docs/#!/Observations/get_observations','Observation Search API endpoint')+' and can accept any of the parameters for that endpoint. Additionally, it accepts 4 more parameters that will allow the grid to be customized: columns, rows, cellpx, and spacerpx.'});
+   faddelem('p',document.body,{innerHTML:'Suppose the address of this page is '+furl(winurlexsearchstr)+', and you want to see '+furl(famp(apiurlbase+'?taxon_id=3&place_id=9'),'birds in New Mexico')+' in a 3 (high) x 5 (wide) grid where each cell is 75px x 75px and where each cell is separated by a 2px spacer, then you would open '+furl(famp(winurlexsearchstr+'?rows=3&columns=5&cellpx=75&spacerpx=2&taxon_id=3&place_id=9'))+' in your browser.'});
+   faddelem('p',document.body,{innerHTML:'Note that the actual size of the image files is 75px x 75px. So setting the cellpx higher than 75 will make the images look blurry. Only the first photo in an observation will be shown, or else ❎ will be shown when an observation has no photos. The last cell in the grid will always be either a "no data" or "more" button. So a 3x5 grid will show only up to 14 observations.'});
+}
+else {
+   fetch(apiurl)
+      .then((response) => {
+         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+         return response.json();
+      })
+      .then((data) => { fresults(data); })
+      .catch((err) => {
+         console.error(err.message);
+         faddelem('p',document.body,{innerHTML:'There was a problem retrieving data. Error '+err.message+'.'})
+      });
+};
+
+</script>
+</body>
+
+</html>
