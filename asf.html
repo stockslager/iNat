@@ -75,7 +75,7 @@ function fresults(xobj) {
          let header_row = '';
          let wild = '';
 
-         let icon = '<div style="display:flex; align-items:center;"><img class="big_icon" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
+         let icon = '<div style="display:flex; align-items:center;"><img class="small_squircle" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
          if( rec.taxon ){
              if( rec.taxon.preferred_common_name !== '' ){
                  header_row += ((rec.taxon.preferred_common_name||''));
@@ -237,7 +237,7 @@ function fresults(xobj) {
          let s_row4     = faddelem('tr',s_tbody);
          let s_four    = [   
                              {innerText:'donor'},
-                             {innerHTML:user_icon+'<span style="padding-left:10px;">' + furl(root_people+rec.user.login,rec.user.login)+'</span></div>'},
+                             {innerHTML:/*user_icon+'<span style="padding-left:10px;">' +*/ furl(root_people+rec.user.login,rec.user.login)/*+'</span></div>'*/},
                          ];        
          faddelems('td',s_row4, s_four);
              
