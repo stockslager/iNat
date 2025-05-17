@@ -85,7 +85,11 @@ function fresults(xobj) {
 
       buildMenu();
 
-      dlString = ('<span id="toprightbold">'+'Horizon Community Church'+'</span>');
+      if( p_project_id === 'horizon-community-church' || p_project_id === '157918' ) {
+          dlString = ('<span id="toprightbold">'+'Horizon Community Church'+'</span>');
+      } else {
+          dlString = ('<span id="toprightbold">'+'Cincinnati Re-Wild'+'</span>');
+      }
       
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
