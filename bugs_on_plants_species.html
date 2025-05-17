@@ -242,8 +242,9 @@ function fresults(xobj) {
 
       labels = [
             {innerText:'#'},
-            {innerText:'Photo'},
-            {innerText:'Name'}, 
+            {innerText:'Icon'},
+            {innerText:'Name'},
+            {innerText:''},
       ];
 
       let table = faddelem('table',document.body,{id:'main'});                    
@@ -294,10 +295,11 @@ function fresults(xobj) {
 
          let values = [
                   {innerText:i+1},
-                  {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                  {innerHTML:furl(root_observations+rec.id,'<img class="icon" src="'+tax_photo+'" />')},
                   {innerHTML:taxon},
+                  {innerText:rec.count||''},
                   ];
-
+       
          faddelems('td',brow,values);
       };
 
