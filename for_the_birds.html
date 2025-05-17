@@ -165,6 +165,8 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let p_project_id = winurlparams.get('project_id') || '';
+let p_user_id    = winurlparams.get('user_id') || '';
 
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of winurlparams.entries()) {
