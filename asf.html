@@ -63,7 +63,7 @@ function buildMenu() {
 function fresults(xobj) {
    let results = xobj.results;
 
-   buildMenu();
+   //buildMenu();
   
    if (results) {
       let total_results = xobj.total_results;
@@ -75,7 +75,7 @@ function fresults(xobj) {
          let header_row = '';
          let wild = '';
 
-         let icon = '<div style="display:flex; align-items:center;"><img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
+         let icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
          if( rec.taxon ){
              if( rec.taxon.preferred_common_name !== '' ){
                  header_row += ((rec.taxon.preferred_common_name||''));
