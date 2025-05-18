@@ -80,16 +80,16 @@ function fresults(xobj) {
          }
 
          if( rec.quality_grade === 'research' ) {
-             wild = (rec.quality_grade + ' (wild)');
+             wild = (rec.quality_grade + ' (Wild)');
              for( let i=0; i<rec.outlinks.length; i++ ){
                   if( rec.outlinks[i].source === 'GBIF' ){
-                      wild = furl(rec.outlinks[i].url, ('wild - (naturally occurring)'));
+                      wild = furl(rec.outlinks[i].url, ('Wild - (naturally occurring)'));
                   } 
              }
          } else if( rec.quality_grade === 'casual' ){
-             wild = ('cultivated');
+             wild = ('Cultivated');
          } else {
-             wild = 'wild - (naturally occurring)';
+             wild = 'Wild - (naturally occurring)';
          }
 
          // seed info
@@ -126,8 +126,8 @@ function fresults(xobj) {
                        }
                        
                        obs_field = [
-                             {innerText:nm.toLowerCase()},
-                             {innerHTML:value.toLowerCase()},
+                             {innerText:nm},
+                             {innerHTML:value},
                        ];        
                    }
                } else {
@@ -162,19 +162,19 @@ function fresults(xobj) {
                                    if( value.startsWith('Coming Soon') ) { dot = '&#128993;'; }
                                  
                                    avail_field = [
-                                         {innerText:nm.toLowerCase()},
+                                         {innerText:nm},
                                      {innerHTML:'<div style="display:flex; align-items:center; font-size:16px;">'+dot+'<span style="padding-left:10px; font-size:14px;">'+value+'</span></div>'},
                                    ];
                                } else {
                                    qty_field = [
-                                     {innerText:nm.toLowerCase()},
-                                     {innerHTML:value.toLowerCase()},
+                                     {innerText:nm},
+                                     {innerHTML:value},
                                    ];
                                }
                            } else {
                                obs_field = [
-                                 {innerText:nm.toLowerCase()},
-                                 {innerHTML:value.toLowerCase()},
+                                 {innerText:nm},
+                                 {innerHTML:value},
                                ];
                            }                         
                        }
@@ -191,13 +191,13 @@ function fresults(xobj) {
          faddelems('td',s_row2, qty_field);
         
          let s_row3     = faddelem('tr',s_tbody);
-         let s_three    = [     {innerText:'quality grade'},
+         let s_three    = [     {innerText:'Quality Grade'},
                                 {innerHTML:wild},];        
          faddelems('td',s_row3, s_three);
 
          let s_row4     = faddelem('tr',s_tbody);
          let s_four    = [   
-                             {innerText:'donor'},
+                             {innerText:'Donor'},
                              {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
                          ];        
          faddelems('td',s_row4, s_four);
