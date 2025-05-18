@@ -92,13 +92,13 @@ function fresults(xobj) {
           for( let i=0; i<results.length; i++) {
                let rec = results[i];
 
-               let icon = '<div style="display:flex; align-items:center;"><img class="descendant" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
+               let icon = '<div style="display:flex; align-items:center;"><img class="mini_photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
  
                let user_icon = rec.user.icon || '';
                if( user_icon === '' ){
                    user_icon = '<div style="display:flex; align-items:center;"><span class="npcicon">&#x1F464;</span><span style="padding-left:10px;">';
                } else {
-                   user_icon = '<div style="display:flex; align-items:center;"><img class="icon" src="'+user_icon+'" /><span style="padding-left:10px;">';
+                   user_icon = '<div style="display:flex; align-items:center;"><img class="mini_icon" src="'+user_icon+'" /><span style="padding-left:10px;">';
                }
 
                let d_row1  = faddelem('tr',d_tbody);
