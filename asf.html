@@ -25,24 +25,25 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let babies       = new URLSearchParams(winurlsearchstr.substring(1));
+let descendants  = new URLSearchParams(winurlsearchstr.substring(1));
 
 let p_project_id = winurlparams.get('project_id') || '';
 let p_obs_id     = winurlparams.get('obs_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 
-babies.delete('id');
-babies.delete('project_id');
-babies.delete('taxon_id');
-babies.delete('obs_id');
+let descendants_results = '';
+descendants.delete('id');
+descendants.delete('project_id');
+descendants.delete('taxon_id');
+descendants.delete('obs_id');
 
 // find key/value pair for &field: param if one was passed in
-for (const [key, value] of babies.entries()) {
+for (const [key, value] of descendants.entries()) {
   if( key.startsWith('field') ){
-      babies.delete(key);
+      descendants.delete(key);
   }
 }  
-babies.append('field:parent+colony', p_obs_id);
+descendants.append('field:parent+colony', p_obs_id);
 
 // for grid...
 var cellpx       = 122;
@@ -63,14 +64,13 @@ winurlparams.delete('per_page');
 winurlparams.append('per_page','30');
 
 let apiurl = ('https://api.inaturalist.org/v1/observations?project_id='+p_project_id+'&id='+p_obs_id+'&taxon_id='+p_taxon_id);
-let apibabiesurl = '';
-let apibabiesbase = '';
-let babies_exist = 'no';
+let apidescendantsurl = '';
+let apidescendantsbase = '';
 
 if( p_obs_id ){
     apiurl    = ('https://api.inaturalist.org/v1/observations/'+p_obs_id);
-    apibabiesbase = 'https://api.inaturalist.org/v1/observations';
-    apibabiesurl = apibabiesbase+((babies!='')?('?'+babies):'');
+    apidescendantsbase = 'https://api.inaturalist.org/v1/observations';
+    apidescendantsurl = apidescendantsbase+((descendants!='')?('?'+descendants):'');
 }
   
 let p_custom     = 'no';
@@ -235,7 +235,7 @@ function fresults(xobj) {
              
          faddelem('p',document.body,{innerText:' '});
 
-         if( rec.description || babies_exist === 'yes' ){
+         if( rec.description || descendants_results ){
              // set up donor info table
              let d_table = faddelem('table',document.body,{id:'main'});
              let d_thead = faddelem('thead',d_table);
@@ -249,28 +249,20 @@ function fresults(xobj) {
              let d_row1     = faddelem('tr',d_tbody);
              let d_one    = [   
                              {innerHTML:rec.description + '<br><br>' +
+                                            "Propagated Descendants" + '<br>' + buildGrid(descendants_results)},
+                             {innerText:''},
+                            ];        
+
+             /*let d_one    = [   
+                             {innerHTML:rec.description + '<br><br>' +
                                             furl(github_root+'descendants_grid.html?seed_project_id='+p_project_id+'&field:parent+colony='+p_obs_id,"Propagated Descendants") + '<br><br>' +
                                             furl(github_root+'descendants_list.html?seed_project_id='+p_project_id+'&field:parent+colony='+p_obs_id,"List of Propagators") + '<br><br>' + 
                                             furl(github_root+'descendants_map.html?field:parant+colony='+p_obs_id, "Geographic Spread of Descendants")},
                              {innerText:''},
-                            ];        
+                            ];     */   
              faddelems('td',d_row1, d_one);
          }
       };    
-   }
-};
-
-function fresultsBabies(xobj) {
-   
-   buildGrid(xobj);
-   let results = xobj.results;
-   if (results) {
-
-      // need to eventually cache these to pass to 
-      // the grid and list.
-      if( results.length > 0 ) {
-          babies_exist = 'yes';
-      }
    }
 };
 
@@ -296,12 +288,12 @@ async function asyncGetData(){
       faddelems('p',document.body,instructions);
    }
    else {
-      await fetch(apibabiesurl)
+      await fetch(apidescendantsurl)
       .then((response) => {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
       })
-      .then((data) => { fresultsBabies(data); })
+      .then((data) => { descendants_results = data; })
       .catch((err) => {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
@@ -312,7 +304,7 @@ async function asyncGetData(){
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
       })
-      .then((data) => { fresults(data); })
+      .then((data) => { fresults(data, descendants_results); })
       .catch((err) => {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
