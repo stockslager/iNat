@@ -30,7 +30,7 @@ let p_seed_prj   = winurlparams.get('seed_project_id') || '';
 
 winurlparams.delete('project_id');
 
-let opts = '';
+let opts = copyOpts( winurlparams ) || '';
 let field_id = '';
 let field_value = '';
 // find key/value pair for &field: param if one was passed in
@@ -38,7 +38,6 @@ for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
       field_id = key;
       field_value = value;
-      opts = '?'+key+'='+value;
   }
 }  
   
