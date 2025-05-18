@@ -100,8 +100,9 @@ function fresults(xobj) {
                  header_row += '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
              }
          }
- 
-         faddelem('p',document.body,{innerHTML:icon+'<span style="padding:10px;">'+header_row+'</span></div>'});  
+
+         let home_string = ('<div id="home">'+furl(github_root+'cncnpc_seeds.html?project_id='+p_seed_project,'&#127807;')+'</div></div>');
+         faddelem('p',document.body,{innerHTML:icon+'<span style="padding:10px;">'+header_row+'</span></div>'+home_string}); 
 
          let user_icon = rec.user.icon || '';
          if( user_icon === '' ){
