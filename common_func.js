@@ -42,7 +42,7 @@ function fdate(str,dateonly=false) {
       str = str.replace('+00:00','±00:00');
    };
    return str;
-};*/
+};
 function truncate(str, maxLength) {
   if (str.length <= maxLength) {
     return str;
