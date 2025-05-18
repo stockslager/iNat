@@ -94,7 +94,7 @@ function fresults(xobj) {
              pref_tax_name = rec.taxon.preferred_common_name || '';
          }
 
-         let icon = '<div style="display:flex; align-items:center;"><img class="mini_photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
+         let icon = '<div style="display:flex; align-items:center;"><img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />';
          if( rec.taxon ){
              if( rec.taxon.preferred_common_name !== '' ){
                  header_row += '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
@@ -147,6 +147,18 @@ function fresults(xobj) {
 
                        if( p_strip_html === 'yes' ){
                            value = stripHtml(value);
+                       }
+
+                       if( rec.ofvs[j].field_id === 18497 ) {  // seeds available in library
+
+                           let dot = '';
+                           if( value.startsWith('no')      { dot = '&#128308;'; }
+                           if( value.startsWith('yes') )   { dot = '&#128994;'; }
+                                 
+                           avail_field = [
+                                {innerText:nm},
+                                {innerHTML:'<div style="display:flex; align-items:center; font-size:16px;">'+dot+'<span style="padding-left:10px; font-size:14px;">'+value+'</span></div>'},
+                              ];
                        }
 
                        if( rec.ofvs[j].field_id === 19197 ){
