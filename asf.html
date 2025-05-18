@@ -250,6 +250,14 @@ function fresults(xobj) {
 };
 
 function fresultsBabies(xobj) {
+   
+   var cellpx       = winurlparams.get('cellpx') || 122;
+   var spacerpx     = winurlparams.get('spacerpx') || 4;
+   var rows         = winurlparams.get('rows') || 30;
+   var columns      = winurlparams.get('columns') || 3;
+   let title        = winurlparams.get('title') || '';
+   let p_action     = winurlparams.get('action') || '';
+   
    buildGrid(xobj);
    let results = xobj.results;
    if (results) {
