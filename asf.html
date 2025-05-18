@@ -235,7 +235,7 @@ function fresults(xobj) {
              
          faddelem('p',document.body,{innerText:' '});
 
-         if( rec.description || descendants_results ){
+         if( rec.description ){
              // set up donor info table
              let d_table = faddelem('table',document.body,{id:'main'});
              let d_thead = faddelem('thead',d_table);
@@ -248,8 +248,7 @@ function fresults(xobj) {
 
              let d_row1     = faddelem('tr',d_tbody);
              let d_one    = [   
-                             {innerHTML:rec.description + '<br><br>' +
-                                            "Propagated Descendants" + '<br>' + buildGrid(descendants_results)},
+                             {innerHTML:rec.description},
                              {innerText:''},
                             ];        
 
@@ -261,6 +260,10 @@ function fresults(xobj) {
                              {innerText:''},
                             ];     */   
              faddelems('td',d_row1, d_one);
+         }
+
+         if( descendants_results ){
+             buildGrid(descendants_results);
          }
       };    
    }
