@@ -37,24 +37,10 @@ var rows         = winurlparams.get('rows') || 30;
 var columns      = winurlparams.get('columns') || 3;
 let title        = winurlparams.get('title') || '';
 let p_action     = winurlparams.get('action') || '';
-/*let p_list       = winurlparams.get('list') || '';
-let p_tag_name   = winurlparams.get('tag_name') || '';
-let p_menu       = winurlparams.get('menu') || '';
-let p_cache_check = winurlparams.get('cache_check') || '';
-let p_behavior   = winurlparams.get('behavior') || 'Behavior';
-let p_life       = winurlparams.get('life') || 'Life Stage';
-let fish_story   = 'no';
-let story_param  = '';*/
 /*var cellpx = 300;
 var spacerpx = 3;
 var rows = 30;
 var columns = 3;*/
-
-/*let obs_field_array = [];
-let annotations_array = [];
-let ofvs_array = [];
-
-let seed_param = '';*/
 
 let all_opts = '';
 for (const [key, value] of winurlparams.entries()) { 
@@ -74,25 +60,6 @@ for (const [key, value] of winurlparams.entries()) {
       }
   }
 }   
-
-/*let all_except_life_stage = '';
-for (const [key, value] of winurlparams.entries()) { 
-  if( key !== 'life' && key !== 'term_id' && key !== 'term_value_id' ) {
-      if( all_except_life_stage === '' ){
-          all_except_life_stage += "?";
-      } else {
-          all_except_life_stage += "&";
-      }
-      all_except_life_stage += key;
-      all_except_life_stage += "=";
-
-      if( key === 'page' ){
-          all_except_life_stage += '1';
-      } else {
-          all_except_life_stage += value;
-      }
-  }
-}   */
    
 // if the user has selected a method, built the opt to pass to the
 // lifelist page.
