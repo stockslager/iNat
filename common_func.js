@@ -73,3 +73,23 @@ function buildDD( name, content ) {
 function buildHome( url ) {
    return ('<div id="home">'+url+'</div>');
 }
+function copyOpts( winurlparams ) {
+   let opts='';
+   // build param list for url's used in fresults
+   for( const [key, value] of winurlparams.entries() ) { 
+        if( opts === '' ){
+            opts += "?";
+        } else {
+            opts += "&";
+        }
+        opts += key;
+        opts += "=";
+
+        if( key === 'page' ){
+            opts += '1';
+        } else {
+            opts += value;
+        }
+   } 
+   return( opts );
+}
