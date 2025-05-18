@@ -33,6 +33,16 @@ function ffetch(url) {
    })
    .catch((err) => { console.error(err); });
 };
+function fdate(str,dateonly=false) {
+   str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
+   if (dateonly) { str = str.split(' ')[0]; }
+   else {
+      str = str.replace(/([+-]\d{2}\:?\d{2})/,' ($1)'); //puts parenthesis around time zone offset
+      str = str.replace(/z/i,' (+00:00)'); //replaces Z (case insensitve) with UTC
+      str = str.replace('+00:00','±00:00');
+   };
+   return str;
+};*/
 function truncate(str, maxLength) {
   if (str.length <= maxLength) {
     return str;
