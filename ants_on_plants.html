@@ -51,25 +51,11 @@ let opts = '';
 let obs_field_array = [];
 let seed_param = '';
 
+let opts = copyOpts( winurlparams ) || '';
+
 if( p_seed_project ) {
     opts += ('&seed_project='+p_seed_project);
     seed_param = '&seed_project='+p_seed_project;
-}
-
-if( p_list ) {
-    opts += ('&list='+p_list);
-}
-
-if( p_menu ) {
-    opts += ('&menu='+p_menu);
-}
-
-if( p_tag_name ) {
-    opts += ('&tag_name='+p_tag_name);
-}
-
-if( p_title ) {
-    opts += ('&title='+p_title);
 }
  
 if( p_omit_users !== '' ){
@@ -97,6 +83,13 @@ for (const [key, value] of winurlparams.entries()) {
       p_field_value = value;
   }
 }  
+
+if( p_title === '' ) {
+    tab_title = 'Ants on Plants';
+} else {
+    tab_title = (p_prefix+' '+p_title+' '+p_target_name);
+    document.title = tab_title;
+}
 
 winurlparams.delete('options');
 let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
@@ -142,32 +135,6 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let labels = [];
-      let dlString = '';
-      let proj = '';
-      let user = '';
-      if( p_project_id ) {
-          proj = ('?project_id='+p_project_id);
-          if( p_user_id ) {
-              proj += ('&user_id='+p_user_id);
-          }
-      } else {
-          user = ('?user_id='+p_user_id);
-      }
-
-      let leaf_params = '';
-      if( p_list ) {
-          leaf_params += ('&list='+p_list);
-      }
-      if( p_place_id ) {
-          leaf_params += ('&place_id='+p_place_id);
-      }
-
-      if( p_title === '' ) {
-          dlString = 'Ants on Plants';
-      } else {
-          dlString = (p_prefix+' '+p_title+' '+p_target_name);
-          document.title = dlString;
-      }
 
       let field_id = '';
       let field_name = '';
@@ -228,14 +195,14 @@ function fresults(xobj) {
       }
 
       if( !p_field_value ) {
-          dlString = furl(github_root+'bugs_on_plants_grid.html'+proj+user+seed_param+leaf_params+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&action='+p_title+'&menu='+p_menu+field_name,'<span id="topright">all organisms '+p_title+' any plant</span>');
+          tab_title = furl(github_root+'bugs_on_plants_grid.html'+opts+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&action='+p_title+'&menu='+p_menu+field_name,'<span id="topright">all organisms '+p_title+' any plant</span>');
       } else {
-          dlString = ('<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
+          tab_title = ('<span id="toprightbold">'+capitalizeWords(tab_title)+'</span>');
       }
     
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+dlString+'<br />'});  
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+tab_title+'<br />'});  
 
       labels = [
             {innerText:'#'},
@@ -292,7 +259,7 @@ function fresults(xobj) {
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html?'+query_params+opts+'&taxon_id='+rec.taxon.id+grid_title+field_name+p_target_id,displayName)},
+                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html?'+opts+'&taxon_id='+rec.taxon.id+grid_title+field_name+p_target_id,displayName)},
                   {innerText:rec.count||''},
                   ];
         
