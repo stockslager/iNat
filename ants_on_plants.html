@@ -46,7 +46,7 @@ let p_seed_project  = winurlparams.get('seed_project') || '';
 let p_taxon_nm      = winurlparams.get('taxon_nm') || 'Show';
 let p_field = '';
 let p_field_value = '';
-let obs_fields = [];
+let interactions = [];
 let obs_field_array = [];
 let seed_param = '';
 
@@ -138,12 +138,14 @@ function buildMenu() {
 
       links += furl(github_root+'ants_on_plants.html'+opts, 'All');
  
-      for( let i=0; i<obs_fields.length; i++ ) {
-           links += furl(github_root+'ants_on_plants.html'+opts+'&field:'+obs_fields[i].field_name, obs_fields[i].dd_name);
+      for( let i=0; i<interactions.length; i++ ) {
+           links += furl(github_root+'ants_on_plants.html'+opts+'&field:'+interactions[i].field_name, interactions[i].dd_name);
       }
 
       menu_string = '<div class="navbar">';
-      menu_string += buildDD('Obs Fields', links);
+      menu_string += buildDD('Interactions', links);
+
+      menu_string += furl(github_root+'ants_on_plants.html'+opts+'&field:undescribed+ant+name','Undescribed');
 
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
@@ -239,8 +241,8 @@ async function asyncGetData() {
      .then(response => response.json())
      .then(data => {
       // Access your data here 
-      for( let i=0; i<data.obs_fields.length; i++ ) {
-           obs_fields = data.obs_fields;
+      for( let i=0; i<data.interactions.length; i++ ) {
+           interactions = data.interactions;
       }
       console.log(data);
    })
