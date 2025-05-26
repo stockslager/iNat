@@ -155,17 +155,12 @@ let p_place_name = winurlparams.get('place_name') || '';
 let p_tname      = winurlparams.get('tname') || '';
 let p_place_id   = winurlparams.get('place_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
+let p_project_id = winurlparams.get('project_id') || '239695';
 
 // cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
 // session storage is only used for sorting of data in columns at this point.
 let p_cache_check = winurlparams.get('cache_check') || 'no';  
  
-// default the id's of the projects to be passed in to the projects api.
-winurlparams.delete('user_id');
-winurlparams.append('user_id', 'stockslager,lukeward6');
-
-let user_param = '?user_id=stockslager,lukeward6';
-
 // if the user has selected a method, built the opt to pass to the
 // lifelist page.
 let p_field_opt = '';
@@ -270,16 +265,16 @@ function sortWithNullObs(arr, ascending) {
 function fresults(result, places_obj, taxa_obj) {
 
       // places menu...
-      let places_menu = furl(github_root+'life_list_dashboard.html'+user_param+sort_opt+taxon_opt+p_field_opt,'All');
+      let places_menu = furl(github_root+'life_list_dashboard.html?project_id='+p_project_id+sort_opt+taxon_opt+p_field_opt,'All');
       for( let i=0; i<places_obj.places.length; i++ ) {
-           places_menu += furl(github_root+'life_list_dashboard.html'+user_param+sort_opt+taxon_opt+p_field_opt+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
+           places_menu += furl(github_root+'life_list_dashboard.html?project_id='+p_project_id+sort_opt+taxon_opt+p_field_opt+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
       }
       places_menu += furl(github_root+'life_list_places.html','Select Custom Place');
 
       // taxa menu...
-      let taxa_menu = furl(github_root+'life_list_dashboard.html'+user_param+sort_opt+place_opt+p_field_opt,'All');
+      let taxa_menu = furl(github_root+'life_list_dashboard.html?project_id='+p_project_id+sort_opt+place_opt+p_field_opt,'All');
       for( let i=0; i<taxa_obj.taxa.length; i++ ) {
-           taxa_menu += furl(github_root+'life_list_dashboard.html'+user_param+sort_opt+place_opt+p_field_opt+'&taxon_id='+taxa_obj.taxa[i].taxon_id+'&tname='+taxa_obj.taxa[i].taxon_name,taxa_obj.taxa[i].taxon_name);
+           taxa_menu += furl(github_root+'life_list_dashboard.html?project_id='+p_project_id+sort_opt+place_opt+p_field_opt+'&taxon_id='+taxa_obj.taxa[i].taxon_id+'&tname='+taxa_obj.taxa[i].taxon_name,taxa_obj.taxa[i].taxon_name);
       }
   
       let place_name  = 'Place';
@@ -324,7 +319,7 @@ function fresults(result, places_obj, taxa_obj) {
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
-                                                                 furl(github_root+'life_list_dashboard.html'+user_param+taxon_opt+place_opt+sort_opt,'All') +
+                                                                 furl(github_root+'life_list_dashboard.html?project_id='+p_project_id+taxon_opt+place_opt+sort_opt,'All') +
                                                                  furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Angling+(Conventional)'+opts+sort_opt,'Angling (Conventional)') +
                                                                  furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Microfishing'+opts+sort_opt,'Microfishing') +
                                                                  furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Fly+Fishing'+opts+sort_opt,'Fly Fishing') +
@@ -365,7 +360,7 @@ function fresults(result, places_obj, taxa_obj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
 
-      let sort_url = (github_root+'life_list_dashboard.html'+user_param+opts+'&cache_check=yes');
+      let sort_url = (github_root+'life_list_dashboard.html?project_id='+p_project_id+opts+'&cache_check=yes');
       let arrows = ('<img class="arrows" src="'+github_root+'arrows.png"/>');
                       
       let labels = [
@@ -391,22 +386,22 @@ function fresults(result, places_obj, taxa_obj) {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }
 
-         let params = ('life_list.html?user_id='+rec.user_login/*+'&tag_name=lifelist'*/+p_field_opt);
-         let detail_params = ('configurable_obs_field_table.html?user_id='+rec.user_login+'&obs_fields=17274,7615');
+         let params = ('life_list.html?project_id='+p_project_id+'&user_id='+rec.user_login/*+'&tag_name=lifelist'*/+p_field_opt);
+         let detail_params = ('configurable_obs_field_table.html?project_id='+p_project_id+'&user_id='+rec.user_login+'&obs_fields=17274,7615');
 
          if( rec.user_login === 'uconnbirdfish' ){
-             params = ('life_list.html?user_id='+rec.user_login+'&tag_name=pegslifelist');
-             params = ('life_list.html?user_id='+rec.user_login+opts);
+             params = ('life_list.html?project_id='+p_project_id+'&user_id='+rec.user_login+'&tag_name=pegslifelist');
+             params = ('life_list.html?project_id='+p_project_id+'&user_id='+rec.user_login+opts);
          }
 
-         let map = furl(github_root+'life_list_map.html?user_id='+rec.user_login+opts,'<span class="books">&#127758</span>');
+         let map = furl(github_root+'life_list_map.html?project_id='+p_project_id+opts+'&user_id='+rec.user_login,'<span class="books">&#127758</span>');
        
          let values = [
             {innerText:i+1},
             {innerHTML:user_icon},
             {innerHTML:furl(root_people+rec.user_login,rec.user_login)+map},
             {innerHTML:furl(github_root+params+opts,rec.species_count )},
-            {innerHTML:furl(github_root+'life_list_grid.html?user_id='+rec.user_login+'&angler='+rec.user_login+opts+p_field_opt,rec.obs_count)},
+            {innerHTML:furl(github_root+'life_list_grid.html?project_id='+p_project_id+'&user_id='+rec.user_login+'&angler='+rec.user_login+opts+p_field_opt,rec.obs_count)},
          ];
          faddelems('td',brow,values);
       };
