@@ -157,6 +157,9 @@ let p_place_id   = winurlparams.get('place_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_project_id = winurlparams.get('project_id') || '239695';
 
+winurlparams.delete('project_id');
+winurlparams.append('project_id',p_project_id);
+
 // cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
 // session storage is only used for sorting of data in columns at this point.
 let p_cache_check = winurlparams.get('cache_check') || 'no';  
