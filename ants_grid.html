@@ -54,23 +54,13 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr);
 let p_project_id = winurlparams.get('project_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
-let p_target_id  = winurlparams.get('target_id') || '';
-let p_show_all   = winurlparams.get('show_all') || 'no';
 var cellpx       = winurlparams.get('cellpx') || 122;
 var spacerpx     = winurlparams.get('spacerpx') || 4;
 var rows         = winurlparams.get('rows') || 30;
 var columns      = winurlparams.get('columns') || 3;
 let title        = winurlparams.get('title') || '';
 let p_action     = winurlparams.get('action') || '';
-let p_list       = winurlparams.get('list') || '';
-let p_tag_name   = winurlparams.get('tag_name') || '';
-let p_menu       = winurlparams.get('menu') || '';
 let p_cache_check = winurlparams.get('cache_check') || '';
-let p_behavior   = winurlparams.get('behavior') || 'Behavior';
-let p_life       = winurlparams.get('life') || 'Life Stage';
-let p_seed_project = winurlparams.get('seed_project') || '';
-let fish_story   = 'no';
-let story_param  = '';
 /*var cellpx = 300;
 var spacerpx = 3;
 var rows = 30;
@@ -80,73 +70,17 @@ let obs_field_array = [];
 let annotations_array = [];
 let ofvs_array = [];
 
-if( p_show_all === 'no' ) {
-    winurlparams.delete('taxon_id');
-    winurlparams.append('taxon_id', p_target_id);
-} else {
-    winurlparams.delete('taxon_id');
-}
-
-let seed_param = '';
-if( p_seed_project ) {
-    seed_param = '&seed_project='+p_seed_project;
-}
-
-let all_opts = '';
-for (const [key, value] of winurlparams.entries()) { 
-  if( key !== 'term_id' && key !== 'term_value_id' ) {
-      if( all_opts === '' ){
-          all_opts += "?";
-      } else {
-          all_opts += "&";
-      }
-      all_opts += key;
-      all_opts += "=";
-
-      if( key === 'page' ){
-          all_opts += '1';
-      } else {
-          all_opts += value;
-      }
-  }
-}   
-
-let all_except_life_stage = '';
-for (const [key, value] of winurlparams.entries()) { 
-  if( key !== 'life' && key !== 'term_id' && key !== 'term_value_id' ) {
-      if( all_except_life_stage === '' ){
-          all_except_life_stage += "?";
-      } else {
-          all_except_life_stage += "&";
-      }
-      all_except_life_stage += key;
-      all_except_life_stage += "=";
-
-      if( key === 'page' ){
-          all_except_life_stage += '1';
-      } else {
-          all_except_life_stage += value;
-      }
-  }
-}   
-   
 // if the user has selected a method, built the opt to pass to the
 // lifelist page.
 // find key/value pair for &field: param if one was passed in
 let field = '';
-let opts = '';
 let p_obs_id = '';
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
-      opts += ('&'+key+'='+value);
       field = ('&'+key+'='+value);
       p_obs_id = value;
   }
 }   
-
-if( p_taxon_id ) {
-    opts      += ('&taxon_id='+p_taxon_id);
-}
 
 var recsmax = columns * rows - 1;
 
