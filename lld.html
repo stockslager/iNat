@@ -265,16 +265,16 @@ function sortWithNullObs(arr, ascending) {
 function fresults(result, places_obj, taxa_obj) {
 
       // places menu...
-      let places_menu = furl(github_root+'life_list_dashboard.html?project_id='+p_project_id+sort_opt+taxon_opt+p_field_opt,'All');
+      let places_menu = furl(github_root+'lld.html?project_id='+p_project_id+sort_opt+taxon_opt+p_field_opt,'All');
       for( let i=0; i<places_obj.places.length; i++ ) {
-           places_menu += furl(github_root+'life_list_dashboard.html?project_id='+p_project_id+sort_opt+taxon_opt+p_field_opt+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
+           places_menu += furl(github_root+'lld.html?project_id='+p_project_id+sort_opt+taxon_opt+p_field_opt+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
       }
       places_menu += furl(github_root+'life_list_places.html','Select Custom Place');
 
       // taxa menu...
-      let taxa_menu = furl(github_root+'life_list_dashboard.html?project_id='+p_project_id+sort_opt+place_opt+p_field_opt,'All');
+      let taxa_menu = furl(github_root+'lld.html?project_id='+p_project_id+sort_opt+place_opt+p_field_opt,'All');
       for( let i=0; i<taxa_obj.taxa.length; i++ ) {
-           taxa_menu += furl(github_root+'life_list_dashboard.html?project_id='+p_project_id+sort_opt+place_opt+p_field_opt+'&taxon_id='+taxa_obj.taxa[i].taxon_id+'&tname='+taxa_obj.taxa[i].taxon_name,taxa_obj.taxa[i].taxon_name);
+           taxa_menu += furl(github_root+'lld.html?project_id='+p_project_id+sort_opt+place_opt+p_field_opt+'&taxon_id='+taxa_obj.taxa[i].taxon_id+'&tname='+taxa_obj.taxa[i].taxon_name,taxa_obj.taxa[i].taxon_name);
       }
   
       let place_name  = 'Place';
@@ -319,11 +319,11 @@ function fresults(result, places_obj, taxa_obj) {
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
-                                                                 furl(github_root+'life_list_dashboard.html?project_id='+p_project_id+taxon_opt+place_opt+sort_opt,'All') +
-                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Angling+(Conventional)'+opts+sort_opt,'Angling (Conventional)') +
-                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Microfishing'+opts+sort_opt,'Microfishing') +
-                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Fly+Fishing'+opts+sort_opt,'Fly Fishing') +
-                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Ice+Angling'+opts+sort_opt,'Ice Angling') +
+                                                                 furl(github_root+'lld.html?project_id='+p_project_id+taxon_opt+place_opt+sort_opt,'All') +
+                                                                 furl(github_root+'lld.html?field:fish+observation+method=Angling+(Conventional)'+opts+sort_opt,'Angling (Conventional)') +
+                                                                 furl(github_root+'lld.html?field:fish+observation+method=Microfishing'+opts+sort_opt,'Microfishing') +
+                                                                 furl(github_root+'lld.html?field:fish+observation+method=Fly+Fishing'+opts+sort_opt,'Fly Fishing') +
+                                                                 furl(github_root+'lld.html?field:fish+observation+method=Ice+Angling'+opts+sort_opt,'Ice Angling') +
                                                            '</div>' +
                                                        '</div>' + 
                                               '</div>')});
@@ -360,7 +360,7 @@ function fresults(result, places_obj, taxa_obj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
 
-      let sort_url = (github_root+'life_list_dashboard.html?project_id='+p_project_id+opts+'&cache_check=yes');
+      let sort_url = (github_root+'lld.html?project_id='+p_project_id+opts+'&cache_check=yes');
       let arrows = ('<img class="arrows" src="'+github_root+'arrows.png"/>');
                       
       let labels = [
