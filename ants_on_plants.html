@@ -131,12 +131,14 @@ function buildMenu() {
       let menu_string = '';
       let links = '';
 
+      links += furl(github_root+'ants_on_plants.html'+opts, 'All');
+ 
       for( let i=0; i<obs_fields.length; i++ ) {
            links += furl(github_root+'ants_on_plants.html'+opts+'&field:'+obs_fields[i].field_name, obs_fields[i].dd_name);
       }
 
       menu_string = '<div class="navbar">';
-      menu_string += buildDD('Activity', links);
+      menu_string += buildDD('Obs Fields', links);
 
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
