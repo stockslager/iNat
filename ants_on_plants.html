@@ -139,14 +139,12 @@ function buildMenu() {
       links += furl(github_root+'ants_on_plants.html'+opts, 'All');
  
       for( let i=0; i<interactions.length; i++ ) {
-           links += furl(github_root+'ants_on_plants.html'+opts+'&field:'+interactions[i].field_name, interactions[i].dd_name);
+           links += furl(github_root+'ants_on_plants.html'+opts+'&field:'+interactions[i].field_name+'='+interactions[i].field_value, interactions[i].dd_name);
       }
 
       menu_string = '<div class="navbar">';
-      menu_string += buildDD('Interactions', links);
+      menu_string += buildDD('Obs Fields', links);
 
-      menu_string += furl(github_root+'ants_on_plants.html'+opts+'&field:undescribed+ant+name','Undescribed');
-      menu_string += furl(github_root+'ants_on_plants.html'+opts+'&field:gyne(s) present?=yes','Gyne(s) Present?');
       menu_string += '</div>';
 
       faddelem('p',document.body,{innerHTML:(menu_string)});  
