@@ -254,7 +254,7 @@ function fresults(xobj) {
                if( p_operator !== 'merge' ){
                    if( box_array[e].field_name === p_field.replace('field:','') ) {
                        labels.push({innerText:getPrimaryColumnHeader(box_array[e].field_name)});
-                   } else if( p_obs_fields.split(',').includes(box_array[e].field_id) ) {
+                   } else if( field_array.includes(box_array[e].field_id) ) {
                        labels.push({innerText:getSecondaryColumnHeader(box_array[e].field+name)});
                    }
                } else {
