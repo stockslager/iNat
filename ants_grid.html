@@ -22,30 +22,6 @@
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
 
 <script>
-/*function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
-function famp(str) { return str.replace(/&/g,'&amp;'); };
-function fshorten(num) { return num<10000 ? num : num<1000000 ? (num/1000).toFixed(1)+'K' : (num/1000000).toFixed(1)+'M'; };
-function faddelem(etype,eparent=null,eattributes={}) {
-   var eobj = document.createElement(etype);
-   for (let [key,value] of Object.entries(eattributes)) {
-      if ( typeof value === 'object' && value !== null ) {
-         for (let [subkey,subvalue] of Object.entries(value)) { eobj[key][subkey] = subvalue; };
-      }
-      else { eobj[key] = value; };
-    };
-   if (eparent) { eparent.appendChild(eobj); };
-   return eobj;
-};
-function fdate(str,dateonly=false) {
-   str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
-   if (dateonly) { str = str.split(' ')[0]; }
-   else {
-      str = str.replace(/([+-]\d{2}\:?\d{2})/,' ($1)'); //puts parenthesis around time zone offset
-      str = str.replace(/z/i,' (+00:00)'); //replaces Z (case insensitve) with UTC
-      str = str.replace('+00:00','±00:00');
-   };
-   return str;
-};*/
 
 //get parameters from the url
 let winurlstr = window.location.href;
@@ -113,7 +89,9 @@ function buildMenu() {
       }
 
       links += furl(github_root+'ants_grid.html?project_id='+p_project_id+'&taxon_id='+p_taxon_id+field,"grid");
-      links += furl(github_root+'ants_on_plants_list.html?project_id='+p_project_id+'&taxon_id='+p_taxon_id+obs_fields+field,"list");
+      if( field_key ) {
+          links += furl(github_root+'ants_on_plants_list.html?project_id='+p_project_id+'&taxon_id='+p_taxon_id+obs_fields+field,"list");
+      }
       links += furl(github_root+'life_list_map.html?project_id='+p_project_id+'&taxon_id='+p_taxon_id+field+'&centerlat=40.28948147516545&centerlng=-82.86732790624998&defaultzoom=7',"map");
   
       menu_string = '<div class="navbar">';
