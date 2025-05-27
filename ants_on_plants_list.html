@@ -27,6 +27,7 @@ let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
 let p_col_header = winurlparams.get('col_header') || '';
+let p_show_user  = winurlparams.get('show_user') || '';
 let p_obs_field_array = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic   = winurlparams.get('ofield_iconic') || '';
 let p_omit_users      = winurlparams.get('omit_users') || '';
@@ -36,6 +37,8 @@ let p_field = '';
 let p_field_value = '';
 let opts = '';
 let field_array = [];
+let top_taxon = '';
+let tax_photo = '<div class="clipart">&#127807</div>'; 
 
 if( p_obs_field_array !== '' ){
     field_array = p_obs_field_array.split(",");
@@ -264,9 +267,7 @@ function fresults(xobj) {
      
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
-         let tax_name = '';
          let pref_tax_name = '';
-         let tax_photo = '<div class="clipart">&#127807</div>'; 
          let tax_id = '';
          let field1 = ''; 
          let param1 = ''; 
@@ -279,6 +280,7 @@ function fresults(xobj) {
          let dataType2 = '';
          let matchValue = '';
          let matchTaxonId = '';
+         let tax_name = '';
          let taxon = '';
          
          if( rec.taxon ){
@@ -291,6 +293,10 @@ function fresults(xobj) {
                      tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
                  }
              }
+         }
+
+         if( tax_id !== '' ){
+             top_taxon = furl(github_root+'ants_on_plants_list.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,(pref_tax_name.toLowerCase() || tax_name));         
          }
 
          if( i === 0 ) {
@@ -425,14 +431,12 @@ function fresults(xobj) {
               values.push({innerHTML:displayName});
          }          
 
-         if( !p_user_id ) { 
+         if( p_show_user && !p_user_id ) { 
              values.push({innerHTML:'<div><div style="text-align:center;">'+user_icon+'</div><div style="text-align:center;">'+furl(root_people+rec.user.login, truncate(rec.user.login,'7') )+'</div></div>'});
          }
        
          tempBrow.push(values);
       };
-
-      //faddelem('p',document.body,{innerHTML:dlString});
 
       if( mismatch === 'yes' ) {
           if( p_operator === 'merge' ){       
@@ -440,8 +444,8 @@ function fresults(xobj) {
           }
       }  
 
-      if( p_user_id ) {
-          faddelem('p',document.body,{innerHTML:(u_icon+'<span style="padding-left:10px;">'+furl(root_people+p_user_id,p_user_id)+'</span></div></span>')});
+      if( p_taxon_id ) {
+          faddelem('p',document.body,{innerHTML:(tax_photo+top_taxon)});
       }
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
@@ -452,8 +456,8 @@ function fresults(xobj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
 
-      if( !p_user_id ) {
-          labels.push({innerHTML:'<div style="text-align:center;">Angler</div>'});
+      if( p_show_user && !p_user_id ) {
+          labels.push({innerHTML:'<div style="text-align:center;">'+p_show_user+'</div>'});
       }
       
       faddelems('th',hrow,labels);
