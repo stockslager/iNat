@@ -26,7 +26,6 @@ let p_project_id = winurlparams.get('project_id') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
-let p_col_header = winurlparams.get('col_header') || '';
 let p_show_user  = winurlparams.get('show_user') || '';
 let p_obs_field_array = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic   = winurlparams.get('ofield_iconic') || '';
@@ -39,6 +38,7 @@ let opts = '';
 let field_array = [];
 let top_taxon = '';
 let tax_photo = '<div class="clipart">&#127807</div>'; 
+let interactions = [];
 
 if( p_obs_field_array !== '' ){
     field_array = p_obs_field_array.split(",");
@@ -97,25 +97,6 @@ let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observa
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
 <script> 
  
-if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
-   let instructions = [
-      {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.'},
-   ];
-   faddelems('p',document.body,instructions);
-}
-else {
-   fetch(apiurl)
-   .then((response) => {
-      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-      return response.json();
-   })
-   .then((data) => { fresults(data); })
-   .catch((err) => {
-      console.error(err.message);
-      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-   });
-};
-
 // remove the field param from the url before building options
 winurlparams.delete(p_field);
 winurlparams.delete('operator');
@@ -153,6 +134,30 @@ function buildMenu() {
 
       menu_string += buildHome(furl(github_root+'ants_on_plants.html?project_id='+p_project_id,'<img class="nav_photo" src="'+github_root+'ohio_ant.png" />'));
       faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+
+function getPrimaryColumnHeader( field_name ) {
+   let header = '';
+ 
+   for( let i=0; i<interactions.length; i++ ) {
+        if( field_name === interactions[i].field_name ) {
+            header = interactions[i].list_primary;
+        }
+   }
+
+   return header;
+}
+
+function getSecondaryColumnHeader( field_name ) {
+   let header = '';
+ 
+   for( let i=0; i<interactions.length; i++ ) {
+        if( field_name === interactions[i].field_name ) {
+            header = interactions[i].list_secondary || interactions[i].list_primary;
+        }
+   }
+
+   return header;
 }
 
 function fresults(xobj) {
@@ -248,13 +253,9 @@ function fresults(xobj) {
             
                if( p_operator !== 'merge' ){
                    if( box_array[e].field_name === p_field.replace('field:','') ) {
-                       if( p_col_header ) {
-                           labels.push({innerText:p_col_header});
-                       } else {
-                           labels.push({innerText:p_field.replace('field:','')});
-                       }
-                   } else {
-                       labels.push({innerText:' '});
+                       labels.push({innerText:getPrimaryColumnHeader(box_array[e].field_name)});
+                   } else if( p_obs_fields.split(',').includes(box_array[e].field_id) ) {
+                       labels.push({innerText:getSecondaryColumnHeader(box_array[e].field+name)});
                    }
                } else {
                    if( firstCol === 'yes' ){
@@ -486,6 +487,39 @@ function fresults(xobj) {
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
+
+if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
+   let instructions = [
+      {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.'},
+   ];
+   faddelems('p',document.body,instructions);
+}
+else {
+   fetch('ants.json')
+     .then(response => response.json())
+     .then(data => {
+      // Access your data here 
+      for( let i=0; i<data.interactions.length; i++ ) {
+           interactions = data.interactions;
+      }
+      console.log(data);
+   })
+     .catch(error => {
+      console.error('Error fetching JSON:', error);
+   });
+ 
+   fetch(apiurl)
+   .then((response) => {
+      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+      return response.json();
+   })
+   .then((data) => { fresults(data); })
+   .catch((err) => {
+      console.error(err.message);
+      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+   });
+};
+
 </script>
 </body>
 
