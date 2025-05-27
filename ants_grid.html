@@ -101,10 +101,12 @@ function buildMenu() {
       let menu_string = '';
       let links = '';
 
-      //links += furl(github_root+'bird_grid.html?project_id='+p_project_id+'&target_id='+p_target_id+'&show_all=yes'+field,"all");
+      links += furl(github_root+'ants_grid.html?project_id='+p_project_id+'&taxon_id='+p_taxon_id+field,"grid");
+      links += furl(github_root+'configurable_obs_field_table.html?project_id='+p_project_id+'&taxon_id='+p_taxon_id+field,"list");
+      links += furl(github_root+'life_list_map.html?project_id='+p_project_id+'&taxon_id='+p_taxon_id+field+'&centerlat=39.10445934350343&centerlng=-84.5196921535475&defaultzoom=9',"map");
   
       menu_string = '<div class="navbar">';
-      //menu_string += buildDD('Show', links);
+      menu_string += buildDD('Show', links);
 
       menu_string += ('<div id="home">'+furl(github_root+'ants_on_plants.html?project_id='+p_project_id,'<img class="nav_photo" src="'+github_root+'ohio_ant.png" />')+'</div></div>');
       faddelem('p',document.body,{innerHTML:(menu_string)});  
