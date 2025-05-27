@@ -10,7 +10,8 @@ function faddelem(etype,eparent=null,eattributes={}) {
     };
    if (eparent) { eparent.appendChild(eobj); };
    return eobj;
-};
+}
+
 function faddelems(etype,eparent=null,eattributes=[]) { for (let e of eattributes) { faddelem(etype,eparent,e); }; };
 function fpageurl(urlbase,urlparams,per_page,page) {
    let params = new URLSearchParams(urlparams);
@@ -19,12 +20,14 @@ function fpageurl(urlbase,urlparams,per_page,page) {
    (url_per_page===null) ? params.append('per_page',per_page) : params.set('per_page',per_page);
    (url_page===null) ? params.append('page',page) : params.set('page',page);
    return urlbase+'?'+params;
-};
+}
+
 function fpageurlplusorderbyid(urlbase,urlparams,per_page,page) {
    let params = new URLSearchParams(urlparams);
    params.get('order_by') ? params.set('order_by','id') : params.append('order_by','id');
    return fpageurl(urlbase,params,per_page,page);
-};
+}
+
 function ffetch(url) {
    return fetch(url)
    .then((response) => {
@@ -32,7 +35,8 @@ function ffetch(url) {
       return response.json();
    })
    .catch((err) => { console.error(err); });
-};
+}
+
 function famp(str) { return str.replace(/&/g,'&amp;'); };
 function fshorten(num) { return num<10000 ? num : num<1000000 ? (num/1000).toFixed(1)+'K' : (num/1000000).toFixed(1)+'M'; };
 function fdate(str,dateonly=false) {
@@ -44,16 +48,35 @@ function fdate(str,dateonly=false) {
       str = str.replace('+00:00','±00:00');
    };
    return str;
-};
+}
+
 function truncate(str, maxLength) {
   if (str.length <= maxLength) {
     return str;
   } else {
      return (str.substring(0, maxLength) + '...');
   }
-};
+}
+
 function stripHtml(html) {
   return html.replace(/<[^>]*>/g, '');
+}
+
+function isMultipleOfFour(num) {
+  return num % 4 === 0;
+}
+
+function isMultipleOfThree(num) {
+  return num % 3 === 0;
+}
+
+function replaceDoubleQuotes(str) {
+  return str.replace(/"/g, '%22');
+}
+
+function boxRow(field_id, field_name, field_value) {
+    this.field_id    = field_id;
+    this.field_name  = field_name;
 }
 
 // functions for menu bar
@@ -73,6 +96,7 @@ function buildDD( name, content ) {
 function buildHome( url ) {
    return ('<div id="home">'+url+'</div>');
 }
+
 function copyOpts( winurlparams ) {
    let opts='';
    // build param list for url's used in fresults
