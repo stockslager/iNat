@@ -22,12 +22,12 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let p_project_id = winurlparams.get('project_id') || '34391';
+let p_project_id = winurlparams.get('project_id') || '';
 let p_params     = winurlparams.get('params') || 'ants';
 let p_place_id   = winurlparams.get('place_id') || '';
 let p_list       = winurlparams.get('list') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
-let p_taxon_id   = winurlparams.get('taxon_id') || '';
+let p_taxon_id   = winurlparams.get('taxon_id') || '47336';
 let p_operator   = winurlparams.get('operator') || '';
 let p_obs_field  = winurlparams.get('obs_field') || '';
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
@@ -114,18 +114,6 @@ let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observat
 </script> 
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
 <script> 
-
-// remove the field param from the url before building options
-winurlparams.delete('operator');
-winurlparams.delete('taxon_id');
-winurlparams.delete('not_user_id');
-winurlparams.delete('not_id');
-winurlparams.delete('not_in_project');
-
-// add them back after building options...
-winurlparams.append('operator', p_operator);
-winurlparams.append('taxon_id', p_taxon_id);
-winurlparams.append('target_id', p_target_id);
 
 function capitalizeWords(str) {
   return str.toLowerCase().split(' ').map(function(word) {
