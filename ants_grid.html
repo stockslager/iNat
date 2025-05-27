@@ -29,6 +29,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr);
 let p_project_id = winurlparams.get('project_id') || '';
+let p_params     = winurlparams.get('params') || 'ants';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 var cellpx       = winurlparams.get('cellpx') || 122;
 var spacerpx     = winurlparams.get('spacerpx') || 4;
@@ -109,7 +110,7 @@ function fresults(data) {
 };
 
 async function asyncGetData() {
-   await fetch('ants.json')
+   await fetch(p_params+'.json')
      .then(response => response.json())
      .then(data => {
       // Access your data here 
