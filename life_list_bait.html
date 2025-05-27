@@ -186,8 +186,7 @@ function fresults(xobj) {
       labels = [
             {innerText:'#'},
             {innerText:'Photo'},
-            {innerText:'Name'}, 
-            {innerText:'Obs Photo'}];
+            {innerText:'Name'}];
     
       if( p_operator === 'merge' ){
           merged = 'merged observation field';
@@ -281,7 +280,11 @@ function fresults(xobj) {
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                if( p_operator !== 'merge' ){
-                   labels.push({innerText:box_array[e].field_name});
+                   if( box_array[e].field_id.toString() === '9833' ) 
+                       labels.push({innerText:'Tackle'});
+                   } else {
+                       labels.push({innerText:'Bait'});
+                   }
                } else {
                    if( firstCol === 'yes' ){
                        firstCol = 'no';
@@ -337,9 +340,8 @@ function fresults(xobj) {
        
          values = [
                   {innerText:i+1},
-                  {innerHTML:tax_photo},
-                  {innerHTML:taxon},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                  {innerHTML:taxon},
               ];
 
          let user_icon = rec.user.icon || '';
@@ -460,7 +462,7 @@ function fresults(xobj) {
          tempBrow.push(values);
       };
 
-      faddelem('p',document.body,{innerHTML:dlString});
+      //faddelem('p',document.body,{innerHTML:dlString});
 
       if( mismatch === 'yes' ) {
           if( p_operator === 'merge' ){       
