@@ -9,139 +9,10 @@
 <link rel="icon" type="image/svg+xml" href="fish.svg" />
 <link rel="shortcut icon" href="fish.ico" />
 <link rel="apple-touch-icon" sizes="180x180" href="fish.png" />
+<link rel="stylesheet" type="text/css" href="seed_library.css" />
 <meta name="apple-mobile-web-app-title" content="Life List" />
 <link rel="manifest" href="fish.webmanifest" />
 <title>iNaturalist Angling Lifelists</title>
-<style>
-   :root {
-      background: var(--color-base); 
-      color: var(--color-text);
-      font: 14px Sans-Serif;
-      --color-base: white;
-      --color-alt: whitesmoke;
-      --color-brand: #333;
-      --color-text: black;
-      --color-text-invert: white;
-      --color-text-link: royalblue;
-      --color-border: lightgray;
-      --color-hover: lightgray;
-      --color-base-translucent: rgba(255,255,255,0.85);
-   }
-   @media (prefers-color-scheme: dark) {
-      :root {
-         --color-base: black;
-         --color-alt: #171717;
-         --color-brand: #333;
-         --color-text: #bababa;
-         --color-text-invert: white;
-         --color-text-link: cornflowerblue;
-         --color-border: #444;
-         --color-hover: #444;
-         --color-base-translucent: rgba(0,0,0,0.85);
-      }
-   }  
-   #key { color:var(--color-text-link); }
-   #main { width:fit-content; min-width:375px; }
-   #arrow { color:var(--color-text-invert); }
-   table, td, th { border-collapse:collapse; margin:0px; padding:5px; } 
-  /* th { position:-webkit-sticky; position:sticky; top:0; font-weight:600; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }*/
-   th { padding-top:10px; padding-bottom:10px; position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-size:14px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
-   th:first-child{ border: 0px solid #333; border-radius: 5px 0px 0px 0px; }
-   th:last-child{ border: 0px solid #333; border-radius: 0px 5px 0px 0px; }  
-   .arrows { width:14px; height:14px; }
-   tbody>tr { border-width:1px 0px; border-style:solid; border-color:var(--color-border); background:var(--color-alt);}
-   tr:nth-child(even) { background:var(--color-base); }
-   .tar { text-align:right; }
-   .icon { height:34px; width:34px; border-radius:50%; }
-   .npcicon { width:18px; height:18px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 15px; border-radius: 50px; }
-   .books { font-size:1.000em; float:right; padding-right:5px; }
-   .photo { height:64px; width:64px; border-radius: 15px 15px 15px 15px; }
-   img { margin:0; padding:0; border:0; }
-   h2 { width:fit-content; min-width:375px; }
-   p { width:fit-content; min-width:375px; }
-   a { text-decoration:none; color:var(--color-text-link); }
-   a:hover { background:var(--color-hover); }
-   #nav { margin-left:-8px; position:-webkit-sticky /*Safari*/; position:sticky; left:0; bottom:0; background:var(--color-base-translucent); width:188px; height:52px; border-radius:14px; }
-   @media print { #nav { display:none; } } 
-   .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
-   .button { background:var(--color-alt); }
-   .button_inactive { background:none; color:var(--color-border); }
-
-.navbar {
-  overflow: hidden;
-  background-color: #333;
-  border-radius: 5px 5px 5px 5px;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.navbar a {
-  float: left;
-  font-size: 14px;
-  color: white;
-  text-align: center;
-  padding: 12px 14px;
-  text-decoration: none;
-}
-
-.dropdown {
-  float: left;
-  overflow: hidden;
-}
-
-.dropdown .dropbtn {
-  cursor: pointer;
-  font-size: 14px;  
-  border: none;
-  outline: none;
-  color: white;
-  padding: 12px 14px;
-  background-color: inherit;
-  font-family: inherit;
-  margin: 0;
-}
-
-.navbar a:hover, .dropdown:hover .dropbtn, .dropbtn:focus {
-  background-color: black;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  float: none;
-  color: black;
-  padding: 10px 14px;
-  text-decoration: none;
-  display: block;
-  text-align: left;
-}
-
-.dropdown-content a:hover {
-  background-color: #ddd;
-}
- 
-.dropdown-content a:first-child {
-  border-radius: 5px 5px 0 0;
-}
-
-.dropdown-content a:last-child {
-  border-radius: 0 0 5px 5px;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-.show {
-  display: block;
-}
-</style>
 </head>
 
 <body>
@@ -155,15 +26,15 @@ let p_place_name = winurlparams.get('place_name') || '';
 let p_tname      = winurlparams.get('tname') || '';
 let p_place_id   = winurlparams.get('place_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
-let p_project_id = winurlparams.get('project_id') || '239695';
-
-winurlparams.delete('project_id');
-winurlparams.append('project_id',p_project_id);
 
 // cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
 // session storage is only used for sorting of data in columns at this point.
 let p_cache_check = winurlparams.get('cache_check') || 'no';  
  
+// default the id's of the projects to be passed in to the projects api.
+winurlparams.delete('project_id');
+winurlparams.append('project_id', '239695');
+
 // if the user has selected a method, built the opt to pass to the
 // lifelist page.
 let p_field_opt = '';
@@ -268,16 +139,16 @@ function sortWithNullObs(arr, ascending) {
 function fresults(result, places_obj, taxa_obj) {
 
       // places menu...
-      let places_menu = furl(github_root+'lld.html?project_id='+p_project_id+sort_opt+taxon_opt+p_field_opt,'All');
+      let places_menu = furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+taxon_opt+p_field_opt,'All');
       for( let i=0; i<places_obj.places.length; i++ ) {
-           places_menu += furl(github_root+'lld.html?project_id='+p_project_id+sort_opt+taxon_opt+p_field_opt+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
+           places_menu += furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+taxon_opt+p_field_opt+'&place_id='+places_obj.places[i].place_id,places_obj.places[i].place_name);
       }
       places_menu += furl(github_root+'life_list_places.html','Select Custom Place');
 
       // taxa menu...
-      let taxa_menu = furl(github_root+'lld.html?project_id='+p_project_id+sort_opt+place_opt+p_field_opt,'All');
+      let taxa_menu = furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+place_opt+p_field_opt,'All');
       for( let i=0; i<taxa_obj.taxa.length; i++ ) {
-           taxa_menu += furl(github_root+'lld.html?project_id='+p_project_id+sort_opt+place_opt+p_field_opt+'&taxon_id='+taxa_obj.taxa[i].taxon_id+'&tname='+taxa_obj.taxa[i].taxon_name,taxa_obj.taxa[i].taxon_name);
+           taxa_menu += furl(github_root+'life_list_dashboard.html?project_id=239695'+sort_opt+place_opt+p_field_opt+'&taxon_id='+taxa_obj.taxa[i].taxon_id+'&tname='+taxa_obj.taxa[i].taxon_name,taxa_obj.taxa[i].taxon_name);
       }
   
       let place_name  = 'Place';
@@ -322,11 +193,11 @@ function fresults(result, places_obj, taxa_obj) {
                                                              '<i class="fa fa-caret-down"></i>' +
                                                            '</button>' +
                                                            '<div class="dropdown-content">' +
-                                                                 furl(github_root+'lld.html?project_id='+p_project_id+taxon_opt+place_opt+sort_opt,'All') +
-                                                                 furl(github_root+'lld.html?project_id='+p_project_id+'&field:fish+observation+method=Angling+(Conventional)'+opts+sort_opt,'Angling (Conventional)') +
-                                                                 furl(github_root+'lld.html?project_id='+p_project_id+'&field:fish+observation+method=Microfishing'+opts+sort_opt,'Microfishing') +
-                                                                 furl(github_root+'lld.html?project_id='+p_project_id+'&field:fish+observation+method=Fly+Fishing'+opts+sort_opt,'Fly Fishing') +
-                                                                 furl(github_root+'lld.html?project_id='+p_project_id+'&field:fish+observation+method=Ice+Angling'+opts+sort_opt,'Ice Angling') +
+                                                                 furl(github_root+'life_list_dashboard.html?project_id=239695'+taxon_opt+place_opt+sort_opt,'All') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Angling+(Conventional)'+opts+sort_opt,'Angling (Conventional)') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Microfishing'+opts+sort_opt,'Microfishing') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Fly+Fishing'+opts+sort_opt,'Fly Fishing') +
+                                                                 furl(github_root+'life_list_dashboard.html?field:fish+observation+method=Ice+Angling'+opts+sort_opt,'Ice Angling') +
                                                            '</div>' +
                                                        '</div>' + 
                                               '</div>')});
@@ -363,7 +234,7 @@ function fresults(result, places_obj, taxa_obj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
 
-      let sort_url = (github_root+'lld.html?project_id='+p_project_id+opts+'&cache_check=yes');
+      let sort_url = (github_root+'life_list_dashboard.html?project_id=239695'+opts+'&cache_check=yes');
       let arrows = ('<img class="arrows" src="'+github_root+'arrows.png"/>');
                       
       let labels = [
@@ -389,22 +260,22 @@ function fresults(result, places_obj, taxa_obj) {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }
 
-         let params = ('life_list.html?project_id='+p_project_id+'&user_id='+rec.user_login/*+'&tag_name=lifelist'*/+p_field_opt);
-         let detail_params = ('configurable_obs_field_table.html?project_id='+p_project_id+'&user_id='+rec.user_login+'&obs_fields=17274,7615');
+         let params = ('life_list.html?project_id=239695&user_id='+rec.user_login/*+'&tag_name=lifelist'*/+p_field_opt);
+         let detail_params = ('configurable_obs_field_table.html?project_id=239695&user_id='+rec.user_login+'&obs_fields=17274,7615');
 
          if( rec.user_login === 'uconnbirdfish' ){
-             params = ('life_list.html?project_id='+p_project_id+'&user_id='+rec.user_login+'&tag_name=pegslifelist');
-             params = ('life_list.html?project_id='+p_project_id+'&user_id='+rec.user_login+opts);
+             params = ('life_list.html?project_id=239695&user_id='+rec.user_login+'&tag_name=pegslifelist');
+             params = ('life_list.html?project_id=239695&user_id='+rec.user_login+opts);
          }
 
-         let map = furl(github_root+'life_list_map.html?project_id='+p_project_id+opts+'&user_id='+rec.user_login,'<span class="books">&#127758</span>');
+         let map = furl(github_root+'life_list_map.html?project_id=239695'+opts+'&user_id='+rec.user_login,'<span class="books">&#127758</span>');
        
          let values = [
             {innerText:i+1},
             {innerHTML:user_icon},
             {innerHTML:furl(root_people+rec.user_login,rec.user_login)+map},
             {innerHTML:furl(github_root+params+opts,rec.species_count )},
-            {innerHTML:furl(github_root+'life_list_grid.html?project_id='+p_project_id+'&user_id='+rec.user_login+'&angler='+rec.user_login+opts+p_field_opt,rec.obs_count)},
+            {innerHTML:furl(github_root+'life_list_grid.html?project_id=239695&user_id='+rec.user_login+'&angler='+rec.user_login+opts+p_field_opt,rec.obs_count)},
          ];
          faddelems('td',brow,values);
       };
@@ -570,13 +441,7 @@ async function asyncGetData() {
       console.error('Error fetching JSON:', error);
    });
 
-   if( p_project_id !== '245057' && p_project_id !== '239695' ){
-      let instructions = [
-         {innerHTML:'Invalid project.  A project id is required.  Please add &project_id=xxxxxxxxx to the url.'},
-      ];
-      faddelems('p',document.body,instructions);
-   } else {
-     await fetch(apiurl)
+   await fetch(apiurl)
       .then((response) => {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
@@ -588,7 +453,6 @@ async function asyncGetData() {
           console.error(err.message);
           faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
       })
-   }
 }
 
 // need to pull resources from a json file to pass into an api
