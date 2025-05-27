@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
-<meta name="description" content="Bait or Tackle Used" />
+<meta name="description" content="Bait & Tackle" />
 <link rel="icon" type="image/png" href="fish.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="fish.svg" />
 <link rel="shortcut icon" href="fish.ico" />
@@ -12,7 +12,7 @@
 <link rel="stylesheet" type="text/css" href="life_list.css" />
 <meta name="apple-mobile-web-app-title" content="Life List" />
 <link rel="manifest" href="fish.webmanifest" />
-<title>Bait or Tackle Used</title>
+<title>Bait & Tackle</title>
 </head>
 
 <body>
@@ -21,7 +21,6 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let p_project_id = winurlparams.get('project_id') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
@@ -34,6 +33,10 @@ let p_field = '';
 let p_field_value = '';
 let opts = '';
 let field_array = [];
+
+winurlparams.delete('project_id');
+winurlparams.append('project_id','239695');
+let p_project_id = winurlparams.get('project_id');
 
 if( p_obs_field_array !== '' ){
     field_array = p_obs_field_array.split(",");
@@ -159,10 +162,21 @@ function boxRow(field_id, field_name, field_value) {
     this.field_name  = field_name;
 }
 
+function buildMenu() {
+      let menu_string = '';
+
+      menu_string = '<div class="navbar">';
+
+      menu_string += buildHome(furl(github_root+'life_list_dashboard.html?project_id='+p_project_id,'Anglers'));
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+
 function fresults(xobj) {
    let results = xobj.results;
    let box_array = [];
    let u_icon = '';
+
+   buildMenu();
 
    for( let f=0; f<field_array.length; f++ ){
         box_array.push(new boxRow(field_array[f], '') );
@@ -277,7 +291,7 @@ function fresults(xobj) {
                winurlparams_copy.delete('obs_fields');
                winurlparams_copy.append('obs_fields',box_array[e].field_id);
             
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'configurable_obs_field_table.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'life_list_bait.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                if( p_operator !== 'merge' ){
@@ -346,7 +360,7 @@ function fresults(xobj) {
          }
 
          if( tax_id !== '' ){
-             taxon = furl(github_root+'configurable_obs_field_table.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl(github_root+'life_list_bait.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
          values = [
@@ -430,7 +444,7 @@ function fresults(xobj) {
                                       field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   }
                                   if( p_field_value === '' ){
-                                      values.push({innerHTML:furl(github_root+'configurable_obs_field_table.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
+                                      values.push({innerHTML:furl(github_root+'life_list_bait.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
                                   } else {
                                       values.push({innerHTML:field1});
                                   }
