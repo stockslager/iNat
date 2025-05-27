@@ -466,9 +466,11 @@ function fresults(xobj) {
           
               values.push({innerHTML:displayName});
          }          
- 
-         values.push({innerHTML:'<div><div style="text-align:center;">'+user_icon+'</div><div style="text-align:center;">'+furl(root_people+rec.user.login,rec.user.login)+'</div></div>'});
 
+         if( !p_user_id ) { 
+             values.push({innerHTML:'<div><div style="text-align:center;">'+user_icon+'</div><div style="text-align:center;">'+furl(root_people+rec.user.login,rec.user.login)+'</div></div>'});
+         }
+       
          tempBrow.push(values);
       };
 
@@ -480,7 +482,10 @@ function fresults(xobj) {
           }
       }  
 
-      faddelem('p',document.body,{innerHTML:(u_icon+'<span style="padding-left:10px;">'+p_user_id+'</span></div></span>')});
+      if( p_user_id ) {
+          faddelem('p',document.body,{innerHTML:(u_icon+'<span style="padding-left:10px;">'+furl(root_people+p_user_id,p_user_id)+'</span></div></span>')});
+      }
+    
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br />'});  
@@ -489,7 +494,9 @@ function fresults(xobj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
 
-      labels.push({innerText:'Angler'});
+      if( !p_user_id ) {
+          labels.push({innerText:'Angler'});
+      }
       
       faddelems('th',hrow,labels);
 
