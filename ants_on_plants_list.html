@@ -26,6 +26,7 @@ let p_project_id = winurlparams.get('project_id') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
+let p_col_header = winurlparams.get('col_header') || '';
 let p_obs_field_array = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic   = winurlparams.get('ofield_iconic') || '';
 let p_omit_users      = winurlparams.get('omit_users') || '';
@@ -147,7 +148,7 @@ function buildMenu() {
 
       menu_string = '<div class="navbar">';
 
-      menu_string += buildHome(furl(github_root+'life_list_dashboard.html','Anglers'));
+      menu_string += buildHome(furl(github_root+'ants_on_plants.html?project_id='+p_project_id,'<img class="nav_photo" src="'+github_root+'ohio_ant.png" />'));
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
@@ -239,10 +240,14 @@ function fresults(xobj) {
                winurlparams_copy.append('obs_fields',box_array[e].field_id);
             
                if( p_operator !== 'merge' ){
-                   if( box_array[e].field_id.toString() === '9833' ) {
-                       labels.push({innerText:'Tackle'});
+                   if( box_array[e].field_name.toString() === p_field ) {
+                       if( p_col_header ) {
+                           labels.push({innerText:p_col_header});
+                       } else {
+                           labels.push({innerText:p_field});
+                       }
                    } else {
-                       labels.push({innerText:'Bait'});
+                       labels.push({innerText:' '});
                    }
                } else {
                    if( firstCol === 'yes' ){
