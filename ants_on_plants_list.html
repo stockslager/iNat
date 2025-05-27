@@ -27,6 +27,7 @@ let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
 let p_show_user  = winurlparams.get('show_user') || '';
+let p_params     = winurlparams.get('params') || 'ants';
 let p_obs_field_array = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic   = winurlparams.get('ofield_iconic') || '';
 let p_omit_users      = winurlparams.get('omit_users') || '';
@@ -495,7 +496,7 @@ if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
    faddelems('p',document.body,instructions);
 }
 else {
-   fetch('ants.json')
+   fetch(p_params+'.json')
      .then(response => response.json())
      .then(data => {
       // Access your data here 
