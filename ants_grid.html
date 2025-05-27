@@ -69,14 +69,17 @@ var columns = 3;*/
 let obs_field_array = [];
 let annotations_array = [];
 let ofvs_array = [];
+let interactions = [];
 
 // if the user has selected a method, built the opt to pass to the
 // lifelist page.
 // find key/value pair for &field: param if one was passed in
 let field = '';
+let field_key = '';
 let field_id = '';
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
+      field_key = key;
       field = ('&'+key+'='+value);
       field_id = value;
   }
@@ -100,9 +103,16 @@ document.title = title.toLowerCase();
 function buildMenu() {
       let menu_string = '';
       let links = '';
+      let obs_fields = '&obs_fields=';
+
+      for( let i=0; i<interactions.length; i++ ) {
+           if( field_key.toString() === interactions[i].field_name.toString() ) {
+               obs_fields += (interactions[i].field_id+',');
+           }
+      }
 
       links += furl(github_root+'ants_grid.html?project_id='+p_project_id+'&taxon_id='+p_taxon_id+field,"grid");
-      links += furl(github_root+'ants_on_plants_list.html?project_id='+p_project_id+'&taxon_id='+p_taxon_id+field,"list");
+      links += furl(github_root+'ants_on_plants_list.html?project_id='+p_project_id+'&taxon_id='+p_taxon_id+obs_fields,field,"list");
       links += furl(github_root+'life_list_map.html?project_id='+p_project_id+'&taxon_id='+p_taxon_id+field+'&centerlat=40.28948147516545&centerlng=-82.86732790624998&defaultzoom=7',"map");
   
       menu_string = '<div class="navbar">';
