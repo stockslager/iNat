@@ -184,7 +184,11 @@ function fresults(xobj) {
       labels = [
             {innerText:'#'},
             {innerText:'Photo'},
-            {innerText:'Name'}];
+         ];
+
+      if( !p_taxon_id ) {
+          labels.push({innerText:'Name'});
+      }
     
       if( p_operator === 'merge' ){
           merged = 'merged observation field';
@@ -316,8 +320,11 @@ function fresults(xobj) {
          values = [
                   {innerText:i+1},
                   {innerHTML:furl(root_observations+rec.id,'<img class="photo" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-                  {innerHTML:taxon},
               ];
+
+         if( !p_taxon_id ) {
+             values.push({innerHTML:taxon});
+         }
 
          let user_icon = rec.user.icon || '';
          
