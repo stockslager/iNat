@@ -12,6 +12,7 @@
 <link rel="stylesheet" type="text/css" href="life_list.css" />
 <meta name="apple-mobile-web-app-title" content="Life List" />
 <link rel="manifest" href="fish.webmanifest" />
+<script type="text/javascript" src='common_func.js'> </script>
 <title>Bait & Tackle</title>
 </head>
 
@@ -93,12 +94,7 @@ let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observa
 
 </script> 
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
 <script> 
-
-function replaceDoubleQuotes(str) {
-  return str.replace(/"/g, '%22');
-}
  
 if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
    let instructions = [
@@ -148,19 +144,6 @@ for (const [key, value] of winurlparams.entries()) {
 winurlparams.append('operator', p_operator);
 winurlparams.append(p_field, p_field_value);
 winurlparams.append('taxon_id', p_taxon_id);
-
-function isMultipleOfFour(num) {
-  return num % 4 === 0;
-}
-
-function isMultipleOfThree(num) {
-  return num % 3 === 0;
-}
-
-function boxRow(field_id, field_name, field_value) {
-    this.field_id    = field_id;
-    this.field_name  = field_name;
-}
 
 function buildMenu() {
       let menu_string = '';
