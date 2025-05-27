@@ -182,6 +182,8 @@ let p_tname      = winurlparams.get('tname') || '';
 let p_place_id   = winurlparams.get('place_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_story_id   = winurlparams.get('story_id') || '';
+let p_user_id    = winurlparams.get('user_id') || '';
+let p_taxon_id   = winurlparams.get('taxon_id') || '';
 var cellpx       = winurlparams.get('cellpx') || 122;
 var spacerpx     = winurlparams.get('spacerpx') || 4;
 var rows         = winurlparams.get('rows') || 30;
@@ -189,10 +191,18 @@ var columns      = winurlparams.get('columns') || 3;
 let title        = winurlparams.get('title') || '';
 let fish_story   = 'no';
 let story_param  = '';
+let all_users_all_taxa = 'no';
 /*var cellpx = 300;
 var spacerpx = 3;
 var rows = 30;
 var columns = 3;*/
+
+// if user_id and taxon_id aren't populated the grid will show all
+// species for all users in the project and we can safely display
+// the bait & tackle options in the "details" drop-down.
+if( !p_user_id && !p_taxon_id ) {
+    all_users_all_taxa = 'yes';
+}
 
 let obs_field_array = [];
 
@@ -258,11 +268,13 @@ function buildDetailsMenu(data) {
                               '<i class="fa fa-caret-down"></i>' +
                            '</button>' +
                            '<div class="dropdown-content">';
-   
-   if( obs_field_array.includes(9833) ){      // describe what bait or lure was used.
+
+   // 9833  - describe what bait or lure was used
+   // 12288 - bait
+   if( all_users_all_taxa === 'yes' || obs_field_array.includes(9833) ){                                     
        details_menu += furl(github_root+'life_list_bait.html?project_id='+p_project_id+opts+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=9833&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:describe+what+bait+or+lure+was+used','Tackle Used');
    }
-   if( obs_field_array.includes(12288) ) {    // bait
+   if( all_users_all_taxa === 'yes' || obs_field_array.includes(12288) || (!p_user_id && !p_taxon_id) ) {    
        details_menu += furl(github_root+'life_list_bait.html?project_id='+p_project_id+opts+'&user_id='+(winurlparams.get('user_id')||'')+'&obs_fields=12288&ofv_datatype=taxon,text,numeric,date,time,datetime,dna&field:bait','Bait Used');
    }
 
