@@ -22,7 +22,7 @@
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
 
 <script>
-function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
+/*function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
 function famp(str) { return str.replace(/&/g,'&amp;'); };
 function fshorten(num) { return num<10000 ? num : num<1000000 ? (num/1000).toFixed(1)+'K' : (num/1000000).toFixed(1)+'M'; };
 function faddelem(etype,eparent=null,eattributes={}) {
@@ -45,7 +45,7 @@ function fdate(str,dateonly=false) {
       str = str.replace('+00:00','±00:00');
    };
    return str;
-};
+};*/
 
 //get parameters from the url
 let winurlstr = window.location.href;
@@ -79,7 +79,7 @@ let field_key = '';
 let field_id = '';
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
-      field_key = key;
+      field_key = key.replace('field:','');
       field = ('&'+key+'='+value);
       field_id = value;
   }
