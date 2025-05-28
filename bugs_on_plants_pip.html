@@ -71,21 +71,21 @@ function setUpDefaults(configurations) {
  
    if( configuration.default_place ) {
        if( !p_place_id ) {
-           winurlparams.set('place_id', configuration.default_place);
+           winurlparams.append('place_id', configuration.default_place);
            p_place_id = configuration.default_place;
        }
    }
  
    if( configuration.default_taxon ) {
        if( !p_taxon_id ) {
-           winurlparams.set('taxon_id', configuration.default_taxon);
+           winurlparams.append('taxon_id', configuration.default_taxon);
            p_taxon_id = configuration.default_taxon;
        }
    }
  
    if( configuration.plant_project ) {
        if( !p_project_id ) {
-           winurlparams.set('project_id', configuration.plant_project);
+           winurlparams.append('project_id', configuration.plant_project);
            p_project_id = configuration.plant_project;
        }
    }
