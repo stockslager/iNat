@@ -28,6 +28,13 @@ let p_project_id = winurlparams.get('project_id') || '';
 let p_title      = winurlparams.get('title') || '';
 let p_insect_project = winurlparams.get('insect_project') || '159056';  // pip
 
+// the place selected was added to seed_project parameter and needs to be
+// parsed if control is returning from the insects page.
+let place = getAfter(p_insect_project, "$");
+
+console.log('insect ' + p_insect_project);
+console.log('plc    ' + place);
+ 
 let configuration = '';
 
 let opts = copyOpts( winurlparams ) || '';
@@ -60,6 +67,10 @@ function capitalizeWords(str) {
   }).join(' ');
 }
 
+function getAfter(str, char) {
+  return str.split(char)[1];
+}
+ 
 function setUpDefaults(configurations) {
 
    for( let i=0; i<configurations.length; i++ ) {
@@ -173,7 +184,7 @@ function fresults(xobj) {
          }
 
          let place_param = '';
-         if( p_place_id ) { place_param = '&place_id='+p_place_id; }
+         if( p_place_id ) { place_param = '$'+p_place_id; }
        
          let field_param    = ('&field:'+configuration.field_name+'='+rec.taxon.id);
          let seed_prj_param = ('&seed_project=pip'+p_insect_project+place_param);
