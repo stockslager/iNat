@@ -29,6 +29,7 @@ let p_title      = winurlparams.get('title') || '';
 let p_insect_project = winurlparams.get('insect_project') || '159056';  // pip
 
 let configurations = [];
+let configuration = '';
 
 let opts = copyOpts( winurlparams ) || '';
 
@@ -63,6 +64,26 @@ function capitalizeWords(str) {
 
 function buildMenu() {
       let menu_string = '';
+      let links = '';
+
+      for( let i=0; i<configurations.length; i++ ) {
+           if( configurations[i].project_id === p_insect_project ) {
+               configuration = configurations[i];
+               break;
+           }
+      }
+
+      if( configuration.places && configuration.places.length > 0 ) {
+          for( let i=0; i<configuration.places.length; i++ ) {
+               links += furl(github_root+'bugs_on_plants_pip.html?place_id='+configuration.places[i].place_id,configuration[i].place_name);
+          }
+      }
+  
+      menu_string = '<div class="navbar">';
+      menu_string += buildDD('Place', links);
+
+      //menu_string += buildHome(furl(github_root+'cncnpc_seeds.html?project_id='+p_project_id,'&#127807;'));
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
 function fresults(xobj) {
@@ -81,7 +102,7 @@ function fresults(xobj) {
       let field_id = '';
       let field_name = '';
 
-      //buildMenu();
+      buildMenu();
     
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
@@ -128,10 +149,8 @@ function fresults(xobj) {
          let field_param = '';
  
          for( let i=0; i<configurations.length; i++ ) {
-              console.log('config ' + configurations[i].project_id );
               if( configurations[i].project_id === p_insect_project ) {
                   field_param = ('&field:'+configurations[i].field_name+'='+rec.taxon.id);
-                  console.log('param ' + field_param);
               }
          }
 
