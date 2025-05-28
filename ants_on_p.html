@@ -23,16 +23,8 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
-let p_params     = winurlparams.get('params') || '';
-let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
-let p_title        = winurlparams.get('title') || '';
-let p_prefix       = winurlparams.get('prefix') || '';
-let p_target_name   = winurlparams.get('target_name') || '';
-let p_field = '';
-let p_field_value = '';
-let interactions = [];
-let obs_field_array = [];
+let p_params     = winurlparams.get('params') || '';
 
 // set defaults...
 if( !p_project_id ) {
@@ -43,9 +35,18 @@ if( !p_project_id ) {
 } 
  
 if( !p_params ) {
-    winurlparams.append('params', p_params);
+    winurlparams.append('params', 'ants');
     p_params = winurlparams.get('params');
 }
+ 
+let p_user_id    = winurlparams.get('user_id') || '';
+let p_title        = winurlparams.get('title') || '';
+let p_prefix       = winurlparams.get('prefix') || '';
+let p_target_name   = winurlparams.get('target_name') || '';
+let p_field = '';
+let p_field_value = '';
+let interactions = [];
+let obs_field_array = [];
  
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of winurlparams.entries()) {
