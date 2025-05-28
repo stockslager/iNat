@@ -27,6 +27,7 @@ winurlparams.set('taxon_id', '47124');
 let p_project_id = winurlparams.get('place_id') || '';
 let p_place_id   = winurlparams.get('place_id') || '';
 let p_title      = winurlparams.get('title') || '';
+let p_insect_project = winurlparams.get('insect_project') || '159056';  // pip
 
 let opts = copyOpts( winurlparams ) || '';
 
@@ -103,6 +104,7 @@ function fresults(xobj) {
          let rec = results[i];
          let tax_name = '';
          let pref_tax_name = '';
+         let header_name = '';
          let tax_photo = '<div class="clipart">&#127807</div>'; 
          let tax_id = '';
          let taxon = '';
@@ -113,6 +115,7 @@ function fresults(xobj) {
              tax_id = rec.taxon.id;
              tax_name = rec.taxon.name || '';
              pref_tax_name = rec.taxon.preferred_common_name || '';
+             header_name = pref_tax_name || tax_name || '';
            
              if( rec.taxon.default_photo ){
                  if( rec.taxon.default_photo.url ){
@@ -126,7 +129,7 @@ function fresults(xobj) {
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'bugs_on_plants2.html'+opts+'&taxon_id='+rec.taxon.id,displayName)},
+                  {innerHTML:furl(github_root+'bugs_on_plants2.html?project_id='+p_insect_project+'&taxon_id='+rec.taxon.id+'&menu=pip&title=on&target_name='+header_name,displayName)},
                   {innerText:rec.count||''},
                   ];
         
