@@ -45,12 +45,18 @@ var columns = 3;*/
 
 let home_opts = '';
 
-if( !p_project_id ) {
+if( p_project_id ) {
+    home_opts = '?project_id='+p_project_id+'&taxon_id=47336';
+} else {
     home_opts = '?taxon_id=47336';
 }
 if( p_params ) {
     home_opts += '&params='+p_params;
 }
+
+let dd_opts = '';
+if( p_project_id ) { dd_opts += '&project_id='+p_project_id; }
+if( p_params )     { dd_opts += '&params='+p_params; }
 
 let obs_field_array = [];
 let annotations_array = [];
@@ -100,11 +106,11 @@ function buildMenu() {
            }
       }
 
-      links += furl(github_root+'ants_g.html'+home_opts+'&taxon_id='+p_taxon_id+field,"grid");
+      links += furl(github_root+'ants_g.html?taxon_id='+p_taxon_id+dd_opts+field,"grid");
       if( field_key ) {
-          links += furl(github_root+'ants_on_p_l.html'+home_opts+'&taxon_id='+p_taxon_id+obs_fields+field,"list");
+          links += furl(github_root+'ants_on_p_l.html?taxon_id='+p_taxon_id+dd_opts+obs_fields+field,"list");
       }
-      links += furl(github_root+'life_list_map.html'+home_opts+'&taxon_id='+p_taxon_id+field+'&centerlat=40.28948147516545&centerlng=-82.86732790624998&defaultzoom=7',"map");
+      links += furl(github_root+'life_list_map.html?taxon_id='+p_taxon_id+dd_opts+field+'&centerlat=40.28948147516545&centerlng=-82.86732790624998&defaultzoom=7',"map");
   
       menu_string = '<div class="navbar">';
       menu_string += buildDD('Show', links);
