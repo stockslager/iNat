@@ -103,15 +103,15 @@ function buildMenu() {
       let links = '';
       let menu = '';
 
+      menu_string = '<div class="navbar">';
+
       links += furl(github_root+'ants_on_p.html'+opts, 'all');
  
       for( let i=0; i<interactions.length; i++ ) {
        
            if( !menu || (menu !== interactions[i].dd_menu) ) {
-               menu_string = '<div class="navbar">';
                if( i !== 0 ) {
                    menu_string += buildDD(interactions[i].dd_menu, links);
-                   menu_string += '</div>';
                }
            }
            menu = interactions[i].dd_menu;
