@@ -124,18 +124,18 @@ function capitalizeWords(str) {
 function buildMenu() {
       let menu_string = '';
       let links = '';
-      let menu = interactions[0].dd_menu;
+      let menu = interactions[0].dd_menu.toString();
 
       links += furl(github_root+'ants_on_plants.html'+opts, 'all');
  
       for( let i=0; i<interactions.length; i++ ) {
        
-           if( menu && menu !== interactions[i].dd_menu ) {
+           if( menu && menu !== interactions[i].dd_menu.toString() ) {
                menu_string = '<div class="navbar">';
-               menu_string += buildDD(interactions[0].dd_menu, links);
+               menu_string += buildDD(interactions[0].dd_menu.toString(), links);
                menu_string += '</div>';
            }
-           menu = interactions[i].dd_menu;
+           menu = interactions[i].dd_menu.toString();
            links += furl(github_root+'ants_on_plants.html'+opts+'&field:'+interactions[i].field_name+'='+interactions[i].field_value, interactions[i].dd_name);
       }
 
