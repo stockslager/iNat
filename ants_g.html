@@ -101,10 +101,9 @@ function buildMenu() {
       let obs_fields = '&obs_fields=';
 
       for( let i=0; i<interactions.length; i++ ) {
-        console.log('key '+field_key.toString());
-        console.log('nm ' + interactions[i].field_name.toString());
            if( field_key.toString() === interactions[i].field_name.toString() ) {
-               obs_fields += (interactions[i].obs_field_list);
+               obs_fields = (interactions[i].obs_field_list);
+               break;
            }
       }
 
