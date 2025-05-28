@@ -1,0 +1,164 @@
+<!DOCTYPE html>  
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Ant Grid" />
+<meta charset="utf-8">
+<link rel="icon" type="image/png" href="ohio_ant.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="ohio_ant.svg" />
+<link rel="shortcut icon" href="ohio_ant.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="ohio_ant.png" />
+<meta name="apple-mobile-web-app-title" content="Ants" />
+<link rel="manifest" href="ohio_ant.manifest" />
+<link rel="stylesheet" type="text/css" href="seed_library.css" />
+<script type="text/javascript" src='common_func.js'> </script>
+<script type="text/javascript" src='observations_grid.js'> </script>
+<title>Ant Grid</title>
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
+
+<script>
+
+//get parameters from the url
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr);
+let p_project_id = winurlparams.get('project_id') || '';
+let p_params     = winurlparams.get('params') || '';
+let p_taxon_id   = winurlparams.get('taxon_id') || '';
+var cellpx       = winurlparams.get('cellpx') || 122;
+var spacerpx     = winurlparams.get('spacerpx') || 4;
+var rows         = winurlparams.get('rows') || 30;
+var columns      = winurlparams.get('columns') || 3;
+let title        = winurlparams.get('title') || '';
+let p_action     = winurlparams.get('action') || '';
+let p_cache_check = winurlparams.get('cache_check') || '';
+/*var cellpx = 300;
+var spacerpx = 3;
+var rows = 30;
+var columns = 3;*/
+
+let home_opts = '';
+
+if( !p_project_id ) {
+    home_opts = '?taxon_id=47336';
+}
+if( p_params ) {
+    home_opts += '&params='+p_params;
+}
+
+let obs_field_array = [];
+let annotations_array = [];
+let ofvs_array = [];
+let interactions = [];
+
+// if the user has selected a method, built the opt to pass to the
+// lifelist page.
+// find key/value pair for &field: param if one was passed in
+let field = '';
+let field_key = '';
+let field_id = '';
+for (const [key, value] of winurlparams.entries()) {
+  if( key.startsWith('field') ){
+      field_key = key.replace('field:','');
+      field = ('&'+key+'='+value);
+      field_id = value;
+  }
+}   
+
+var recsmax = columns * rows - 1;
+
+winurlparams.delete('cellpx');
+winurlparams.delete('spacerpx');
+winurlparams.delete('rows');
+winurlparams.delete('columns');
+var obsurlbase = 'https://www.inaturalist.org/observations';
+var obsurl = obsurlbase+'?'+winurlparams.toString();
+winurlparams.append('per_page',recsmax);
+var apiurlbase = 'https://api.inaturalist.org/v1/observations'
+var apiurl = apiurlbase+'?'+winurlparams.toString();
+
+if( title ) {
+    document.title = title.toLowerCase();
+}
+
+function buildMenu() {
+      let menu_string = '';
+      let links = '';
+      let obs_fields = '&obs_fields=';
+
+      for( let i=0; i<interactions.length; i++ ) {
+        console.log('key '+field_key.toString());
+        console.log('nm ' + interactions[i].field_name.toString());
+           if( field_key.toString() === interactions[i].field_name.toString() ) {
+               obs_fields += (interactions[i].obs_field_list);
+           }
+      }
+
+      links += furl(github_root+'ants_g.html'+home_opts+'&taxon_id='+p_taxon_id+field,"grid");
+      if( field_key ) {
+          links += furl(github_root+'ants_on_p_l.html'+home_opts+'&taxon_id='+p_taxon_id+obs_fields+field,"list");
+      }
+      links += furl(github_root+'life_list_map.html'+home_opts+'&taxon_id='+p_taxon_id+field+'&centerlat=40.28948147516545&centerlng=-82.86732790624998&defaultzoom=7',"map");
+  
+      menu_string = '<div class="navbar">';
+      menu_string += buildDD('Show', links);
+
+      menu_string += ('<div id="home">'+furl(github_root+'ants_on_p.html'+home_opts,'<img class="nav_photo" src="'+github_root+'ohio_ant.png" />')+'</div></div>');
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+  
+function fresults(data) {  
+   buildMenu();
+   buildGrid(data);
+};
+
+async function asyncGetData() {
+   await fetch(p_params+'.json')
+     .then(response => response.json())
+     .then(data => {
+      // Access your data here 
+      for( let i=0; i<data.interactions.length; i++ ) {
+           interactions = data.interactions;
+      }
+      console.log(data);
+   })
+     .catch(error => {
+      console.error('Error fetching JSON:', error);
+   });
+
+   if (winurlsearchstr==='' || (p_project_id === '' && p_taxon_id === '') ) {
+      let instructions = [
+         {innerText:'This page requires a project_id and/or a taxon_id argument.  Add ?project_id=12345678 to the end of the url.  '},
+      ];
+      faddelems('p',document.body,instructions);
+   } else {
+      await fetch(apiurl)
+      .then((response) => {
+         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+         return response.json();
+      })
+      .then((data) => { fresults(data); })
+      .catch((err) => {
+         console.error(err.message);
+         faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+      });
+   }
+}
+
+// need to pull resources from a json file to pass into an api
+// so needs to be asynchronous. 
+const request = async () => {
+   asyncGetData();
+}
+
+request();  
+   
+</script>
+</body>
+</html>
