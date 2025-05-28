@@ -70,7 +70,7 @@ function setUpDefaults(configurations) {
 
    if( !configuration.default_place && !configuration.plant_project ) {
        faddelem('p',document.body,{innerText:'A plant_project or default_place must be specified in bugs_pip.json'});
-       throw;
+       throw new Error('A plant_project or default_place must be specified in bugs_pip.json');
    }
  
    if( configuration.default_place ) {
