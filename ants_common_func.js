@@ -1,7 +1,7 @@
 function getHomeOpts( winurlparams ) {
    let opts='';
    for( const [key, value] of winurlparams.entries() ) { 
-        if( key !== 'taxon_id' && !key.startWith('field:') ) {
+        if( key !== 'taxon_id' && !key.startsWith('field:') ) {
             if( opts === '' ){
                 opts += "?";
             } else {
