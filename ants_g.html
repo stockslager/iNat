@@ -29,8 +29,22 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr);
 let p_project_id = winurlparams.get('project_id') || '';
-let p_params     = winurlparams.get('params') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
+let p_params     = winurlparams.get('params') || '';
+
+// set defaults...
+if( !p_project_id ) {
+    if( !p_taxon_id ) {
+        winurlparams.append('taxon_id', '47336');
+        p_taxon_id = winurlparams.get('taxon_id');
+    } 
+} 
+ 
+if( !p_params ) {
+    winurlparams.append('params', p_params);
+    p_params = winurlparams.get('params');
+}
+    
 var cellpx       = winurlparams.get('cellpx') || 122;
 var spacerpx     = winurlparams.get('spacerpx') || 4;
 var rows         = winurlparams.get('rows') || 30;
@@ -43,6 +57,7 @@ var spacerpx = 3;
 var rows = 30;
 var columns = 3;*/
 
+// set home opts...
 let home_opts = '';
 
 if( p_project_id ) {
