@@ -57,6 +57,7 @@ var spacerpx = 3;
 var rows = 30;
 var columns = 3;*/
 
+let opts = copyOpts( winurlparams ) || '';
 // set home opts...
 let home_opts = '';
 
@@ -121,16 +122,16 @@ function buildMenu() {
            }
       }
 
-      links += furl(github_root+'ants_g.html?taxon_id='+p_taxon_id+dd_opts+field,"grid");
+      links += furl(github_root+'ants_g.html?taxon_id='+p_taxon_id+opts+field,"grid");
       if( field_key ) {
-          links += furl(github_root+'ants_on_p_l.html?taxon_id='+p_taxon_id+dd_opts+obs_fields+field,"list");
+          links += furl(github_root+'ants_on_p_l.html?taxon_id='+p_taxon_id+opts+obs_fields+field,"list");
       }
-      links += furl(github_root+'life_list_map.html?taxon_id='+p_taxon_id+dd_opts+field+'&centerlat=40.28948147516545&centerlng=-82.86732790624998&defaultzoom=7',"map");
+      links += furl(github_root+'life_list_map.html?taxon_id='+p_taxon_id+opts+field+'&centerlat=40.28948147516545&centerlng=-82.86732790624998&defaultzoom=7',"map");
   
       menu_string = '<div class="navbar">';
       menu_string += buildDD('Show', links);
 
-      menu_string += ('<div id="home">'+furl(github_root+'ants_on_p.html'+home_opts,'<img class="nav_photo" src="'+github_root+'ohio_ant.png" />')+'</div></div>');
+      menu_string += ('<div id="home">'+furl(github_root+'ants_on_p.html'+opts,'<img class="nav_photo" src="'+github_root+'ohio_ant.png" />')+'</div></div>');
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
   
