@@ -111,7 +111,7 @@ function buildMenu() {
        
            if( !menu || (menu !== interactions[i].dd_menu) ) {
                if( i !== 0 ) {
-                   menu_string += buildDD(interactions[i].dd_menu, links);
+                   menu_string += buildDD(interactions[(i-1)].dd_menu, links);
                    links = '';
                }
            }
