@@ -1,0 +1,258 @@
+<!DOCTYPE html>  
+<html lang="en">  
+ 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Bugs on Plants" />
+<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="Bugs on Plants" />
+<link rel="manifest" href="bugs.webmanifest" />
+<link rel="stylesheet" type="text/css" href="seed_library.css" />
+<script type="text/javascript" src='common_func.js'> </script>
+<title>Bugs on Plants</title>
+</head>
+
+<body>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+winurlparams.set('place_id', '52339,48,42,51');
+let p_project_id = winurlparams.get('place_id') || '';
+let p_place_id   = winurlparams.get('place_id') || '';
+let p_list       = winurlparams.get('list') || '';
+let p_user_id    = winurlparams.get('user_id') || '';
+let p_taxon_id   = winurlparams.get('taxon_id') || '';
+let p_operator   = winurlparams.get('operator') || '';
+let p_obs_field  = winurlparams.get('obs_field') || '';
+let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
+let p_omit_users = winurlparams.get('omit_users') || '';
+let p_omit_id = winurlparams.get('omit_id') || '';
+let p_omit_project = winurlparams.get('omit_projects') || '';
+let p_title        = winurlparams.get('title') || '';
+let p_prefix       = winurlparams.get('prefix') || '';
+let p_target_name   = winurlparams.get('target_name') || '';
+let p_target_id     = winurlparams.get('target_id') || '';
+let p_show_menu     = winurlparams.get('show_menu') || 'no';
+let p_menu_array    = winurlparams.get('menu_array') || '';
+let p_tag_name      = winurlparams.get('tag_name') || '';
+let p_sub_menu_array    = winurlparams.get('sub_menu_array') || '';
+let p_menu          = winurlparams.get('menu') || 'pip';
+let p_seed_project  = winurlparams.get('seed_project') || '';
+let p_taxon_nm      = winurlparams.get('taxon_nm') || 'Show';
+let p_field = '';
+let p_field_value = '';
+let interactions = [];
+let obs_field_array = [];
+let seed_param = '';
+
+// find key/value pair for &field: param if one was passed in
+for (const [key, value] of winurlparams.entries()) {
+  if( key.startsWith('field') ){
+      p_field = key;
+      p_field_value = value;
+  }
+}  
+
+winurlparams.delete(p_field);
+let opts = copyOpts( winurlparams ) || '';
+
+winurlparams.delete('taxon_id');
+let opts_no_taxon = copyOpts( winurlparams ) || '';
+
+winurlparams.append('taxon_id', p_taxon_id);
+
+if( p_field ) {
+    winurlparams.append(p_field, p_field_value);
+}
+
+if( p_seed_project ) {
+    opts += ('&seed_project='+p_seed_project);
+    seed_param = '&seed_project='+p_seed_project;
+}
+ 
+if( p_omit_users !== '' ){
+    winurlparams.delete('not_user_id');
+    winurlparams.append('not_user_id', p_omit_users);
+}
+
+if( p_omit_id !== '' ){
+    winurlparams.delete('not_id');
+    winurlparams.append('not_id', p_omit_id);
+}
+
+if( p_omit_project !== '' ){
+    winurlparams.delete('not_in_project');
+    winurlparams.append('not_in_project', p_omit_project);
+}
+ 
+winurlparams.delete('per_page');
+winurlparams.append('per_page','100');
+
+if( p_title === '' ) {
+    tab_title = 'Ants on Plants';
+} else {
+    tab_title = (p_prefix+' '+p_title+' '+p_target_name);
+    document.title = tab_title;
+}
+
+winurlparams.delete('options');
+let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
+winurlparams.delete('idextra_user_id');
+let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
+winurlparams.delete('photo_curl_filename_prefix');
+ 
+let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
+let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
+
+</script> 
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
+<script> 
+
+function capitalizeWords(str) {
+  return str.toLowerCase().split(' ').map(function(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }).join(' ');
+}
+
+function buildMenu() {
+      let menu_string = '';
+}
+
+function fresults(xobj) {
+   let results = xobj.results;
+   let box_array = [];
+ 
+   if (results) {
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+      let labels = [];
+
+      let field_id = '';
+      let field_name = '';
+
+      //buildMenu();
+
+      if( !p_field_value ) {
+          tab_title = furl(github_root+'ants_grid.html'+opts,'<span id="topright">all organisms '+p_title+' any plant</span>');
+      } else {
+          tab_title = ('<span id="toprightbold">'+capitalizeWords(tab_title)+'</span>');
+      }
+    
+      faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
+             +'per page: '+fcomnum(per_page)+'<br />'
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)/*+tab_title*/+'<br />'});  
+
+      labels = [
+            {innerText:'#'},
+            {innerText:'Photo'},
+            {innerText:'Name'}, 
+            {innerText:' '},
+      ];
+
+      let table = faddelem('table',document.body,{id:'main'});                    
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+      
+      faddelems('th',hrow,labels);
+      let tbody = faddelem('tbody',table);
+
+      for (let i=0; i<results.length; i++) {
+         let rec = results[i];
+         let tax_name = '';
+         let pref_tax_name = '';
+         let tax_photo = '<div class="clipart">&#127807</div>'; 
+         let tax_id = '';
+         let taxon = '';
+
+         let brow = faddelem('tr',tbody);
+
+         if( rec.taxon ){
+             tax_id = rec.taxon.id;
+             tax_name = rec.taxon.name || '';
+             pref_tax_name = rec.taxon.preferred_common_name || '';
+           
+             if( rec.taxon.default_photo ){
+                 if( rec.taxon.default_photo.url ){
+                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
+                 }
+             }
+         }
+
+         let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
+                                      
+         let values = [
+                  {innerText:i+1},
+                  {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
+                  {innerHTML:furl(github_root+'ants_grid.html'+opts_no_taxon+'&taxon_id='+rec.taxon.id+'&'+p_field,displayName)},
+                  {innerText:rec.count||''},
+                  ];
+        
+         faddelems('td',brow,values);
+      };
+
+      // buttons to go to prev or next page
+      let nav = faddelem('div',document.body,{id:'nav'});
+      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
+};
+
+async function asyncGetData() {
+   /*await fetch((p_params+'.json'))
+     .then(response => response.json())
+     .then(data => {
+      // Access your data here 
+      for( let i=0; i<data.interactions.length; i++ ) {
+           interactions = data.interactions;
+      }
+      console.log(data);
+   })
+     .catch(error => {
+      console.error('Error fetching JSON:', error);
+   });*/
+
+   /*if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
+      let instructions = [
+         {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.  It will default to the "7623 - plant that the organism was found on" observation field if &obs_field=xxx is not passed in.'},
+      ];
+      faddelems('p',document.body,instructions);
+   } else {*/
+      await fetch(apiurl)
+      .then((response) => {
+         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+         return response.json();
+      })
+      .then((data) => { fresults(data); })
+      .catch((err) => {
+         console.error(err.message);
+         faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+      });
+ //  }
+}
+
+// need to pull resources from a json file to pass into an api
+// so needs to be asynchronous. 
+const request = async () => {
+   asyncGetData();
+}
+
+request();  
+
+</script>
+</body>
+
+</html>
