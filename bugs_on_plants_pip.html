@@ -30,7 +30,7 @@ let p_insect_project = winurlparams.get('insect_project') || '159056';  // pip
 
 // the place selected was added to seed_project parameter and needs to be
 // parsed if control is returning from the insects page.
-let place = getAfter(p_insect_project, "$");
+let place = p_insect_project.split('$')[1];
 
 console.log('insect ' + p_insect_project);
 console.log('plc    ' + place);
