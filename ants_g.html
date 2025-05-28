@@ -102,9 +102,9 @@ function buildMenu() {
 
       for( let i=0; i<interactions.length; i++ ) {
            if( field_key.toString() === interactions[i].field_name.toString() ) {
-               if( field_value && field_value.toString() === interactions[i].field_value.toString() ) {
+               if( field_value && field_value === interactions[i].field_value ) {
                    for( let j=0; j<interactions[i].obs_field_list.length; j++ ) {
-                        obs_fields += (interactions[i].obs_field_list[j].field_value+',');
+                        obs_fields += (interactions[i].obs_field_list[j].field_id+',');
                    }
                }
            }
