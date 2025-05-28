@@ -22,13 +22,12 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-winurlparams.set('place_id', '52339,48,42,51');
-winurlparams.set('taxon_id', '47124');
 let p_place_id   = winurlparams.get('place_id') || '';
+let p_taxon_id   = winurlparams.get('taxon_id') || '';
+let p_project_id = winurlparams.get('project_id') || '';
 let p_title      = winurlparams.get('title') || '';
 let p_insect_project = winurlparams.get('insect_project') || '159056';  // pip
 
-let configurations = [];
 let configuration = '';
 
 let opts = copyOpts( winurlparams ) || '';
@@ -62,12 +61,42 @@ function capitalizeWords(str) {
   }).join(' ');
 }
 
+function setUpDefaults(configurations) {
+
+   for( let i=0; i<configurations.length; i++ ) {
+        if( configurations[i].insect_project === p_insect_project ) {
+            configuration = configurations[i];
+        }
+   }
+ 
+   if( configuration.default_place ) {
+       if( !p_place_id ) {
+           winurlparams.set('place_id', configuration.default_place);
+           p_place_id = configuration.default_place;
+       }
+   }
+ 
+   if( configuration.default_taxon ) {
+       if( !p_taxon_id ) {
+           winurlparams.set('taxon_id', configuration.default_taxon);
+           p_taxon_id = configuration.default_taxon;
+       }
+   }
+ 
+   if( configuration.plant_project ) {
+       if( !p_project_id ) {
+           winurlparams.set('project_id', configuration.plant_project);
+           p_project_id = configuration.plant_project;
+       }
+   }
+}
+ 
 function buildMenu() {
       let menu_string = '';
       let links = '';
 
       for( let i=0; i<configurations.length; i++ ) {
-           if( configurations[i].project_id === p_insect_project ) {
+           if( configurations[i].insect_project === p_insect_project ) {
                configuration = configurations[i];
                break;
            }
@@ -149,7 +178,7 @@ function fresults(xobj) {
          let field_param = '';
  
          for( let i=0; i<configurations.length; i++ ) {
-              if( configurations[i].project_id === p_insect_project ) {
+              if( configurations[i].insect_project === p_insect_project ) {
                   field_param = ('&field:'+configurations[i].field_name+'='+rec.taxon.id);
               }
          }
@@ -182,7 +211,7 @@ async function asyncGetData() {
      .then(data => {
       // Access your data here 
       if( data.configurations ) {
-           configurations = data.configurations;
+           setUpDefaults(data.configurations);
       }
       console.log(data);
    })
