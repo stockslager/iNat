@@ -28,7 +28,7 @@ let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
 let p_show_user  = winurlparams.get('show_user') || '';
-let p_params     = winurlparams.get('params') || 'ants';
+let p_params     = winurlparams.get('params') || '';
 let p_obs_field_array = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic   = winurlparams.get('ofield_iconic') || '';
 let p_omit_users      = winurlparams.get('omit_users') || '';
@@ -47,7 +47,7 @@ if( !p_project_id ) {
     home_opts = '?taxon_id=47336';
 }
 if( p_params ) {
-    home_opts += '&params=ants';
+    home_opts += '&params='+p_params;
 }
 
 if( p_obs_field_array !== '' ){
