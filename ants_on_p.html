@@ -34,6 +34,7 @@ let p_field_value = '';
 let interactions = [];
 let obs_field_array = [];
 
+// set defaults...
 if( !p_project_id ) {
     if( !p_taxon_id ) {
         winurlparams.append('taxon_id', '47336');
@@ -42,6 +43,7 @@ if( !p_project_id ) {
 } 
  
 if( !p_params ) {
+    winurlparams.append('params', p_params);
     p_params = winurlparams.get('params');
 }
  
