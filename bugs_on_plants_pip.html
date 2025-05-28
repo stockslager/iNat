@@ -95,13 +95,6 @@ function buildMenu() {
       let menu_string = '';
       let links = '';
 
-      for( let i=0; i<configurations.length; i++ ) {
-           if( configurations[i].insect_project === p_insect_project ) {
-               configuration = configurations[i];
-               break;
-           }
-      }
-
       if( configuration.places && configuration.places.length > 0 ) {
           for( let i=0; i<configuration.places.length; i++ ) {
                links += furl(github_root+'bugs_on_plants_pip.html?place_id='+configuration.places[i].place_id,configuration.places[i].place_name);
@@ -175,13 +168,7 @@ function fresults(xobj) {
              }
          }
 
-         let field_param = '';
- 
-         for( let i=0; i<configurations.length; i++ ) {
-              if( configurations[i].insect_project === p_insect_project ) {
-                  field_param = ('&field:'+configurations[i].field_name+'='+rec.taxon.id);
-              }
-         }
+         let field_param = ('&field:'+configuration.field_name+'='+rec.taxon.id);
 
          let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
                                       
