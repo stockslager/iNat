@@ -23,82 +23,20 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 winurlparams.set('place_id', '52339,48,42,51');
+winurlparams.set('taxon_id', '47124');
 let p_project_id = winurlparams.get('place_id') || '';
 let p_place_id   = winurlparams.get('place_id') || '';
-let p_list       = winurlparams.get('list') || '';
-let p_user_id    = winurlparams.get('user_id') || '';
-let p_taxon_id   = winurlparams.get('taxon_id') || '';
-let p_operator   = winurlparams.get('operator') || '';
-let p_obs_field  = winurlparams.get('obs_field') || '';
-let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
-let p_omit_users = winurlparams.get('omit_users') || '';
-let p_omit_id = winurlparams.get('omit_id') || '';
-let p_omit_project = winurlparams.get('omit_projects') || '';
-let p_title        = winurlparams.get('title') || '';
-let p_prefix       = winurlparams.get('prefix') || '';
-let p_target_name   = winurlparams.get('target_name') || '';
-let p_target_id     = winurlparams.get('target_id') || '';
-let p_show_menu     = winurlparams.get('show_menu') || 'no';
-let p_menu_array    = winurlparams.get('menu_array') || '';
-let p_tag_name      = winurlparams.get('tag_name') || '';
-let p_sub_menu_array    = winurlparams.get('sub_menu_array') || '';
-let p_menu          = winurlparams.get('menu') || 'pip';
-let p_seed_project  = winurlparams.get('seed_project') || '';
-let p_taxon_nm      = winurlparams.get('taxon_nm') || 'Show';
-let p_field = '';
-let p_field_value = '';
-let interactions = [];
-let obs_field_array = [];
-let seed_param = '';
+let p_title      = winurlparams.get('title') || '';
 
-// find key/value pair for &field: param if one was passed in
-for (const [key, value] of winurlparams.entries()) {
-  if( key.startsWith('field') ){
-      p_field = key;
-      p_field_value = value;
-  }
-}  
-
-winurlparams.delete(p_field);
 let opts = copyOpts( winurlparams ) || '';
 
-winurlparams.delete('taxon_id');
-let opts_no_taxon = copyOpts( winurlparams ) || '';
-
-winurlparams.append('taxon_id', p_taxon_id);
-
-if( p_field ) {
-    winurlparams.append(p_field, p_field_value);
-}
-
-if( p_seed_project ) {
-    opts += ('&seed_project='+p_seed_project);
-    seed_param = '&seed_project='+p_seed_project;
-}
- 
-if( p_omit_users !== '' ){
-    winurlparams.delete('not_user_id');
-    winurlparams.append('not_user_id', p_omit_users);
-}
-
-if( p_omit_id !== '' ){
-    winurlparams.delete('not_id');
-    winurlparams.append('not_id', p_omit_id);
-}
-
-if( p_omit_project !== '' ){
-    winurlparams.delete('not_in_project');
-    winurlparams.append('not_in_project', p_omit_project);
-}
- 
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
 
 if( p_title === '' ) {
-    tab_title = 'Ants on Plants';
+    document.title = 'Bugs on Plants';
 } else {
-    tab_title = (p_prefix+' '+p_title+' '+p_target_name);
-    document.title = tab_title;
+    document.title = p_title;
 }
 
 winurlparams.delete('options');
@@ -142,22 +80,16 @@ function fresults(xobj) {
       let field_name = '';
 
       //buildMenu();
-
-      if( !p_field_value ) {
-          tab_title = furl(github_root+'ants_grid.html'+opts,'<span id="topright">all organisms '+p_title+' any plant</span>');
-      } else {
-          tab_title = ('<span id="toprightbold">'+capitalizeWords(tab_title)+'</span>');
-      }
     
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)/*+tab_title*/+'<br />'});  
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
 
       labels = [
             {innerText:'#'},
             {innerText:'Photo'},
             {innerText:'Name'}, 
-            {innerText:' '},
+            {innerText:'Count'},
       ];
 
       let table = faddelem('table',document.body,{id:'main'});                    
@@ -194,7 +126,7 @@ function fresults(xobj) {
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'ants_grid.html'+opts_no_taxon+'&taxon_id='+rec.taxon.id+'&'+p_field,displayName)},
+                  {innerHTML:furl(github_root+'bugs_on_plants2.html'+opts+'&taxon_id='+rec.taxon.id,displayName)},
                   {innerText:rec.count||''},
                   ];
         
