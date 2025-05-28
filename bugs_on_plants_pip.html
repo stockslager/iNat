@@ -161,7 +161,7 @@ async function asyncGetData() {
      .then(response => response.json())
      .then(data => {
       // Access your data here 
-      for( let i=0; i<data.interactions.length; i++ ) {
+      if( data.configurations ) {
            configurations = data.configurations;
       }
       console.log(data);
