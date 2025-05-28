@@ -123,9 +123,9 @@ async function asyncGetData() {
       console.error('Error fetching JSON:', error);
    });
 
-   if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
+   if (winurlsearchstr==='' || (p_project_id === '' && p_taxon_id === '') ) {
       let instructions = [
-         {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.  It will default to the "7623 - plant that the organism was found on" observation field if &obs_field=xxx is not passed in.'},
+         {innerText:'This page requires a project_id and/or a taxon_id argument.  Add ?project_id=12345678 to the end of the url.  '},
       ];
       faddelems('p',document.body,instructions);
    } else {
