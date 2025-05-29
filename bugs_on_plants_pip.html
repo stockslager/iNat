@@ -121,7 +121,7 @@ function buildMenu() {
 
       if( configuration.places && configuration.places.length > 0 ) {
           for( let i=0; i<configuration.places.length; i++ ) {
-               links += furl(github_root+'bugs_on_plants_pip.html?place_id='+configuration.places[i].place_id+configuration.places[i].other_filters,configuration.places[i].place_name);
+               links += furl(github_root+'bugs_on_plants_pip.html?place_id='+configuration.places[i].place_id+(configuration.places[i].other_filters||''),configuration.places[i].place_name);
           }
       }
   
