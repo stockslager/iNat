@@ -100,8 +100,10 @@ for (const [key, value] of winurlparams.entries()) {
 // find key/value pair for &field: param if one was passed in
 let field = '';
 let opts = '';
+let field_key = '';
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
+      field_key = key;
       opts += ('&'+key+'='+value);
       field = ('&'+key+'='+value);
   }
