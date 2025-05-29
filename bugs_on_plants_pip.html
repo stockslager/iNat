@@ -126,7 +126,7 @@ function setUpDefaults(configurations) {
 }
 
 function getTaxonName( configuration, taxon_id ) {
-   let taxon_name = 'Taxa';
+   let taxon_name = 'Plant';
 
    for( let i=0; i<configuration.taxa.length; i++ ) {
         if( taxon_id === configuration.taxa[i].taxon_id.toString() ) {
@@ -134,6 +134,17 @@ function getTaxonName( configuration, taxon_id ) {
         }
    }
    return taxon_name;
+}
+
+function getPlaceName( configuration, place_id ) {
+   let place_name = 'Place';
+
+   for( let i=0; i<configuration.places.length; i++ ) {
+        if( place_id === configuration.places[i].place_id.toString() ) {
+            place_name = configuration.places[i].place_name;
+        }
+   }
+   return place_name;
 }
  
 function buildMenu() {
@@ -152,7 +163,7 @@ function buildMenu() {
       }
   
       menu_string = '<div class="navbar">';
-      menu_string += buildDD('Place', links);
+      menu_string += buildDD(getPlaceName(configuration, p_place_id), links);
       links = '';
 
       if( configuration.taxa && configuration.taxa.length > 0 ) {
