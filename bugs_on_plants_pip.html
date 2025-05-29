@@ -128,19 +128,29 @@ function setUpDefaults(configurations) {
 function buildMenu() {
       let menu_string = '';
       let links = '';
+      let place_param = '';
+      let taxon_param = '';
+
+      if( p_place_id ) { place_param += '&place_id='+p_place_id; }
+      if( p_taxon_id ) { taxon_param += '&taxon_id='+p_taxon_id; }
 
       if( configuration.places && configuration.places.length > 0 ) {
           for( let i=0; i<configuration.places.length; i++ ) {
-               let filters = '';
-               if( configuration.places[i].other_filters ) {
-                   filters += '&'+configuration.places[i].other_filters;
-               }
-               links += furl(github_root+'bugs_on_plants_pip.html?place_id='+configuration.places[i].place_id/*+filters*/,configuration.places[i].place_name);
+               links += furl(github_root+'bugs_on_plants_pip.html?place_id='+configuration.places[i].place_id+taxon_param,configuration.places[i].place_name);
           }
       }
   
       menu_string = '<div class="navbar">';
       menu_string += buildDD('Place', links);
+
+      if( configuration.taxa && configuration.taxa.length > 0 ) {
+          for( let i=0; i<configuration.taxa.length; i++ ) {
+               links += furl(github_root+'bugs_on_plants_pip.html?taxon_id='+configuration.taxa[i].taxon_id+place_param,configuration.taxa[i].taxon_name);
+          }
+      }
+ 
+      menu_string = '<div class="navbar">';
+      menu_string += buildDD('Taxa', links);
 
       //menu_string += buildHome(furl(github_root+'cncnpc_seeds.html?project_id='+p_project_id,'&#127807;'));
       faddelem('p',document.body,{innerHTML:(menu_string)});  
