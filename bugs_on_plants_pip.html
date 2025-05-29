@@ -33,8 +33,6 @@ let p_insect_project = winurlparams.get('insect_project') || '159056';  // pip
 let prj   = p_insect_project.split('$')[0];
 let place = p_insect_project.split('$')[1];
 
-console.log('insect ' + prj);
-console.log('plc    ' + place);
 if( prj ) {
     winurlparams.append('insect_project', prj);
     p_insect_project = prj;
@@ -113,6 +111,18 @@ function setUpDefaults(configurations) {
            p_project_id = configuration.plant_project;
        }
    }
+
+   // check for additional filters in the .json for the place and project...
+   if( p_place_id ) {
+       for( let i=0; i<configuration.places.length; i++ ) {
+            if( p_place_id === configuration.places[i].place_id ) {
+                if( configuration.places[i].other_filters ) {
+                    winurlparams.append(('&'+configuration.places[i].other_filters),'');
+                    break;
+                }
+            }
+       }
+   }
 }
  
 function buildMenu() {
@@ -121,7 +131,11 @@ function buildMenu() {
 
       if( configuration.places && configuration.places.length > 0 ) {
           for( let i=0; i<configuration.places.length; i++ ) {
-               links += furl(github_root+'bugs_on_plants_pip.html?place_id='+configuration.places[i].place_id+(configuration.places[i].other_filters||''),configuration.places[i].place_name);
+               let filters = '';
+               if( configuration.places[i].other_filters ) {
+                   filters += '&'+configuration.places[i].other_filters;
+               }
+               links += furl(github_root+'bugs_on_plants_pip.html?place_id='+configuration.places[i].place_id+filters,configuration.places[i].place_name);
           }
       }
   
