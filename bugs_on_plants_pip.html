@@ -21,11 +21,11 @@
 let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
-let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let p_place_id   = winurlparams.get('place_id') || '';
-let p_taxon_id   = winurlparams.get('taxon_id') || '';
-let p_project_id = winurlparams.get('project_id') || '';
-let p_title      = winurlparams.get('title') || '';
+let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
+let p_place_id    = winurlparams.get('place_id') || '';
+let p_taxon_id    = winurlparams.get('taxon_id') || '';
+let p_project_id  = winurlparams.get('project_id') || '';
+let p_title       = winurlparams.get('title') || '';
 let p_insect_project = winurlparams.get('insect_project') || '159056';  // pip
 
 // the place selected was added to seed_project parameter and needs to be
@@ -124,6 +124,17 @@ function setUpDefaults(configurations) {
        }
    }
 }
+
+function getTaxonName( configuration, taxon_id ) {
+   let taxon_name = 'Taxa';
+
+   for( let i=0; i<configuration.taxa.length; i++ ) {
+        if( taxon_id === configuration.taxa.taxon_id.toString() ) {
+            taxon_name = configuration.taxa.taxon_name;
+        }
+   }
+   return taxon_name;
+}
  
 function buildMenu() {
       let menu_string = '';
@@ -150,7 +161,7 @@ function buildMenu() {
           }
       }
  
-      menu_string += buildDD('Taxa', links);
+      menu_string += buildDD(getTaxonName(configuration, p_taxon_id), links);
       menu_string += '</div>';
 
       //menu_string += buildHome(furl(github_root+'cncnpc_seeds.html?project_id='+p_project_id,'&#127807;'));
