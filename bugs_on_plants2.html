@@ -442,6 +442,10 @@ function fresults(xobj) {
              }
          }
 
+         if( p_place_id ) {
+             query_params += '&place_id='+p_place_id;
+         }
+
          let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
          let grid_title  = ('&action='+p_title+'&title='+(pref_tax_name||tax_name)+' '+p_title+' '+p_target_name);
                                       
