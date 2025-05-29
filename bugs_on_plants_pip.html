@@ -115,7 +115,7 @@ function setUpDefaults(configurations) {
    // check for additional filters in the .json for the place and project...
    if( p_place_id ) {
        for( let i=0; i<configuration.places.length; i++ ) {
-            if( p_place_id === configuration.places[i].place_id.toString() ) {
+            if( p_place_id === configuration.places[i].place_id ) {
                 if( configuration.places[i].other_filters ) {
                     winurlparams.append(configuration.places[i].other_filters,'');
                     break;
@@ -129,7 +129,7 @@ function getTaxonName( configuration, taxon_id ) {
    let taxon_name = 'Plant';
 
    for( let i=0; i<configuration.taxa.length; i++ ) {
-        if( taxon_id === configuration.taxa[i].taxon_id.toString() ) {
+        if( taxon_id === configuration.taxa[i].taxon_id ) {
             taxon_name = configuration.taxa[i].taxon_name;
         }
    }
@@ -140,7 +140,7 @@ function getPlaceName( configuration, place_id ) {
    let place_name = 'Place';
 
    for( let i=0; i<configuration.places.length; i++ ) {
-        if( place_id === configuration.places[i].place_id.toString() ) {
+        if( place_id === configuration.places[i].place_id ) {
             place_name = configuration.places[i].place_name;
         }
    }
