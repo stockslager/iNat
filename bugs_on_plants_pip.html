@@ -129,8 +129,8 @@ function getTaxonName( configuration, taxon_id ) {
    let taxon_name = 'Taxa';
 
    for( let i=0; i<configuration.taxa.length; i++ ) {
-        if( taxon_id === configuration.taxa.taxon_id.toString() ) {
-            taxon_name = configuration.taxa.taxon_name;
+        if( taxon_id === configuration.taxa[i].taxon_id.toString() ) {
+            taxon_name = configuration.taxa[i].taxon_name;
         }
    }
    return taxon_name;
