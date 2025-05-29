@@ -318,8 +318,12 @@ function fresults(xobj) {
       let menu_item = '';
       for( let i=0; i<menu_items.length; i++ ){
            if( menu_items[i].title === p_title ) {
-               field_id   = menu_items[i].field_id;
-               field_name = ('&field:'+menu_items[i].field_name+'=');
+               if( menu_items[i].field_name ) {
+                   field_id   = menu_items[i].field_id;
+                   field_name = ('&field:'+menu_items[i].field_name+'=');
+               } else {
+                   field_name = ('&field:'+p_field+'=');
+               }
                menu_item = menu_items[i];
            }
       }
