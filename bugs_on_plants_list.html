@@ -312,7 +312,7 @@ function fresults(xobj) {
            
              if( rec.taxon.default_photo ){
                  if( rec.taxon.default_photo.url ){
-                     tax_photo = '<img class="smallicon" src="'+rec.taxon.default_photo.url+'" />';
+                     tax_photo = '<img class="mini_icon" src="'+rec.taxon.default_photo.url+'" />';
                  }
              }
          }
@@ -470,7 +470,7 @@ function fresults(xobj) {
       }  
 
       if( p_taxon_id ) {
-          faddelem('p',document.body,{innerHTML:('<span id="topright">'+tax_photo+top_taxon+'</span>')});
+          faddelem('p',document.body,{innerHTML:('<span id="topright"><div style="display:flex; align-items:center;">'+tax_photo+'<span style="padding-left:10px;">'+top_taxon+'</span></div></span>')});
       }
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
