@@ -79,9 +79,11 @@ for (const [key, value] of winurlparams.entries()) {
 let field = '';
 let opts = '';
 let field_key = '';
+let field_value = '';
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
       field_key = key;
+      field_value = value;
       opts += ('&'+key+'='+value);
       field = ('&'+key+'='+value);
   }
@@ -106,14 +108,14 @@ var apiurl = apiurlbase+'?'+winurlparams.toString();
 
 document.title = title.toLowerCase();
 
-function buildLifeStageMenu(data) {
+function buildLifeStageMenu(data, obs_field_id) {
 
    let links = '';
    let menu_string = '';
    
    links = furl(github_root+'a_gg.html'+all_opts,"grid");
    if( field_key ) {
-       links += furl(github_root+'bugs_on_plants_list.html'+all_opts,"list");
+       links += furl(github_root+'bugs_on_plants_list.html'+all_opts+'&obs_fields='+obs_field_id,"list");
    }
    links += furl(github_root+'life_list_map.html'+all_opts,"map");
 
@@ -183,12 +185,20 @@ function buildLifeStageMenu(data) {
 }
 
 function buildMenu(data) {
-   
+
+  let obs_field_id = '';
   for( let j=0; j<data.results.length; j++ ) {
        checkForAnnotations(data.results[j]);
+       for( let i=0; i<data.results[j].ofvs.length; i++ ) {
+            // find the obs field that matches the one that passed in and save the id
+            // to pass to the "list" if that option is chosen in the "show" drop-down.
+            if( data.results[j].ofvs[i].name === field_value ) {
+                obs_field_id = data.results[j].ofvs[i].field_id;
+            }
+       }
   }
 
-  return( buildLifeStageMenu(data) );
+  return( buildLifeStageMenu(data, obs_field_id) );
 }
 
 function checkForAnnotations( obs ){
