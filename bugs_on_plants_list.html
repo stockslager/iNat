@@ -158,7 +158,7 @@ function getPrimaryColumnHeader( field_name ) {
 
    if( interactions ) {
        for( let i=0; i<interactions.length; i++ ) {
-            if( field_name === interactions[i].field_name ) {
+            if( field_name.toLowerCase() === interactions[i].field_name.toLowerCase() ) {
                 header = interactions[i].list_primary;
             }
         }
@@ -172,7 +172,7 @@ function getSecondaryColumnHeader( field_name ) {
 
    if( interactions ) {
        for( let i=0; i<interactions.length; i++ ) {
-            if( field_name === interactions[i].field_name ) {
+            if( field_name.toLowerCase() === interactions[i].field_name.toLowerCase() ) {
                 header = interactions[i].list_secondary || interactions[i].list_primary;
             }
        }
