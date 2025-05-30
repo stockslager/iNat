@@ -269,16 +269,29 @@ if (window.location.search==='') {
    faddelem('p',document.body,{innerHTML:'Note that the actual size of the image files is 75px x 75px. So setting the cellpx higher than 75 will make the images look blurry. Only the first photo in an observation will be shown, or else ❎ will be shown when an observation has no photos. The last cell in the grid will always be either a "no data" or "more" button. So a 3x5 grid will show only up to 14 observations.'});
 }
 else {
-   fetch(apiurl)
-      .then((response) => {
-         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-         return response.json();
-      })
-      .then((data) => { fresults(data); })
-      .catch((err) => {
-         console.error(err.message);
-         faddelem('p',document.body,{innerHTML:'There was a problem retrieving data. Error '+err.message+'.'})
-      });
+    let grid_data = '';
+    let cache_key = ('grid_data$'+p_project_id+'taxon_id='+p_taxon_id+'field='+field);
+
+    if( p_cache_check === 'yes' ) {
+        if( sessionStorage.getItem(cache_key) ) {
+            console.log('found cache..: '+cache_key+'==='+sessionStorage.getItem(cache_key));
+            grid_data = sessionStorage.getItem(cache_key);
+        }
+    }
+
+    if( !grid_data ) { 
+    
+        fetch(apiurl)
+          .then((response) => {
+             if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+             return response.json();
+          })
+          .then((data) => { sessionStorage.setItem(cache_key, grid_data); fresults(data); })
+          .catch((err) => {
+             console.error(err.message);
+             faddelem('p',document.body,{innerHTML:'There was a problem retrieving data. Error '+err.message+'.'})
+          });
+    }
 };
 
 </script>
