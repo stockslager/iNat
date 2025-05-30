@@ -155,10 +155,12 @@ function buildMenu() {
 
 function getPrimaryColumnHeader( field_name ) {
    let header = '';
- 
-   for( let i=0; i<interactions.length; i++ ) {
-        if( field_name === interactions[i].field_name ) {
-            header = interactions[i].list_primary;
+
+   if( interactions ) {
+       for( let i=0; i<interactions.length; i++ ) {
+            if( field_name === interactions[i].field_name ) {
+                header = interactions[i].list_primary;
+            }
         }
    }
 
@@ -167,11 +169,13 @@ function getPrimaryColumnHeader( field_name ) {
 
 function getSecondaryColumnHeader( field_name ) {
    let header = '';
- 
-   for( let i=0; i<interactions.length; i++ ) {
-        if( field_name === interactions[i].field_name ) {
-            header = interactions[i].list_secondary || interactions[i].list_primary;
-        }
+
+   if( interactions ) {
+       for( let i=0; i<interactions.length; i++ ) {
+            if( field_name === interactions[i].field_name ) {
+                header = interactions[i].list_secondary || interactions[i].list_primary;
+            }
+       }
    }
 
    return header;
@@ -269,14 +273,12 @@ function fresults(xobj) {
                winurlparams_copy.append('obs_fields',box_array[e].field_id);
             
                if( p_operator !== 'merge' ){
-                   if( box_array[e].field_name.toLowerCase() === p_field.replace('field:','').toLowerCase() ) {
-                       console.log('one');
+                   if( box_array[e].field_name.toLowerCase() === p_field.replace('field:','').toLowerCase() &&
+                       getPrimaryColumnHeader(box_array[e].field_name) ) {
                        labels.push({innerText:getPrimaryColumnHeader(box_array[e].field_name)});
-                   } else if( field_array.includes(box_array[e].field_id) ) {
-                       console.log('two');
+                   } else if( getSecondaryColumnHeader(box_array[e].field_name) ) {
                        labels.push({innerText:getSecondaryColumnHeader(box_array[e].field_name)});
                    } else {
-                       console.log('three');
                        labels.push({innerText:box_array[e].field_name});
                    }
                } else {
