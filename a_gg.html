@@ -119,33 +119,50 @@ function buildLifeStageMenu(data) {
 
    menu_string = '<div class="navbar">';
    menu_string += buildDD('Show', links);
+
+   // the life list links need to be cached the first time the page is enetered 
+   // otherwise when a life stage is chosen the grid will only display that
+   // life stage and the drop down will only see that life stage and (all) 
+   // since the other life stages are filtered out.
+   let cache_key = ('project_id='+p_project_id+'taxon_id='+p_taxon_id+'field='+field);
+
+   links = '';
+   if( p_cache_check === 'yes' ) {
+       if( sessionStorage.getItem(cache_key) ) {
+           console.log('found cache..: '+cache_key+'==='+sessionStorage.getItem(cache_key));
+           links += sessionStorage.getItem(cache_key);
+       }
+   }
+
+   if( !links ) {
+       // all should always appear...
+       links = furl(github_root+'a_gg.html'+all_except_life_stage+'&life=&cache_check=yes','All');
    
-   // all should always appear...
-   links = furl(github_root+'a_gg.html'+all_except_life_stage+'&life=&cache_check=yes','All');
-   
-   if( annotations_array.includes(2) ){      // adult
-       links += furl(github_root+'a_gg.html'+all_except_life_stage+'&life=Adults&term_id=1&term_value_id=2&cache_check=yes','Adults');
-   }
-   if( annotations_array.includes(3) ){      // teneral
-       links += furl(github_root+'a_gg.html'+all_except_life_stage+'&life=Teneral&term_id=1&term_value_id=3&cache_check=yes','Teneral');
-   }
-   if( annotations_array.includes(4) ) {    // pupa
-       links += furl(github_root+'a_gg.html'+all_except_life_stage+'&life=Pupa&term_id=1&term_value_id=4&cache_check=yes','Pupa');
-   }
-   if( annotations_array.includes(5) ) {    // nymph
-       links += furl(github_root+'a_gg.html'+all_except_life_stage+'&life=Nymph&term_id=1&term_value_id=5&cache_check=yes','Nymph');
-   }
-   if( annotations_array.includes(6) ){      // larva.
+       if( annotations_array.includes(2) ){      // adult
+           links += furl(github_root+'a_gg.html'+all_except_life_stage+'&life=Adults&term_id=1&term_value_id=2&cache_check=yes','Adults');
+       }
+       if( annotations_array.includes(3) ){      // teneral
+           links += furl(github_root+'a_gg.html'+all_except_life_stage+'&life=Teneral&term_id=1&term_value_id=3&cache_check=yes','Teneral');
+       }
+       if( annotations_array.includes(4) ) {    // pupa
+           links += furl(github_root+'a_gg.html'+all_except_life_stage+'&life=Pupa&term_id=1&term_value_id=4&cache_check=yes','Pupa');
+       }
+       if( annotations_array.includes(5) ) {    // nymph
+           links += furl(github_root+'a_gg.html'+all_except_life_stage+'&life=Nymph&term_id=1&term_value_id=5&cache_check=yes','Nymph');
+       }
+       if( annotations_array.includes(6) ){      // larva.
            links += furl(github_root+'a_gg.html'+all_except_life_stage+'&life=Larva&term_id=1&term_value_id=6&cache_check=yes','Larva');
-   }
-   if( annotations_array.includes(7) ) {    // egg
-       links += furl(github_root+'a_gg.html'+all_except_life_stage+'&life=Egg&term_id=1&term_value_id=7&cache_check=yes','Egg');
-   }
-   if( annotations_array.includes(8) ) {    // juvenile
-       links += furl(github_root+'a_gg.html'+all_except_life_stage+'&life=Juvenile&term_id=1&term_value_id=8&cache_check=yes','Juvenile');
-   }
-   if( annotations_array.includes(16) ) {    // subimago
-       links += furl(github_root+'a_gg.html'+all_except_life_stage+'&life=Subimago&term_id=1&term_value_id=16&cache_check=yes','Subimago');
+       }
+       if( annotations_array.includes(7) ) {    // egg
+           links += furl(github_root+'a_gg.html'+all_except_life_stage+'&life=Egg&term_id=1&term_value_id=7&cache_check=yes','Egg');
+       }
+       if( annotations_array.includes(8) ) {    // juvenile
+           links += furl(github_root+'a_gg.html'+all_except_life_stage+'&life=Juvenile&term_id=1&term_value_id=8&cache_check=yes','Juvenile');
+       }
+       if( annotations_array.includes(16) ) {    // subimago
+           links += furl(github_root+'a_gg.html'+all_except_life_stage+'&life=Subimago&term_id=1&term_value_id=16&cache_check=yes','Subimago');
+       }
+       sessionStorage.setItem(cache_key, links);
    }
 
    menu_string += buildDD(p_life, links);
@@ -192,21 +209,7 @@ function checkForAnnotations( obs ){
   
 function fresults(data) {  
 
-   let menu = '';
-   let cache_key = ('project_id='+p_project_id+'taxon_id='+p_taxon_id+'field='+field);
-
-   if( p_cache_check === 'yes' ) {
-       if( sessionStorage.getItem(cache_key) ) {
-           console.log('found cache..: '+cache_key+'==='+sessionStorage.getItem(cache_key));
-           menu = sessionStorage.getItem(cache_key);
-       }
-   }
-
-   if( !menu ) { menu = buildMenu(data); }
-
-   faddelem('p',document.body,{innerHTML:menu}); 
-
-   sessionStorage.setItem(cache_key, menu);
+   faddelem('p',document.body,{innerHTML:buildMenu(data)}); 
    
    var results = data.results;
    var recsfound = results ? results.length : 0;
