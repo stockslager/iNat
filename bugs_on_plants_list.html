@@ -270,10 +270,13 @@ function fresults(xobj) {
             
                if( p_operator !== 'merge' ){
                    if( box_array[e].field_name.toLowerCase() === p_field.replace('field:','').toLowerCase() ) {
+                       console.log('one');
                        labels.push({innerText:getPrimaryColumnHeader(box_array[e].field_name)});
                    } else if( field_array.includes(box_array[e].field_id) ) {
+                       console.log('two');
                        labels.push({innerText:getSecondaryColumnHeader(box_array[e].field_name)});
                    } else {
+                       console.log('three');
                        labels.push({innerText:box_array[e].field_name});
                    }
                } else {
