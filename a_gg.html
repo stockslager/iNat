@@ -194,10 +194,24 @@ function buildMenu(data) {
        // find the obs field that matches the one that passed in and save the id
        // to pass to the "list" if that option is chosen in the "show" drop-down.
        if( j === 0 ){
-           for( let i=0; i<interactions.length; i++ ) {
-                if( interactions[i].field_name.toLowerCase() === field_key.replace("field:",'').toLowerCase() ) {
-                    obs_fields = interactions[i].obs_field_list;
+           if( interactions ) {
+               for( let i=0; i<interactions.length; i++ ) {
+                    console.log('one');
+                    if( interactions[i].dd_menu === p_project_id && 
+                        interactions[i].field_name.toLowerCase() === field_key.replace("field:",'').toLowerCase() ) {
+                        console.log('two');
+                        obs_fields = interactions[i].obs_field_list;
+                    }
                 }
+            }
+            // if there weren't interactions added to the .json,
+            // just pass along whichever obs_fields were passed to the grid.
+            if( !obs_fields ) {
+                for( let i=0; i<data.results[j].ofvs.length; i++ ) {
+                     if( data.results[j].ofvs[i].name.toLowerCase() === field_key.replace("field:",'').toLowerCase() ) {
+                         obs_field_id = data.results[j].ofvs[i].field_id;
+                     }
+                 }
             }
        }
   }
