@@ -270,9 +270,13 @@ function fresults(xobj) {
             
                if( p_operator !== 'merge' ){
                    if( box_array[e].field_name === p_field.replace('field:','') ) {
-                       labels.push({innerText:getPrimaryColumnHeader(box_array[e].field_name)});
+                       labels.push({box_array[e].field_name});
+                       //labels.push({innerText:getPrimaryColumnHeader(box_array[e].field_name)});
                    } else if( field_array.includes(box_array[e].field_id) ) {
-                       labels.push({innerText:getSecondaryColumnHeader(box_array[e].field_name)});
+                       labels.push({box_array[e].field_name});
+                       //labels.push({innerText:getSecondaryColumnHeader(box_array[e].field_name)});
+                   } else {
+                       labels.push({box_array[e].field_name});
                    }
                } else {
                    if( firstCol === 'yes' ){
@@ -470,7 +474,7 @@ function fresults(xobj) {
       }  
 
       if( p_taxon_id ) {
-          faddelem('p',document.body,{innerHTML:('<span id="topright" style="padding-bottom:0px;"><div style="display:flex; align-items:center;">'+tax_photo+'<span style="font-size:16px; font-weight:bold; padding-left:10px;">'+top_taxon+'</span></div></span>')});
+          faddelem('p',document.body,{innerHTML:('<span id="topright" style="padding-bottom:0px;"><div style="display:flex; align-items:center;">'/*+tax_photo*/+'<span style="font-size:16px; font-weight:bold; padding-left:10px;">'+top_taxon+'</span></div></span>')});
       }
     
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
