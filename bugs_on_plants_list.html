@@ -136,7 +136,9 @@ function buildMenu() {
           }
       }
 
-      menu_string += buildDD('Show', links);
+      if( links ) {
+          menu_string += buildDD('Show', links);
+      }
 
       if( p_seed_project ) {
           if( p_seed_project.startsWith('pip') ) {
