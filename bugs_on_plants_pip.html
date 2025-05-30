@@ -25,7 +25,7 @@ let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
 let p_place_id    = winurlparams.get('place_id') || '';
 let p_taxon_id    = winurlparams.get('taxon_id') || '';
 let p_project_id  = winurlparams.get('project_id') || '';
-let p_title       = winurlparams.get('title') || '';
+let p_title       = winurlparams.get('title') || 'on';
 let p_insect_project = winurlparams.get('insect_project') || '159056';  // pip
 
 // the place selected was added to seed_project parameter and needs to be
@@ -200,10 +200,12 @@ function fresults(xobj) {
       let field_name = '';
 
       buildMenu();
-    
+
+      let on_all = furl(github_root+'bugs_on_plants2.html?project_id='+p_insect_project+'&place_id='+p_place_id+'&menu=pip&title='+p_title+'&target_name=all%20plants'+field_param+seed_prj_param,'<span id="topright">'+p_title+' any plant</span>');
+ 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+on_all+'<br />'});  
 
       labels = [
             {innerText:'#'},
@@ -253,7 +255,7 @@ function fresults(xobj) {
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'bugs_on_plants2.html?project_id='+p_insect_project+'&place_id='+p_place_id+'&target_id='+rec.taxon.id+'&menu=pip&title=on&target_name='+header_name+field_param+seed_prj_param,displayName)},
+                  {innerHTML:furl(github_root+'bugs_on_plants2.html?project_id='+p_insect_project+'&place_id='+p_place_id+'&target_id='+rec.taxon.id+'&menu=pip&title='+p_title+'&target_name='+header_name+field_param+seed_prj_param,displayName)},
                   //{innerText:rec.count||''},
                   ];
         
