@@ -136,7 +136,7 @@ function buildMenu() {
 
       if( interactions ) {
           for( let i=0; i<interactions.length; i++ ) {
-               if( interactions[i].dd_menu.toString() === p_project_id ) {
+               if( interactions[i].dd_menu && interactions[i].dd_menu.toString() === p_project_id ) {
                    winurlparams.delete('obs_fields');
                    winurlparams.append('obs_fields', interactions[i].obs_field_list);
                    links += furl(github_root+'bugs_on_plants_list.html'+copyOpts(winurlparams), interactions[i].dd_name);
