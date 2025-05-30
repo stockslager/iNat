@@ -35,7 +35,7 @@ function buildGrid(data) {
             let anchor = faddelem('a',gcell,{href:famp(obsurlbase+'/'+obs.id)});
             let photo = (photourl===null) ? faddelem('span',anchor,{innerText:'❎'})
                : faddelem('img',anchor,{style:{width:cellpx+'px',height:cellpx+'px'},
-                  title: taxon + ' observed on ' + obsdt + ' observed by ' + user + ' on ' + obsdt,
+                  title: taxon + ' observed by ' + user + ' on ' + obsdt,
                   src: ((cellpx<=75) ? photourl
                      : (cellpx<=150) ? photourl.replace('square','small')
                      : photourl.replace('square','medium'))
