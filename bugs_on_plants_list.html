@@ -270,14 +270,12 @@ function fresults(xobj) {
             
                if( p_operator !== 'merge' ){
                    if( box_array[e].field_name.toLowerCase() === p_field.replace('field:','').toLowerCase() ) {
-                       //labels.push({box_array[e].field_name});
                        labels.push({innerText:getPrimaryColumnHeader(box_array[e].field_name)});
                    } else if( field_array.includes(box_array[e].field_id) ) {
-                       //labels.push({box_array[e].field_name});
                        labels.push({innerText:getSecondaryColumnHeader(box_array[e].field_name)});
-                   } /*else {
-                       labels.push({box_array[e].field_name});
-                   }*/
+                   } else {
+                       labels.push({innerText:box_array[e].field_name});
+                   }
                } else {
                    if( firstCol === 'yes' ){
                        firstCol = 'no';
