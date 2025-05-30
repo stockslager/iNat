@@ -116,7 +116,8 @@ function buildLifeStageMenu(data) {
        links += furl(github_root+'bugs_on_plants_list.html'+all_opts,"list");
    }
    links += furl(github_root+'life_list_map.html'+all_opts,"map");
-  
+
+   menu_string = '<div class="navbar">';
    menu_string += buildDD('Show', links);
    
    // all should always appear...
@@ -147,7 +148,6 @@ function buildLifeStageMenu(data) {
        links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Subimago&term_id=1&term_value_id=16&cache_check=yes','Subimago');
    }
 
-   menu_string = '<div class="navbar">';
    menu_string += buildDD(p_life, links);
     
    if( p_seed_project ) {
