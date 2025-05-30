@@ -145,8 +145,6 @@ function buildMenu() {
           }
       }
 
-      console.log('links ' + link_count);
-      console.log('nam  ' + p_target_name);
       if( links && link_count > 1 && p_target_name !== 'all plants' ) {
           menu_string += buildDD('Show', links);
       }
@@ -286,16 +284,7 @@ function fresults(xobj) {
                winurlparams_copy.append('obs_fields',box_array[e].field_id);
             
                if( p_operator !== 'merge' ){
-                   console.log('id ' + box_array[e].field_id);
                    labels.push({innerText:getPrimaryColumnHeader(box_array[e].field_id)});
-                  /* if( box_array[e].field_name.toLowerCase() === p_field.replace('field:','').toLowerCase() &&
-                       getPrimaryColumnHeader(box_array[e].field_name) ) {
-                       labels.push({innerText:getPrimaryColumnHeader(box_array[e].field_name)});
-                   } else if( getSecondaryColumnHeader(box_array[e].field_name) ) {
-                       labels.push({innerText:getSecondaryColumnHeader(box_array[e].field_name)});
-                   } else {
-                       labels.push({innerText:box_array[e].field_name});
-                   }*/
                } else {
                    if( firstCol === 'yes' ){
                        firstCol = 'no';
