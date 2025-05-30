@@ -201,12 +201,6 @@ function fresults(xobj) {
 
       buildMenu();
 
-      let on_all = furl(github_root+'bugs_on_plants2.html?project_id='+p_insect_project+'&place_id='+p_place_id+'&menu=pip&title='+p_title+'&target_name=all%20plants'+field_param+seed_prj_param,'<span id="topright">'+p_title+' any plant</span>');
- 
-      faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
-             +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+on_all+'<br />'});  
-
       labels = [
             {innerText:'#'},
             {innerText:'Photo'},
@@ -258,6 +252,14 @@ function fresults(xobj) {
                   {innerHTML:furl(github_root+'bugs_on_plants2.html?project_id='+p_insect_project+'&place_id='+p_place_id+'&target_id='+rec.taxon.id+'&menu=pip&title='+p_title+'&target_name='+header_name+field_param+seed_prj_param,displayName)},
                   //{innerText:rec.count||''},
                   ];
+
+          if( i === 0 ) {
+              let on_all = furl(github_root+'bugs_on_plants2.html?project_id='+p_insect_project+'&place_id='+p_place_id+'&menu=pip&title='+p_title+'&target_name=all%20plants'+field_param+seed_prj_param,'<span id="topright">'+p_title+' any plant</span>');
+ 
+              faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
+                 +'per page: '+fcomnum(per_page)+'<br />'
+                 +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+on_all+'<br />'});  
+          }
         
          faddelems('td',brow,values);
       };
