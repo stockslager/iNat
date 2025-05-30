@@ -36,7 +36,7 @@ let p_omit_project    = winurlparams.get('omit_projects') || '';
 let p_seed_project    = winurlparams.get('seed_project') || '';
 let p_list            = winurlparams.get('list') || '';
 let p_title           = winurlparams.get('title') || '';
-let p_menu            = winurlparams.get('menu') || 'bugs';
+let p_dd_menu         = winurlparams.get('dd_menu') || 'bugs';
 let p_tag_name        = winurlparams.get('tag_name') || '';
 let p_field = '';
 let p_field_value = '';
@@ -158,7 +158,7 @@ function getPrimaryColumnHeader( field_name ) {
 
    if( interactions ) {
        for( let i=0; i<interactions.length; i++ ) {
-            if( field_name.toLowerCase() === interactions[i].field_name.toLowerCase() ) {
+            if( interactions[i].dd_menu.toLowerCase() === p_dd_menu.toLowerCase() && field_name.toLowerCase() === interactions[i].field_name.toLowerCase() ) {
                 header = interactions[i].list_primary;
             }
         }
@@ -172,7 +172,7 @@ function getSecondaryColumnHeader( field_name ) {
 
    if( interactions ) {
        for( let i=0; i<interactions.length; i++ ) {
-            if( field_name.toLowerCase() === interactions[i].field_name.toLowerCase() ) {
+            if( interactions[i].dd_menu.toLowerCase() === p_dd_menu.toLowerCase() && field_name.toLowerCase() === interactions[i].field_name.toLowerCase() ) {
                 header = interactions[i].list_secondary || interactions[i].list_primary;
             }
        }
