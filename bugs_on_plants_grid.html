@@ -166,12 +166,7 @@ function buildLifeStageMenu(data, obs_field_id) {
        sessionStorage.setItem(cache_key, links);
    }
 
-   // only show the life stage drop down if it has more than
-   // one life stage... most of the time it's only showing "adults".
-   // it'll always have the "all" entry... so it needs to be greater than 1.
-   if( annotations_array.length > 1 ) {
-       menu_string += buildDD(p_life, links);
-   }
+   menu_string += buildDD(p_life, links);
     
    if( p_seed_project ) {
        if( p_seed_project.startsWith('pip') ) {
