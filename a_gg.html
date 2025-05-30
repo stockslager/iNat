@@ -113,21 +113,7 @@ winurlparams.delete('not_id');
 winurlparams.delete('not_in_project');
 
 // build param list for url's used in fresults
-for (const [key, value] of winurlparams.entries()) { 
-  if( opts === '' ){
-      opts += "?";
-  } else {
-      opts += "&";
-  }
-  opts += key;
-  opts += "=";
-
-  if( key === 'page' ){
-      opts += '1';
-  } else {
-      opts += value;
-  }
-}   
+opts = copyOpts(winurlparams);
 
 // add them back after building options...
 winurlparams.append('operator', p_operator);
@@ -136,8 +122,21 @@ winurlparams.append('taxon_id', p_taxon_id);
 
 function buildMenu() {
       let menu_string = '';
+      let links = '';
 
       menu_string = '<div class="navbar">';
+
+      if( interactions ) {
+          for( let i=0; i<interactions.length; i++ ) {
+               if( interactions[i].dd_menu.toString() === p_project_id ) {
+                   winurlparams.delete('obs_fields');
+                   winurlparams.append('obs_fields', interactions[i].obs_field_list);
+                   links = furl(github_root+'bugs_on_plants_list.html'+copyOpts(winurlparams), interactions[i].dd_name);
+               }
+          }
+      }
+
+      menu_string += buildDD('Show', links);
 
       if( p_seed_project ) {
           if( p_seed_project.startsWith('pip') ) {
