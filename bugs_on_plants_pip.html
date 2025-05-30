@@ -49,12 +49,6 @@ let opts = copyOpts( winurlparams ) || '';
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
 
-if( p_title === '' ) {
-    document.title = 'Bugs on Plants';
-} else {
-    document.title = p_title;
-}
-
 winurlparams.delete('options');
 let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
 winurlparams.delete('idextra_user_id');
