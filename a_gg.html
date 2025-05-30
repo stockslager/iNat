@@ -109,14 +109,14 @@ var apiurl = apiurlbase+'?'+winurlparams.toString();
 
 document.title = title.toLowerCase();
 
-function buildLifeStageMenu(data, obs_field_id) {
+function buildLifeStageMenu(data, obs_fields) {
 
    let links = '';
    let menu_string = '';
    
    links = furl(github_root+'bugs_on_plants_grid.html'+all_opts,"grid");
    if( field_key ) {
-       links += furl(github_root+'bugs_on_plants_list.html'+all_opts+'&obs_fields='+obs_field_id,"list");
+       links += furl(github_root+'bugs_on_plants_list.html'+all_opts+'&obs_fields='+obs_fields,"list");
    }
    links += furl(github_root+'life_list_map.html'+all_opts,"map");
 
@@ -196,7 +196,8 @@ function buildMenu(data) {
        if( j === 0 ){
            if( interactions ) {
                for( let i=0; i<interactions.length; i++ ) {
-                    console.log('one');
+                    console.log('menu ' + interactions[i].dd_menu );
+                    console.log('nm ' + interactions[i].field_name );
                     if( interactions[i].dd_menu === p_project_id && 
                         interactions[i].field_name.toLowerCase() === field_key.replace("field:",'').toLowerCase() ) {
                         console.log('two');
