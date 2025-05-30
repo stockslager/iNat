@@ -224,6 +224,9 @@ function fresults(xobj) {
          let tax_id = '';
          let taxon = '';
 
+         let place_param = '';
+         if( p_place_id ) { place_param = '$'+p_place_id; }
+       
          let field_param    = ('&field:'+configuration.field_name+'='+rec.taxon.id);
          let seed_prj_param = ('&seed_project=pip'+p_insect_project+place_param);
 
@@ -249,9 +252,6 @@ function fresults(xobj) {
                  }
              }
          }
-
-         let place_param = '';
-         if( p_place_id ) { place_param = '$'+p_place_id; }
        
          let displayName    = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
                                       
