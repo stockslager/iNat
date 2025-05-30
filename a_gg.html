@@ -187,11 +187,14 @@ function buildMenu(data) {
   let obs_field_id = '';
   for( let j=0; j<data.results.length; j++ ) {
        checkForAnnotations(data.results[j]);
-       for( let i=0; i<data.results[j].ofvs.length; i++ ) {
-            // find the obs field that matches the one that passed in and save the id
-            // to pass to the "list" if that option is chosen in the "show" drop-down.
-            if( data.results[j].ofvs[i].name === field_key.replace("field:",'') ) {
-                obs_field_id = data.results[j].ofvs[i].field_id;
+      
+       // find the obs field that matches the one that passed in and save the id
+       // to pass to the "list" if that option is chosen in the "show" drop-down.
+       if( j === 0 ){
+           for( let i=0; i<data.results[j].ofvs.length; i++ ) {
+                if( data.results[j].ofvs[i].name === field_key.replace("field:",'') ) {
+                    obs_field_id = data.results[j].ofvs[i].field_id;
+                }
             }
        }
   }
