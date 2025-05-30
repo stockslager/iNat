@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
-<meta name="description" content="Plants With Ants List" />
+<meta name="description" content="Bugs on Plants List" />
 <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="shortcut icon" href="favicon.ico" />
@@ -113,21 +113,7 @@ winurlparams.delete('not_id');
 winurlparams.delete('not_in_project');
 
 // build param list for url's used in fresults
-for (const [key, value] of winurlparams.entries()) { 
-  if( opts === '' ){
-      opts += "?";
-  } else {
-      opts += "&";
-  }
-  opts += key;
-  opts += "=";
-
-  if( key === 'page' ){
-      opts += '1';
-  } else {
-      opts += value;
-  }
-}   
+opts = copyOpts(winurlparams);
 
 // add them back after building options...
 winurlparams.append('operator', p_operator);
@@ -136,8 +122,21 @@ winurlparams.append('taxon_id', p_taxon_id);
 
 function buildMenu() {
       let menu_string = '';
+      let links = '';
 
       menu_string = '<div class="navbar">';
+
+      if( interactions ) {
+          for( let i=0; i<interactions.length; i++ ) {
+               if( interactions[i].dd_menu.toString() === p_project_id ) {
+                   winurlparams.delete('obs_fields');
+                   winurlparams.append('obs_fields', interactions[i].obs_field_list);
+                   links += furl(github_root+'bugs_on_plants_list.html'+copyOpts(winurlparams), interactions[i].dd_name);
+               }
+          }
+      }
+
+      menu_string += buildDD('Show', links);
 
       if( p_seed_project ) {
           if( p_seed_project.startsWith('pip') ) {
@@ -154,12 +153,12 @@ function buildMenu() {
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
-function getPrimaryColumnHeader( field_name ) {
+function getPrimaryColumnHeader( field_id ) {
    let header = '';
 
    if( interactions ) {
        for( let i=0; i<interactions.length; i++ ) {
-            if( interactions[i].dd_menu.toLowerCase() === p_dd_menu.toLowerCase() && field_name.toLowerCase() === interactions[i].field_name.toLowerCase() ) {
+            if( interactions[i].dd_menu.toString() === p_project_id && field_id.toString() === interactions[i].field_id.toString() ) {
                 header = interactions[i].list_primary;
             }
         }
@@ -173,7 +172,7 @@ function getSecondaryColumnHeader( field_name ) {
 
    if( interactions ) {
        for( let i=0; i<interactions.length; i++ ) {
-            if( interactions[i].dd_menu.toLowerCase() === p_dd_menu.toLowerCase() && field_name.toLowerCase() === interactions[i].field_name.toLowerCase() ) {
+            if( interactions[i].dd_menu.toString() === p_project_id && field_name.toLowerCase() === interactions[i].field_name.toLowerCase() ) {
                 header = interactions[i].list_secondary || interactions[i].list_primary;
             }
        }
@@ -274,14 +273,16 @@ function fresults(xobj) {
                winurlparams_copy.append('obs_fields',box_array[e].field_id);
             
                if( p_operator !== 'merge' ){
-                   if( box_array[e].field_name.toLowerCase() === p_field.replace('field:','').toLowerCase() &&
+                   console.log('id ' + box_array[e].field_id);
+                   labels.push({innerText:getPrimaryColumnHeader(box_array[e].field_id)});
+                  /* if( box_array[e].field_name.toLowerCase() === p_field.replace('field:','').toLowerCase() &&
                        getPrimaryColumnHeader(box_array[e].field_name) ) {
                        labels.push({innerText:getPrimaryColumnHeader(box_array[e].field_name)});
                    } else if( getSecondaryColumnHeader(box_array[e].field_name) ) {
                        labels.push({innerText:getSecondaryColumnHeader(box_array[e].field_name)});
                    } else {
                        labels.push({innerText:box_array[e].field_name});
-                   }
+                   }*/
                } else {
                    if( firstCol === 'yes' ){
                        firstCol = 'no';
@@ -340,7 +341,7 @@ function fresults(xobj) {
          }
 
          if( tax_id !== '' ){
-             taxon = furl(github_root+'ants_on_plants_list.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl(github_root+'bugs_on_plants_list.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
          values = [
@@ -427,7 +428,7 @@ function fresults(xobj) {
                                       field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   }
                                   if( p_field_value === '' ){
-                                      values.push({innerHTML:furl(github_root+'ants_on_plants_list.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
+                                      values.push({innerHTML:furl(github_root+'bugs_on_plants_list.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
                                   } else {
                                       values.push({innerHTML:field1});
                                   }
