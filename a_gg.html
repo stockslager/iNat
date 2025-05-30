@@ -166,7 +166,12 @@ function buildLifeStageMenu(data, obs_field_id) {
        sessionStorage.setItem(cache_key, links);
    }
 
-   menu_string += buildDD(p_life, links);
+   // only show the life stage drop down if it has more than
+   // one life stage... most of the time it's only showing "adults".
+   // it'll always have the "all" entry... so it needs to be greater than 1.
+   if( annotations_array.length > 1 ) {
+       menu_string += buildDD(p_life, links);
+   }
     
    if( p_seed_project ) {
        if( p_seed_project.startsWith('pip') ) {
@@ -192,8 +197,11 @@ function buildMenu(data) {
        // find the obs field that matches the one that passed in and save the id
        // to pass to the "list" if that option is chosen in the "show" drop-down.
        if( j === 0 ){
+           console.log('on');
            for( let i=0; i<data.results[j].ofvs.length; i++ ) {
+               console.log('two');
                 if( data.results[j].ofvs[i].name === field_key.replace("field:",'') ) {
+                    console.log('three');
                     obs_field_id = data.results[j].ofvs[i].field_id;
                 }
             }
