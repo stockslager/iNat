@@ -208,6 +208,18 @@ function fresults(xobj) {
             //{innerText:'Count'},
       ];
 
+      let place_param = '';
+      if( p_place_id ) { place_param = '$'+p_place_id; }
+       
+      let field_param    = ('&field:'+configuration.field_name+'=');
+      let seed_prj_param = ('&seed_project=pip'+p_insect_project+place_param);
+
+      let on_all = furl(github_root+'bugs_on_plants2.html?project_id='+p_insect_project+'&place_id='+p_place_id+'&menu=pip&title='+p_title+'&target_name=all%20plants'+field_param+seed_prj_param,'<span id="topright">'+p_title+' any plant</span>');
+ 
+      faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
+                 +'per page: '+fcomnum(per_page)+'<br />'
+                 +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+on_all+'<br />'});  
+
       let table = faddelem('table',document.body,{id:'main'});                    
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
@@ -224,20 +236,6 @@ function fresults(xobj) {
          let tax_id = '';
          let taxon = '';
 
-         let place_param = '';
-         if( p_place_id ) { place_param = '$'+p_place_id; }
-       
-         let field_param    = ('&field:'+configuration.field_name+'='+rec.taxon.id);
-         let seed_prj_param = ('&seed_project=pip'+p_insect_project+place_param);
-
-         if( i === 0 ) {
-             let on_all = furl(github_root+'bugs_on_plants2.html?project_id='+p_insect_project+'&place_id='+p_place_id+'&menu=pip&title='+p_title+'&target_name=all%20plants'+field_param+seed_prj_param,'<span id="topright">'+p_title+' any plant</span>');
- 
-             faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
-                 +'per page: '+fcomnum(per_page)+'<br />'
-                 +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+on_all+'<br />'});  
-         }
-
          let brow = faddelem('tr',tbody);
 
          if( rec.taxon ){
@@ -252,6 +250,9 @@ function fresults(xobj) {
                  }
              }
          }
+
+         // append the selected taxon id to the field_param to build links to individual insects.
+         field_param += rec.taxon.id;
        
          let displayName    = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
                                       
