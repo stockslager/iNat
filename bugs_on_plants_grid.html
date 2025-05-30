@@ -107,7 +107,6 @@ winurlparams.append('per_page',recsmax);
 var apiurlbase = 'https://api.inaturalist.org/v1/observations'
 var apiurl = apiurlbase+'?'+winurlparams.toString();
 
-console.log('title' + title);
 document.title = title.toLowerCase();
 
 function buildLifeStageMenu(data, obs_fields) {
@@ -197,12 +196,8 @@ function buildMenu(data) {
        if( j === 0 ){
            if( interactions ) {
                for( let i=0; i<interactions.length; i++ ) {
-                    console.log('menu ' + interactions[i].dd_menu );
-                    console.log('prj  ' + p_project_id );
-                    console.log('nm ' + interactions[i].field_name );
                     if( interactions[i].dd_menu === p_project_id && 
                         interactions[i].field_name.toLowerCase() === field_key.replace("field:",'').toLowerCase() ) {
-                        console.log('two');
                         obs_fields = interactions[i].obs_field_list;
                     }
                 }
