@@ -130,7 +130,7 @@ winurlparams.append('taxon_id', p_taxon_id);
 function buildMenu() {
       let menu_string = '';
       let links = '';
-      let found_link = 'no';
+      let link_count = 0;
 
       menu_string = '<div class="navbar">';
 
@@ -140,14 +140,14 @@ function buildMenu() {
                    winurlparams.delete('obs_fields');
                    winurlparams.append('obs_fields', interactions[i].obs_field_list);
                    links += furl(github_root+'bugs_on_plants_list.html'+copyOpts(winurlparams), interactions[i].dd_name);
-                   found_link = 'yes';
+                   link_count += 1;
                }
           }
       }
 
-      console.log('links ' + links.length);
+      console.log('links ' + links_count);
       console.log('nam  ' + p_target_name);
-      if( links && found_link === 'yes' && p_target_name !== 'all plants' ) {
+      if( links && link_count > 1 && p_target_name !== 'all plants' ) {
           menu_string += buildDD('Show', links);
       }
 
