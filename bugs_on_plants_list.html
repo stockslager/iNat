@@ -47,6 +47,12 @@ let top_taxon = '';
 let tax_photo = '<div class="clipart">&#127807</div>'; 
 let interactions = [];
 
+if( p_project_id === 'cincinnati-nature-center-pollinator-garden' ) {
+    winurlparams.delete('project_id');
+    winurlparams.append('project_id', '220623');
+    p_project_id = '220623';
+}
+
 if( p_obs_field_array !== '' ){
     field_array = p_obs_field_array.split(",");
 }
