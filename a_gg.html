@@ -41,7 +41,6 @@ let p_show_menu     = winurlparams.get('show_menu') || 'no';
 let p_menu_array    = winurlparams.get('menu_array') || '';
 let p_tag_name      = winurlparams.get('tag_name') || '';
 let p_sub_menu_array    = winurlparams.get('sub_menu_array') || '';
-let p_menu          = winurlparams.get('menu') || 'all';
 let p_seed_project  = winurlparams.get('seed_project') || '';
 let p_taxon_nm      = winurlparams.get('taxon_nm') || 'Show';
 let p_field = '';
@@ -84,10 +83,6 @@ if( p_seed_project ) {
 
 if( p_list ) {
     opts += ('&list='+p_list);
-}
-
-if( p_menu ) {
-    opts += ('&menu='+p_menu);
 }
 
 if( p_tag_name ) {
@@ -153,102 +148,88 @@ winurlparams.append('target_id', p_target_id);
 
 function buildMenu( results ) {
 
-     /*for( let i=0; i<configurations.length; i++ ){
-       console.log('a1');
-           if( configurations[i].insect_project === p_project_id ) {
-            console.log('a2');*/
-               if( configuration.field_name ) {
-                console.log('a3');
-                   field_name = ('&field:'+configuration.field_name+'=');
-               } else {
-                   field_name = ('&'+p_field+'=');
-               }
-  //             configuration = configurations[i];
-  //         }
-  //    }
-      let sub_taxon_arr = [];
-      if( p_sub_menu_array ) {
-          sub_taxon_arr = p_sub_menu_array;
-      } else {
-       console.log('a');
-          if( configuration.sub_icons ) {
-           console.log('b');
-              for( let i=0; i<results.length; i++) {
-               console.log('c');
-                   if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
-                    console.log('d');
-                       for( let j=0; j<configuration.sub_icons.length; j++ ) {
-                        console.log('e');
-                            for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
-                             console.log('f');
-                                 if( results[i].taxon.ancestor_ids[k].toString() === configuration.sub_icons[j].taxon_id.toString() ){
-                                  console.log('g');
-                                     if( !sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
-                                      console.log('h');
-                                         sub_taxon_arr.push( configuration.sub_icons[j].taxon_id );
-                                     }
-                                 }
-                             }
-                        }
-                   }
-               }
-          }
-      }
-      let links = '';
-      let icons = '';
-      let menu_string = '';
-      let params = ('bugs_on_plants2.html'+proj+user+seed_param+leaf_params+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu+'&menu='+p_menu);
+   if( configuration.field_name ) {
+       field_name = ('&field:'+configuration.field_name+'=');
+   } else {
+       field_name = ('&'+p_field+'=');
+   }
 
-      if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
-          ( p_show_menu === 'yes' ) ||
-          ( configuration.sub_icons ) ) { 
+   let sub_taxon_arr = [];
+   if( p_sub_menu_array ) {
+       sub_taxon_arr = p_sub_menu_array;
+   } else {
+       if( configuration.sub_icons ) {
+           for( let i=0; i<results.length; i++) {
+                if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
+                    for( let j=0; j<configuration.sub_icons.length; j++ ) {
+                         for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
+                              if( results[i].taxon.ancestor_ids[k].toString() === configuration.sub_icons[j].taxon_id.toString() ){
+                                  if( !sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
+                                      sub_taxon_arr.push( configuration.sub_icons[j].taxon_id );
+                                  }
+                              }
+                          }
+                     }
+                }
+            }
+       }
+   }
+   
+   let links = '';
+   let icons = '';
+   let menu_string = '';
+   let params = ('bugs_on_plants2.html'+proj+user+seed_param+leaf_params+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu);
+
+   if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
+       ( p_show_menu === 'yes' ) ||
+       ( configuration.sub_icons ) ) { 
+    
             menu_string = '<div class="navbar">';
             if( configuration.sub_icons ) {
-           console.log('men1 ' + menu_string);
               
-                  params += ('&sub_menu_array='+sub_taxon_arr);
+                params += ('&sub_menu_array='+sub_taxon_arr);
 
-                  links = (furl(github_root+params,'<span style="padding-right:20px;">&#10133;</span>all' ));
-                  for( let j=0; j<configuration.sub_icons.length; j++ ) {
-                       if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
-                           links += (furl(github_root+params+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
-                       }
-                  }
+                links = (furl(github_root+params,'<span style="padding-right:20px;">&#10133;</span>all' ));
+                for( let j=0; j<configuration.sub_icons.length; j++ ) {
+                     if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
+                         links += (furl(github_root+params+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+                     }
+                }
               
-                  menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
-              }
+                menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
+            }
        
-              links = '';
-              let link_count = 0;
-           console.log('men2 ' + menu_string);
-              if( interactions ) {
-                  for( let i=0; i<interactions.length; i++ ) {
-                       if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
-                           winurlparams.delete('obs_fields');
-                           winurlparams.append('obs_fields', interactions[i].obs_field_list);
-                           links += furl(github_root+'bugs_on_plants_list.html'+copyOpts(winurlparams), interactions[i].dd_name);
-                           link_count += 1;
-                       }
-                  }
-              }
+            links = '';
+            let link_count = 0;
 
-              if( links && link_count > 1 && p_target_name !== 'all plants' ) {
-                  menu_string += buildDD('Show', links);
-              }
+            if( interactions ) {
+                for( let i=0; i<interactions.length; i++ ) {
+                     if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
+                         winurlparams.delete('obs_fields');
+                         winurlparams.append('obs_fields', interactions[i].obs_field_list);
+                         links += furl(github_root+'bugs_on_plants_list.html'+copyOpts(winurlparams), interactions[i].dd_name);
+                         link_count += 1;
+                     }
+                }
+            }
 
-              // check to see if they entered the flow from a seed library.  if so, return control there.
-              if( p_seed_project ) {
-                  if( p_seed_project.startsWith('pip') ) {
-                      menu_string += buildHome( furl(github_root+'bugs_on_plants_pip.html?insect_project='+p_seed_project.replace('pip',''),'&#127807;') );
-                  } else {
-                      menu_string += buildHome( furl(github_root+'cncnpc_seeds.html?project_id='+p_seed_project,'&#127807;') );
-                  }
-              } else {
-                  menu_string += buildHome( furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_title+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;') );
-              }
-              menu_string += '</div>';
-          }
- console.log('men ' + menu_string);
+            if( links && link_count > 1 && p_target_name !== 'all plants' ) {
+                menu_string += buildDD('Show', links);
+            }
+
+            // check to see if they entered the flow from a seed library.  if so, return control there.
+            if( p_seed_project ) {
+                if( p_seed_project.startsWith('pip') ) {
+                    menu_string += buildHome( furl(github_root+'bugs_on_plants_pip.html?insect_project='+p_seed_project.replace('pip',''),'&#127807;') );
+                } else {
+                    menu_string += buildHome( furl(github_root+'cncnpc_seeds.html?project_id='+p_seed_project,'&#127807;') );
+                }
+            } else {
+                menu_string += buildHome( furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_title+'&tag_name='+p_tag_name,'&#127807;') );
+            }
+            menu_string += '</div>';
+    }
+ 
     return( menu_string );
 }
 
@@ -267,7 +248,7 @@ function fresults(xobj) {
       faddelem('p',document.body,{innerHTML:(buildMenu(results))});  
        
       if( !p_field_value ) {
-          dlString = furl(github_root+'bugs_on_plants_grid.html'+proj+user+seed_param+leaf_params+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&action='+p_title+'&menu='+p_menu+field_name,'<span id="topright">all organisms '+p_title+' any plant</span>');
+          dlString = furl(github_root+'bugs_on_plants_grid.html'+proj+user+seed_param+leaf_params+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&action='+p_title+field_name,'<span id="topright">all organisms '+p_title+' any plant</span>');
       } else {
           dlString = ('<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
       }
