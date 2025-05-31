@@ -74,6 +74,12 @@ function replaceDoubleQuotes(str) {
   return str.replace(/"/g, '%22');
 }
 
+function capitalizeWords(str) {
+  return str.toLowerCase().split(' ').map(function(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }).join(' ');
+}
+
 function boxRow(field_id, field_name, field_value) {
     this.field_id    = field_id;
     this.field_name  = field_name;
