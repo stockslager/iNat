@@ -215,6 +215,10 @@ function buildMenu( results ) {
                          dd_list_title = interactions[i].list_primary;
                          winurlparams.delete('obs_fields');
                          winurlparams.append('obs_fields', interactions[i].obs_field_list);
+                         // need to delete the sub_menu_array because it'll need to rebuild the
+                         // taxa menu for only those iconic taxa found behaving a certain way.
+                         winurlparams.delete(p_field);
+                         winurlparams.delete('sub_menu_array');
                          links += furl(github_root+'a_gg.html'+copyOpts(winurlparams)+'&field:'+interactions[i].field_name.toLowerCase()+'='+interactions[i].field_value.toLowerCase(), interactions[i].field_value.toLowerCase());
                          link_count += 1;
                      }
