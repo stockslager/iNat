@@ -125,7 +125,7 @@ winurlparams.append('operator', p_operator);
 winurlparams.append('taxon_id', p_taxon_id);
 winurlparams.append('target_id', p_target_id);
 
-function buildMenu() {
+function buildMenu( results ) {
       let field_id = '';
       let field_name = '';
       let menu_item = '';
@@ -241,7 +241,7 @@ function fresults(xobj) {
           document.title = dlString;
       }
 
-      buildMenu();
+      buildMenu( results );
       faddelem('p',document.body,{innerHTML:(menu_string)});  
        
       if( !p_field_value ) {
