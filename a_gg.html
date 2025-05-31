@@ -46,9 +46,10 @@ let p_seed_project  = winurlparams.get('seed_project') || '';
 let p_taxon_nm      = winurlparams.get('taxon_nm') || 'Show';
 let p_field = '';
 let p_field_value = '';
-let menu_items = [];
 let opts = '';
 let obs_field_array = [];
+let configurations = [];
+let interactions [];
 let seed_param = '';
 let field_name = '';
 
@@ -151,29 +152,29 @@ winurlparams.append('taxon_id', p_taxon_id);
 winurlparams.append('target_id', p_target_id);
 
 function buildMenu( results ) {
-      let menu_item = '';
-      for( let i=0; i<menu_items.length; i++ ){
-           if( menu_items[i].title === p_title ) {
-               if( menu_items[i].field_name ) {
-                   field_name = ('&field:'+menu_items[i].field_name+'=');
+      let configuration = '';
+      for( let i=0; i<configurations.length; i++ ){
+           if( configurations[i].insect_project === p_project_id ) {
+               if( configurations[i].field_name ) {
+                   field_name = ('&field:'+configurations[i].field_name+'=');
                } else {
                    field_name = ('&'+p_field+'=');
                }
-               menu_item = menu_items[i];
+               configuration = configurations[i];
            }
       }
       let sub_taxon_arr = [];
       if( p_sub_menu_array ) {
           sub_taxon_arr = p_sub_menu_array;
       } else {
-          if( menu_item.sub_icons ) {
+          if( configuration.sub_icons ) {
               for( let i=0; i<results.length; i++) {
                    if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
-                       for( let j=0; j<menu_item.sub_icons.length; j++ ) {
+                       for( let j=0; j<configuration.sub_icons.length; j++ ) {
                             for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
-                                 if( results[i].taxon.ancestor_ids[k].toString() === menu_item.sub_icons[j].taxon_id.toString() ){
-                                     if( !sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
-                                         sub_taxon_arr.push( menu_item.sub_icons[j].taxon_id );
+                                 if( results[i].taxon.ancestor_ids[k].toString() === configuration.sub_icons[j].taxon_id.toString() ){
+                                     if( !sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
+                                         sub_taxon_arr.push( configuration.sub_icons[j].taxon_id );
                                      }
                                  }
                              }
@@ -188,20 +189,35 @@ function buildMenu( results ) {
 
       if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
           ( p_show_menu === 'yes' ) ||
-          (menu_item.sub_icons) ) { 
-          if( menu_item.sub_icons ) {
+          (configuration.sub_icons) ) { 
+          if( configuration.sub_icons ) {
               menu_string = '<div class="navbar">';
               
               params += ('&sub_menu_array='+sub_taxon_arr);
 
               let links = (furl(github_root+params,'<span style="padding-right:20px;">&#10133;</span>all' ));
-              for( let j=0; j<menu_item.sub_icons.length; j++ ) {
-                   if( sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
-                       links += (furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id+'&taxon_nm='+menu_item.sub_icons[j].nm,'<span style="padding-right:20px;">'+menu_item.sub_icons[j].icon+'</span>'+menu_item.sub_icons[j].nm ));
+              for( let j=0; j<configuration.sub_icons.length; j++ ) {
+                   if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
+                       links += (furl(github_root+params+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
                    }
               }
               
               menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
+
+              if( interactions ) {
+                  for( let i=0; i<interactions.length; i++ ) {
+                       if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
+                           winurlparams.delete('obs_fields');
+                           winurlparams.append('obs_fields', interactions[i].obs_field_list);
+                           links += furl(github_root+'bugs_on_plants_list.html'+copyOpts(winurlparams), interactions[i].dd_name);
+                           link_count += 1;
+                       }
+                  }
+              }
+
+              if( links && link_count > 1 && p_target_name !== 'all plants' ) {
+                  menu_string += buildDD('Show', links);
+              }
 
               // check to see if they entered the flow from a seed library.  if so, return control there.
               if( p_seed_project ) {
@@ -319,7 +335,7 @@ function fresults(xobj) {
 };
 
 async function asyncGetData() {
-   await fetch('bugs.json')
+   await fetch('bugs_pip.json')
      .then(response => response.json())
      .then(data => {
       // Access your data here 
@@ -328,7 +344,8 @@ async function asyncGetData() {
            if( data.configurations[i].name === p_menu ) {
                console.log('p_menu: '+p_menu);
                console.log('config_name: '+data.configurations[i].name);
-               menu_items = data.configurations[i].menu_items;
+               configurations = data.configurations;
+               interactions   = data.interactions;
            }
       }
       if( !found ) {
