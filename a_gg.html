@@ -48,7 +48,7 @@ let p_field = '';
 let p_field_value = '';
 let opts = '';
 let obs_field_array = [];
-let configurations = [];
+let configuration = '';
 let interactions = [];
 let seed_param = '';
 let field_name = '';
@@ -153,10 +153,10 @@ winurlparams.append('target_id', p_target_id);
 
 function buildMenu( results ) {
       let configuration = '';
-      for( let i=0; i<configurations.length; i++ ){
+      /*for( let i=0; i<configurations.length; i++ ){
        console.log('a1');
            if( configurations[i].insect_project === p_project_id ) {
-            console.log('a2');
+            console.log('a2');*/
                if( configurations[i].field_name ) {
                 console.log('a3');
                    field_name = ('&field:'+configurations[i].field_name+'=');
@@ -164,8 +164,8 @@ function buildMenu( results ) {
                    field_name = ('&'+p_field+'=');
                }
                configuration = configurations[i];
-           }
-      }
+  //         }
+  //    }
       let sub_taxon_arr = [];
       if( p_sub_menu_array ) {
           sub_taxon_arr = p_sub_menu_array;
@@ -357,12 +357,12 @@ async function asyncGetData() {
      .then(data => {
       // Access your data here 
       let found = '';
+      interactions   = data.interactions;
       for( let i=0; i<data.configurations.length; i++ ) {
-           if( data.configurations[i].name === p_menu ) {
-               console.log('p_menu: '+p_menu);
-               console.log('config_name: '+data.configurations[i].name);
-               configurations = data.configurations;
-               interactions   = data.interactions;
+           if( data.configurations[i].insect_project === p_project_id ) {
+               found = 'yes';
+               console.log('config_prj: '+data.configurations[i].insect_project);
+               configuration = data.configurations[i];
            }
       }
       if( !found ) {
