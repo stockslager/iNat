@@ -284,7 +284,12 @@ function fresults(xobj) {
                winurlparams_copy.append('obs_fields',box_array[e].field_id);
             
                if( p_operator !== 'merge' ){
-                   labels.push({innerText:getPrimaryColumnHeader(box_array[e].field_id)});
+                   let header = getPrimaryColumnHeader(box_array[e].field_id);
+                   if( header ) {
+                       labels.push({innerText:header});
+                   else {
+                       labels.push({innerText:box_array[e].field_name});
+                   }
                } else {
                    if( firstCol === 'yes' ){
                        firstCol = 'no';
