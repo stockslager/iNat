@@ -202,22 +202,27 @@ function buildMenu( results ) {
        
             links = '';
             let link_count = 0;
+            let dd_list_title = '';
 
             if( interactions ) {
                 for( let i=0; i<interactions.length; i++ ) {
                      if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
+                         if( dd_list_title && interactions[i].list_primary !== dd_list_title ) {
+                             if( links && link_count > 1 && p_target_name !== 'all plants' ) {
+                                 menu_string += buildDD('Show', links);
+                             }
+                         }
                          winurlparams.delete('obs_fields');
                          winurlparams.append('obs_fields', interactions[i].obs_field_list);
                          links += furl(github_root+'bugs_on_plants_list.html'+copyOpts(winurlparams), interactions[i].dd_name);
                          link_count += 1;
                      }
                 }
-            }
 
-            if( links && link_count > 1 && p_target_name !== 'all plants' ) {
-                menu_string += buildDD('Show', links);
+                if( links && link_count > 1 && p_target_name === 'all plants' ) {
+                    menu_string += buildDD('Show', links);
+                }
             }
-
 
             // check to see if they entered the flow from a seed library.  if so, return control there.
             if( p_seed_project ) {
