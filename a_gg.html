@@ -204,14 +204,9 @@ function buildMenu( results ) {
             let link_count = 0;
             let dd_list_title = '';
 
-            if( interactions ) {
+            if( interactions && p_target_name === 'all plants' ) {
                 for( let i=0; i<interactions.length; i++ ) {
                      if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
-                         if( dd_list_title && interactions[i].list_primary !== dd_list_title ) {
-                             if( links && link_count > 1 && p_target_name !== 'all plants' ) {
-                                 menu_string += buildDD(dd_list_title, links);
-                             }
-                         }
                          dd_list_title = interactions[i].list_primary;
                          winurlparams.delete('obs_fields');
                          winurlparams.append('obs_fields', interactions[i].obs_field_list);
@@ -224,7 +219,8 @@ function buildMenu( results ) {
                      }
                 }
 
-                if( links && link_count > 1 && p_target_name === 'all plants' ) {
+                if( links && link_count > 0 && p_target_name === 'all plants' ) {
+                    links += furl(github_root+'a_gg.html'+copyOpts(winurlparams)+'&field:'+configuration.field_name.toLowerCase()+'=', 'All');
                     menu_string += buildDD(dd_list_title, links);
                 }
             }
