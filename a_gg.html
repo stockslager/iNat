@@ -1,11 +1,10 @@
-<!DOCTYPE html> 
-<html lang="en"> 
-
+<!DOCTYPE html>  
+<html lang="en">  
+ 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
 <meta name="description" content="Bugs on Plants" />
-<meta charset="utf-8">
 <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="shortcut icon" href="favicon.ico" />
@@ -14,241 +13,338 @@
 <link rel="manifest" href="bugs.webmanifest" />
 <link rel="stylesheet" type="text/css" href="seed_library.css" />
 <script type="text/javascript" src='common_func.js'> </script>
-<script type="text/javascript" src='observations_grid.js'> </script>
-<title>Bugs on Pl Grid</title>
+<title></title>
 </head>
 
 <body>
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
-
 <script>
-//get parameters from the url
 let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
-let winurlparams = new URLSearchParams(winurlsearchstr);
+let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
-let p_taxon_id   = winurlparams.get('taxon_id') || '';
-var cellpx       = winurlparams.get('cellpx') || 122;
-var spacerpx     = winurlparams.get('spacerpx') || 4;
-var rows         = winurlparams.get('rows') || 30;
-var columns      = winurlparams.get('columns') || 3;
-let title        = winurlparams.get('title') || '';
-let p_action     = winurlparams.get('action') || '';
+let p_place_id   = winurlparams.get('place_id') || '';
 let p_list       = winurlparams.get('list') || '';
-let p_tag_name   = winurlparams.get('tag_name') || '';
-let p_menu       = winurlparams.get('menu') || '';
-let p_cache_check = winurlparams.get('cache_check') || '';
-let p_params     = winurlparams.get('params') || 'bugs_pip';
-let p_life       = winurlparams.get('life') || 'Life Stage';
-let p_seed_project = winurlparams.get('seed_project') || '';
-/*var cellpx = 300;
-var spacerpx = 3;
-var rows = 30;
-var columns = 3;*/
-
-let annotations_array = [];
-let interactions = [];
-
+let p_user_id    = winurlparams.get('user_id') || '';
+let p_taxon_id   = winurlparams.get('taxon_id') || '';
+let p_operator   = winurlparams.get('operator') || '';
+let p_obs_field  = winurlparams.get('obs_field') || '';
+let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
+let p_omit_users = winurlparams.get('omit_users') || '';
+let p_omit_id = winurlparams.get('omit_id') || '';
+let p_omit_project = winurlparams.get('omit_projects') || '';
+let p_title        = winurlparams.get('title') || '';
+let p_prefix       = winurlparams.get('prefix') || '';
+let p_target_name   = winurlparams.get('target_name') || '';
+let p_target_id     = winurlparams.get('target_id') || '';
+let p_show_menu     = winurlparams.get('show_menu') || 'no';
+let p_menu_array    = winurlparams.get('menu_array') || '';
+let p_tag_name      = winurlparams.get('tag_name') || '';
+let p_sub_menu_array    = winurlparams.get('sub_menu_array') || '';
+let p_menu          = winurlparams.get('menu') || 'all';
+let p_seed_project  = winurlparams.get('seed_project') || '';
+let p_taxon_nm      = winurlparams.get('taxon_nm') || 'Show';
+let p_field = '';
+let p_field_value = '';
+let menu_items = [];
+let opts = '';
+let obs_field_array = [];
 let seed_param = '';
+
 if( p_seed_project ) {
+    opts += ('&seed_project='+p_seed_project);
     seed_param = '&seed_project='+p_seed_project;
 }
 
-let all_opts = copyOpts(winurlparams);
+if( p_list ) {
+    opts += ('&list='+p_list);
+}
 
-let all_except_life_stage = '';
-for (const [key, value] of winurlparams.entries()) { 
-  if( key !== 'life' && key !== 'term_id' && key !== 'term_value_id' ) {
-      if( all_except_life_stage === '' ){
-          all_except_life_stage += "?";
-      } else {
-          all_except_life_stage += "&";
-      }
-      all_except_life_stage += key;
-      all_except_life_stage += "=";
+if( p_menu ) {
+    opts += ('&menu='+p_menu);
+}
 
-      if( key === 'page' ){
-          all_except_life_stage += '1';
-      } else {
-          all_except_life_stage += value;
-      }
-  }
-}   
-   
-// if the user has selected a method, built the opt to pass to the
-// lifelist page.
+if( p_tag_name ) {
+    opts += ('&tag_name='+p_tag_name);
+}
+
+if( p_title ) {
+    opts += ('&title='+p_title);
+}
+ 
+if( p_omit_users !== '' ){
+    winurlparams.delete('not_user_id');
+    winurlparams.append('not_user_id', p_omit_users);
+}
+
+if( p_omit_id !== '' ){
+    winurlparams.delete('not_id');
+    winurlparams.append('not_id', p_omit_id);
+}
+
+if( p_omit_project !== '' ){
+    winurlparams.delete('not_in_project');
+    winurlparams.append('not_in_project', p_omit_project);
+}
+ 
+winurlparams.delete('per_page');
+winurlparams.append('per_page','100');
+
 // find key/value pair for &field: param if one was passed in
-let field = '';
-let opts = '';
-let field_key = '';
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
-      field_key = key;
-      opts += ('&'+key+'='+value);
-      field = ('&'+key+'='+value);
+      p_field = key;
+      p_field_value = value;
   }
-}   
+}  
 
-if( p_taxon_id ) {
-    opts      += ('&taxon_id='+p_taxon_id);
+winurlparams.delete('options');
+let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
+winurlparams.delete('idextra_user_id');
+let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
+winurlparams.delete('photo_curl_filename_prefix');
+ 
+let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
+let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
+
+</script> 
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
+<script> 
+
+// remove the field param from the url before building options
+winurlparams.delete('operator');
+winurlparams.delete('taxon_id');
+winurlparams.delete('not_user_id');
+winurlparams.delete('not_id');
+winurlparams.delete('not_in_project');
+
+// add them back after building options...
+winurlparams.append('operator', p_operator);
+winurlparams.append('taxon_id', p_taxon_id);
+winurlparams.append('target_id', p_target_id);
+
+function buildMenu() {
+      let field_id = '';
+      let field_name = '';
+      let menu_item = '';
+      for( let i=0; i<menu_items.length; i++ ){
+           if( menu_items[i].title === p_title ) {
+               if( menu_items[i].field_name ) {
+                   field_id   = menu_items[i].field_id;
+                   field_name = ('&field:'+menu_items[i].field_name+'=');
+               } else {
+                   field_name = ('&'+p_field+'=');
+               }
+               menu_item = menu_items[i];
+           }
+      }
+
+      let sub_taxon_arr = [];
+      if( p_sub_menu_array ) {
+          sub_taxon_arr = p_sub_menu_array;
+      } else {
+          if( menu_item.sub_icons ) {
+              for( let i=0; i<results.length; i++) {
+                   if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
+                       for( let j=0; j<menu_item.sub_icons.length; j++ ) {
+                            for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
+                                 if( results[i].taxon.ancestor_ids[k].toString() === menu_item.sub_icons[j].taxon_id.toString() ){
+                                     if( !sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
+                                         sub_taxon_arr.push( menu_item.sub_icons[j].taxon_id );
+                                     }
+                                 }
+                             }
+                        }
+                   }
+               }
+          }
+      }
+
+      let icons = '';
+      let menu_string = '';
+      let params = ('bugs_on_plants2.html'+proj+user+seed_param+leaf_params+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu+'&menu='+p_menu);
+
+      if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
+          ( p_show_menu === 'yes' ) ||
+          (menu_item.sub_icons) ) { 
+          if( menu_item.sub_icons ) {
+              buildMenu();
+              menu_string = '<div class="navbar">';
+              menu_string += '<div class="dropdown">' +
+                                '<button class="dropbtn">' +
+                                    capitalizeWords(p_taxon_nm) +
+                                    '<i class="fa fa-caret-down"></i>' +
+                                '</button>' +
+                             '<div class="dropdown-content">';
+              params += ('&sub_menu_array='+sub_taxon_arr);
+              menu_string += (furl(github_root+params,'<span style="padding-right:20px;">&#10133;</span>all' ));
+              for( let j=0; j<menu_item.sub_icons.length; j++ ) {
+                   if( sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
+                       menu_string += (furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id+'&taxon_nm='+menu_item.sub_icons[j].nm,'<span style="padding-right:20px;">'+menu_item.sub_icons[j].icon+'</span>'+menu_item.sub_icons[j].nm ));
+                   }
+              }
+              menu_string += ('</div></div>');
+
+              // check to see if they entered the flow from a seed library.  if so, return control there.
+              if( p_seed_project ) {
+                  if( p_seed_project.startsWith('pip') ) {
+                      menu_string += ('<div id="home">'+furl(github_root+'bugs_on_plants_pip.html?insect_project='+p_seed_project.replace('pip',''),'&#127807;')+'</div></div>');
+                  } else {
+                      menu_string += ('<div id="home">'+furl(github_root+'cncnpc_seeds.html?project_id='+p_seed_project,'&#127807;')+'</div></div>');
+                  }
+              } else {
+                  menu_string += ('<div id="home">'+furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_title+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div></div>');
+              }
+          }
+      }
+    return( menu_string );
 }
 
-var recsmax = columns * rows - 1;
+function fresults(xobj) {
+   let results = xobj.results;
+   let box_array = [];
+ 
+   if (results) {
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+      let labels = [];
+      let dlString = '';
+      let proj = '';
+      let user = '';
+      if( p_project_id ) {
+          proj = ('?project_id='+p_project_id);
+          if( p_user_id ) {
+              proj += ('&user_id='+p_user_id);
+          }
+      } else {
+          user = ('?user_id='+p_user_id);
+      }
 
-winurlparams.delete('cellpx');
-winurlparams.delete('spacerpx');
-winurlparams.delete('rows');
-winurlparams.delete('columns');
-winurlparams.delete('title');
-var obsurlbase = 'https://www.inaturalist.org/observations';
-var obsurl = obsurlbase+'?'+winurlparams.toString();
-winurlparams.append('per_page',recsmax);
-var apiurlbase = 'https://api.inaturalist.org/v1/observations'
-var apiurl = apiurlbase+'?'+winurlparams.toString();
+      let leaf_params = '';
+      if( p_list ) {
+          leaf_params += ('&list='+p_list);
+      }
+      if( p_place_id ) {
+          leaf_params += ('&place_id='+p_place_id);
+      }
 
-document.title = title.toLowerCase();
+      if( p_title === '' ) {
+          dlString = 'Bugs on Plants';
+      } else {
+          dlString = (p_prefix+' '+p_title+' '+p_target_name);
+          document.title = dlString;
+      }
 
-function buildLifeStageMenu(data, obs_fields) {
-
-   let links = '';
-   let menu_string = '';
-   
-   links = furl(github_root+'bugs_on_plants_grid.html'+all_opts,"grid");
-   if( field_key ) {
-       links += furl(github_root+'bugs_on_plants_list.html'+all_opts+'&obs_fields='+obs_fields,"list");
-   }
-   links += furl(github_root+'life_list_map.html'+all_opts,"map");
-
-   menu_string = '<div class="navbar">';
-   menu_string += buildDD('Show', links);
-
-   // the life list links need to be cached the first time the page is enetered 
-   // otherwise when a life stage is chosen the grid will only display that
-   // life stage and the drop down will only see that life stage and (all) 
-   // since the other life stages are filtered out.
-   let cache_key = ('project_id='+p_project_id+'taxon_id='+p_taxon_id+'field='+field);
-
-   links = '';
-   if( p_cache_check === 'yes' ) {
-       if( sessionStorage.getItem(cache_key) ) {
-           console.log('found cache..: '+cache_key+'==='+sessionStorage.getItem(cache_key));
-           links += sessionStorage.getItem(cache_key);
-       }
-   }
-
-   if( !links ) {
-       // all should always appear...
-       links = furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=&cache_check=yes','All');
-   
-       if( annotations_array.includes(2) ){      // adult
-           links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Adults&term_id=1&term_value_id=2&cache_check=yes','Adults');
-       }
-       if( annotations_array.includes(3) ){      // teneral
-           links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Teneral&term_id=1&term_value_id=3&cache_check=yes','Teneral');
-       }
-       if( annotations_array.includes(4) ) {    // pupa
-           links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Pupa&term_id=1&term_value_id=4&cache_check=yes','Pupa');
-       }
-       if( annotations_array.includes(5) ) {    // nymph
-           links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Nymph&term_id=1&term_value_id=5&cache_check=yes','Nymph');
-       }
-       if( annotations_array.includes(6) ){      // larva.
-           links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Larva&term_id=1&term_value_id=6&cache_check=yes','Larva');
-       }
-       if( annotations_array.includes(7) ) {    // egg
-           links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Egg&term_id=1&term_value_id=7&cache_check=yes','Egg');
-       }
-       if( annotations_array.includes(8) ) {    // juvenile
-           links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Juvenile&term_id=1&term_value_id=8&cache_check=yes','Juvenile');
-       }
-       if( annotations_array.includes(16) ) {    // subimago
-           links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Subimago&term_id=1&term_value_id=16&cache_check=yes','Subimago');
-       }
-       sessionStorage.setItem(cache_key, links);
-   }
-
-   menu_string += buildDD(p_life, links);
+      buildMenu();
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+       
+      if( !p_field_value ) {
+          dlString = furl(github_root+'bugs_on_plants_grid.html'+proj+user+seed_param+leaf_params+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&action='+p_title+'&menu='+p_menu+field_name,'<span id="topright">all organisms '+p_title+' any plant</span>');
+      } else {
+          dlString = ('<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
+      }
     
-   if( p_seed_project ) {
-       if( p_seed_project.startsWith('pip') ) {
-           menu_string += buildHome(furl(github_root+'bugs_on_plants_pip.html?insect_project='+p_seed_project.replace('pip',''),'&#127807;'));
-       } else {
-           menu_string += buildHome(furl(github_root+'cncnpc_seeds.html?project_id='+p_seed_project,'&#127807;'));
-       }
-   } else {
-       menu_string += buildHome(furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;'));
-   }
+      faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
+             +'per page: '+fcomnum(per_page)+'<br />'
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+dlString+'<br />'});  
 
-   menu_string += '</div>';
-   
-   return menu_string;
-}
+      labels = [
+            {innerText:'#'},
+            {innerText:'Photo'},
+            {innerText:'Name'}, 
+      ];
 
-function buildMenu(data) {
+      if( p_field !== '' ) {
+          labels.push({innerText:' '});
+      }
 
-  let obs_fields = '';
-  for( let j=0; j<data.results.length; j++ ) {
-       checkForAnnotations(data.results[j]);
+      let table = faddelem('table',document.body,{id:'main'});                    
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
       
-       // find the obs field that matches the one that passed in and save the id
-       // to pass to the "list" if that option is chosen in the "show" drop-down.
-       if( j === 0 ){
-           if( interactions ) {
-               for( let i=0; i<interactions.length; i++ ) {
-                    console.log('menu ' + interactions[i].dd_menu );
-                    console.log('prj  ' + p_project_id );
-                    console.log('nm ' + interactions[i].field_name );
-                    if( interactions[i].dd_menu === p_project_id && 
-                        interactions[i].field_name.toLowerCase() === field_key.replace("field:",'').toLowerCase() ) {
-                        console.log('two');
-                        obs_fields = interactions[i].obs_field_list;
-                    }
-                }
-            }
-            // if there weren't interactions added to the .json,
-            // just pass along whichever obs_fields were passed to the grid.
-            if( !obs_fields ) {
-                for( let i=0; i<data.results[j].ofvs.length; i++ ) {
-                     if( data.results[j].ofvs[i].name.toLowerCase() === field_key.replace("field:",'').toLowerCase() ) {
-                         obs_fields = data.results[j].ofvs[i].field_id;
-                     }
+      faddelems('th',hrow,labels);
+      let tbody = faddelem('tbody',table);
+
+      for (let i=0; i<results.length; i++) {
+         let rec = results[i];
+         let tax_name = '';
+         let pref_tax_name = '';
+         let tax_photo = '<div class="clipart">&#127807</div>'; 
+         let tax_id = '';
+         let taxon = '';
+
+         let brow = faddelem('tr',tbody);
+
+         if( rec.taxon ){
+             tax_id = rec.taxon.id;
+             tax_name = rec.taxon.name || '';
+             pref_tax_name = rec.taxon.preferred_common_name || '';
+           
+             if( rec.taxon.default_photo ){
+                 if( rec.taxon.default_photo.url ){
+                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
                  }
-            }
-       }
-  }
+             }
+         }
 
-  return( buildLifeStageMenu(data, obs_fields) );
-}
+         let query_params = '';
+         if( p_project_id === '' || p_project_id === 'null' ){
+             query_params = ('user_id='+p_user_id);
+         } else {
+             query_params = ('project_id='+p_project_id);
+             if( p_user_id !== '' ){
+                 query_params += ('&user_id='+p_user_id);
+             }
+         }
 
-function checkForAnnotations( obs ){
-   if( obs.annotations ) {
-       for( let i=0; i<obs.annotations.length; i++ ) {
-            // eventually this hard coding would need to be removed.
-            // it should call the get_observations_popular_field_values on page load
-            // and store the results in session for use when the menu is clicked.
-            // replace session on re-load of page.
-            if( obs.annotations[i].controlled_attribute_id === 1 ) {   // life stage
-                if( !annotations_array.includes(obs.annotations[i].controlled_value_id) ) {
-                    annotations_array.push(obs.annotations[i].controlled_value_id);
-                }
-            }
-       }
+         if( p_place_id ) {
+             query_params += '&place_id='+p_place_id;
+         }
+
+         let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
+         let grid_title  = ('&action='+p_title+'&title='+(pref_tax_name||tax_name)+' '+p_title+' '+p_target_name);
+                                      
+         let values = [
+                  {innerText:i+1},
+                  {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
+                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html?'+query_params+opts+'&taxon_id='+rec.taxon.id+grid_title+field_name+p_target_id,displayName)},
+                  {innerText:rec.count||''},
+                  ];
+        
+         faddelems('td',brow,values);
+      };
+
+      // buttons to go to prev or next page
+      let nav = faddelem('div',document.body,{id:'nav'});
+      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
    }
-}
-  
-function fresults(data) {  
-   faddelem('p',document.body,{innerHTML:buildMenu(data)}); 
-   buildGrid(data);    
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
 
 async function asyncGetData() {
-   await fetch(p_params+'.json')
+   await fetch('bugs.json')
      .then(response => response.json())
      .then(data => {
       // Access your data here 
-      for( let i=0; i<data.interactions.length; i++ ) {
-           interactions = data.interactions;
+      let found = '';
+      for( let i=0; i<data.configurations.length; i++ ) {
+           if( data.configurations[i].name === p_menu ) {
+               console.log('p_menu: '+p_menu);
+               console.log('config_name: '+data.configurations[i].name);
+               menu_items = data.configurations[i].menu_items;
+           }
+      }
+      if( !found ) {
+          faddelems('p',document.body,'Menu not found.  A &menu paramater was not passed in or was not found.  Add &menu=xxx to the end of the url where xxx has a matching menu in the bugs.json file.');
       }
       console.log(data);
    })
@@ -256,23 +352,23 @@ async function asyncGetData() {
       console.error('Error fetching JSON:', error);
    });
 
-   if (window.location.search==='') {
-      faddelem('p',document.body,{innerHTML:'This is a quick and dirty example of a widget to display iNaturalist observations in a grid. It is based on the '+furl('https://api.inaturalist.org/v1/docs/#!/Observations/get_observations','Observation Search API endpoint')+' and can accept any of the parameters for that endpoint. Additionally, it accepts 4 more parameters that will allow the grid to be customized: columns, rows, cellpx, and spacerpx.'});
-      faddelem('p',document.body,{innerHTML:'Suppose the address of this page is '+furl(winurlexsearchstr)+', and you want to see '+furl(famp(apiurlbase+'?taxon_id=3&place_id=9'),'birds in New Mexico')+' in a 3 (high) x 5 (wide) grid where each cell is 75px x 75px and where each cell is separated by a 2px spacer, then you would open '+furl(famp(winurlexsearchstr+'?rows=3&columns=5&cellpx=75&spacerpx=2&taxon_id=3&place_id=9'))+' in your browser.'});
-      faddelem('p',document.body,{innerHTML:'Note that the actual size of the image files is 75px x 75px. So setting the cellpx higher than 75 will make the images look blurry. Only the first photo in an observation will be shown, or else ❎ will be shown when an observation has no photos. The last cell in the grid will always be either a "no data" or "more" button. So a 3x5 grid will show only up to 14 observations.'});
+   if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
+      let instructions = [
+         {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.  It will default to the "7623 - plant that the organism was found on" observation field if &obs_field=xxx is not passed in.'},
+      ];
+      faddelems('p',document.body,instructions);
    } else {
-        await fetch(apiurl)
-          .then((response) => {
-             if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-             return response.json();
-          })
-          .then((data) => { fresults(data); })
-          .catch((err) => {
-             console.error(err.message);
-             faddelem('p',document.body,{innerHTML:'There was a problem retrieving data. Error '+err.message+'.'})
-        });
-   };
-
+      await fetch(apiurl)
+      .then((response) => {
+         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+         return response.json();
+      })
+      .then((data) => { fresults(data); })
+      .catch((err) => {
+         console.error(err.message);
+         faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+      });
+   }
 }
 
 // need to pull resources from a json file to pass into an api
@@ -282,7 +378,7 @@ const request = async () => {
 }
 
 request();  
- 
+
 </script>
 </body>
 
