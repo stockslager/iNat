@@ -191,29 +191,27 @@ function buildMenu( results ) {
           (menu_item.sub_icons) ) { 
           if( menu_item.sub_icons ) {
               menu_string = '<div class="navbar">';
-              menu_string += '<div class="dropdown">' +
-                                '<button class="dropbtn">' +
-                                    capitalizeWords(p_taxon_nm) +
-                                    '<i class="fa fa-caret-down"></i>' +
-                                '</button>' +
-                             '<div class="dropdown-content">';
+              
               params += ('&sub_menu_array='+sub_taxon_arr);
-              menu_string += (furl(github_root+params,'<span style="padding-right:20px;">&#10133;</span>all' ));
+
+              let links = (furl(github_root+params,'<span style="padding-right:20px;">&#10133;</span>all' ));
               for( let j=0; j<menu_item.sub_icons.length; j++ ) {
                    if( sub_taxon_arr.includes( menu_item.sub_icons[j].taxon_id ) ) {
-                       menu_string += (furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id+'&taxon_nm='+menu_item.sub_icons[j].nm,'<span style="padding-right:20px;">'+menu_item.sub_icons[j].icon+'</span>'+menu_item.sub_icons[j].nm ));
+                       links += (furl(github_root+params+'&taxon_id='+menu_item.sub_icons[j].taxon_id+'&taxon_nm='+menu_item.sub_icons[j].nm,'<span style="padding-right:20px;">'+menu_item.sub_icons[j].icon+'</span>'+menu_item.sub_icons[j].nm ));
                    }
               }
-              menu_string += ('</div></div>');
+              
+              menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
+
               // check to see if they entered the flow from a seed library.  if so, return control there.
               if( p_seed_project ) {
                   if( p_seed_project.startsWith('pip') ) {
-                      menu_string += ('<div id="home">'+furl(github_root+'bugs_on_plants_pip.html?insect_project='+p_seed_project.replace('pip',''),'&#127807;')+'</div></div>');
+                      menu_string += buildHome( furl(github_root+'bugs_on_plants_pip.html?insect_project='+p_seed_project.replace('pip',''),'&#127807;') );
                   } else {
-                      menu_string += ('<div id="home">'+furl(github_root+'cncnpc_seeds.html?project_id='+p_seed_project,'&#127807;')+'</div></div>');
+                      menu_string += buildHome( furl(github_root+'cncnpc_seeds.html?project_id='+p_seed_project,'&#127807;') );
                   }
               } else {
-                  menu_string += ('<div id="home">'+furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_title+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div></div>');
+                  menu_string += buildHome( furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_title+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;') );
               }
           }
       }
