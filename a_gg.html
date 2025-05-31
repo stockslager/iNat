@@ -73,7 +73,7 @@ if( p_place_id ) { leaf_params += ('&place_id='+p_place_id); }
 if( p_title === '' ) {
     dlString = 'Bugs on Plants';
 } else {
-    dlString = (p_prefix+' '+p_title+' '+p_target_name);
+    dlString = (capitalizeWords((p_prefix+' '+p_title+' '+p_target_name)));
     document.title = dlString;
 }
 
@@ -167,13 +167,21 @@ function buildMenu( results ) {
       if( p_sub_menu_array ) {
           sub_taxon_arr = p_sub_menu_array;
       } else {
+       console.log('a');
           if( configuration.sub_icons ) {
+           console.log('b');
               for( let i=0; i<results.length; i++) {
+               console.log('c');
                    if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
+                    console.log('d');
                        for( let j=0; j<configuration.sub_icons.length; j++ ) {
+                        console.log('e');
                             for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
+                             console.log('f');
                                  if( results[i].taxon.ancestor_ids[k].toString() === configuration.sub_icons[j].taxon_id.toString() ){
+                                  console.log('g');
                                      if( !sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
+                                      console.log('h');
                                          sub_taxon_arr.push( configuration.sub_icons[j].taxon_id );
                                      }
                                  }
