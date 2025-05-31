@@ -190,20 +190,21 @@ function buildMenu( results ) {
       if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
           ( p_show_menu === 'yes' ) ||
           (configuration.sub_icons) ) { 
-          if( configuration.sub_icons ) {
               menu_string = '<div class="navbar">';
+              if( configuration.sub_icons ) {
            console.log('men1 ' + menu_string);
               
-              params += ('&sub_menu_array='+sub_taxon_arr);
+                  params += ('&sub_menu_array='+sub_taxon_arr);
 
-              let links = (furl(github_root+params,'<span style="padding-right:20px;">&#10133;</span>all' ));
-              for( let j=0; j<configuration.sub_icons.length; j++ ) {
-                   if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
-                       links += (furl(github_root+params+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
-                   }
-              }
+                  let links = (furl(github_root+params,'<span style="padding-right:20px;">&#10133;</span>all' ));
+                  for( let j=0; j<configuration.sub_icons.length; j++ ) {
+                       if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
+                           links += (furl(github_root+params+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+                       }
+                  }
               
-              menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
+                  menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
+              }
            console.log('men2 ' + menu_string);
               if( interactions ) {
                   for( let i=0; i<interactions.length; i++ ) {
