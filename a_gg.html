@@ -209,9 +209,10 @@ function buildMenu( results ) {
                      if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
                          if( dd_list_title && interactions[i].list_primary !== dd_list_title ) {
                              if( links && link_count > 1 && p_target_name !== 'all plants' ) {
-                                 menu_string += buildDD('Show', links);
+                                 menu_string += buildDD(dd_list_title, links);
                              }
                          }
+                         dd_list_title = interactions[i].list_primary;
                          winurlparams.delete('obs_fields');
                          winurlparams.append('obs_fields', interactions[i].obs_field_list);
                          links += furl(github_root+'bugs_on_plants_list.html'+copyOpts(winurlparams), interactions[i].dd_name);
@@ -220,7 +221,7 @@ function buildMenu( results ) {
                 }
 
                 if( links && link_count > 1 && p_target_name === 'all plants' ) {
-                    menu_string += buildDD('Show', links);
+                    menu_string += buildDD(dd_list_title, links);
                 }
             }
 
