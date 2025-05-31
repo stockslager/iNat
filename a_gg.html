@@ -239,8 +239,7 @@ function fresults(xobj) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let labels = [];
 
-      buildMenu( results );
-      faddelem('p',document.body,{innerHTML:(menu_string)});  
+      faddelem('p',document.body,{innerHTML:(buildMenu(results))});  
        
       if( !p_field_value ) {
           dlString = furl(github_root+'bugs_on_plants_grid.html'+proj+user+seed_param+leaf_params+'&target_name=all%20plants&obs_field='+p_obs_field+'&title='+p_title+'&action='+p_title+'&menu='+p_menu+field_name,'<span id="topright">all organisms '+p_title+' any plant</span>');
