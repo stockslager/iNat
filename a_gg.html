@@ -153,6 +153,7 @@ function buildMenu( results ) {
       let field_id = '';
       let field_name = '';
       let menu_item = '';
+ console.log('one');
       for( let i=0; i<menu_items.length; i++ ){
            if( menu_items[i].title === p_title ) {
                if( menu_items[i].field_name ) {
@@ -164,7 +165,7 @@ function buildMenu( results ) {
                menu_item = menu_items[i];
            }
       }
-
+console.log('two');
       let sub_taxon_arr = [];
       if( p_sub_menu_array ) {
           sub_taxon_arr = p_sub_menu_array;
@@ -185,7 +186,7 @@ function buildMenu( results ) {
                }
           }
       }
-
+console.log('three');
       let icons = '';
       let menu_string = '';
       let params = ('bugs_on_plants2.html'+proj+user+seed_param+leaf_params+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu+'&menu='+p_menu);
@@ -210,7 +211,7 @@ function buildMenu( results ) {
                    }
               }
               menu_string += ('</div></div>');
-
+console.log('four');
               // check to see if they entered the flow from a seed library.  if so, return control there.
               if( p_seed_project ) {
                   if( p_seed_project.startsWith('pip') ) {
@@ -223,12 +224,12 @@ function buildMenu( results ) {
               }
           }
       }
+ console.log('five');
     return( menu_string );
 }
 
 function fresults(xobj) {
    let results = xobj.results;
-   let box_array = [];
  
    if (results) {
       let total_results = xobj.total_results;
