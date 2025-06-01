@@ -61,12 +61,11 @@ for (const [key, value] of winurlparams.entries()) {
   }
 }  
 
-// create params for selection of an individual species within the table.
+// create params for selection within an observation field drop down.
 // need to delete the sub_menu_array because it'll need to rebuild the
-// taxa menu for only those iconic taxa found behaving a certain way.
-let table_row_params = new URLSearchParams(winurlsearchstr.substring(1));
+// taxa menu for only those iconic taxa found for that obs field / value.
+let dd_params = new URLSearchParams(winurlsearchstr.substring(1));
 table_row_params.delete('obs_fields');
-table_row_params.append('obs_fields', interactions[i].obs_field_list);
 table_row_params.delete('field:'+p_field);
 table_row_params.delete('sub_menu_array');
  
@@ -171,8 +170,9 @@ function buildMenu( results ) {
                      if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
                          if( dd_list_title !== interactions[i].list_primary ) {
                              dd_list_title = interactions[i].list_primary;
-                             if( last_field ) { table_row_params.delete('field:'+last_field); }
+                             table_row_params.append('obs_fields', interactions[i].obs_field_list);
                              table_row_params.append( ('field:'+interactions[i].field_name), interactions[i].field_value );
+                             if( last_field ) { table_row_params.delete('field:'+last_field); }
                          }
                          last_field = '&field:'+interactions[i].field_name;
                          links += furl(github_root+'a_gg.html'+copyOpts(winurlparams)+'&field:'+interactions[i].field_name.toLowerCase()+'='+interactions[i].field_value.toLowerCase(), interactions[i].dd_name);
