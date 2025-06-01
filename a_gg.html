@@ -176,13 +176,13 @@ function buildMenu( results ) {
                              if( last_field ) { dd_params.delete('field:'+last_field); }
                          }
                          last_field = '&field:'+interactions[i].field_name;
-                         links += furl(github_root+'a_gg.html'+copyOpts(winurlparams)+'&field:'+interactions[i].field_name.toLowerCase()+'='+interactions[i].field_value.toLowerCase(), interactions[i].dd_name);
+                         links += furl(github_root+'a_gg.html'+copyOpts(dd_params)+'&field:'+interactions[i].field_name.toLowerCase()+'='+interactions[i].field_value.toLowerCase(), interactions[i].dd_name);
                          link_count += 1;
                      }
                 }
 
                 if( links && link_count > 0 && p_target_name === 'all plants' ) {
-                    links += furl(github_root+'a_gg.html'+copyOpts(winurlparams)+'&field:'+configuration.field_name.toLowerCase()+'=', 'All');
+                    links += furl(github_root+'a_gg.html'+copyOpts(dd_params)+'&field:'+configuration.field_name.toLowerCase()+'=', 'All');
                     menu_string += buildDD(dd_list_title, links);
                 }
             }
