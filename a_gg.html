@@ -207,7 +207,6 @@ function buildMenu( results ) {
             if( interactions && p_target_name === 'all plants' ) {
                 for( let i=0; i<interactions.length; i++ ) {
                      if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
-                         dd_list_title = interactions[i].list_primary;
                          winurlparams.delete('obs_fields');
                          winurlparams.append('obs_fields', interactions[i].obs_field_list);
                          // need to delete the sub_menu_array because it'll need to rebuild the
@@ -216,6 +215,12 @@ function buildMenu( results ) {
                          winurlparams.delete(('field:'+p_field));
                          winurlparams.delete('sub_menu_array');
                          winurlparams.append( ('field:'+interactions[i].field_name), interactions[i].field_value );
+                      
+                         if( dd_list_title !== interactions[i].list_primary && links && link_count > 0 && p_target_name === 'all plants' ) {
+                             menu_string += buildDD(dd_list_title, links);  
+                             links_count = 0;  links = '';
+                         }
+                         dd_list_title = interactions[i].list_primary;
                          links += furl(github_root+'a_gg.html'+copyOpts(winurlparams), interactions[i].dd_name);
                          link_count += 1;
                      }
@@ -305,27 +310,13 @@ function fresults(xobj) {
              }
          }
 
-         let query_params = '';
-         /*if( p_project_id === '' || p_project_id === 'null' ){
-             query_params = ('user_id='+p_user_id);
-         } else {
-             query_params = ('project_id='+p_project_id);
-             if( p_user_id !== '' ){
-                 query_params += ('&user_id='+p_user_id);
-             }
-         }
-
-         if( p_place_id ) {
-             query_params += '&place_id='+p_place_id;
-         }*/
-
          let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
          let grid_title  = ('&action='+p_title+'&title='+(pref_tax_name||tax_name)+' '+p_title+' '+p_target_name);
                                       
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html?'+query_params+copyOpts(winurlparams)+'&taxon_id='+rec.taxon.id+grid_title/*+field_name+p_target_id*/,displayName)},
+                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html?'+copyOpts(winurlparams)+'&taxon_id='+rec.taxon.id+grid_title,displayName)},
                   {innerText:rec.count||''},
                   ];
         
