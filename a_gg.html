@@ -183,6 +183,9 @@ function buildMenu( results ) {
                          link_count += 1;
                      }
                 }
+                if( links && link_count > 0 && p_target_name === 'all plants' ) {
+                    menu_string += buildDD(dd_list_title, links);
+                }            
             }
 
             // check to see if they entered the flow from a seed library.  if so, return control there.
