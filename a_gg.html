@@ -212,6 +212,7 @@ function buildMenu( results ) {
                          winurlparams.append('obs_fields', interactions[i].obs_field_list);
                          // need to delete the sub_menu_array because it'll need to rebuild the
                          // taxa menu for only those iconic taxa found behaving a certain way.
+                         winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
                          winurlparams.delete(('field:'+p_field));
                          winurlparams.delete('sub_menu_array');
                          winurlparams.append( ('field:'+interactions[i].field_name), interactions[i].field_value );
