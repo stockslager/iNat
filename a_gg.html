@@ -29,10 +29,6 @@ let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
 let p_obs_field  = winurlparams.get('obs_field') || '';
-let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
-let p_omit_users = winurlparams.get('omit_users') || '';
-let p_omit_id = winurlparams.get('omit_id') || '';
-let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_title        = winurlparams.get('title') || '';
 let p_prefix       = winurlparams.get('prefix') || '';
 let p_target_name   = winurlparams.get('target_name') || '';
@@ -94,21 +90,6 @@ if( p_title === '' ) {
     document.title = dlString;
 }
  
-if( p_omit_users !== '' ){
-    winurlparams.delete('not_user_id');
-    winurlparams.append('not_user_id', p_omit_users);
-}
-
-if( p_omit_id !== '' ){
-    winurlparams.delete('not_id');
-    winurlparams.append('not_id', p_omit_id);
-}
-
-if( p_omit_project !== '' ){
-    winurlparams.delete('not_in_project');
-    winurlparams.append('not_in_project', p_omit_project);
-}
- 
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
 
@@ -126,18 +107,6 @@ let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observat
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
 <script> 
-
-// remove the field param from the url before building options
-winurlparams.delete('operator');
-winurlparams.delete('taxon_id');
-winurlparams.delete('not_user_id');
-winurlparams.delete('not_id');
-winurlparams.delete('not_in_project');
-
-// add them back after building options...
-winurlparams.append('operator', p_operator);
-winurlparams.append('taxon_id', p_taxon_id);
-winurlparams.append('target_id', p_target_id);
 
 function buildMenu( results ) {
 
