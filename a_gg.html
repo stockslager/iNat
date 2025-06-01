@@ -56,6 +56,23 @@ let field_name = '';
 let dlString = '';
 let proj = '';
 let user = '';
+
+// find key/value pair for &field: param if one was passed in
+for (const [key, value] of winurlparams.entries()) {
+  if( key.startsWith('field') ){
+      p_field = key;
+      p_field_value = value;
+  }
+}  
+
+// create params for selection of an individual species within the table.
+// need to delete the sub_menu_array because it'll need to rebuild the
+// taxa menu for only those iconic taxa found behaving a certain way.
+let table_row_params = new URLSearchParams(winurlsearchstr.substring(1));
+table_row_params.delete('obs_fields');
+table_row_params.append('obs_fields', interactions[i].obs_field_list);
+table_row_params.delete(('field:'+p_field);
+table_row_params.delete('sub_menu_array');
  
 if( p_project_id ) {
     proj = ('?project_id='+p_project_id);
@@ -76,23 +93,6 @@ if( p_title === '' ) {
     dlString = (capitalizeWords((p_prefix+' '+p_title+' '+p_target_name)));
     document.title = dlString;
 }
-
-if( p_seed_project ) {
-    opts += ('&seed_project='+p_seed_project);
-    seed_param = '&seed_project='+p_seed_project;
-}
-
-if( p_list ) {
-    opts += ('&list='+p_list);
-}
-
-if( p_tag_name ) {
-    opts += ('&tag_name='+p_tag_name);
-}
-
-if( p_title ) {
-    opts += ('&title='+p_title);
-}
  
 if( p_omit_users !== '' ){
     winurlparams.delete('not_user_id');
@@ -111,14 +111,6 @@ if( p_omit_project !== '' ){
  
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
-
-// find key/value pair for &field: param if one was passed in
-for (const [key, value] of winurlparams.entries()) {
-  if( key.startsWith('field') ){
-      p_field = key;
-      p_field_value = value;
-  }
-}  
 
 winurlparams.delete('options');
 let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
@@ -203,18 +195,17 @@ function buildMenu( results ) {
             links = '';
             let link_count = 0;
             let dd_list_title = '';
+            let last_field = '';
 
             if( interactions && p_target_name === 'all plants' ) {
                 for( let i=0; i<interactions.length; i++ ) {
                      if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
-                         dd_list_title = interactions[i].list_primary;
-                         winurlparams.delete('obs_fields');
-                         winurlparams.append('obs_fields', interactions[i].obs_field_list);
-                         // need to delete the sub_menu_array because it'll need to rebuild the
-                         // taxa menu for only those iconic taxa found behaving a certain way.
-                         winurlparams.delete(('field:'+p_field);
-                         winurlparams.delete('sub_menu_array');
-                         winurlparams.append( ('field:'+interactions[i].field_name), interactions[i].field_value );
+                         if( dd_list_title !== interactions[i].list_primary ) {
+                             dd_list_title = interactions[i].list_primary;
+                             if( last_field ) { table_row_params.delete(('field:'+last_field); }
+                             table_row_params.append( ('field:'+interactions[i].field_name), interactions[i].field_value );
+                         }
+                         last_field = '&field:'+interactions[i].field_name;
                          links += furl(github_root+'a_gg.html'+copyOpts(winurlparams)+'&field:'+interactions[i].field_name.toLowerCase()+'='+interactions[i].field_value.toLowerCase(), interactions[i].dd_name);
                          link_count += 1;
                      }
@@ -325,7 +316,7 @@ function fresults(xobj) {
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html?'+query_params+copyOpts(winurlparams)+'&taxon_id='+rec.taxon.id+grid_title/*+field_name+p_target_id*/,displayName)},
+                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html'/*+query_params*/+copyOpts(winurlparams)+'&taxon_id='+rec.taxon.id+grid_title/*+field_name+p_target_id*/,displayName)},
                   {innerText:rec.count||''},
                   ];
         
