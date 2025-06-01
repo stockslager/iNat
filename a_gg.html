@@ -175,6 +175,7 @@ function buildMenu( results ) {
                              dd_params.append( ('field:'+interactions[i].field_name), interactions[i].field_value );
                              if( last_field ) { dd_params.delete('field:'+last_field); }
                          }
+                         console.log('copy '+copyOpts(dd_params));
                          last_field = '&field:'+interactions[i].field_name;
                          links += furl(github_root+'a_gg.html'+copyOpts(dd_params)+'&field:'+interactions[i].field_name.toLowerCase()+'='+interactions[i].field_value.toLowerCase(), interactions[i].dd_name);
                          link_count += 1;
