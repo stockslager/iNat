@@ -1,5 +1,5 @@
 <!DOCTYPE html>   
-<html lang="en">   
+<html lang="en">  
  
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
@@ -29,6 +29,10 @@ let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
 let p_obs_field  = winurlparams.get('obs_field') || '';
+let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
+let p_omit_users = winurlparams.get('omit_users') || '';
+let p_omit_id = winurlparams.get('omit_id') || '';
+let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_title        = winurlparams.get('title') || '';
 let p_prefix       = winurlparams.get('prefix') || '';
 let p_target_name   = winurlparams.get('target_name') || '';
@@ -52,25 +56,6 @@ let field_name = '';
 let dlString = '';
 let proj = '';
 let user = '';
-
-// find key/value pair for &field: param if one was passed in
-for (const [key, value] of winurlparams.entries()) {
-  if( key.startsWith('field') ){
-      p_field = key;
-      p_field_value = value;
-  }
-}  
-
-// create params for selection within an observation field drop down.
-// need to delete the sub_menu_array because it'll need to rebuild the
-// taxa menu for only those iconic taxa found for that obs field / value.
-let dd_params = new URLSearchParams(winurlsearchstr.substring(1));
-dd_params.delete('obs_fields');
-console.log('f ' + p_field );
-dd_params.delete('field:'+p_field);
-dd_params.delete('sub_menu_array');
-console.log('asdfafda ' + copyOpts(dd_params));
- 
  
 if( p_project_id ) {
     proj = ('?project_id='+p_project_id);
@@ -91,9 +76,49 @@ if( p_title === '' ) {
     dlString = (capitalizeWords((p_prefix+' '+p_title+' '+p_target_name)));
     document.title = dlString;
 }
+
+if( p_seed_project ) {
+    opts += ('&seed_project='+p_seed_project);
+    seed_param = '&seed_project='+p_seed_project;
+}
+
+if( p_list ) {
+    opts += ('&list='+p_list);
+}
+
+if( p_tag_name ) {
+    opts += ('&tag_name='+p_tag_name);
+}
+
+if( p_title ) {
+    opts += ('&title='+p_title);
+}
+ 
+if( p_omit_users !== '' ){
+    winurlparams.delete('not_user_id');
+    winurlparams.append('not_user_id', p_omit_users);
+}
+
+if( p_omit_id !== '' ){
+    winurlparams.delete('not_id');
+    winurlparams.append('not_id', p_omit_id);
+}
+
+if( p_omit_project !== '' ){
+    winurlparams.delete('not_in_project');
+    winurlparams.append('not_in_project', p_omit_project);
+}
  
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
+
+// find key/value pair for &field: param if one was passed in
+for (const [key, value] of winurlparams.entries()) {
+  if( key.startsWith('field') ){
+      p_field = key;
+      p_field_value = value;
+  }
+}  
 
 winurlparams.delete('options');
 let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
@@ -109,6 +134,18 @@ let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observat
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
 <script> 
+
+// remove the field param from the url before building options
+winurlparams.delete('operator');
+winurlparams.delete('taxon_id');
+winurlparams.delete('not_user_id');
+winurlparams.delete('not_id');
+winurlparams.delete('not_in_project');
+
+// add them back after building options...
+winurlparams.append('operator', p_operator);
+winurlparams.append('taxon_id', p_taxon_id);
+winurlparams.append('target_id', p_target_id);
 
 function buildMenu( results ) {
 
@@ -166,26 +203,27 @@ function buildMenu( results ) {
             links = '';
             let link_count = 0;
             let dd_list_title = '';
-            let last_field = '';
 
             if( interactions && p_target_name === 'all plants' ) {
                 for( let i=0; i<interactions.length; i++ ) {
                      if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
-                         if( dd_list_title !== interactions[i].list_primary ) {
-                             dd_list_title = interactions[i].list_primary;
-                             dd_params.append('obs_fields', interactions[i].obs_field_list);
-                             dd_params.append( ('field:'+interactions[i].field_name), interactions[i].field_value );
-                             if( last_field ) { dd_params.delete('field:'+last_field); }
-                         }
-                         console.log('copy '+copyOpts(dd_params));
-                         last_field = '&field:'+interactions[i].field_name;
-                         links += furl(github_root+'a_gg.html'+copyOpts(dd_params)+'&field:'+interactions[i].field_name.toLowerCase()+'='+interactions[i].field_value.toLowerCase(), interactions[i].dd_name);
+                         dd_list_title = interactions[i].list_primary;
+                         winurlparams.delete('obs_fields');
+                         winurlparams.append('obs_fields', interactions[i].obs_field_list);
+                         // need to delete the sub_menu_array because it'll need to rebuild the
+                         // taxa menu for only those iconic taxa found behaving a certain way.
+                         winurlparams.delete(('field:'+p_field);
+                         winurlparams.delete('sub_menu_array');
+                         winurlparams.append( ('field:'+interactions[i].field_name), interactions[i].field_value );
+                         links += furl(github_root+'a_gg.html'+copyOpts(winurlparams)+'&field:'+interactions[i].field_name.toLowerCase()+'='+interactions[i].field_value.toLowerCase(), interactions[i].dd_name);
                          link_count += 1;
                      }
                 }
+
                 if( links && link_count > 0 && p_target_name === 'all plants' ) {
+                    links += furl(github_root+'a_gg.html'+copyOpts(winurlparams)+'&field:'+configuration.field_name.toLowerCase()+'=', 'All');
                     menu_string += buildDD(dd_list_title, links);
-                }            
+                }
             }
 
             // check to see if they entered the flow from a seed library.  if so, return control there.
@@ -287,7 +325,7 @@ function fresults(xobj) {
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html'/*+query_params*/+copyOpts(winurlparams)+'&taxon_id='+rec.taxon.id+grid_title/*+field_name+p_target_id*/,displayName)},
+                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html?'+query_params+copyOpts(winurlparams)+'&taxon_id='+rec.taxon.id+grid_title/*+field_name+p_target_id*/,displayName)},
                   {innerText:rec.count||''},
                   ];
         
