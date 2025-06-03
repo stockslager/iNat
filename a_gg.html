@@ -196,18 +196,27 @@ function buildMenu( results ) {
             let link_count = 0;
             let dd_list_title = '';
 
+            // if the field is set to the primary observation field and a taxon id 
+            // filter has been set, skip the behavior drop-down since there's too much
+            // risk that filtered observations won't include an observation with the 
+            // behaviors in the drop-down.
+            let skip_behaviors = 'no';
+            if( ('field:'+configuration.field_name.toLowerCase()) !== p_field.toLowerCase() && p_taxon_id ) {
+                skip_behaviors = 'yes';
+            }
+
             // if a specific plant or taxon has already been chosen, we don't
             // want to show the interacitons drop downs because they don't
             // necessarily exist for every plant / visitor combination.
             // if the interaction is "preyed upon" for example... what are
             // the odds that a specific insect was "preyed upon" while
             // on every single plant in the project area?
-            if( interactions && p_target_name === 'all plants' ) {
+            if( interactions && p_target_name === 'all plants' && skip_behaviors === 'no' ) {
                 // if a taxon_id has been selected from the "show" drop-down
                 // display the value of the "field" as a non-clickable title.
                 console.log('tax ' + p_taxon_id );
                 console.log('fi  ' + p_field_value);
-                if( p_taxon_id && p_field_value && ('field:'+configuration.field_name.toLowerCase()) !== p_field.toLowerCase() ) {
+                if( p_taxon_id && p_field_value ) {
                     console.log('a');
                     menu_string += buildTitle( p_field_value );
                 } else {
