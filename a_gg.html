@@ -94,7 +94,7 @@ function getShowDDOpts( winurlparams ) {
    let opts='';
    // build param list for url's used in fresults
    for( const [key, value] of winurlparams.entries() ) { 
-        if( !key === 'taxon_id' && !key === 'taxon_nm' ){
+        if( key !== 'taxon_id' && key !== 'taxon_nm' ){
             if( opts === '' ){
                 opts += "?";
             } else {
@@ -112,7 +112,7 @@ function getObsFieldsDDOpts(winurlparams) {
    let opts='';
    // build param list for url's used in fresults
    for( const [key, value] of winurlparams.entries() ) { 
-        if( !key.startsWith('field') && !key === 'obs_fields' && !key === 'sub_menu_array' ){
+        if( !key.startsWith('field') && key !== 'obs_fields' && key !== 'sub_menu_array' ){
             if( opts === '' ){
                 opts += "?";
             } else {
