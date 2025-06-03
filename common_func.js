@@ -123,3 +123,22 @@ function copyOpts( winurlparams ) {
    } 
    return( opts );
 }
+
+function copyOptsWithoutField(winurlparams) {
+   let opts='';
+   // build param list for url's used in fresults
+   for( const [key, value] of winurlparams.entries() ) { 
+        if( !key.startsWith('field') ){
+            if( opts === '' ){
+                opts += "?";
+            } else {
+                opts += "&";
+            }
+            opts += key;
+            opts += "=";
+            opts += value;
+        }
+   } 
+   return( opts );
+}
+ 
