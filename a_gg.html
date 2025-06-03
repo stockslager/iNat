@@ -43,7 +43,7 @@ let p_params        = winurlparams.get('params') || 'a_pip';
 let p_field = '';
 let p_field_value = '';
 let obs_field_array = [];
-const configuration = '';
+let configurations = [];
 let interactions = [];
 let seed_param = '';
 let field_name = '';
@@ -152,6 +152,13 @@ function buildMenu( results ) {
    let links = '';
    let icons = '';
    let menu_string = '';
+   let configuration = '';
+
+   for( let i=0; i<data.configurations.length; i++ ) {
+        if( data.configurations[i].insect_project === p_project_id ) {
+               configuration = data.configurations[i];
+        }
+   }
 
    if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
        ( p_show_menu === 'yes' ) ||
@@ -310,11 +317,11 @@ async function asyncGetData() {
       // Access your data here 
       let found = '';
       interactions   = data.interactions;
+      configurations = data.configurations;
       for( let i=0; i<data.configurations.length; i++ ) {
            if( data.configurations[i].insect_project === p_project_id ) {
                found = 'yes';
                console.log('config_prj: '+data.configurations[i].insect_project);
-               configuration = data.configurations[i];
            }
       }
       if( !found ) {
