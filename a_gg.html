@@ -49,6 +49,12 @@ let seed_param = '';
 let field_name = '';
 let dlString = '';
 
+if( p_project_id === 'cincinnati-nature-center-pollinator-garden' ) {
+    winurlparams.delete('project_id');
+    winurlparams.append('project_id', '220623');
+    p_project_id = '220623';
+}
+
 let opts = copyOpts( winurlparams );
 
 // find key/value pair for &field: param if one was passed in
