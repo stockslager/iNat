@@ -170,24 +170,6 @@ winurlparams.append('operator', p_operator);
 winurlparams.append('taxon_id', p_taxon_id);
 winurlparams.append('target_id', p_target_id);
 
-function copyOptsWithoutField(winurlparams) {
-   let opts='';
-   // build param list for url's used in fresults
-   for( const [key, value] of winurlparams.entries() ) { 
-        if( !key.startsWith('field') ){
-            if( opts === '' ){
-                opts += "?";
-            } else {
-                opts += "&";
-            }
-            opts += key;
-            opts += "=";
-            opts += value;
-        }
-   } 
-   return( opts );
-}
- 
 function buildMenu( results ) {
 
    if( configuration.field_name ) {
