@@ -207,7 +207,7 @@ function buildMenu( results ) {
                 // display the value of the "field" as a non-clickable title.
                 console.log('tax ' + p_taxon_id );
                 console.log('fi  ' + p_field_value);
-                if( p_taxon_id && p_field_value ) {
+                if( p_taxon_id && p_field_value && ('field:'+configuration.field_name.toLowerCase()) !== p_field.toLowerCase() ) {
                     console.log('a');
                     menu_string += buildTitle( p_field_value );
                 } else {
