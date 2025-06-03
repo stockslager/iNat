@@ -230,7 +230,7 @@ function fresults(xobj) {
       faddelem('p',document.body,{innerHTML:(buildMenu(results))});  
        
       if( !p_field_value ) {
-          dlString = furl(github_root+'bugs_on_plants_grid.html'+opts+'&action='+p_title+field_name,'<span id="topright">all organisms '+p_title+' any plant</span>');
+          dlString = furl(github_root+'bugs_on_plants_grid.html'+opts+'&action='+p_title,'<span id="topright">all organisms '+p_title+' any plant</span>');
       } else {
           dlString = ('<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
       }
@@ -284,7 +284,7 @@ function fresults(xobj) {
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html?'+copyOpts(winurlparams)+'&taxon_id='+rec.taxon.id+grid_title,displayName)},
+                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html'+copyOpts(winurlparams)+'&taxon_id='+rec.taxon.id+grid_title,displayName)},
                   {innerText:rec.count||''},
                   ];
         
