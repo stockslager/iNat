@@ -122,6 +122,14 @@ function getObsFieldsDDOpts(winurlparams) {
 
 function buildMenu( results ) {
 
+   let configuration = '';
+
+   for( let i=0; i<data.configurations.length; i++ ) {
+        if( data.configurations[i].insect_project === p_project_id ) {
+               configuration = data.configurations[i];
+        }
+   }
+
    if( configuration.field_name ) {
        field_name = ('&field:'+configuration.field_name+'=');
    } else {
@@ -152,13 +160,6 @@ function buildMenu( results ) {
    let links = '';
    let icons = '';
    let menu_string = '';
-   let configuration = '';
-
-   for( let i=0; i<data.configurations.length; i++ ) {
-        if( data.configurations[i].insect_project === p_project_id ) {
-               configuration = data.configurations[i];
-        }
-   }
 
    if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
        ( p_show_menu === 'yes' ) ||
