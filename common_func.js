@@ -115,11 +115,11 @@ function copyOpts( winurlparams ) {
         opts += key;
         opts += "=";
 
-        if( key === 'page' ){
+        /*if( key === 'page' ){
             opts += '1';
-        } else {
+        } else {*/
             opts += value;
-        }
+        //}
    } 
    return( opts );
 }
