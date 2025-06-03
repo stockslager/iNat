@@ -208,12 +208,18 @@ function buildMenu( results ) {
                 if( p_taxon_id && p_field_value ) {
                     menu_string += buildTitle( p_field_value );
                 } else {
+                    dd_list_title = 'Behavior';
                     for( let i=0; i<interactions.length; i++ ) {
                          if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
                              obs_fields_dd_copy_opts = getObsFieldsDDOpts( winurlparams );
                              obs_fields_dd_copy_opts += ('&obs_fields=' + interactions[i].obs_field_list);
                              obs_fields_dd_copy_opts += ('&field:'+interactions[i].field_name+'='+interactions[i].field_value );
-                             dd_list_title = interactions[i].dd_title;
+                             //dd_list_title = interactions[i].dd_title;
+                             if( p_field.toLowerCase() === interactions[i].field_name.toLowerCase() ) {
+                                 if( p_field_value && interactions[i].field_value && p_field_value.toLowerCase() === interactions[i].field_value.toLowerCase() ) {
+                                     dd_list_title = interactions[i].field_value;
+                                 }
+                             }
                              links += furl(github_root+'a_gg.html'+obs_fields_dd_copy_opts, interactions[i].dd_name);
                              link_count += 1;
                          }
