@@ -107,6 +107,10 @@ function getShowDDOpts( winurlparams ) {
    } 
    return( opts );
 }
+
+function buildTitle( title ) {
+   return (title);
+}
  
 function getObsFieldsDDOpts(winurlparams) {
    let opts='';
@@ -181,7 +185,7 @@ function buildMenu( results ) {
                 let showDDOpts = getShowDDOpts( winurlparams );
                 showDDOpts += '&sub_menu_array='+sub_taxon_arr;
              
-                links = (furl(github_root+'a_gg.html'+showDDOpts+'&taxon_nm=All','<span style="padding-right:20px;">&#10133;</span>all' ));
+                links = (furl(github_root+'a_gg.html'+showDDOpts,'<span style="padding-right:20px;">&#10133;</span>all' ));
                 for( let j=0; j<configuration.sub_icons.length; j++ ) {
                      if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
                          links += (furl(github_root+'a_gg.html'+showDDOpts+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
@@ -202,20 +206,26 @@ function buildMenu( results ) {
             // the odds that a specific insect was "preyed upon" while
             // on every single plant in the project area?
             if( interactions && p_target_name === 'all plants' && !p_taxon_id ) {
-                for( let i=0; i<interactions.length; i++ ) {
-                     if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
-                         obs_fields_dd_copy_opts = getObsFieldsDDOpts( winurlparams );
-                         obs_fields_dd_copy_opts += ('&obs_fields=' + interactions[i].obs_field_list);
-                         obs_fields_dd_copy_opts += ('&field:'+interactions[i].field_name+'='+interactions[i].field_value );
+                // if a taxon_id has been selected from the "show" drop-down
+                // display the value of the "field" as a non-clickable title.
+                if( p_taxon_id && p_field_value) {
+                    menu_string += buildTitle( p_field_value );
+                } else {
+                    for( let i=0; i<interactions.length; i++ ) {
+                         if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
+                             obs_fields_dd_copy_opts = getObsFieldsDDOpts( winurlparams );
+                             obs_fields_dd_copy_opts += ('&obs_fields=' + interactions[i].obs_field_list);
+                             obs_fields_dd_copy_opts += ('&field:'+interactions[i].field_name+'='+interactions[i].field_value );
                       
-                         if( (dd_list_title && dd_list_title !== interactions[i].dd_title) && links && link_count > 0 ) {
-                             menu_string += buildDD(dd_list_title, links);  
-                             links_count = 0;  links = '';
+                             if( (dd_list_title && dd_list_title !== interactions[i].dd_title) && links && link_count > 0 ) {
+                                 menu_string += buildDD(dd_list_title, links);  
+                                 links_count = 0;  links = '';
+                             }
+                             dd_list_title = interactions[i].dd_title;
+                             links += furl(github_root+'a_gg.html'+obs_fields_dd_copy_opts, interactions[i].dd_name);
+                             link_count += 1;
                          }
-                         dd_list_title = interactions[i].dd_title;
-                         links += furl(github_root+'a_gg.html'+obs_fields_dd_copy_opts, interactions[i].dd_name);
-                         link_count += 1;
-                     }
+                    }
                 }
 
                 if( links && link_count > 0 ) {
