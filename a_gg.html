@@ -66,17 +66,6 @@ for (const [key, value] of winurlparams.entries()) {
   }
 }  
 
-// prepare opts for "obs fields drop downs" urls
-//winurlparams.delete( 'field%3A'+p_field );
-winurlparams.delete( 'obs_fields' );
-winurlparams.delete( 'sub_menu_array' );
-let obs_fields_dd_copy_opts = copyOptsWithoutField(winurlparams);
-console.log('obs_fields1 '+ obs_fields_dd_copy_opts);
-winurlparams.append( p_field,          p_field_value );
-winurlparams.append( 'obs_fields',     p_obs_fields );
-winurlparams.append( 'sub_menu_array', p_sub_menu_array );
-console.log('obs_fields_dd_copy_opts..:' + obs_fields_dd_copy_opts );
-
 // build opts for "show" urls
 winurlparams.delete( 'taxon_id' );
 let show_copy_opts = copyOpts(winurlparams);
@@ -170,6 +159,43 @@ winurlparams.append('operator', p_operator);
 winurlparams.append('taxon_id', p_taxon_id);
 winurlparams.append('target_id', p_target_id);
 
+function getShowDDOpts( winurlparams ) { 
+   let opts='';
+   // build param list for url's used in fresults
+   for( const [key, value] of winurlparams.entries() ) { 
+        if( !key === 'taxon_id' && !key === 'taxon_nm' ){
+            if( opts === '' ){
+                opts += "?";
+            } else {
+                opts += "&";
+            }
+            opts += key;
+            opts += "=";
+            opts += value;
+        }
+   } 
+   return( opts );
+}
+ 
+function getObsFieldsDDOpts(winurlparams) {
+   let opts='';
+   // build param list for url's used in fresults
+   for( const [key, value] of winurlparams.entries() ) { 
+        if( !key.startsWith('field') && !key === 'obs_fields' && !key === 'sub_menu_array' ){
+            if( opts === '' ){
+                opts += "?";
+            } else {
+                opts += "&";
+            }
+            opts += key;
+            opts += "=";
+            opts += value;
+        }
+   } 
+   return( opts );
+}
+ 
+
 function buildMenu( results ) {
 
    if( configuration.field_name ) {
@@ -202,7 +228,6 @@ function buildMenu( results ) {
    let links = '';
    let icons = '';
    let menu_string = '';
-   let params = ('a_gg.html'+proj+user+seed_param+leaf_params+field_name+p_target_id+'&title='+p_title+'&target_name='+p_target_name+'&target_id='+p_target_id+'&show_menu='+p_show_menu);
 
    if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
        ( p_show_menu === 'yes' ) ||
@@ -211,12 +236,13 @@ function buildMenu( results ) {
             menu_string = '<div class="navbar">';
             if( configuration.sub_icons ) {
               
-                params += ('&sub_menu_array='+sub_taxon_arr);
-
-                links = (furl(github_root+params,'<span style="padding-right:20px;">&#10133;</span>all' ));
+                let showDDOpts = getShowDDOpts( winurlparams );
+                showDDOpts += '&sub_menu_array='+sub_taxon_arr;
+             
+                links = (furl(github_root+'a_gg.html'+showDDOpts,'<span style="padding-right:20px;">&#10133;</span>all' ));
                 for( let j=0; j<configuration.sub_icons.length; j++ ) {
                      if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
-                         links += (furl(github_root+params+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+                         links += (furl(github_root+'a_gg.html'+showDDOpts+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
                      }
                 }
               
@@ -230,21 +256,16 @@ function buildMenu( results ) {
             if( interactions && p_target_name === 'all plants' ) {
                 for( let i=0; i<interactions.length; i++ ) {
                      if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
-                         winurlparams.delete('obs_fields');
-                         winurlparams.append('obs_fields', interactions[i].obs_field_list);
-                         // need to delete the sub_menu_array because it'll need to rebuild the
-                         // taxa menu for only those iconic taxa found behaving a certain way.
-                         winurlparams.delete('field:Plant%20that%20the%20organism%20was%20found%20on');
-                         winurlparams.delete(('field:'+p_field));
-                         winurlparams.delete('sub_menu_array');
-                         winurlparams.append( ('field:'+interactions[i].field_name), interactions[i].field_value );
+                         obs_fields_dd_copy_opts = getObsFieldsDDOpts( winurlparams );
+                         obs_fields_dd_copy_opts += ('&obs_fields=' + interactions[i].obs_field_list);
+                         obs_fields_dd_copy_opts += ('&field:'+interactions[i].field_name+'='+interactions[i].field_value );
                       
                          if( (dd_list_title && dd_list_title !== interactions[i].dd_title) && links && link_count > 0 ) {
                              menu_string += buildDD(dd_list_title, links);  
                              links_count = 0;  links = '';
                          }
                          dd_list_title = interactions[i].dd_title;
-                         links += furl(github_root+'a_gg.html'+copyOpts(winurlparams), interactions[i].dd_name);
+                         links += furl(github_root+'a_gg.html'+obs_fields_dd_copy_opts, interactions[i].dd_name);
                          link_count += 1;
                      }
                 }
