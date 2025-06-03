@@ -208,7 +208,6 @@ function buildMenu( results ) {
                 if( p_taxon_id && p_field_value ) {
                     menu_string += buildTitle( p_field_value );
                 } else {
-                    dd_list_title = 'Behavior';
                     for( let i=0; i<interactions.length; i++ ) {
                          if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
                              obs_fields_dd_copy_opts = getObsFieldsDDOpts( winurlparams );
@@ -226,7 +225,7 @@ function buildMenu( results ) {
                     }
 
                     if( links && link_count > 0 ) {
-                        menu_string += buildDD(dd_list_title, links);
+                        menu_string += buildDD( (dd_list_title||'Behavior'), links );
                     }
                 }
             }
