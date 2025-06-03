@@ -67,10 +67,11 @@ for (const [key, value] of winurlparams.entries()) {
 }  
 
 // prepare opts for "obs fields drop downs" urls
-winurlparams.delete( 'field%3A'+p_field );
+//winurlparams.delete( 'field%3A'+p_field );
 winurlparams.delete( 'obs_fields' );
 winurlparams.delete( 'sub_menu_array' );
-let obs_fields_dd_copy_opts = copyOpts(winurlparams);
+let obs_fields_dd_copy_opts = copyOptsWithoutField(winurlparams);
+console.log('obs_fields1 '+ obs_fields_dd_copy_opts);
 winurlparams.append( p_field,          p_field_value );
 winurlparams.append( 'obs_fields',     p_obs_fields );
 winurlparams.append( 'sub_menu_array', p_sub_menu_array );
@@ -169,6 +170,24 @@ winurlparams.append('operator', p_operator);
 winurlparams.append('taxon_id', p_taxon_id);
 winurlparams.append('target_id', p_target_id);
 
+function copyOptsWithoutField() {
+   let opts='';
+   // build param list for url's used in fresults
+   for( const [key, value] of winurlparams.entries() ) { 
+        if( !key.startsWith('field') ){
+            if( opts === '' ){
+                opts += "?";
+            } else {
+                opts += "&";
+            }
+            opts += key;
+            opts += "=";
+            opts += value;
+        }
+   } 
+   return( opts );
+}
+ 
 function buildMenu( results ) {
 
    if( configuration.field_name ) {
