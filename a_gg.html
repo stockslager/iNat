@@ -130,6 +130,24 @@ function getObsFieldsDDOpts(winurlparams) {
    return( opts );
 }
 
+function getTaxonSelectedOpts(winurlparams) {
+   let opts='';
+   // build param list for url's used in fresults
+   for( const [key, value] of winurlparams.entries() ) { 
+        if( key !== 'sub_menu_array' && key !== 'taxon_id' && key !== 'taxon_nm' && key !== 'title' ){
+            if( opts === '' ){
+                opts += "?";
+            } else {
+                opts += "&";
+            }
+            opts += key;
+            opts += "=";
+            opts += value;
+        }
+   } 
+   return( opts );
+}
+
 function buildMenu( results ) {
 
    let configuration = '';
@@ -340,7 +358,7 @@ console.log('one');
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html'+copyOpts(winurlparams)+'&taxon_id='+rec.taxon.id+grid_title,displayName)},
+                  {innerHTML:furl(github_root+'bugs_on_plants_grid.html'+getTaxonSelectedOpts(winurlparams)+'&taxon_id='+rec.taxon.id+grid_title,displayName)},
                   {innerText:rec.count||''},
                   ];
         
