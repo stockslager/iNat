@@ -121,6 +121,7 @@ winurlparams.delete('not_in_project');
 
 // build param list for url's used in fresults
 opts = copyOpts(winurlparams);
+optsOne = copyOptsPageOne(winurlparams);
 
 // add them back after building options...
 winurlparams.append('operator', p_operator);
@@ -349,7 +350,7 @@ function fresults(xobj) {
          }
 
          if( tax_id !== '' ){
-             taxon = furl(github_root+'bugs_on_plants_list.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl(github_root+'bugs_on_plants_list.html'+optsOne+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
          values = [
