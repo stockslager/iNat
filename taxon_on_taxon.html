@@ -198,9 +198,9 @@ function fresults(xobj) {
    let results = xobj.results;
    let box_array = [];
 
-   for( let f=0; f<field_array.length; f++ ){
+   /*for( let f=0; f<field_array.length; f++ ){
         box_array.push(new boxRow(field_array[f], '') );
-   }
+   }*/
  
    if (results) {
       let total_results = xobj.total_results;
@@ -241,7 +241,7 @@ function fresults(xobj) {
       
       let firstCol = 'yes';
       let winurlparams_copy ='';
-      let nf_box_array = [];
+      /*let nf_box_array = [];
 
       nf_box_array = box_array;
     
@@ -319,7 +319,7 @@ function fresults(xobj) {
            }
       }
 
-      dlString += '</table></span>';
+      dlString += '</table></span>';*/
      
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
@@ -371,35 +371,9 @@ function fresults(xobj) {
             user_icon = '<img class="icon" src="'+user_icon+'" />';
          }
 
-         let emojiTitle = 'Merged Observation Fields:&#10;';
-
          if(rec.ofvs&&rec.ofvs.length>0){
-              for( let r=0; r<box_array.length; r++ ) {
                  for( let j=0; j<rec.ofvs.length; j++ ){
-
-                      if( field_array.includes(rec.ofvs[j].field_id.toString()) ){
-                          if( matchValue === '' ){
-                              matchValue = rec.ofvs[j].value;
-                          } else if( rec.ofvs[j].value !== '' && matchValue !== rec.ofvs[j].value ){
-                              mismatch = 'yes';
-                          }
-                      
-                          if( dataType === '' ){
-                              dataType = rec.ofvs[j].datatype;
-                          } else if( dataType !== rec.ofvs[j].datatype ){
-                              mismatch = 'yes';
-                          }
-                          if( rec.ofvs[j].taxon ){
-                              if( matchTaxonId === '' ){
-                                  matchTaxonId = rec.ofvs[j].taxon.id;
-                              }
-                              if( rec.ofvs[j].taxon.id !== matchTaxonId ){
-                                  mismatch = 'yes';
-                              }
-                          }
-                      } 
-                      
-                      if( rec.ofvs[j].field_id.toString() === box_array[r].field_id.toString() ){
+                      if( rec.ofvs[j].datatype.toString() === 'taxon' ){
                           matchedCopy = 'yes';
                           if( rec.ofvs[j].value ) {
                               field1 = rec.ofvs[j].value.toLowerCase();
@@ -426,7 +400,6 @@ function fresults(xobj) {
                   } else {
                       values.push({innerText:''});
                   }
-             }
          }             
         
          values.push({innerHTML:user_icon});
@@ -434,8 +407,6 @@ function fresults(xobj) {
 
          tempBrow.push(values);
       };
-
-      faddelem('p',document.body,{innerHTML:dlString});
 
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
