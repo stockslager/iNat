@@ -42,6 +42,7 @@ let p_cache_check = winurlparams.get('cache_check') || '';
 let p_params     = winurlparams.get('params') || 'bugs_pip';
 let p_life       = winurlparams.get('life') || 'Life Stage';
 let p_seed_project = winurlparams.get('seed_project') || '';
+let p_hide_home  = winurlparams.get('hide_home') || 'no';
 /*var cellpx = 300;
 var spacerpx = 3;
 var rows = 30;
@@ -169,15 +170,17 @@ function buildLifeStageMenu(data, obs_fields) {
    }
 
    menu_string += buildDD(p_life, links);
-    
-   if( p_seed_project ) {
-       if( p_seed_project.startsWith('pip') ) {
-           menu_string += buildHome(furl(github_root+'bugs_on_plants_pip.html?insect_project='+p_seed_project.replace('pip',''),'&#127807;'));
+
+   if( p_hide_home === 'no' ) {
+       if( p_seed_project ) {
+           if( p_seed_project.startsWith('pip') ) {
+               menu_string += buildHome(furl(github_root+'bugs_on_plants_pip.html?insect_project='+p_seed_project.replace('pip',''),'&#127807;'));
+           } else {
+               menu_string += buildHome(furl(github_root+'cncnpc_seeds.html?project_id='+p_seed_project,'&#127807;'));
+           }
        } else {
-           menu_string += buildHome(furl(github_root+'cncnpc_seeds.html?project_id='+p_seed_project,'&#127807;'));
+           menu_string += buildHome(furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;'));
        }
-   } else {
-       menu_string += buildHome(furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;'));
    }
 
    menu_string += '</div>';
