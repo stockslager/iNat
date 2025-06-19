@@ -74,13 +74,16 @@ function getAfter(str, char) {
  
 function setUpDefaults(configurations) {
 
- console.log('one');
    for( let i=0; i<configurations.length; i++ ) {
         if( configurations[i].insect_project === p_insect_project ) {
             configuration = configurations[i];
         }
    }
-console.log('two');
+
+   if( !configuration ) {
+       faddelem('p',document.body,{innerText:'A plant_project or default_place must be specified in bugs_pip.json'});
+       throw new Error('A plant_project or default_place must be specified in bugs_pip.json');
+   }
 
    if( !configuration.default_place && !configuration.plant_project ) {
        faddelem('p',document.body,{innerText:'A plant_project or default_place must be specified in bugs_pip.json'});
@@ -109,7 +112,6 @@ console.log('two');
    }
 
    // check for additional filters in the .json for the place and project...
- console.log('three');
    if( p_place_id && configuration.places ) {
        for( let i=0; i<configuration.places.length; i++ ) {
             if( p_place_id === configuration.places[i].place_id ) {
@@ -120,7 +122,6 @@ console.log('two');
             }
        }
    }
- console.log('four');
 }
 
 function getTaxonName( configuration, taxon_id ) {
