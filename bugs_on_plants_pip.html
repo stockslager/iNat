@@ -111,6 +111,14 @@ function setUpDefaults(configurations) {
        }
    }
 
+   if( configuration.user_id ) {
+       winurlparams.append('user_id', configuration.user_id);
+   }
+
+   if( configuration.tag_name ) {
+       winurlparams.append('q', configuration.tag_name);
+   }
+
    // check for additional filters in the .json for the place and project...
    if( p_place_id && configuration.places ) {
        for( let i=0; i<configuration.places.length; i++ ) {
