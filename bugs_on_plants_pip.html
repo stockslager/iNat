@@ -27,6 +27,7 @@ let p_taxon_id    = winurlparams.get('taxon_id') || '';
 let p_project_id  = winurlparams.get('project_id') || '';
 let p_title       = winurlparams.get('title') || 'on';
 let p_insect_project = winurlparams.get('insect_project') || '159056';  // pip
+let p_params      = winurlparams.get('params') || 'bugs_pip';
 
 // the place selected was added to seed_project parameter and needs to be
 // parsed if control is returning from the insects page.
@@ -284,7 +285,7 @@ function fresults(xobj) {
 };
 
 async function asyncGetData() {
-   await fetch(('bugs_pip.json'))
+   await fetch((p_params+'.json'))
      .then(response => response.json())
      .then(data => {
       // Access your data here 
