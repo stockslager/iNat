@@ -117,7 +117,7 @@ function getShowDDOpts( winurlparams ) {
 function buildTitle( title ) {
    return ('<div class="dd_title">'+title+'</div>');
 }
- 
+
 function getObsFieldsDDOpts(winurlparams) {
    let opts='';
    // build param list for url's used in fresults
@@ -141,6 +141,24 @@ function getTaxonSelectedOpts(winurlparams) {
    // build param list for url's used in fresults
    for( const [key, value] of winurlparams.entries() ) { 
         if( key !== 'sub_menu_array' && key !== 'taxon_id' && key !== 'taxon_nm' && key !== 'title' ){
+            if( opts === '' ){
+                opts += "?";
+            } else {
+                opts += "&";
+            }
+            opts += key;
+            opts += "=";
+            opts += value;
+        }
+   } 
+   return( opts );
+}
+
+function getNoTaxonOpts(winurlparams) {
+   let opts='';
+   // build param list for url's used in fresults
+   for( const [key, value] of winurlparams.entries() ) { 
+        if( key !== 'taxon_id' ){
             if( opts === '' ){
                 opts += "?";
             } else {
@@ -294,7 +312,7 @@ function fresults(xobj) {
       if( !p_field_value ) {
           dlString = furl(github_root+'bugs_on_plants_grid.html'+opts+'&action='+p_title,'<span id="topright">all organisms '+p_title+' any plant</span>');
       } else {
-          dlString = ('<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
+          dlString = furl(github_root+'bugs_on_plants_grid.html'+getNoTaxonOpts(winurlparams)+'&action='+p_title, '<span id="toprightbold">'+capitalizeWords(dlString)+'</span>';
       }
     
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
