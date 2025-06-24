@@ -230,7 +230,11 @@ function fresults(xobj) {
       let field_param    = ('&field:'+configuration.field_name+'=');
       let seed_prj_param = ('&seed_project=pip'+p_insect_project+place_param+json);
 
-      let on_all = furl(github_root+'bugs_on_plants2.html?project_id='+p_insect_project+'&place_id='+p_place_id+'&menu=pip&title='+p_title+'&target_name=all%20plants'+field_param+seed_prj_param,'<span id="topright">'+p_title+' any plant</span>');
+      let on_all = '';
+
+      if( configuration.hide_on_any === 'yes) {
+          furl(github_root+'bugs_on_plants2.html?project_id='+p_insect_project+'&place_id='+p_place_id+'&menu=pip&title='+p_title+'&target_name=all%20plants'+field_param+seed_prj_param,'<span id="topright">'+p_title+' any plant</span>');
+      }
  
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
                  +'per page: '+fcomnum(per_page)+'<br />'
