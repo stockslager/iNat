@@ -28,12 +28,14 @@ let p_project_id  = winurlparams.get('project_id') || '';
 let p_title       = winurlparams.get('title') || 'on';
 let p_insect_project = winurlparams.get('insect_project') || '159056';  // pip
 let p_params      = winurlparams.get('params') || 'bugs_pip';
+let p_user        = winurlparams.get('user_id') || '';
 
 // the place selected was added to seed_project parameter and needs to be
 // parsed if control is returning from the insects page.
 let prj    = p_insect_project.split('$')[0];
 let place  = p_insect_project.split('$')[1];
 let params = p_insect_project.split('$')[2];
+let user   = p_insect_project.split('$')[3];
 
 if( prj ) {
     winurlparams.append('insect_project', prj);
@@ -226,9 +228,12 @@ function fresults(xobj) {
 
       let json = '';
       if( p_params ) { json = '$'+p_params; }
+
+      let user_param = '';
+      if( p_user ) { user_param = '$'+p_user; }
        
       let field_param    = ('&field:'+configuration.field_name+'=');
-      let seed_prj_param = ('&seed_project=pip'+p_insect_project+place_param+json);
+      let seed_prj_param = ('&seed_project=pip'+p_insect_project+place_param+json+user_param);
 
       let on_all = '';
 
