@@ -395,7 +395,7 @@ async function asyncGetData() {
                console.log('config_prj: '+data.configurations[i].insect_project);
            }
       }
-      if( !found ) {
+      if( found === '' ) {
           faddelems('p',document.body,'Menu not found.  A &menu paramater was not passed in or was not found.  Add &menu=xxx to the end of the url where xxx has a matching menu in the bugs.json file.');
       }
       console.log(data);
