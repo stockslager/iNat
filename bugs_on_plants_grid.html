@@ -179,7 +179,11 @@ function buildLifeStageMenu(data, obs_fields) {
                menu_string += buildHome(furl(github_root+'cncnpc_seeds.html?project_id='+p_seed_project,'&#127807;'));
            }
        } else {
-           menu_string += buildHome(furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;'));
+           if( p_title === 'hide' ) {
+               menu_string += buildHome( furl(github_root+'bugs_on_plants2.html?project_id='+p_project_id+'&title='+p_action+'&field:'+configuration.field_name.toLowerCase()+'='+'&target_name=all+plants&params='+p_params,'&#127807;') );
+           } else {
+               menu_string += buildHome(furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;'));
+           }
        }
    }
 
