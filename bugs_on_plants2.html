@@ -71,7 +71,9 @@ for (const [key, value] of winurlparams.entries()) {
   }
 }  
 
-if( p_title === '' ) {
+if( p_title === 'hide' ){
+    dlString = '';
+} else if( p_title === '' ) {
     dlString = 'Bugs on Plants';
 } else {
     dlString = (capitalizeWords((p_prefix+' '+p_title+' '+p_target_name)));
