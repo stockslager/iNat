@@ -311,11 +311,13 @@ function fresults(xobj) {
       let labels = [];
    
       faddelem('p',document.body,{innerHTML:(buildMenu(results))});  
-       
-      if( !p_field_value ) {
-          dlString = furl(github_root+'bugs_on_plants_grid.html'+opts+'&action='+p_title,'<span id="topright">all organisms '+p_title+' any plant</span>');
-      } else {
-          dlString = furl(github_root+'bugs_on_plants_grid.html'+getNoTaxonOpts(winurlparams)+'&action='+p_title, '<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
+
+      if( p_title !== 'hide' ) {
+          if( !p_field_value ) {
+              dlString = furl(github_root+'bugs_on_plants_grid.html'+opts+'&action='+p_title,'<span id="topright">all organisms '+p_title+' any plant</span>');
+          } else {
+              dlString = furl(github_root+'bugs_on_plants_grid.html'+getNoTaxonOpts(winurlparams)+'&action='+p_title, '<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
+          }
       }
     
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
