@@ -235,7 +235,7 @@ function buildMenu( results ) {
        
             links = '';
             let link_count = 0;
-            let dd_list_title = '';
+            let dd_title = '';
 
             // if the field is set to the primary observation field and a taxon id 
             // filter has been set, skip the behavior drop-down since there's too much
@@ -265,7 +265,7 @@ function buildMenu( results ) {
                              obs_fields_dd_copy_opts += ('&field:'+interactions[i].field_name+'='+interactions[i].field_value );
                              if( p_field.toLowerCase() === ('field:'+interactions[i].field_name.toLowerCase()) ) {
                                  if( p_field_value && interactions[i].field_value && p_field_value.toLowerCase() === interactions[i].field_value.toLowerCase() ) {
-                                     dd_list_title = interactions[i].field_value;
+                                     dd_title = interactions[i].field_value;
                                  }
                              }
                              links += furl(github_root+'bugs_on_plants2.html'+obs_fields_dd_copy_opts, interactions[i].dd_name);
@@ -274,7 +274,7 @@ function buildMenu( results ) {
                     }
 
                     if( links && link_count > 0 ) {
-                        menu_string += buildDD( (dd_list_title||'Behavior'), links );
+                        menu_string += buildDD( (dd_title||'Behavior'), links );
                     }
                 }
             }
