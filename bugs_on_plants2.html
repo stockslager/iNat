@@ -266,7 +266,6 @@ function buildMenu( results ) {
                              if( p_field.toLowerCase() === ('field:'+interactions[i].field_name.toLowerCase()) ) {
                                  if( p_field_value && interactions[i].field_value && p_field_value.toLowerCase() === interactions[i].field_value.toLowerCase() ) {
                                      dd_title = interactions[i].field_value;
-                                  console.log('title: '+dd_title);
                                  }
                              }
                              links += furl(github_root+'bugs_on_plants2.html'+obs_fields_dd_copy_opts, interactions[i].dd_name);
@@ -275,7 +274,8 @@ function buildMenu( results ) {
                     }
 
                     if( links && link_count > 0 ) {
-                        menu_string += buildDD( (dd_title||'Behavior'), links );
+                        //menu_string += buildDD( (dd_title||'Behavior'), links );
+                        menu_string += buildDD( (interactions[0].list_primary||'Behavior'), links );
                     }
                 }
             }
