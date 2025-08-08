@@ -104,8 +104,7 @@ function setUpDefaults(configurations) {
    }
 
    if( configuration.plant_filter ) {
-       winurlparams += configuration.plant_filter;
-       console.log('winurl ' + winurlparams);
+       winurlparams.append(configuration.plant_filter, configuration.plant_filter_value);
    }
  
    if( configuration.default_place ) {
