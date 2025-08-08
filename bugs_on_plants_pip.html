@@ -102,6 +102,11 @@ function setUpDefaults(configurations) {
        faddelem('p',document.body,{innerText:'A plant_project or default_place must be specified in bugs_pip.json'});
        throw new Error('A plant_project or default_place must be specified in bugs_pip.json');
    }
+
+   if( configuration.plant_filters ) {
+       winurlparams += configuration.plant_filters;
+       console.log('winurl ' + winurlparams);
+   }
  
    if( configuration.default_place ) {
        if( !p_place_id ) {
