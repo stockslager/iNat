@@ -38,14 +38,17 @@ let params = p_insect_project.split('$')[2];
 let user   = p_insect_project.split('$')[3];
 
 if( prj ) {
+    winurlparams.delete('insect_project');
     winurlparams.append('insect_project', prj);
     p_insect_project = prj;
 }
 if( place ) {
+    winurlparams.delete('place_id');
     winurlparams.append('place_id', place);
     p_place_id = place;
 }
 if( params ) {
+    winurlparams.delete('params');
     winurlparams.append('params', params);
     p_params = params;
 }
