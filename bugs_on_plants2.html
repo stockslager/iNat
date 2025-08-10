@@ -267,8 +267,11 @@ function buildMenu( results ) {
                              obs_fields_dd_copy_opts += ('&obs_fields=' + interactions[i].obs_field_list);
                              obs_fields_dd_copy_opts += ('&field:'+interactions[i].field_name+'='+interactions[i].field_value );
                              if( p_field.toLowerCase() === ('field:'+interactions[i].field_name.toLowerCase()) ) {
-                                 if( p_field_value && interactions[i].field_value && p_field_value.toLowerCase() === interactions[i].field_value.toLowerCase() ) {
-                                     //dd_title = interactions[i].field_value;
+                                 if( p_field_value ) {
+                                     if( p_field_value && interactions[i].field_value && p_field_value.toLowerCase() === interactions[i].field_value.toLowerCase() ) {
+                                         dd_title = interactions[i].dd_name;
+                                     }
+                                 } else {
                                      dd_title = interactions[i].dd_name;
                                  }
                              }
