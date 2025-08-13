@@ -256,10 +256,10 @@ function buildMenu( results ) {
                 let showDDOpts = getShowDDOpts( winurlparams );
                 showDDOpts += '&sub_menu_array='+sub_taxon_arr;
              
-                links = (furl(github_root+'bugs_on_plants2.html'+showDDOpts,'<span style="padding-right:20px;">&#10133;</span>all' ));
+                links = (furl(github_root+'bugs_on_plants22.html'+showDDOpts,'<span style="padding-right:20px;">&#10133;</span>all' ));
                 for( let j=0; j<configuration.sub_icons.length; j++ ) {
                      if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
-                         links += (furl(github_root+'bugs_on_plants2.html'+showDDOpts+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+                         links += (furl(github_root+'bugs_on_plants22.html'+showDDOpts+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
                      }
                 }
               
@@ -272,7 +272,7 @@ function buildMenu( results ) {
             if( configuration.places && configuration.places.length > 0 ) {
                 for( let i=0; i<configuration.places.length; i++ ) {
                      place_opts += ('&place_id='+configuration.places[i].place_id);
-                     links += furl(github_root+'bugs_on_plants2.html'+place_opts,configuration.places[i].place_name);
+                     links += furl(github_root+'bugs_on_plants22.html'+place_opts,configuration.places[i].place_name);
                 }
             }
   
@@ -319,7 +319,7 @@ function buildMenu( results ) {
                                      dd_title = interactions[i].dd_name;
                                  }
                              }
-                             links += furl(github_root+'bugs_on_plants2.html'+obs_fields_dd_copy_opts, interactions[i].dd_name);
+                             links += furl(github_root+'bugs_on_plants22.html'+obs_fields_dd_copy_opts, interactions[i].dd_name);
                              link_count += 1;
                          }
                     }
@@ -339,7 +339,7 @@ function buildMenu( results ) {
                 }
             } else {
                 if( p_title === 'hide' ) {
-                    menu_string += buildHome( furl(github_root+'bugs_on_plants2.html?project_id='+p_project_id+'&title='+p_title+'&field:'+configuration.field_name.toLowerCase()+'='+'&target_name=all+plants&params='+p_params,'&#127807;') );
+                    menu_string += buildHome( furl(github_root+'bugs_on_plants22.html?project_id='+p_project_id+'&title='+p_title+'&field:'+configuration.field_name.toLowerCase()+'='+'&target_name=all+plants&params='+p_params,'&#127807;') );
                 } else {
                     menu_string += buildHome( furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_title+'&menu='+p_menu+'&='+p_tag_name,'&#127807;') );
                 }
