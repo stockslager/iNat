@@ -23,7 +23,6 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
-let p_place_id   = winurlparams.get('place_id') || '';
 let p_list       = winurlparams.get('list') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
@@ -174,35 +173,6 @@ function getNoTaxonOpts(winurlparams) {
    } 
    return( opts );
 }
-
-function getNoPlaceOpts(winurlparams) {
-   let opts='';
-   // build param list for url's used in fresults
-   for( const [key, value] of winurlparams.entries() ) { 
-        if( key !== 'place_id' ){
-            if( opts === '' ){
-                opts += "?";
-            } else {
-                opts += "&";
-            }
-            opts += key;
-            opts += "=";
-            opts += value;
-        }
-   } 
-   return( opts );
-}
-
-function getPlaceName( configuration, place_id ) {
-   let place_name = 'Place';
-
-   for( let i=0; i<configuration.places.length; i++ ) {
-        if( place_id === configuration.places[i].place_id ) {
-            place_name = configuration.places[i].place_name;
-        }
-   }
-   return place_name;
-}
  
 function buildMenu( results ) {
 
@@ -266,20 +236,6 @@ function buildMenu( results ) {
                 menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
             }
 
-            //*********************************************
-            links = '';
-            let place_opts = getNoPlaceOpts(winurlparams);
-            if( configuration.places && configuration.places.length > 0 ) {
-                for( let i=0; i<configuration.places.length; i++ ) {
-                     place_opts += ('&place_id='+configuration.places[i].place_id);
-                     links += furl(github_root+'bugs_on_plants2.html'+place_opts,configuration.places[i].place_name);
-                }
-            }
-  
-            menu_string = '<div class="navbar">';
-            if( links ) { menu_string += buildDD(getPlaceName(configuration, p_place_id), links); }
-            //**********************************************
-    
             links = '';
             let link_count = 0;
             let dd_title = '';
