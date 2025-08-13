@@ -191,6 +191,17 @@ function getNoPlaceOpts(winurlparams) {
    } 
    return( opts );
 }
+
+function getPlaceName( configuration, place_id ) {
+   let place_name = 'Place';
+
+   for( let i=0; i<configuration.places.length; i++ ) {
+        if( place_id === configuration.places[i].place_id ) {
+            place_name = configuration.places[i].place_name;
+        }
+   }
+   return place_name;
+}
  
 function buildMenu( results ) {
 
