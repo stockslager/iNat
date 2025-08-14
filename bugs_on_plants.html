@@ -354,9 +354,9 @@ async function asyncGetData() {
       console.log(data);
    })
      .catch(error => {
-      faddelem('p',document.body,{innerText:'A valid configuration file is required to be specified in (&params=bugs_cnc.json).'});
-      console.error('Error fetching JSON:', error);
       faddelem('p',document.body,{innerText:'There was a problem retrieving '+p_params+'.json.'});
+      faddelem('p',document.body,{innerText:'A valid configuration file is required to be specified as a url parameter. (e.g. ?params=bugs_cnc.json).'});
+      //console.error('Error fetching JSON:', error);
    });
 
    await fetch(apiurl)
