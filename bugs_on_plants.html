@@ -27,7 +27,7 @@ let p_taxon_id    = winurlparams.get('taxon_id') || '';
 let p_project_id  = winurlparams.get('project_id') || '';
 let p_title       = winurlparams.get('title') || 'on';
 let p_insect_project = winurlparams.get('insect_project') || '159056';  // pip
-let p_params      = winurlparams.get('params') || 'bugs_cnc';
+let p_params      = winurlparams.get('params') || '';
 let p_user        = winurlparams.get('user_id') || '';
 
 // the place selected was added to seed_project parameter and needs to be
@@ -354,7 +354,7 @@ async function asyncGetData() {
       console.log(data);
    })
      .catch(error => {
-      faddelem('p',document.body,{innerText:'There was a problem retrieving '+p_params+'.json.'});
+      faddelem('p',document.body,{innerText:'There was a problem retrieving <b>'+p_params+'.json.</b>'});
       faddelem('p',document.body,{innerText:'A valid configuration file is required to be specified as a url parameter. (e.g. ?params=bugs_cnc.json).'});
        throw new Error('asdfasdf');
       //console.error('Error fetching JSON:', error);
