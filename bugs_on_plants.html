@@ -41,7 +41,10 @@ if( prj ) {
     winurlparams.delete('insect_project');
     winurlparams.append('insect_project', prj);
     p_insect_project = prj;
+} else {
+    winurlparams.delete('insect_project');
 }
+ 
 /*if( place ) {
     winurlparams.delete('place_id');
     winurlparams.append('place_id', place);
@@ -52,7 +55,7 @@ if( params ) {
     winurlparams.append('params', params);
     p_params = params;
 }
- 
+
 let configuration = '';
 
 let opts = copyOpts( winurlparams ) || '';
