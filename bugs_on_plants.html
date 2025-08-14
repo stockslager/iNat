@@ -135,6 +135,11 @@ function setUpDefaults(configurations) {
                 configuration = configurations[i];
             }
        }
+       if( !configuration ) {
+           faddelem('p',document.body,{innerText:'A &garden parameter not specified as a url parameter.'});
+           faddelem('p',document.body,{innerText:'Please add &garden=xxxxx to the end of the url where xxxxx is matches a title for one of the configurations in '+p_params+'.json'});
+           throw new Error('No configurations defined.');
+       }
    }
 
    if( !configuration.default_place && !configuration.plant_project ) {
