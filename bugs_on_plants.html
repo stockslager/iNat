@@ -130,6 +130,11 @@ function setUpDefaults(configurations) {
            p_place_id = configuration.default_place;
        //}
    }
+
+   if( configuration.plant_ids ) {
+       winurlparams.delete('id');
+       winurlparams.append('id', configuration.plant_ids);
+   }
  
    if( configuration.default_taxon ) {
        if( !p_taxon_id ) {
