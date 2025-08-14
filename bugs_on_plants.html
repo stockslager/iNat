@@ -351,7 +351,7 @@ async function asyncGetData() {
            setUpDefaults(data.configurations);
            apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
       } else {
-           faddelem('p',document.body,{innerText:'A valid configuration file is required to be specified in (&params=bugs_cnc.json)'});
+           faddelem('p',document.body,{innerText:'A valid configuration file is required to be specified in (&params=bugs_cnc.json). Error '+err.message+'.'});
            throw new Error('A valid configuration file is required to be specified in (&params=bugs_cnc.json)');
       }
       console.log(data);
