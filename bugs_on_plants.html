@@ -104,7 +104,9 @@ function setUpDefaults(configurations) {
 
    if( configurations.length === 0 ) {
        faddelem('p',document.body,{innerText:'Configuration file ('+p_params+'.json) contains no valid configurations.'});
-       throw new Error('asdfasdf');
+       faddelem('p',document.body,{innerText:'There are no configurations specified in '+p_params+'.json'});
+       faddelem('p',document.body,{innerText:'Please add at least one valid configuration to '+p_params+'.json'});
+       throw new Error('No configurations defined.');
    }
  
    for( let i=0; i<configurations.length; i++ ) {
@@ -356,8 +358,7 @@ async function asyncGetData() {
      .catch(error => {
       faddelem('p',document.body,{innerText:'There was a problem retrieving '+p_params+'.json.'});
       faddelem('p',document.body,{innerText:'A valid configuration file is required to be specified as a url parameter. (e.g. ?params=bugs_cnc).'});
-       throw new Error('asdfasdf');
-      //console.error('Error fetching JSON:', error);
+      throw new Error('Error fetching JSON');
    });
 
    await fetch(apiurl)
