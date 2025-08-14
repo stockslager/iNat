@@ -58,6 +58,7 @@ if( params ) {
 }
 
 let configuration = '';
+let configs = '';
 
 let opts = copyOpts( winurlparams ) || '';
 
@@ -213,9 +214,12 @@ function buildMenu() {
       if( p_taxon_id )       { taxon_param += '&taxon_id='+p_taxon_id; }
       if( p_insect_project ) { menu_params += '?insect_project='+p_insect_project+'&params='+p_params; }
 
-      // if not insect_project parameter was specified, build a menu showing each configuration and
+      // if no insect_project parameter was specified, build a menu showing each configuration and
       // let them select which configuration (plant list) they'd like.
       if( !p_insect_project ) {
+          for( let i=0; i<configs.length; i++ ) {
+               links += furl(github_root+'bugs_on_plants.html'+menu_params+'&place_id='+configuration.places[i].place_id+taxon_param,configs[i].title);
+          }
       }
 
       if( configuration.places && configuration.places.length > 0 ) {
@@ -359,6 +363,7 @@ async function asyncGetData() {
      .then(data => {
       // Access your data here 
       if( data.configurations ) {
+           configs = data.configurations;
            setUpDefaults(data.configurations);
            apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
       } 
