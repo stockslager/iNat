@@ -239,7 +239,7 @@ function buildMenu(configs) {
       // let them select which configuration (plant list) they'd like.
       if( !p_insect_project ) {
           for( let i=0; i<configs.length; i++ ) {
-               garden_links += furl(github_root+'bugs_on_plants.html'+menu_params+place_param+taxon_param+'&garden='+configs[i].title,configs[i].title);
+               garden_links += furl(github_root+'bugs_on_plants.html'+params+menu_params+place_param+taxon_param+'&garden='+configs[i].title,configs[i].title);
           }
       }
       menu_string = '<div class="navbar">';
@@ -389,15 +389,14 @@ async function asyncGetData() {
      .then(data => {
       // Access your data here 
       if( data.configurations ) {
-       console.log('one');
+           console.log('setting up defaults...');
            setUpDefaults(data.configurations);
-       console.log('two');
+           console.log('building menu...');
            if( configuration.title && p_insect_project ) {
                faddelem('h2',document.body,{innerText:(configuration.title)});
            } else {
                buildMenu(data.configurations);
            }
-       console.log('three');
            apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
       } 
       console.log(data);
