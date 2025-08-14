@@ -350,13 +350,11 @@ async function asyncGetData() {
       if( data.configurations ) {
            setUpDefaults(data.configurations);
            apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-      } else {
-           faddelem('p',document.body,{innerText:'A valid configuration file is required to be specified in (&params=bugs_cnc.json). Error '+err.message+'.'});
-           throw new Error('A valid configuration file is required to be specified in (&params=bugs_cnc.json)');
-      }
+      } 
       console.log(data);
    })
      .catch(error => {
+      faddelem('p',document.body,{innerText:'A valid configuration file is required to be specified in (&params=bugs_cnc.json). Error '+err.message+'.'});
       console.error('Error fetching JSON:', error);
       faddelem('p',document.body,{innerText:'There was a problem retrieving '+p_params+'.json. Error '+err.message+'.'});
    });
