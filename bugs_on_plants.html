@@ -369,7 +369,7 @@ async function asyncGetData() {
      .then(data => {
       // Access your data here 
       if( data.configurations ) {
-           configs = JSON.parse(JSON.stringify(data.configurations));
+           configs = structuredClone(data.configurations);
            console.log('configs '+configs);
            setUpDefaults(data.configurations);
            apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
