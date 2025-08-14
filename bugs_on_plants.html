@@ -203,7 +203,7 @@ function getPlaceName( configuration, place_id ) {
    return place_name;
 }
  
-function buildMenu() {
+function buildMenu(configs) {
       let menu_string = '';
       let links = '';
       let place_param = '';
@@ -269,11 +269,11 @@ function fresults(xobj) {
       let field_id = '';
       let field_name = '';
 
-      if( configuration.title && p_insect_project ) {
+      /*if( configuration.title && p_insect_project ) {
           faddelem('h2',document.body,{innerText:(configuration.title)});
       } else {
           buildMenu();
-      }
+      }*/
 
       labels = [
             {innerText:'#'},
@@ -369,9 +369,12 @@ async function asyncGetData() {
      .then(data => {
       // Access your data here 
       if( data.configurations ) {
-           configs = structuredClone(data.configurations);
-           console.log('configs '+configs);
            setUpDefaults(data.configurations);
+           if( configuration.title && p_insect_project ) {
+               faddelem('h2',document.body,{innerText:(configuration.title)});
+           } else {
+               buildMenu(data.configurations);
+           }
            apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
       } 
       console.log(data);
