@@ -356,7 +356,7 @@ async function asyncGetData() {
      .catch(error => {
       faddelem('p',document.body,{innerText:'There was a problem retrieving '+p_params+'.json.'});
       faddelem('p',document.body,{innerText:'A valid configuration file is required to be specified as a url parameter. (e.g. ?params=bugs_cnc.json).'});
-      throw;
+       throw new Error('asdfasdf');
       //console.error('Error fetching JSON:', error);
    });
 
