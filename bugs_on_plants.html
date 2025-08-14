@@ -27,7 +27,7 @@ let p_taxon_id    = winurlparams.get('taxon_id') || '';
 let p_project_id  = winurlparams.get('project_id') || '';
 let p_title       = winurlparams.get('title') || 'on';
 let p_insect_project = winurlparams.get('insect_project') || '159056';  // pip
-let p_params      = winurlparams.get('params') || 'bugs_pip';
+let p_params      = winurlparams.get('params') || 'bugs_cnc';
 let p_user        = winurlparams.get('user_id') || '';
 
 // the place selected was added to seed_project parameter and needs to be
@@ -54,8 +54,6 @@ if( params ) {
 }
  
 let configuration = '';
-
-console.log("winurlparams: " + winurlparams);
 
 let opts = copyOpts( winurlparams ) || '';
 
@@ -104,15 +102,20 @@ function getAfter(str, char) {
  
 function setUpDefaults(configurations) {
 
+   if( configurations.length === 0 ) {
+       faddelem('p',document.body,{innerText:'Configuration file ('+p_params+'.json) contains no valid configurations.'});
+       throw new Error('asdfasdf');
+   }
+ 
    for( let i=0; i<configurations.length; i++ ) {
         if( configurations[i].insect_project === p_insect_project ) {
             configuration = configurations[i];
         }
    }
 
+   // if an insect_project wasn't passed in, default to the first configuration in the .json
    if( !configuration ) {
-       faddelem('p',document.body,{innerText:'A plant_project or default_place must be specified in '+p_params+'.json'});
-       throw new Error('A plant_project or default_place must be specified in '+p_params+'.json');
+       configuration = configurations[0];
    }
 
    if( !configuration.default_place && !configuration.plant_project ) {
@@ -347,6 +350,9 @@ async function asyncGetData() {
       if( data.configurations ) {
            setUpDefaults(data.configurations);
            apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+      } else {
+           faddelem('p',document.body,{innerText:'A valid configuration file is required to be specified in (&params=bugs_cnc.json)'});
+           throw new Error('A valid configuration file is required to be specified in (&params=bugs_cnc.json)');
       }
       console.log(data);
    })
