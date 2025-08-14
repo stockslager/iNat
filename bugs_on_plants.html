@@ -384,12 +384,15 @@ async function asyncGetData() {
      .then(data => {
       // Access your data here 
       if( data.configurations ) {
+       console.log('one');
            setUpDefaults(data.configurations);
+       console.log('two');
            if( configuration.title && p_insect_project ) {
                faddelem('h2',document.body,{innerText:(configuration.title)});
            } else {
                buildMenu(data.configurations);
            }
+       console.log('three');
            apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
       } 
       console.log(data);
