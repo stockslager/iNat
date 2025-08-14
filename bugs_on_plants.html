@@ -26,7 +26,7 @@ let p_place_id    = winurlparams.get('place_id') || '';
 let p_taxon_id    = winurlparams.get('taxon_id') || '';
 let p_project_id  = winurlparams.get('project_id') || '';
 let p_title       = winurlparams.get('title') || 'on';
-let p_insect_project = winurlparams.get('insect_project') || '159056';  // pip
+let p_insect_project = winurlparams.get('insect_project') || ''; 
 let p_params      = winurlparams.get('params') || '';
 let p_user        = winurlparams.get('user_id') || '';
 
@@ -250,7 +250,7 @@ function fresults(xobj) {
       let field_id = '';
       let field_name = '';
 
-      if( configuration.title ) {
+      if( configuration.title && p_insect_project ) {
           faddelem('h2',document.body,{innerText:(configuration.title)});
       } else {
           buildMenu();
