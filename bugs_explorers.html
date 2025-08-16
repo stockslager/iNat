@@ -75,24 +75,17 @@ function setUpDefaults(configurations) {
        throw new Error('No configurations defined.');
    }
  
+   // if a garden wasn't passed in, default to the first configuration in the .json
    for( let i=0; i<configurations.length; i++ ) {
-        if( configurations[i].insect_project === p_project_id ) {
+        if( configurations[i].title.toLowerCase() === p_garden.toLowerCase() ) {
             configuration = configurations[i];
         }
    }
-
-   // if a project_id wasn't passed in, default to the first configuration in the .json
+        
    if( !configuration ) {
-       for( let i=0; i<configurations.length; i++ ) {
-            if( configurations[i].title.toLowerCase() === p_garden.toLowerCase() ) {
-                configuration = configurations[i];
-            }
-       }
-       if( !configuration ) {
-           faddelem('p',document.body,{innerText:'A &garden parameter not specified as a url parameter.'});
-           faddelem('p',document.body,{innerText:'Please add &garden=xxxxx to the end of the url where xxxxx is matches a title for one of the configurations in '+p_params+'.json'});
-           throw new Error('No configurations defined.');
-       }
+       faddelem('p',document.body,{innerText:'A &garden parameter not specified as a url parameter.'});
+       faddelem('p',document.body,{innerText:'Please add &garden=xxxxx to the end of the url where xxxxx is matches a title for one of the configurations in '+p_params+'.json'});
+       throw new Error('No configurations defined.');
    }
 }
 
@@ -154,7 +147,7 @@ function fresults(result, places_obj, taxa_obj) {
          let user_icon = rec.icon || '';
          
          if( user_icon === '' ){
-            user_icon += '<div class="npcicon">?/*&#x1F464;*/</div>';
+            user_icon += '<div class="npcicon">?</div>';
          } else {
             user_icon = '<img class="exp_icon" src="'+user_icon+'" />';
          }
