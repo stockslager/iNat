@@ -22,17 +22,14 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let p_sort       = winurlparams.get('sort') || 'dspecies';
-let p_place_name = winurlparams.get('place_name') || '';
-let p_tname      = winurlparams.get('tname') || '';
-let p_place_id   = winurlparams.get('place_id') || '';
 let p_project_id = winurlparams.get('project_id') || '';
-let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_params     = winurlparams.get('params') || '';
 
 // cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
 // session storage is only used for sorting of data in columns at this point.
 let p_cache_check = winurlparams.get('cache_check') || 'no';  
+
+let configs = '';
  
 // if the user has selected a method, built the opt to pass to the
 // lifelist page.
@@ -68,9 +65,57 @@ function findValueByKey(arr, key, value) {
   }
   return undefined;
 }
+
+function setUpDefaults(configurations) {
+
+   if( configurations.length === 0 ) {
+       faddelem('p',document.body,{innerText:'Configuration file ('+p_params+'.json) contains no valid configurations.'});
+       faddelem('p',document.body,{innerText:'There are no configurations specified in '+p_params+'.json'});
+       faddelem('p',document.body,{innerText:'Please add at least one valid configuration to '+p_params+'.json'});
+       throw new Error('No configurations defined.');
+   }
+ 
+   for( let i=0; i<configurations.length; i++ ) {
+        if( configurations[i].insect_project === p_project_id ) {
+            configuration = configurations[i];
+        }
+   }
+
+   // if a project_id wasn't passed in, default to the first configuration in the .json
+   if( !configuration ) {
+       for( let i=0; i<configurations.length; i++ ) {
+            if( configurations[i].title.toLowerCase() === p_garden.toLowerCase() ) {
+                configuration = configurations[i];
+            }
+       }
+       if( !configuration ) {
+           faddelem('p',document.body,{innerText:'A &garden parameter not specified as a url parameter.'});
+           faddelem('p',document.body,{innerText:'Please add &garden=xxxxx to the end of the url where xxxxx is matches a title for one of the configurations in '+p_params+'.json'});
+           throw new Error('No configurations defined.');
+       }
+   }
+}
+
+function buildMenu(configs) {
+      let menu_string = '';
+      let garden_links = '';
+      let params = '';
+
+      if( p_params )         { params      += '?params='+p_params; }   
+
+      // let them select which configuration (plant list) they'd like.
+      for( let i=0; i<configs.length; i++ ) {
+           garden_links += furl(github_root+'bugs_on_plants.html'+params+menu_params+place_param+taxon_param+'&garden='+configs[i].title,configs[i].title);
+      }
+      menu_string = '<div class="navbar">';
+      if( garden_links ) { menu_string += buildDD('Choose Garden', garden_links); }
+      menu_string += '</div>';
+
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
  
 function fresults(result, places_obj, taxa_obj) {
- 
+
    if (result) {
 
       let total_results = result.total_results;
@@ -109,7 +154,7 @@ function fresults(result, places_obj, taxa_obj) {
          let user_icon = rec.icon || '';
          
          if( user_icon === '' ){
-            user_icon += '<div class="npcicon">&#x1F464;</div>';
+            user_icon += '<div class="npcicon">?/*&#x1F464;*/</div>';
          } else {
             user_icon = '<img class="exp_icon" src="'+user_icon+'" />';
          }
@@ -207,11 +252,7 @@ async function asyncGetData() {
            console.log('setting up defaults...');
            setUpDefaults(data.configurations);
            console.log('building menu...');
-           if( configuration.title && p_insect_project ) {
-               faddelem('h2',document.body,{innerText:(configuration.title)});
-           } else {
-               buildMenu(data.configurations);
-           }
+           buildMenu(data.configurations);
    })
      .catch(error => {
       console.error('Error fetching JSON:', error);
