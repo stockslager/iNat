@@ -88,6 +88,10 @@ function setUpDefaults(configurations) {
        faddelem('p',document.body,{innerText:'Please add &garden=xxxxx to the end of the url where xxxxx is matches a title for one of the configurations in '+p_params+'.json'});
        throw new Error('No configurations defined.');
    }
+
+   if( configuration.field_name ) {
+       winurlparams.append( ('field:'+configuration.field_name+'='), '');
+   }
 }
 
 function buildMenu(configs) {
