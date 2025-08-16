@@ -32,18 +32,6 @@ let p_cache_check = winurlparams.get('cache_check') || 'no';
 
 let configs = '';
  
-// if the user has selected a method, built the opt to pass to the
-// lifelist page.
-let p_field_opt = '';
-let p_field_value = '';
-// find key/value pair for &field: param if one was passed in
-for (const [key, value] of winurlparams.entries()) {
-  if( key.startsWith('field') ){
-      p_field_value = value;
-      p_field_opt = ('&'+key+'='+value);
-  }
-}   
-
 let opts = ''
    
 let view = winurlparams.get('view') || '';
@@ -91,7 +79,7 @@ function setUpDefaults(configurations) {
 
    if( configuration.field_name ) {
        console.log('field:'+configuration.field_name);
-       winurlparams.append( ('field%3A'+configuration.field_name), '');
+       winurlparams.append( ('field:'+configuration.field_name), '');
        console.log('win '+winurlparams);
    }
 }
