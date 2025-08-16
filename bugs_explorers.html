@@ -44,8 +44,6 @@ for (const [key, value] of winurlparams.entries()) {
   }
 }   
  
-let opts = ''
-   
 let view = winurlparams.get('view') || '';
 let activity_data = winurlparams.get('activity_data') || 'local';
 winurlparams.delete('activity_data');
@@ -161,22 +159,12 @@ function fresults(result, places_obj, taxa_obj) {
             user_icon = '<img class="exp_icon" src="'+user_icon+'" />';
          }
 
-         let params = ('life_list.html?project_id=239695&user_id='+rec.user_login/*+'&tag_name=lifelist'*/+p_field_opt);
-         let detail_params = ('configurable_obs_field_table.html?project_id=239695&user_id='+rec.user_login+'&obs_fields=17274,7615');
-
-         if( rec.user_login === 'uconnbirdfish' ){
-             params = ('life_list.html?project_id=239695&user_id='+rec.user_login+'&tag_name=pegslifelist');
-             params = ('life_list.html?project_id=239695&user_id='+rec.user_login+opts);
-         }
-
-         let map = furl(github_root+'life_list_map.html?project_id=239695'+opts+'&user_id='+rec.user_login,'<span class="globe">&#127758</span>');
-       
          let values = [
             {innerText:i+1},
             {innerHTML:user_icon},
             {innerHTML:furl(root_people+rec.user_login,rec.user_login)/*+map*/},
-            {innerHTML:furl(github_root+'bugs_on_plants2.html?insect_project='+p_project_id+params+opts+p_field_opt,rec.species_count )},
-            {innerHTML:furl(github_root+'bugs_on_plants_grid.html?project_id='+p_project_id+params+'&user_id='+rec.user_login+opts+p_field_opt,rec.obs_count)},
+            {innerHTML:furl(github_root+'bugs_on_plants2.html?insect_project='+p_project_id+'&params='+p_params+p_field_opt,rec.species_count )},
+            {innerHTML:furl(github_root+'bugs_on_plants_grid.html?project_id='+p_project_id+'&params='+p_params+'&user_id='+rec.user_login+p_field_opt,rec.obs_count)},
          ];
          faddelems('td',brow,values);
       };
