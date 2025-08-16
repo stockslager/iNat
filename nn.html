@@ -263,12 +263,7 @@ function buildMenu(configs) {
           }
       }
 
-      let field_param    = ('&field:'+configuration.field_name+'=');
- 
       if( links ) { menu_string += buildDD(getTaxonName(configuration, p_taxon_id), links); }
-
-      // build explorers link...
-      menu_string += buildHome(furl(github_root+'bugs_explorers.html?params='+p_params+'&garden='+p_garden+'&project_id='+configuration.plant_project+field_param,'&#128100;'));
  
       menu_string += '</div>';
 
@@ -302,7 +297,7 @@ function fresults(xobj) {
             {innerText:'#'},
             {innerText:'Photo'},
             {innerText:'Name'}, 
-            //{innerText:'Count'},
+            {innerText:''},
       ];
 
       let place_param = '';
@@ -377,7 +372,7 @@ function fresults(xobj) {
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
                   {innerHTML:furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+'&place_id='+p_place_id+'&params='+p_params+'&target_id='+rec.taxon.id+'&menu=pip&title='+p_title+'&target_name='+header_name+field_param+seed_prj_param,displayName)},
-                  //{innerText:rec.count||''},
+                  {innerHTML:furl(github_root+'bugs_explorers.html?params='+p_params+'&garden='+p_garden+'&project_id='+configuration.plant_project+field_param,'&#128100;')},
                   ];
         
          faddelems('td',brow,values);
