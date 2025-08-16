@@ -25,8 +25,6 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_garden     = winurlparams.get('garden') || '';
 let p_params     = winurlparams.get('params') || '';
 let p_project_id = winurlparams.get('project_id') || '';
-
-winurlparams.append('apply_project_rules_for', '255754');
  
 // cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
 // session storage is only used for sorting of data in columns at this point.
@@ -89,6 +87,10 @@ function setUpDefaults(configurations) {
        faddelem('p',document.body,{innerText:'A &garden parameter not specified as a url parameter.'});
        faddelem('p',document.body,{innerText:'Please add &garden=xxxxx to the end of the url where xxxxx is matches a title for one of the configurations in '+p_params+'.json'});
        throw new Error('No configurations defined.');
+   }
+
+   if( configuration.apply_project_rules_for ) {
+       winurlparams.append('apply_project_rules_for', configuration.apply_project_rules_for);
    }
 }
 
