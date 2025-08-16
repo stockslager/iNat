@@ -262,11 +262,13 @@ function buildMenu(configs) {
                links += furl(github_root+'nn.html'+menu_params+'&taxon_id='+configuration.taxa[i].taxon_id+place_param,configuration.taxa[i].taxon_name);
           }
       }
+
+      let field_param    = ('&field:'+configuration.field_name+'=');
  
       if( links ) { menu_string += buildDD(getTaxonName(configuration, p_taxon_id), links); }
 
       // build explorers link...
-      menu_string += buildHome(furl(github_root+'bugs_explorers.html?params='+p_params+'&garden='+p_garden+'&project_id='+configuration.plant_project,'&#128100;'));
+      menu_string += buildHome(furl(github_root+'bugs_explorers.html?params='+p_params+'&garden='+p_garden+'&project_id='+configuration.plant_project+field_param,'&#128100;'));
  
       menu_string += '</div>';
 
