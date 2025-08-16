@@ -98,7 +98,7 @@ function buildMenu(configs) {
 
       // let them select which configuration (plant list) they'd like.
       for( let i=0; i<configs.length; i++ ) {
-           garden_links += furl(github_root+'bugs_explorers.html'+params+'&garden='+configs[i].title,configs[i].title);
+           garden_links += furl(github_root+'bugs_explorers.html'+params+'&garden='+configs[i].title+'&project_id='+p_project_id,configs[i].title);
       }
       menu_string = '<div class="navbar">';
       if( garden_links ) { menu_string += buildDD('Choose Garden', garden_links); }
@@ -131,8 +131,6 @@ function fresults(result, places_obj, taxa_obj) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
 
-      let sort_url = (github_root+'bugs_explorers.html?project_id=239695'+opts+'&cache_check=yes');
-                      
       let labels = [
          {innerText:'#'},
          {innerText:'Icon '},
