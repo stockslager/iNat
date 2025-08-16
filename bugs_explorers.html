@@ -142,8 +142,8 @@ function fresults(result, places_obj, taxa_obj) {
          {innerText:'#'},
          {innerText:'Icon '},
          {innerText:'Name' },
-         {innerText:'Spc'  },
-         {innerText:'Obs'  },
+         {innerText:'Species Count'  },
+         //{innerText:'Obs'  },
       ];
       faddelems('th',hrow,labels);
       
@@ -174,9 +174,9 @@ function fresults(result, places_obj, taxa_obj) {
          let values = [
             {innerText:i+1},
             {innerHTML:user_icon},
-            {innerHTML:furl(root_people+rec.user_login,rec.user_login)+map},
+            {innerHTML:furl(root_people+rec.user_login,rec.user_login)/*+map*/},
             {innerHTML:furl(github_root+params+opts,rec.species_count )},
-            {innerHTML:furl(github_root+'life_list_grid.html?project_id=239695&user_id='+rec.user_login+'&angler='+rec.user_login+opts+p_field_opt,rec.obs_count)},
+            //{innerHTML:furl(github_root+'life_list_grid.html?project_id=239695&user_id='+rec.user_login+'&angler='+rec.user_login+opts+p_field_opt,rec.obs_count)},
          ];
          faddelems('td',brow,values);
       };
