@@ -130,15 +130,19 @@ function setUpDefaults(configurations) {
 
    // if an insect_project wasn't passed in, default to the first configuration in the .json
    if( !configuration ) {
-       for( let i=0; i<configurations.length; i++ ) {
-            if( configurations[i].title.toLowerCase() === p_garden.toLowerCase() ) {
-                configuration = configurations[i];
-            }
-       }
-       if( !configuration ) {
-           faddelem('p',document.body,{innerText:'A &garden parameter not specified as a url parameter.'});
-           faddelem('p',document.body,{innerText:'Please add &garden=xxxxx to the end of the url where xxxxx is matches a title for one of the configurations in '+p_params+'.json'});
-           throw new Error('No configurations defined.');
+       if( p_garden ) {
+           for( let i=0; i<configurations.length; i++ ) {
+                if( configurations[i].title.toLowerCase() === p_garden.toLowerCase() ) {
+                    configuration = configurations[i];
+                }
+           }
+           if( !configuration ) {
+               faddelem('p',document.body,{innerText:'A &garden parameter was specified but not found in the configuration.'});
+               faddelem('p',document.body,{innerText:'Please add &garden=xxxxx to the end of the url where xxxxx is matches a title for one of the configurations in '+p_params+'.json'});
+               throw new Error('No configurations defined.');
+           }
+       } else {
+           configuration = configurations[0];
        }
    }
 
