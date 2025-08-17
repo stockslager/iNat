@@ -54,7 +54,7 @@ function buildMenu(configs) {
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
-function fresults(xobj) {
+function buildTable() {
       let labels = [];
 
       labels = [
@@ -95,19 +95,15 @@ function fresults(xobj) {
 fetch((p_params+'.json'))
      .then(response => response.json())
      .then(data => {
-      // Access your data here 
-      if( data.configurations ) {
-           console.log('setting up defaults...');
-           setUpDefaults(data.configurations);
-           console.log('building menu...');
-           if( configuration.title && p_insect_project ) {
-               faddelem('h2',document.body,{innerText:(configuration.title)});
-           } else {
-               buildMenu(data.configurations);
-           }
-           apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-      } 
-      console.log(data);
+        // Access your data here 
+        if( data.configurations ) {
+             console.log('setting up defaults...');
+             setUpDefaults(data.configurations);
+             console.log('building menu...');
+             buildMenu(data.configurations);
+             console.log('building table...');
+             buildTable();
+        }
       })
      .catch(error => {
       faddelem('p',document.body,{innerText:'There was a problem retrieving '+p_params+'.json.'});
