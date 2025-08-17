@@ -30,6 +30,7 @@ let p_insect_project = winurlparams.get('insect_project') || '';
 let p_params      = winurlparams.get('params') || '';
 let p_user        = winurlparams.get('user_id') || '';
 let p_garden      = winurlparams.get('garden') || '';
+let p_mode        = winurlparams.get('mode') || 'visitor';
 
 // the place selected was added to seed_project parameter and needs to be
 // parsed if control is returning from the insects page.
@@ -38,6 +39,7 @@ let place  = p_insect_project.split('$')[1];
 let params = p_insect_project.split('$')[2];
 let user   = p_insect_project.split('$')[3];
 let garden = p_insect_project.split('$')[4];
+let mode   = p_insect_project.split('$')[5];
 
 if( prj ) {
     winurlparams.delete('insect_project');
@@ -58,7 +60,11 @@ if( params ) {
     winurlparams.append('params', params);
     p_params = params;
 }
-
+if( mode ) {
+    winurlparams.delete('mode');
+    winurlparams.append('mode', mode);
+    p_mode = mode;
+}
 if( garden ) {
     winurlparams.delete('garden');
     winurlparams.append('garden', garden);
@@ -371,13 +377,22 @@ function fresults(xobj) {
          field_param = ('&field:'+configuration.field_name+'='+rec.taxon.id);
        
          let displayName    = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
-                                      
-         let values = [
+
+         let values = [];
+
+         if( p_mode === 'visitor' ) {
+             values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
                   {innerHTML:furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+'&place_id='+p_place_id+'&params='+p_params+'&target_id='+rec.taxon.id+'&menu=pip&title='+p_title+'&target_name='+header_name+field_param+seed_prj_param,displayName)},
-                  //{innerText:rec.count||''},
                   ];
+         } else if( p_mode === 'explorer' ) {
+             values = [
+                  {innerText:i+1},
+                  {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
+                  {innerHTML:furl(github_root+'bugs_explorers.html?params='+p_params+'&project_id='+config.plant_project+'&garden='+config.title+'&field:'+config.field_name+'&plant_name='+header_name, displayName)},
+                  ];
+         }
         
          faddelems('td',brow,values);
       };
