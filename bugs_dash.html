@@ -81,8 +81,10 @@ function buildTable() {
 
       let brow = faddelem('tr',tbody);
       let values = [
-                  {innerHTML:furl(github_root+'bugs_on_plants.html?params='+p_params+'&mode=explorer&project_id='+config.plant_project+'&garden='+config.title+'&field:'+config.field_name+'&plant_name=All Plants','&#128100;')},
-                  {innerHTML:furl(github_root+'bugs_on_plants.html?params='+p_params+'&mode=explorer&project_id='+config.plant_project+'&garden='+config.title+'&field:'+config.field_name+'&plant_name=All Plants','Explorers')},
+                  {innerHTML:furl(github_root+'bugs_on_plants.html?params='+p_params+'&mode=explorer&garden='+config.title,'&#128100;')},
+                  {innerHTML:furl(github_root+'bugs_on_plants.html?params='+p_params+'&mode=explorer&garden='+config.title,'Explorers')},
+                  //{innerHTML:furl(github_root+'bugs_on_plants.html?params='+p_params+'&mode=explorer&project_id='+config.plant_project+'&garden='+config.title+'&field:'+config.field_name+'&plant_name=All Plants','&#128100;')},
+                  //{innerHTML:furl(github_root+'bugs_on_plants.html?params='+p_params+'&mode=explorer&project_id='+config.plant_project+'&garden='+config.title+'&field:'+config.field_name+'&plant_name=All Plants','Explorers')},
                   {innerText:'Observations of wildlife activity on each plant by each explorer.'},
             ];
       faddelems('td',brow,values);
