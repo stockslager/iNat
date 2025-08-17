@@ -25,6 +25,7 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_garden     = winurlparams.get('garden') || '';
 let p_params     = winurlparams.get('params') || '';
 let p_project_id = winurlparams.get('project_id') || '';
+let p_plant_name = winurlparams.get('plant_name') || '';
  
 // cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
 // session storage is only used for sorting of data in columns at this point.
@@ -103,7 +104,7 @@ function buildMenu(configs) {
 
       // let them select which configuration (plant list) they'd like.
       for( let i=0; i<configs.length; i++ ) {
-           garden_links += furl(github_root+'bugs_explorers.html'+params+'&garden='+configs[i].title+'&project_id='+configs[i].plant_project+p_field_opt,configs[i].title);
+           garden_links += furl(github_root+'bugs_explorers.html'+params+'&garden='+configs[i].title+'&project_id='+configs[i].plant_project+p_field_opt+'&plant_name='+p_plant_name,configs[i].title);
       }
       menu_string = '<div class="navbar">';
       if( garden_links ) { menu_string += buildDD('Choose Garden', garden_links); }
@@ -127,8 +128,10 @@ function fresults(result, places_obj, taxa_obj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
+      let on_all = '<span id="topright">On '+ p_plant_name +'<br>at <b>'+configuration.title+'</b></span>';
+    
       faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results)+'<br />' 
-            +'per page: '+fcomnum(per_page)+'<br />'
+            +'per page: '+fcomnum(per_page)+ on_all + '<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });
 
