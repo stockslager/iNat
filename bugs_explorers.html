@@ -26,6 +26,7 @@ let p_garden     = winurlparams.get('garden') || '';
 let p_params     = winurlparams.get('params') || '';
 let p_project_id = winurlparams.get('project_id') || '';
 let p_plant_name = winurlparams.get('plant_name') || '';
+let p_mode       = winurlparams.get('mode' || 'explorer');
  
 // cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
 // session storage is only used for sorting of data in columns at this point.
@@ -112,7 +113,7 @@ function buildMenu(configs) {
       if( garden_links ) { menu_string += buildDD('Choose Garden', garden_links); }
 
       // build home icon...
-      menu_string += buildHome(furl(github_root+'nn.html?params='+p_params+'&garden='+p_garden,'&#127807;'));
+      menu_string += buildHome(furl(github_root+'bugs_on_plants.html?params='+p_params+'&mode='+p_mode+'&garden='+p_garden,'&#127807;'));
  
       menu_string += '</div>';
 
