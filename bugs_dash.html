@@ -41,6 +41,13 @@ function setUpDefaults(configurations) {
    }
 }
 
+function buildDDTitle( content ) {
+  let dd = '<div class="dd_title">' + content +
+           '</div>';
+
+  return( dd );
+}
+
 function buildMenu(configs) {
       let menu_string = '';
       let params = '';
@@ -48,6 +55,7 @@ function buildMenu(configs) {
       if( p_params )         { params      += '?params='+p_params; }   
 
       menu_string = '<div class="navbar">';
+      menu_string += buildDDTitle(' ');
       menu_string += '</div>';
 
       menu_string += buildHome(furl(github_root+'bugs_dash.html?params='+p_params,'<span>&#63;</span>'));
@@ -55,6 +63,11 @@ function buildMenu(configs) {
 }
 
 function buildTable() {
+      
+      faddelem('p',document.body,{innerHTML:'total modes: 2 <br/>'
+                 +'per page: 10<br />'
+                 +'page: 1 of 1<br />'});  
+ 
       let labels = [];
 
       labels = [
