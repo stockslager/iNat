@@ -1,0 +1,128 @@
+<!DOCTYPE html>  
+<html lang="en">   
+ 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" /> 
+<meta name="description" content="Bugs on Plants" />
+<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="Bugs on Plants" />
+<link rel="manifest" href="bugs.webmanifest" />
+<link rel="stylesheet" type="text/css" href="seed_library.css" />
+<script type="text/javascript" src='common_func.js'> </script>
+<title>Bugs on Plants</title>
+</head>
+
+<body>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
+let p_params        = winurlparams.get('params') || 'secret_society';
+
+let configuration = '';
+let configs = [];
+ 
+</script> 
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
+<script> 
+ 
+function setUpDefaults(configurations) {
+
+   if( configurations.length === 0 ) {
+       faddelem('p',document.body,{innerText:'Configuration file ('+p_params+'.json) contains no valid configurations.'});
+       faddelem('p',document.body,{innerText:'There are no configurations specified in '+p_params+'.json'});
+       faddelem('p',document.body,{innerText:'Please add at least one valid configuration to '+p_params+'.json'});
+       throw new Error('No configurations defined.');
+   }
+ 
+   for( let i=0; i<configurations.length; i++ ) {
+        if( configurations[i].insect_project === p_insect_project ) {
+            configuration = configurations[i];
+        }
+   }
+
+}
+
+function buildMenu(configs) {
+      let menu_string = '';
+      let params = '';
+
+      if( p_params )         { params      += '?params='+p_params; }   
+
+      menu_string = '<div class="navbar">';
+      menu_string += '</div>';
+
+      menu_string += buildHome(furl(github_root+'bugs_dash.html?params='+p_params,'<span>&#63;</span>'));
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+
+function fresults(xobj) {
+      let labels = [];
+
+      labels = [
+            {innerText:'Icon'},
+            {innerText:'Mode'},
+            {innerText:'Description'}, 
+      ];
+
+      let table = faddelem('table',document.body,{id:'main'});                    
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+      
+      faddelems('th',hrow,labels);
+      let tbody = faddelem('tbody',table);
+                                      
+      let values = [
+                  {innerText:'&#127807;'},
+                  {innerText:'Explorers'},
+                  {innerText:'Observations of wildlife activity on each plant by each explorer.'},
+            ];
+      faddelems('td',brow,values);
+
+        let values = [
+                  {innerText:'&#127807;'},
+                  {innerText:'Wildlife Activity'},
+                  {innerText:'Southwest Ohio wildlife activity observed occurring on each plant for each garden.'},
+            ];
+      faddelems('td',brow,values);
+
+      // buttons to go to prev or next page
+      let nav = faddelem('div',document.body,{id:'nav'});
+      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+};
+
+fetch((p_params+'.json'))
+     .then(response => response.json())
+     .then(data => {
+      // Access your data here 
+      if( data.configurations ) {
+           console.log('setting up defaults...');
+           setUpDefaults(data.configurations);
+           console.log('building menu...');
+           if( configuration.title && p_insect_project ) {
+               faddelem('h2',document.body,{innerText:(configuration.title)});
+           } else {
+               buildMenu(data.configurations);
+           }
+           apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+      } 
+      console.log(data);
+      })
+     .catch(error => {
+      faddelem('p',document.body,{innerText:'There was a problem retrieving '+p_params+'.json.'});
+      faddelem('p',document.body,{innerText:'A valid configuration file is required to be specified as a url parameter. (e.g. ?params=bugs_cnc).'});
+      throw new Error('Error fetching JSON');
+});
+
+</script>
+</body>
+
+</html>
