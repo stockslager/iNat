@@ -86,16 +86,15 @@ function buildTable() {
                   {innerText:'Southwest Ohio wildlife activity observed occurring on each plant for each garden.'},
             ];
       faddelems('td',brow,values);
- 
+
+      brow = faddelem('tr',tbody);
       values = [
                   {innerHTML:furl(github_root+'bugs_on_plants.html?params='+p_params+'&mode=pro_explorer&garden='+config.title,'&#128100;')},
                   {innerHTML:furl(github_root+'bugs_on_plants.html?params='+p_params+'&mode=pro_explorer&garden='+config.title,'Explorers')},
                   {innerText:'Observations of wildlife activity on each plant by each explorer.'},
             ];
       faddelems('td',brow,values);
- 
-      brow = faddelem('tr',tbody);
- 
+  
 };
 
 fetch((p_params+'.json'))
