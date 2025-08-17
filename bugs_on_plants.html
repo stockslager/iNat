@@ -310,19 +310,19 @@ function fresults(xobj) {
       ];
 
       let place_param = '';
-      if( p_place_id ) { place_param = '$'+p_place_id; }
+      if( p_place_id ) { place_param = '$'+p_place_id; } else { place_param = '$null'; }
 
       let json = '';
-      if( p_params ) { json = '$'+p_params; }
+      if( p_params ) { json = '$'+p_params; } else { json = '$null'; }
 
       let user_param = '';
       if( p_user ) { user_param = '$'+p_user; } else { user_param = '$null'; }
 
       let garden_param = '';
-      if( p_garden ) { garden_param = '$'+p_garden; }
+      if( p_garden ) { garden_param = '$'+p_garden; } else { garden_param = '$null'; }
 
       let mode_param = '';
-      if( p_mode ) { mode_param = '$'+p_mode; }
+      if( p_mode ) { mode_param = '$'+p_mode; } else { mode_param = '$null'; }
        
       let field_param    = ('&field:'+configuration.field_name+'=');
       let seed_prj_param = ('&seed_project=pip'+p_insect_project+place_param+json+user_param+garden_param+mode_param);
