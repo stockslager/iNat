@@ -272,9 +272,13 @@ function buildMenu(configs) {
       }
  
       if( links ) { menu_string += buildDD(getTaxonName(configuration, p_taxon_id), links); }
+
+      if( p_mode.startsWith('pro') ) {
+          menu_string += buildHome(furl(github_root+'bugs_dash.html','Dashboard'));
+      }
+
       menu_string += '</div>';
 
-      //menu_string += buildHome(furl(github_root+'cncnpc_seeds.html?project_id='+p_project_id,'&#127807;'));
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
@@ -375,13 +379,13 @@ function fresults(xobj) {
 
          let values = [];
 
-         if( p_mode === 'visitor' ) {
+         if( p_mode === 'visitor' || p_mode === 'pro_visitor' ) {
              values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
                   {innerHTML:furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+'&place_id='+p_place_id+'&params='+p_params+'&target_id='+rec.taxon.id+'&menu=pip&title='+p_title+'&target_name='+header_name+field_param+seed_prj_param,displayName)},
                   ];
-         } else if( p_mode === 'explorer' ) {
+         } else if( p_mode === 'explorer' || p_mode === 'pro_explorer ) {
              values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
