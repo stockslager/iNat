@@ -142,14 +142,12 @@ function setUpDefaults(configurations) {
                     configuration = configurations[i];
                 }
            }
-           if( !configuration ) {
-               faddelem('p',document.body,{innerText:'A &garden parameter was specified but not found in the configuration.'});
-               faddelem('p',document.body,{innerText:'Please add &garden=xxxxx to the end of the url where xxxxx is matches a title for one of the configurations in '+p_params+'.json'});
-               throw new Error('No configurations defined.');
-           }
-       } else {
-           configuration = configurations[0];
        }
+   }
+
+   // if the configuration is still not found, default to the first one.
+   if( !configuration ) {
+       configuration = configurations[0];
    }
 
    if( !configuration.default_place && !configuration.plant_project ) {
