@@ -99,6 +99,13 @@ function buildDD( name, content ) {
   return( dd );
 }
 
+function buildDDTitle( content ) {
+  let dd = '<div class="dd_title">' + content +
+           '</div>';
+
+  return( dd );
+}
+
 function buildHome( url ) {
    return ('<div id="home">'+url+'</div>');
 }
