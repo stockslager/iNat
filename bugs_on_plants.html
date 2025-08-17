@@ -242,7 +242,6 @@ function buildMenu(configs) {
       if( p_taxon_id )       { taxon_param += '&taxon_id='+p_taxon_id; }
       if( p_insect_project ) { menu_params += '&insect_project='+p_insect_project; }
 
- //*******************
       // if no insect_project parameter was specified, build a menu showing each configuration and
       // let them select which configuration (plant list) they'd like.
       if( !p_insect_project ) {
@@ -252,7 +251,6 @@ function buildMenu(configs) {
       }
       menu_string = '<div class="navbar">';
       if( garden_links ) { menu_string += buildDD('Choose Garden', garden_links); }
- //**********************************
  
       if( configuration.places && configuration.places.length > 0 ) {
           //links += furl(github_root+'bugs_on_plants.html'+menu_params+'&place_id='+configuration.default_place+taxon_param,'All');
@@ -293,12 +291,6 @@ function fresults(xobj) {
 
       let field_id = '';
       let field_name = '';
-
-      /*if( configuration.title && p_insect_project ) {
-          faddelem('h2',document.body,{innerText:(configuration.title)});
-      } else {
-          buildMenu();
-      }*/
 
       labels = [
             {innerText:'#'},
@@ -391,7 +383,7 @@ function fresults(xobj) {
              values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'bugs_explorers.html?params='+p_params+'&project_id='+config.plant_project+'&garden='+config.title+'&field:'+config.field_name+'&plant_name='+header_name, displayName)},
+                  {innerHTML:furl(github_root+'bugs_explorers.html?params='+p_params+'&project_id='+configuration.plant_project+'&garden='+configuration.title+'&field:'+configuration.field_name+'&plant_name='+header_name, displayName)},
                   ];
          }
         
