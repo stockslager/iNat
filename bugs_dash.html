@@ -41,13 +41,6 @@ function setUpDefaults(configurations) {
    }
 }
 
-function buildDDTitle( content ) {
-  let dd = '<div class="dd_title">' + content +
-           '</div>';
-
-  return( dd );
-}
-
 function buildMenu(configs) {
       let menu_string = '';
       let params = '';
@@ -55,9 +48,9 @@ function buildMenu(configs) {
       if( p_params )         { params      += '?params='+p_params; }   
 
       menu_string = '<div class="navbar">';
-      menu_string += buildDDTitle('Test');
+      menu_string += buildDDTitle('');
 
-      menu_string += buildHome(furl(github_root+'bugs_dash.html?params='+p_params,'<span style="color: blue; font_size: 16px; font-weight: bold;">?</span>'));
+      menu_string += buildHome(furl(github_root+'bugs_dash.html?params='+p_params,'<span style="font_size: 16px; font-weight: bold;">Help</span>'));
       menu_string += '</div>';
  
       faddelem('p',document.body,{innerHTML:(menu_string)});  
@@ -77,14 +70,12 @@ function buildTable() {
             {innerText:'Description'}, 
       ];
 
- console.log('one');
       let table = faddelem('table',document.body,{id:'main'});                    
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
       
       faddelems('th',hrow,labels);
       let tbody = faddelem('tbody',table);
-console.log('one a');               
 
       let brow = faddelem('tr',tbody);
       let values = [
@@ -92,18 +83,16 @@ console.log('one a');
                   {innerText:'Explorers'},
                   {innerText:'Observations of wildlife activity on each plant by each explorer.'},
             ];
-console.log('one b');
       faddelems('td',brow,values);
  
       brow = faddelem('tr',tbody);
-console.log('two');
       values = [
                   {innerHTML:'&#127807;'},
                   {innerText:'Wildlife Activity'},
                   {innerText:'Southwest Ohio wildlife activity observed occurring on each plant for each garden.'},
             ];
       faddelems('td',brow,values);
- console.log('three');
+ 
 };
 
 fetch((p_params+'.json'))
@@ -117,7 +106,6 @@ fetch((p_params+'.json'))
              buildMenu(data.configurations);
              console.log('building table...');
              buildTable();
-             console.log('four');
         }
       })
      .catch(error => {
