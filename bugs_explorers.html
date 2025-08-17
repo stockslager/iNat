@@ -89,9 +89,11 @@ function setUpDefaults(configurations) {
    }
 
    if( configuration.field_name ) {
-       console.log('field:'+configuration.field_name);
        winurlparams.append( ('field:'+configuration.field_name), '');
-       console.log('win '+winurlparams);
+   }
+
+   if( configuration.apply_project_rules_for ) {
+       winurlparams.append( 'apply_project_rules_for', configuration.apply_project_rules_for );
    }
 }
 
