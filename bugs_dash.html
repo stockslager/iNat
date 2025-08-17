@@ -56,9 +56,10 @@ function buildMenu(configs) {
 
       menu_string = '<div class="navbar">';
       menu_string += buildDDTitle(' ');
-      menu_string += '</div>';
 
       menu_string += buildHome(furl(github_root+'bugs_dash.html?params='+p_params,'<span>&#63;</span>'));
+      menu_string += '</div>';
+ 
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
@@ -87,7 +88,7 @@ console.log('one a');
 
       let brow = faddelem('tr',tbody);
       let values = [
-                  {innerText:'&#128100;'},
+                  {innerHTML:'&#128100;'},
                   {innerText:'Explorers'},
                   {innerText:'Observations of wildlife activity on each plant by each explorer.'},
             ];
@@ -97,7 +98,7 @@ console.log('one b');
       brow = faddelem('tr',tbody);
 console.log('two');
       values = [
-                  {innerText:'&#127807;'},
+                  {innerHTML:'&#127807;'},
                   {innerText:'Wildlife Activity'},
                   {innerText:'Southwest Ohio wildlife activity observed occurring on each plant for each garden.'},
             ];
