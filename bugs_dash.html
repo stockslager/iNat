@@ -50,7 +50,7 @@ function buildMenu(configs) {
       menu_string = '<div class="navbar">';
       menu_string += buildDDTitle('');
 
-      menu_string += buildHome(furl(github_root+'bugs_dash.html?params='+p_params,'<span style="font_size: 16px; font-weight: bold;">Help</span>'));
+      menu_string += buildHome(furl(github_root+'bugs_dash.html?params='+p_params,'<span style="font_size: 16px;">Help</span>'));
       menu_string += '</div>';
  
       faddelem('p',document.body,{innerHTML:(menu_string)});  
@@ -79,8 +79,8 @@ function buildTable() {
 
       let brow = faddelem('tr',tbody);
       let values = [
-                  {innerHTML:'&#128100;'},
-                  {innerText:'Explorers'},
+                  {innerHTML:furl(github_root+'bugs_on_plants.html?params='+p_params,'&#128100;')},
+                  {innerHTML:furl(github_root+'bugs_on_plants.html?params='+p_params,'Explorers')},
                   {innerText:'Observations of wildlife activity on each plant by each explorer.'},
             ];
       faddelems('td',brow,values);
