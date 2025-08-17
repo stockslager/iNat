@@ -108,14 +108,14 @@ function buildMenu(configs) {
       if( p_seed_prj )       { params      += '&seed_project=' + p_seed_prj }
 
       // let them select which configuration (plant list) they'd like.
-      for( let i=0; i<configs.length; i++ ) {
+      /*for( let i=0; i<configs.length; i++ ) {
            garden_links += furl(github_root+'bugs_explorers.html'+params+'&garden='+configs[i].title+'&project_id='+configs[i].plant_project+p_field_opt+'&plant_name='+p_plant_name,configs[i].title);
-      }
+      }*/
       menu_string = '<div class="navbar">';
-      if( garden_links ) { menu_string += buildDD('Choose Garden', garden_links); }
+     // if( garden_links ) { menu_string += buildDD('Choose Garden', garden_links); }
 
       // build home icon...
-      menu_string += buildHome(furl(github_root+'bugs_on_plants.html?params='+p_params+'&mode='+p_mode+'&garden='+p_garden,'&#127807;'));
+      menu_string += buildHome(furl(github_root+'bugs_on_plants.html'+params+'&mode='+p_mode+'&garden='+p_garden,'&#127807;'));
  
       menu_string += '</div>';
 
