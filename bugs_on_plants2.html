@@ -198,7 +198,6 @@ function buildMenu( results ) {
            for( let i=0; i<results.length; i++) {
                 if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
                     for( let j=0; j<configuration.sub_icons.length; j++ ) {
-                         console.log( 'tax_id: ' + configuration.sub_icons[j].taxon_id.toString() );
                          for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
                               if( results[i].taxon.ancestor_ids[k].toString() === configuration.sub_icons[j].taxon_id.toString() ){
                                   if( !sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
