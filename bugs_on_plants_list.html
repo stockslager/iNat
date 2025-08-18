@@ -49,6 +49,10 @@ let top_taxon = '';
 let tax_photo = '<div class="clipart">&#127807</div>'; 
 let interactions = [];
 
+// don't show organsims that have only been id'd to genus and above, otherwise the number's
+// won't match other counts
+ winurlparams.append('hrank', 'species');
+
 if( p_project_id === 'cincinnati-nature-center-pollinator-garden' ) {
     winurlparams.delete('project_id');
     winurlparams.append('project_id', '220623');
