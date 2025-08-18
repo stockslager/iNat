@@ -27,6 +27,7 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 
 let p_project_id = winurlparams.get('project_id') || '';
 let p_seed_prj   = winurlparams.get('seed_project_id') || '';
+let p_params     = winurlparams.get('params') || 'params2';
 
 winurlparams.delete('project_id');
 
@@ -61,7 +62,7 @@ function buildMenu() {
       menu_string = '<div class="navbar">';
       menu_string += buildDD('Descendants', links);
 
-      menu_string += buildHome(furl(github_root+'cncnpc_seeds_fields.html?project_id='+p_seed_prj+'&obs_id='+field_value,'&#127807;'));
+      menu_string += buildHome(furl(github_root+'cncnpc_seeds_fields.html?project_id='+p_seed_prj+'&obs_id='+field_value+'&params='+p_params,'&#127807;'));
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
