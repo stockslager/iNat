@@ -180,6 +180,7 @@ let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_omit_users = winurlparams.get('omit_users') || '';
 let p_omit_id = winurlparams.get('omit_id') || '';
 let p_omit_project = winurlparams.get('omit_projects') || '';
+let p_params       = winurlparams.get('params') || 'params2';
 let p_field = '';
 let p_field_value = '';
 let opts = '';
@@ -640,7 +641,7 @@ function parseStoredPlaces(places) {
 async function asyncGetData() {
    let instructions = '';
  
-   await fetch('params2.json')
+   await fetch(p_params+'.json')
      .then(response => response.json())
      .then(data => {
       // Access your data here 
