@@ -77,8 +77,21 @@ if( p_obs_id ){
 let p_custom     = 'no';
 let p_strip_html = 'yes';
 
+function buildMenu() {
+      let menu_string = '';
+
+      menu_string = '<div class="navbar">';
+      menu_string += buildDDTitle('');
+
+      menu_string += buildHome(furl(github_root+'cncnpc_seeds.html?project_id='+p_project_id,'&#127807;'));
+      menu_string += '</div>';
+ 
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+  
 function fresults(xobj) {
    let results = xobj.results;
+   buildMenu();
 
    if (results) {
       let total_results = xobj.total_results;
@@ -102,8 +115,7 @@ function fresults(xobj) {
              }
          }
  
-         let home_string = ('<div id="home">'+furl(github_root+'cncnpc_seeds.html?project_id='+p_project_id,'<span style="padding-top:20px; padding-right:15px;">&#127807;</span>')+'</div></div>');
-         faddelem('p',document.body,{innerHTML:home_string+icon+'<span style="padding:10px;">'+header_row+'</span></div>'}); 
+         faddelem('p',document.body,{innerHTML:icon+'<span style="padding:10px;">'+header_row+'</span></div>'}); 
 
          let user_icon = rec.user.icon || '';
          if( user_icon === '' ){
