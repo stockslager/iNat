@@ -32,8 +32,6 @@ let p_obs_id     = winurlparams.get('obs_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_params     = winurlparams.get('params') || 'params2';
 
-let has_babies = 'no';
-
 let descendants_results = '';
 descendants.delete('id');
 descendants.delete('project_id');
@@ -262,7 +260,7 @@ function fresults(xobj) {
                          ];        
          faddelems('td',s_row4, s_four);
 
-         if( descendants.results ) {
+         if( descendants_results ) {
              let s_row5     = faddelem('tr',s_tbody);
              let s_five    = [   
                              {innerText:'Propagated Descendants'},
@@ -336,9 +334,6 @@ async function asyncGetData(){
       })
       .then((data) => { 
         descendants_results = data; 
-        if( descendants_results.length > 0 ) {
-            has_babies = 'yes';
-        }
       })
       .catch((err) => {
          console.error(err.message);
