@@ -36,6 +36,7 @@ var rows         = winurlparams.get('rows') || 30;
 var columns      = winurlparams.get('columns') || 3;
 let title        = winurlparams.get('title') || '';
 let p_action     = winurlparams.get('action') || '';
+let p_params     = winurlparams.get('params') || 'params2';
 
 let opts = copyOpts( winurlparams ) || '';
 
@@ -75,7 +76,7 @@ function buildMenu() {
       menu_string = '<div class="navbar">';
       menu_string += buildDD('Descendants', links);
 
-      menu_string += buildHome(furl(github_root+'cncnpc_seeds_fields.html?project_id='+p_seed_prj+'&obs_id='+p_obs_id,'&#127807;'));
+      menu_string += buildHome(furl(github_root+'cncnpc_seeds_fields.html?project_id='+p_seed_prj+'&obs_id='+p_obs_id+'&params='+p_params,'&#127807;'));
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
   
