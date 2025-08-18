@@ -30,6 +30,7 @@ let descendants  = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
 let p_obs_id     = winurlparams.get('obs_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
+let p_params     = winurlparams.get('params2') || '';
 
 let descendants_results = '';
 descendants.delete('id');
@@ -290,7 +291,7 @@ function fresults(xobj) {
 };
 
 async function asyncGetData(){
-   await fetch('params2.json')
+   await fetch(p_params+'.json')
      .then(response => response.json())
      .then(data => {
        // Access your data here 
