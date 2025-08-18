@@ -249,7 +249,7 @@ function fresults(xobj) {
          let s_row5     = faddelem('tr',s_tbody);
          let s_five    = [   
                              {innerText:'Propagated Descendants'},
-                             {innerHTML:furl(github_root+'descendants_grid.html?seed_project_id='+p_project_id+'&field:parent+colony='+p_obs_id,"Propagated Descendants") },                         
+                             {innerHTML:furl(github_root+'descendants_grid.html?seed_project_id='+p_project_id+'&field:parent+colony='+p_obs_id,"Plant Babies") },                         
                          ];        
          faddelems('td',s_row5, s_five);
              
@@ -268,16 +268,16 @@ function fresults(xobj) {
 
              let d_row1     = faddelem('tr',d_tbody);
              let d_one = [];
-             if( descendants_results ) {
+             /*if( descendants_results ) {
                  d_one    = [ {innerHTML:rec.description + '<br><br>' +
                                 furl(github_root+'descendants_grid.html?seed_project_id='+p_project_id+'&field:parent+colony='+p_obs_id,"Propagated Descendants") },
                               {innerText:''},
                             ];        
-             } else {
+             } else { */
                  d_one    = [ {innerHTML:rec.description},
                               {innerText:''},
                             ];   
-             }
+             //}
              faddelems('td',d_row1, d_one);         
          }
 
