@@ -267,16 +267,23 @@ function fresults(xobj) {
              let d_tbody = faddelem('tbody',d_table);
 
              let d_row1     = faddelem('tr',d_tbody);
-             let d_one    = [   
-                             {innerHTML:rec.description},
-                             {innerText:''},
+             let d_one = [];
+             if( descendants_results ) {
+                 d_one    = [ {innerHTML:rec.description + '<br><br>' +
+                                furl(github_root+'descendants_grid.html?seed_project_id='+p_project_id+'&field:parent+colony='+p_obs_id,"Propagated Descendants") },
+                              {innerText:''},
                             ];        
+             } else {
+                 d_one    = [ {innerHTML:rec.description},
+                              {innerText:''},
+                            ];   
+             }
              faddelems('td',d_row1, d_one);         
          }
 
-         if( descendants_results ){
+         /*if( descendants_results ){
              buildGrid(descendants_results);
-         }
+         }*/
       };    
    }
 };
