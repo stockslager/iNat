@@ -28,6 +28,10 @@ let p_project_id = winurlparams.get('project_id') || '';
 let p_plant_name = winurlparams.get('plant_name') || '';
 let p_mode       = winurlparams.get('mode' || 'explorer');
 let p_seed_prj   = winurlparams.get('seed_project' || '');
+
+// don't show organsims that have only been id'd to genus and above, otherwise the number's
+// won't match other counts
+ winurlparams.append('hrank', 'species');
  
 // cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
 // session storage is only used for sorting of data in columns at this point.
