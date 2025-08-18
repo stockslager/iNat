@@ -186,14 +186,14 @@ function fresults(xobj) {
                            let obs_field = [];
 
                            if( p_strip_html === 'yes' ){
-                               value = stripHtml(value);
+                               value = stripHtml(value.toLowerCase());
                            }
 
                            if( rec.ofvs[j].field_id === 19197 ){
-                               value = furl(root_usda+rec.ofvs[j].value,rec.ofvs[j].value);
+                               value = furl(root_usda+rec.ofvs[j].value,rec.ofvs[j].value.toLowerCase());
                            }
                            if( rec.ofvs[j].field_id === 19198 ){
-                               value = furl(root_missouri+rec.ofvs[j].value,rec.ofvs[j].value);
+                               value = furl(root_missouri+rec.ofvs[j].value,rec.ofvs[j].value.toLowerCase());
                            }
 
                            if( rec.ofvs[j].field_id === 17234   ||    // qty avail
@@ -207,7 +207,7 @@ function fresults(xobj) {
                                  
                                    avail_field = [
                                          {innerText:nm},
-                                     {innerHTML:'<div style="display:flex; align-items:center; font-size:16px;">'+dot+'<span style="padding-left:10px; font-size:14px;">'+value+'</span></div>'},
+                                     {innerHTML:'<div style="display:flex; align-items:center; font-size:16px;">'+dot+'<span style="padding-left:10px; font-size:14px;">'+value.toLowerCase()+'</span></div>'},
                                    ];
                                } else {
                                    qty_field = [
@@ -218,7 +218,7 @@ function fresults(xobj) {
                            } else {
                                obs_field = [
                                  {innerText:nm},
-                                 {innerHTML:value},
+                                 {innerHTML:value.toLowerCase()},
                                ];
                            }                         
                        }
@@ -249,7 +249,7 @@ function fresults(xobj) {
          let s_row5     = faddelem('tr',s_tbody);
          let s_five    = [   
                              {innerText:'Propagated Descendants'},
-                             {innerHTML:furl(github_root+'descendants_grid.html?seed_project_id='+p_project_id+'&field:parent+colony='+p_obs_id,"Plant Babies") },                         
+                             {innerHTML:furl(github_root+'descendants_grid.html?seed_project_id='+p_project_id+'&field:parent+colony='+p_obs_id,"plant babies") },                         
                          ];        
          faddelems('td',s_row5, s_five);
              
