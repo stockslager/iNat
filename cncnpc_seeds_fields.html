@@ -32,6 +32,8 @@ let p_obs_id     = winurlparams.get('obs_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_params     = winurlparams.get('params') || 'params2';
 
+let has_babies = 'no';
+
 let descendants_results = '';
 descendants.delete('id');
 descendants.delete('project_id');
@@ -332,7 +334,12 @@ async function asyncGetData(){
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
       })
-      .then((data) => { descendants_results = data; })
+      .then((data) => { 
+        descendants_results = data; 
+        if( descendants_results.length > 0 ) {
+            has_babies = 'yes';
+        }
+      })
       .catch((err) => {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
