@@ -260,12 +260,14 @@ function fresults(xobj) {
                          ];        
          faddelems('td',s_row4, s_four);
 
-         let s_row5     = faddelem('tr',s_tbody);
-         let s_five    = [   
+         if( descendants.results ) {
+             let s_row5     = faddelem('tr',s_tbody);
+             let s_five    = [   
                              {innerText:'Propagated Descendants'},
                              {innerHTML:furl(github_root+'descendants_grid.html?seed_project_id='+p_project_id+'&field:parent+colony='+p_obs_id,"plant babies") },                         
-                         ];        
-         faddelems('td',s_row5, s_five);
+                             ];        
+             faddelems('td',s_row5, s_five);
+         }
              
          faddelem('p',document.body,{innerText:' '});
 
