@@ -117,9 +117,9 @@ function buildMenu(configs) {
       // mode is not passed in from the plant list
       // mode is passed in from the dashboard.
       if( p_mode.includes('explorer') ) {
-          menu_string += buildDDTitle( furl(github_root+'bugs_on_plants.html'+params,'Choose Plant') );
+          menu_string += buildDDTitle( furl(github_root+'bugs_on_plants.html'+params+'&mode='+p_mode,'Choose Plant') );
           if( p_mode.startsWith('pro') ) {
-              menu_string += buildHome( furl(github_root+'bugs_dash.html','Dashboard') );
+              menu_string += buildDDTitle( furl(github_root+'bugs_dash.html','Dashboard') );
           }
       } else {
           // build home icon...
