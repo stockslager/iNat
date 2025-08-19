@@ -116,7 +116,7 @@ function buildMenu(configs) {
       // the menu will behave differently if the page was entered from the dashboard vs. from the plant list...
       // mode is not passed in from the plant list
       // mode is passed in from the dashboard.
-      if( p_mode.includes('explorer') ) {
+      if( p_mode && p_mode.includes('explorer') ) {
           menu_string += buildDDTitle( furl(github_root+'bugs_on_plants.html'+params+'&mode='+p_mode,'Choose Plant') );
           if( p_mode.startsWith('pro') ) {
               menu_string += buildDDTitle( furl(github_root+'bugs_dash.html','Dashboard') );
