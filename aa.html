@@ -88,9 +88,10 @@ function buildTable() {
       faddelems('td',brow,values);
 
       brow = faddelem('tr',tbody);
+      let explorers_params = '&params='+p_params+'&project_id='+config.insect_project+'&garden='+config.title+'&field:'+config.field_name+'&plant_name=All Plants';
       values = [
-                  {innerHTML:furl(github_root+'bugs_on_plants.html?params='+p_params+'&mode=pro_explorer&garden='+config.title,'&#128100;')},
-                  {innerHTML:furl(github_root+'bugs_on_plants.html?params='+p_params+'&mode=pro_explorer&garden='+config.title,'Explorers')},
+                  {innerHTML:furl(github_root+'bugs_explorers.html?params='+p_params+'&mode=pro_explorer'+explorers_params,'&#128100;')},
+                  {innerHTML:furl(github_root+'bugs_explorers.html?params='+p_params+'&mode=pro_explorer'+explorers_params,'Explorers')},
                   {innerText:'Shows the observation and species counts for each explorer that shared wildlife activity occurring on a noteworthy native species anywhere in Southwest Ohio.'},
             ];
       faddelems('td',brow,values);
