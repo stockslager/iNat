@@ -26,7 +26,7 @@ let p_garden     = winurlparams.get('garden') || '';
 let p_params     = winurlparams.get('params') || '';
 let p_project_id = winurlparams.get('project_id') || '';
 let p_plant_name = winurlparams.get('plant_name') || '';
-let p_mode       = winurlparams.get('mode' || 'explorer');
+let p_mode       = winurlparams.get('mode' || '');
 let p_seed_prj   = winurlparams.get('seed_project' || '');
 
 // don't show organsims that have only been id'd to genus and above, otherwise the number's
@@ -113,8 +113,18 @@ function buildMenu(configs) {
 
       menu_string = '<div class="navbar">';
 
-      // build home icon...
-      menu_string += buildHome(furl(github_root+'bugs_on_plants.html'+params,'&#127807;'));
+      // the menu will behave differently if the page was entered from the dashboard vs. from the plant list...
+      // mode is not passed in from the plant list
+      // mode is passed in from the dashboard.
+      if( p_mode.includes('explorer') ) {
+          menu_string += buildDDTitle( furl(github_root+'bugs_on_plants.html'+params,'Choose Plant') );
+          if( p_mode.startsWith('pro') ) {
+              menu_string += buildHome( furl(github_root+'bugs_dash.html','Dashboard') );
+          }
+      } else {
+          // build home icon...
+          menu_string += buildHome(furl(github_root+'bugs_on_plants.html'+params,'&#127807;'));
+      }
  
       menu_string += '</div>';
 
