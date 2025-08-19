@@ -66,9 +66,14 @@ if( mode ) {
     p_mode = mode;
 }
 if( garden ) {
-    winurlparams.delete('garden');
-    winurlparams.append('garden', garden);
-    p_garden = garden;
+    if( p_mode.includes('explorer') ) {
+        winurlparams.delete('garden');
+        p_garden = '';
+    } else {
+        winurlparams.delete('garden');
+        winurlparams.append('garden', garden);
+        p_garden = garden;
+    }
 }
 
 let configuration = '';
