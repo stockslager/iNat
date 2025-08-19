@@ -327,8 +327,12 @@ function fresults(xobj) {
       let nn_on_all = '';
 
       if( configuration.hide_on_any === 'yes' ) {
-          if( !p_insect_project ) {
-              nn_on_all = '<span id="topright">Hilighted Natives in<br> <b>'+configuration.title+'</b></span>';
+          if( p_mode.includes('explorer') ) {
+              on_all = furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+'&place_id='+p_place_id+'&params='+p_params+'&menu=pip&title='+p_title+'&target_name=all%20plants'+field_param+seed_prj_param,'<span id="topright">'+p_title+' any plant</span>');
+          } else {
+              if( !p_insect_project ) {
+                  nn_on_all = '<span id="topright">Hilighted Natives in<br> <b>'+configuration.title+'</b></span>';
+              }
           }
       } else {
           on_all = furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+'&place_id='+p_place_id+'&params='+p_params+'&menu=pip&title='+p_title+'&target_name=all%20plants'+field_param+seed_prj_param,'<span id="topright">'+p_title+' any plant</span>');
