@@ -74,15 +74,30 @@ function setUpDefaults(configurations) {
 
 }
 
-function buildMenu(configs) {
+function buildMenu() {
       let menu_string = '';
       let garden_links = '';
       let params = '';
+      let links = '';
 
       if( p_params )         { params      += '?params=' + p_params; }   
       if( p_seed_prj )       { params      += '&insect_project=' + p_seed_prj.replace('pip','') }
 
       menu_string = '<div class="navbar">';
+
+      // all should always appear...
+      links = furl(github_root+'a.html?project_id='+p_project_id+'&ofv_datatype=taxon','All');
+   
+      links += furl(github_root+'a.html?project_id='+p_project_id+'&ofv_datatype=taxon&life=Adults&term_id=1&term_value_id=2&cache_check=yes','Adults');
+      links += furl(github_root+'a.html?project_id='+p_project_id+'&ofv_datatype=taxon&life=Teneral&term_id=1&term_value_id=3&cache_check=yes','Teneral');
+      links += furl(github_root+'a.html?project_id='+p_project_id+'&ofv_datatype=taxon&life=Pupa&term_id=1&term_value_id=4&cache_check=yes','Pupa');
+      links += furl(github_root+'a.html?project_id='+p_project_id+'&ofv_datatype=taxon&life=Nymph&term_id=1&term_value_id=5&cache_check=yes','Nymph');
+      links += furl(github_root+'a.html?project_id='+p_project_id+'&ofv_datatype=taxon&life=Larva&term_id=1&term_value_id=6&cache_check=yes','Larva');
+      links += furl(github_root+'a.html?project_id='+p_project_id+'&ofv_datatype=taxon&life=Egg&term_id=1&term_value_id=7&cache_check=yes','Egg');
+      links += furl(github_root+'a.html?project_id='+p_project_id+'&ofv_datatype=taxon&life=Juvenile&term_id=1&term_value_id=8&cache_check=yes','Juvenile');
+      links += furl(github_root+'a.html?project_id='+p_project_id+'&ofv_datatype=taxon&life=Subimago&term_id=1&term_value_id=16&cache_check=yes','Subimago');
+
+      menu_string += buildDD('Life Stage', links);
 
       // build home icon...
       menu_string += buildHome(furl(github_root+'bugs_on_plants.html'+params,'&#127807;'));
