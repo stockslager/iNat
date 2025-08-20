@@ -105,19 +105,17 @@ function buildMenu() {
 }
  
 function fresults(xobj) {
-console.log('1');
    let results = xobj.results;
-console.log('two');
+
    if (results) {
       buildMenu();
-console.log('three');
+
       let total_results = xobj.total_results;
       let per_page = xobj.per_page;
       let page_curr = xobj.page;
       let page_max = Math.ceil(total_results/per_page);
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
-    console.log('four');
 
       let on_all = ''; //'<span id="topright">Observation Counts <br>On <b>'+p_plant_name+'</b></span>';
     
@@ -125,7 +123,7 @@ console.log('three');
             +'per page: '+fcomnum(per_page)+ on_all + '<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });
-console.log('five');
+
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
@@ -140,13 +138,13 @@ console.log('five');
       faddelems('th',hrow,labels);
       
       let tbody = faddelem('tbody',table);
+      console.log('results: '+results);
       for (let i=0; i<results.length; i++) {
          let target_url = '';     
          let brow = faddelem('tr',tbody);
          let rec = results[i];
          let lists = '';
          let user_icon = rec.icon || '';
-       console.log('six');
          
          if( user_icon === '' ){
             user_icon += '<div class="npcicon"></div>';
