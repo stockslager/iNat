@@ -138,13 +138,13 @@ function fresults(xobj) {
       faddelems('th',hrow,labels);
       
       let tbody = faddelem('tbody',table);
-      console.log('results: '+results);
+    
       for (let i=0; i<results.length; i++) {
          let target_url = '';     
          let brow = faddelem('tr',tbody);
          let rec = results[i];
          let lists = '';
-         let user_icon = rec.icon || '';
+         let user_icon = rec.user.icon || '';
          
          if( user_icon === '' ){
             user_icon += '<div class="npcicon"></div>';
@@ -161,7 +161,7 @@ function fresults(xobj) {
             {innerHTML:user_icon},
             {innerHTML:furl(root_people+rec.user.login,rec.user.login)/*+map*/},
             {innerHTML:furl(github_root+'bugs_on_plants2.html?project_id='+p_project_id+/*configuration.insect_project+*/'&user_id='+rec.user.login+params+p_field_opt+'&title=on&target_name='+'p name'/*p_plant_name*/,rec.species_count )},
-            {innerHTML:furl(github_root+'bugs_on_plants_grid.html?project_id='+p_project_id+params+'&user_id='+rec.user.login+p_field_opt,rec.obs_count)},
+            {innerHTML:furl(github_root+'bugs_on_plants_grid.html?project_id='+p_project_id+params+'&user_id='+rec.user.login+p_field_opt,rec.observation_count)},
          ];
          faddelems('td',brow,values);
       };
