@@ -187,6 +187,11 @@ function setUpDefaults(configurations) {
            p_taxon_id = configuration.default_taxon;
        }
    }
+
+   if( configuration.taxon_ids ) {
+       winurlparams.delete('taxon_id');
+       winurlparams.append('taxon_id', configuration.taxon_ids);
+   }
  
    if( configuration.plant_project ) {
        if( !p_project_id ) {
