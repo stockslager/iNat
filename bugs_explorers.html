@@ -101,6 +101,16 @@ function setUpDefaults(configurations) {
    if( configuration.apply_project_rules_for ) {
        winurlparams.append( 'apply_project_rules_for', configuration.apply_project_rules_for );
    }
+
+   // if a project id was not passed in and there is an insect_project specified in the configuration,
+   // default the project id to the insect_project.
+   if( !p_project_id ) {
+       if( configuration.insect_project ) {
+           winurlparams.delete('project_id');
+           winurlparams.append('project_id', configuration.insect_project);
+           p_project_id = configuration.insect_project;
+       }
+   }
 }
 
 function buildMenu(configs) {
