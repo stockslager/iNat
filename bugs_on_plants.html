@@ -49,7 +49,11 @@ if( prj ) {
     winurlparams.delete('insect_project');
     p_insect_project = '';
 }
-
+// the user_id isn't used on the plant list page, it's only used to display wildlife activity.
+// so if one exists just save it to pass along to the wildlife activity page.
+if( user ) {
+    p_user = user;
+}
 /*if( place ) {
     winurlparams.delete('place_id');
     winurlparams.append('place_id', place);
@@ -74,6 +78,12 @@ if( garden ) {
         winurlparams.append('garden', garden);
         p_garden = garden;
     }
+}
+
+// if a user_id was passed in we only want to pass it along to the insect activity page.
+// it isn't used to display the plant list.
+if( p_user ) {
+    winurlparams.delete('user_id');
 }
 
 let configuration = '';
