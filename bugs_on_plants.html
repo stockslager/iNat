@@ -176,6 +176,7 @@ function setUpDefaults(configurations) {
  
    if( configuration.default_place ) {
        //if( !p_place_id ) {
+           winurlparams.delete('place_id');
            winurlparams.append('place_id', configuration.default_place);
            p_place_id = configuration.default_place;
        //}
@@ -184,6 +185,9 @@ function setUpDefaults(configurations) {
    if( configuration.plant_ids ) {
        winurlparams.delete('id');
        winurlparams.append('id', configuration.plant_ids);
+       // if plant id's were passed in, we need to remove project_id since some projects don't allow casual obs.
+       // since we're using the actual observation id's there's no need for project_id anyway.
+       winurlparams.delete('project_id');
    }
  
    if( configuration.default_taxon ) {
