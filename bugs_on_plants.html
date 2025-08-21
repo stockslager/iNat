@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" /> 
-<meta name="description" content="Bugs on Plants" />r
+<meta name="description" content="Bugs on Plants" />
 <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="shortcut icon" href="favicon.ico" />
@@ -449,6 +449,7 @@ async function asyncGetData() {
       throw new Error('Error fetching JSON');
    });
 
+   console.log('api url ' + apiurl);
    await fetch(apiurl)
       .then((response) => {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
