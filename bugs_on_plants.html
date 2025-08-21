@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" /> 
-<meta name="description" content="Bugs on Plants" />
+<meta name="description" content="Bugs on Plants" />r
 <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="shortcut icon" href="favicon.ico" />
@@ -49,7 +49,12 @@ if( prj ) {
     winurlparams.delete('insect_project');
     p_insect_project = '';
 }
- 
+if( user ) {
+    winurlparams.delete('user_id');
+    winurlparams.append('user_id', user);
+    p_user = user;
+} 
+
 /*if( place ) {
     winurlparams.delete('place_id');
     winurlparams.append('place_id', place);
