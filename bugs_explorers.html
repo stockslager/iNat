@@ -28,17 +28,8 @@ let p_project_id = winurlparams.get('project_id') || '';
 let p_plant_name = winurlparams.get('plant_name') || '';
 let p_mode       = winurlparams.get('mode' || 'explorers');
 let p_seed_prj   = winurlparams.get('seed_project' || '');
-
-let seed_prj_param = '';
-if( !p_seed_prj ) {
-    seed_prj_param += '&seed_project=pip'+p_project_id;
-    if( p_place_id ) { seed_prj_param += '$'+p_place_id; } else { seed_prj_param += '$null'; }
-    if( p_params )   { seed_prj_param += '$'+p_params;   } else { seed_prj_param += '$null'; }
-    if( p_user )     { seed_prj_param += '$'+p_user;     } else { seed_prj_param += '$null'; }
-    if( p_garden )   { seed_prj_param += '$'+p_garden;   } else { seed_prj_param += '$null'; }
-    if( p_mode )     { seed_prj_param += '$'+p_mode;     } else { seed_prj_param += '$null'; }
-}
-       
+let p_place_id   = '';
+ 
 // don't show organsims that have only been id'd to genus and above, otherwise the number's
 // won't match other counts
  winurlparams.append('hrank', 'species');
@@ -48,6 +39,7 @@ if( !p_seed_prj ) {
 let p_cache_check = winurlparams.get('cache_check') || 'no';  
 
 let configs = '';
+let seed_prj_param = '';
 
 // if the user has selected a method, built the opt to pass to the
 // lifelist page.
@@ -93,14 +85,14 @@ function setUpDefaults(configurations) {
  
    // if a garden wasn't passed in, default to the first configuration in the .json
    for( let i=0; i<configurations.length; i++ ) {
-        if( configurations[i].title.toLowerCase() === p_garden.toLowerCase() ) {
+        if( configurations[i].insect_project === p_project_id ) {
             configuration = configurations[i];
         }
    }
         
    if( !configuration ) {
-       faddelem('p',document.body,{innerText:'A &garden parameter not specified as a url parameter.'});
-       faddelem('p',document.body,{innerText:'Please add &garden=xxxxx to the end of the url where xxxxx is matches a title for one of the configurations in '+p_params+'.json'});
+       faddelem('p',document.body,{innerText:'An insect_project parameter was not specified in '+p_param+'.json.'});
+       faddelem('p',document.body,{innerText:'Please modify '+p_params+'.json to include an insect_project.'});
        throw new Error('No configurations defined.');
    }
 
@@ -121,6 +113,22 @@ function setUpDefaults(configurations) {
            p_project_id = configuration.insect_project;
        }
    }
+
+   // if no place id was passed in and there's a default place in the configuration,
+   // set the p_place_id to the default.
+   if( !p_place_id && configuration.default_place ) {
+       p_place_id = configuration.default_place;
+   }
+
+   if( !p_seed_prj ) {
+       seed_prj_param += '&seed_project=pip'+p_project_id;
+       if( p_place_id ) { seed_prj_param += '$'+p_place_id; } else { seed_prj_param += '$null'; }
+       if( p_params )   { seed_prj_param += '$'+p_params;   } else { seed_prj_param += '$null'; }
+       if( p_user )     { seed_prj_param += '$'+p_user;     } else { seed_prj_param += '$null'; }
+       if( p_garden )   { seed_prj_param += '$'+p_garden;   } else { seed_prj_param += '$null'; }
+       if( p_mode )     { seed_prj_param += '$'+p_mode;     } else { seed_prj_param += '$null'; }
+   }
+ 
 }
 
 function buildMenu(configs) {
