@@ -142,7 +142,15 @@ function fresults(result, places_obj, taxa_obj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let on_all = '<span id="topright">Observation Counts <br>On <b>'+p_plant_name+'</b></span>';
+      let on_all = '';
+    
+      if( !p_plant_name ) {
+          on_all = '<span id="topright">Observation Counts <br>On <b>'             
+                   + furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+params+p_field_opt+'&title=on',' any plant') 
+                   + '</b></span>';
+      } else {
+          on_all = '<span id="topright">Observation Counts On<br> <b>'+p_plant_name+'</b></span>';
+      }
     
       faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results)+'<br />' 
             +'per page: '+fcomnum(per_page)+ on_all + '<br />'
