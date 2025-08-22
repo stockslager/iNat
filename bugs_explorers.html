@@ -29,6 +29,7 @@ let p_plant_name = winurlparams.get('plant_name') || '';
 let p_mode       = winurlparams.get('mode' || 'explorers');
 let p_seed_prj   = winurlparams.get('seed_project' || '');
 let p_place_id   = '';
+let p_user = '';
  
 // don't show organsims that have only been id'd to genus and above, otherwise the number's
 // won't match other counts
@@ -118,6 +119,12 @@ function setUpDefaults(configurations) {
    // set the p_place_id to the default.
    if( !p_place_id && configuration.default_place ) {
        p_place_id = configuration.default_place;
+   }
+
+   // if no user id was passed in and there's a default user in the configuration,
+   // set the p_user to the default.
+   if( !p_user && configuration.user_id ) {
+       p_user = configuration.user_id;
    }
 
    if( !p_seed_prj ) {
