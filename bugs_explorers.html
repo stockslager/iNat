@@ -29,6 +29,16 @@ let p_plant_name = winurlparams.get('plant_name') || '';
 let p_mode       = winurlparams.get('mode' || 'explorers');
 let p_seed_prj   = winurlparams.get('seed_project' || '');
 
+let seed_prj_param = '';
+if( !p_seed_prj ) {
+    seed_prj_param += '&seed_project=pip'+p_insect_project;
+    if( p_place_id ) { seed_prj_param += '$'+p_place_id; } else { seed_prj_param += '$null'; }
+    if( p_params )   { seed_prj_param += '$'+p_params;   } else { seed_prj_param += '$null'; }
+    if( p_user )     { seed_prj_param += '$'+p_user;     } else { seed_prj_param += '$null'; }
+    if( p_garden )   { seed_prj_param += '$'+p_garden;   } else { seed_prj_param += '$null'; }
+    if( p_mode )     { seed_prj_param += '$'+p_mode;     } else { seed_prj_param += '$null'; }
+}
+       
 // don't show organsims that have only been id'd to genus and above, otherwise the number's
 // won't match other counts
  winurlparams.append('hrank', 'species');
@@ -145,8 +155,8 @@ function fresults(result, places_obj, taxa_obj) {
       let on_all = '';
     
       if( !p_plant_name ) {
-          on_all = '<span id="topright">Observation Counts <br>On <b>'             
-                   + furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+'&params='+p_params+p_field_opt+'&title=on',' any plant') 
+          on_all = '<span id="topright">Observation Counts On<br> <b>'             
+                   + furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+'&params='+p_params+p_field_opt+'&title=on'+seed_prj_param,' any plant') 
                    + '</b></span>';
       } else {
           on_all = '<span id="topright">Observation Counts On<br> <b>'+p_plant_name+'</b></span>';
