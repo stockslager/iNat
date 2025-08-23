@@ -182,7 +182,8 @@ function fresults(result, places_obj, taxa_obj) {
                    //+ '</b><br>by any user</span>';
       } else {
           on_all2 = '<span id="topright">showing counts for<br><b>'+p_plant_name.toLowerCase()+'</b>' +
-                   '<br>show all plants?</span>';
+                   '<br>show ' +
+                   furl(github_root+'bugs_explorer.html?project_id='+configuration.insect_project+'&params='+p_params+p_field_opt+seed_prj_param,'all plants?') + '</span>';
       }
     
       faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + on_all2 + '<br />' 
