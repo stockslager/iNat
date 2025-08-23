@@ -138,7 +138,6 @@ function setUpDefaults(configurations) {
        if( p_mode )     { seed_prj_param += '$'+p_mode;     } else { seed_prj_param += '$null'; }
        p_seed_prj = seed_prj_param;
    }
- console.log('p '+p_seed_prj);
  
 }
 
@@ -177,7 +176,7 @@ function fresults(result, places_obj, taxa_obj) {
 
       let on_all = '';
       let on_all2 = '';
-    console.log('p2 ' + p_seed_prj);
+    
       if( !p_plant_name ) {
           on_all = '<span id="topright">showing counts for<br> <b>' +
                    'all plants</b></span>';
@@ -223,7 +222,7 @@ function fresults(result, places_obj, taxa_obj) {
 
          let params = '';
          if( p_params )         { params      += '&params=' + p_params; }   
-         if( p_seed_prj )       { params      += '&seed_project=' + p_seed_prj }
+         if( p_seed_prj )       { params      += p_seed_prj }
 
          let values = [
             {innerText:i+1},
