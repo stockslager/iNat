@@ -149,8 +149,11 @@ function buildMenu(configs) {
 
       menu_string = '<div class="navbar">';
 
-      // build home icon...
-      menu_string += buildHome(furl(github_root+'bugs_on_plants.html'+params,'&#127807;'));
+      menu_string += buildDDLink(furl(github_root+'bugs_on_plants.html'+params+'&mode='+p_mode,'Choose Plant'));
+
+      if( p_mode.startsWith('pro') ) {
+          menu_string += buildHome(furl(github_root+'bugs_dash.html?params='+p_params,'Dashboard'));
+      }
  
       menu_string += '</div>';
 
