@@ -31,29 +31,31 @@ let p_seed_prj   = winurlparams.get('seed_project' || '');
 let p_place_id   = '';
 let p_user = '';
 
-// the place selected was added to seed_project parameter and needs to be
-// parsed if control is returning from the insects page.
-let prj    = p_seed_prj.split('$')[0];
-let place  = p_seed_prj.split('$')[1];
-let params = p_seed_prj.split('$')[2];
-let user   = p_seed_prj.split('$')[3];
-let garden = p_seed_prj.split('$')[4];
-let mode   = p_seed_prj.split('$')[5];
+if( p_seed_prj ) {
+    // the place selected was added to seed_project parameter and needs to be
+    // parsed if control is returning from the insects page.
+    let prj    = p_seed_prj.split('$')[0];
+    let place  = p_seed_prj.split('$')[1];
+    let params = p_seed_prj.split('$')[2];
+    let user   = p_seed_prj.split('$')[3];
+    let garden = p_seed_prj.split('$')[4];
+    let mode   = p_seed_prj.split('$')[5];
 
-if( prj ) {
-    winurlparams.delete('project_id');
-    winurlparams.append('project_id', prj);
-    p_project_id = prj;
-} 
-if( params ) {
-    winurlparams.delete('params');
-    winurlparams.append('params', params);
-    p_params = params;
-}
-if( mode ) {
-    winurlparams.delete('mode');
-    winurlparams.append('mode', mode);
-    p_mode = mode;
+    if( prj ) {
+        winurlparams.delete('project_id');
+        winurlparams.append('project_id', prj);
+        p_project_id = prj;
+    } 
+    if( params ) {
+        winurlparams.delete('params');
+        winurlparams.append('params', params);
+        p_params = params;
+    }
+    if( mode ) {
+        winurlparams.delete('mode');
+        winurlparams.append('mode', mode);
+        p_mode = mode;
+    }
 }
  
 // cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
