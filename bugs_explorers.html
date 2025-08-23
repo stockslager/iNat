@@ -148,10 +148,6 @@ function buildMenu(configs) {
       if( p_params )         { params      += '?params=' + p_params; }   
       if( p_seed_prj )       { params      += '&seed_project=' + p_seed_prj; }
 
-      if( p_plant_name ) {
-          choose_plant = p_plant_name;
-      }
-
       menu_string = '<div class="navbar">';
 
       menu_string += furl(github_root+'bugs_on_plants.html'+params+'&mode='+p_mode, choose_plant);
@@ -179,11 +175,13 @@ function fresults(result, places_obj, taxa_obj) {
       let on_all = '';
     
       if( !p_plant_name ) {
-          on_all = '<span id="topright">observation counts on<br> <b>'             
-                   + furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+'&params='+p_params+p_field_opt+'&title=on'+seed_prj_param,' any plant') 
-                   + '</b><br>by any user</span>';
+          on_all = '<span id="topright">showing counts for<br> <b>' +
+                   'all plants</b></span>;
+                   //+ furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+'&params='+p_params+p_field_opt+'&title=on'+seed_prj_param,' any plant') 
+                   //+ '</b><br>by any user</span>';
       } else {
-          on_all = '<span id="topright">observation counts<br>on <b>'+p_plant_name.toLowerCase()+'</b><br>by any user'+'</span>';
+          on_all = '<span id="topright">showing counts for<br><b>'+p_plant_name.toLowerCase()+'</b>' +
+                   '<br>show all plants?</span>';
       }
     
       faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) /*+ on_all*/ + '<br />' 
@@ -274,16 +272,16 @@ function storeData(xobj) {
 
       // Serialize the object to JSON string so it can be stored in session
       const result_string = JSON.stringify(result);
-      sessionStorage.setItem('anglers', result_string);
+      sessionStorage.setItem('gardeners', result_string);
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); };
 }
 
-function parseStoredData(anglers) {
+function parseStoredData(gardeners) {
    // Check if value exists before parsing
-   if( anglers ) {
+   if( gardeners ) {
        // Parse the string back to an object
-       const retrievedRec = JSON.parse(anglers);
+       const retrievedRec = JSON.parse(gardeners);
        retrievedRec.recs = JSON.parse(retrievedRec.recs);
        return retrievedRec;
    } else {
@@ -317,7 +315,7 @@ async function asyncGetData() {
          return response.json();
       })
        .then((data) => { storeData(data); 
-                         fresults( parseStoredData(sessionStorage.getItem('anglers')) ); 
+                         fresults( parseStoredData(sessionStorage.getItem('gardeners')) ); 
                        })
        .catch((err) => {
           console.error(err.message);
@@ -332,10 +330,10 @@ const request = async () => {
 }
 
 // cache check will be set to yes for sorting of columns and
-// and when "anglers" is cicked on subsequent pages
-if( p_cache_check === 'yes' && sessionStorage.getItem('anglers') ) {
+// and when "gardeners" is cicked on subsequent pages
+if( p_cache_check === 'yes' && sessionStorage.getItem('gardeners') ) {
     console.log('found session');
-    fresults( parseStoredData(sessionStorage.getItem('anglers')), );
+    fresults( parseStoredData(sessionStorage.getItem('gardeners')), );
 } else {
     request();  
 }
