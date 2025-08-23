@@ -351,7 +351,7 @@ function fresults(xobj) {
 
       if( configuration.hide_on_any === 'yes' ) {
           if( p_mode.includes('explorer') ) {
-              on_all = furl(github_root+'bugs_explorers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+field_param+'&plant_name=Any Plant'+seed_prj_param,'<span id="topright">'+p_title+' any plant</span>');
+              on_all = furl(github_root+'bugs_explorers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+field_param+'&plant_name=Any Plant'+'&mode='+p_mode+seed_prj_param,'<span id="topright">'+p_title+' any plant</span>');
           } else {
               if( !p_insect_project ) {
                   nn_on_all = '<span id="topright">'+prefix+'<br> <b>'+configuration.title+'</b></span>';
@@ -416,7 +416,7 @@ function fresults(xobj) {
              values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'bugs_explorers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+field_param+'&plant_name='+header_name+seed_prj_param, displayName)},
+                  {innerHTML:furl(github_root+'bugs_explorers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+field_param+'&plant_name='+header_name+'&mode='+p_mode+seed_prj_param, displayName)},
                   ];
          }
         
