@@ -31,8 +31,6 @@ let p_seed_prj   = winurlparams.get('seed_project' || '');
 let p_place_id   = '';
 let p_user = '';
 
- console.log('pa'+p_seed_prj);
-
 if( p_seed_prj ) {
     // the place selected was added to seed_project parameter and needs to be
     // parsed if control is returning from the insects page.
@@ -153,7 +151,7 @@ function setUpDefaults(configurations) {
    if( !p_user && configuration.user_id ) {
        p_user = configuration.user_id;
    }
-console.log('p1'+p_seed_prj);
+
    if( !p_seed_prj ) {
        seed_prj_param += ('&seed_project=exp'+p_project_id);
        if( p_place_id ) { seed_prj_param += '$'+p_place_id; } else { seed_prj_param += '$null'; }
@@ -162,7 +160,6 @@ console.log('p1'+p_seed_prj);
        if( p_garden )   { seed_prj_param += '$'+p_garden;   } else { seed_prj_param += '$null'; }
        if( p_mode )     { seed_prj_param += '$'+p_mode;     } else { seed_prj_param += '$null'; }
    }
- console.log('p2'+p_seed_prj);
  
 }
 
@@ -208,10 +205,9 @@ function fresults(result, places_obj, taxa_obj) {
                    //+ furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+'&params='+p_params+p_field_opt+'&title=on'+seed_prj_param,' any plant') 
                    //+ '</b><br>by any user</span>';
       } else {
-          console.log('p '+p_seed_prj);
           on_all2 = '<span id="topright">showing counts for<br><b>'+p_plant_name.toLowerCase()+'</b>' +
                    '<br>show ' +
-                   furl(github_root+'bugs_explorers.html?project_id='+configuration.insect_project+'&params='+p_params+p_field+p_seed_prj+'&mode='+p_mode,'all plants?') + '</span>';
+                   furl(github_root+'bugs_explorers.html?project_id='+configuration.insect_project+'&params='+p_params+p_field+seed_prj_param+'&mode='+p_mode,'all plants?') + '</span>';
       }
     
       faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + on_all2 + '<br />' 
