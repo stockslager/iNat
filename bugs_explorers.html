@@ -143,13 +143,18 @@ function buildMenu(configs) {
       let menu_string = '';
       let garden_links = '';
       let params = '';
+      let choose_plant = 'Choose Plant';
 
       if( p_params )         { params      += '?params=' + p_params; }   
       if( p_seed_prj )       { params      += '&seed_project=' + p_seed_prj; }
 
+      if( p_plant_name ) {
+          choose_plant = p_plant_name;
+      }
+
       menu_string = '<div class="navbar">';
 
-      menu_string += furl(github_root+'bugs_on_plants.html'+params+'&mode='+p_mode,'Choose Plant');
+      menu_string += furl(github_root+'bugs_on_plants.html'+params+'&mode='+p_mode, choose_plant);
 
       if( p_mode.startsWith('pro') ) {
           menu_string += buildHome(furl(github_root+'bugs_dash.html?params='+p_params,'Dashboard'));
@@ -181,7 +186,7 @@ function fresults(result, places_obj, taxa_obj) {
           on_all = '<span id="topright">observation counts<br>on <b>'+p_plant_name.toLowerCase()+'</b><br>by any user'+'</span>';
       }
     
-      faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results)+ on_all + '<br />' 
+      faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) /*+ on_all*/ + '<br />' 
             +'per page: '+fcomnum(per_page)+ '<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });
