@@ -149,6 +149,8 @@ function setUpDefaults(configurations) {
    // if no user id was passed in and there's a default user in the configuration,
    // set the p_user to the default.
    if( !p_user && configuration.user_id ) {
+       winurlparams.delete('user_id');
+       winurlparams.append('user_id', configuration.user_id);
        p_user = configuration.user_id;
    }
 
