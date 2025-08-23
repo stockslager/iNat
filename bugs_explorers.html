@@ -173,6 +173,7 @@ function fresults(result, places_obj, taxa_obj) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
       let on_all = '';
+      let on_all2 = '';
     
       if( !p_plant_name ) {
           on_all = '<span id="topright">showing counts for<br> <b>' +
@@ -180,12 +181,12 @@ function fresults(result, places_obj, taxa_obj) {
                    //+ furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+'&params='+p_params+p_field_opt+'&title=on'+seed_prj_param,' any plant') 
                    //+ '</b><br>by any user</span>';
       } else {
-          on_all = '<span id="topright">showing counts for<br><b>'+p_plant_name.toLowerCase()+'</b>' +
+          on_all2 = '<span id="topright">showing counts for<br><b>'+p_plant_name.toLowerCase()+'</b>' +
                    '<br>show all plants?</span>';
       }
     
-      faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) /*+ on_all*/ + '<br />' 
-            +'per page: '+fcomnum(per_page)+ '<br />'
+      faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + on_all2 + '<br />' 
+            +'per page: '+fcomnum(per_page)+ on_all + '<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });
 
