@@ -44,12 +44,14 @@ let seed_prj_param = '';
 
 // if the user has selected a method, built the opt to pass to the
 // lifelist page.
+let p_field = '';
 let p_field_opt = '';
 let p_field_value = '';
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
       p_field_value = value;
+      p_field = ('&'+key+'=');
       p_field_opt = ('&'+key+'='+value);
   }
 }   
@@ -183,7 +185,7 @@ function fresults(result, places_obj, taxa_obj) {
       } else {
           on_all2 = '<span id="topright">showing counts for<br><b>'+p_plant_name.toLowerCase()+'</b>' +
                    '<br>show ' +
-                   furl(github_root+'bugs_explorer.html?project_id='+configuration.insect_project+'&params='+p_params+p_field_opt+seed_prj_param,'all plants?') + '</span>';
+                   furl(github_root+'bugs_explorer.html?project_id='+configuration.insect_project+'&params='+p_params+p_field+p_seed_prj,'all plants?') + '</span>';
       }
     
       faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + on_all2 + '<br />' 
