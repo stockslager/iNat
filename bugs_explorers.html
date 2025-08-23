@@ -130,7 +130,7 @@ function setUpDefaults(configurations) {
    }
 
    if( !p_seed_prj ) {
-       seed_prj_param += '&seed_project=exp'+p_project_id;
+       seed_prj_param += ('&seed_project=exp'+p_project_id);
        if( p_place_id ) { seed_prj_param += '$'+p_place_id; } else { seed_prj_param += '$null'; }
        if( p_params )   { seed_prj_param += '$'+p_params;   } else { seed_prj_param += '$null'; }
        if( p_user )     { seed_prj_param += '$'+p_user;     } else { seed_prj_param += '$null'; }
@@ -185,7 +185,7 @@ function fresults(result, places_obj, taxa_obj) {
       } else {
           on_all2 = '<span id="topright">showing counts for<br><b>'+p_plant_name.toLowerCase()+'</b>' +
                    '<br>show ' +
-                   furl(github_root+'bugs_explorers.html?project_id='+configuration.insect_project+'&params='+p_params+p_field+p_seed_prj,'all plants?') + '</span>';
+                   furl(github_root+'bugs_explorers.html?project_id='+configuration.insect_project+'&params='+p_params+p_field+p_seed_prj+'&mode='+p_mode,'all plants?') + '</span>';
       }
     
       faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + on_all2 + '<br />' 
