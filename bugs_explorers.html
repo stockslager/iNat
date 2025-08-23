@@ -128,7 +128,7 @@ function setUpDefaults(configurations) {
    }
 
    if( !p_seed_prj ) {
-       seed_prj_param += '&seed_project=pip'+p_project_id;
+       seed_prj_param += '&seed_project=exp'+p_project_id;
        if( p_place_id ) { seed_prj_param += '$'+p_place_id; } else { seed_prj_param += '$null'; }
        if( p_params )   { seed_prj_param += '$'+p_params;   } else { seed_prj_param += '$null'; }
        if( p_user )     { seed_prj_param += '$'+p_user;     } else { seed_prj_param += '$null'; }
@@ -174,15 +174,15 @@ function fresults(result, places_obj, taxa_obj) {
       let on_all = '';
     
       if( !p_plant_name ) {
-          on_all = '<span id="topright">Observation Counts On<br> <b>'             
+          on_all = '<span id="topright">observation counts on<br> <b>'             
                    + furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+'&params='+p_params+p_field_opt+'&title=on'+seed_prj_param,' any plant') 
-                   + '</b></span>';
+                   + '</b><br>by any user</span>';
       } else {
-          on_all = '<span id="topright">Observation Counts On<br> <b>'+p_plant_name+'</b></span>';
+          on_all = '<span id="topright">observation counts<br>on <b>'+p_plant_name.toLowerCase()+'</b><br>by any user'+'</span>';
       }
     
-      faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results)+'<br />' 
-            +'per page: '+fcomnum(per_page)+ on_all + '<br />'
+      faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results)+ on_all + '<br />' 
+            +'per page: '+fcomnum(per_page)+ '<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });
 
