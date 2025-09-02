@@ -10,8 +10,8 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-<meta name="apple-mobile-web-app-title" content="Explorers" />
-<link rel="manifest" href="fish.webmanifest" />
+<meta name="apple-mobile-web-app-title" content="Garden Visitors" />
+<link rel="manifest" href="bugs.webmanifest" />
 <link rel="stylesheet" type="text/css" href="seed_library.css" />
 <script type="text/javascript" src='common_func.js'> </script>
 <title>Choose Taxon</title>
@@ -138,6 +138,7 @@ function fresults(xobj) {
       let labels = [
             {innerText:('#')},
             {innerText:'Taxon Name'},   
+            {innerText:'Rank'},   
       ];
 
       faddelems('th',hrow,labels);
@@ -157,7 +158,8 @@ function fresults(xobj) {
 
          let values = [
             {innerText:i+1},
-            {innerHTML:furl(github_root+'bugs_on_plants.html?taxon_id='+rec.id+'&taxon_name='+rec.name,rec.name)},
+            {innerHTML:furl(github_root+'bugs_on_plants.html?taxon_id='+rec.id+'&taxon_name='+(rec.preferred_common_name||rec.name),(rec.preferred_common_name||rec.name))},
+            {innerText:rec.rank},
          ];         
 
          faddelems('td',brow,values);
