@@ -110,7 +110,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_options  = winurlparams.get('options') || [];
-let p_place_id = winurlparams.get('place_id') || '';
+let p_taxon_id = winurlparams.get('taxon_id') || '';
 let p_q        = winurlparams.get('q') || '';
 
 winurlparams.delete('options');
@@ -132,18 +132,12 @@ function fresults(xobj) {
       let toggle_args = '';
       let args = '';
 
-      /*faddelem('p',document.body,{innerHTML:'total places: '+fcomnum(total_results)+' <br />'
-            +'per page: '+fcomnum(per_page)+'<br />'
-            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)
-            +'<br />'
-      });*/
-
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
       let labels = [
             {innerText:('#')},
-            {innerText:'Place Name'},   
+            {innerText:'Taxon Name'},   
       ];
 
       faddelems('th',hrow,labels);
@@ -163,7 +157,7 @@ function fresults(xobj) {
 
          let values = [
             {innerText:i+1},
-            {innerHTML:furl(github_root+'life_list_dashboard.html?place_id='+rec.id+'&place_name='+rec.display_name,rec.display_name)},
+            {innerHTML:furl(github_root+'bugs_on_plants.html?taxon_id='+rec.id+'&taxon_name='+rec.name,rec.name)},
          ];         
 
          faddelems('td',brow,values);
@@ -181,9 +175,9 @@ function fresults(xobj) {
 
 function buildForm() {
   faddelem('p',document.body,{innerHTML:('<div>' +
-                                           '<form action='+github_root+'life_list_places.html>' +
-                                              '<label for="fname">Place Name</label>' +
-                                              '<input type="text" id="pname" name="q" placeholder="Enter a full or partial place name..">' +   
+                                           '<form action='+github_root+'choose_taxon.html>' +
+                                              '<label for="fname">Taxon Name</label>' +
+                                              '<input type="text" id="pname" name="q" placeholder="Enter a full or partial taxon name..">' +   
                                               '<input type="submit" value="Search">' +
                                            '</form>' +
                                          '</div>')});
@@ -194,12 +188,12 @@ let apiurl     = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefname = 'Choose Taxon';
 
 if( !p_q ) {
-   faddelem('h2',document.body,{innerText:'Enter a full or partial place name.'});
+   faddelem('h2',document.body,{innerText:'Enter a full or partial taxon name.'});
    buildForm();
 } else {
    faddelem('h2',document.body,{innerText:apirefname});
    buildForm();
-   faddelem('p',document.body,{innerText:'List of places found.  Select one to view life list counts from that place.'});
+   faddelem('p',document.body,{innerText:'List of taxons found.  Select one to view plants of that taxon.'});
    fetch(apiurl)
       .then((response) => {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
