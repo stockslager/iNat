@@ -266,7 +266,9 @@ function buildMenu(configs) {
       menu_string = '<div class="navbar">';
       if( garden_links ) { 
           if( configs.length === 1 ) {
-              menu_string += buildDDTitle(configs[0].title); 
+              let menu_title = configs[0].title;
+              if( p_nm1 ) { menu_title = p_nm1 }
+              menu_string += buildDDTitle(menu_title); 
           } else {
               menu_string += buildDD('Garden', garden_links); 
           }
