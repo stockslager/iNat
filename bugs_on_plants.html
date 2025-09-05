@@ -31,6 +31,8 @@ let p_params      = winurlparams.get('params') || '';
 let p_user        = winurlparams.get('user_id') || '';
 let p_garden      = winurlparams.get('garden') || '';
 let p_mode        = winurlparams.get('mode') || 'visitor';
+let p_nm1         = winurlparams.get('nm1') || '';
+let p_nm2         = winurlparams.get('nm2') || '';
 
 // the place selected was added to seed_project parameter and needs to be
 // parsed if control is returning from the insects page.
@@ -343,10 +345,14 @@ function fresults(xobj) {
       let nn_on_all = '';
 
       let prefix = 'Hilighted Natives in';
+      let suffix = configuration.title;
 
       if( p_params === 'specific_users_in_sw_ohio' ) {
           prefix = 'Noteworthy Natives in';
       }
+
+      if( p_nm1 ) { prefix = p_nm1; }
+      if( p_nm2 ) { suffix = p_nm2; }
 
       let u_param = '';
       if( configuration.user_id ) { u_param = '&user_id='+configuration.user_id; }
@@ -356,7 +362,7 @@ function fresults(xobj) {
               on_all = furl(github_root+'bugs_explorers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+field_param+'&mode='+p_mode,'<span id="topright">'+p_title+' any plant</span>');
           } else {
               if( !p_insect_project ) {
-                  nn_on_all = '<span id="topright">'+prefix+'<br> <b>'+configuration.title+'</b></span>';
+                  nn_on_all = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
               }
           }
       } else {
