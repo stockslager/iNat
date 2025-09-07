@@ -45,6 +45,14 @@ let p_life       = winurlparams.get('life') || 'Life Stage';
 let p_seed_project = winurlparams.get('seed_project') || '';
 let p_hide_home  = winurlparams.get('hide_home') || 'no';
 
+// parse the seed project param to determine mode.
+let prj    = p_insect_project.split('$')[0];
+let place  = p_insect_project.split('$')[1];
+let params = p_insect_project.split('$')[2];
+let user   = p_insect_project.split('$')[3];
+let garden = p_insect_project.split('$')[4];
+let mode   = p_insect_project.split('$')[5];
+
 // don't show organsims that have only been id'd to genus and above, otherwise the number's
 // won't match other counts
  winurlparams.append('hrank', 'species');
@@ -115,15 +123,17 @@ function buildLifeStageMenu(data, obs_fields) {
 
    let links = '';
    let menu_string = '';
-   
-   links = furl(github_root+'bugs_on_plants_grid.html'+all_opts,"grid");
-   if( field_key ) {
-       links += furl(github_root+'bugs_on_plants_list.html'+all_opts+'&obs_fields='+obs_fields,"list");
-   }
-   links += furl(github_root+'life_list_map.html'+all_opts,"map");
 
    menu_string = '<div class="navbar">';
-   menu_string += buildDD('Show', links);
+
+   if( mode !== 'visitors' ) {
+       links = furl(github_root+'bugs_on_plants_grid.html'+all_opts,"grid");
+       if( field_key ) {
+           links += furl(github_root+'bugs_on_plants_list.html'+all_opts+'&obs_fields='+obs_fields,"list");
+       }
+       links += furl(github_root+'life_list_map.html'+all_opts,"map");
+       menu_string += buildDD('Show', links);
+   }
 
    // the life list links need to be cached the first time the page is enetered 
    // otherwise when a life stage is chosen the grid will only display that
