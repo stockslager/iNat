@@ -466,11 +466,12 @@ async function asyncGetData() {
    });
 
    let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
-   let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
  
    if( p_project_id === '255754' ) {
        apibase = 'https://api.inaturalist.org/v1/observations';
    }
+ 
+   let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 
    console.log('api url ' + apiurl);
    await fetch(apiurl)
