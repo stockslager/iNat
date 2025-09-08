@@ -95,14 +95,7 @@ let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
 winurlparams.delete('idextra_user_id');
 let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
 winurlparams.delete('photo_curl_filename_prefix');
- 
-let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
-let apiurl = '';
-
-if( p_project_id === '255754' ) {
-    apibase = 'https://api.inaturalist.org/v1/observations';
-}
- 
+  
 </script> 
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
 <script> 
@@ -326,7 +319,6 @@ function fresults(xobj) {
             {innerText:'#'},
             {innerText:'Photo'},
             {innerText:'Name'}, 
-            //{innerText:'Count'},
       ];
 
       let place_param = '';
@@ -464,7 +456,6 @@ async function asyncGetData() {
            } else {
                buildMenu(data.configurations);
            }
-           apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
       } 
       console.log(data);
    })
@@ -473,6 +464,13 @@ async function asyncGetData() {
       faddelem('p',document.body,{innerText:'A valid configuration file is required to be specified as a url parameter. (e.g. ?params=bugs_cnc).'});
       throw new Error('Error fetching JSON');
    });
+
+   let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
+   let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+ 
+   if( p_project_id === '255754' ) {
+       apibase = 'https://api.inaturalist.org/v1/observations';
+   }
 
    console.log('api url ' + apiurl);
    await fetch(apiurl)
