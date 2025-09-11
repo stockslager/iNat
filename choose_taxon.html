@@ -111,6 +111,7 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_options  = winurlparams.get('options') || [];
 let p_taxon_id = winurlparams.get('taxon_id') || '';
+let p_params   = winurlparams.get('params') || '';
 let p_q        = winurlparams.get('q') || '';
 
 winurlparams.delete('options');
@@ -158,7 +159,7 @@ function fresults(xobj) {
 
          let values = [
             {innerText:i+1},
-            {innerHTML:furl(github_root+'bugs_on_plants.html?taxon_id='+rec.id+'&taxon_name='+(rec.preferred_common_name||rec.name),(rec.preferred_common_name||rec.name))},
+            {innerHTML:furl(github_root+'bugs_on_plants.html?params='+p_params+'&taxon_id='+rec.id+'&taxon_name='+(rec.preferred_common_name||rec.name),(rec.preferred_common_name||rec.name))},
             {innerText:rec.rank},
          ];         
 
