@@ -321,12 +321,6 @@ function parseStoredData(gardeners) {
    }
 }
 
-let apibase = 'https://api.inaturalist.org/v1/observations/observers';
-let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-let apirefurl = 'https://api.inaturalist.org/v1/observations/observers';
-let apirefname = 'iNaturalist Angling Life Lists';
-let apiref = furl(apirefurl,apirefname);
-
 async function asyncGetData() {
    await fetch(p_params+'.json')
       .then((response) => {
@@ -338,13 +332,17 @@ async function asyncGetData() {
            setUpDefaults(data.configurations);
            console.log('building menu...');
            buildMenu(data.configurations);
-   console.log('p1 ' + winurlparams.get('place_id') );
    })
      .catch(error => {
       console.error('Error fetching JSON:', error);
    });
 
-   console.log('p ' + winurlparams.get('place_id') );
+   let apibase = 'https://api.inaturalist.org/v1/observations/observers';
+   let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+   let apirefurl = 'https://api.inaturalist.org/v1/observations/observers';
+   let apirefname = 'iNaturalist Observations Observers';
+   let apiref = furl(apirefurl,apirefname);
+
    console.log('apiurl ' + apiurl);
    await fetch(apiurl)
       .then((response) => {
