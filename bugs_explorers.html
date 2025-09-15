@@ -338,11 +338,13 @@ async function asyncGetData() {
            setUpDefaults(data.configurations);
            console.log('building menu...');
            buildMenu(data.configurations);
+   console.log('p1 ' + winurlparams.get('place_id') );
    })
      .catch(error => {
       console.error('Error fetching JSON:', error);
    });
 
+   console.log('p ' + winurlparams.get('place_id') );
    console.log('apiurl ' + apiurl);
    await fetch(apiurl)
       .then((response) => {
