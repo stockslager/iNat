@@ -353,7 +353,7 @@ function fresults(xobj) {
 
       if( configuration.hide_on_any === 'yes' ) {
           if( p_mode.includes('explorer') ) {
-              on_all = furl(github_root+'bugs_explorers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+field_param+'&mode='+p_mode,'<span id="topright">'+p_title+' any plant</span>');
+              on_all = furl(github_root+'bugs_explorers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+'&mode='+p_mode,'<span id="topright">'+p_title+' any plant</span>');
           } else {
               if( !p_insect_project ) {
                   nn_on_all = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
@@ -424,7 +424,7 @@ function fresults(xobj) {
              values = [
                   {innerText:i+1},
                   {innerHTML:image},
-                  {innerHTML:furl(github_root+'bugs_explorers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+field_param+'&plant_name='+header_name+'&mode='+p_mode, displayName)},
+                  {innerHTML:furl(github_root+'bugs_explorers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+'&taxon_id='+rec.taxon_id+'&plant_name='+header_name+'&mode='+p_mode, displayName)},
                   ];
          }
         
