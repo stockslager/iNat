@@ -143,7 +143,7 @@ function buildMenu() {
       links += furl(github_root+'plant_seeds.html'+opts+'&field:availability=available on request', 'Available on Request');  
       links += furl(github_root+'plant_seeds.html'+opts+'&field:availability=coming soon',          'Coming Soon');      
       links += furl(github_root+'plant_seeds.html'+opts+'&field:availability=out of stock',         'Out of Stock');
-      menu  += buildDD( field_name, fields_menu );
+      menu  += buildDD( 'Availability', links );
   }
 
   if( p_mode.startsWith('pro') ) {
@@ -272,11 +272,6 @@ async function asyncGetData() {
       console.error('Error fetching JSON:', error);
       instructions = 'Error fetching JSON for project.  The project must be configured in params.json.';
    });
-
-   if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
-       instructions = 'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.';
-   }
-
 
    let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
    let apibase = 'https://api.inaturalist.org/v1/observations';
