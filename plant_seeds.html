@@ -37,7 +37,6 @@ let opts = '';
 let api_params = '';
  
 // config fields
-let p_insect_prj = '';
 let p_plant_prj  = '';
 
 // build param list for url's used in fresults
@@ -82,13 +81,16 @@ function setUpDefaults(configurations) {
        faddelem('p',document.body,{innerText:'Please add at least one valid configuration to '+p_params+'.json'});
        throw new Error('No configurations defined.');
    }
- 
-   for( let i=0; i<configurations.length; i++ ) {
-        if( configurations[i].insect_project === p_insect_project ) {
-            console.log('found config');
-            configuration = configurations[i];
-        }
+
+   if( configurations.length > 1 ) {
+       faddelem('p',document.body,{innerText:'Configuration file ('+p_params+'.json) contains contains more than one configuration.'});
+       faddelem('p',document.body,{innerText:'Multiple configurations are not yet supported.'});
+       faddelem('p',document.body,{innerText:'Please remove all but one configuration in '+p_params+'.json'});
+       throw new Error('No configurations defined.');
    }
+ 
+   console.log('found config');
+   configuration = configurations[0];
 
    // if an insect_project wasn't passed in, default to the first configuration in the .json
    if( !configuration ) {
@@ -229,12 +231,7 @@ function fresults(xobj, places_obj, tags_obj, fields_obj) {
 
          // if an insect project was specified in params.json show insect observaitons from that donor
          // project rather than from the user_id on the parent plant observation.
-         let insect_param = '';
-         if( p_insect_prj ) {
-             insect_param += 'project_id='+configuration.insect_project;
-         } else {
-             insect_param += 'user_id='+rec.user.id;
-         }
+         let insect_param = 'project_id='+configuration.insect_project;
 
          values = [
                   {innerText:i+1},
