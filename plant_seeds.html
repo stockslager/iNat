@@ -32,8 +32,18 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_params       = winurlparams.get('params') || '';
 let p_mode         = winurlparams.get('mode') || '';
 let p_availability = winurlparams.get('availability') || '';
+let p_state        = winurlparams.get('state') || '';
 let opts = '';
 let menu = '';
+
+// state might move to session eventually.
+let params = p_insect_project.split('$')[0];
+let mode   = p_insect_project.split('$')[1];
+let avail  = p_insect_project.split('$')[2];
+
+if( params ) { p_params = params; }
+if( mode   ) { p_mode   = mode; }
+if( avail  ) { p_avail  = avail; }
 
 // params for api transaction...
 let api_params = '';
@@ -220,8 +230,10 @@ function fresults( xobj ) {
              }
          }
 
+         let state_param = ('&state='+p_params+'$'+p_mode+'$'+p_avail);
+
          if( tax_id !== '' ){
-             taxon = furl(github_root+'plant_seeds_detail.html?project_id='+configuration.seed_project+'&obs_id='+rec.id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl(github_root+'plant_seeds_detail.html?project_id='+configuration.seed_project+'&obs_id='+rec.id+state_param,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
 
          // if an insect project was specified in params.json show insect observaitons from that donor
