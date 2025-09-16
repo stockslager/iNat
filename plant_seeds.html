@@ -73,7 +73,6 @@ winurlparams.delete('photo_curl_filename_prefix');
 
 // these are stored in params.json 
 let p_obs_id   = '';
-let p_library_name = '';
 
 function setUpDefaults(configurations) {
 
@@ -173,13 +172,9 @@ function fresults( xobj ) {
 
       let lib_title = '';
     
-      if( menu ) {
-          let map = '<span id="toprightbold"><div style="display:flex; align-items:center;">'+furl(github_root+'plant_map.html'+api_params+'&centerlat=39.10445934350343&centerlng=-84.5196921535475&defaultzoom=9','<span class="earth">&#127758</span>');
-          faddelem('p',document.body,{innerHTML:menu});
-          lib_title = map+p_library_name+'</div></span>';
-      } else {
-          faddelem('h2',document.body,{innerText:p_library_name});
-      }
+      let map = '<span id="toprightbold"><div style="display:flex; align-items:center;">'+furl(github_root+'plant_map.html'+api_params+'&centerlat=39.10445934350343&centerlng=-84.5196921535475&defaultzoom=9','<span class="earth">&#127758</span>');
+      faddelem('p',document.body,{innerHTML:menu});
+      lib_title = map+'Collection Area'+'</div></span>';
 
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
