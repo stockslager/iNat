@@ -31,6 +31,7 @@ let p_project_id = winurlparams.get('project_id') || '';
 let p_obs_id     = winurlparams.get('obs_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_params     = winurlparams.get('params') || 'params2';
+let p_state      = winurlparams.get('state') || '';
 
 let descendants_results = '';
 descendants.delete('id');
@@ -83,7 +84,7 @@ function buildMenu() {
       menu_string = '<div class="navbar">';
       menu_string += buildDDTitle('');
 
-      menu_string += buildHome(furl(github_root+'plant_seeds.html?project_id='+p_project_id,'&#127807;'));
+      menu_string += buildHome(furl(github_root+'plant_seeds.html?state='+p_state,'&#127807;'));
       menu_string += '</div>';
  
       faddelem('p',document.body,{innerHTML:(menu_string)});  
