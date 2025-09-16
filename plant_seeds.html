@@ -155,7 +155,7 @@ function buildMenu() {
   return( menu );
 } 
 
-function fresults(xobj, places_obj, tags_obj, fields_obj) {
+function fresults( xobj ) {
    let results = xobj.results;
    let box_array = [];
  
@@ -288,7 +288,7 @@ async function asyncGetData() {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
       })
-      .then((data) => { fresults(data, parseStoredPlaces(sessionStorage.getItem('places')), parseStoredTags(sessionStorage.getItem('tags')), parseStoredFields(sessionStorage.getItem('fields'))); })
+      .then((data) => { fresults(data); })
       .catch((err) => {
          console.error(err.message);
          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
