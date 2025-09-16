@@ -31,6 +31,7 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_params       = winurlparams.get('params') || '';
 let p_mode         = winurlparams.get('mode') || '';
+let p_availability = winurlparams.get('availability') || '';
 let opts = '';
 let menu = '';
 
@@ -124,7 +125,7 @@ function setUpDefaults(configurations) {
   if( configuration.seed_project === '218728' ) {   // grovedale
       api_params += '&field:seeds available in library?=';
   } else {
-      api_params += '&field:availability=';
+      api_params += '&field:availability='+p_availability;
   }
 
 }
@@ -139,10 +140,10 @@ function buildMenu() {
   } else {
       menu += '<div class="navbar">';
       links += furl(github_root+'plant_seeds.html'+opts, 'All');
-      links += furl(github_root+'plant_seeds.html'+opts+'&field:availability=available now',        'Available Now');      
-      links += furl(github_root+'plant_seeds.html'+opts+'&field:availability=available on request', 'Available on Request');  
-      links += furl(github_root+'plant_seeds.html'+opts+'&field:availability=coming soon',          'Coming Soon');      
-      links += furl(github_root+'plant_seeds.html'+opts+'&field:availability=out of stock',         'Out of Stock');
+      links += furl(github_root+'plant_seeds.html'+opts+'&availability=available now',        'Available Now');      
+      links += furl(github_root+'plant_seeds.html'+opts+'&availability=available on request', 'Available on Request');  
+      links += furl(github_root+'plant_seeds.html'+opts+'&availability=coming soon',          'Coming Soon');      
+      links += furl(github_root+'plant_seeds.html'+opts+'&availability=out of stock',         'Out of Stock');
       menu  += buildDD( 'Availability', links );
   }
 
