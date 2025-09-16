@@ -58,15 +58,6 @@ for (const [key, value] of winurlparams.entries()) {
       }
   } 
 }   
-
-
-// find key/value pair for &field: param if one was passed in
-for (const [key, value] of winurlparams.entries()) {
-  if( key.startsWith('field') ){
-      p_field = key;
-      p_field_value = value;
-  }
-}   
  
 winurlparams.delete('options');
 let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
@@ -79,31 +70,9 @@ winurlparams.delete('photo_curl_filename_prefix');
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
 <script> 
 
-// remove the field param from the url before building options
-winurlparams.delete(p_field);
-winurlparams.delete('operator');
-winurlparams.delete('taxon_id');
-winurlparams.delete('not_user_id');
-winurlparams.delete('not_id');
-winurlparams.delete('not_in_project');
-
-// add them back after building options...
-winurlparams.append('operator', p_operator);
-winurlparams.append(p_field, p_field_value);
-winurlparams.append('taxon_id', p_taxon_id);
-
 // these are stored in params.json 
 let p_obs_id   = '';
 let p_library_name = '';
-
-function findValueByKey(arr, key, value) {
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i][key].toString() === value) {
-      return arr[i];
-    }
-  }
-  return undefined;
-}
 
 function setUpDefaults(configurations) {
 
