@@ -131,11 +131,11 @@ function buildLifeStageMenu(data, obs_fields) {
 
    if( p_hide_dds === 'no' ) {
        if( mode !== 'visitors' ) {
-           links = furl(github_root+'bugs_on_plants_grid.html'+all_opts,"grid");
+           links = furl(github_root+'plant_grid.html'+all_opts,"grid");
            if( field_key ) {
-               links += furl(github_root+'bugs_on_plants_list.html'+all_opts+'&obs_fields='+obs_fields,"list");
+               links += furl(github_root+'plant_activity_list.html'+all_opts+'&obs_fields='+obs_fields,"list");
            }
-           links += furl(github_root+'life_list_map.html'+all_opts,"map");
+           links += furl(github_root+'plant_map.html'+all_opts,"map");
            menu_string += buildDD('Show', links);
        }
    }
@@ -156,31 +156,31 @@ function buildLifeStageMenu(data, obs_fields) {
 
    if( !links ) {
        // all should always appear...
-       links = furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=&cache_check=yes','All');
+       links = furl(github_root+'plant_grid.html'+all_except_life_stage+'&life=&cache_check=yes','All');
    
        if( annotations_array.includes(2) ){      // adult
-           links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Adults&term_id=1&term_value_id=2&cache_check=yes','Adults');
+           links += furl(github_root+'plant_grid.html'+all_except_life_stage+'&life=Adults&term_id=1&term_value_id=2&cache_check=yes','Adults');
        }
        if( annotations_array.includes(3) ){      // teneral
-           links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Teneral&term_id=1&term_value_id=3&cache_check=yes','Teneral');
+           links += furl(github_root+'plant_grid.html'+all_except_life_stage+'&life=Teneral&term_id=1&term_value_id=3&cache_check=yes','Teneral');
        }
        if( annotations_array.includes(4) ) {    // pupa
-           links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Pupa&term_id=1&term_value_id=4&cache_check=yes','Pupa');
+           links += furl(github_root+'plant_grid.html'+all_except_life_stage+'&life=Pupa&term_id=1&term_value_id=4&cache_check=yes','Pupa');
        }
        if( annotations_array.includes(5) ) {    // nymph
-           links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Nymph&term_id=1&term_value_id=5&cache_check=yes','Nymph');
+           links += furl(github_root+'plant_grid.html'+all_except_life_stage+'&life=Nymph&term_id=1&term_value_id=5&cache_check=yes','Nymph');
        }
        if( annotations_array.includes(6) ){      // larva.
-           links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Larva&term_id=1&term_value_id=6&cache_check=yes','Larva');
+           links += furl(github_root+'plant_grid.html'+all_except_life_stage+'&life=Larva&term_id=1&term_value_id=6&cache_check=yes','Larva');
        }
        if( annotations_array.includes(7) ) {    // egg
-           links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Egg&term_id=1&term_value_id=7&cache_check=yes','Egg');
+           links += furl(github_root+'plant_grid.html'+all_except_life_stage+'&life=Egg&term_id=1&term_value_id=7&cache_check=yes','Egg');
        }
        if( annotations_array.includes(8) ) {    // juvenile
-           links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Juvenile&term_id=1&term_value_id=8&cache_check=yes','Juvenile');
+           links += furl(github_root+'plant_grid.html'+all_except_life_stage+'&life=Juvenile&term_id=1&term_value_id=8&cache_check=yes','Juvenile');
        }
        if( annotations_array.includes(16) ) {    // subimago
-           links += furl(github_root+'bugs_on_plants_grid.html'+all_except_life_stage+'&life=Subimago&term_id=1&term_value_id=16&cache_check=yes','Subimago');
+           links += furl(github_root+'plant_grid.html'+all_except_life_stage+'&life=Subimago&term_id=1&term_value_id=16&cache_check=yes','Subimago');
        }
        sessionStorage.setItem(cache_key, links);
    }
@@ -192,17 +192,15 @@ function buildLifeStageMenu(data, obs_fields) {
    if( p_hide_home === 'no' ) {
        if( p_seed_project ) {
            if( p_seed_project.startsWith('pip') ) {
-               menu_string += buildHome(furl(github_root+'bugs_on_plants.html?insect_project='+p_seed_project.replace('pip',''),'&#127807;'));
+               menu_string += buildHome(furl(github_root+'plant_list.html?insect_project='+p_seed_project.replace('pip',''),'&#127807;'));
            } else if( p_seed_project.startsWith('exp') ) {
-               menu_string += buildHome( furl(github_root+'bugs_explorers.html?seed_project='+p_seed_project.replace('exp','')+'&plant_id='+field_value+'&plant_name='+p_target_name,'&#127807;') );
-           } else {
-               menu_string += buildHome(furl(github_root+'cncnpc_seeds.html?project_id='+p_seed_project,'&#127807;'));
-           }
+               menu_string += buildHome( furl(github_root+'plant_activity_observers.html?seed_project='+p_seed_project.replace('exp','')+'&plant_id='+field_value+'&plant_name='+p_target_name,'&#127807;') );
+           } 
        } else {
            if( p_action === 'hide' ) {
-               menu_string += buildHome( furl(github_root+'bugs_on_plants2.html?project_id='+p_project_id+'&title='+p_action+'&'+field_key+'='+'&target_name=all+plants&params='+p_params,'&#127807;') );
+               menu_string += buildHome( furl(github_root+'plant_activity.html?project_id='+p_project_id+'&title='+p_action+'&'+field_key+'='+'&target_name=all+plants&params='+p_params,'&#127807;') );
            } else {
-               menu_string += buildHome(furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;'));
+               menu_string += buildHome(furl(github_root+'plant_list.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;'));
            }
        }
    }
