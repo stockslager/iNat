@@ -183,16 +183,16 @@ function setUpDefaults(configurations) {
    }
 
    for( let i=0; i<configurations.length; i++ ) {
-        if( configurations[i].insect_project === p_insect_project ) {
+        if( configurations[i].insect_project === p_project_id ) {
             console.log('found config');
             configuration = configurations[i];
         }
    }
 
    if( !configuration ) {
-       faddelem('p',document.body,{innerText:'Configuration file ('+p_params+'.json) contains no valid configurations for &insect_project='+p_insect_project+'.'});
+       faddelem('p',document.body,{innerText:'Configuration file ('+p_params+'.json) contains no valid configurations for &insect_project='+p_project_id+'.'});
        faddelem('p',document.body,{innerText:'There are no configurations specified in '+p_params+'.json'});
-       faddelem('p',document.body,{innerText:'Please add a valid configuration to '+p_params+'.json for &insect_project='+p_insect_project});
+       faddelem('p',document.body,{innerText:'Please add a valid configuration to '+p_params+'.json for &insect_project='+p_project_id});
        throw new Error('No configurations defined.');
    }
 
