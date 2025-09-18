@@ -338,6 +338,9 @@ function fresults(xobj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let labels = [];
+
+      console.log('building menu...');
+      buildMenu( results );
    
       if( p_title !== 'hide' ) {
           if( !p_field_value ) {
@@ -423,8 +426,6 @@ async function asyncGetData() {
       if( data.configurations ) {
            console.log('setting up defaults...');
            setUpDefaults(data.configurations);
-           console.log('building menu...');
-           buildMenu(data.configurations);
       } 
       console.log(data);
    })
