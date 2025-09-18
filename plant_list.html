@@ -26,7 +26,7 @@ let p_place_id    = '';
 let p_taxon_id    = winurlparams.get('taxon_id') || '';
 let p_project_id  = winurlparams.get('project_id') || '';
 let p_title       = winurlparams.get('title') || 'on';
-let p_insect_project = winurlparams.get('insect_project') || ''; 
+let p_state       = winurlparams.get('state') || ''; 
 let p_params      = winurlparams.get('params') || '';
 let p_user        = winurlparams.get('user_id') || '';
 let p_garden      = winurlparams.get('garden') || '';
@@ -36,19 +36,16 @@ let p_nm2         = winurlparams.get('nm2') || '';
 
 // the place selected was added to seed_project parameter and needs to be
 // parsed if control is returning from the insects page.
-let prj    = p_insect_project.split('$')[0];
-let place  = p_insect_project.split('$')[1];
-let params = p_insect_project.split('$')[2];
-let user   = p_insect_project.split('$')[3];
-let garden = p_insect_project.split('$')[4];
-let mode   = p_insect_project.split('$')[5];
+let prj    = p_state.split('$')[0];
+let place  = p_state.split('$')[1];
+let params = p_state.split('$')[2];
+let user   = p_state.split('$')[3];
+let garden = p_state.split('$')[4];
+let mode   = p_state.split('$')[5];
 
 if( prj ) {
-    winurlparams.delete('insect_project');
-    winurlparams.append('insect_project', prj);
     p_insect_project = prj;
 } else {
-    winurlparams.delete('insect_project');
     p_insect_project = '';
 }
 // the user_id isn't used on the plant list page, it's only used to display wildlife activity.
