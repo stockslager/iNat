@@ -48,6 +48,15 @@ let all_params = '';
 
 let opts = copyOpts( winurlparams );
 
+// the place selected was added to seed_project parameter and needs to be
+// parsed if control is returning from the insects page.
+let prj    = p_state.split('$')[0];
+let place  = p_state.split('$')[1];
+let params = p_state.split('$')[2];
+let user   = p_state.split('$')[3];
+let garden = p_state.split('$')[4];
+let mode   = p_state.split('$')[5];
+
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
@@ -246,7 +255,7 @@ function buildMenu( results ) {
 
             // check to see if they entered the flow from a seed library.  if so, return control there.
             if( p_state ) {
-                if( p_state.startsWith('exp') ) {
+                if( mode.includes('observer') ) {
                     menu_string += buildHome( furl(github_root+'plant_activity_observers.html?seed_project='+p_seed_project.replace('exp','')+'&plant_id='+p_field_value+'&plant_name='+p_target_name,'&#127807;') );
                 } else {
                     menu_string += buildHome( furl(github_root+'plant_list.html?state='+p_state,'&#127807;') );
