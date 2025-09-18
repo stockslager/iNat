@@ -246,11 +246,11 @@ function buildMenu( results ) {
 
             // check to see if they entered the flow from a seed library.  if so, return control there.
             if( p_state ) {
-                if( p_state.startsWith('pip') ) {
-                    menu_string += buildHome( furl(github_root+'plant_list.html?state='+p_state,'&#127807;') );
-                } else if( p_state.startsWith('exp') ) {
+                if( p_state.startsWith('exp') ) {
                     menu_string += buildHome( furl(github_root+'plant_activity_observers.html?seed_project='+p_seed_project.replace('exp','')+'&plant_id='+p_field_value+'&plant_name='+p_target_name,'&#127807;') );
-                } 
+                } else {
+                    menu_string += buildHome( furl(github_root+'plant_list.html?state='+p_state,'&#127807;') );
+                }
             } 
     
             menu_string += '</div>';
