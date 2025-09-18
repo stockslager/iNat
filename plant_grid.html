@@ -42,17 +42,17 @@ let p_target_name = winurlparams.get('target_name') || '';
 let p_cache_check = winurlparams.get('cache_check') || '';
 let p_params     = winurlparams.get('params') || 'bugs_pip';
 let p_life       = winurlparams.get('life') || 'Life Stage';
-let p_seed_project = winurlparams.get('seed_project') || '';
+let p_state      = winurlparams.get('state') || '';
 let p_hide_home  = winurlparams.get('hide_home') || 'no';
 let p_hide_dds   = winurlparams.get('hide_dds') || 'no';
 
 // parse the seed project param to determine mode.
-let prj    = p_seed_project.split('$')[0];
-let place  = p_seed_project.split('$')[1];
-let params = p_seed_project.split('$')[2];
-let user   = p_seed_project.split('$')[3];
-let garden = p_seed_project.split('$')[4];
-let mode   = p_seed_project.split('$')[5];
+let prj    = p_state.split('$')[0];
+let place  = p_state.split('$')[1];
+let params = p_state.split('$')[2];
+let user   = p_state.split('$')[3];
+let garden = p_state.split('$')[4];
+let mode   = p_state.split('$')[5];
 
 // don't show organsims that have only been id'd to genus and above, otherwise the number's
 // won't match other counts
@@ -62,8 +62,8 @@ let annotations_array = [];
 let interactions = [];
 
 let seed_param = '';
-if( p_seed_project ) {
-    seed_param = '&seed_project='+p_seed_project;
+if( p_state ) {
+    state_param = '&state='+p_state;
 }
 
 let all_opts = copyOpts(winurlparams);
@@ -190,19 +190,13 @@ function buildLifeStageMenu(data, obs_fields) {
    }
 
    if( p_hide_home === 'no' ) {
-       if( p_seed_project ) {
-           if( p_seed_project.startsWith('pip') ) {
-               menu_string += buildHome(furl(github_root+'plant_list.html?insect_project='+p_seed_project.replace('pip',''),'&#127807;'));
-           } else if( p_seed_project.startsWith('exp') ) {
-               menu_string += buildHome( furl(github_root+'plant_activity_observers.html?seed_project='+p_seed_project.replace('exp','')+'&plant_id='+field_value+'&plant_name='+p_target_name,'&#127807;') );
-           } 
-       } else {
-           if( p_action === 'hide' ) {
-               menu_string += buildHome( furl(github_root+'plant_activity.html?project_id='+p_project_id+'&title='+p_action+'&'+field_key+'='+'&target_name=all+plants&params='+p_params,'&#127807;') );
+       if( p_state ) {
+           if( p_state.startsWith('exp') ) {
+               menu_string += buildHome( furl(github_root+'plant_activity_observers.html?seed_project='+p_state.replace('exp','')+'&plant_id='+p_field_value+'&plant_name='+p_target_name,'&#127807;') );
            } else {
-               menu_string += buildHome(furl(github_root+'plant_list.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;'));
+               menu_string += buildHome( furl(github_root+'plant_list.html?state='+p_state,'&#127807;') );
            }
-       }
+       } 
    }
 
    menu_string += '</div>';
