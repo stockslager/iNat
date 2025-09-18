@@ -417,7 +417,7 @@ function fresults(xobj) {
 };
 
 async function asyncGetData() {
-   let error = 'no';
+   let err = 'no';
  
    await fetch(p_params+'.json')
      .then(response => response.json())
@@ -432,7 +432,7 @@ async function asyncGetData() {
    })
      .catch(error => {
       console.error('Error fetching JSON:', error);
-      error = 'yes';
+      err = 'yes';
    });
 
    let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
@@ -440,8 +440,8 @@ async function asyncGetData() {
    let apiurl = apibase+(api_params);
    console.log('api url ' + apiurl);
 
-   console.log('error ' + error );
-   if( error === 'no' ) {
+   console.log('error ' + err );
+   if( err === 'no' ) {
        if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
           let instructions = [
              {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.  It will default to the "7623 - plant that the organism was found on" observation field if &obs_field=xxx is not passed in.'},
