@@ -201,6 +201,10 @@ function setUpDefaults(configurations) {
    api_params += '&hrank=species';
    api_params += '&field:'+configuration.field_name+'='+p_target_id;
 
+   if( p_taxon_id ) {
+       api_params += '&taxon_id='+p_taxon_id;
+   }
+
 }
  
 function buildMenu( results ) {
@@ -440,7 +444,6 @@ async function asyncGetData() {
    let apiurl = apibase+(api_params);
    console.log('api url ' + apiurl);
 
-   console.log('error ' + err );
    if( err === 'no' ) {
        if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
           let instructions = [
