@@ -28,7 +28,6 @@ let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_obs_field  = winurlparams.get('obs_field') || '';
 let p_obs_fields = winurlparams.get('obs_fields') || '';
-let p_title        = winurlparams.get('title') || '';
 let p_prefix       = winurlparams.get('prefix') || '';
 let p_target_name   = winurlparams.get('target_name') || '';
 let p_target_id     = winurlparams.get('target_id') || '';
@@ -73,14 +72,8 @@ for (const [key, value] of winurlparams.entries()) {
   }
 }  
 
-if( p_title === 'hide' ){
-    dlString = '';
-} else if( p_title === '' ) {
-    dlString = 'Bugs on Plants';
-} else {
-    dlString = (capitalizeWords((p_prefix+' '+p_title+' '+p_target_name)));
-    document.title = dlString;
-}
+dlString = (capitalizeWords((p_prefix+' on '+p_target_name)));
+document.title = dlString;
   
 winurlparams.delete('per_page');
 winurlparams.append('per_page','100');
@@ -239,7 +232,7 @@ function buildMenu( results ) {
    let icons = '';
    let menu_string = '';
 
-   if( ( p_title && ( p_taxon_id || p_target_name ) ) ||
+   if( ( p_taxon_id || p_target_name ) ||
        ( p_show_menu === 'yes' ) ||
        ( configuration.sub_icons ) ) { 
     
@@ -340,12 +333,10 @@ function fresults(xobj) {
       console.log('building menu...');
       buildMenu( results );
    
-      if( p_title !== 'hide' ) {
-          if( !p_target_id ) {
-              dlString = furl(github_root+'plant_grid.html'+opts+'&action='+p_title,'<span id="topright">all organisms '+p_title+' any plant</span>');
-          } else {
-              dlString = furl(github_root+'plant_grid.html'+getNoTaxonOpts(winurlparams)+'&action='+p_title, '<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
-          }
+      if( !p_target_id ) {
+          dlString = furl(github_root+'plant_grid.html'+opts+'&action=on','<span id="topright">all organisms on any plant</span>');
+      } else {
+          dlString = furl(github_root+'plant_grid.html'+getNoTaxonOpts(winurlparams)+'&action=on', '<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
       }
     
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
@@ -392,7 +383,7 @@ function fresults(xobj) {
          }
 
          let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
-         let grid_title  = ('&action='+p_title+'&title='+(pref_tax_name||tax_name)+' '+p_title+' '+p_target_name);
+         let grid_title  = ('&action=on&title='+(pref_tax_name||tax_name)+' on '+p_target_name);
                                       
          let values = [
                   {innerText:i+1},
