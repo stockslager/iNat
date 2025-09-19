@@ -33,7 +33,6 @@ var cellpx       = winurlparams.get('cellpx') || 122;
 var spacerpx     = winurlparams.get('spacerpx') || 4;
 var rows         = winurlparams.get('rows') || 30;
 var columns      = winurlparams.get('columns') || 3;
-let title        = winurlparams.get('title') || '';
 let p_action     = winurlparams.get('action') || '';
 let p_list       = winurlparams.get('list') || '';
 let p_tag_name   = winurlparams.get('tag_name') || '';
@@ -113,14 +112,11 @@ winurlparams.delete('cellpx');
 winurlparams.delete('spacerpx');
 winurlparams.delete('rows');
 winurlparams.delete('columns');
-winurlparams.delete('title');
 var obsurlbase = 'https://www.inaturalist.org/observations';
 var obsurl = obsurlbase+'?'+winurlparams.toString();
 winurlparams.append('per_page',recsmax);
 var apiurlbase = 'https://api.inaturalist.org/v1/observations'
 var apiurl = apiurlbase+'?'+winurlparams.toString();
-
-document.title = title.toLowerCase();
 
 function buildLifeStageMenu(data, obs_fields) {
 
