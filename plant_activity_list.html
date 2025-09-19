@@ -33,7 +33,7 @@ let p_ofield_iconic   = winurlparams.get('ofield_iconic') || '';
 let p_omit_users      = winurlparams.get('omit_users') || '';
 let p_omit_id         = winurlparams.get('omit_id') || '';
 let p_omit_project    = winurlparams.get('omit_projects') || '';
-let p_seed_project    = winurlparams.get('seed_project') || '';
+let p_state           = winurlparams.get('state') || '';
 let p_list            = winurlparams.get('list') || '';
 let p_title           = winurlparams.get('title') || '';
 let p_action          = winurlparams.get('action') || '';
@@ -155,20 +155,14 @@ function buildMenu() {
       }
 */
 
-      if( p_seed_project ) {
-          if( p_seed_project.startsWith('pip') ) {
-              menu_string += buildHome(furl(github_root+'plant_list.html?insect_project='+p_seed_project.replace('pip',''),'&#127807;')+'</div></div>');
-          } else if( p_seed_project.startsWith('exp') ) {
-              menu_string += buildHome( furl(github_root+'plant_activity_observers.html?seed_project='+p_seed_project.replace('exp','')+'&plant_id='+p_field_value+'&plant_name='+p_target_name,'&#127807;') );
-          } 
-      } else {
-           if( p_action === 'hide' ) {
-               menu_string += buildHome( furl(github_root+'plant_activity.html?project_id='+p_project_id+'&title='+p_action+'&'+p_field+'='+'&target_name=all+plants&params='+p_params,'&#127807;') );
+       if( p_state ) {
+           if( mode.includes('observer') ) {
+               menu_string += buildHome( furl(github_root+'plant_activity_observers.html?state='+p_state+'&plant_id='+p_field_value+'&plant_name='+p_target_name,'&#127807;') );
            } else {
-               menu_string += buildHome(furl(github_root+'plant_list.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;')+'</div></div>');
+               menu_string += buildHome( furl(github_root+'plant_list.html?state='+p_state,'&#127807;') );
            }
-      }
-
+       } 
+ 
       menu_string += '</div>';
   
       faddelem('p',document.body,{innerHTML:(menu_string)});  
