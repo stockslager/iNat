@@ -49,6 +49,14 @@ let top_taxon = '';
 let tax_photo = '<div class="clipart">&#127807</div>'; 
 let interactions = [];
 
+// parse the seed project param to determine mode.
+let prj    = p_state.split('$')[0];
+let place  = p_state.split('$')[1];
+let params = p_state.split('$')[2];
+let user   = p_state.split('$')[3];
+let garden = p_state.split('$')[4];
+let mode   = p_state.split('$')[5];
+
 if( p_project_id === 'cincinnati-nature-center-pollinator-garden' ) {
     winurlparams.delete('project_id');
     winurlparams.append('project_id', '220623');
