@@ -49,9 +49,6 @@ if( prj ) {
 }
 // the user_id isn't used on the plant list page, it's only used to display wildlife activity.
 // so if one exists just save it to pass along to the wildlife activity page.
-if( user ) {
-    p_user = user;
-}
 if( place ) {
     winurlparams.delete('place_id');
     winurlparams.append('place_id', place);
@@ -328,7 +325,7 @@ function fresults(xobj) {
       if( p_params ) { json = '$'+p_params; } else { json = '$null'; }
 
       let user_param = '';
-      if( p_user ) { user_param = '$'+p_user; } else { user_param = '$null'; }
+      user_param = '$null'; 
 
       let garden_param = '';
       if( p_garden ) { garden_param = '$'+p_garden; } else { garden_param = '$null'; }
