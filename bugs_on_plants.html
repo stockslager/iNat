@@ -34,6 +34,8 @@ let p_mode        = winurlparams.get('mode') || 'visitor';
 let p_nm1         = winurlparams.get('nm1') || '';
 let p_nm2         = winurlparams.get('nm2') || '';
 
+winurlparams.append('iconic_taxa', 'plantae');
+
 // the place selected was added to seed_project parameter and needs to be
 // parsed if control is returning from the insects page.
 let prj    = p_insect_project.split('$')[0];
@@ -166,7 +168,7 @@ function setUpDefaults(configurations) {
 
    if( configuration.plant_filter ) {
        console.log('setting filter');
-       winurlparams.append(configuration.plant_filter, configuration.plant_filter_value);
+       winurlparams.append(("field:"+configuration.plant_filter), configuration.plant_filter_value);
    }
  
    if( configuration.default_place ) {
