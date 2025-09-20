@@ -1,4 +1,4 @@
-<!DOCTYPE html>  
+er<!DOCTYPE html>  
 <html lang="en">    
  
 <head>
@@ -28,7 +28,6 @@ let p_project_id  = winurlparams.get('project_id') || '';
 let p_title       = winurlparams.get('title') || 'on';
 let p_state       = winurlparams.get('state') || ''; 
 let p_params      = winurlparams.get('params') || '';
-let p_user        = winurlparams.get('user_id') || '';
 let p_garden      = winurlparams.get('garden') || '';
 let p_mode        = winurlparams.get('mode') || 'visitor';
 let p_nm1         = winurlparams.get('nm1') || '';
@@ -195,6 +194,10 @@ function setUpDefaults(configurations) {
        }
    }
 
+   if( configuration.user_id ) {
+       winurlparams.append('user_id', configuration.user_id);
+   }
+
    if( configuration.tag_name ) {
        winurlparams.append('q', configuration.tag_name);
    }
@@ -344,9 +347,6 @@ function fresults(xobj) {
       if( p_nm1 ) { prefix = p_nm1; }
       if( p_nm2 ) { suffix = p_nm2; }
 
-      let u_param = '';
-      if( configuration.user_id ) { u_param = '&user_id='+configuration.user_id; }
-
       if( configuration.hide_on_any === 'yes' ) {
           if( p_mode.includes('explorer') ) {
               on_all = furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+'&mode='+p_mode,'<span id="topright">'+p_title+' any plant</span>');
@@ -356,7 +356,7 @@ function fresults(xobj) {
               }
           }
       } else {
-          on_all = furl(github_root+'plant_activity.html?project_id='+configuration.insect_project+u_param+'&place_id='+p_place_id+'&params='+p_params+'&target_name=all%20plants'+state_param,'<span id="topright">'+p_title+' any plant</span>');
+          on_all = furl(github_root+'plant_activity.html?project_id='+configuration.insect_project+'&place_id='+p_place_id+'&params='+p_params+'&target_name=all%20plants'+state_param,'<span id="topright">'+p_title+' any plant</span>');
       }
 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
@@ -411,7 +411,7 @@ function fresults(xobj) {
              values = [
                   {innerText:i+1},
                   {innerHTML:image},
-                  {innerHTML:furl(github_root+'plant_activity.html?project_id='+configuration.insect_project+u_param+'&place_id='+p_place_id+'&params='+p_params+'&target_id='+rec.taxon.id+'&target_name='+header_name+state_param,displayName)},
+                  {innerHTML:furl(github_root+'plant_activity.html?project_id='+configuration.insect_project+'&place_id='+p_place_id+'&params='+p_params+'&target_id='+rec.taxon.id+'&target_name='+header_name+state_param,displayName)},
                   ];
          } else if( p_mode.includes('explorer') ) {
              values = [
