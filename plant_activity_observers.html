@@ -64,14 +64,7 @@ if( p_seed_prj ) {
         p_mode = mode;
     }
 } 
-       
-       state_param += ('&state='+p_project_id);
-       if( p_place_id ) { state_param += '$'+p_place_id; } else { state_param += '$null'; }
-       if( p_params )   { state_param += '$'+p_params;   } else { state_param += '$null'; }
-       if( p_user )     { state_param += '$'+p_user;     } else { state_param += '$null'; }
-       if( p_garden )   { state_param += '$'+p_garden;   } else { state_param += '$null'; }
-       if( p_mode )     { state_param += '$'+p_mode;     } else { state_param += '$null'; }
- 
+        
 // cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
 // session storage is only used for sorting of data in columns at this point.
 let p_cache_check = winurlparams.get('cache_check') || 'no';  
@@ -251,6 +244,13 @@ function fresults(result, places_obj, taxa_obj) {
 
          let params = '';
          if( p_params )         { params      += '&params=' + p_params; }   
+
+         state_param = ('&state='+p_project_id);
+         if( p_place_id )     { state_param += '$'+p_place_id;     } else { state_param += '$null'; }
+         if( p_params )       { state_param += '$'+p_params;       } else { state_param += '$null'; }
+         if( rec.user_login ) { state_param += '$'+rec.user_login; } else { state_param += '$null'; }
+         if( p_garden )       { state_param += '$'+p_garden;       } else { state_param += '$null'; }
+         if( p_mode )         { state_param += '$'+p_mode;         } else { state_param += '$null'; }
 
          let values = [
             {innerText:i+1},
