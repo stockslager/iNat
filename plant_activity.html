@@ -141,6 +141,8 @@ function setUpDefaults(configurations) {
        throw new Error('No configurations defined.');
    }
 
+   interactions   = configuration.interactions;
+
    api_params += ('?project_id='+configuration.insect_project);
    api_params += '&place_id='+configuration.default_place;
    api_params += '&hrank=species';
@@ -261,7 +263,6 @@ function buildMenu( results ) {
             }
 
             // check to see if they entered the flow from a seed library.  if so, return control there.
-    console.log('mode '+mode);
             if( p_state ) {
                 if( mode.includes('observer') ) {
                     menu_string += buildHome( furl(github_root+'plant_activity_observers.html?state='+p_state+'&plant_id='+p_field_value+'&plant_name='+p_target_name,'&#127807;') );
@@ -367,7 +368,6 @@ async function asyncGetData() {
      .then(response => response.json())
      .then(data => {
       // Access your data here 
-      interactions   = data.interactions;
       if( data.configurations ) {
            console.log('setting up defaults...');
            setUpDefaults(data.configurations);
