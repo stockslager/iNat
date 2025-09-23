@@ -400,7 +400,9 @@ function fresults(xobj) {
 
          let image = '<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />';
 
-         if( p_project_id === '255754' || p_project_id === '260252' ) {
+         let use_plant_project_images = configuration.use_plant_project_images || 'no';
+
+         if( p_project_id === '255754' || p_project_id === '260252' || use_plant_project_images === 'yes' ) {
              image = furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />');
          }
 
@@ -455,8 +457,10 @@ async function asyncGetData() {
    });
 
    let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
+
+   let use_plant_project_images = configuration.use_plant_project_images || 'no';
  
-   if( p_project_id === '255754' || p_project_id === '260252' ) {
+   if( p_project_id === '255754' || p_project_id === '260252' || use_plant_project_images === 'yes' ) {
        apibase = 'https://api.inaturalist.org/v1/observations';
    }
  
