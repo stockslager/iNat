@@ -355,7 +355,7 @@ function fresults(xobj) {
               }
           }
       } else {
-          on_all = furl(github_root+'plant_activity.html?project_id='+configuration.insect_project+'&target_name=all%20plants'+state_param,'<span id="topright">'+p_title+' any plant</span>');
+          on_all = furl(github_root+'plant_activity.html?target_name=all%20plants'+state_param,'<span id="topright">'+p_title+' any plant</span>');
       }
 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
@@ -412,7 +412,7 @@ function fresults(xobj) {
              values = [
                   {innerText:i+1},
                   {innerHTML:image},
-                  {innerHTML:furl(github_root+'plant_activity.html?project_id='+configuration.insect_project+'&target_id='+rec.taxon.id+'&target_name='+header_name+state_param,displayName)},
+                  {innerHTML:furl(github_root+'plant_activity.html?target_id='+rec.taxon.id+'&target_name='+header_name+state_param,displayName)},
                   ];
          } else if( p_mode.includes('explorer') ) {
              values = [
