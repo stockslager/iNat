@@ -345,7 +345,6 @@ function fresults(xobj) {
       if( p_nm2 ) { suffix = p_nm2; }
 
       if( configuration.hide_on_any === 'yes' ) {
-       console.log('asdfsad');
           if( p_mode.includes('explorer') ) {
               on_all = furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+'&mode='+p_mode,'<span id="topright">'+p_title+' any plant</span>');
           } else {
@@ -356,7 +355,6 @@ function fresults(xobj) {
       } else {
           on_all = furl(github_root+'plant_activity.html?project_id='+configuration.insect_project+'&place_id='+p_place_id+'&params='+p_params+'&target_name=all%20plants'+state_param,'<span id="topright">'+p_title+' any plant</span>');
       }
-      console.log('2222');
 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
                  +'per page: '+fcomnum(per_page)+ nn_on_all + '<br />'
