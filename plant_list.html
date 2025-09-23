@@ -325,7 +325,7 @@ function fresults(xobj) {
       if( p_params ) { json = '$'+p_params; } else { json = '$null'; }
 
       let user_param = '';
-      if( configuration.user_id ) { user_param = '&user_id='+configuration.user_id; }
+      if( configuration.user_id ) { user_param = '$'+configuration.user_id; } else { '$null'; }
 
       let garden_param = '';
       if( p_garden ) { garden_param = '$'+p_garden; } else { garden_param = '$null'; }
