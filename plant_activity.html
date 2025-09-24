@@ -216,18 +216,25 @@ function buildMenu( results ) {
             // filter has been set, skip the behavior drop-down since there's too much
             // risk that filtered observations won't include an observation with the 
             // behaviors in the drop-down.
-            let skip_behaviors = 'no';
+            /*let skip_behaviors = 'no';
             if( ('field:'+configuration.field_name.toLowerCase()) === behavior_field.toLowerCase() && p_taxon_id ) {
                 skip_behaviors = 'yes';
-            }
+            }*/
 
-            // if a specific plant or taxon has already been chosen, we don't
-            // want to show the interacitons drop downs because they don't
-            // necessarily exist for every plant / visitor combination.
-            // if the interaction is "preyed upon" for example... what are
-            // the odds that a specific insect was "preyed upon" while
-            // on every single plant in the project area?
-            if( interactions && p_target_name === 'all plants' && skip_behaviors === 'no' ) {
+            let show_behaviors = configuration.show_behaviors || 'no';
+            if( p_target_name === 'on all' ) {
+                if( show_behaviors === 'on_all' ) {
+                    show_behaviors = 'yes';
+                }
+            } else {
+                if( show_behaviors === 'by_plant' ) {
+                    show_behaviors = 'yes';
+                }
+            }      
+
+            // show behaviors if there are interactions in the config and if 
+            // show_behaviors is 'on_all' or 'by_plant'.
+            if( interactions && show_behaviors === 'yes'/*skip_behaviors === 'no'*/ ) {
                 // if a taxon_id has been selected from the "show" drop-down
                 // display the value of the "field" as a non-clickable title.
                 if( p_taxon_id && behavior_field_value ) {
