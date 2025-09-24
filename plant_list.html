@@ -347,17 +347,19 @@ function fresults(xobj) {
       let prefix = 'Hilighted Natives in';
       let suffix = configuration.title;
 
+      let show_behavior = configuration.show_behavior || 'no';
+    
       if( p_nm1 ) { prefix = p_nm1; }
       if( p_nm2 ) { suffix = p_nm2; }
 
-      if( configuration.hide_on_any === 'yes' ) {
+      if( show_behavior === 'by_plant' || show_behavior === 'on_all' ) {
+          on_all = furl(github_root+'plant_activity.html?target_name=all%20plants'+state_param,'<span id="topright">'+p_title+' any plant</span>');
+      } else {
           if( p_mode.includes('explorer') ) {
               on_all = furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+'&mode='+p_mode,'<span id="topright">'+p_title+' any plant</span>');
           } else {
               nn_on_all = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
           }
-      } else {
-          on_all = furl(github_root+'plant_activity.html?target_name=all%20plants'+state_param,'<span id="topright">'+p_title+' any plant</span>');
       }
 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
