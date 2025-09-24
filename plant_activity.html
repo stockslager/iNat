@@ -160,7 +160,7 @@ function buildMenu( results ) {
    if( configuration.field_name ) {
        field_name = ('&field:'+configuration.field_name+'=');
    } else {
-       field_name = ('&'+p_field+'=');
+       field_name = ('&'+behavior_field+'=');
    }
 
    let sub_taxon_arr = [];
@@ -217,7 +217,7 @@ function buildMenu( results ) {
             // risk that filtered observations won't include an observation with the 
             // behaviors in the drop-down.
             let skip_behaviors = 'no';
-            if( ('field:'+configuration.field_name.toLowerCase()) === p_field.toLowerCase() && p_taxon_id ) {
+            if( ('field:'+configuration.field_name.toLowerCase()) === behavior_field.toLowerCase() && p_taxon_id ) {
                 skip_behaviors = 'yes';
             }
 
@@ -230,17 +230,17 @@ function buildMenu( results ) {
             if( interactions /*&& p_target_name === 'all plants'*/ && skip_behaviors === 'no' ) {
                 // if a taxon_id has been selected from the "show" drop-down
                 // display the value of the "field" as a non-clickable title.
-                if( p_taxon_id && p_field_value ) {
-                    menu_string += buildTitle( p_field_value );
+                if( p_taxon_id && behavior_field_value ) {
+                    menu_string += buildTitle( behavior_field_value );
                 } else {
                     for( let i=0; i<interactions.length; i++ ) {
                          if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
                              obs_fields_dd_copy_opts = getObsFieldsDDOpts( winurlparams );
                              obs_fields_dd_copy_opts += ('&obs_fields=' + interactions[i].obs_field_list);
                              obs_fields_dd_copy_opts += ('&field:'+interactions[i].field_name+'='+interactions[i].field_value );
-                             if( p_field.toLowerCase() === ('field:'+interactions[i].field_name.toLowerCase()) ) {
-                                 if( p_field_value ) {
-                                     if( p_field_value && interactions[i].field_value && p_field_value.toLowerCase() === interactions[i].field_value.toLowerCase() ) {
+                             if( behavior_field.toLowerCase() === ('field:'+interactions[i].field_name.toLowerCase()) ) {
+                                 if( behavior_field_value ) {
+                                     if( behavior_field_value && interactions[i].field_value && behavior_field_value.toLowerCase() === interactions[i].field_value.toLowerCase() ) {
                                          dd_title = interactions[i].dd_name;
                                      }
                                  } else {
@@ -262,7 +262,7 @@ function buildMenu( results ) {
             // check to see if they entered the flow from a seed library.  if so, return control there.
             if( p_state ) {
                 if( mode.includes('observer') ) {
-                    menu_string += buildHome( furl(github_root+'plant_activity_observers.html?state='+p_state+'&plant_id='+p_field_value+'&plant_name='+p_target_name,'&#127807;') );
+                    menu_string += buildHome( furl(github_root+'plant_activity_observers.html?state='+p_state+'&plant_id='+behavior_field_value+'&plant_name='+p_target_name,'&#127807;') );
                 } else {
                     menu_string += buildHome( furl(github_root+'plant_list.html?state='+p_state,'&#127807;') );
                 }
