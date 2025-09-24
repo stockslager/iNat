@@ -221,20 +221,20 @@ function buildMenu( results ) {
                 skip_behaviors = 'yes';
             }*/
 
-            let show_behaviors = configuration.show_behaviors || 'no';
+            let show_behavior = configuration.show_behavior || 'no';
             if( p_target_name === 'on all' ) {
-                if( show_behaviors === 'on_all' ) {
-                    show_behaviors = 'yes';
+                if( show_behavior === 'on_all' ) {
+                    show_behavior = 'yes';
                 }
             } else {
-                if( show_behaviors === 'by_plant' ) {
-                    show_behaviors = 'yes';
+                if( show_behavior === 'by_plant' ) {
+                    show_behavior = 'yes';
                 }
             }      
 
             // show behaviors if there are interactions in the config and if 
-            // show_behaviors is 'on_all' or 'by_plant'.
-            if( interactions && show_behaviors === 'yes'/*skip_behaviors === 'no'*/ ) {
+            // show_behavior is 'on_all' or 'by_plant'.
+            if( interactions && show_behavior === 'yes'/*skip_behaviors === 'no'*/ ) {
                 // if a taxon_id has been selected from the "show" drop-down
                 // display the value of the "field" as a non-clickable title.
                 if( p_taxon_id && behavior_field_value ) {
