@@ -65,7 +65,7 @@ if( mode ) {
     p_mode = mode;
 }
 if( garden ) {
-    if( p_mode.includes('explorer') ) {
+    if( p_mode.includes('observer') ) {
         winurlparams.delete('garden');
         p_garden = '';
     } else {
@@ -355,7 +355,7 @@ function fresults(xobj) {
       if( show_behavior === 'on_all' ) {
           on_all = furl(github_root+'plant_activity.html?target_name=all%20plants'+state_param,'<span id="topright">'+p_title+' any plant</span>');
       } else {
-          if( p_mode.includes('explorer') ) {
+          if( p_mode.includes('observer') ) {
               on_all = furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+'&mode='+p_mode,'<span id="topright">'+p_title+' any plant</span>');
           } else {
               nn_on_all = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
@@ -418,7 +418,7 @@ function fresults(xobj) {
                   {innerHTML:image},
                   {innerHTML:furl(github_root+'plant_activity.html?target_id='+rec.taxon.id+'&target_name='+header_name+state_param,displayName)},
                   ];
-         } else if( p_mode.includes('explorer') ) {
+         } else if( p_mode.includes('observer') ) {
              values = [
                   {innerText:i+1},
                   {innerHTML:image},
