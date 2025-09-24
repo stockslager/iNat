@@ -227,12 +227,13 @@ function buildMenu( results ) {
             // if the interaction is "preyed upon" for example... what are
             // the odds that a specific insect was "preyed upon" while
             // on every single plant in the project area?
-            if( interactions /*&& p_target_name === 'all plants'*/ && skip_behaviors === 'no' ) {
+            if( interactions && p_target_name === 'all plants' && skip_behaviors === 'no' ) {
                 // if a taxon_id has been selected from the "show" drop-down
                 // display the value of the "field" as a non-clickable title.
                 if( p_taxon_id && behavior_field_value ) {
                     menu_string += buildTitle( behavior_field_value );
                 } else {
+                    links += furl(github_root+'plant_activity.html'+getObsFieldsDDOpts(winurlparams), 'All');
                     for( let i=0; i<interactions.length; i++ ) {
                          if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
                              obs_fields_dd_copy_opts = getObsFieldsDDOpts( winurlparams );
