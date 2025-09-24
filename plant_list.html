@@ -35,12 +35,14 @@ let p_nm2         = winurlparams.get('nm2') || '';
 
 // the place selected was added to seed_project parameter and needs to be
 // parsed if control is returning from the insects page.
-let prj    = p_state.split('$')[0];
-let place  = p_state.split('$')[1];
-let params = p_state.split('$')[2];
-let user   = p_state.split('$')[3];
-let garden = p_state.split('$')[4];
-let mode   = p_state.split('$')[5];
+let prj        = p_state.split('$')[0];
+let place      = p_state.split('$')[1];
+let params     = p_state.split('$')[2];
+let user       = p_state.split('$')[3];
+let garden     = p_state.split('$')[4];
+let mode       = p_state.split('$')[5];
+let plant_id   = p_state.split('$')[6];
+let plant_name = p_state.split('$')[7];
 
 if( prj ) {
     p_insect_project = prj;
@@ -338,7 +340,7 @@ function fresults(xobj) {
 
       let mode_param = '';
       if( p_mode ) { mode_param = '$'+p_mode; } else { mode_param = '$null'; }
-       
+
       let state_param = ('&state='+p_insect_project+place_param+json+user_param+garden_param+mode_param);
 
       let on_all = '';
@@ -416,17 +418,19 @@ function fresults(xobj) {
              image = furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />');
          }
 
+         state_param += '$'+rec.taxon.id+'$'+header_name;
+
          if( p_mode.includes('visitor') ) {
              values = [
                   {innerText:i+1},
                   {innerHTML:image},
-                  {innerHTML:furl(github_root+'plant_activity.html?target_id='+rec.taxon.id+'&target_name='+header_name+state_param,displayName)},
+                  {innerHTML:furl(github_root+'plant_activity.html?state_param,displayName)},
                   ];
          } else if( p_mode.includes('observer') ) {
              values = [
                   {innerText:i+1},
                   {innerHTML:image},
-                  {innerHTML:furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+'&plant_id='+rec.taxon.id+'&plant_name='+header_name+'&mode='+p_mode, displayName)},
+                  {innerHTML:furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+'&mode='+p_mode, displayName)},
                   ];
          }
         
