@@ -240,6 +240,7 @@ function fresults(result, places_obj, taxa_obj) {
             user_icon = '<img class="exp_icon" src="'+user_icon+'" />';
          }
 
+         let plant_param = '';
          let params = '';
          if( p_params )         { params      += '&params=' + p_params; }   
 
@@ -250,11 +251,13 @@ function fresults(result, places_obj, taxa_obj) {
          if( p_garden )       { state_param += '$'+p_garden;       } else { state_param += '$null'; }
          if( p_mode )         { state_param += '$'+p_mode;         } else { state_param += '$null'; }
 
+         if( p_plant_id )     { plant_param += '&target_id='+p_plant_id; }
+
          let values = [
             {innerText:i+1},
             {innerHTML:user_icon},
             {innerHTML:furl(root_people+rec.user_login,rec.user_login)/*+map*/},
-            {innerHTML:furl(github_root+'plant_activity.html?project_id='+configuration.insect_project+'&user_id='+rec.user_login+params+'&title=on&target_name='+p_plant_name+'&hrank=species'+state_param,rec.species_count )},
+            {innerHTML:furl(github_root+'plant_activity.html?project_id='+configuration.insect_project+'&user_id='+rec.user_login+params+'&title=on&target_name='+p_plant_name+plant_param+'&hrank=species'+state_param,rec.species_count )},
             //{innerHTML:furl(github_root+'plant_grid.html?project_id='+p_project_id+params+'&user_id='+rec.user_login+p_field_opt,rec.obs_count)},
          ];
          faddelems('td',brow,values);
