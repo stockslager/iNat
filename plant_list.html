@@ -268,6 +268,10 @@ function buildMenu(configs) {
           } else {
               menu_string += buildDD('Garden', garden_links); 
           }
+      } else {
+          let menu_title = configuration.title;
+          if( p_nm2 ) { menu_title = p_nm2 }
+          menu_string += buildDDTitle(menu_title); 
       }
  
       if( configuration.places && configuration.places.length > 0 ) {
