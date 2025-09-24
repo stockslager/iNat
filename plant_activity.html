@@ -31,8 +31,9 @@ let p_sub_menu_array    = winurlparams.get('sub_menu_array') || '';
 let p_state         = winurlparams.get('state') || '';
 let p_taxon_nm      = winurlparams.get('taxon_nm') || 'Show';
 let p_page          = winurlparams.get('page') || '';
-let p_field = '';
-let p_field_value = '';
+let p_obs_fields    = winurlparams.get('obs_fields') || '';
+let behavior_field = '';
+let behavior_field_value = '';
 let obs_field_array = [];
 let configuration = '';
 let configurations = [];
@@ -43,6 +44,7 @@ let dlString = '';
 
 let api_params = '';
 let all_params = '';
+let behavior_params = '';
 
 let opts = copyOpts( winurlparams );
 
@@ -58,8 +60,9 @@ let mode         = p_state.split('$')[5];
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
-      p_field = key;
-      p_field_value = value;
+      behavior_field = key;
+      behavior_field_value = value;
+      behavior_params = '&'+behavior_field+'='+behavior_field_value;
   }
 }  
 
@@ -140,6 +143,7 @@ function setUpDefaults(configurations) {
    api_params += '&place_id='+configuration.default_place;
    api_params += '&hrank=species';
    api_params += '&field:'+configuration.field_name+'='+p_target_id;
+   api_params += behavior_params;
 
    if( p_user_id ) { api_params += '&user_id='+p_user_id; }
 
