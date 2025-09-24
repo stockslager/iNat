@@ -252,9 +252,9 @@ function buildMenu(configs) {
       if( p_insect_project ) { menu_params += '&insect_project='+p_insect_project; }
       if( p_mode )           { mode_params += '&mode='+p_mode; }
 
-      // if no insect_project parameter was specified, build a menu showing each configuration and
+      // if multiple configurations exist, build a menu showing each configuration and
       // let them select which configuration (plant list) they'd like.
-      if( !p_insect_project ) {
+      if( configs.length > 1 ) {
           for( let i=0; i<configs.length; i++ ) {
                garden_links += furl(github_root+'plant_list.html'+params+menu_params+mode_params+taxon_param+'&garden='+configs[i].title,configs[i].title);
           }
