@@ -202,8 +202,6 @@ function fresults(result, places_obj, taxa_obj) {
       if( !p_plant_name ) {
           on_all = '<span id="topright">showing counts for<br> <b>' +
                    'all plants</b></span>';
-                   //+ furl(github_root+'plant_activity.html?project_id='+configuration.insect_project+'&params='+p_params+p_field_opt+'&title=on'+state_param,' any plant') 
-                   //+ '</b><br>by any user</span>';
       } else {
           on_all2 = '<span id="topright">showing counts for<br><b>'+p_plant_name.toLowerCase()+'</b>' +
                    '<br>show ' +
@@ -256,7 +254,7 @@ function fresults(result, places_obj, taxa_obj) {
             {innerText:i+1},
             {innerHTML:user_icon},
             {innerHTML:furl(root_people+rec.user_login,rec.user_login)/*+map*/},
-            {innerHTML:furl(github_root+'plant_activity.html?project_id='+configuration.insect_project+'&user_id='+rec.user_login+params+'&field:'+configuration.field_name+'='+(p_plant_id||'')+'&title=on&target_name='+p_plant_name+'&hrank=species'+state_param,rec.species_count )},
+            {innerHTML:furl(github_root+'plant_activity.html?project_id='+configuration.insect_project+'&user_id='+rec.user_login+params+'&title=on&target_name='+p_plant_name+'&hrank=species'+state_param,rec.species_count )},
             //{innerHTML:furl(github_root+'plant_grid.html?project_id='+p_project_id+params+'&user_id='+rec.user_login+p_field_opt,rec.obs_count)},
          ];
          faddelems('td',brow,values);
