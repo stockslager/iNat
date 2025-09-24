@@ -212,15 +212,6 @@ function buildMenu( results ) {
             let link_count = 0;
             let dd_title = '';
 
-            // if the field is set to the primary observation field and a taxon id 
-            // filter has been set, skip the behavior drop-down since there's too much
-            // risk that filtered observations won't include an observation with the 
-            // behaviors in the drop-down.
-            /*let skip_behaviors = 'no';
-            if( ('field:'+configuration.field_name.toLowerCase()) === behavior_field.toLowerCase() && p_taxon_id ) {
-                skip_behaviors = 'yes';
-            }*/
-
             let show_behavior = configuration.show_behavior || 'no';
             if( p_target_name === 'all plants' ) {
                 if( show_behavior === 'on_all' ) {
@@ -231,12 +222,10 @@ function buildMenu( results ) {
                     show_behavior = 'yes';
                 }
             }      
-            console.log('show behavior ' +show_behavior );
-            console.log('target ' +p_target_name);
 
             // show behaviors if there are interactions in the config and if 
             // show_behavior is 'on_all' or 'by_plant'.
-            if( interactions && show_behavior === 'yes'/*skip_behaviors === 'no'*/ ) {
+            if( interactions && show_behavior === 'yes' ) {
                 // if a taxon_id has been selected from the "show" drop-down
                 // display the value of the "field" as a non-clickable title.
                 if( p_taxon_id && behavior_field_value ) {
