@@ -23,6 +23,8 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
+let p_target_id    = winurlparams.get('target_id') || '';
+let p_target_name  = winurlparams.get('target_name') || '';
 let p_prefix       = winurlparams.get('prefix') || '';
 let p_show_menu     = winurlparams.get('show_menu') || 'no';
 let p_sub_menu_array    = winurlparams.get('sub_menu_array') || '';
@@ -54,8 +56,6 @@ let p_params      = p_state.split('$')[2];
 let p_user_id     = p_state.split('$')[3];
 let garden        = p_state.split('$')[4];
 let mode          = p_state.split('$')[5];
-let p_target_id   = p_state.split('$')[6];
-let p_target_name = p_state.split('$')[7];
 
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of winurlparams.entries()) {
