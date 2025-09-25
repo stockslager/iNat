@@ -127,7 +127,7 @@ function buildLifeStageMenu(data, obs_fields) {
    menu_string = '<div class="navbar">';
 
    if( p_hide_dds === 'no' ) {
-       if( mode !== 'visitors' ) {
+       if( !mode.includes('visitors') && !mode.includes('observers') && !mode.includes('seeds') ) {
            links = furl(github_root+'plant_grid.html'+all_opts,"grid");
            if( field_key ) {
                links += furl(github_root+'plant_activity_list.html'+all_opts+'&obs_fields='+obs_fields,"list");
