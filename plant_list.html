@@ -159,6 +159,8 @@ function setUpDefaults(configurations) {
        throw new Error('A plant_project or default_place must be specified in '+p_params+'.json');
    }
 
+   winurlparams.append('iconic_taxa', 'plantae');
+
    if( configuration.plant_filter ) {
        console.log('setting filter');
        winurlparams.append(configuration.plant_filter, configuration.plant_filter_value);
