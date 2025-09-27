@@ -26,38 +26,30 @@ let p_place_id    = '';
 let p_taxon_id    = winurlparams.get('taxon_id') || '';
 let p_project_id  = winurlparams.get('project_id') || '';
 let p_title       = winurlparams.get('title') || 'on';
-let p_insect_project = winurlparams.get('insect_project') || ''; 
+let p_state       = winurlparams.get('state') || ''; 
 let p_params      = winurlparams.get('params') || '';
-let p_user        = winurlparams.get('user_id') || '';
 let p_garden      = winurlparams.get('garden') || '';
 let p_mode        = winurlparams.get('mode') || 'visitor';
 let p_nm1         = winurlparams.get('nm1') || '';
 let p_nm2         = winurlparams.get('nm2') || '';
 
-winurlparams.append('iconic_taxa', 'plantae');
-
 // the place selected was added to seed_project parameter and needs to be
 // parsed if control is returning from the insects page.
-let prj    = p_insect_project.split('$')[0];
-let place  = p_insect_project.split('$')[1];
-let params = p_insect_project.split('$')[2];
-let user   = p_insect_project.split('$')[3];
-let garden = p_insect_project.split('$')[4];
-let mode   = p_insect_project.split('$')[5];
+let prj          = p_state.split('$')[0];
+let place        = p_state.split('$')[1];
+let params       = p_state.split('$')[2];
+let user         = p_state.split('$')[3];
+let garden       = p_state.split('$')[4];
+let mode         = p_state.split('$')[5];
+let filter_taxon = p_state.split('$')[6];
 
 if( prj ) {
-    winurlparams.delete('insect_project');
-    winurlparams.append('insect_project', prj);
     p_insect_project = prj;
 } else {
-    winurlparams.delete('insect_project');
     p_insect_project = '';
 }
 // the user_id isn't used on the plant list page, it's only used to display wildlife activity.
 // so if one exists just save it to pass along to the wildlife activity page.
-if( user ) {
-    p_user = user;
-}
 if( place ) {
     winurlparams.delete('place_id');
     winurlparams.append('place_id', place);
@@ -74,7 +66,7 @@ if( mode ) {
     p_mode = mode;
 }
 if( garden ) {
-    if( p_mode.includes('explorer') ) {
+    if( p_mode.includes('observer') ) {
         winurlparams.delete('garden');
         p_garden = '';
     } else {
@@ -82,6 +74,11 @@ if( garden ) {
         winurlparams.append('garden', garden);
         p_garden = garden;
     }
+}
+if( filter_taxon ) {
+    winurlparams.delete('taxon_id');
+    winurlparams.append('taxon_id', filter_taxon);
+    p_taxon_id = filter_taxon;
 }
 
 let configuration = '';
@@ -151,6 +148,7 @@ function setUpDefaults(configurations) {
            for( let i=0; i<configurations.length; i++ ) {
                 if( configurations[i].title.toLowerCase() === p_garden.toLowerCase() ) {
                     configuration = configurations[i];
+                    p_insect_project = configuration.insect_project;
                 }
            }
        }
@@ -159,12 +157,15 @@ function setUpDefaults(configurations) {
    // if the configuration is still not found, default to the first one.
    if( !configuration ) {
        configuration = configurations[0];
+       p_insect_project = configuration.insect_project;
    }
 
    if( !configuration.default_place && !configuration.plant_project ) {
        faddelem('p',document.body,{innerText:'A plant_project or default_place must be specified in '+p_params+'.json'});
        throw new Error('A plant_project or default_place must be specified in '+p_params+'.json');
    }
+
+   winurlparams.append('iconic_taxa', 'plantae');
 
    if( configuration.plant_filter ) {
        console.log('setting filter');
@@ -181,13 +182,6 @@ function setUpDefaults(configurations) {
        winurlparams.append('id', configuration.plant_ids);
    }
  
-   if( configuration.default_taxon ) {
-       if( !p_taxon_id ) {
-           winurlparams.append('taxon_id', configuration.default_taxon);
-           p_taxon_id = configuration.default_taxon;
-       }
-   }
-
    if( configuration.taxon_ids ) {
        winurlparams.delete('taxon_id');
        winurlparams.append('taxon_id', configuration.taxon_ids);
@@ -198,6 +192,10 @@ function setUpDefaults(configurations) {
            winurlparams.append('project_id', configuration.plant_project);
            p_project_id = configuration.plant_project;
        }
+   }
+
+   if( configuration.user_id ) {
+       winurlparams.append('user_id', configuration.user_id);
    }
 
    if( configuration.tag_name ) {
@@ -255,9 +253,9 @@ function buildMenu(configs) {
       if( p_insect_project ) { menu_params += '&insect_project='+p_insect_project; }
       if( p_mode )           { mode_params += '&mode='+p_mode; }
 
-      // if no insect_project parameter was specified, build a menu showing each configuration and
+      // if multiple configurations exist, build a menu showing each configuration and
       // let them select which configuration (plant list) they'd like.
-      if( !p_insect_project ) {
+      if( configs.length > 1 ) {
           for( let i=0; i<configs.length; i++ ) {
                garden_links += furl(github_root+'bugs_on_plants.html'+params+menu_params+mode_params+taxon_param+'&garden='+configs[i].title,configs[i].title);
           }
@@ -271,12 +269,18 @@ function buildMenu(configs) {
           } else {
               menu_string += buildDD('Garden', garden_links); 
           }
+      } else {
+          if( !configuration.taxa && !configuration.places ) {
+              let menu_title = configuration.title;
+              if( p_nm2 ) { menu_title = p_nm2 }
+              menu_string += buildDDTitle(menu_title); 
+          }
       }
  
       if( configuration.places && configuration.places.length > 0 ) {
-          //links += furl(github_root+'bugs_on_plants.html'+menu_params+mode_params+'&place_id='+configuration.default_place+taxon_param,'All');
+          //links += furl(github_root+'bugs_on_plants.html'+params+menu_params+mode_params+'&place_id='+configuration.default_place+taxon_param,'All');
           for( let i=0; i<configuration.places.length; i++ ) {
-               links += furl(github_root+'bugs_on_plants.html'+menu_params+mode_params+taxon_param,configuration.places[i].place_name);
+               links += furl(github_root+'bugs_on_plants.html'+params+menu_params+mode_params+taxon_param,configuration.places[i].place_name);
           }
       }
   
@@ -284,9 +288,9 @@ function buildMenu(configs) {
       links = '';
 
       if( configuration.taxa && configuration.taxa.length > 0 ) {
-          links += furl(github_root+'bugs_on_plants.html'+menu_params+mode_params+'&taxon_id='+configuration.default_taxon,'All');
+          links += furl(github_root+'bugs_on_plants.html'+params+menu_params+mode_params,'All');
           for( let i=0; i<configuration.taxa.length; i++ ) {
-               links += furl(github_root+'bugs_on_plants.html'+menu_params+mode_params+'&taxon_id='+configuration.taxa[i].taxon_id,configuration.taxa[i].taxon_name);
+               links += furl(github_root+'bugs_on_plants.html'+params+menu_params+mode_params+'&taxon_id='+configuration.taxa[i].taxon_id,configuration.taxa[i].taxon_name);
           }
       }
  
@@ -324,45 +328,48 @@ function fresults(xobj) {
       ];
 
       let place_param = '';
-      if( p_place_id ) { place_param = '$'+p_place_id; } else { place_param = '$null'; }
+      if( p_place_id ) { place_param = '$'+p_place_id; } else { place_param = '$'; }
 
       let json = '';
-      if( p_params ) { json = '$'+p_params; } else { json = '$null'; }
+      if( p_params ) { json = '$'+p_params; } else { json = '$'; }
 
       let user_param = '';
-      if( p_user ) { user_param = '$'+p_user; } else { user_param = '$null'; }
+      if( configuration.user_id ) { user_param = '$'+configuration.user_id; } else { user_param = '$'; }
 
       let garden_param = '';
-      if( p_garden ) { garden_param = '$'+p_garden; } else { garden_param = '$null'; }
+      if( p_garden ) { garden_param = '$'+p_garden; } else { garden_param = '$'; }
 
       let mode_param = '';
-      if( p_mode ) { mode_param = '$'+p_mode; } else { mode_param = '$null'; }
-       
-      let field_param    = ('&field:'+configuration.field_name+'=');
-      let seed_prj_param = ('&seed_project=pip'+p_insect_project+place_param+json+user_param+garden_param+mode_param);
+      if( p_mode ) { mode_param = '$'+p_mode; } else { mode_param = '$'; }
+
+      let filter_taxon_param = '';
+      if( p_taxon_id ) { filter_taxon_param = '$'+p_taxon_id; } else { filter_taxon_param = '$'; }
+
+      let state_param = ('&state='+p_insect_project+place_param+json+user_param+garden_param+mode_param+filter_taxon_param);
 
       let on_all = '';
       let nn_on_all = '';
 
-      let prefix = '';
+      let prefix = 'Hilighted Natives in';
       let suffix = configuration.title;
 
+      let show_behavior = configuration.show_behavior || 'no';
+    
       if( p_nm1 ) { prefix = p_nm1; }
       if( p_nm2 ) { suffix = p_nm2; }
 
-      let u_param = '';
-      if( configuration.user_id ) { u_param = '&user_id='+configuration.user_id; }
-
-      if( configuration.hide_on_any === 'yes' ) {
-          if( p_mode.includes('explorer') ) {
+      if( show_behavior === 'on_all' ) {
+          if( p_mode.includes('observer') ) {
               on_all = furl(github_root+'bugs_explorers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+'&mode='+p_mode,'<span id="topright">'+p_title+' any plant</span>');
           } else {
-              if( !p_insect_project ) {
-                  nn_on_all = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
-              }
+              on_all = furl(github_root+'bugs_on_plants2.html?target_name=all%20plants'+state_param,'<span id="topright">'+p_title+' any plant</span>');
           }
       } else {
-          on_all = furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+u_param+'&place_id='+p_place_id+'&params='+p_params+'&menu=pip&title='+p_title+'&target_name=all%20plants'+field_param+seed_prj_param+'&hrank=species','<span id="topright">'+p_title+' any plant</span>');
+          if( p_mode.includes('observer') ) {
+              on_all = furl(github_root+'bugs_explorers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+'&mode='+p_mode,'<span id="topright">'+p_title+' any plant</span>');
+          } else {
+              nn_on_all = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
+          }
       }
 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
@@ -403,16 +410,15 @@ function fresults(xobj) {
              }
          }
 
-         // append the selected taxon id to the field_param to build links to individual insects.
-         field_param = ('&field:'+configuration.field_name+'='+rec.taxon.id);
-       
          let displayName    = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
 
          let values = [];
 
          let image = '<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />';
 
-         if( p_project_id === '255754' ) {
+         let use_plant_project_images = configuration.use_plant_project_images || 'no';
+
+         if( p_project_id === '255754' || p_project_id === '260252' || use_plant_project_images === 'yes' ) {
              image = furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />');
          }
 
@@ -420,9 +426,9 @@ function fresults(xobj) {
              values = [
                   {innerText:i+1},
                   {innerHTML:image},
-                  {innerHTML:furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+u_param+'&place_id='+p_place_id+'&params='+p_params+'&target_id='+rec.taxon.id+'&menu=pip&title='+p_title+'&target_name='+header_name+field_param+seed_prj_param+'&hrank=species',displayName)},
+                  {innerHTML:furl(github_root+'bugs_on_plants2.html?'+state_param+'&target_id='+rec.taxon.id+'&target_name='+header_name,displayName)},
                   ];
-         } else if( p_mode.includes('explorer') ) {
+         } else if( p_mode.includes('observer') ) {
              values = [
                   {innerText:i+1},
                   {innerHTML:image},
@@ -452,11 +458,7 @@ async function asyncGetData() {
            console.log('setting up defaults...');
            setUpDefaults(data.configurations);
            console.log('building menu...');
-           if( configuration.title && p_insect_project ) {
-               faddelem('h2',document.body,{innerText:(configuration.title)});
-           } else {
-               buildMenu(data.configurations);
-           }
+           buildMenu(data.configurations);
       } 
       console.log(data);
    })
@@ -467,8 +469,10 @@ async function asyncGetData() {
    });
 
    let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
+
+   let use_plant_project_images = configuration.use_plant_project_images || 'no';
  
-   if( p_project_id === '255754' ) {
+   if( p_project_id === '255754' || p_project_id === '260252' || use_plant_project_images === 'yes' ) {
        apibase = 'https://api.inaturalist.org/v1/observations';
    }
  
