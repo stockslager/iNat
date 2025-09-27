@@ -37,17 +37,15 @@ let configuration = '';
 function buildMenu(data) {
       let menu_string = '';
       let links = '';
-console.log('one');
       configuration = data.configurations[0];
  
       menu_string = '<div class="navbar">';
-console.log('two');
       if( configuration.title )              { links += furl(github_root+'plant_about.html?params='+p_params+'&field=title',              "title"); }
       if( configuration.plant_project )      { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_project',      "plant_project"); }
       if( configuration.plant_filter )       { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_filter',       "plant_filter"); }
       if( configuration.plant_filter_value ) { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_filter_value', "plant_filter_value"); }
       menu_string += buildDD('Field', links);
-console.log('three');
+ 
       menu_string += buildHome(furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;'));
 
       menu_string += '</div>';
@@ -64,7 +62,7 @@ function displayJson(data) {
     if( p_field === 'title' ) {
         faddelem('p',document.body,{innerHTML:('<hr><b>title:</b><br><br>The title to be displayed above the plant list in the app.<hr>')});
     } else if( p_field === 'plant_project' ) {
-        faddelem('p',document.body,{innerHTML:('<hr><b>plant_project:</b><br><br>The unique iNat project id for the project that contains the plant observations. (e.g. '+furl(root_projects+configuration.plant_project,'&project_id='+configuration.plant_project)+') <hr>')});
+        faddelem('p',document.body,{innerHTML:('<hr><b>"plant_project": "'+furl(root_projects+configuration.plant_project, configuration.plant_project)+'"</b><br><br>The unique iNat project id for the project that contains the plant observations. <hr>')});
     } else if( p_field === 'plant_filter' ) {
         faddelem('p',document.body,{innerHTML:('<hr><b>plant_filter:</b><br><br>Used to filter observations stored in the iNat plant_project in the event that the iNat plant_project contains more than just the observations to be displayed in the plant list.<hr>')});
     } else if( p_field === 'plant_filter_value' ) {
