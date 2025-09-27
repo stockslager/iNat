@@ -17,7 +17,6 @@
 </head>
 
 <style>
-   #wrapper { margin-left:5px; float:right; width:fit-content; min-width:375px; display: inline-table; justify-content:start; border-width:1px 1px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; }
    pre { width:fit-content; min-width:375px; }
 </style>
  
@@ -59,17 +58,17 @@ function displayJson(data) {
                                            'from and which observation fields to filter that data with.<br>')});
                                            
     if( p_field === 'title' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="wrapper"><b>title:</b><br><br>The title to be displayed above the plant list in the app.</span>')});
+        faddelem('p',document.body,{innerHTML:('<b>title:</b><br><br>The title to be displayed above the plant list in the app.')});
     } else if( p_field === 'plant_project' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="wrapper"><b>plant_project:</b><br><br>The unique iNat project id for the project that contains the plant observations.</span>')});
+        faddelem('p',document.body,{innerHTML:('<b>plant_project:</b><br><br>The unique iNat project id for the project that contains the plant observations.')});
     } else if( p_field === 'plant_filter' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="wrapper"><b>plant_filter:</b><br><br>Used to filter observations stored in the iNat plant_project in the event that the iNat plant_project contains more than just the observations to be displayed in the plant list.</span>')});
+        faddelem('p',document.body,{innerHTML:('<b>plant_filter:</b><br><br>Used to filter observations stored in the iNat plant_project in the event that the iNat plant_project contains more than just the observations to be displayed in the plant list.')});
     } else if( p_field === 'plant_filter_value' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="wrapper"><b>plant_filter_value</b><br><br>The value of the "plant_filter" parameter.</span>')});
+        faddelem('p',document.body,{innerHTML:('<b>plant_filter_value</b><br><br>The value of the "plant_filter" parameter.')});
     }
 
     const prettyJson = JSON.stringify(data, null, 2);
-    faddelem('p',document.body,{innerHTML:('<br><b>Entire '+p_params+'.json:</b>' +
+    faddelem('p',document.body,{innerHTML:('<br><br><b>Entire '+p_params+'.json:</b>' +
                                            '<pre id="json-display"></pre>')});
     document.getElementById('json-display').textContent = prettyJson;
 
