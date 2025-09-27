@@ -16,6 +16,10 @@
 <title>Garden Viewer</title>
 </head>
 
+<style>
+   #dltest { margin-left:15px; float:right; width:fit-content; display: inline-table; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }
+</style>
+ 
 <body>
 <script>
 let winurlstr = window.location.href;
@@ -51,8 +55,8 @@ function buildMenu() {
 function displayJson(data) {
     faddelem('p',document.body,{innerHTML:('This app is driven by a configuration file stored in '+p_params+'.json.  '+
                                            'This configuration file tells the app things like which projects to pull data '+
-                                           'from and which observation fields to filter that data with.<br><br>'+
-                                           '<b>'+p_params+'.json:</b>')});
+                                           'from and which observation fields to filter that data with.<br><br>')});
+                                           
     if( p_field === 'title' ) {
         faddelem('p',document.body,{innerHTML:('The title to be displayed above the plant list in the app.')});
     } else if( p_field === 'plant_project' ) {
@@ -63,9 +67,13 @@ function displayJson(data) {
         faddelem('p',document.body,{innerHTML:('The value of the "plant_filter" parameter.')});
     }
 
+    faddelem('p',document.body,{innerHTML:('<span id="dltest">')});
+    faddelem('p',document.body,{innerText:('<b>Entire '+p_params+'.json:</b>')});
+ 
     faddelem('p',document.body,{innerHTML:('<pre id="json-display"></pre>')});  
     const prettyJson = JSON.stringify(data, null, 2);
     document.getElementById('json-display').textContent = prettyJson;
+    faddelem('p',document.body,{innerHTML:('</span>')});
 }
   
 buildMenu();
