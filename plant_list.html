@@ -35,12 +35,13 @@ let p_nm2         = winurlparams.get('nm2') || '';
 
 // the place selected was added to seed_project parameter and needs to be
 // parsed if control is returning from the insects page.
-let prj        = p_state.split('$')[0];
-let place      = p_state.split('$')[1];
-let params     = p_state.split('$')[2];
-let user       = p_state.split('$')[3];
-let garden     = p_state.split('$')[4];
-let mode       = p_state.split('$')[5];
+let prj          = p_state.split('$')[0];
+let place        = p_state.split('$')[1];
+let params       = p_state.split('$')[2];
+let user         = p_state.split('$')[3];
+let garden       = p_state.split('$')[4];
+let mode         = p_state.split('$')[5];
+let filter_taxon = p_state.split('$')[6];
 
 if( prj ) {
     p_insect_project = prj;
@@ -73,6 +74,11 @@ if( garden ) {
         winurlparams.append('garden', garden);
         p_garden = garden;
     }
+}
+if( filter_taxon ) {
+    winurlparams.delete('taxon_id');
+    winurlparams.append('taxon_id', filter_taxon);
+    p_taxon_id = filter_taxon;
 }
 
 let configuration = '';
@@ -336,7 +342,10 @@ function fresults(xobj) {
       let mode_param = '';
       if( p_mode ) { mode_param = '$'+p_mode; } else { mode_param = '$'; }
 
-      let state_param = ('&state='+p_insect_project+place_param+json+user_param+garden_param+mode_param);
+      let filter_taxon_param = '';
+      if( filter_taxon ) { filter_taxon_param = '$'+filter_taxon; } else { filter_taxon_param = '$'; }
+
+      let state_param = ('&state='+p_insect_project+place_param+json+user_param+garden_param+mode_param+filter_taxon_param);
 
       let on_all = '';
       let nn_on_all = '';
