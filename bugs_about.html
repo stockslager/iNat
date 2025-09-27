@@ -1,0 +1,70 @@
+<!DOCTYPE html>  
+<html lang="en">    
+ 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" /> 
+<meta name="description" content="Garden Viewer" />
+<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="Bugs on Plants" />
+<link rel="manifest" href="bugs.webmanifest" />
+<link rel="stylesheet" type="text/css" href="seed_library.css" />
+<script type="text/javascript" src='common_func.js'> </script>
+<title>Garden Viewer</title>
+</head>
+
+<body>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
+let p_params      = winurlparams.get('params') || '';
+
+</script> 
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
+<script> 
+ 
+function buildMenu() {
+      let menu_string = '';
+ 
+      menu_string = '<div class="navbar">';
+
+      menu_string += buildHome(furl(github_root+'bugs_dash.html?params='+p_params,'&#127807;'));
+
+      menu_string += '</div>';
+
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+
+function displayJson(data) {
+    faddelem('p',document.body,{innerHTML:('This app is driven by a configuration file stored in '+p_params+'.json.  '+
+                                           'This configuration file tells the app things like which projects to pull data '+
+                                           'from and which observation fields to filter that data with.<br><br>'+
+                                           '<b>'+p_params+'.json:</b>')});
+    faddelem('p',document.body,{innerHTML:('<pre id="json-display"></pre>')});  
+    const prettyJson = JSON.stringify(data, null, 2);
+    document.getElementById('json-display').textContent = prettyJson;
+}
+  
+buildMenu();
+
+fetch((p_params+'.json'))
+     .then(response => response.json())
+     .then(data => {
+      displayJson(data);
+      console.log(data);
+   })
+     .catch(error => {
+      faddelem('p',document.body,{innerText:'There was a problem retrieving '+p_params+'.json.'});
+      faddelem('p',document.body,{innerText:'A valid configuration file is required to be specified as a url parameter. (e.g. ?params=bugs_cnc).'});
+      throw new Error('Error fetching JSON');
+});
+
+</script>
+</body>
+
+</html>
