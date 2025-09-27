@@ -26,12 +26,12 @@ let p_garden     = winurlparams.get('garden') || '';
 let p_params     = winurlparams.get('params') || '';
 let p_project_id = winurlparams.get('project_id') || '';
 let p_plant_name = winurlparams.get('plant_name') || '';
-let p_mode       = winurlparams.get('mode' || 'explorers');
-let p_seed_prj   = winurlparams.get('seed_project' || '');
+let p_mode       = winurlparams.get('mode' || 'observers');
+let p_seed_prj   = winurlparams.get('state' || '');
 let p_plant_id   = winurlparams.get('plant_id' || '');
 let p_place_id   = '';
 let p_user = '';
-let seed_prj_param = '';
+let state_param = '';
 
 if( p_seed_prj ) {
     // the place selected was added to seed_project parameter and needs to be
@@ -64,14 +64,7 @@ if( p_seed_prj ) {
         p_mode = mode;
     }
 } 
-       
-       seed_prj_param += ('&seed_project=exp'+p_project_id);
-       if( p_place_id ) { seed_prj_param += '$'+p_place_id; } else { seed_prj_param += '$null'; }
-       if( p_params )   { seed_prj_param += '$'+p_params;   } else { seed_prj_param += '$null'; }
-       if( p_user )     { seed_prj_param += '$'+p_user;     } else { seed_prj_param += '$null'; }
-       if( p_garden )   { seed_prj_param += '$'+p_garden;   } else { seed_prj_param += '$null'; }
-       if( p_mode )     { seed_prj_param += '$'+p_mode;     } else { seed_prj_param += '$null'; }
- 
+        
 // cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
 // session storage is only used for sorting of data in columns at this point.
 let p_cache_check = winurlparams.get('cache_check') || 'no';  
@@ -181,7 +174,7 @@ function buildMenu(configs) {
 
       menu_string = '<div class="navbar">';
 
-      menu_string += furl(github_root+'bugs_on_plants.html'+params+seed_prj_param+'&mode='+p_mode, choose_plant);
+      menu_string += furl(github_root+'bugs_on_plants.html'+params+state_param+'&mode='+p_mode, choose_plant);
 
       if( p_mode.startsWith('pro') ) {
           menu_string += buildHome(furl(github_root+'bugs_dash.html?params='+p_params,'&#127807;'));
@@ -209,8 +202,6 @@ function fresults(result, places_obj, taxa_obj) {
       if( !p_plant_name ) {
           on_all = '<span id="topright">showing counts for<br> <b>' +
                    'all plants</b></span>';
-                   //+ furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+'&params='+p_params+p_field_opt+'&title=on'+seed_prj_param,' any plant') 
-                   //+ '</b><br>by any user</span>';
       } else {
           on_all2 = '<span id="topright">showing counts for<br><b>'+p_plant_name.toLowerCase()+'</b>' +
                    '<br>show ' +
@@ -249,15 +240,25 @@ function fresults(result, places_obj, taxa_obj) {
             user_icon = '<img class="exp_icon" src="'+user_icon+'" />';
          }
 
+         let plant_param = '';
          let params = '';
          if( p_params )         { params      += '&params=' + p_params; }   
+
+         state_param = ('&state='+p_project_id);
+         if( p_place_id )     { state_param += '$'+p_place_id;     } else { state_param += '$'; }
+         if( p_params )       { state_param += '$'+p_params;       } else { state_param += '$'; }
+         if( rec.user_login ) { state_param += '$'+rec.user_login; } else { state_param += '$'; }
+         if( p_garden )       { state_param += '$'+p_garden;       } else { state_param += '$'; }
+         if( p_mode )         { state_param += '$'+p_mode;         } else { state_param += '$'; }
+
+         if( p_plant_id )     { plant_param += '&target_id='+p_plant_id; }
 
          let values = [
             {innerText:i+1},
             {innerHTML:user_icon},
             {innerHTML:furl(root_people+rec.user_login,rec.user_login)/*+map*/},
-            {innerHTML:furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+'&user_id='+rec.user_login+params+'&field:'+configuration.field_name+'='+(p_plant_id||'')+'&title=on&target_name='+p_plant_name+'&hrank=species'+seed_prj_param,rec.species_count )},
-            //{innerHTML:furl(github_root+'bugs_on_plants_grid.html?project_id='+p_project_id+params+'&user_id='+rec.user_login+p_field_opt,rec.obs_count)},
+            {innerHTML:furl(github_root+'bugs_on_plants2.html?project_id='+configuration.insect_project+'&user_id='+rec.user_login+params+'&title=on&target_name='+p_plant_name+plant_param+'&hrank=species'+state_param,rec.species_count )},
+            //{innerHTML:furl(github_root+'plant_grid.html?project_id='+p_project_id+params+'&user_id='+rec.user_login+p_field_opt,rec.obs_count)},
          ];
          faddelems('td',brow,values);
       };
