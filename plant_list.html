@@ -176,13 +176,6 @@ function setUpDefaults(configurations) {
        winurlparams.append('id', configuration.plant_ids);
    }
  
-   if( configuration.default_taxon ) {
-       if( !p_taxon_id ) {
-           winurlparams.append('taxon_id', configuration.default_taxon);
-           p_taxon_id = configuration.default_taxon;
-       }
-   }
-
    if( configuration.taxon_ids ) {
        winurlparams.delete('taxon_id');
        winurlparams.append('taxon_id', configuration.taxon_ids);
