@@ -58,13 +58,13 @@ function displayJson(data) {
                                            'from and which observation fields to filter that data with.<br>')});
                                            
     if( p_field === 'title' ) {
-        faddelem('p',document.body,{innerHTML:('<b>title:</b><br><br>The title to be displayed above the plant list in the app.')});
+        faddelem('p',document.body,{innerHTML:('<hr><b>title:</b><br><br>The title to be displayed above the plant list in the app.')});
     } else if( p_field === 'plant_project' ) {
-        faddelem('p',document.body,{innerHTML:('<b>plant_project:</b><br><br>The unique iNat project id for the project that contains the plant observations.')});
+        faddelem('p',document.body,{innerHTML:('<hr><b>plant_project:</b><br><br>The unique iNat project id for the project that contains the plant observations.')});
     } else if( p_field === 'plant_filter' ) {
-        faddelem('p',document.body,{innerHTML:('<b>plant_filter:</b><br><br>Used to filter observations stored in the iNat plant_project in the event that the iNat plant_project contains more than just the observations to be displayed in the plant list.')});
+        faddelem('p',document.body,{innerHTML:('<hr><b>plant_filter:</b><br><br>Used to filter observations stored in the iNat plant_project in the event that the iNat plant_project contains more than just the observations to be displayed in the plant list.')});
     } else if( p_field === 'plant_filter_value' ) {
-        faddelem('p',document.body,{innerHTML:('<b>plant_filter_value</b><br><br>The value of the "plant_filter" parameter.')});
+        faddelem('p',document.body,{innerHTML:('<hr><b>plant_filter_value</b><br><br>The value of the "plant_filter" parameter.')});
     }
 
     const prettyJson = JSON.stringify(data, null, 2);
