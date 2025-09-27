@@ -33,36 +33,37 @@ var cellpx       = winurlparams.get('cellpx') || 122;
 var spacerpx     = winurlparams.get('spacerpx') || 4;
 var rows         = winurlparams.get('rows') || 30;
 var columns      = winurlparams.get('columns') || 3;
-let title        = winurlparams.get('title') || '';
 let p_action     = winurlparams.get('action') || '';
 let p_list       = winurlparams.get('list') || '';
 let p_tag_name   = winurlparams.get('tag_name') || '';
 let p_menu       = winurlparams.get('menu') || '';
-let p_target_name = winurlparams.get('target_name') || '';
+let p_plant_id   = winurlparams.get('plant_id') || '';
+let p_plant_name = winurlparams.get('plant_name') || '';
 let p_cache_check = winurlparams.get('cache_check') || '';
 let p_params     = winurlparams.get('params') || 'bugs_pip';
 let p_life       = winurlparams.get('life') || 'Life Stage';
-let p_seed_project = winurlparams.get('seed_project') || '';
+let p_state      = winurlparams.get('state') || '';
 let p_hide_home  = winurlparams.get('hide_home') || 'no';
+let p_hide_dds   = winurlparams.get('hide_dds') || 'no';
 
 // parse the seed project param to determine mode.
-let prj    = p_seed_project.split('$')[0];
-let place  = p_seed_project.split('$')[1];
-let params = p_seed_project.split('$')[2];
-let user   = p_seed_project.split('$')[3];
-let garden = p_seed_project.split('$')[4];
-let mode   = p_seed_project.split('$')[5];
+let prj    = p_state.split('$')[0];
+let place  = p_state.split('$')[1];
+let params = p_state.split('$')[2];
+let user   = p_state.split('$')[3];
+let garden = p_state.split('$')[4];
+let mode   = p_state.split('$')[5];
 
 // don't show organsims that have only been id'd to genus and above, otherwise the number's
 // won't match other counts
- winurlparams.append('hrank', 'species');
+winurlparams.append('lrank', 'subspecies');
 
 let annotations_array = [];
 let interactions = [];
 
 let seed_param = '';
-if( p_seed_project ) {
-    seed_param = '&seed_project='+p_seed_project;
+if( p_state ) {
+    state_param = '&state='+p_state;
 }
 
 let all_opts = copyOpts(winurlparams);
@@ -90,7 +91,7 @@ for (const [key, value] of winurlparams.entries()) {
 // lifelist page.
 // find key/value pair for &field: param if one was passed in
 let field = '';
-let field_value = '';
+let p_field_value = '';
 let opts = '';
 let field_key = '';
 for (const [key, value] of winurlparams.entries()) {
@@ -98,7 +99,7 @@ for (const [key, value] of winurlparams.entries()) {
       field_key = key;
       opts += ('&'+key+'='+value);
       field = ('&'+key+'='+value);
-      field_value = value;
+      p_field_value = value;
   }
 }   
 
@@ -112,14 +113,11 @@ winurlparams.delete('cellpx');
 winurlparams.delete('spacerpx');
 winurlparams.delete('rows');
 winurlparams.delete('columns');
-winurlparams.delete('title');
 var obsurlbase = 'https://www.inaturalist.org/observations';
 var obsurl = obsurlbase+'?'+winurlparams.toString();
 winurlparams.append('per_page',recsmax);
 var apiurlbase = 'https://api.inaturalist.org/v1/observations'
 var apiurl = apiurlbase+'?'+winurlparams.toString();
-
-document.title = title.toLowerCase();
 
 function buildLifeStageMenu(data, obs_fields) {
 
@@ -128,13 +126,15 @@ function buildLifeStageMenu(data, obs_fields) {
 
    menu_string = '<div class="navbar">';
 
-   if( mode !== 'visitors' ) {
-       links = furl(github_root+'bugs_on_plants_grid.html'+all_opts,"grid");
-       if( field_key ) {
-           links += furl(github_root+'bugs_on_plants_list.html'+all_opts+'&obs_fields='+obs_fields,"list");
+   if( p_hide_dds === 'no' ) {
+       if( !mode.includes('visitors') && !mode.includes('observers') && !mode.includes('seeds') ) {
+           links = furl(github_root+'bugs_on_plants_grid.html'+all_opts,"grid");
+           if( field_key ) {
+               links += furl(github_root+'bugs_on_plants_list.html'+all_opts+'&obs_fields='+obs_fields,"list");
+           }
+           links += furl(github_root+'plant_map.html'+all_opts,"map");
+           menu_string += buildDD('Show', links);
        }
-       links += furl(github_root+'life_list_map.html'+all_opts,"map");
-       menu_string += buildDD('Show', links);
    }
 
    // the life list links need to be cached the first time the page is enetered 
@@ -182,24 +182,19 @@ function buildLifeStageMenu(data, obs_fields) {
        sessionStorage.setItem(cache_key, links);
    }
 
-   menu_string += buildDD(p_life, links);
+   if( p_hide_dds === 'no' ) {
+       menu_string += buildDD(p_life, links);
+   }
 
    if( p_hide_home === 'no' ) {
-       if( p_seed_project ) {
-           if( p_seed_project.startsWith('pip') ) {
-               menu_string += buildHome(furl(github_root+'bugs_on_plants.html?insect_project='+p_seed_project.replace('pip',''),'&#127807;'));
-           } else if( p_seed_project.startsWith('exp') ) {
-               menu_string += buildHome( furl(github_root+'bugs_explorers.html?seed_project='+p_seed_project.replace('exp','')+'&plant_id='+field_value+'&plant_name='+p_target_name,'&#127807;') );
+       // check to see if they entered the flow from a seed library.  if so, return control there.
+       if( p_state ) {
+           if( mode.includes('observer') ) {
+               menu_string += buildHome( furl(github_root+'bugs_explorers.html?state='+p_state+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name,'&#127807;') );
            } else {
-               menu_string += buildHome(furl(github_root+'cncnpc_seeds.html?project_id='+p_seed_project,'&#127807;'));
+               menu_string += buildHome( furl(github_root+'bugs_on_plants.html?state='+p_state+'&plant_id='+p_plant_id+'&plant_name='+p_plant_name,'&#127807;') );
            }
-       } else {
-           if( p_action === 'hide' ) {
-               menu_string += buildHome( furl(github_root+'bugs_on_plants2.html?project_id='+p_project_id+'&title='+p_action+'&'+field_key+'='+'&target_name=all+plants&params='+p_params,'&#127807;') );
-           } else {
-               menu_string += buildHome(furl(github_root+'bugs_on_plants.html?project_id='+p_project_id+'&list='+p_list+'&title='+p_action+'&menu='+p_menu+'&tag_name='+p_tag_name,'&#127807;'));
-           }
-       }
+       } 
    }
 
    menu_string += '</div>';
