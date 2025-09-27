@@ -51,7 +51,7 @@ let opts = copyOpts( winurlparams );
 // the place selected was added to seed_project parameter and needs to be
 // parsed if control is returning from the insects page.
 let p_project_id  = p_state.split('$')[0];
-let place         = p_state.split('$')[1];
+let p_place_id    = p_state.split('$')[1];
 let p_params      = p_state.split('$')[2];
 let p_user_id     = p_state.split('$')[3];
 let garden        = p_state.split('$')[4];
@@ -140,12 +140,12 @@ function setUpDefaults(configurations) {
    interactions   = configuration.interactions;
 
    api_params += ('?project_id='+configuration.insect_project);
-   api_params += '&place_id='+(configuration.default_place||'');
    api_params += '&hrank=species';
    api_params += '&field:'+configuration.field_name+'='+p_target_id;
    api_params += behavior_params;
 
-   if( p_user_id ) { api_params += '&user_id='+p_user_id; }
+   if( p_place_id ) { api_params += '&place_id='+p_place_id; }
+   if( p_user_id )  { api_params += '&user_id='+p_user_id; }
 
    all_params += api_params;
    all_params += '&per_page=200';
