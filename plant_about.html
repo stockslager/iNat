@@ -37,17 +37,17 @@ let configuration = '';
 function buildMenu() {
       let menu_string = '';
       let links = '';
-
+console.log('one');
       configuration = data.configurations[0];
  
       menu_string = '<div class="navbar">';
-
+console.log('two');
       if( configuration.title )              { links += furl(github_root+'plant_about.html?params='+p_params+'&field=title',              "title"); }
       if( configuration.plant_project )      { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_project',      "plant_project"); }
       if( configuration.plant_filter )       { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_filter',       "plant_filter"); }
       if( configuration.plant_filter_value ) { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_filter_value', "plant_filter_value"); }
       menu_string += buildDD('Field', links);
-
+console.log('three');
       menu_string += buildHome(furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;'));
 
       menu_string += '</div>';
