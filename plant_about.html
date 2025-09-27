@@ -28,6 +28,7 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
 let p_params      = winurlparams.get('params') || '';
 let p_field       = winurlparams.get('field') || '';
+let configuration = '';
 
 </script> 
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v8.js"></script>
@@ -36,13 +37,15 @@ let p_field       = winurlparams.get('field') || '';
 function buildMenu() {
       let menu_string = '';
       let links = '';
+
+      configuration = data.configurations[0];
  
       menu_string = '<div class="navbar">';
 
-      links  = furl(github_root+'plant_about.html?params='+p_params+'&field=title',              "title");
-      links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_project',      "plant_project");
-      links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_filter',       "plant_filter");
-      links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_filter_value', "plant_filter_value");
+      if( configuration.title )              { links += furl(github_root+'plant_about.html?params='+p_params+'&field=title',              "title"); }
+      if( configuration.plant_project )      { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_project',      "plant_project"); }
+      if( configuration.plant_filter )       { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_filter',       "plant_filter"); }
+      if( configuration.plant_filter_value ) { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_filter_value', "plant_filter_value"); }
       menu_string += buildDD('Field', links);
 
       menu_string += buildHome(furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;'));
@@ -53,8 +56,6 @@ function buildMenu() {
 }
 
 function displayJson(data) {
-
-    let configuration = data.configurations[0];
  
     faddelem('p',document.body,{innerHTML:('This app is driven by a configuration file stored in '+p_params+'.json.  '+
                                            'This configuration file tells the app things like which projects to pull data '+
@@ -77,11 +78,10 @@ function displayJson(data) {
 
 }
   
-buildMenu();
-
 fetch((p_params+'.json'))
      .then(response => response.json())
      .then(data => {
+      buildMenu(data);
       displayJson(data);
       console.log(data);
    })
