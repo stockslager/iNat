@@ -245,11 +245,11 @@ function fresults(result, places_obj, taxa_obj) {
          if( p_params )         { params      += '&params=' + p_params; }   
 
          state_param = ('&state='+p_project_id);
-         if( p_place_id )     { state_param += '$'+p_place_id;     } else { state_param += '$null'; }
-         if( p_params )       { state_param += '$'+p_params;       } else { state_param += '$null'; }
-         if( rec.user_login ) { state_param += '$'+rec.user_login; } else { state_param += '$null'; }
-         if( p_garden )       { state_param += '$'+p_garden;       } else { state_param += '$null'; }
-         if( p_mode )         { state_param += '$'+p_mode;         } else { state_param += '$null'; }
+         if( p_place_id )     { state_param += '$'+p_place_id;     } else { state_param += '$'; }
+         if( p_params )       { state_param += '$'+p_params;       } else { state_param += '$'; }
+         if( rec.user_login ) { state_param += '$'+rec.user_login; } else { state_param += '$'; }
+         if( p_garden )       { state_param += '$'+p_garden;       } else { state_param += '$'; }
+         if( p_mode )         { state_param += '$'+p_mode;         } else { state_param += '$'; }
 
          if( p_plant_id )     { plant_param += '&target_id='+p_plant_id; }
 
