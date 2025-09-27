@@ -30,7 +30,7 @@ let p_params      = winurlparams.get('params') || '';
 let p_field       = winurlparams.get('field') || '';
 
 </script> 
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v8.js"></script>
 <script> 
  
 function buildMenu() {
@@ -53,6 +53,9 @@ function buildMenu() {
 }
 
 function displayJson(data) {
+
+    let configuration = data.configurations[0];
+ 
     faddelem('p',document.body,{innerHTML:('This app is driven by a configuration file stored in '+p_params+'.json.  '+
                                            'This configuration file tells the app things like which projects to pull data '+
                                            'from and which observation fields to filter that data with.<br>')});
@@ -60,7 +63,7 @@ function displayJson(data) {
     if( p_field === 'title' ) {
         faddelem('p',document.body,{innerHTML:('<hr><b>title:</b><br><br>The title to be displayed above the plant list in the app.<hr>')});
     } else if( p_field === 'plant_project' ) {
-        faddelem('p',document.body,{innerHTML:('<hr><b>plant_project:</b><br><br>The unique iNat project id for the project that contains the plant observations.<hr>')});
+        faddelem('p',document.body,{innerHTML:('<hr><b>plant_project:</b><br><br>The unique iNat project id for the project that contains the plant observations. (e.g. '+furl(root_projects+configuration.plant_project,'&project_id='+configuration.plant_project+') <hr>')});
     } else if( p_field === 'plant_filter' ) {
         faddelem('p',document.body,{innerHTML:('<hr><b>plant_filter:</b><br><br>Used to filter observations stored in the iNat plant_project in the event that the iNat plant_project contains more than just the observations to be displayed in the plant list.<hr>')});
     } else if( p_field === 'plant_filter_value' ) {
