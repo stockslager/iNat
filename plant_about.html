@@ -67,13 +67,13 @@ function displayJson(data) {
         faddelem('p',document.body,{innerHTML:('The value of the "plant_filter" parameter.')});
     }
 
-    faddelem('p',document.body,{innerHTML:('<span id="dltest">')});
-    faddelem('p',document.body,{innerText:('<b>Entire '+p_params+'.json:</b>')});
- 
-    faddelem('p',document.body,{innerHTML:('<pre id="json-display"></pre>')});  
     const prettyJson = JSON.stringify(data, null, 2);
+    faddelem('p',document.body,{innerHTML:('<span id="dltest">' + 
+                                           '<b>Entire '+p_params+'.json:</b>' +
+                                           '<pre id="json-display"></pre>' + 
+                                           '</span>')});
     document.getElementById('json-display').textContent = prettyJson;
-    faddelem('p',document.body,{innerHTML:('</span>')});
+
 }
   
 buildMenu();
