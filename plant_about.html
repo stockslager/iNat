@@ -44,6 +44,7 @@ function buildMenu(data) {
       if( configuration.plant_project )      { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_project',      "plant_project"); }
       if( configuration.plant_filter )       { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_filter',       "plant_filter"); }
       if( configuration.plant_filter_value ) { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_filter_value', "plant_filter_value"); }
+      if( configuration.insect_project )     { links += furl(github_root+'plant_about.html?params='+p_params+'&field=insect_project',     "insect_project"); }
       menu_string += buildDD('Field', links);
  
       menu_string += buildHome(furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;'));
@@ -67,8 +68,10 @@ function displayJson(data) {
         faddelem('p',document.body,{innerHTML:('<hr><b>plant_filter:</b><br><br>Used to filter observations stored in the iNat plant_project in the event that the iNat plant_project contains more than just the observations to be displayed in the plant list.<hr>')});
     } else if( p_field === 'plant_filter_value' ) {
         faddelem('p',document.body,{innerHTML:('<hr><b>plant_filter_value</b><br><br>The value of the "plant_filter" parameter.<hr>')});
-    }
-
+    } else if( p_field === 'insect_project' ) {
+        faddelem('p',document.body,{innerHTML:('<hr><b>insect_project: '+furl(root_projects+configuration.insect_project, configuration.insect_project)+'</b><br><br>The unique iNat project id for the project that contains the insect and other wildlife activity observations. <hr>')});
+    } 
+ 
     const prettyJson = JSON.stringify(data, null, 2);
     faddelem('p',document.body,{innerHTML:('<br><b>Entire '+p_params+'.json:</b>' +
                                            '<pre id="json-display"></pre>')});
