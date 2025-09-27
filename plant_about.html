@@ -59,20 +59,18 @@ function displayJson(data) {
                                            'from and which observation fields to filter that data with.<br><br>')});
                                            
     if( p_field === 'title' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="wrapper">The title to be displayed above the plant list in the app.</span>')});
+        faddelem('p',document.body,{innerHTML:('<span id="wrapper"><b>title:</b><br>The title to be displayed above the plant list in the app.</span>')});
     } else if( p_field === 'plant_project' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="wrapper">The unique iNat project id for the project that contains the plant observations.</span>')});
+        faddelem('p',document.body,{innerHTML:('<span id="wrapper"><b>plant_project:</b><br>The unique iNat project id for the project that contains the plant observations.</span>')});
     } else if( p_field === 'plant_filter' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="wrapper">Used to filter observations stored in the iNat plant_project in the event that the iNat plant_project contains more than just the observations to be displayed in the plant list.</span>')});
+        faddelem('p',document.body,{innerHTML:('<span id="wrapper"><b>plant_filter:</b><br>Used to filter observations stored in the iNat plant_project in the event that the iNat plant_project contains more than just the observations to be displayed in the plant list.</span>')});
     } else if( p_field === 'plant_filter_value' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="wrapper">The value of the "plant_filter" parameter.</span>')});
+        faddelem('p',document.body,{innerHTML:('<span id="wrapper"><b>plant_filter_value</b><br>The value of the "plant_filter" parameter.</span>')});
     }
 
     const prettyJson = JSON.stringify(data, null, 2);
-    faddelem('p',document.body,{innerHTML:('<span id="wrapper">' + 
-                                           '<b>Entire '+p_params+'.json:</b>' +
-                                           '<pre id="json-display"></pre>' + 
-                                           '</span>')});
+    faddelem('p',document.body,{innerHTML:('<b>Entire '+p_params+'.json:</b>' +
+                                           '<pre id="json-display"></pre>')});
     document.getElementById('json-display').textContent = prettyJson;
 
 }
