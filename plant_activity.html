@@ -140,7 +140,7 @@ function setUpDefaults(configurations) {
    interactions   = configuration.interactions;
 
    api_params += ('?project_id='+configuration.insect_project);
-   api_params += '&place_id='+configuration.default_place;
+   api_params += '&place_id='+(configuration.default_place||'');
    api_params += '&hrank=species';
    api_params += '&field:'+configuration.field_name+'='+p_target_id;
    api_params += behavior_params;
