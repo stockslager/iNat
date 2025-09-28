@@ -61,6 +61,13 @@ function buildMenu(data) {
               links += furl(github_root+'plant_about.html?params='+p_params+'&field=taxa', "taxa");
           }
       }
+ 
+      if( configuration.sub_icons ) {
+          if( configuration.sub_icons[0] ) {
+              links += furl(github_root+'plant_about.html?params='+p_params+'&field=sub_icons', "sub_icons");
+          }
+      }
+ 
       menu_string += buildDD('Parameters', links);
  
       menu_string += buildHome(furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;'));
@@ -131,12 +138,27 @@ function displayJson(data) {
     } else if( p_field === 'taxa' ) {
         faddelem('p',document.body,{innerHTML:('<b>taxa: </b>')});
         faddelem('p',document.body,{innerHTML:('<table id="tablekey">' +
-                                               '<tr id="trkey"><td id="tdkey">taxon_id: '+furl(root_taxa+configuration.taxa[0].taxon_id,configuration.taxa[0].taxon_id)+'</td><td id="tdkey">' +
-                                               'The unique iNat ID of the taxon to be displayed in the "Plant" drop-down above the Plant List.</td></tr>' +
+                                               '<tr id="trkey"><td id="tdkey">taxon_id </td><td id="tdkey">' +
+                                               'The unique iNat ID of the taxon to be displayed in the "Plant" drop-down above the Plant List.' +
+                                               '  (e.g. '+furl(root_taxa+configuration.taxa[0].taxon_id,configuration.taxa[0].taxon_id)+')</td></tr>' +
                                                '<tr id="trkey"><td id="tdkey">taxon_name</td><td id="tdkey">' +
-                                               'The name of the taxon that will appear in the "Plant" drop-down.</td></tr></table><span id="seperator"></span>')});
+                                               'The name of the taxon that will appear in the "Plant" drop-down.' +
+                                               '</td></tr></table><span id="seperator"></span>')});
+    } else if( p_field === 'sub_icons' ) {
+        faddelem('p',document.body,{innerHTML:('<b>sub_icons: </b>')});
+        faddelem('p',document.body,{innerHTML:('<table id="tablekey">' +
+                                               '<tr id="trkey"><td id="tdkey">nm</td><td id="tdkey">' +
+                                               'The name of the taxon that will appear in the "Show" drop-down above the Wildlife Activity Counts.' +
+                                               '</td></tr>' +
+                                               '<tr id="trkey"><td id="tdkey">taxon_id </td><td id="tdkey">' +
+                                               'The unique iNat ID of the taxon to be displayed in the "Show" drop-down above the Wildlife Activity Counts.' +
+                                               '  (e.g. '+furl(root_taxa+configuration.sub_icons[0].taxon_id,configuration.sub_icons[0].taxon_id)+')</td></tr>' +
+                                               '<tr id="trkey"><td id="tdkey">icon</td><td id="tdkey">' +
+                                               'The utf-8 of the icon that will appear next to the corresponding name in the "Show" drop-down.' +
+                                               '  (e.g. '+configuration.sub_icons[0].icon+')</td></tr>' +
+                                               '</td></tr></table><span id="seperator"></span>')});
     }
-
+ 
     const prettyJson = JSON.stringify(data, null, 2);
     faddelem('p',document.body,{innerHTML:('<b>Entire '+p_params+'.json:</b>' +
                                            '<pre id="json-display"></pre>')});
