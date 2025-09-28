@@ -43,6 +43,8 @@ function buildMenu(data) {
       if( configuration.plant_ids )          { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_ids',          "plant_ids"); }
       if( configuration.insect_project )     { links += furl(github_root+'plant_about.html?params='+p_params+'&field=insect_project',     "insect_project"); }
       if( configuration.default_place )      { links += furl(github_root+'plant_about.html?params='+p_params+'&field=default_place',      "default_place"); }
+      if( configuration.field_id )           { links += furl(github_root+'plant_about.html?params='+p_params+'&field=field_id',           "field_id"); }
+      if( configuration.field_name )         { links += furl(github_root+'plant_about.html?params='+p_params+'&field=field_name',         "field_name"); }
       menu_string += buildDD('Parameters', links);
  
       menu_string += buildHome(furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;'));
@@ -84,8 +86,15 @@ function displayJson(data) {
                                                'The unique iNat place id for the place that contains the insect and ' +
                                                'other wildlife activity observations. The wildlife activity observations in ' +
                                                'this project are sometimes further filtered by setting the default_place parameter.'+def_place_no_prj+'<hr>')});
-    } 
- 
+    } else if( p_field === 'field_id' ) {
+        faddelem('p',document.body,{innerHTML:('<hr><b>field_id: '+furl(root_obs_fields+configuration.field_id, configuration.field_id)+'</b><br><br>' +
+                                               'The unique iNat field id for the observation field used to associate an ' +
+                                               'observation of wildlife to a given plant. <hr>')});
+    } else if( p_field === 'field_name' ) {
+        faddelem('p',document.body,{innerHTML:('<hr><b>field_name: '+furl(root_obs_fields+configuration.field_id, configuration.field_name)+'</b><br><br>' +
+                                               'The unique iNat field name for the observation field used to associate an ' +
+                                               'observation of wildlife to a given plant. <hr>')});
+    }  
     const prettyJson = JSON.stringify(data, null, 2);
     faddelem('p',document.body,{innerHTML:('<br><b>Entire '+p_params+'.json:</b>' +
                                            '<pre id="json-display"></pre>')});
