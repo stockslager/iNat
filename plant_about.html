@@ -78,30 +78,34 @@ function displayJson(data) {
         faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>plant_project: '+furl(root_projects+configuration.plant_project, configuration.plant_project)+'</b>')});
         faddelem('p',document.body,{innerHTML:('The unique iNat project id for the project that contains the plant observations. <span id="seperator"></span>')});
     } else if( p_field === 'observers_project' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>observers_project: '+furl(root_projects+configuration.observers_project, configuration.observers_project)+'</b>' +
-                                               'The unique iNat project id for the project that defines the network of observers contributing ' +
+        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>observers_project: '+furl(root_projects+configuration.observers_project, configuration.observers_project)+'</b>')});
+        faddelem('p',document.body,{innerHTML:('The unique iNat project id for the project that defines the network of observers contributing ' +
                                                'wildlife observations for display by the app. <span id="seperator"></span>')});
     } else if( p_field === 'insect_project' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>insect_project: '+furl(root_projects+configuration.insect_project, configuration.insect_project)+'</b>' +
-                                               'The unique iNat project id for the project that contains the insect and ' +
+        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>insect_project: '+furl(root_projects+configuration.insect_project, configuration.insect_project)+'</b>')});
+        faddelem('p',document.body,{innerHTML:('The unique iNat project id for the project that contains the insect and ' +
                                                'other wildlife activity observations. The wildlife activity observations in ' +
                                                'this project are sometimes further filtered by setting the default_place parameter.<span id="seperator"></span>')});
     } else if( p_field === 'title' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>title:</b>The title to be displayed above the plant list in the app.<span id="seperator"></span>')});
+        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>title:</b>')}); 
+        faddelem('p',document.body,{innerHTML:('The title to be displayed above the plant list in the app.<span id="seperator"></span>')});
     } else if( p_field === 'plant_filter' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>plant_filter:</b>Used to filter observations stored in the iNat plant_project in the event that the iNat plant_project contains more than just the observations to be displayed in the plant list.<span id="seperator"></span>')});
+        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>plant_filter:</b>')});
+        faddelem('p',document.body,{innerHTML:('Used to filter observations stored in the iNat plant_project in the event that the iNat plant_project contains more than just the observations to be displayed in the plant list.<span id="seperator"></span>')});
     } else if( p_field === 'plant_filter_value' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>plant_filter_value</b>The value of the "plant_filter" parameter.<span id="seperator"></span>')});
+        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>plant_filter_value</b>')});
+        faddelem('p',document.body,{innerHTML:('The value of the "plant_filter" parameter.<span id="seperator"></span>')});
     } else if( p_field === 'plant_ids' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>plant_ids</b>A comma delimited list of observation ids corresponding to plant observations to be displayed on the plant list.<span id="seperator"></span>')});
+        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>plant_ids</b>')});
+        faddelem('p',document.body,{innerHTML:('A comma delimited list of observation ids corresponding to plant observations to be displayed on the plant list.<span id="seperator"></span>')});
     } else if( p_field === 'default_place' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>default_place: '+furl(root_places+configuration.default_place, configuration.default_place)+'</b>' +
-                                               'The unique iNat place id for the place that contains the insect and ' +
+        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>default_place: '+furl(root_places+configuration.default_place, configuration.default_place)+'</b>')});
+        faddelem('p',document.body,{innerHTML:('The unique iNat place id for the place that contains the insect and ' +
                                                'other wildlife activity observations. The wildlife activity observations in ' +
                                                'this project are sometimes further filtered by setting the default_place parameter.'+def_place_no_prj+'<span id="seperator"></span>')});
     } else if( p_field === 'show_behavior' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>show_behavior: </b>' +
-                                               '<table id="tablekey">' +
+        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>show_behavior: </b>')});
+        faddelem('p',document.body,{innerHTML:('<table id="tablekey">' +
                                                '<tr id="trkey"><td id="tdkey">on_all</td><td id="tdkey">' +
                                                'Displays a link on the plant list page that shows the wildlife '+
                                                'activity counts for the entire list of plants.  Also triggers a "Behaviors" drop down to appear ' +
@@ -109,19 +113,13 @@ function displayJson(data) {
                                                '<tr id="trkey"><td id="tdkey">by_plant</td><td id="tdkey">' +
                                                'Triggers a "Behaviors" drop down to appear with the wildlife activity counts for ' +
                                                'each individual plant.</td></tr></table><span id="seperator"></span>')});
-                                               /*'Valid Values Include  ' +
-                                               'on_all ~ Displays a link on the plant list page that shows the wildlife '+
-                                               'activity counts for the entire list of plants.  Also triggers a "Behaviors" drop down to appear ' +
-                                               'with the wildlife activity counts.' +
-                                               'by_plant ~ Triggers a "Behaviors" drop down to appear with the wildlife activity counts for ' +
-                                               'each individual plant. <span id="seperator"></span>')});*/
     } else if( p_field === 'field_id' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>field_id: '+furl(root_obs_fields+configuration.field_id, configuration.field_id)+'</b>' +
-                                               'The unique iNat field id for the observation field used to associate an ' +
+        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>field_id: '+furl(root_obs_fields+configuration.field_id, configuration.field_id)+'</b>')});
+        faddelem('p',document.body,{innerHTML:('The unique iNat field id for the observation field used to associate an ' +
                                                'observation of wildlife to a given plant. <span id="seperator"></span>')});
     } else if( p_field === 'field_name' ) {
-        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>field_name: '+furl(root_obs_fields+configuration.field_id, configuration.field_name)+'</b>' +
-                                               'The unique iNat field name for the observation field used to associate an ' +
+        faddelem('p',document.body,{innerHTML:('<span id="seperator"></span><b>field_name: '+furl(root_obs_fields+configuration.field_id, configuration.field_name)+'</b>')});
+        faddelem('p',document.body,{innerHTML:('The unique iNat field name for the observation field used to associate an ' +
                                                'observation of wildlife to a given plant. <span id="seperator"></span>')});
     }  
     const prettyJson = JSON.stringify(data, null, 2);
