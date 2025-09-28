@@ -55,6 +55,12 @@ function buildMenu(data) {
       if( configuration.show_behavior )      { links += furl(github_root+'plant_about.html?params='+p_params+'&field=show_behavior',      "show_behavior"); }
       if( configuration.field_id )           { links += furl(github_root+'plant_about.html?params='+p_params+'&field=field_id',           "field_id"); }
       if( configuration.field_name )         { links += furl(github_root+'plant_about.html?params='+p_params+'&field=field_name',         "field_name"); }
+
+      if( configuration.taxa ) {
+          if( configuration.taxa[0] ) {
+              links += furl(github_root+'plant_about.html?params='+p_params+'&field=taxa', "taxa");
+          }
+      }
       menu_string += buildDD('Parameters', links);
  
       menu_string += buildHome(furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;'));
@@ -122,7 +128,15 @@ function displayJson(data) {
         faddelem('p',document.body,{innerHTML:('<b>field_name: '+furl(root_obs_fields+configuration.field_id, configuration.field_name)+'</b>')});
         faddelem('p',document.body,{innerHTML:('The unique iNat field name for the observation field used to associate an ' +
                                                'observation of wildlife to a given plant. <span id="seperator"></span>')});
-    }  
+    } else if( p_field === 'taxa' ) {
+        faddelem('p',document.body,{innerHTML:('<b>taxa: </b>')});
+        faddelem('p',document.body,{innerHTML:('<table id="tablekey">' +
+                                               '<tr id="trkey"><td id="tdkey">taxon_id: '+furl(root_taxa+configuration.taxa[0].taxon_id,configuration.taxa[0].taxon_id)+'</td><td id="tdkey">' +
+                                               'The unique iNat ID of the taxon to be displayed in the "Plant" drop-down above the Plant List.</td></tr>' +
+                                               '<tr id="trkey"><td id="tdkey">taxon_name</td><td id="tdkey">' +
+                                               'The name of the taxon that will appear in the "Plant" drop-down.</td></tr></table><span id="seperator"></span>')});
+    }
+
     const prettyJson = JSON.stringify(data, null, 2);
     faddelem('p',document.body,{innerHTML:('<b>Entire '+p_params+'.json:</b>' +
                                            '<pre id="json-display"></pre>')});
