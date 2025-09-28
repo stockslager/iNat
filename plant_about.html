@@ -16,6 +16,10 @@
 <title>Garden Viewer</title>
 </head>
 
+<style>
+   #dltest { margin-left:15px; float:right; width:fit-content; display: inline-table; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }
+</style>
+ 
 <body>
 <script>
 let winurlstr = window.location.href;
@@ -94,12 +98,21 @@ function displayJson(data) {
                                                'this project are sometimes further filtered by setting the default_place parameter.'+def_place_no_prj+'<hr>')});
     } else if( p_field === 'show_behavior' ) {
         faddelem('p',document.body,{innerHTML:('<hr><b>show_behavior: </b><br><br>' +
-                                               'Valid Values Include <br> ' +
+                                               '<span id="dltest"><table id="tablekey">' +
+                                               '<tr id="trkey"><td id="tdkey">on_all</td><td>' +
+                                               'Displays a link on the plant list page that shows the wildlife '+
+                                               'activity counts for the entire list of plants.  Also triggers a "Behaviors" drop down to appear ' +
+                                               'with the wildlife activity counts.</td></tr>' +
+                                               '<tr id="trkey"><td id="tdkey">by_plant</td><td>' +
+                                               'Triggers a "Behaviors" drop down to appear with the wildlife activity counts for ' +
+                                               'each individual plant.</td></tr></table></span>' +
+                                               '<hr>')});
+                                               /*'Valid Values Include <br> ' +
                                                'on_all ~ Displays a link on the plant list page that shows the wildlife '+
                                                'activity counts for the entire list of plants.  Also triggers a "Behaviors" drop down to appear ' +
                                                'with the wildlife activity counts.<br>' +
                                                'by_plant ~ Triggers a "Behaviors" drop down to appear with the wildlife activity counts for ' +
-                                               'each individual plant. <hr>')});
+                                               'each individual plant. <hr>')});*/
     } else if( p_field === 'field_id' ) {
         faddelem('p',document.body,{innerHTML:('<hr><b>field_id: '+furl(root_obs_fields+configuration.field_id, configuration.field_id)+'</b><br><br>' +
                                                'The unique iNat field id for the observation field used to associate an ' +
