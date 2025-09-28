@@ -53,6 +53,11 @@ function buildMenu(data) {
 }
 
 function displayJson(data) {
+
+    let def_place_no_prj = '';
+    if( !configuration.plant_project ) {
+        def_place_no_prj = '  Default place is also used (as in this case) when plant_ids are configured but no plant_project is set.';
+    }
  
     faddelem('p',document.body,{innerHTML:('This app is driven by a configuration file stored in '+p_params+'.json.  '+
                                            'This configuration file tells the app things like which projects to pull data '+
@@ -78,7 +83,7 @@ function displayJson(data) {
         faddelem('p',document.body,{innerHTML:('<hr><b>default_place: '+furl(root_places+configuration.default_place, configuration.default_place)+'</b><br><br>' +
                                                'The unique iNat place id for the place that contains the insect and ' +
                                                'other wildlife activity observations. The wildlife activity observations in ' +
-                                               'this project are sometimes further filtered by setting the default_place parameter.<hr>')});
+                                               'this project are sometimes further filtered by setting the default_place parameter.'+def_place_no_prj+'<hr>')});
     } 
  
     const prettyJson = JSON.stringify(data, null, 2);
