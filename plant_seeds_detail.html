@@ -18,7 +18,7 @@
 </head>
 
 <body>
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v7.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/js/plant_params_v10.js"></script>
 <script>
   
 let winurlstr = window.location.href;
@@ -308,7 +308,8 @@ function fresults(xobj) {
 };
 
 async function asyncGetData(){
-   await fetch(p_params+'.json')
+   console.log('json ' + json_root+p_params);
+   await fetch((json_root+p_params+'.json'))
      .then(response => response.json())
      .then(data => {
        // Access your data here 
