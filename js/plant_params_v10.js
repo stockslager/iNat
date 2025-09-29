@@ -9,6 +9,12 @@ let root_places       = 'https://www.inaturalist.org/places/';
 // repo root directory
 let github_root = 'https://stockslager.github.io/iNat/';
 
+// json root dir
+let json_root = 'https://stockslager.github.io/iNat/json/';
+
+// JavaScript root dir 
+let js_root = 'https://stockslager.github.io/iNat/js/';
+
 // outlinks used in cncnpc_seeds_fields.html
 // usda outlink 
 // missour botanical garden outlink 
