@@ -448,7 +448,7 @@ function fresults(xobj) {
 
 async function asyncGetData() {
    console.log('json ' + json_root+p_params);
-   fetch((json_root+p_params+'.json'))
+   await fetch((json_root+p_params+'.json'))
      .then(response => response.json())
      .then(data => {
       // Access your data here 
