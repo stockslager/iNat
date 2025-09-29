@@ -37,6 +37,8 @@ let p_state        = winurlparams.get('state') || '';
 let p_page         = winurlparams.get('page') || '';
 let p_per_page     = winurlparams.get('per_page') || '';
 let menu = '';
+let state_param = '';
+let dd_state = '';
 
 // state might move to session eventually.
 let prj          = p_state.split('$')[0] || '';
@@ -52,20 +54,11 @@ if( params ) { p_params = params; }
 if( mode   ) { p_mode   = mode; }
 if( avail  ) { p_avail  = avail; }
 
-// set the state for urls....
-let state_param = ('&state='+prj+'$'+place+'$'+p_params+'$'+user+'$'+garden+'$'+p_mode+'$'+filter_taxon+'$'+p_avail);
-
-// set the state for drop-down...
-let dd_state = ('?state='+prj+'$'+place+'$'+p_params+'$'+user+'$'+garden+'$'+p_mode+'$'+filter_taxon+'$'+'&page=1&per_page=50');
- 
 // params for api transaction...
 let api_params = '';
  
 // config fields
 let p_plant_prj  = '';
-
-// these are stored in params.json 
-let p_obs_id   = '';
 
 function setUpDefaults(configurations) {
 
@@ -120,6 +113,11 @@ function setUpDefaults(configurations) {
       api_params += '&field:availability='+p_avail;
   }
 
+  // set the state for urls....
+  state_param = ('&state='+configuration.insect_project+'$'+place+'$'+p_params+'$'+user+'$'+garden+'$'+p_mode+'$'+filter_taxon+'$'+p_avail);
+
+  // set the state for drop-down...
+  dd_state = ('?state='+configuration.insect_project+'$'+place+'$'+p_params+'$'+user+'$'+garden+'$'+p_mode+'$'+filter_taxon+'$'+'&page=1&per_page=50');
 }
 
 function buildMenu() {
