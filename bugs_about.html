@@ -17,6 +17,7 @@
 </head>
 
 <body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/js/plant_params_v10.js"></script>
 <script>
 let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
@@ -24,10 +25,6 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
 let p_params      = winurlparams.get('params') || '';
 
-</script> 
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
-<script> 
- 
 function buildMenu() {
       let menu_string = '';
  
@@ -52,7 +49,8 @@ function displayJson(data) {
   
 buildMenu();
 
-fetch((p_params+'.json'))
+console.log('json ' + json_root+p_params);
+fetch((json_root+p_params+'.json'))
      .then(response => response.json())
      .then(data => {
       displayJson(data);
