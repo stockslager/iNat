@@ -28,7 +28,6 @@ let p_user_id    = winurlparams.get('user_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_operator   = winurlparams.get('operator') || '';
 let p_show_user  = winurlparams.get('show_user') || '';
-let p_params     = winurlparams.get('params') || 'bugs_pip';
 let p_obs_field_array = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic   = winurlparams.get('ofield_iconic') || '';
 let p_omit_users      = winurlparams.get('omit_users') || '';
@@ -51,12 +50,12 @@ let tax_photo = '<div class="clipart">&#127807</div>';
 let interactions = [];
 
 // parse the seed project param to determine mode.
-let prj    = p_state.split('$')[0];
-let place  = p_state.split('$')[1];
-let params = p_state.split('$')[2];
-let user   = p_state.split('$')[3];
-let garden = p_state.split('$')[4];
-let mode   = p_state.split('$')[5];
+let prj      = p_state.split('$')[0];
+let place    = p_state.split('$')[1];
+let p_params = p_state.split('$')[2];
+let user     = p_state.split('$')[3];
+let garden   = p_state.split('$')[4];
+let mode     = p_state.split('$')[5];
 
 if( p_project_id === 'cincinnati-nature-center-pollinator-garden' ) {
     winurlparams.delete('project_id');
