@@ -70,8 +70,7 @@ dlString = (capitalizeWords((p_prefix+' on '+p_target_name)));
 document.title = dlString;
   
 </script> 
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/js/plant_params_v10.js"></script>
 <script> 
 
 function getShowDDOpts( winurlparams ) { 
@@ -360,7 +359,8 @@ function fresults(xobj) {
 async function asyncGetData() {
    let err = 'no';
  
-   await fetch(p_params+'.json')
+   console.log('json ' + json_root+p_params);
+   await fetch((json_root+p_params+'.json'))
      .then(response => response.json())
      .then(data => {
       // Access your data here 
