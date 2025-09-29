@@ -41,33 +41,33 @@ function buildMenu(data) {
       configuration = data.configurations[0];
  
       menu_string = '<div class="navbar">';
-      if( configuration.plant_project )      { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_project',      "plant_project"); }
-      if( configuration.observers_project )  { links += furl(github_root+'plant_about.html?params='+p_params+'&field=observers_project',  "observers_project"); }
-      if( configuration.insect_project )     { links += furl(github_root+'plant_about.html?params='+p_params+'&field=insect_project',     "insect_project"); }
-      if( configuration.title )              { links += furl(github_root+'plant_about.html?params='+p_params+'&field=title',              "title"); }
-      if( configuration.plant_filter )       { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_filter',       "plant_filter"); }
-      if( configuration.plant_filter_value ) { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_filter_value', "plant_filter_value"); }
-      if( configuration.plant_ids )          { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_ids',          "plant_ids"); }
-      if( configuration.default_place )      { links += furl(github_root+'plant_about.html?params='+p_params+'&field=default_place',      "default_place"); }
-      if( configuration.show_behavior )      { links += furl(github_root+'plant_about.html?params='+p_params+'&field=show_behavior',      "show_behavior"); }
-      if( configuration.field_id )           { links += furl(github_root+'plant_about.html?params='+p_params+'&field=field_id',           "field_id"); }
-      if( configuration.field_name )         { links += furl(github_root+'plant_about.html?params='+p_params+'&field=field_name',         "field_name"); }
+      if( configuration.plant_project )      { links += furl(github_root+'bugs_about.html?params='+p_params+'&field=plant_project',      "plant_project"); }
+      if( configuration.observers_project )  { links += furl(github_root+'bugs_about.html?params='+p_params+'&field=observers_project',  "observers_project"); }
+      if( configuration.insect_project )     { links += furl(github_root+'bugs_about.html?params='+p_params+'&field=insect_project',     "insect_project"); }
+      if( configuration.title )              { links += furl(github_root+'bugs_about.html?params='+p_params+'&field=title',              "title"); }
+      if( configuration.plant_filter )       { links += furl(github_root+'bugs_about.html?params='+p_params+'&field=plant_filter',       "plant_filter"); }
+      if( configuration.plant_filter_value ) { links += furl(github_root+'bugs_about.html?params='+p_params+'&field=plant_filter_value', "plant_filter_value"); }
+      if( configuration.plant_ids )          { links += furl(github_root+'bugs_about.html?params='+p_params+'&field=plant_ids',          "plant_ids"); }
+      if( configuration.default_place )      { links += furl(github_root+'bugs_about.html?params='+p_params+'&field=default_place',      "default_place"); }
+      if( configuration.show_behavior )      { links += furl(github_root+'bugs_about.html?params='+p_params+'&field=show_behavior',      "show_behavior"); }
+      if( configuration.field_id )           { links += furl(github_root+'bugs_about.html?params='+p_params+'&field=field_id',           "field_id"); }
+      if( configuration.field_name )         { links += furl(github_root+'bugs_about.html?params='+p_params+'&field=field_name',         "field_name"); }
 
       if( configuration.taxa ) {
           if( configuration.taxa[0] ) {
-              links += furl(github_root+'plant_about.html?params='+p_params+'&field=taxa', "taxa");
+              links += furl(github_root+'bugs_about.html?params='+p_params+'&field=taxa', "taxa");
           }
       }
  
       if( configuration.sub_icons ) {
           if( configuration.sub_icons[0] ) {
-              links += furl(github_root+'plant_about.html?params='+p_params+'&field=sub_icons', "sub_icons");
+              links += furl(github_root+'bugs_about.html?params='+p_params+'&field=sub_icons', "sub_icons");
           }
       }
  
       menu_string += buildDD('Parameters', links);
  
-      menu_string += buildHome(furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;'));
+      menu_string += buildHome(furl(github_root+'bugs_dash.html?params='+p_params,'&#127807;'));
 
       menu_string += '</div>';
 
