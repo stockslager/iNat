@@ -17,6 +17,7 @@
 </head>
 
 <body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/js/plant_params_v10.js"></script>
 <script>
 let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
@@ -26,10 +27,6 @@ let p_params           = winurlparams.get('params') || 'rw';
 
 let config = '';
 let configs = [];
- 
-</script> 
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
-<script> 
  
 function setUpDefaults(configurations) {
 
@@ -121,7 +118,8 @@ function buildTable() {
  
 };
 
-fetch((p_params+'.json'))
+console.log('json ' + json_root+p_params);
+fetch((json_root+p_params+'.json'))
      .then(response => response.json())
      .then(data => {
         // Access your data here 
