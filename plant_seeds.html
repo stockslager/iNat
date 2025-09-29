@@ -34,48 +34,35 @@ let p_params       = winurlparams.get('params') || '';
 let p_mode         = winurlparams.get('mode') || '';
 let p_avail        = winurlparams.get('availability') || '';
 let p_state        = winurlparams.get('state') || '';
-let opts = '';
+let p_page         = winurlparams.get('page') || '';
+let p_per_page     = winurlparams.get('per_page') || '';
 let menu = '';
 
 // state might move to session eventually.
-let params = p_state.split('$')[0];
-let mode   = p_state.split('$')[1];
-let avail  = p_state.split('$')[2];
+let prj          = p_state.split('$')[0];
+let place        = p_state.split('$')[1];
+let params       = p_state.split('$')[2];
+let user         = p_state.split('$')[3];
+let garden       = p_state.split('$')[4];
+let mode         = p_state.split('$')[5];
+let filter_taxon = p_state.split('$')[6];
+let avail        = p_state.split('$')[7];
 
 if( params ) { p_params = params; }
 if( mode   ) { p_mode   = mode; }
 if( avail  ) { p_avail  = avail; }
 
+// set the state for urls....
+let state_param = ('&state='+'$'+prj+'$'+place+'$'+p_params+'$'+user+'$'+garden+'$'+p_mode+'$'+filter_taxon+'$'+p_avail);
+
+// set the state for drop-down...
+let dd_state = ('?state='+'$'+prj+'$'+place+'$'+p_params+'$'+user+'$'+garden+'$'+p_mode+'$'+filter_taxon+'$'+'&page=1&per_page=50');
+ 
 // params for api transaction...
 let api_params = '';
  
 // config fields
 let p_plant_prj  = '';
-
-// build param list for url's used in fresults
-for (const [key, value] of winurlparams.entries()) { 
-  if( key !== 'availability' ) {
-      if( opts === '' ){
-          opts += "?";
-      } else {
-          opts += "&";
-      }
-      opts += key;
-      opts += "=";
-
-      if( key === 'page' ){
-          opts += '1';
-      } else {
-          opts += value;
-      }
-  } 
-}   
- 
-winurlparams.delete('options');
-let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
-winurlparams.delete('idextra_user_id');
-let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
-winurlparams.delete('photo_curl_filename_prefix');
 
 // these are stored in params.json 
 let p_obs_id   = '';
@@ -144,11 +131,11 @@ function buildMenu() {
       menu += '<div class="navbar">';
   } else {
       menu += '<div class="navbar">';
-      links += furl(github_root+'plant_seeds.html'+opts, 'All');
-      links += furl(github_root+'plant_seeds.html'+opts+'&availability=available now',        'Available Now');      
-      links += furl(github_root+'plant_seeds.html'+opts+'&availability=available on request', 'Available on Request');  
-      links += furl(github_root+'plant_seeds.html'+opts+'&availability=coming soon',          'Coming Soon');      
-      links += furl(github_root+'plant_seeds.html'+opts+'&availability=out of stock',         'Out of Stock');
+      links += furl(github_root+'plant_seeds.html'+dd_state, 'All');
+      links += furl(github_root+'plant_seeds.html'+dd_state+'&availability=available now',        'Available Now');      
+      links += furl(github_root+'plant_seeds.html'+dd_state+'&availability=available on request', 'Available on Request');  
+      links += furl(github_root+'plant_seeds.html'+dd_state+'&availability=coming soon',          'Coming Soon');      
+      links += furl(github_root+'plant_seeds.html'+dd_state+'&availability=out of stock',         'Out of Stock');
       menu  += buildDD( 'Availability', links );
   }
 
@@ -225,8 +212,6 @@ function fresults( xobj ) {
                  }
              }
          }
-
-         let state_param = ('&state='+p_params+'$'+p_mode+'$'+p_avail);
 
          if( tax_id !== '' ){
              taxon = furl(github_root+'plant_seeds_detail.html?project_id='+configuration.seed_project+'&obs_id='+rec.id+state_param,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
