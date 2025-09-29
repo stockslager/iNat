@@ -17,6 +17,7 @@
 </head>
 
 <body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/js/plant_params_v10.js"></script>
 <script>
 let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
@@ -95,10 +96,6 @@ winurlparams.delete('idextra_user_id');
 let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
 winurlparams.delete('photo_curl_filename_prefix');
   
-</script> 
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
-<script> 
-
 function sortWithNull(arr, ascending = true) {
   for( let i=0; i<arr.length; i++ ) {
        if( arr[i].taxon.preferred_common_name ){
@@ -450,7 +447,8 @@ function fresults(xobj) {
 };
 
 async function asyncGetData() {
-   await fetch((p_params+'.json'))
+   console.log('json ' + json_root+p_params);
+   fetch((json_root+p_params+'.json'))
      .then(response => response.json())
      .then(data => {
       // Access your data here 
