@@ -17,6 +17,7 @@
 </head>
 
 <body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/js/plant_params_v10.js"></script>
 <script>
 let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
@@ -115,10 +116,6 @@ winurlparams.delete('photo_curl_filename_prefix');
 let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
-
-</script> 
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
-<script> 
  
 // remove the field param from the url before building options
 winurlparams.delete(p_field);
@@ -540,7 +537,8 @@ if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
    faddelems('p',document.body,instructions);
 }
 else {
-   fetch(p_params+'.json')
+   console.log('json ' + json_root+p_params);
+   await fetch((json_root+p_params+'.json'))
      .then(response => response.json())
      .then(data => {
       // Access your data here 
