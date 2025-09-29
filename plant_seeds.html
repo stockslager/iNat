@@ -39,14 +39,14 @@ let p_per_page     = winurlparams.get('per_page') || '';
 let menu = '';
 
 // state might move to session eventually.
-let prj          = p_state.split('$')[0];
-let place        = p_state.split('$')[1];
-let params       = p_state.split('$')[2];
-let user         = p_state.split('$')[3];
-let garden       = p_state.split('$')[4];
-let mode         = p_state.split('$')[5];
-let filter_taxon = p_state.split('$')[6];
-let avail        = p_state.split('$')[7];
+let prj          = p_state.split('$')[0] || '';
+let place        = p_state.split('$')[1] || '';
+let params       = p_state.split('$')[2] || '';
+let user         = p_state.split('$')[3] || '';
+let garden       = p_state.split('$')[4] || '';
+let mode         = p_state.split('$')[5] || '';
+let filter_taxon = p_state.split('$')[6] || '';
+let avail        = p_state.split('$')[7] || '';
 
 if( params ) { p_params = params; }
 if( mode   ) { p_mode   = mode; }
