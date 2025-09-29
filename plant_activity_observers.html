@@ -17,6 +17,7 @@
 </head>
 
 <body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/js/plant_params_v10.js"></script>
 <script>
 let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
@@ -88,12 +89,6 @@ for (const [key, value] of winurlparams.entries()) {
 let view = winurlparams.get('view') || '';
 let activity_data = winurlparams.get('activity_data') || 'local';
 winurlparams.delete('activity_data');
-</script>
-   
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v7.js"></script>
-
-<script>
 
 function furlArrow(url,txt=url) { return '<a href="'+url+'" id="arrow">'+txt+'</a>'; };
 
@@ -324,7 +319,8 @@ function parseStoredData(gardeners) {
 }
 
 async function asyncGetData() {
-   await fetch(p_params+'.json')
+   console.log('json ' + json_root+p_params);
+   await fetch((json_root+p_params+'.json'))
       .then((response) => {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
