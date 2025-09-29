@@ -33,8 +33,6 @@ let p_mode        = winurlparams.get('mode') || 'visitor';
 let p_nm1         = winurlparams.get('nm1') || '';
 let p_nm2         = winurlparams.get('nm2') || '';
 
-let json_bin_full_url = '';
-
 // the place selected was added to seed_project parameter and needs to be
 // parsed if control is returning from the insects page.
 let prj          = p_state.split('$')[0];
@@ -452,8 +450,8 @@ function fresults(xobj) {
 };
 
 async function asyncGetData() {
-   console.log('json ' + json_bin_full_url+p_params);
-   await fetch((json_bin_full_url+p_params+'.json'))
+   console.log('json ' + json_root+p_params);
+   await fetch((json_root+p_params+'.json'))
      .then(response => response.json())
      .then(data => {
       // Access your data here 
