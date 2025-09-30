@@ -44,6 +44,7 @@ function buildMenu(data) {
       if( configuration.plant_project )      { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_project',      "plant_project"); }
       if( configuration.observers_project )  { links += furl(github_root+'plant_about.html?params='+p_params+'&field=observers_project',  "observers_project"); }
       if( configuration.insect_project )     { links += furl(github_root+'plant_about.html?params='+p_params+'&field=insect_project',     "insect_project"); }
+      if( configuration.seeds_project )      { links += furl(github_root+'plant_about.html?params='+p_params+'&field=seeds_project',      "seeds_project"); }
       if( configuration.title )              { links += furl(github_root+'plant_about.html?params='+p_params+'&field=title',              "title"); }
       if( configuration.plant_filter )       { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_filter',       "plant_filter"); }
       if( configuration.plant_filter_value ) { links += furl(github_root+'plant_about.html?params='+p_params+'&field=plant_filter_value', "plant_filter_value"); }
@@ -97,6 +98,10 @@ function displayJson(data) {
         faddelem('p',document.body,{innerHTML:('The unique iNat project id for the project that contains the insect and ' +
                                                'other wildlife activity observations. The wildlife activity observations in ' +
                                                'this project are sometimes further filtered by setting the default_place parameter.<span id="seperator"></span>')});
+    } else if( p_field === 'seeds_project' ) {
+        faddelem('p',document.body,{innerHTML:('<b>seeds_project: '+furl(root_projects+configuration.seeds_project, configuration.seeds_project)+'</b>')});
+        faddelem('p',document.body,{innerHTML:('The unique iNat project id for the project that contains the observations of plants from which seeds '+
+                                               'are being shared. <span id="seperator"></span>')});
     } else if( p_field === 'title' ) {
         faddelem('p',document.body,{innerHTML:('<b>title:</b>')}); 
         faddelem('p',document.body,{innerHTML:('The title to be displayed above the plant list in the app.<span id="seperator"></span>')});
