@@ -118,7 +118,7 @@ function replaceDoubleQuotes(str) {
       // Access your data here 
       if( data.fields ) {
            console.log('building menu...');
-           buildMenu(data.configurations);
+           buildMenu(data.fields);
       } 
       console.log(data);
    })
@@ -212,8 +212,6 @@ function buildMenu(fields) {
 function fresults(xobj) {
    let results = xobj.results;
    let box_array = [];
-
-   buildMenu();
 
    for( let f=0; f<field_array.length; f++ ){
         box_array.push(new boxRow(field_array[f], '') );
