@@ -419,6 +419,11 @@ function fresults(xobj) {
              image = furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />');
          }
 
+         let target = rec.taxon.id;
+         if( configuration.use_names_lookup === 'no' && rec.taxon.preferred_common_name ) {
+             target = pref_tax_name.toLowerCase();
+         }
+
          if( p_mode.includes('visitor') ) {
              values = [
                   {innerText:i+1},
