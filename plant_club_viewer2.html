@@ -109,6 +109,23 @@ let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observa
 function replaceDoubleQuotes(str) {
   return str.replace(/"/g, '%22');
 }
+
+   console.log('json ' + json_root+p_params);
+   fetch((json_root+p_params+'.json'))
+     .then(response => response.json())
+     .then(data => {
+      // Access your data here 
+      if( data.fields ) {
+           console.log('building menu...');
+           buildMenu(data.configurations);
+      } 
+      console.log(data);
+   })
+     .catch(error => {
+      faddelem('p',document.body,{innerText:'There was a problem retrieving '+p_params+'.json.'});
+      faddelem('p',document.body,{innerText:'A valid configuration file is required to be specified as a url parameter. (e.g. ?params='+p_params+'.json).'});
+      throw new Error('Error fetching JSON');
+   });
  
 if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
    let instructions = [
@@ -172,14 +189,20 @@ function boxRow(field_id, field_name, field_value) {
     this.field_name  = field_name;
 }
 
-function buildMenu(configs) {
+function buildMenu(fields) {
       let menu_string = '';
       let links = '';
       let taxon_param = '';
- 
 
       menu_string = '<div class="navbar">';
 
+      if( fields && fields.length > 0 ) {
+          for( let i=0; i<fields.length; i++ ) {
+               links += furl(github_root+'plant_club_viewer2.html'+opts+'&field:'+fields[i].field_name.toLowerCase(), fields[i].field_name.toLowerCase());
+          }
+          menu_string += buildDD('Field', links); 
+      }
+ 
       menu_string += '</div>';
 
       faddelem('p',document.body,{innerHTML:(menu_string)});  
