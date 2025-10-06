@@ -138,6 +138,10 @@ function setUpDefaults(configurations) {
            winurlparams.delete('project_id');
            winurlparams.append('project_id', configuration.insect_project);
            p_project_id = configuration.insect_project;
+       } else if( configuration.observers_project ) {
+           winurlparams.delete('project_id');
+           winurlparams.append('project_id', configuration.observers_project);
+           p_project_id = configuration.observers_project;
        }
    }
 
