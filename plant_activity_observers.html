@@ -25,7 +25,7 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_garden     = winurlparams.get('garden') || '';
 let p_params     = winurlparams.get('params') || '';
-let p_project_id = '';
+let p_project_id = winurlparams.get('project_id) || '';
 let p_plant_name = winurlparams.get('plant_name') || '';
 let p_mode       = winurlparams.get('mode' || 'observers');
 let p_seed_prj   = winurlparams.get('state' || '');
@@ -138,11 +138,7 @@ function setUpDefaults(configurations) {
            winurlparams.delete('project_id');
            winurlparams.append('project_id', configuration.insect_project);
            p_project_id = configuration.insect_project;
-       } else if( configuration.observers_project ) {
-           winurlparams.delete('project_id');
-           winurlparams.append('project_id', configuration.observers_project);
-           p_project_id = configuration.observers_project;
-       }
+       } 
    }
 
    // if there's a default place in the configuration,
