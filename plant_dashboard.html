@@ -98,6 +98,16 @@ function buildTable() {
           faddelems('td',brow,values);
       }
 
+      if( config.art_project ) {
+          brow = faddelem('tr',tbody);
+          values = [
+                  {innerHTML:furl(github_root+'plant_artists.html?params='+p_params+'&mode=pro_artist','&#128100;')},
+                  {innerHTML:furl(github_root+'plant_artists.html?params='+p_params+'&mode=pro_artist','Journals')},
+                  {innerText:'Shows the journal entries for anyone participating on iNat and in an in-network journaling meet-up.'},
+                ];
+          faddelems('td',brow,values);
+      }
+
       if( config.seed_project ) {
           brow = faddelem('tr',tbody);
           values = [
