@@ -151,10 +151,10 @@ function fresults(result, places_obj, taxa_obj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let table = faddelem('table',document.body,{id:'main'});
-      let thead = faddelem('thead',table);
-      let hrow  = faddelem('tr',thead);
-      let tbody = faddelem('tbody',table);
+      let table = '';
+      let thead = '';
+      let hrow  = '';
+      let tbody = '';
 
       let labels = [
                  {innerText:'#'},
@@ -190,6 +190,10 @@ function fresults(result, places_obj, taxa_obj) {
          if( p_plant_id )     { plant_param += '&target_id='+p_plant_id; }
 
          if( i === 0 ) {
+             table = faddelem('table',document.body,{id:'main'});
+             thead = faddelem('thead',table);
+             hrow  = faddelem('tr',thead);
+             tbody = faddelem('tbody',table);
              faddelems('th',hrow,labels);
                 
              let all_artists = '<span id="topright"><b>'+furl(github_root+'plant_grid2.html?project_id='+configuration.art_project+state_param, 'all artwork' )+'</b></span>';
