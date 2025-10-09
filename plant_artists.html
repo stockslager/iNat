@@ -165,7 +165,6 @@ function fresults(result, places_obj, taxa_obj) {
 
       for (let i=0; i<result.recs.length; i++) {
          let target_url = '';     
-         let brow = faddelem('tr',tbody);
          let rec = result.recs[i];
          let lists = '';
          let user_icon = rec.icon || '';
@@ -190,19 +189,21 @@ function fresults(result, places_obj, taxa_obj) {
          if( p_plant_id )     { plant_param += '&target_id='+p_plant_id; }
 
          if( i === 0 ) {
-             table = faddelem('table',document.body,{id:'main'});
-             thead = faddelem('thead',table);
-             hrow  = faddelem('tr',thead);
-             tbody = faddelem('tbody',table);
-             faddelems('th',hrow,labels);
-                
              let all_artists = '<span id="topright"><b>'+furl(github_root+'plant_grid2.html?project_id='+configuration.art_project+state_param, 'all artwork' )+'</b></span>';
     
              faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + '<br />' 
                  +'per page: '+fcomnum(per_page) + '<br />'
                  +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+ all_artists + '<br />'
              });
+          
+             table = faddelem('table',document.body,{id:'main'});
+             thead = faddelem('thead',table);
+             hrow  = faddelem('tr',thead);
+             tbody = faddelem('tbody',table);
+             faddelems('th',hrow,labels);
          }
+
+         let brow = faddelem('tr',tbody);
 
          let values = [
             {innerText:i+1},
