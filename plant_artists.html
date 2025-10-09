@@ -305,6 +305,10 @@ async function asyncGetData() {
    })
      .catch(error => {
       console.error('Error setting up defaults or menu:', error);
+      if( error.status === 404 ) {
+          faddelem('p',document.body,{innerText:'Configuration file not found.'});
+          faddelem('p',document.body,{innerText:'The configuration file '+p_params+'.json was not found.  Please create a valid .json configuration file named '+p_params+'.json.'});
+      }
       throw new Error('Error setting up defaults or menu.');
    });
 
