@@ -73,34 +73,9 @@ let p_cache_check = winurlparams.get('cache_check') || 'no';
 
 let configs = '';
 
-// if the user has selected a method, built the opt to pass to the
-// lifelist page.
-let p_field = '';
-let p_field_opt = '';
-let p_field_value = '';
-// find key/value pair for &field: param if one was passed in
-for (const [key, value] of winurlparams.entries()) {
-  if( key.startsWith('field') ){
-      p_field_value = value;
-      p_field = ('&'+key+'=');
-      p_field_opt = ('&'+key+'='+value);
-  }
-}   
- 
 let view = winurlparams.get('view') || '';
 let activity_data = winurlparams.get('activity_data') || 'local';
 winurlparams.delete('activity_data');
-
-function furlArrow(url,txt=url) { return '<a href="'+url+'" id="arrow">'+txt+'</a>'; };
-
-function findValueByKey(arr, key, value) {
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i][key].toString() === value) {
-      return arr[i];
-    }
-  }
-  return undefined;
-}
 
 function setUpDefaults(configurations) {
 
@@ -227,7 +202,7 @@ function fresults(result, places_obj, taxa_obj) {
             {innerText:i+1},
             {innerHTML:user_icon},
             {innerHTML:furl(root_people+rec.user_login,rec.user_login)},
-            {innerHTML:furl(github_root+'plant_grid.html?project_id='+configuration.art_project+'&user_id='+rec.user_login+params+state_param,rec.species_count )},
+            {innerHTML:furl(github_root+'plant_grid.html?project_id='+configuration.art_project+'&user_id='+rec.user_login+params+state_param,rec.observation_count )},
          ];
          faddelems('td',brow,values);
       };
