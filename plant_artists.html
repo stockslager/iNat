@@ -190,12 +190,12 @@ function fresults(result, places_obj, taxa_obj) {
 
          if( p_plant_id )     { plant_param += '&target_id='+p_plant_id; }
 
-         if( i===0 ) {
-             let all_artists = '<span id="topright"><b>'+furl(github_root+'plant_grid2.html?project_id='+configuration.art_project+params+state_param, 'all artwork' )+'</b></span>';
+         if( i === 0 ) {
+             let all_artists = '<span id="topright"><b>'+furl(github_root+'plant_grid2.html?project_id='+configuration.art_project+state_param, 'all artwork' )+'</b></span>';
     
              faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + '<br />' 
-                 +'per page: '+fcomnum(per_page) + all_artists + '<br />'
-                 +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
+                 +'per page: '+fcomnum(per_page) + '<br />'
+                 +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+ all_artists + '<br />'
              });
          }
 
