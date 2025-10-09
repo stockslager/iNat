@@ -123,6 +123,9 @@ function setUpDefaults(configurations) {
        throw new Error('No configurations defined.');
    }
 
+   winurlparams.delete('project_id');
+   winurlparams.append('project_id', configuration.art_project);
+
    // if there's a default place in the configuration,
    // set the p_place_id to the default.
    if( configuration.default_place ) {
