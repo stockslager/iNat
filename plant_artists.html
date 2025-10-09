@@ -151,10 +151,10 @@ function fresults(result, places_obj, taxa_obj) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let all_artists = '<span id="topright"><b>all artists</b></span>';
+      let all_artists = '<span id="topright"><b>'+furl(github_root+'plant_grid2.html?project_id='+configuration.art_project+params+state_param, 'all artwork )+'</b></span>';
     
-      faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + all_artists + '<br />' 
-            +'per page: '+fcomnum(per_page) + '<br />'
+      faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + '<br />' 
+            +'per page: '+fcomnum(per_page) + all_artists + '<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });
 
@@ -166,8 +166,7 @@ function fresults(result, places_obj, taxa_obj) {
          {innerText:'#'},
          {innerText:'Icon '},
          {innerText:'User' },
-         {innerText:'Pieces'  },
-         //{innerText:'Obs'  },
+         {innerText:'Artwork'  },
       ];
       faddelems('th',hrow,labels);
       
