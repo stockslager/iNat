@@ -33,6 +33,7 @@ let p_plant_id   = winurlparams.get('plant_id' || '');
 let p_place_id   = '';
 let p_user = '';
 let state_param = '';
+let configuration = '';
 
 if( p_seed_prj ) {
     // the place selected was added to seed_project parameter and needs to be
@@ -118,7 +119,7 @@ function setUpDefaults(configurations) {
    }
         
    if( !configuration ) {
-       faddelem('p',document.body,{innerText:'An insect_project parameter was not specified in '+p_param+'.json.'});
+       faddelem('p',document.body,{innerText:'An insect_project parameter was not specified in '+p_params+'.json.'});
        faddelem('p',document.body,{innerText:'Please modify '+p_params+'.json to include an insect_project.'});
        throw new Error('No configurations defined.');
    }
