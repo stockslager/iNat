@@ -305,8 +305,6 @@ async function asyncGetData() {
    })
      .catch(error => {
       console.error('Error setting up defaults or menu:', error);
-      faddelem('p',document.body,{innerText:'Configuration file ('+p_params+'.json) contains no valid configurations.'});
-      faddelem('p',document.body,{innerText:'There are no configurations specified in '+p_params+'.json'});
       throw new Error('Error setting up defaults or menu.');
    });
 
