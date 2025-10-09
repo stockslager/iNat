@@ -129,7 +129,7 @@ function buildMenu(configs) {
 
       menu_string = '<div class="navbar">';
 
-      menu_string += furl(github_root+'plant_list.html'+params+state_param+'&mode='+p_mode, choose_plant);
+      menu_string += buildDDTitle(configs[0].menu_title); 
 
       if( p_mode.startsWith('pro') ) {
           menu_string += buildHome(furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;'));
@@ -150,13 +150,6 @@ function fresults(result, places_obj, taxa_obj) {
       let page_max = Math.ceil(total_results/per_page);
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
-
-      let all_artists = '<span id="topright"><b>'+furl(github_root+'plant_grid2.html?project_id='+configuration.art_project+params+state_param, 'all artwork' )+'</b></span>';
-    
-      faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + '<br />' 
-            +'per page: '+fcomnum(per_page) + all_artists + '<br />'
-            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
-            });
 
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
@@ -196,6 +189,15 @@ function fresults(result, places_obj, taxa_obj) {
          if( p_mode )         { state_param += '$'+p_mode;         } else { state_param += '$'; }
 
          if( p_plant_id )     { plant_param += '&target_id='+p_plant_id; }
+
+         if( i===0 ) {
+             let all_artists = '<span id="topright"><b>'+furl(github_root+'plant_grid2.html?project_id='+configuration.art_project+params+state_param, 'all artwork' )+'</b></span>';
+    
+             faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + '<br />' 
+                 +'per page: '+fcomnum(per_page) + all_artists + '<br />'
+                 +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
+             });
+         }
 
          let values = [
             {innerText:i+1},
