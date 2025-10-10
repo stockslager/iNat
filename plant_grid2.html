@@ -314,7 +314,9 @@ async function asyncGetData() {
       for( let i=0; i<data.configurations.length; i++ ) {
            if( data.configurations[i].insect_project === p_project_id ) {
                interactions = data.configurations[i].interactions;
-               configuration = data.configurations[0];
+           }
+           if( data.configurations[i].art_project === p_project_id ) {
+               configuration = data.configurations[i];
            }
       }
       console.log(data);
