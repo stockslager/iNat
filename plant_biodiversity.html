@@ -37,8 +37,6 @@ let p_params      = p_state.split('$')[2];
 let p_user_id     = p_state.split('$')[3];
 let garden        = p_state.split('$')[4];
 let mode          = p_state.split('$')[5];
-
-document.title = dlString;
   
 </script> 
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/js/plant_params_v10.js"></script>
@@ -67,6 +65,9 @@ function buildTitle( title ) {
 }
 
 function setUpDefaults(configurations) {
+
+   let api_params = '';
+   let all_params = '';
 
    if( configurations.length === 0 ) {
        faddelem('p',document.body,{innerText:'Configuration file ('+p_params+'.json) contains no valid configurations.'});
