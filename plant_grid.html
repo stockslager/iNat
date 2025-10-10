@@ -151,10 +151,10 @@ function buildArtistMenu(data, obs_fields) {
 
            // plantae is hard-coded because we only want to appear on the artists grid and not
            // in the "show" drop down used on the counts page.  may need to re-visit.
-           links =  (furl(github_root+'plant_grid2.html'+showDDOpts,'<span style="padding-right:20px;">&#10133;</span>all' ));
-           links += (furl(github_root+'plant_grid2.html'+showDDOpts+'&taxon_id=47126','<span style="padding-right:20px;">&#127807;</span>plants' )); 
+           links =  (furl(github_root+'plant_grid.html'+showDDOpts,'<span style="padding-right:20px;">&#10133;</span>all' ));
+           links += (furl(github_root+'plant_grid.html'+showDDOpts+'&taxon_id=47126','<span style="padding-right:20px;">&#127807;</span>plants' )); 
            for( let j=0; j<configuration.sub_icons.length; j++ ) {
-                links += (furl(github_root+'plant_grid2.html'+showDDOpts+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+                links += (furl(github_root+'plant_grid.html'+showDDOpts+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
            }
               
            menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
