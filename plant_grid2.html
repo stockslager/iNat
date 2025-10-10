@@ -144,17 +144,14 @@ function buildArtistMenu(data, obs_fields) {
 
    menu_string = '<div class="navbar">';
 
-    console.log('one');
    if( p_hide_dds === 'no' ) {
-    console.log('two');
        // show drop down to filter by taxa
        if( configuration.sub_icons ) { 
-    console.log('three');
            let showDDOpts = getShowDDOpts( winurlparams );
              
-           links = (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
+           links = (furl(github_root+'plant_grid2.html'+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
            for( let j=0; j<configuration.sub_icons.length; j++ ) {
-                links += (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1'+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+                links += (furl(github_root+'plant_grid2.html'+showDDOpts+'&page=1'+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
            }
               
            menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
