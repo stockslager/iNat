@@ -304,7 +304,7 @@ async function asyncGetData() {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
       })
-       .then((data) => { storeData(p_params, data); 
+       .then((data) => { storeData(data); 
                          fresults( parseStoredData(sessionStorage.getItem(p_params+'artists')) ); 
                        })
        .catch((err) => {
