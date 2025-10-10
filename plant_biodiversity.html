@@ -75,12 +75,6 @@ function setUpDefaults(configurations) {
        throw new Error('No configurations defined.');
    }
 
-   if( !configuration.plant_project ) {
-       faddelem('p',document.body,{innerText:'Configuration file ('+p_params+'.json) does not contain a plant_project parameter with a value of '+p_project_id+'.'});
-       faddelem('p',document.body,{innerText:'Please add a valid plant_project to '+p_params+'.json for &plant_project='+p_project_id});
-       throw new Error('No configurations defined.');
-   }
-
    for( let i=0; i<configurations.length; i++ ) {
         if( configurations[i].plant_project === p_project_id ) {
             console.log('found config');
