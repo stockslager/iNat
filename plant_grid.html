@@ -118,10 +118,34 @@ winurlparams.append('per_page',recsmax);
 var apiurlbase = 'https://api.inaturalist.org/v1/observations'
 var apiurl = apiurlbase+'?'+winurlparams.toString();
 
+function buildArtistMenu(data, obs_fields) {
+   let links = '';
+   let menu_string = '';
+
+   menu_string = '<div class="navbar">';
+
+   if( p_hide_dds === 'no' ) {
+       // filter by drop down
+   }
+
+   if( p_hide_home === 'no' ) {
+       menu_string += buildHome( furl(github_root+'plant_artists.html?state='+p_state,'&#127807;') );
+   }
+
+   menu_string += '</div>';
+   
+   return menu_string;
+
+}
+    
 function buildLifeStageMenu(data, obs_fields) {
 
    let links = '';
    let menu_string = '';
+
+   if( mode.includes('artist') ) {
+       return (buildArtistMenu(data, obs_fields));
+   }
 
    menu_string = '<div class="navbar">';
 
