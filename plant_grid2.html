@@ -59,6 +59,7 @@ winurlparams.append('lrank', 'subspecies');
 
 let annotations_array = [];
 let interactions = [];
+let configuration = '';
 
 let seed_param = '';
 if( p_state ) {
@@ -118,6 +119,24 @@ winurlparams.append('per_page',recsmax);
 var apiurlbase = 'https://api.inaturalist.org/v1/observations'
 var apiurl = apiurlbase+'?'+winurlparams.toString();
 
+function getShowDDOpts( winurlparams ) { 
+   let opts='';
+   // build param list for url's used in fresults
+   for( const [key, value] of winurlparams.entries() ) { 
+        if( key !== 'taxon_id' && key !== 'taxon_nm' && key !== 'page' ){
+            if( opts === '' ){
+                opts += "?";
+            } else {
+                opts += "&";
+            }
+            opts += key;
+            opts += "=";
+            opts += value;
+        }
+   } 
+   return( opts );
+}
+
 function buildArtistMenu(data, obs_fields) {
    let links = '';
    let menu_string = '';
@@ -125,7 +144,19 @@ function buildArtistMenu(data, obs_fields) {
    menu_string = '<div class="navbar">';
 
    if( p_hide_dds === 'no' ) {
-       // filter by drop down
+       // show drop down to filter by taxa
+       if( configuration.sub_icons ) ) { 
+           let showDDOpts = getShowDDOpts( winurlparams );
+             
+           links = (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
+           for( let j=0; j<configuration.sub_icons.length; j++ ) {
+                if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
+                     links += (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1'+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+                }
+           }
+              
+           menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
+       }
    }
 
    if( p_hide_home === 'no' ) {
@@ -280,6 +311,7 @@ async function asyncGetData() {
       for( let i=0; i<data.configurations.length; i++ ) {
            if( data.configurations[i].insect_project === p_project_id ) {
                interactions = data.configurations[i].interactions;
+               configuration = data.configurations[0];
            }
       }
       console.log(data);
