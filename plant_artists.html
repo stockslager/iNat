@@ -69,7 +69,7 @@ if( p_seed_prj ) {
         
 // cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
 // session storage is only used for sorting of data in columns at this point.
-let p_cache_check = winurlparams.get('cache_check') || 'no';  
+let p_cache_check = winurlparams.get('cache_check') || 'yes';  
 
 let configs = '';
 
@@ -245,6 +245,8 @@ class Record {
   
 function storeData(xobj) {
    let results = xobj.results;
+
+   console.log('storing artists in session');
 
    if (results) {
       let record_array = [];
