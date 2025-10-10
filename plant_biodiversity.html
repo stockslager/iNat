@@ -23,6 +23,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_state         = winurlparams.get('state') || '';
+let p_page          = winurlparams.get('page') || '';
 
 let api_params = '';
 let all_params = '';
@@ -94,6 +95,8 @@ function setUpDefaults(configurations) {
 
    all_params += api_params;
    all_params += '&per_page=200';
+
+   if( p_page     ) { all_params += '&page='+p_page; }
 
 }
  
