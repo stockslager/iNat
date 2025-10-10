@@ -298,19 +298,25 @@ async function asyncGetData() {
    let apirefname = 'iNaturalist Observations Observers';
    let apiref = furl(apirefurl,apirefname);
 
-   console.log('apiurl ' + apiurl);
-   await fetch(apiurl)
-      .then((response) => {
-         if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-         return response.json();
-      })
-       .then((data) => { storeData(data); 
+   // look for the list of artists in the cache.
+   if( p_cache_check === 'yes' && sessionStorage.getItem((p_params+'artists')) ) {
+       console.log('found cached artist list');
+       fresults( parseStoredData(sessionStorage.getItem((p_params+'artists'))), );
+   } else {
+       console.log('apiurl ' + apiurl);
+       await fetch(apiurl)
+          .then((response) => {
+             if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+             return response.json();
+           })
+           .then((data) => { storeData(data); 
                          fresults( parseStoredData(sessionStorage.getItem(p_params+'artists')) ); 
                        })
-       .catch((err) => {
-          console.error(err.message);
-          faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-      })
+          .catch((err) => {
+             console.error(err.message);
+             faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+         })
+   }
 }
 
 // need to pull resources from a json file to pass into an api
@@ -319,14 +325,7 @@ const request = async () => {
    asyncGetData();
 }
 
-// cache check will be set to yes for sorting of columns and
-// and when "artists" is cicked on subsequent pages
-if( p_cache_check === 'yes' && sessionStorage.getItem((p_params+'artists')) ) {
-    console.log('found session');
-    fresults( parseStoredData(sessionStorage.getItem((p_params+'artists'))), );
-} else {
-    request();  
-}
+request();  
  
 </script>
 
