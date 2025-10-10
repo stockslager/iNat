@@ -69,7 +69,7 @@ if( p_seed_prj ) {
         
 // cache check of session storage to make app less expensive to server (cache check, get it!  bwahahaha)
 // session storage is only used for sorting of data in columns at this point.
-let p_cache_check = winurlparams.get('cache_check') || 'no';  
+let p_cache_check = winurlparams.get('cache_check') || 'yes';  
 
 let configs = '';
 
@@ -256,7 +256,7 @@ function storeData(xobj) {
 
       // Serialize the object to JSON string so it can be stored in session
       const result_string = JSON.stringify(result);
-      sessionStorage.setItem('artists', result_string);
+      sessionStorage.setItem((p_params+'artists'), result_string);
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); };
 }
@@ -304,8 +304,8 @@ async function asyncGetData() {
          if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
          return response.json();
       })
-       .then((data) => { storeData(data); 
-                         fresults( parseStoredData(sessionStorage.getItem('artists')) ); 
+       .then((data) => { storeData(p_params, data); 
+                         fresults( parseStoredData(sessionStorage.getItem(p_params+'artists')) ); 
                        })
        .catch((err) => {
           console.error(err.message);
@@ -321,9 +321,9 @@ const request = async () => {
 
 // cache check will be set to yes for sorting of columns and
 // and when "artists" is cicked on subsequent pages
-if( p_cache_check === 'yes' && sessionStorage.getItem('artists') ) {
+if( p_cache_check === 'yes' && sessionStorage.getItem((p_params+'artists')) ) {
     console.log('found session');
-    fresults( parseStoredData(sessionStorage.getItem('artists')), );
+    fresults( parseStoredData(sessionStorage.getItem((p_params+'artists'))), );
 } else {
     request();  
 }
