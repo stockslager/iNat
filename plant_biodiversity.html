@@ -105,8 +105,16 @@ function setUpDefaults(configurations) {
 function buildMenu( results ) {
 
     let menu_string = '';
+    let links = '';
 
     menu_string = '<div class="navbar">';
+
+    let showDDOpts = getShowDDOpts( winurlparams );
+    links =  (furl(github_root+'plant_biodiversity.html'+showDDOpts,'<span style="padding-right:20px;">&#10133;</span>all' ));
+    links += (furl(github_root+'plant_biodiversity.html'+showDDOpts+'&list_id=4543978','Landscaped Beds' )); 
+    links += (furl(github_root+'plant_biodiversity.html'+showDDOpts+'&list_id=4544121','Trees and Shrubs' )); 
+              
+    menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
   
     menu_string += buildHome( furl(github_root+'plant_dashboard.html?state='+p_state,'&#127807;') );
     
