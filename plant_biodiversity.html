@@ -52,7 +52,7 @@ function getShowDDOpts( winurlparams ) {
    let opts='';
    // build param list for url's used in fresults
    for( const [key, value] of winurlparams.entries() ) { 
-        if( key !== 'taxon_id' && key !== 'taxon_nm' && key !== 'page' ){
+        if( key !== 'list_id' && key !== 'list' && key !== 'page' ){
             if( opts === '' ){
                 opts += "?";
             } else {
@@ -95,6 +95,7 @@ function setUpDefaults(configurations) {
 
    api_params += ('?project_id='+configuration.plant_project);
    api_params += ('&taxon_id='+p_taxon_id);
+   api_params += ('&list_id='+p_list_id);
 
    all_params += api_params;
    all_params += '&per_page=200';
