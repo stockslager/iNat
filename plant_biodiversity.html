@@ -41,6 +41,7 @@ let p_params      = p_state.split('$')[2];
 let p_user_id     = p_state.split('$')[3];
 let garden        = p_state.split('$')[4];
 let mode          = p_state.split('$')[5];
+let p_taxon_id    = p_state.split('$')[6];
   
 </script> 
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/js/plant_params_v10.js"></script>
@@ -92,7 +93,6 @@ function setUpDefaults(configurations) {
    }
 
    api_params += ('?project_id='+configuration.plant_project);
-   api_params += ('&iconic_taxa=plantae');
 
    all_params += api_params;
    all_params += '&per_page=200';
