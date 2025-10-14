@@ -32,8 +32,6 @@ let p_state         = winurlparams.get('state') || '';
 let p_taxon_nm      = winurlparams.get('taxon_nm') || 'Show';
 let p_page          = winurlparams.get('page') || '';
 let p_obs_fields    = winurlparams.get('obs_fields') || '';
-let behavior_field = '';
-let behavior_field_value = '';
 let obs_field_array = [];
 let configuration = '';
 let configurations = [];
@@ -44,7 +42,6 @@ let dlString = '';
 
 let api_params = '';
 let all_params = '';
-let behavior_params = '';
 
 let opts = copyOpts( winurlparams );
 
@@ -128,8 +125,6 @@ function setUpDefaults(configurations) {
 
    api_params += ('?project_id='+configuration.insect_project);
    api_params += '&hrank=species';
-   api_params += '&field:'+configuration.field_name+'='+p_target_id;
-   api_params += behavior_params;
 
    if( p_place_id ) { api_params += '&place_id='+p_place_id; }
    if( p_user_id )  { api_params += '&user_id='+p_user_id; }
