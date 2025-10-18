@@ -66,8 +66,8 @@ for (const [key, value] of winurlparams.entries()) {
   }
 }  
 
-if( p_target_name === 'Yard List' ) {
-    dlString = p_target_name;
+if( mode.includes('yard') ) {
+    dlString = 'Yard List';
 } else {
     dlString = (capitalizeWords((p_prefix+' on '+p_target_name)));
 }
@@ -145,7 +145,8 @@ function setUpDefaults(configurations) {
    api_params += ('?project_id='+configuration.insect_project);
    api_params += '&hrank=species';
 
-   if( p_target_name !== 'Yard List' ) {
+   // filter by field when not displaying the yard list
+   if( !mode.includes('yard') ) {
        api_params += '&field:'+configuration.field_name+'='+p_target_id;
        api_params += behavior_params;
    }
@@ -194,7 +195,7 @@ function buildMenu( results ) {
    let icons = '';
    let menu_string = '';
 
-   if( p_target_name === 'Yard List' ) {
+   if( mode.includes('yard') ) {
        menu_string = '<div class="navbar">';
        if( configuration.sub_icons ) {
               
