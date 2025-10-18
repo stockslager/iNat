@@ -182,7 +182,7 @@ function buildMenu( results ) {
            menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
        }
 
-       menu_string += buildHome( furl(github_root+'plant_dashboard.html?state='+p_state,'&#127807;') );
+       menu_string += buildHome( furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;') );
     
        menu_string += '</div>';
 
@@ -323,6 +323,10 @@ function fresults(xobj) {
           dlString = furl(github_root+'plant_grid.html'+all_params+'&state='+p_state+'&action=on&plant_id='+p_target_id+'&plant_name='+p_target_name,'<span id="topright">All Organisms On Any Plant</span>');
       } else {
           dlString = furl(github_root+'plant_grid.html'+all_params+'&state='+p_state+'&action=on&plant_id='+p_target_id+'&plant_name='+p_target_name,'<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
+      }
+
+      if( mode.includes('yard') ) {
+          dlString = '';
       }
     
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
