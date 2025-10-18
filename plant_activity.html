@@ -66,7 +66,11 @@ for (const [key, value] of winurlparams.entries()) {
   }
 }  
 
-dlString = (capitalizeWords((p_prefix+' on '+p_target_name)));
+if( mode.includes('yard') ) {
+    dlString = 'Yard List';
+} else {
+    dlString = (capitalizeWords((p_prefix+' on '+p_target_name)));
+}
 document.title = dlString;
   
 </script> 
@@ -140,8 +144,12 @@ function setUpDefaults(configurations) {
 
    api_params += ('?project_id='+configuration.insect_project);
    api_params += '&hrank=species';
-   api_params += '&field:'+configuration.field_name+'='+p_target_id;
-   api_params += behavior_params;
+ 
+   // filter by field when not displaying the yard list
+   if( !mode.includes('yard') ) {
+       api_params += '&field:'+configuration.field_name+'='+p_target_id;
+       api_params += behavior_params;
+   }
 
    if( p_place_id ) { api_params += '&place_id='+p_place_id; }
    if( p_user_id )  { api_params += '&user_id='+p_user_id; }
@@ -155,6 +163,32 @@ function setUpDefaults(configurations) {
 }
  
 function buildMenu( results ) {
+
+   let links = '';
+   let icons = '';
+   let menu_string = '';
+
+   if( mode.includes('yard') ) {
+       menu_string = '<div class="navbar">';
+       if( configuration.sub_icons ) {
+              
+           let showDDOpts = getShowDDOpts( winurlparams );
+             
+           links = (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
+           for( let j=0; j<configuration.sub_icons.length; j++ ) {
+                links += (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1'+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+           }
+              
+           menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
+       }
+
+       menu_string += buildHome( furl(github_root+'plant_dashboard.html?state='+p_state,'&#127807;') );
+    
+       menu_string += '</div>';
+
+       faddelem('p',document.body,{innerHTML:(menu_string)});
+       return;
+   }
 
    if( configuration.field_name ) {
        field_name = ('&field:'+configuration.field_name+'=');
@@ -183,10 +217,6 @@ function buildMenu( results ) {
        }
    }
    
-   let links = '';
-   let icons = '';
-   let menu_string = '';
-
    if( ( p_taxon_id || p_target_name ) ||
        ( p_show_menu === 'yes' ) ||
        ( configuration.sub_icons ) ) { 
