@@ -56,10 +56,21 @@ function buildMenu(configs) {
 }
 
 function buildTable() {
+
+      let nbr_of_modes = 0;
+      if( config.plant_project || config.plant_ids ) { nbr_of_modes++; }
+      if( config.observers_project )                 { nbr_of_modes++; }
+      if( config.art_project )                       { nbr_of_modes++; }
+      if( config.seed_project )                      { nbr_of_modes++; }
+
+      let all_url = '';
+      if( p_params === 'horizon' ) {
+          all_url = furl(github_root+'plant_activity.html?state='+config.insect_project+'$'+config.default_place+'$'+p_params+'$$$'+'pro_yard_visitors'+'$','<span id="topright">All Observations</span>');
+      }
       
-      faddelem('p',document.body,{innerHTML:'total modes: 2 <br/>'
+      faddelem('p',document.body,{innerHTML:'total modes: ' + nbr_of_modes + ' <br/>'
                  +'per page: 10<br />'
-                 +'page: 1 of 1<br />'});  
+                 +'page: 1 of 1' + all_url + '<br />'});  
  
       let labels = [];
 
