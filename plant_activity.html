@@ -298,7 +298,9 @@ function buildMenu( results ) {
 
             // check to see if they entered the flow from a seed library.  if so, return control there.
             if( p_state ) {
-                if( mode.includes('observer') ) {
+                if( mode.includes('simple') ) {
+                    menu_string += buildHome( furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;') );
+                } else if( mode.includes('observer') ) {
                     menu_string += buildHome( furl(github_root+'plant_activity_observers.html?state='+p_state+'&plant_id='+p_target_id+'&plant_name='+p_target_name,'&#127807;') );
                 } else if( mode.includes('seed') ) {
                     menu_string += buildHome( furl(github_root+'plant_seeds.html?state='+p_state,'&#127807;') );
