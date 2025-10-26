@@ -141,6 +141,24 @@ function getShowDDOpts( winurlparams ) {
    return( opts );
 }
 
+function getQDDOpts( winurlparams ) { 
+   let opts='';
+   // build param list for url's used in fresults
+   for( const [key, value] of winurlparams.entries() ) { 
+        if( key !== 'q' && key !== 'page' && key !== 'per_page' && key !== 'lrank' ){
+            if( opts === '' ){
+                opts += "?";
+            } else {
+                opts += "&";
+            }
+            opts += key;
+            opts += "=";
+            opts += value;
+        }
+   } 
+   return( opts );
+}
+
 function buildArtistMenu(data, obs_fields) {
    let links = '';
    let menu_string = '';
@@ -170,10 +188,10 @@ function buildArtistMenu(data, obs_fields) {
 
    // plantae is hard-coded because we only want to appear on the artists grid and not
    // in the "show" drop down used on the counts page.  may need to re-visit.
-           let showDDOpts = getShowDDOpts( winurlparams );
-           links =  (furl(github_root+'thing.html'+showDDOpts+'&q=thing','<span style="padding-right:20px;">&#10133;</span>all' ));
-           links += (furl(github_root+'thing.html'+showDDOpts+'&q=thing one','thing one' ));
-           links += (furl(github_root+'thing.html'+showDDOpts+'&q=thing two','thing two' ));
+           let QDDOpts = getQDDOpts( winurlparams );
+           links =  (furl(github_root+'thing.html'+QDDOpts+'&q=thing','<span style="padding-right:20px;">&#10133;</span>all' ));
+           links += (furl(github_root+'thing.html'+QDDOpts+'&q=thing one','thing one' ));
+           links += (furl(github_root+'thing.html'+QDDOpts+'&q=thing two','thing two' ));
               
            menu_string += ( buildDD( capitalizeWords(p_q), links) );
 
