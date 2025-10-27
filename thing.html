@@ -46,6 +46,7 @@ let p_state      = winurlparams.get('state') || '';
 let p_hide_home  = winurlparams.get('hide_home') || 'no';
 let p_hide_dds   = winurlparams.get('hide_dds') || 'no';
 let p_q          = winurlparams.get('q') || 'thing';
+let p_search_on  = winurlparams.get('search_on') || 'tags';
 
 // parse the seed project param to determine mode.
 let prj      = p_state.split('$')[0];
@@ -110,8 +111,6 @@ if( p_taxon_id ) {
 }
 
 var recsmax = columns * rows - 1;
-
-winurlparams.append('search_on', 'tags');
   
 winurlparams.delete('cellpx');
 winurlparams.delete('spacerpx');
@@ -145,7 +144,7 @@ function getQDDOpts( winurlparams ) {
    let opts='';
    // build param list for url's used in fresults
    for( const [key, value] of winurlparams.entries() ) { 
-        if( key !== 'q' && key !== 'page' && key !== 'per_page' && key !== 'lrank' ){
+        if( key !== 'q' && key !== 'search_on' && key !== 'page' && key !== 'per_page' && key !== 'lrank' ){
             if( opts === '' ){
                 opts += "?";
             } else {
@@ -270,9 +269,9 @@ function buildLifeStageMenu(data, obs_fields) {
    // plantae is hard-coded because we only want to appear on the artists grid and not
    // in the "show" drop down used on the counts page.  may need to re-visit.
            let QDDOpts = getQDDOpts( winurlparams );
-           links =  (furl(github_root+'thing.html'+QDDOpts+'&q=thing','<span style="padding-right:20px;">&#10133;</span>all' ));
-           links += (furl(github_root+'thing.html'+QDDOpts+'&q=thing one','thing one' ));
-           links += (furl(github_root+'thing.html'+QDDOpts+'&q=thing two','thing two' ));
+           links =  (furl(github_root+'thing.html'+QDDOpts+'&q=thing&search_on=tags','<span style="padding-right:20px;">&#10133;</span>all' ));
+           links += (furl(github_root+'thing.html'+QDDOpts+'&q=thing one&search_on=tags','thing one' ));
+           links += (furl(github_root+'thing.html'+QDDOpts+'&q=thing two&search_on=tags','thing two' ));
               
            menu_string += ( buildDD( capitalizeWords('thing'), links) );
 
