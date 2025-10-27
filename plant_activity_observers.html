@@ -124,7 +124,7 @@ function setUpDefaults(configurations) {
        throw new Error('No configurations defined.');
    }
 
-   if( configuration.field_name ) {
+   if( configuration.field_name && !p_mode.includes('yard') ) {
        winurlparams.append( ('field:'+configuration.field_name), (p_plant_id||''));
    }
 
@@ -170,10 +170,18 @@ function buildMenu(configs) {
 
       menu_string = '<div class="navbar">';
 
-      menu_string += furl(github_root+'plant_list.html'+params+state_param+'&mode='+p_mode, choose_plant);
+      if( p_mode.includes('yard') ) {
+          menu_string += buildDDTitle('');
+      } else {
+          menu_string += furl(github_root+'plant_list.html'+params+state_param+'&mode='+p_mode, choose_plant);
+      }
 
       if( p_mode.startsWith('pro') ) {
-          menu_string += buildHome(furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;'));
+          if( p_mode.includes('yard') ) {
+              menu_string += buildHome(furl(github_root+'yard_dashboard.html?params='+p_params,'&#127807;'));
+          } else {
+              menu_string += buildHome(furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;'));
+          }
       }
  
       menu_string += '</div>';
@@ -194,14 +202,16 @@ function fresults(result, places_obj, taxa_obj) {
 
       let on_all = '';
       let on_all2 = '';
-    
-      if( !p_plant_name ) {
-          on_all = '<span id="topright">showing counts for<br> <b>' +
-                   'all plants</b></span>';
-      } else {
-          on_all2 = '<span id="topright">showing counts for<br><b>'+p_plant_name.toLowerCase()+'</b>' +
-                   '<br>show ' +
-                   furl(github_root+'plant_activity_observers.html?project_id='+configuration.insect_project+'&params='+p_params+p_field+'&mode='+p_mode,'all plants?') + '</span>';
+
+      if( !p_mode.includes('yard') ) {
+          if( !p_plant_name ) {
+              on_all = '<span id="topright">showing counts for<br> <b>' +
+                       'all plants</b></span>';
+          } else {
+              on_all2 = '<span id="topright">showing counts for<br><b>'+p_plant_name.toLowerCase()+'</b>' +
+                       '<br>show ' +
+                       furl(github_root+'plant_activity_observers.html?project_id='+configuration.insect_project+'&params='+p_params+p_field+'&mode='+p_mode,'all plants?') + '</span>';
+          }
       }
     
       faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + on_all2 + '<br />' 
