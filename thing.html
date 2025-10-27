@@ -186,16 +186,6 @@ function buildArtistMenu(data, obs_fields) {
        menu_string += buildHome( furl(github_root+'plant_artists.html?state='+p_state,'&#127807;') );
    }
 
-   // plantae is hard-coded because we only want to appear on the artists grid and not
-   // in the "show" drop down used on the counts page.  may need to re-visit.
-           let QDDOpts = getQDDOpts( winurlparams );
-           links =  (furl(github_root+'thing.html'+QDDOpts+'&q=thing','<span style="padding-right:20px;">&#10133;</span>all' ));
-           links += (furl(github_root+'thing.html'+QDDOpts+'&q=thing one','thing one' ));
-           links += (furl(github_root+'thing.html'+QDDOpts+'&q=thing two','thing two' ));
-              
-           menu_string += ( buildDD( capitalizeWords('thing'), links) );
-
-
    menu_string += '</div>';
    
    return menu_string;
@@ -276,6 +266,15 @@ function buildLifeStageMenu(data, obs_fields) {
    if( p_hide_home === 'no' ) {
        menu_string += buildHome( furl(github_root+'plant_activity.html?state='+p_state+'&target_id='+p_plant_id+'&target_name='+p_plant_name,'&#127807;') );
    }
+
+   // plantae is hard-coded because we only want to appear on the artists grid and not
+   // in the "show" drop down used on the counts page.  may need to re-visit.
+           let QDDOpts = getQDDOpts( winurlparams );
+           links =  (furl(github_root+'thing.html'+QDDOpts+'&q=thing','<span style="padding-right:20px;">&#10133;</span>all' ));
+           links += (furl(github_root+'thing.html'+QDDOpts+'&q=thing one','thing one' ));
+           links += (furl(github_root+'thing.html'+QDDOpts+'&q=thing two','thing two' ));
+              
+           menu_string += ( buildDD( capitalizeWords('thing'), links) );
 
    menu_string += '</div>';
    
