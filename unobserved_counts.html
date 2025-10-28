@@ -140,7 +140,7 @@ function buildMenu( results ) {
        }
    }
    
-   if( ( p_taxon_id || p_target_name ) ||
+   if( ( p_taxon_id ) ||
        ( p_show_menu === 'yes' ) ||
        ( configuration.sub_icons ) ) { 
     
@@ -159,17 +159,6 @@ function buildMenu( results ) {
               
                 menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
             }
-
-            // check to see if they entered the flow from a seed library.  if so, return control there.
-            if( p_state && !mode.includes('simple') ) {
-                if( mode.includes('observer') ) {
-                    menu_string += buildHome( furl(github_root+'plant_activity_observers.html?state='+p_state+'&plant_id='+p_target_id+'&plant_name='+p_target_name,'&#127807;') );
-                } else if( mode.includes('seed') ) {
-                    menu_string += buildHome( furl(github_root+'plant_seeds.html?state='+p_state,'&#127807;') );
-                } else {
-                    menu_string += buildHome( furl(github_root+'plant_list.html?state='+p_state,'&#127807;') );
-                }
-            } 
     
             menu_string += '</div>';
     }
