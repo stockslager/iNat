@@ -115,6 +115,8 @@ let p_project_nm = winurlparams.get('project_nm') || '';
 let p_mode       = winurlparams.get('mode') || '';
 let p_q          = winurlparams.get('q') || '';
 
+let api_params = '?q='+p_q+'&per_page=10';
+
 winurlparams.delete('options');
 let p_idextra_ = winurlparams.get('idextra_user_id')?.split(',') || [];;
 winurlparams.delete('idextra_user_id');
@@ -189,7 +191,7 @@ function buildForm() {
 }
   
 let apibase    = 'https://api.inaturalist.org/v1/users/autocomplete';
-let apiurl     = apibase+((winurlparams!='')?('?'+winurlparams):'');
+let apiurl     = apibase+api_params;
 let apirefname = 'Choose User';
 
 if( !p_q ) {
