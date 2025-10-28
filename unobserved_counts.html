@@ -112,8 +112,8 @@ function setUpDefaults() {
  
    if( p_place_id ) { api_params += '&place_id='+p_place_id; }
 
-   if( p_mode === 'unobserved' ) { api_params += '&unobserved_by_user_id='+p_user_id; }
-   if( p_mode === 'observed' )   { api_params += '&user_id='+p_user_id; }
+   if( p_mode.toLowerCase() === 'unobserved' ) { api_params += '&unobserved_by_user_id='+p_user_id; }
+   if( p_mode.toLowerCase() === 'observed' )   { api_params += '&user_id='+p_user_id; }
 
    all_params += api_params;
    all_params += '&per_page=30';
