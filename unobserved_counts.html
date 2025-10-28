@@ -182,8 +182,10 @@ function fresults(xobj) {
       console.log('building menu...');
       buildMenu( results );
 
+      let choose_prj = furl(github_root+'choose_project.html?project_id='+p_project_id+'&user_id='+p_user_id, p_project_nm);
+                            
       let txt = '<span id="topright">unobserved by '+p_user_id+'<br> <b>' +
-                       'at '+p_project_nm+'</b></span>';
+                       'at '+choose_prj+'</b></span>';
     
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+txt+'<br />'
