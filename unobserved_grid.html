@@ -1,0 +1,171 @@
+<!DOCTYPE html>  
+<html lang="en"> 
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Garden Viewer Grid" />
+<meta charset="utf-8">
+<link rel="icon" type="image/png" href="plant-icon-96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="plant-icon-96.svg" />
+<link rel="shortcut icon" href="plant-club.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="plant-icon-192.png" />
+<meta name="apple-mobile-web-app-title" content="Garden Viewer Grid" />
+<link rel="manifest" href="plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css" href="seed_library.css" />
+<script type="text/javascript" src='common_func.js'> </script>
+<script type="text/javascript" src='observations_grid.js'> </script>
+<title>Garden Viewer Grid</title>
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/js/plant_params_v10.js"></script>
+
+<script>
+//get parameters from the url
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr);
+let p_project_id = winurlparams.get('project_id') || '';
+let p_taxon_id   = winurlparams.get('taxon_id') || '';
+let p_taxon_nm   = winurlparams.get('taxon_nm') || 'Show';
+var cellpx       = winurlparams.get('cellpx') || 122;
+var spacerpx     = winurlparams.get('spacerpx') || 4;
+var rows         = winurlparams.get('rows') || 30;
+var columns      = winurlparams.get('columns') || 3;
+let p_action     = winurlparams.get('action') || '';
+let p_list       = winurlparams.get('list') || '';
+let p_tag_name   = winurlparams.get('tag_name') || '';
+let p_menu       = winurlparams.get('menu') || '';
+let p_plant_id   = winurlparams.get('plant_id') || '';
+let p_plant_name = winurlparams.get('plant_name') || '';
+let p_cache_check = winurlparams.get('cache_check') || '';
+let p_life       = winurlparams.get('life') || 'Life Stage';
+let p_state      = winurlparams.get('state') || '';
+let p_hide_home  = winurlparams.get('hide_home') || 'no';
+let p_hide_dds   = winurlparams.get('hide_dds') || 'no';
+
+let annotations_array = [];
+let interactions = [];
+let configuration = '';
+
+let seed_param = '';
+
+let all_opts = copyOpts(winurlparams);
+
+let all_except_life_stage = '';
+for (const [key, value] of winurlparams.entries()) { 
+  if( key !== 'life' && key !== 'term_id' && key !== 'term_value_id' ) {
+      if( all_except_life_stage === '' ){
+          all_except_life_stage += "?";
+      } else {
+          all_except_life_stage += "&";
+      }
+      all_except_life_stage += key;
+      all_except_life_stage += "=";
+
+      if( key === 'page' ){
+          all_except_life_stage += '1';
+      } else {
+          all_except_life_stage += value;
+      }
+  }
+}   
+   
+// if the user has selected a method, built the opt to pass to the
+// lifelist page.
+// find key/value pair for &field: param if one was passed in
+let field = '';
+let p_field_value = '';
+let opts = '';
+let field_key = '';
+for (const [key, value] of winurlparams.entries()) {
+  if( key.startsWith('field') ){
+      field_key = key;
+      opts += ('&'+key+'='+value);
+      field = ('&'+key+'='+value);
+      p_field_value = value;
+  }
+}   
+
+if( p_taxon_id ) {
+    opts      += ('&taxon_id='+p_taxon_id);
+}
+
+var recsmax = columns * rows - 1;
+
+winurlparams.delete('cellpx');
+winurlparams.delete('spacerpx');
+winurlparams.delete('rows');
+winurlparams.delete('columns');
+var obsurlbase = 'https://www.inaturalist.org/observations';
+var obsurl = obsurlbase+'?'+winurlparams.toString();
+winurlparams.append('per_page',recsmax);
+var apiurlbase = 'https://api.inaturalist.org/v1/observations'
+var apiurl = apiurlbase+'?'+winurlparams.toString();
+
+function getShowDDOpts( winurlparams ) { 
+   let opts='';
+   // build param list for url's used in fresults
+   for( const [key, value] of winurlparams.entries() ) { 
+        if( key !== 'taxon_id' && key !== 'taxon_nm' && key !== 'page' && key !== 'per_page' && key !== 'lrank' ){
+            if( opts === '' ){
+                opts += "?";
+            } else {
+                opts += "&";
+            }
+            opts += key;
+            opts += "=";
+            opts += value;
+        }
+   } 
+   return( opts );
+}
+  
+function buildMenu(data) {
+
+   let links = '';
+   let menu_string = '';
+
+   menu_string = '<div class="navbar">';
+
+   menu_string += furl(github_root+'plant_map.html'+all_opts,"Map");
+
+   if( p_hide_home === 'no' ) {
+       menu_string += buildHome( furl(github_root+'plant_activity.html?state='+p_state+'&target_id='+p_plant_id+'&target_name='+p_plant_name,'&#127807;') );
+   }
+
+   menu_string += '</div>';
+   
+   return menu_string;
+}
+
+function fresults(data) {  
+   faddelem('p',document.body,{innerHTML:buildMenu(data)}); 
+   buildGrid(data);    
+};
+
+
+if (window.location.search==='') {
+   faddelem('p',document.body,{innerHTML:'This is a quick and dirty example of a widget to display iNaturalist observations in a grid. It is based on the '+furl('https://api.inaturalist.org/v1/docs/#!/Observations/get_observations','Observation Search API endpoint')+' and can accept any of the parameters for that endpoint. Additionally, it accepts 4 more parameters that will allow the grid to be customized: columns, rows, cellpx, and spacerpx.'});
+   faddelem('p',document.body,{innerHTML:'Suppose the address of this page is '+furl(winurlexsearchstr)+', and you want to see '+furl(famp(apiurlbase+'?taxon_id=3&place_id=9'),'birds in New Mexico')+' in a 3 (high) x 5 (wide) grid where each cell is 75px x 75px and where each cell is separated by a 2px spacer, then you would open '+furl(famp(winurlexsearchstr+'?rows=3&columns=5&cellpx=75&spacerpx=2&taxon_id=3&place_id=9'))+' in your browser.'});
+   faddelem('p',document.body,{innerHTML:'Note that the actual size of the image files is 75px x 75px. So setting the cellpx higher than 75 will make the images look blurry. Only the first photo in an observation will be shown, or else ❎ will be shown when an observation has no photos. The last cell in the grid will always be either a "no data" or "more" button. So a 3x5 grid will show only up to 14 observations.'});
+} else {
+       fetch(apiurl)
+          .then((response) => {
+             if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+             return response.json();
+          })
+          .then((data) => { fresults(data); })
+          .catch((err) => {
+             console.error(err.message);
+             faddelem('p',document.body,{innerHTML:'There was a problem retrieving data. Error '+err.message+'.'})
+        });
+};
+
+ 
+</script>
+</body>
+
+</html>
