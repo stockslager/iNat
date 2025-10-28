@@ -26,7 +26,7 @@ let p_project_id = winurlparams.get('project_id') || '';
 let p_project_nm = winurlparams.get('project_nm') || '';
 let p_place_id   = winurlparams.get('place_id') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
-let p_mode       = winurlparams.get('mode') || 'visitors';
+let p_mode       = winurlparams.get('mode') || 'unobserved';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_show_menu     = winurlparams.get('show_menu') || 'no';
 let p_sub_menu_array    = winurlparams.get('sub_menu_array') || '';
@@ -96,15 +96,24 @@ function setUpDefaults() {
 
    if( !p_project_id ) {
        faddelem('p',document.body,{innerText:'Project ID must be specified.'});
-       faddelem('p',document.body,{innerText:'A &project_id parameter was not specified in the list of url parameters'});
+       faddelem('p',document.body,{innerText:'A ?project_id parameter was not specified in the list of url parameters'});
        faddelem('p',document.body,{innerText:'Please add a url param for ?p_project_id=xxxxxxx'});
+       throw new Error('No project_id.');
+   }
+
+   if( !p_user_id ) {
+       faddelem('p',document.body,{innerText:'User ID must be specified.'});
+       faddelem('p',document.body,{innerText:'A &user_id parameter was not specified in the list of url parameters'});
+       faddelem('p',document.body,{innerText:'Please add a url param for &p_user_id=xxxxxxx'});
        throw new Error('No project_id.');
    }
 
    api_params += ('?project_id='+p_project_id);
  
    if( p_place_id ) { api_params += '&place_id='+p_place_id; }
-   if( p_user_id )  { api_params += '&unobserved_by_user_id='+p_user_id; }
+
+   if( p_mode === 'unobserved' ) { api_params += '&unobserved_by_user_id='+p_user_id; }
+   if( p_mode === 'observed' )   { api_params += '&user_id='+p_user_id; }
 
    all_params += api_params;
    all_params += '&per_page=30';
@@ -182,9 +191,17 @@ function fresults(xobj) {
       console.log('building menu...');
       buildMenu( results );
 
-      let choose_prj = furl(github_root+'choose_project.html?project_id='+p_project_id+'&user_id='+p_user_id, truncate(p_project_nm,25));
+      let observed = '';
+
+      if( p_mode === 'unobserved' ) {
+          observed   = furl(github_root+'unobserved_counts.html?project_id='+p_project_id+'&user_id='+p_user_id+'&mode=observed', 'unobserved');
+      } else {
+          observed   = furl(github_root+'unobserved_counts.html?project_id='+p_project_id+'&user_id='+p_user_id+'&mode=unobserved', 'observed');
+      }
                             
-      let txt = '<span id="topright">unobserved by '+p_user_id+'<br> <b>' +
+      let choose_prj = furl(github_root+'choose_project.html?project_id='+p_project_id+'&user_id='+p_user_id+'&mode='+p_mode, truncate(p_project_nm,25));
+                            
+      let txt = '<span id="topright">' + observed + ' by '+p_user_id+'<br> <b>' +
                        'at '+choose_prj+'</b></span>';
     
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
@@ -228,7 +245,7 @@ function fresults(xobj) {
          }
 
          let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
-         let grid_title  = ('&action=on&title='+(pref_tax_name||tax_name)+' unobserved by '+p_user_id);
+         let grid_title  = ('&action=on&title='+(pref_tax_name||tax_name)+' ' + p_mode + ' by '+p_user_id);
                                       
          let values = [
                   {innerText:i+1},
