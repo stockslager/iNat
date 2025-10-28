@@ -23,6 +23,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
+let p_project_nm = winurlparams.get('project_nm') || '';
 let p_place_id   = winurlparams.get('place_id') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
 let p_mode       = winurlparams.get('mode') || 'visitors';
@@ -106,7 +107,7 @@ function setUpDefaults() {
    if( p_user_id )  { api_params += '&unobserved_by_user_id='+p_user_id; }
 
    all_params += api_params;
-   all_params += '&per_page=200';
+   all_params += '&per_page=30';
 
    if( p_taxon_id ) { all_params += '&taxon_id='+p_taxon_id; }
    if( p_page     ) { all_params += '&page='+p_page; }
@@ -180,10 +181,13 @@ function fresults(xobj) {
 
       console.log('building menu...');
       buildMenu( results );
-   
+
+      let txt = '<span id="topright">unobserved by '+p_user_id+'<br> <b>' +
+                       'at '+p_project_nm+'</b></span>';
+    
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
-             +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'unobserved by '+p_user_id+'<br />'});  
+             +'per page: '+fcomnum(per_page)+txt+'<br />'
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'});  
 
       labels = [
             {innerText:'#'},
