@@ -141,6 +141,7 @@ function fresults(xobj) {
       let hrow = faddelem('tr',thead);
       let labels = [
             {innerText:('#')},
+            {innerText:'Icon'},
             {innerText:'User Name'},   
       ];
 
@@ -159,8 +160,17 @@ function fresults(xobj) {
          let brow = faddelem('tr',tbody);
          let rec = results[i];
 
+         let user_icon = rec.icon || '';
+         
+         if( user_icon === '' ){
+            user_icon += '<div class="npcicon"></div>';
+         } else {
+            user_icon = '<img class="exp_icon" src="'+user_icon+'" />';
+         }
+
          let values = [
             {innerText:i+1},
+            {innerHTML:user_icon},
             {innerHTML:furl(github_root+'unobserved_counts.html?project_id='+p_project_id+'&user_id='+rec.login+'&project_nm='+p_project_nm, rec.login)},
          ];         
 
