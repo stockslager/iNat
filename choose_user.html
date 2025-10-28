@@ -111,7 +111,7 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_options  = winurlparams.get('options') || [];
 let p_project_id = winurlparams.get('project_id') || '';
-let p_user_id    = winurlparams.get('user_id') || '';
+let p_project_nm = winurlparams.get('project_nm') || '';
 let p_mode       = winurlparams.get('mode') || '';
 let p_q          = winurlparams.get('q') || '';
 
@@ -159,7 +159,7 @@ function fresults(xobj) {
 
          let values = [
             {innerText:i+1},
-            {innerHTML:furl(github_root+'unobserved_counts.html?project_id='+rec.id+'&user_id='+p_user_id+'&project_nm='+rec.title, rec.title)},
+            {innerHTML:furl(github_root+'unobserved_counts.html?project_id='+rec.id+'&user_id='+rec.login+'&project_nm='+p_project_nm, rec.login)},
          ];         
 
          faddelems('td',brow,values);
@@ -180,7 +180,7 @@ function buildForm() {
                                            '<form action='+github_root+'choose_user.html>' +
                                               '<label for="fname">User Name</label>' +
                                               '<input type="text" id="pname" name="q" placeholder="Enter a full or partial user name..">' +   
-                                              '<input type="hidden" id="hiddenUser" name="user_id" value="'+p_user_id+'">' + 
+                                              '<input type="hidden" id="hiddenProjectNm" name="project_nm" value="'+p_project_nm+'">' + 
                                               '<input type="hidden" id="hiddenMode" name="mode" value="'+p_mode+'">' + 
                                               '<input type="submit" value="Search">' +
                                            '</form>' +
