@@ -112,7 +112,8 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_options  = winurlparams.get('options') || [];
 let p_project_id = winurlparams.get('project_id') || '';
 let p_user_id    = winurlparams.get('user_id') || '';
-let p_q        = winurlparams.get('q') || '';
+let p_mode       = winurlparams.get('mode') || '';
+let p_q          = winurlparams.get('q') || '';
 
 winurlparams.delete('options');
 let p_idextra_ = winurlparams.get('idextra_user_id')?.split(',') || [];;
@@ -180,6 +181,7 @@ function buildForm() {
                                               '<label for="fname">Project Name</label>' +
                                               '<input type="text" id="pname" name="q" placeholder="Enter a full or partial project name..">' +   
                                               '<input type="hidden" id="hiddenUser" name="user_id" value="'+p_user_id+'">' + 
+                                              '<input type="hidden" id="hiddenMode" name="mode" value="'+p_mode+'">' + 
                                               '<input type="submit" value="Search">' +
                                            '</form>' +
                                          '</div>')});
