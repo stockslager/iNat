@@ -257,13 +257,14 @@ function fresults(result, places_obj, taxa_obj) {
          if( p_mode )         { state_param += '$'+p_mode;         } else { state_param += '$'; }
 
          if( p_plant_id )     { plant_param += '&target_id='+p_plant_id; }
+         if( p_plant_name )   { plant_param += '&target_name='+p_plant_name; }
 
          let values = [
             {innerText:i+1},
             {innerHTML:user_icon},
             {innerHTML:furl(root_people+rec.user_login,rec.user_login)/*+map*/},
             //{innerHTML:furl(github_root+'plant_activity.html?'+state_param,rec.species_count )},
-            {innerHTML:furl(github_root+'plant_activity.html?'+state_param+'&target_id='+p_plant_id+'&target_name='+p_plant_name,rec.obs_count )},
+            {innerHTML:furl(github_root+'plant_activity.html?'+state_param+plant_param,rec.obs_count )},
          ];
          faddelems('td',brow,values);
       };
