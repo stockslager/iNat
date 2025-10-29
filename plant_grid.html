@@ -144,6 +144,10 @@ function buildArtistMenu(data, obs_fields) {
 
    menu_string = '<div class="navbar">';
 
+   if( p_hide_dds === 'yes' && p_hide_home === 'yes' ) {
+       menu_string += buildDDTitle('');
+   }
+
    if( p_hide_dds === 'no' ) {
        // show drop down to filter by taxa
        if( configuration.sub_icons ) { 
