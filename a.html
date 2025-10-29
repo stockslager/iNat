@@ -150,8 +150,8 @@ async function getAllObservations(pagesToFetch, customUserAgent) {
   
   console.log('Fetching a total of ' + pagesToFetch + ' pages...');
 
-  for (let page = 0; page < pagesToFetch; page++) {
-    params.set('page', page);
+  for (let page = 1; page <= pagesToFetch; page++) {
+    winurlparams.append('page', page);
     const apiurl  = apibase+((winurlparams!='')?('?'+winurlparams):'');
 
     console.log('apiurl ' + apiurl );
