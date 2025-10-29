@@ -71,8 +71,7 @@ if( p_obs_id ){
     apidescendantsurl = apidescendantsbase+((descendants!='')?('?'+descendants):'');
 }
   
-let p_custom     = 'no';
-let p_strip_html = 'yes';
+let p_strip_html = 'no';
 
 function buildMenu() {
       let menu_string = '';
@@ -150,7 +149,7 @@ function fresults(xobj) {
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
 
-               if( p_custom === 'yes' ) {
+                if( rec.ofvs[j].field_id === 18497 ) {   // seeds availale in library
                    if( rec.ofvs[j].value ) {
                        let nm    = rec.ofvs[j].name || '';
                        let value = rec.ofvs[j].value || '';
@@ -160,28 +159,30 @@ function fresults(xobj) {
                            value = stripHtml(value);
                        }
 
-                       if( rec.ofvs[j].field_id === 18497 ) {  // seeds available in library
 
-                           let dot = '';
-                           if( value.startsWith('no') )    { dot = '&#128308;'; }
-                           if( value.startsWith('yes') )   { dot = '&#128994;'; }
+                       let dot = '';
+                       if( value.startsWith('no') )    { dot = '&#128308;'; }
+                       if( value.startsWith('yes') )   { dot = '&#128994;'; }
                                  
-                           avail_field = [
+                       avail_field = [
                                 {innerText:nm},
                                 {innerHTML:'<div style="display:flex; align-items:center; font-size:16px;">'+dot+'<span style="padding-left:10px; font-size:14px;">'+value+'</span></div>'},
-                              ];
-                       }
+                       ];
+                   }
 
-                       if( rec.ofvs[j].field_id === 19197 ){
-                           value = furl(root_usda+rec.ofvs[j].value,rec.ofvs[j].value);
-                       }
-                       if( rec.ofvs[j].field_id === 19198 ){
-                           value = furl(root_missouri+rec.ofvs[j].value,rec.ofvs[j].value);
-                       }
-                       
-                       obs_field = [
+                   if( rec.ofvs[j].field_id === 19197 ){
+                       value = furl(root_usda+rec.ofvs[j].value,rec.ofvs[j].value);
+                           obs_field = [
                              {innerText:nm},
                              {innerHTML:value},
+                       ];        
+                   }
+                  
+                   if( rec.ofvs[j].field_id === 19198 ){
+                       value = furl(root_missouri+rec.ofvs[j].value,rec.ofvs[j].value);
+                       obs_field = [
+                              {innerText:nm},
+                              {innerHTML:value},
                        ];        
                    }
                } else {
@@ -296,15 +297,11 @@ function fresults(xobj) {
 };
 
 async function asyncGetData(){
-   console.log('json ' + json_root+'seed_detail_params.json');
-   await fetch((json_root+'seed_detail_params.json'))
+   console.log('json ' + json_root+params+'.json');
+   await fetch((json_root+params+'.json'))
      .then(response => response.json())
      .then(data => {
        // Access your data here 
-       const pref   = data.prefs.find(item => item.seed_library_prj_id === p_project_id);
-       p_custom     = pref.custom_obs_fields; 
-       console.log('custom ' + p_custom);
-       p_strip_html = pref.strip_html;
        console.log(data);
      })
      .catch(error => {
