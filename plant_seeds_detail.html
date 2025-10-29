@@ -95,6 +95,7 @@ function fresults(xobj) {
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
          let avail_field = [];
+         let simple_avail_field = [];
          let qty_field = [];
          let header_row = '';
          let wild = '';
@@ -146,53 +147,15 @@ function fresults(xobj) {
 
          faddelem('p',document.body,{innerText:' '});  
 
-         let obs_field = [];
-
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
 
-                /*if( rec.ofvs[j].field_id === 18497 ) {   // seeds availale in library
-                   if( rec.ofvs[j].value ) {
-                       let nm    = rec.ofvs[j].name || '';
-                       let value = rec.ofvs[j].value || '';
-                       let obs_field = [];
-
-                       if( p_strip_html === 'yes' ){
-                           value = stripHtml(value);
-                       }
-
-
-                       let dot = '';
-                       if( value.startsWith('no') )    { dot = '&#128308;'; }
-                       if( value.startsWith('yes') )   { dot = '&#128994;'; }
-                                 
-                       avail_field = [
-                                {innerText:nm},
-                                {innerHTML:'<div style="display:flex; align-items:center; font-size:16px;">'+dot+'<span style="padding-left:10px; font-size:14px;">'+value+'</span></div>'},
-                       ];
-                   }
-
-                   if( rec.ofvs[j].field_id === 19197 ){
-                       value = furl(root_usda+rec.ofvs[j].value,rec.ofvs[j].value);
-                           obs_field = [
-                             {innerText:nm},
-                             {innerHTML:value},
-                       ];        
-                   }
-                  
-                   if( rec.ofvs[j].field_id === 19198 ){
-                       value = furl(root_missouri+rec.ofvs[j].value,rec.ofvs[j].value);
-                       obs_field = [
-                              {innerText:nm},
-                              {innerHTML:value},
-                       ];        
-                   }
-               } else {*/
                    if( rec.ofvs[j].field_id === 18295 ||   // availability
                        rec.ofvs[j].field_id === 17234 ||   // quantity available
                        rec.ofvs[j].field_id === 18298 ||   // seed hub location and pickup info
                        rec.ofvs[j].field_id === 17434 ||   // seed swap
                        rec.ofvs[j].field_id === 19197 ||   // usda symbol
+                       rec.ofvs[j].field_id === 18497 ||   // seeds availale in library
                        rec.ofvs[j].field_id === 19198 ){   // kemper code 
                        if( rec.ofvs[j].value ){
                            let nm    = rec.ofvs[j].name || '';
@@ -209,12 +172,22 @@ function fresults(xobj) {
                                value = furl(root_missouri+rec.ofvs[j].value,rec.ofvs[j].value.toLowerCase());
                            }
 
+                           if( rec.ofvs[j].field_id === 18497 ) {   // seeds avail in library
+                                   let dot = '';
+                                   if( value.toLowerCase().startsWith('no') )          { dot = '&#128308;'; }
+                                   if( value.toLowerCase().startsWith('yes') )         { dot = '&#128994;'; }
+                                 
+                                   simple_avail_field = [
+                                         {innerText:nm},
+                                     {innerHTML:'<div style="display:flex; align-items:center; font-size:16px;">'+dot+'<span style="padding-left:10px; font-size:14px;">'+value.toLowerCase()+'</span></div>'},
+                                   ];
+                           }
+
                            if( rec.ofvs[j].field_id === 17234   ||    // qty avail
                                rec.ofvs[j].field_id === 18295 ) {     // availability
                                if( rec.ofvs[j].field_id === 18295 ) {
 
                                    let dot = '';
-                                   console.log('value ' + value);
                                    if( value.toLowerCase().startsWith('out') )         { dot = '&#128308;'; }
                                    if( value.toLowerCase().startsWith('available') )   { dot = '&#128994;'; }
                                    if( value.toLowerCase().startsWith('coming soon') ) { dot = '&#128993;'; }
@@ -229,21 +202,20 @@ function fresults(xobj) {
                                      {innerHTML:value},
                                    ];
                                }
-                           } else {
-                               obs_field = [
-                                 {innerText:nm},
-                                 {innerHTML:value.toLowerCase()},
-                               ];
-                           }                         
+                           } 
                        }
                    }
-               //}
             }
          }
         
          // seed info
-         let s_row1 = faddelem('tr',s_tbody);
-         faddelems('td',s_row1, avail_field);
+         if( simple_avail_field.length > 0 ) {
+             let s_row1 = faddelem('tr',s_tbody);
+             faddelems('td',s_row1, simple_avail_field);
+         } else {
+             let s_row1 = faddelem('tr',s_tbody);
+             faddelems('td',s_row1, avail_field);
+         }
 
          let s_row2 = faddelem('tr',s_tbody);
          faddelems('td',s_row2, qty_field);
@@ -259,12 +231,6 @@ function fresults(xobj) {
                              {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
                          ];        
          faddelems('td',s_row4, s_four);
-
-         console.log('obs_field ' + obs_field);
-         for( let z=0; z<obs_field.length; z++ ) {
-              let obs_row     = faddelem('tr',s_tbody);
-              faddelems('td',obs_row, obs_field[z]);
-         }
 
          let state_param = 'state='+prj+'$'+place+'$'+params+'$'+user+'$'+garden+'$'+mode+'$'+rec.id+'$'+avail;
         
