@@ -47,7 +47,7 @@ let params       = p_state.split('$')[2] || '';
 let user         = p_state.split('$')[3] || '';
 let garden       = p_state.split('$')[4] || '';
 let mode         = p_state.split('$')[5] || '';
-let filter_taxon = p_state.split('$')[6] || '';
+let obs_id       = p_state.split('$')[6] || '';
 let avail        = p_state.split('$')[7] || '';
 
 if( params ) { p_params = params; }
@@ -114,10 +114,10 @@ function setUpDefaults(configurations) {
   }
 
   // set the state for urls....
-  state_param = ('&state='+configuration.insect_project+'$'+place+'$'+p_params+'$'+user+'$'+garden+'$'+p_mode+'$'+filter_taxon+'$'+p_avail);
+  state_param = ('&state='+configuration.insect_project+'$'+place+'$'+p_params+'$'+user+'$'+garden+'$'+p_mode+'$'+obs_id+'$'+p_avail);
 
   // set the state for drop-down...
-  dd_state = ('?state='+configuration.insect_project+'$'+place+'$'+p_params+'$'+user+'$'+garden+'$'+p_mode+'$'+filter_taxon+'$'+'&page=1&per_page=50');
+  dd_state = ('?state='+configuration.insect_project+'$'+place+'$'+p_params+'$'+user+'$'+garden+'$'+p_mode+'$'+obs_id+'$'+'&page=1&per_page=50');
 }
 
 function buildMenu() {
