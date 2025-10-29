@@ -113,7 +113,7 @@ function replaceDoubleQuotes(str) {
 
 // A simple function to create a delay
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-/*
+
 // A reusable function for making rate-limited API calls
 async function rateLimitedFetch(url, customUserAgent) {
   // Iidentifying application with a custom User-Agent
@@ -144,7 +144,7 @@ async function rateLimitedFetch(url, customUserAgent) {
     throw error;
   }
 }
-*/
+
 // Function to fetch multiple pages of observations sequentially
 async function getAllObservations(pagesToFetch, customUserAgent) {
   
@@ -159,7 +159,7 @@ async function getAllObservations(pagesToFetch, customUserAgent) {
     console.log('Fetching page ' + page + ' of ' + pagesToFetch + '...');
     
     try {
-      //const data = await rateLimitedFetch(apiurl, customUserAgent);
+      const data = await rateLimitedFetch(apiurl, customUserAgent);
       
     } catch (error) {
       console.error('Failed to fetch page ' + page + '. Stopping.', error);
