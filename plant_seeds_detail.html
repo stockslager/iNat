@@ -29,7 +29,6 @@ let descendants  = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id = winurlparams.get('project_id') || '';
 let p_obs_id     = winurlparams.get('obs_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
-let p_params     = winurlparams.get('params') || 'params2';
 let p_state      = winurlparams.get('state') || '';
 
 let prj          = p_state.split('$')[0] || '';
@@ -297,8 +296,8 @@ function fresults(xobj) {
 };
 
 async function asyncGetData(){
-   console.log('json ' + json_root+p_params);
-   await fetch((json_root+p_params+'.json'))
+   console.log('json ' + json_root+params);
+   await fetch((json_root+params+'.json'))
      .then(response => response.json())
      .then(data => {
        // Access your data here 
