@@ -151,6 +151,7 @@ async function getAllObservations(pagesToFetch, customUserAgent) {
   console.log('Fetching a total of ' + pagesToFetch + ' pages...');
 
   for (let page = 1; page <= pagesToFetch; page++) {
+    winurlparams.delete('page');
     winurlparams.append('page', page);
     const apiurl  = apibase+((winurlparams!='')?('?'+winurlparams):'');
 
@@ -188,9 +189,7 @@ function getAll() {
    })();
 };
 
-console.log('hello2');
 getAll();
-console.log('hello3');
   
 if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
    let instructions = [
