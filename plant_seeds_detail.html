@@ -13,7 +13,6 @@
 <link rel="manifest" href="plant_club.webmanifest" />
 <link rel="stylesheet" type="text/css" href="seed_library.css" />
 <script type="text/javascript" src='common_func.js'> </script>
-<script type="text/javascript" src='observations_grid.js'> </script>
 <title>Seed Availability</title>
 </head>
 
@@ -47,17 +46,6 @@ for (const [key, value] of descendants.entries()) {
 }  
 descendants.append('field:parent+colony', p_obs_id);
 
-// for grid...
-var cellpx       = 122;
-var spacerpx     = 4;
-var rows         = 30;
-var columns      = 3;
-let title        = '';
-let p_action     = '';
-var recsmax = columns * rows - 1;
-var obsurlbase = 'https://www.inaturalist.org/observations';
-var obsurl = obsurlbase+'?'+winurlparams.toString();
-   
 // set id to the obs_id passed in for call to api...
 winurlparams.delete('id');
 winurlparams.append('id', p_obs_id);
@@ -266,7 +254,7 @@ function fresults(xobj) {
                  let s_row5     = faddelem('tr',s_tbody);
                  let s_five    = [   
                              {innerText:'Propagated Descendants'},
-                             {innerHTML:furl(github_root+'plant_grid.html?seed_project_id='+p_project_id+'&hide_dds=yes&field:parent+colony='+p_obs_id,"plant babies") },                         
+                             {innerHTML:furl(github_root+'plant_grid.html?state='+p_state+'&hide_dds=yes&field:parent+colony='+p_obs_id,"plant babies") },                         
                              ];        
                  faddelems('td',s_row5, s_five);
              }
@@ -287,22 +275,12 @@ function fresults(xobj) {
 
              let d_row1     = faddelem('tr',d_tbody);
              let d_one = [];
-             /*if( descendants_results ) {
-                 d_one    = [ {innerHTML:rec.description + '<br><br>' +
-                                furl(github_root+'plant_descendants_grid.html?seed_project_id='+p_project_id+'&field:parent+colony='+p_obs_id,"Propagated Descendants") },
-                              {innerText:''},
-                            ];        
-             } else { */
                  d_one    = [ {innerHTML:rec.description},
                               {innerText:''},
                             ];   
-             //}
              faddelems('td',d_row1, d_one);         
          }
 
-         /*if( descendants_results ){
-             buildGrid(descendants_results);
-         }*/
       };    
    }
 };
