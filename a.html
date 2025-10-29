@@ -146,7 +146,7 @@ async function rateLimitedFetch(url, customUserAgent) {
 }
 */
 // Function to fetch multiple pages of observations sequentially
-async function getAllObservations(queryParams, pagesToFetch, customUserAgent) {
+async function getAllObservations(pagesToFetch, customUserAgent) {
   
   console.log('Fetching a total of ' + pagesToFetch + ' pages...');
 
@@ -173,14 +173,10 @@ function getAll() {
  
    (async () => {
       const customUserAgent = 'ObsFieldViewer/0.1 (@stockslager)'; 
-      const queryParams = {
-        user_id: stockslager, 
-        place_id: 31,         // Ohio
-      };
-      const pages = 4; // Fetch 2 pages of observations (max 400 results)
+      const pages = 4; // Fetch 4 pages of observations (max 400 results)
   
       console.log('Starting API calls...');
-      const observations = await getAllObservations(queryParams, pages, customUserAgent);
+      const observations = await getAllObservations(pages, customUserAgent);
   
       console.log('Fetched a total of ' + observations.length + ' observations.');
   
