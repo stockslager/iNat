@@ -169,10 +169,9 @@ async function getAllObservations(queryParams, pagesToFetch, customUserAgent) {
   return data;
 }
 
-// Example usage:
 function getAll() {
  
-   async () => {
+   (async () => {
       const customUserAgent = 'ObsFieldViewer/0.1 (@stockslager)'; 
       const queryParams = {
         user_id: stockslager, 
@@ -190,7 +189,7 @@ function getAll() {
          console.log('First observation:', observations[0]);
          fresults(observations);
       } 
-   } 
+   })();
 };
 
 console.log('hello2');
