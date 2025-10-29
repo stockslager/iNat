@@ -53,6 +53,8 @@ let p_params = p_state.split('$')[2];
 let user     = p_state.split('$')[3];
 let garden   = p_state.split('$')[4];
 let mode     = p_state.split('$')[5];
+let obs_id   = p_state.split('$')[6] || '';
+let avail    = p_state.split('$')[7] || '';
 
 // don't show organsims that have only been id'd to genus and above, otherwise the number's
 // won't match other counts
@@ -244,6 +246,7 @@ function buildLifeStageMenu(data, obs_fields) {
 
    if( p_hide_home === 'no' ) {
        if( mode && mode.includes('seed') ) {
+           console.log('obs id '+obs_id);
            menu_string += buildHome( furl(github_root+'plant_seeds_detail.html?state='+p_state,'&#127807;') );
        } else {
            menu_string += buildHome( furl(github_root+'plant_activity.html?state='+p_state+'&target_id='+p_plant_id+'&target_name='+p_plant_name,'&#127807;') );
