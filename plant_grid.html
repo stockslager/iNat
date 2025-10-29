@@ -176,14 +176,14 @@ function buildLifeStageMenu(data, obs_fields) {
    let links = '';
    let menu_string = '';
 
-   if( mode.includes('artist') ) {
+   if( mode && mode.includes('artist') ) {
        return (buildArtistMenu(data, obs_fields));
    }
 
    menu_string = '<div class="navbar">';
 
    if( p_hide_dds === 'no' ) {
-       if( !mode.includes('visitors') && !mode.includes('observers') && !mode.includes('seeds') ) {
+       if( mode && !mode.includes('visitors') && !mode.includes('observers') && !mode.includes('seeds') ) {
            links = furl(github_root+'plant_grid.html'+all_opts,"grid");
            if( field_key ) {
                links += furl(github_root+'plant_activity_list.html'+all_opts+'&obs_fields='+obs_fields,"list");
