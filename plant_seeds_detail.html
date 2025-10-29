@@ -144,7 +144,9 @@ function fresults(xobj) {
          faddelems('th',s_hrow,s_labels);
          let s_tbody = faddelem('tbody',s_table);
 
-         faddelem('p',document.body,{innerText:' '});        
+         faddelem('p',document.body,{innerText:' '});  
+
+         let obs_field = [];
 
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
@@ -195,7 +197,6 @@ function fresults(xobj) {
                        if( rec.ofvs[j].value ){
                            let nm    = rec.ofvs[j].name || '';
                            let value = rec.ofvs[j].value || ' ';
-                           let obs_field = [];
 
                            if( p_strip_html === 'yes' ){
                                value = stripHtml(value.toLowerCase());
@@ -258,6 +259,15 @@ function fresults(xobj) {
                              {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
                          ];        
          faddelems('td',s_row4, s_four);
+
+         for( let z=0; z<obs_field.length; z++ ) {
+              let obs_row     = faddelem('tr',s_tbody);
+              let obs_arr     = [   
+                                  {innerText:obs_field[z].nm},
+                                  {innerHTML:obs_field[z].value},
+                              ];        
+              faddelems('td',obs_row, obs_arr);
+         }
 
          let state_param = 'state='+prj+'$'+place+'$'+params+'$'+user+'$'+garden+'$'+mode+'$'+rec.id+'$'+avail;
         
