@@ -144,20 +144,21 @@ async function rateLimitedFetch(url, customUserAgent) {
     throw error;
   }
 }
-
+*/
 // Function to fetch multiple pages of observations sequentially
 async function getAllObservations(queryParams, pagesToFetch, customUserAgent) {
   
   console.log('Fetching a total of ' + pagesToFetch + ' pages...');
 
-  for (let page = 1; page <= pagesToFetch; page++) {
+  for (let page = 0; page < pagesToFetch; page++) {
     params.set('page', page);
     const apiurl  = apibase+((winurlparams!='')?('?'+winurlparams):'');
-    
+
+    console.log('apiurl ' + apiurl );
     console.log('Fetching page ' + page + ' of ' + pagesToFetch + '...');
     
     try {
-      const data = await rateLimitedFetch(apiurl, customUserAgent);
+      //const data = await rateLimitedFetch(apiurl, customUserAgent);
       
     } catch (error) {
       console.error('Failed to fetch page ' + page + '. Stopping.', error);
@@ -167,10 +168,9 @@ async function getAllObservations(queryParams, pagesToFetch, customUserAgent) {
   
   return data;
 }
-*/
+
 // Example usage:
 function getAll() {
-   console.log('hello');
  
    async () => {
       const customUserAgent = 'ObsFieldViewer/0.1 (@stockslager)'; 
@@ -181,7 +181,7 @@ function getAll() {
       const pages = 4; // Fetch 2 pages of observations (max 400 results)
   
       console.log('Starting API calls...');
-      /*const observations = await getAllObservations(queryParams, pages, customUserAgent);
+      const observations = await getAllObservations(queryParams, pages, customUserAgent);
   
       console.log('Fetched a total of ' + observations.length + ' observations.');
   
@@ -189,7 +189,7 @@ function getAll() {
       if( observations.length > 0 ) {
          console.log('First observation:', observations[0]);
          fresults(observations);
-      } */
+      } 
    } 
 };
 
