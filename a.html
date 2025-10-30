@@ -173,8 +173,10 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
     
     try {
       const data = await rateLimitedFetch(apiurl, customUserAgent);
-      allObservations.push(...data.results);
-      
+      for( let i=0; i<data.results.length; i++ ) {
+           const obs = new Observations( data.results[i] );
+           allObservations.push( obs );
+      }
     } catch (error) {
       console.error('Failed to fetch page ' + page + '. Stopping.', error);
       break; // Exit the loop on failure
