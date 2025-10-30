@@ -110,19 +110,6 @@ function buildHome( url ) {
    return ('<div id="home">'+url+'</div>');
 }
 
-function parseStoredData(data) {
-   // Check if value exists before parsing
-   if( data ) {
-       // Parse the string back to an object
-       const retrievedRec = JSON.parse(data);
-       retrievedRec.recs = JSON.parse(retrievedRec.recs);
-       return retrievedRec;
-   } else {
-       console.log("No object found in session storage for key 'myObject'");
-       throw new Error("No object found in session storage.");
-   }
-}
-
 function copyOpts( winurlparams ) {
    let opts='';
    // build param list for url's used in fresults
