@@ -81,6 +81,32 @@ let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
 
+function hasFieldNameValuePair( rec, p_field_name, p_field_value ) {
+
+     if( rec.ofvs && rec.ofvs.length > 0 ) {
+         for( let i=0; i<rec.ofvs.length; i++ ) {
+              if( p_field_name.toString()  === rec.ofvs[i].name.toString() &&
+                  p_field_value.toString() === rec.ofvs[i].field_value.toString() ) {
+                  return true;
+              }
+         }
+     }
+
+     return false;
+}
+  
+function hasFieldName ( rec, p_field_name ) {
+     if( this.ofvs && rec.ofvs.length > 0 ) {
+         for( let i=0; i<rec.ofvs.length; i++ ) {
+              if( p_field_name.toString()  === rec.ofvs[i].name.toString() ) {
+                  return true;
+              }
+         }
+     }
+
+     return false;
+}
+ 
 function setParams() {
 
     // script requires a project_id or a user_id.
@@ -544,16 +570,14 @@ function fresults(results) {
 
          const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
 
-         //const boundHasNameValuePair = rec.hasFieldNameValuePair.bind(rec, p_field, p_field_value);
-       
          if( p_taxon_id ) {
              if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
                  if( p_field_value ) {
-                     if( rec.hasFieldNameValuePair(p_field, p_field_value) === true ) {
+                     if( hasFieldNameValuePair(rec, p_field, p_field_value) === true ) {
                          tempBrow.push(values);
                      }
                  } else if( p_field ) {
-                     if( rec.hasFieldName( p_field ) === true ) {
+                     if( hasFieldName( rec, p_field ) === true ) {
                          tempBrow.push(values);
                      }
                  } else {
@@ -562,11 +586,11 @@ function fresults(results) {
              }
          } else {
              if( p_field_value ) {
-                 if( rec.hasFieldNameValuePair( p_field, p_field_value ) === true ) {
+                 if( hasFieldNameValuePair( rec, p_field, p_field_value ) === true ) {
                      tempBrow.push(values);
                  }
              } else if( p_field ) {
-                 if( rec.hasFieldName( p_field ) === true ) {
+                 if( hasFieldName( rec, p_field ) === true ) {
                      tempBrow.push(values);
                  }
              } else {
