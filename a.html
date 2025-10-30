@@ -544,12 +544,12 @@ function fresults(results) {
 
          const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
 
-         const boundHasNameValuePair = rec.hasFieldNameValuePair.bind(rec, p_field, p_field_value);
+         //const boundHasNameValuePair = rec.hasFieldNameValuePair.bind(rec, p_field, p_field_value);
        
          if( p_taxon_id ) {
              if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
                  if( p_field_value ) {
-                     if( boundHasNameValuePair() === true ) {
+                     if( rec.hasFieldNameValuePair(p_field, p_field_value) === true ) {
                          tempBrow.push(values);
                      }
                  } else if( p_field ) {
