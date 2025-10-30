@@ -100,6 +100,8 @@ function hasFieldNameValuePair( rec, p_field_name, p_field_value ) {
 function hasFieldName ( rec, p_field_name ) {
      if( this.ofvs && rec.ofvs.length > 0 ) {
          for( let i=0; i<rec.ofvs.length; i++ ) {
+              console.log('fn ' + p_field_name);
+              console.log('fn2 ' + rec.ofvs[i].name.toString().toLowerCase());
               if( p_field_name.toString().toLowerCase()  === rec.ofvs[i].name.toString().toLowerCase ) {
                   return true;
               }
@@ -572,7 +574,8 @@ function fresults(results) {
 
          const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
 
-         if( p_taxon_id ) {
+         tempBrow.push(values);
+         /*if( p_taxon_id ) {
              if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
                  if( p_field_value ) {
                      if( hasFieldNameValuePair(rec, p_field.toLowerCase(), p_field_value) === true ) {
@@ -582,6 +585,9 @@ function fresults(results) {
                      if( hasFieldName( rec, p_field.toLowerCase() ) === true ) {
                          tempBrow.push(values);
                      }
+                 } else if( field_array.includes(rec.ofvs[{
+                     
+                 }
                  } else {
                      tempBrow.push(values);
                  }
@@ -599,7 +605,8 @@ function fresults(results) {
                  tempBrow.push(values);
              }
          } 
-      };
+      };*/
+       
 
       faddelem('p',document.body,{innerHTML:dlString});
 
