@@ -1,6 +1,7 @@
 class Observation {
   
   constructor(rec) {
+     console.log('Observation constructor... ');
      this.id                          = rec.id;
     
      if( rec.taxon ){
@@ -15,6 +16,7 @@ class Observation {
              } 
          }  
      }
+     console.log('Obs const...');
        
      this.photos                      = rec.photos || '';
      if( rec.photos && rec.photos.length>0 ) {
