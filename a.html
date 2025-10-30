@@ -312,7 +312,7 @@ function fresults(results) {
 
       let tempBrow = [];
 
-     /* for (let i=0; i<results.length; i++) {
+      for (let i=0; i<results.length; i++) {
          let rec = results[i];
          if(rec.ofvs&&rec.ofvs.length>0){
               for( let r=0; r<field_array_copy.length; r++ ) {
@@ -415,7 +415,7 @@ function fresults(results) {
            }
       }
 
-      dlString += '</table></span>';*/
+      dlString += '</table></span>';
      
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
@@ -469,14 +469,16 @@ function fresults(results) {
 
          let skipRow = 'no';
 
-         for( int i=0; i<field_array.length; i++ ) {
+         if( box_array && box_array.length > 0 ) {
+             skipRow = 'yes';
          }
-
+       
          if(rec.ofvs&&rec.ofvs.length>0){
               for( let r=0; r<box_array.length; r++ ) {
                  for( let j=0; j<rec.ofvs.length; j++ ){
 
                       if( field_array.includes(rec.ofvs[j].field_id.toString()) ){
+                          skipRow = 'no';
                           if( matchValue === '' ){
                               matchValue = rec.ofvs[j].value;
                           } else if( rec.ofvs[j].value !== '' && matchValue !== rec.ofvs[j].value ){
@@ -579,7 +581,9 @@ function fresults(results) {
 
          const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
 
-         tempBrow.push(values);
+         if( skipRow === 'no' ) {
+             tempBrow.push(values);
+         }
          /*if( p_taxon_id ) {
              if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
                  if( p_field_value ) {
