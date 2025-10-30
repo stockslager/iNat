@@ -159,7 +159,7 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
   console.log('Fetching a total of ' + pagesToFetch + ' pages...');
 
   if( sessionStorage.getItem( apibase+url_params ) ) {
-      console.log('found cached observations...');
+      console.log('found cached observations... ' + sessionStorage.getItem( apibase+url_params ) );
       return( sessionStorage.getItem( apibase+url_params ) );
   }
                              
