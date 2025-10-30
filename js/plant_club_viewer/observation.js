@@ -1,7 +1,6 @@
 class Observation {
   
   constructor(rec) {
-     console.log('Observation constructor... ');
      this.id                          = rec.id;
     
      if( rec.taxon ){
