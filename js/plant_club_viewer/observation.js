@@ -43,6 +43,7 @@ class ObsField {
   
   constructor(obs_field) {
      this.field_id         = obs_field.field_id;
+     this.name             = obs_field.name;
      this.value            = obs_field.value;
      this.datatype         = obs_field.datatype;
      this.taxon            = obs_field.taxon;
