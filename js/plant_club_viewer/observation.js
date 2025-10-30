@@ -38,7 +38,7 @@ class Observation {
      }
   }
 
-  hasFieldNameValuePair( p_field_name, p_field_value ) {
+  hasFieldNameValuePair = ( p_field_name, p_field_value ) => {
 
      /*if( this.ofvs && this.ofvs.length > 0 ) {
          for( let i=0; i<this.ofvs.length; i++ ) {
@@ -52,7 +52,7 @@ class Observation {
      return false;
   }
   
-  hasFieldName( p_field ) {
+  hasFieldName = ( p_field_name ) => {
     /* if( this.ofvs && this.ofvs.length > 0 ) {
          for( let i=0; i<this.ofvs.length; i++ ) {
               if( p_field_name.toString()  === this.ofvs[i].name.toString() ) {
