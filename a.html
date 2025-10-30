@@ -390,7 +390,7 @@ function fresults(results) {
          let rec = results[i];
          let tax_name = '';
          let pref_tax_name = '';
-         let tax_photo = '<div class="clipart">&#129419;</div>'; 
+         let tax_photo = '<div class="clipart"></div>'; 
          let tax_id = '';
          let field1 = ''; 
          let param1 = ''; 
@@ -410,10 +410,8 @@ function fresults(results) {
              tax_name = rec.taxon_name || '';
              pref_tax_name = rec.taxon_preferred_common_name || '';
            
-             if( rec.taxon_default_photo ){
-                 if( rec.taxon_default_photo_url ){
-                     tax_photo = '<img class="icon" src="'+rec.taxon_default_photo_url+'" />';
-                 }
+             if( rec.taxon_default_photo_url ){
+                 //tax_photo = '<img class="icon" src="'+rec.taxon_default_photos_url+'" />';
              }
          }
 
