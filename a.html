@@ -157,10 +157,13 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
   const allObservations = [];
   
   console.log('Fetching a total of ' + pagesToFetch + ' pages...');
+ 
+  const cache_str    = sessionStorage.getItem( apibase+url_params );
 
-  if( sessionStorage.getItem( apibase+url_params ) ) {
-      console.log('found cached observations... ' + sessionStorage.getItem( apibase+url_params ) );
-      return( sessionStorage.getItem( apibase+url_params ) );
+  if( cache_str ) {
+      const parsed_cache = JSON.parse(cache_str); 
+      console.log('found cached observations... ' + parsed_cache );
+      return( parsed_cache );
   }
                              
   for (let page = 1; page <= pagesToFetch; page++) {
@@ -180,8 +183,9 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
     }
   }
 
-  sessionStorage.setItem( apibase+url_params, allObservations );
-  
+  const jsonObj = JSON.stringify( allObservations );
+  sessionStorage.setItem( apibase+url_params, jsonObj );
+
   return allObservations;
 }
 
