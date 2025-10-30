@@ -158,6 +158,11 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
   
   console.log('Fetching a total of ' + pagesToFetch + ' pages...');
 
+  if( sessionStorage.getItem( apibase+url_params ) ) {
+      console.log('found cached observations...');
+      return( sessionStorage.getItem( apibase+url_params ) );
+  }
+                             
   for (let page = 1; page <= pagesToFetch; page++) {
     let pg = '&page='+page;
     const apiurl  = apibase+url_params+pg;
@@ -174,6 +179,8 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
       break; // Exit the loop on failure
     }
   }
+
+  sessionStorage.setItem( apibase+url_params, allObservations );
   
   return allObservations;
 }
