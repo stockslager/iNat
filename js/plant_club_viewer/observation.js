@@ -37,6 +37,33 @@ class Observation {
          }
      }
   }
+
+  hasFieldNameValuePair( p_field_name, p_field_value ) {
+
+     if( this.ofvs && this.ofvs.length > 0 ) {
+         for( let i=0; i<this.ofvs.length; i++ ) {
+              if( p_field_name.toString()  === this.ofvs[i].name.toString() &&
+                  p_field_value.toString() === this.ofvs[i].field_value.toString() ) {
+                  return true;
+              }
+         }
+     }
+
+     return false;
+  }
+  
+  hasFieldName( p_field ) {
+     if( this.ofvs && this.ofvs.length > 0 ) {
+         for( let i=0; i<this.ofvs.length; i++ ) {
+              if( p_field_name.toString()  === this.ofvs[i].name.toString() ) {
+                  return true;
+              }
+         }
+     }
+
+     return false;
+  }
+  
 }
 
 class ObsField {
