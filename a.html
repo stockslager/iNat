@@ -184,6 +184,7 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
 
   const jsonObj = JSON.stringify( allObservations );
   sessionStorage.setItem( apibase+url_params, jsonObj );
+  console.log('stored cache... ' + jsonObj);
 
   return allObservations;
 }
@@ -541,6 +542,8 @@ function fresults(results) {
          values.push({innerHTML:user_icon});
          values.push({innerHTML:furl(root_people+rec.user_login,rec.user_login)});
 
+             console.log('tax ' + p_taxon_id );
+             console.log('tax2 ' + rec.taxon_id.toString() );
          if( p_taxon_id ) {
              console.log('tax ' + p_taxon_id );
              console.log('tax2 ' + rec.taxon_id.toString() );
