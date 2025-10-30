@@ -533,7 +533,13 @@ function fresults(results) {
          values.push({innerHTML:user_icon});
          values.push({innerHTML:furl(root_people+rec.user.login,rec.user.login)});
 
-         tempBrow.push(values);
+         if( p_taxon_id ) {
+             if( p_taxon_id === rec.taxon.id ) {
+                 tempBrow.push(values);
+             }
+         } else {
+             tempBrow.push(values);
+         }
       };
 
       faddelem('p',document.body,{innerHTML:dlString});
