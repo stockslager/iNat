@@ -8,7 +8,6 @@ class Observation {
          this.taxon_id                    = rec.taxon.id;
          this.taxon_name                  = rec.taxon.name || '';
          this.taxon_preferred_common_name = rec.taxon.preferred_common_name || '';
-         this.taxon_default_photo         = rec.taxon.default_photo || '';
 
          if( rec.taxon.default_photo ){
              if( rec.taxon.default_photo.url ){
