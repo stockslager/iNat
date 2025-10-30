@@ -12,7 +12,7 @@ class Observation {
 
          if( rec.taxon.default_photo ){
              if( rec.taxon.default_photo.url ){
-                 this.taxon.default_photo_url = rec.taxon.default_photo.url;
+                 this.taxon_default_photo_url = rec.taxon.default_photo.url;
              } 
          }  
      }
