@@ -37,6 +37,7 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id  = winurlparams.get('project_id') || '';
 let p_user_id     = winurlparams.get('user_id') || '';
+let p_place_id    = winurlparams.get('place_id') || '';
 let p_taxon_id    = winurlparams.get('taxon_id') || '';
 let p_operator    = winurlparams.get('operator') || '';
 let p_ofv_datatype = winurlparams.get('ofv_datatype') || 'taxon,text,numeric,date,time,datetime,dna';
@@ -196,35 +197,15 @@ function getAll() {
    })();
 };
 
-getAll();
-  
-/*if (winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
-   let instructions = [
-      {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.'},
-   ];
-   faddelems('p',document.body,instructions);
+if( winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
+    let instructions = [
+            {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.'},
+       ];
+    faddelems('p',document.body,instructions);
+} else {
+    getAll();
 }
-else {
-   fetch(apiurl)
-   .then((response) => {
-      if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-      return response.json();
-   })
-   .then((data) => { fresults(data); })
-   .catch((err) => {
-      console.error(err.message);
-      faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-   });
-};*/
-
-// remove the field param from the url before building options
-winurlparams.delete(p_field);
-winurlparams.delete('operator');
-winurlparams.delete('taxon_id');
-winurlparams.delete('not_user_id');
-winurlparams.delete('not_id');
-winurlparams.delete('not_in_project');
-
+  
 // build param list for url's used in fresults
 for (const [key, value] of winurlparams.entries()) { 
   if( opts === '' ){
@@ -241,11 +222,6 @@ for (const [key, value] of winurlparams.entries()) {
       opts += value;
   }
 }   
-
-// add them back after building options...
-winurlparams.append('operator', p_operator);
-winurlparams.append(p_field, p_field_value);
-winurlparams.append('taxon_id', p_taxon_id);
 
 function isMultipleOfFour(num) {
   return num % 4 === 0;
