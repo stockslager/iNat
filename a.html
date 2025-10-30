@@ -85,8 +85,8 @@ function hasFieldNameValuePair( rec, p_field_name, p_field_value ) {
 
      if( rec.ofvs && rec.ofvs.length > 0 ) {
          for( let i=0; i<rec.ofvs.length; i++ ) {
-              if( p_field_name.toString()  === rec.ofvs[i].name.toString() &&
-                  p_field_value.toString() === rec.ofvs[i].value.toString() ) {
+              if( p_field_name.toString().toLowerCase()  === rec.ofvs[i].name.toString().toLowerCase() &&
+                  p_field_value.toString().toLowerCase() === rec.ofvs[i].value.toString().toLowerCase() ) {
                   return true;
               }
          }
@@ -98,7 +98,7 @@ function hasFieldNameValuePair( rec, p_field_name, p_field_value ) {
 function hasFieldName ( rec, p_field_name ) {
      if( this.ofvs && rec.ofvs.length > 0 ) {
          for( let i=0; i<rec.ofvs.length; i++ ) {
-              if( p_field_name.toString()  === rec.ofvs[i].name.toString() ) {
+              if( p_field_name.toString().toLowerCase()  === rec.ofvs[i].name.toString().toLowerCase ) {
                   return true;
               }
          }
@@ -569,6 +569,8 @@ function fresults(results) {
          values.push({innerHTML:furl(root_people+rec.user_login,rec.user_login)}); 
 
          const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
+         console.log('p_field ' + p_field);
+         console.log('p_field_value ' + p_field_value);
 
          if( p_taxon_id ) {
              if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
