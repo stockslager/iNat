@@ -174,7 +174,7 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
     try {
       const data = await rateLimitedFetch(apiurl, customUserAgent);
       for( let i=0; i<data.results.length; i++ ) {
-           const obs = new Observations( data.results[i] );
+           const obs = new Observation( data.results[i] );
            allObservations.push( obs );
       }
     } catch (error) {
