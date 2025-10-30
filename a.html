@@ -546,11 +546,29 @@ function fresults(results) {
        
          if( p_taxon_id ) {
              if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
-                 tempBrow.push(values);
+                 if( p_field_value ) {
+                     if( rec.hasFieldNameValuePair( p_field, p_field_value ) === true ) {
+                         tempBrow.push(values);
+                     }
+                 } else if( p_field ) {
+                     if( rec.hasFieldName( p_field ) === true ) {
+                         tempBrow.push(values);
+                     }
+                 } else {
+                     tempBrow.push(values);
+                 }
              }
          } else {
-             tempBrow.push(values);
-         }
+             if( p_field_value ) {
+                 if( rec.hasFieldNameValuePair( p_field, p_field_value ) === true ) {
+                     tempBrow.push(values);
+                 }
+             } else if( p_field ) {
+                 if( rec.hasFieldName( p_field ) === true ) {
+                     tempBrow.push(values);
+                 }
+             }
+         } 
       };
 
       faddelem('p',document.body,{innerHTML:dlString});
