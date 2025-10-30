@@ -7,6 +7,7 @@ class Observation {
          this.taxon_id                    = rec.taxon.id;
          this.taxon_name                  = rec.taxon.name || '';
          this.taxon_preferred_common_name = rec.taxon.preferred_common_name || '';
+         this.taxon_min_species_ancestry  = rec.taxon.min_species_ancestry || '';
 
          if( rec.taxon.default_photo ){
              if( rec.taxon.default_photo.url ){
