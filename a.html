@@ -13,6 +13,7 @@
 <link rel="manifest" href="plant_club.webmanifest" />
 <link rel="stylesheet" type="text/css" href="seed_library.css" />
 <script type="text/javascript" src='common_func.js'> </script>
+<script type="text/javascript" src='/js/plant_club_viewer/observation.js'> </script>
 <title>Plant Club Viewer</title>
 </head>
 
@@ -30,6 +31,8 @@
    .npcicon { width:38px; height:38px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 5px; border-radius: 50px; }
 </style>
 <body>
+<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/js/plant_params_v10.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/js/plant_club_viewer/observation.js"></script>-->
 <script>
 let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
@@ -78,11 +81,6 @@ winurlparams.delete('options');
 let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
-
-</script> 
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
-<script> 
 
 function setParams() {
 
@@ -405,33 +403,31 @@ function fresults(results) {
          let matchValue = '';
          let matchTaxonId = '';
          let taxon = '';
-
-       console.log('rec.id = ' + rec.id);
          
          if( rec.taxon ){
-             tax_id = rec.taxon.id;
-             tax_name = rec.taxon.name || '';
-             pref_tax_name = rec.taxon.preferred_common_name || '';
+             tax_id = rec.taxon_id;
+             tax_name = rec.taxon_name || '';
+             pref_tax_name = rec.taxon_preferred_common_name || '';
            
-             if( rec.taxon.default_photo ){
-                 if( rec.taxon.default_photo.url ){
-                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
+             if( rec.taxon_default_photo ){
+                 if( rec.taxon_default_photo_url ){
+                     tax_photo = '<img class="icon" src="'+rec.taxon_default_photo_url+'" />';
                  }
              }
          }
 
          if( tax_id !== '' ){
-             taxon = furl(github_root+'a.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl(github_root+'plant_club_viewer.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
          values = [
                   {innerText:i+1},
                   {innerHTML:tax_photo},
                   {innerHTML:taxon},
-                  {innerHTML:furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
+                  {innerHTML:furl(root_observations+rec.id,'<img class="mini_photo2" src="'+(rec.photos_url||'')+'" />')},
               ];
 
-         let user_icon = rec.user.icon || '';
+         let user_icon = rec.user_icon || '';
          
          if( user_icon === '' ){
             user_icon += '<div class="npcicon"></div>';
@@ -459,9 +455,9 @@ function fresults(results) {
                           }
                           if( rec.ofvs[j].taxon ){
                               if( matchTaxonId === '' ){
-                                  matchTaxonId = rec.ofvs[j].taxon.id;
+                                  matchTaxonId = rec.ofvs[j].taxon_id;
                               }
-                              if( rec.ofvs[j].taxon.id !== matchTaxonId ){
+                              if( rec.ofvs[j].taxon_id !== matchTaxonId ){
                                   mismatch = 'yes';
                               }
                           }
@@ -472,9 +468,9 @@ function fresults(results) {
                           field1 = rec.ofvs[j].value.toLowerCase();
                                     
                           if( rec.ofvs[j].taxon ){ 
-                              let name  = rec.ofvs[j].taxon.name || '';
-                              let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                              if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
+                              let name  = rec.ofvs[j].taxon_name || '';
+                              let cname = rec.ofvs[j].taxon_preferred_common_name || '';
+                              if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon_iconic_taxon_id.toString() ){
                                   field1 = name;
                                   displayCommonName = cname.toLowerCase();
                                   displayTaxonName = name;
@@ -501,8 +497,8 @@ function fresults(results) {
                                   displayName = rec.ofvs[j].value.toLowerCase();
                                 
                                   if( rec.ofvs[j].taxon ){
-                                      let name  = rec.ofvs[j].taxon.name || '';
-                                      let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                                      let name  = rec.ofvs[j].taxon_name || '';
+                                      let cname = rec.ofvs[j].taxon_preferred_common_name || '';
                                       field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   }
                                   if( p_field_value === '' ){
@@ -544,15 +540,9 @@ function fresults(results) {
          }          
  
          values.push({innerHTML:user_icon});
-         values.push({innerHTML:furl(root_people+rec.user.login,rec.user.login)});
+         values.push({innerHTML:furl(root_people+rec.user_login,rec.user_login)});
 
-         if( p_taxon_id ) {
-             if( p_taxon_id === rec.taxon.id ) {
-                 tempBrow.push(values);
-             }
-         } else {
-             tempBrow.push(values);
-         }
+         tempBrow.push(values);
       };
 
       faddelem('p',document.body,{innerHTML:dlString});
@@ -563,9 +553,9 @@ function fresults(results) {
           }
       }  
 
-      /*faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
+      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br />'});*/
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br />'});  
 
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
