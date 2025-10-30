@@ -159,8 +159,8 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
   console.log('Fetching a total of ' + pagesToFetch + ' pages...');
 
   for (let page = 1; page <= pagesToFetch; page++) {
-    url_params += '&page='+page;
-    const apiurl  = apibase+url_params;
+    let pg = '&page='+page;
+    const apiurl  = apibase+url_params+pg;
 
     console.log('apiurl ' + apiurl );
     console.log('Fetching page ' + page + ' of ' + pagesToFetch + '...');
