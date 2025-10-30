@@ -542,11 +542,13 @@ function fresults(results) {
          values.push({innerHTML:user_icon});
          values.push({innerHTML:furl(root_people+rec.user_login,rec.user_login)});
 
-         console.log('tax ' + p_taxon_id );
+         /*console.log('tax ' + p_taxon_id );
          console.log('tax 2 ' + rec.taxon_id.toString());
-         console.log('anc ' + rec.taxon_min_species_ancestry);
+         console.log('anc ' + rec.taxon_min_species_ancestry);*/
+         const ancestry_arr = rec.taxon_min_species_ancestry.split(', '); 
+       
          if( p_taxon_id ) {
-             if( p_taxon_id.toString() === rec.taxon_id.toString() || rec.taxon_min_species_ancestry.includes( p_taxon_id.toString() )  ) {
+             if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
                  tempBrow.push(values);
              }
          } else {
