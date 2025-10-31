@@ -129,13 +129,6 @@ function setParams() {
     if( p_omit_project ) { api_params += '&not_in_project=' + p_omit_project; } 
     if( p_ofv_datatype ) { api_params += '&ofv_datatype='   + p_ofv_datatype; }
 
-    // find key/value pair for &field: param if one was passed in
-    /*for( const [key, value] of winurlparams.entries() ) {
-         if( key.startsWith('field') ){
-             api_params += '&field:' + key + '=' + value;
-         }
-    }   */
-
     api_params += '&per_page=50';
 
     return( api_params );
@@ -181,7 +174,7 @@ async function rateLimitedFetch(url, customUserAgent) {
 
 // Function to fetch multiple pages of observations sequentially
 async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
-  const allObservations = [];
+  const data = '';
   
   console.log('Fetching a total of ' + pagesToFetch + ' pages...');
  
@@ -203,8 +196,7 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
     try {
       const data = await rateLimitedFetch(apiurl, customUserAgent);
       for( let i=0; i<data.results.length; i++ ) {
-           const obs = new Observation( data.results[i] );
-           allObservations.push( obs );
+           const data = new ObsArray( data );
       }
     } catch (error) {
       console.error('Failed to fetch page ' + page + '. Stopping.', error);
@@ -212,11 +204,11 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
     }
   }
 
-  const jsonObj = JSON.stringify( allObservations );
+  const jsonObj = JSON.stringify( data );
   sessionStorage.setItem( apibase+url_params, jsonObj );
   console.log('stored cache... ' + jsonObj);
 
-  return allObservations;
+  return data;
 }
 
 function getAll() {
@@ -226,14 +218,14 @@ function getAll() {
       const pages = 2; // Fetch 2 pages of observations (max 400 results)
   
       console.log('Starting API calls...');
-      const observations = await getAllObservations( setParams(), pages, customUserAgent );
+      const xobj = await getAllObservations( setParams(), pages, customUserAgent );
   
       console.log('Fetched a total of ' + observations.length + ' observations.');
   
       // Process observations
-      if( observations.length > 0 ) {
-         console.log('First observation:', observations[0]);
-         fresults(observations);
+      if( xobj ) {
+         console.log('First observation:', xobj.results[0]);
+         fresults(xobj);
       } 
    })();
 };
@@ -277,7 +269,8 @@ function boxRow(field_id, field_name, field_value) {
     this.field_name  = field_name;
 }
 
-function fresults(results) {
+function fresults(xobj) {
+   let results = xobj.results;   
    let box_array = [];
 
    for( let f=0; f<field_array.length; f++ ){
@@ -285,12 +278,7 @@ function fresults(results) {
    }
  
    if (results) {
-      //let total_results = xobj.total_results;
-      //let per_page = xobj.per_page;
-      //let page_curr = xobj.page;
-      //let page_max = Math.ceil(total_results/per_page);
-      //let page_prev = ((page_curr>1)?page_curr-1:null);
-      //let page_next = ((page_curr<page_max)?page_curr+1:null);
+      let total_results = xobj.total_results;
 
       let labels = [];
       let mismatch = '';
@@ -625,9 +613,7 @@ function fresults(results) {
           }
       }  
 
-      /*faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
-             +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br />'});  */
+      faddelem('p',document.body,{innerHTML:'<br/>total observations: '+fcomnum(total_results)+' <br/>'});
 
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
