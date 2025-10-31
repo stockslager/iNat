@@ -43,15 +43,22 @@ let p_place_id    = winurlparams.get('place_id') || '';
 let p_taxon_id    = winurlparams.get('taxon_id') || '';
 let p_operator    = winurlparams.get('operator') || '';
 let p_ofv_datatype = winurlparams.get('ofv_datatype') || 'taxon,text,numeric,date,time,datetime,dna';
-let p_obs_field_array = winurlparams.get('obs_fields') || '';
+let p_obs_fields   = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_omit_users = winurlparams.get('omit_users') || '';
 let p_omit_id = winurlparams.get('omit_id') || '';
 let p_omit_project = winurlparams.get('omit_projects') || '';
-let p_field = '';
-let p_field_value = '';
+let p_field_value  = winurlparams.get('field_value') || '';
 let opts = '';
 let field_array = [];
+
+// set url params that wno't be passed to the api but will be passed along when filtering
+// data returned from the api
+let url_params = '';
+if( p_taxon_id )    { url_params += '&taxon_id='+p_taxon_id; }
+if( p_operator )    { url_params += '&operator='+p_operator; }
+if( p_obs_fields )  { url_params += '&obs_fields='+p_obs_fields; }
+if( p_field_value ) { url_params += '&field_taxon_id='+p_field_value; }
 
 let api_params = '';
 
@@ -59,57 +66,9 @@ if( p_obs_field_array !== '' ){
     field_array = p_obs_field_array.split(",");
 }
 
-// if only one observation field was passed in, there is no reason to "merge"
-// a single field.  so default to "un-merged" if only one obs field is passed in. 
-// defaulting to un-merged will add a target url to the single obs field value in the table.
-if( field_array.length === 1 ){
-    winurlparams.delete('operator');
-    p_operator = '';
-}
-
-// find key/value pair for &field: param if one was passed in
-for (const [key, value] of winurlparams.entries()) {
-  if( key.startsWith('field') ){
-      p_field = key;
-      p_field_value = value;
-  }
-}   
- 
-winurlparams.delete('options');
-
 let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
-
-function hasFieldNameValuePair( rec, p_field_name, p_field_value ) {
-
-     if( rec.ofvs && rec.ofvs.length > 0 ) {
-         for( let i=0; i<rec.ofvs.length; i++ ) {
-              console.log('fn ' + p_field_name);
-              console.log('fn2 ' + rec.ofvs[i].name);
-              if( p_field_name.toString()  === rec.ofvs[i].name.toString().toLowerCase() &&
-                  p_field_value.toString().toLowerCase() === rec.ofvs[i].value.toString().toLowerCase() ) {
-                  return true;
-              }
-         }
-     }
-
-     return false;
-}
-  
-function hasFieldName ( rec, p_field_name ) {
-     if( this.ofvs && rec.ofvs.length > 0 ) {
-         for( let i=0; i<rec.ofvs.length; i++ ) {
-              console.log('fn ' + p_field_name);
-              console.log('fn2 ' + rec.ofvs[i].name.toString().toLowerCase());
-              if( p_field_name.toString().toLowerCase()  === rec.ofvs[i].name.toString().toLowerCase ) {
-                  return true;
-              }
-         }
-     }
-
-     return false;
-}
  
 function setParams() {
 
@@ -128,13 +87,6 @@ function setParams() {
     if( p_omit_id )      { api_params += '&not_id='         + p_omit_id;      }
     if( p_omit_project ) { api_params += '&not_in_project=' + p_omit_project; } 
     if( p_ofv_datatype ) { api_params += '&ofv_datatype='   + p_ofv_datatype; }
-
-    // find key/value pair for &field: param if one was passed in
-    /*for( const [key, value] of winurlparams.entries() ) {
-         if( key.startsWith('field') ){
-             api_params += '&field:' + key + '=' + value;
-         }
-    }   */
 
     api_params += '&per_page=50';
 
@@ -402,7 +354,7 @@ function fresults(results) {
                winurlparams_copy.delete('obs_fields');
                winurlparams_copy.append('obs_fields',box_array[e].field_id);
             
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html'+api_params+url_params,box_array[e].field_id) + '</td>');
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                if( p_operator !== 'merge' ){
@@ -455,7 +407,7 @@ function fresults(results) {
          }
 
          if( tax_id !== '' ){
-             taxon = furl(github_root+'a.html'+opts+'&taxon_id='+tax_id+'&operator='+p_operator+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl(github_root+'a.html'+api_params+url_params+'&taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
          values = [
@@ -475,18 +427,18 @@ function fresults(results) {
 
          let emojiTitle = 'Merged Observation Fields:&#10;';
 
-         let skipRow = 'no';
+         /*let skipRow = 'no';
 
          if( box_array && box_array.length > 0 ) {
              skipRow = 'yes';
-         }
+         }*/
        
          if(rec.ofvs&&rec.ofvs.length>0){
               for( let r=0; r<box_array.length; r++ ) {
                  for( let j=0; j<rec.ofvs.length; j++ ){
 
                       if( field_array.includes(rec.ofvs[j].field_id.toString()) ){
-                          skipRow = 'no';
+                          //skipRow = 'no';
                           if( matchValue === '' ){
                               matchValue = rec.ofvs[j].value;
                           } else if( rec.ofvs[j].value !== '' && matchValue !== rec.ofvs[j].value ){
@@ -537,8 +489,8 @@ function fresults(results) {
                           if( rec.ofvs[j].field_id.toString() === box_array[r].field_id.toString() ){
                               matchedCopy = 'yes';
                               if( rec.ofvs[j].value ) {
+                                  param1 = '&field_value' + rec.ofvs[j].value.toLowerCase();
                                   field1 = rec.ofvs[j].value.toLowerCase();
-                                  param1 = '&field:' + rec.ofvs[j].name + '=' + replaceDoubleQuotes(rec.ofvs[j].value.toString());
                                   displayName = rec.ofvs[j].value.toLowerCase();
                                 
                                   if( rec.ofvs[j].taxon_id ){
@@ -547,7 +499,7 @@ function fresults(results) {
                                       field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   }
                                   if( p_field_value === '' ){
-                                      values.push({innerHTML:furl(github_root+'a.html'+opts+param1+'&taxon_id='+p_taxon_id+'&operator='+p_operator, field1)});
+                                      values.push({innerHTML:furl(github_root+'a.html'+api_params+url_params+param1, field1)});
                                   } else {
                                       values.push({innerHTML:field1});
                                   }
@@ -589,9 +541,9 @@ function fresults(results) {
 
          const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
 
-         if( skipRow === 'no' ) {
+         //if( skipRow === 'no' ) {
              tempBrow.push(values);
-         }
+         //}
          /*if( p_taxon_id ) {
              if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
                  if( p_field_value ) {
