@@ -517,7 +517,7 @@ function fresults(results) {
                                   emojiTitle    += (rec.ofvs[j].field_id + ' ' + rec.ofvs[j].value.toLowerCase() + '&#10;');
                           }
                       }
-                      
+
                       if( p_operator !== 'merge' ) {
                           if( rec.ofvs[j].field_id.toString() === box_array[r].field_id.toString() ){
                               matchedCopy = 'yes';
@@ -534,11 +534,11 @@ function fresults(results) {
                                   if( p_field_value === '' ){
                                       winurlparams.delete('field_value');
                                       displayName = furl(github_root+'a.html?'+winurlparams+param1, field1);
-                                      if( p_field_value ) { winurlparams.append('&field_value', p_field_value); }
                                   } else {
+                                      winurlparams.append('&field_value', p_field_value); 
                                       displayName = field1;
                                   }
-                              }
+                              } 
                           }
                       }
                   }
