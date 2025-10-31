@@ -220,13 +220,19 @@ function buildMenu(fields) {
           for( let i=0; i<fields.length; i++ ) {
                if( p_obs_fields ) {
                    winurlparams.delete('obs_fields');
-                   //winurlparams.append('obs_fields', (p_obs_fields+','+fields[i].field_id));
+                   winurlparams.append('obs_fields', (p_obs_fields+','+fields[i].field_id));
                } else {
                    winurlparams.delete('obs_fields');
                    winurlparams.append('obs_fields', fields[i].field_id);
                }
                links += furl(github_root+'a.html?'+winurlparams, fields[i].field_name);
           }
+
+          // when finished loading the drop-down set the obs_fields back to what was
+          // initially passed in, otherwise the last one will show up in the drop-down.
+          winurlparams.delete('obs_fields');
+          winurlparams.append('obs_fields', p_obs_fields);
+       
           menu_string += buildDD('Field', links); 
       }
  
