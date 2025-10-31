@@ -239,16 +239,19 @@ function buildMenu(fields) {
 function showRow(rec) {
     const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
 
-    // if none of the p_obs_fields match any of the observation fields on the observation, skip it.
-    let matchFound = false;
-    for( let i=0; i<rec.ofvs.length; i++ ) {
-         if( field_array.includes( rec.ofvs[i].field_id.toString() ) ) {
-             matchFound = true;
-         }
-    }
+    // if &obs_fields were passed in but none of the p_obs_fields match 
+    //any of the observation fields on the observation, skip it.
+    if( p_obs_fields ) {
+        let matchFound = false;
+        for( let i=0; i<rec.ofvs.length; i++ ) {
+             if( field_array.includes( rec.ofvs[i].field_id.toString() ) ) {
+                 matchFound = true;
+             }
+        }
 
-    if( !matchFound ) {
-        return false;
+        if( !matchFound ) {
+            return false;
+        }
     }
  
     if( p_taxon_id ) {
