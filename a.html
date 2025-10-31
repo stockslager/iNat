@@ -561,8 +561,10 @@ function fresults(results) {
                   } 
               }
 
-              if( displayName === '' ) { displayName = '&nbsp;' }
-              values.push({innerHTML:displayName});
+              if( displayName ) {
+                  values.push({innerHTML:displayName});
+              } else {
+                  values.push({innerText:''});
          }          
  
          values.push({innerHTML:user_icon});
