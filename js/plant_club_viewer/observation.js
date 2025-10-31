@@ -1,3 +1,16 @@
+class ObsArray {
+  constructor(recs) {
+     this.observations = [];
+       
+     if( recs.length>0 ) {
+         for( let i=0; i<recs.length; i++ ) {
+              const obs = new Observation(recs[i]);
+              this.observations.push(obs);
+         }
+     }
+  }
+}
+
 class Observation {
   
   constructor(rec) {
