@@ -364,32 +364,6 @@ function fresults(results) {
       buildMenu(dd_array);
       
       let firstCol = 'yes';
-      /*let nf_box_array = [];
-
-      nf_box_array = box_array;
-    
-      for( let e=0; e<nf_box_array.length; e++ ){
-           if( nf_box_array[e].field_name === '' ){
-               if( labelCount === 0 ){
-                   dlString += '<span id="dltest"><table id="tablekey">';
-                   dlString += ('<caption id="cap">not found on this page</caption>');                      
-               } 
-            
-               if( labelCount === 0 || isMultipleOfFour(labelCount) ){
-                   if( labelCount > 0 ) {
-                       dlString += '</tr>';
-                   }
-                   dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+nf_box_array[e].field_id,nf_box_array[e].field_id) + '</td>');
-               } else {
-                   dlString += ('<td id="tdkey">' + furl(root_obs_fields+nf_box_array[e].field_id,nf_box_array[e].field_id) + '</td>');
-               }
-               labelCount++;
-           }
-      }
-
-      if( labelCount > 0 ){
-          dlString += '</table></span>';
-      }*/
     
       labelCount = 0;
     
@@ -441,7 +415,7 @@ function fresults(results) {
          let tax_photo = '<div class="clipart"></div>'; 
          let tax_id = '';
          let field1 = ''; 
-         let displayName = ' ';
+         let displayName = '&nbsp;';
          let displayTaxonName = '';
          let mismatch = '';
          let matchedCopy = 'no';
@@ -527,7 +501,7 @@ function fresults(results) {
                                   emojiTitle    += (rec.ofvs[j].field_id + ' ' + name + '&#10;');
                               } else { 
                                   emojiTitle    += (rec.ofvs[j].field_id + ' ' + name.toLowerCase() + '&#10;');
-                                  displayName = ' ';
+                                  displayName = '&nbsp;';
                               }
                           } else {
                                   if( rec.ofvs[j].value.toLowerCase() !== 'unknown' ){
@@ -558,7 +532,7 @@ function fresults(results) {
                                       values.push({innerHTML:field1});
                                   }
                               } else {
-                                  values.push({innerText:' '});
+                                  values.push({innerText:'&nbsp;'});
                               }
                           }
                       }
@@ -567,7 +541,7 @@ function fresults(results) {
                  if( matchedCopy === 'yes' ){
                      matchedCopy = 'no';
                  } else {
-                     values.push({innerText:' '});
+                     values.push({innerText:'&nbsp;'});
                  }
                  }
              }
@@ -582,7 +556,7 @@ function fresults(results) {
                   }
               } else {
                   if( mismatch === 'yes' ){
-                      displayName += ' ';
+                      displayName += '&nbsp;';
                       displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
                   } 
               }
