@@ -217,6 +217,25 @@ function boxRow(field_id, field_name, field_value) {
     this.field_name  = field_name;
 }
 
+function buildMenu(fields) {
+      let menu_string = '';
+      let links = '';
+      let taxon_param = '';
+
+      menu_string = '<div class="navbar">';
+
+      if( fields && fields.length > 0 ) {
+          for( let i=0; i<fields.length; i++ ) {
+               links += furl(github_root+'a.html?'+winurlparams, fields[i].field_name.toLowerCase());
+          }
+          menu_string += buildDD('Field', links); 
+      }
+ 
+      menu_string += '</div>';
+
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+
 function showRow(rec) {
     const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
 
@@ -287,6 +306,7 @@ function showRow(rec) {
  
 function fresults(results) {
    let box_array = [];
+   let dd_array = [];
 
    for( let f=0; f<field_array.length; f++ ){
         box_array.push(new boxRow(field_array[f], '') );
@@ -323,19 +343,26 @@ function fresults(results) {
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
          if(rec.ofvs&&rec.ofvs.length>0){
-              for( let r=0; r<field_array_copy.length; r++ ) {
-                 for( let j=0; j<rec.ofvs.length; j++ ){
-                      if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){
-                          let box_row   = box_array.find( boxRow => boxRow.field_id === rec.ofvs[j].field_id.toString() );
-                          box_row.field_name = rec.ofvs[j].name.toString(); 
-                      }
-                 }
+              for( let j=0; j<rec.ofvs.length; j++ ){
+                   if( dd_array.length === 0 || dd_array.find(rec.ofvs[j].field_id.toString() === '' ) {
+                       dd_array.push(new boxRow(rec.ofvs[j].field_id.toString(), rec.ofvs[j].name.toLowerCase()) );
+                   }
+               
+                   for( let r=0; r<field_array_copy.length; r++ ) {
+                        if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){
+                            let box_row   = box_array.find( boxRow => boxRow.field_id === rec.ofvs[j].field_id.toString() );
+                            box_row.field_name = rec.ofvs[j].name.toString(); 
+                        }
+                   }
               }
          }
       }
+
+      console.log('dd_array ' + dd_array);
+      buildMenu(dd_array);
       
       let firstCol = 'yes';
-      let nf_box_array = [];
+      /*let nf_box_array = [];
 
       nf_box_array = box_array;
     
@@ -360,7 +387,7 @@ function fresults(results) {
 
       if( labelCount > 0 ){
           dlString += '</table></span>';
-      }
+      }*/
     
       labelCount = 0;
     
