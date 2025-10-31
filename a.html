@@ -235,6 +235,34 @@ function boxRow(field_id, field_name, field_value) {
     this.field_name  = field_name;
 }
 
+function showRow(rec) {
+    if( p_taxon_id ) {
+        if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
+            if( p_field_value ) {
+                for( let i=0; i<rec.ofvs.length; i++ ) {
+                     if( field_array.includes(rec.ofvs[i].field_id.toString() ) ) {
+                         if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
+                             return = true;
+                         }
+                     }
+                }
+            } else {
+                return = true;
+            }
+        }
+    } else if( p_field_value ) {
+        for( let i=0; i<rec.ofvs.length; i++ ) {
+             if( field_array.includes(rec.ofvs[i].field_id.toString()) ) 
+                 if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
+                     return = true;
+                 }
+             }
+        }
+    } else {
+        return = true;
+    }
+}
+ 
 function fresults(results) {
    let box_array = [];
 
@@ -531,37 +559,7 @@ function fresults(results) {
 
          const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
 
-         let showRow = false;
-         if( p_taxon_id ) {
-             if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
-                 if( p_field_value ) {
-                     for( let i=0; i<rec.ofvs.length; i++ ) {
-                          if( field_array.includes(rec.ofvs[i].field_id.toString() ) ) {
-                              if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
-                                  showRow = true;
-                              }
-                          }
-                     }
-                 } else {
-                     showRow = true;
-                 }
-             }
-         } else if( p_field_value ) {
-             for( let i=0; i<rec.ofvs.length; i++ ) {
-              console.log('two');
-                  if( field_array.includes(rec.ofvs[i].field_id.toString()) ) {
-                   console.log('three');
-                      if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
-                       console.log('four');
-                          showRow = true;
-                      }
-                  }
-             }
-         } else {
-             showRow = true;
-         }
-
-         if( showRow ) {
+         if( showRow(rec) ) {
              tempBrow.push(values);
          }
       };
