@@ -226,7 +226,7 @@ function buildMenu(fields) {
 
       if( fields && fields.length > 0 ) {
           for( let i=0; i<fields.length; i++ ) {
-               links += furl(github_root+'a.html?'+winurlparams, fields[i].field_name);
+               links += furl(github_root+'a.html?'+winurlparams, (fields[i].field_id + fields[i].field_name));
           }
           menu_string += buildDD('Field', links); 
       }
