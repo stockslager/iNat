@@ -536,7 +536,7 @@ function fresults(results) {
              if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
                  if( p_field_value ) {
                      for( let i=0; i<rec.ofvs.length; i++ ) {
-                          if( field_array.includes(rec.ofvs[i].field_id) ) {
+                          if( field_array.includes(rec.ofvs[i].field_id.toString() ) ) {
                               if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
                                   showRow = true;
                               }
