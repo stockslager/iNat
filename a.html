@@ -361,7 +361,6 @@ function fresults(results) {
          }
       }
 
-      console.log('dd_array ' + dd_array);
       buildMenu(dd_array);
       
       let firstCol = 'yes';
@@ -442,7 +441,7 @@ function fresults(results) {
          let tax_photo = '<div class="clipart"></div>'; 
          let tax_id = '';
          let field1 = ''; 
-         let displayName = '';
+         let displayName = ' ';
          let displayTaxonName = '';
          let mismatch = '';
          let matchedCopy = 'no';
@@ -528,7 +527,7 @@ function fresults(results) {
                                   emojiTitle    += (rec.ofvs[j].field_id + ' ' + name + '&#10;');
                               } else { 
                                   emojiTitle    += (rec.ofvs[j].field_id + ' ' + name.toLowerCase() + '&#10;');
-                                  displayName = '';
+                                  displayName = ' ';
                               }
                           } else {
                                   if( rec.ofvs[j].value.toLowerCase() !== 'unknown' ){
@@ -559,7 +558,7 @@ function fresults(results) {
                                       values.push({innerHTML:field1});
                                   }
                               } else {
-                                  values.push({innerText:''});
+                                  values.push({innerText:' '});
                               }
                           }
                       }
@@ -568,7 +567,7 @@ function fresults(results) {
                  if( matchedCopy === 'yes' ){
                      matchedCopy = 'no';
                  } else {
-                     values.push({innerText:''});
+                     values.push({innerText:' '});
                  }
                  }
              }
