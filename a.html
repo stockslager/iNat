@@ -202,6 +202,15 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
     
     try {
       const data = await rateLimitedFetch(apiurl, customUserAgent);
+
+      console.log('data... ' + data);
+      //let total_results = xobj.total_results;
+      //let per_page = xobj.per_page;
+      //let page_curr = xobj.page;
+      //let page_max = Math.ceil(total_results/per_page);
+      //let page_prev = ((page_curr>1)?page_curr-1:null);
+      //let page_next = ((page_curr<page_max)?page_curr+1:null);
+ 
       for( let i=0; i<data.results.length; i++ ) {
            const obs = new Observation( data.results[i] );
            allObservations.push( obs );
@@ -214,7 +223,6 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
 
   const jsonObj = JSON.stringify( allObservations );
   sessionStorage.setItem( apibase+url_params, jsonObj );
-  console.log('stored cache... ' + jsonObj);
 
   return allObservations;
 }
