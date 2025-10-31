@@ -424,18 +424,11 @@ function fresults(results) {
 
          let emojiTitle = 'Merged Observation Fields:&#10;';
 
-         /*let skipRow = 'no';
-
-         if( box_array && box_array.length > 0 ) {
-             skipRow = 'yes';
-         }*/
-       
          if(rec.ofvs&&rec.ofvs.length>0){
               for( let r=0; r<box_array.length; r++ ) {
                  for( let j=0; j<rec.ofvs.length; j++ ){
 
                       if( field_array.includes(rec.ofvs[j].field_id.toString()) ){
-                          //skipRow = 'no';
                           if( matchValue === '' ){
                               matchValue = rec.ofvs[j].value;
                           } else if( rec.ofvs[j].value !== '' && matchValue !== rec.ofvs[j].value ){
@@ -538,39 +531,13 @@ function fresults(results) {
 
          const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
 
-         //if( skipRow === 'no' ) {
-             tempBrow.push(values);
-         //}
-         /*if( p_taxon_id ) {
+         if( p_taxon_id ) {
              if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
-                 if( p_field_value ) {
-                     if( hasFieldNameValuePair(rec, p_field.toLowerCase(), p_field_value) === true ) {
-                         tempBrow.push(values);
-                     }
-                 } else if( p_field ) {
-                     if( hasFieldName( rec, p_field.toLowerCase() ) === true ) {
-                         tempBrow.push(values);
-                     }
-                 } else if( field_array.includes(rec.ofvs[{
-                     
-                 }
-                 } else {
-                     tempBrow.push(values);
-                 }
-             }
-         } else {
-             if( p_field_value ) {
-                 if( hasFieldNameValuePair( rec, p_field.toLowerCase(), p_field_value ) === true ) {
-                     tempBrow.push(values);
-                 }
-             } else if( p_field ) {
-                 if( hasFieldName( rec, p_field.toLowerCase() ) === true ) {
-                     tempBrow.push(values);
-                 }
-             } else {
                  tempBrow.push(values);
              }
-         } */
+         } else {
+             tempBrow.push(values);
+         }
       };
        
 
