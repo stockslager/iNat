@@ -51,14 +51,6 @@ let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_field_value  = winurlparams.get('field_value') || '';
 let field_array = [];
 
-// set url params that wno't be passed to the api but will be passed along when filtering
-// data returned from the api
-//let url_params = winurlparams;
-/*if( p_taxon_id )    { url_params += '&taxon_id='+p_taxon_id; }
-if( p_operator )    { url_params += '&operator='+p_operator; }
-if( p_obs_fields )  { url_params += '&obs_fields='+p_obs_fields; }
-if( p_field_value ) { url_params += '&field_value='+p_field_value; }*/
-
 let api_params = '';
 
 if( p_obs_fields !== '' ){
@@ -228,7 +220,7 @@ function buildMenu(fields) {
           for( let i=0; i<fields.length; i++ ) {
                if( p_obs_fields ) {
                    winurlparams.delete('obs_fields');
-                   winurlparams.append('obs_fields', (p_obs_fields+','+fields[i].field_id));
+                   //winurlparams.append('obs_fields', (p_obs_fields+','+fields[i].field_id));
                } else {
                    winurlparams.delete('obs_fields');
                    winurlparams.append('obs_fields', fields[i].field_id);
@@ -405,7 +397,6 @@ function fresults(results) {
                    } 
                }
            } else {
-               //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<tr id="trkey"><td id="tdkey">' + box_array[e].field_id + '</td>');
                dlString += ('<td id="tdkey">missing from this page</td></tr>');
                if( p_operator !== 'merge' ) {
