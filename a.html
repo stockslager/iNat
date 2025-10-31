@@ -227,7 +227,7 @@ function showRow(rec) {
                      if( field_array.includes(rec.ofvs[i].field_id.toString() ) ) {
                          if( rec.ofvs[i].datatype === 'taxon' ) {
                              if( isNaN(rec.ofvs[i].value) ) {  // needed to handle case where type taxon has plain text value
-                                 if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
+                                 if( p_field_value.toLowerCase().toString() === rec.ofvs[i].value.toLowerCase().toString() ) {
                                      return true;
                                  }
                              } else {
@@ -252,7 +252,7 @@ function showRow(rec) {
              if( field_array.includes(rec.ofvs[i].field_id.toString()) ) {
                  if( rec.ofvs[i].datatype === 'taxon' ) {
                      if( isNaN(rec.ofvs[i].value) ) {  // needed to handle case where type taxon has plain text value
-                         if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
+                         if( p_field_value.toLowerCase().toString() === rec.ofvs[i].value.toLowerCase().toString() ) {
                              return true;
                          }
                      } else {
