@@ -531,11 +531,34 @@ function fresults(results) {
 
          const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
 
+         let showRow = false;
          if( p_taxon_id ) {
              if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
-                 tempBrow.push(values);
+                 if( p_field_value ) {
+                     for( let i=0; i<rec.ofvs.length; i++ ) {
+                          if( field_array.includes(rec.ofvs[i].field_id) ) {
+                              if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
+                                  showRow = true;
+                              }
+                          }
+                     }
+                 } else {
+                     showRow = true;
+                 }
+             }
+         } else if( p_field_value ) {
+             for( let i=0; i<rec.ofvs.length; i++ ) {
+                  if( field_array.includes(rec.ofvs[i].field_id) ) {
+                      if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
+                          showRow = true;
+                      }
+                  }
              }
          } else {
+             showRow = true;
+         }
+
+         if( showRow ) {
              tempBrow.push(values);
          }
       };
