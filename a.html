@@ -225,8 +225,15 @@ function showRow(rec) {
             if( p_field_value ) {
                 for( let i=0; i<rec.ofvs.length; i++ ) {
                      if( field_array.includes(rec.ofvs[i].field_id.toString() ) ) {
-                         if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
-                             return true;
+                         if( rec.ofvs[i].datatype === 'taxon' ) {
+                             const ofvs_ancestry_arr = rec.ofvs[i].taxon_min_species_ancestry.split(','); 
+                             if( ofvs_ancestry_arr.includes(p_field_value.toString()) ) {
+                                 return true;
+                             }
+                         } else {
+                             if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
+                                 return true;
+                             }
                          }
                      }
                 }
@@ -237,8 +244,15 @@ function showRow(rec) {
     } else if( p_field_value ) {
         for( let i=0; i<rec.ofvs.length; i++ ) {
              if( field_array.includes(rec.ofvs[i].field_id.toString()) ) {
-                 if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
-                     return true;
+                 if( rec.ofvs[i].datatype === 'taxon' ) {
+                     const ofvs_ancestry_arr = rec.ofvs[i].taxon_min_species_ancestry.split(','); 
+                     if( ofvs_ancestry_arr.includes(p_field_value.toString()) ) {
+                         return true;
+                     }
+                 } else {
+                     if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
+                         return true;
+                     }
                  }
              }
         }
@@ -486,6 +500,7 @@ function fresults(results) {
                                   if( p_field_value === '' ){
                                       winurlparams.delete('field_value');
                                       values.push({innerHTML:furl(github_root+'a.html?'+winurlparams+param1, field1)});
+                                      if( p_field_value ) { winurlparams.append('&field_value', p_field_value); }
                                   } else {
                                       values.push({innerHTML:field1});
                                   }
