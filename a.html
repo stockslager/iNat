@@ -54,11 +54,11 @@ let field_array = [];
 
 // set url params that wno't be passed to the api but will be passed along when filtering
 // data returned from the api
-let url_params = '';
-if( p_taxon_id )    { url_params += '&taxon_id='+p_taxon_id; }
+let url_params = winurlparams;
+/*if( p_taxon_id )    { url_params += '&taxon_id='+p_taxon_id; }
 if( p_operator )    { url_params += '&operator='+p_operator; }
 if( p_obs_fields )  { url_params += '&obs_fields='+p_obs_fields; }
-if( p_field_value ) { url_params += '&field_value='+p_field_value; }
+if( p_field_value ) { url_params += '&field_value='+p_field_value; }*/
 
 let api_params = '';
 
@@ -130,12 +130,12 @@ async function rateLimitedFetch(url, customUserAgent) {
 }
 
 // Function to fetch multiple pages of observations sequentially
-async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
+async function getAllObservations(api_params, pagesToFetch, customUserAgent) {
   const allObservations = [];
   
   console.log('Fetching a total of ' + pagesToFetch + ' pages...');
  
-  const cache_str    = sessionStorage.getItem( apibase+url_params );
+  const cache_str    = sessionStorage.getItem( apibase+api_params );
 
   if( cache_str ) {
       const parsed_cache = JSON.parse(cache_str); 
@@ -145,7 +145,7 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
                              
   for (let page = 1; page <= pagesToFetch; page++) {
     let pg = '&per_page=50&page='+page;
-    const apiurl  = apibase+url_params+pg;
+    const apiurl  = apibase+api_params+pg;
 
     console.log('apiurl ' + apiurl );
     console.log('Fetching page ' + page + ' of ' + pagesToFetch + '...');
@@ -172,7 +172,7 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
   }
 
   const jsonObj = JSON.stringify( allObservations );
-  sessionStorage.setItem( apibase+url_params, jsonObj );
+  sessionStorage.setItem( apibase+api_params, jsonObj );
 
   return allObservations;
 }
@@ -382,7 +382,7 @@ function fresults(results) {
                winurlparams_copy.delete('obs_fields');
                winurlparams_copy.append('obs_fields',box_array[e].field_id);
             
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html'+api_params+url_params,box_array[e].field_id) + '</td>');
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html'+url_params,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                if( p_operator !== 'merge' ){
                    labels.push({innerText:box_array[e].field_name});
@@ -434,7 +434,7 @@ function fresults(results) {
          }
 
          if( tax_id !== '' ){
-             taxon = furl(github_root+'a.html'+api_params+url_params+'&taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl(github_root+'a.html'+url_params+'&taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
          values = [
@@ -519,7 +519,7 @@ function fresults(results) {
                                       field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   }
                                   if( p_field_value === '' ){
-                                      values.push({innerHTML:furl(github_root+'a.html'+api_params+url_params+param1, field1)});
+                                      values.push({innerHTML:furl(github_root+'a.html'+url_params+param1, field1)});
                                   } else {
                                       values.push({innerHTML:field1});
                                   }
