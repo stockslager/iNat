@@ -226,7 +226,14 @@ function buildMenu(fields) {
 
       if( fields && fields.length > 0 ) {
           for( let i=0; i<fields.length; i++ ) {
-               links += furl(github_root+'a.html?'+winurlparams, (fields[i].field_id + fields[i].field_name));
+               if( p_obs_fields ) {
+                   winurlparams.delete('obs_fields');
+                   winurlparams.append('obs_fields', (p_obs_fields+','+fields[i].field_id));
+               } else {
+                   winurlparams.delete('obs_fields');
+                   winurlparams.append('obs_fields', fields[i].field_id);
+               }
+               links += furl(github_root+'a.html?'+winurlparams, fields[i].field_name);
           }
           menu_string += buildDD('Field', links); 
       }
@@ -348,7 +355,6 @@ function fresults(results) {
          if(rec.ofvs&&rec.ofvs.length>0){
               for( let j=0; j<rec.ofvs.length; j++ ){
                    const matchingRow = dd_array.find(item => item.field_id.toString() === rec.ofvs[j].field_id.toString() );
-                   console.log('match ' + matchingRow);
                    if( !matchingRow ) {
                        dd_array.push(new boxRow(rec.ofvs[j].field_id.toString(), rec.ofvs[j].name.toLowerCase(), '') );
                    }
