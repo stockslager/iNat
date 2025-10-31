@@ -196,7 +196,7 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
     try {
       const data = await rateLimitedFetch(apiurl, customUserAgent);
       for( let i=0; i<data.results.length; i++ ) {
-           const data = new ObsArray( data );
+           const data_obj = new ObsArray( data );
       }
     } catch (error) {
       console.error('Failed to fetch page ' + page + '. Stopping.', error);
@@ -204,7 +204,7 @@ async function getAllObservations(url_params, pagesToFetch, customUserAgent) {
     }
   }
 
-  const jsonObj = JSON.stringify( data );
+  const jsonObj = JSON.stringify( data_obj );
   sessionStorage.setItem( apibase+url_params, jsonObj );
   console.log('stored cache... ' + jsonObj);
 
