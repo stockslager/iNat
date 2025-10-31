@@ -226,9 +226,15 @@ function showRow(rec) {
                 for( let i=0; i<rec.ofvs.length; i++ ) {
                      if( field_array.includes(rec.ofvs[i].field_id.toString() ) ) {
                          if( rec.ofvs[i].datatype === 'taxon' ) {
-                             const ofvs_ancestry_arr = rec.ofvs[i].taxon_min_species_ancestry.split(','); 
-                             if( ofvs_ancestry_arr.includes(p_field_value.toString()) ) {
-                                 return true;
+                             if( isNaN(rec.ofvs[i].value) ) {  // needed to handle case where type taxon has plain text value
+                                 if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
+                                     return true;
+                                 }
+                             } else {
+                                 const ofvs_ancestry_arr = rec.ofvs[i].taxon_min_species_ancestry.split(','); 
+                                 if( ofvs_ancestry_arr.includes(p_field_value.toString()) ) {
+                                     return true;
+                                 }
                              }
                          } else {
                              if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
@@ -245,9 +251,15 @@ function showRow(rec) {
         for( let i=0; i<rec.ofvs.length; i++ ) {
              if( field_array.includes(rec.ofvs[i].field_id.toString()) ) {
                  if( rec.ofvs[i].datatype === 'taxon' ) {
-                     const ofvs_ancestry_arr = rec.ofvs[i].taxon_min_species_ancestry.split(','); 
-                     if( ofvs_ancestry_arr.includes(p_field_value.toString()) ) {
-                         return true;
+                     if( isNaN(rec.ofvs[i].value) ) {  // needed to handle case where type taxon has plain text value
+                         if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
+                             return true;
+                         }
+                     } else {
+                         const ofvs_ancestry_arr = rec.ofvs[i].taxon_min_species_ancestry.split(','); 
+                         if( ofvs_ancestry_arr.includes(p_field_value.toString()) ) {
+                             return true;
+                         }
                      }
                  } else {
                      if( p_field_value.toString() === rec.ofvs[i].value.toString() ) {
