@@ -54,7 +54,7 @@ let field_array = [];
 
 // set url params that wno't be passed to the api but will be passed along when filtering
 // data returned from the api
-let url_params = winurlparams;
+//let url_params = winurlparams;
 /*if( p_taxon_id )    { url_params += '&taxon_id='+p_taxon_id; }
 if( p_operator )    { url_params += '&operator='+p_operator; }
 if( p_obs_fields )  { url_params += '&obs_fields='+p_obs_fields; }
@@ -382,7 +382,7 @@ function fresults(results) {
                winurlparams_copy.delete('obs_fields');
                winurlparams_copy.append('obs_fields',box_array[e].field_id);
             
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html?'+url_params,box_array[e].field_id) + '</td>');
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html?'+winurlparams,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                if( p_operator !== 'merge' ){
                    labels.push({innerText:box_array[e].field_name});
@@ -434,7 +434,8 @@ function fresults(results) {
          }
 
          if( tax_id !== '' ){
-             taxon = furl(github_root+'a.html?'+url_params+'&taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             winurlparams.delete('taxon_id');
+             taxon = furl(github_root+'a.html?'+winurlparams+'&taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
          values = [
@@ -519,7 +520,8 @@ function fresults(results) {
                                       field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   }
                                   if( p_field_value === '' ){
-                                      values.push({innerHTML:furl(github_root+'a.html?'+url_params+param1, field1)});
+                                      winurlparams.delete('field_value');
+                                      values.push({innerHTML:furl(github_root+'a.html?'+winurlparams+param1, field1)});
                                   } else {
                                       values.push({innerHTML:field1});
                                   }
