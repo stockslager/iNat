@@ -49,7 +49,6 @@ let p_omit_users = winurlparams.get('omit_users') || '';
 let p_omit_id = winurlparams.get('omit_id') || '';
 let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_field_value  = winurlparams.get('field_value') || '';
-let opts = '';
 let field_array = [];
 
 // set url params that wno't be passed to the api but will be passed along when filtering
@@ -205,23 +204,6 @@ if( winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
     getAll();
 }
   
-// build param list for url's used in fresults
-for (const [key, value] of winurlparams.entries()) { 
-  if( opts === '' ){
-      opts += "?";
-  } else {
-      opts += "&";
-  }
-  opts += key;
-  opts += "=";
-
-  if( key === 'page' ){
-      opts += '1';
-  } else {
-      opts += value;
-  }
-}   
-
 function isMultipleOfFour(num) {
   return num % 4 === 0;
 }
@@ -315,7 +297,6 @@ function fresults(results) {
       }
       
       let firstCol = 'yes';
-      let winurlparams_copy ='';
       let nf_box_array = [];
 
       nf_box_array = box_array;
@@ -363,24 +344,6 @@ function fresults(results) {
            }
            labelCount++;
            if( box_array[e].field_name !== '' ){
-               // delete the group of obs field and add only the one chosen
-               let winurlparams_copy = new URLSearchParams(winurlsearchstr.substring(1));
-            
-               // find key/value pair for &field: param if one was passed in
-               // delete the &field when found
-               // then, append the single param for the url being displayed
-               for (const [key, value] of winurlparams_copy.entries()) {
-                   if( key.startsWith('field') ){
-                       winurlparams_copy.delete( key );
-                   }
-               }    
-               winurlparams_copy.delete('page');
-               winurlparams_copy.append('page', '1');
-               winurlparams_copy.append(('field:'+box_array[e].field_name),'');
-
-               // delete any existing obs_fields and append the param for the url
-               winurlparams_copy.delete('obs_fields');
-               winurlparams_copy.append('obs_fields',box_array[e].field_id);
             
                dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html?'+winurlparams,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
@@ -411,7 +374,6 @@ function fresults(results) {
          let tax_photo = '<div class="clipart"></div>'; 
          let tax_id = '';
          let field1 = ''; 
-         let param1 = ''; 
          let displayName = '';
          let displayTaxonName = '';
          let mismatch = '';
@@ -511,7 +473,7 @@ function fresults(results) {
                           if( rec.ofvs[j].field_id.toString() === box_array[r].field_id.toString() ){
                               matchedCopy = 'yes';
                               if( rec.ofvs[j].value ) {
-                                  param1 = '&field_value=' + rec.ofvs[j].value.toLowerCase();
+                                  let param1 = '&field_value=' + rec.ofvs[j].value.toLowerCase();
                                   field1 = rec.ofvs[j].value.toLowerCase();
                                   displayName = rec.ofvs[j].value.toLowerCase();
                                 
