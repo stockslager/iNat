@@ -33,6 +33,7 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
 let p_params      = winurlparams.get('params') || '';
 let p_field       = winurlparams.get('field') || '';
+let p_mode        = winurlparams.get('mode') || 'pro';
 let configuration = '';
 
 function buildMenu(data) {
@@ -67,8 +68,12 @@ function buildMenu(data) {
       }
  
       menu_string += buildDD('Parameters', links);
- 
-      menu_string += buildHome(furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;'));
+
+      if( p_mode.includes('yard') ) {
+          menu_string += buildHome(furl(github_root+'yard_dashboard.html?params='+p_params,'&#127807;'));
+      } else {
+          menu_string += buildHome(furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;'));
+      }
 
       menu_string += '</div>';
 
