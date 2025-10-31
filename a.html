@@ -347,7 +347,7 @@ function fresults(results) {
          let rec = results[i];
          if(rec.ofvs&&rec.ofvs.length>0){
               for( let j=0; j<rec.ofvs.length; j++ ){
-                   if( !dd_array.includes(rec.ofvs[j].field_id.toString()) ) {
+                   if( !dd_array.includes(rec.ofvs[j].field_id.toString(), rec.ofvs[j].name.toLowerCase(), '') ) {
                        dd_array.push(new boxRow(rec.ofvs[j].field_id.toString(), rec.ofvs[j].name.toLowerCase(), '') );
                    }
                
