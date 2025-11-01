@@ -253,7 +253,7 @@ function buildMenu(fields) {
                // of the datatypes in the ofv_datatype parameter (and when it hasn't already been chosen).
            console.log('field_id ' + fields[i].field_id);
            console.log('arr ' + field_array[i]);
-               if( ofv_datatype_array.includes( fields[i].ofv_datatype && !field_array.includes(fields[i].field_id) ) ) {
+               if( ofv_datatype_array.includes( fields[i].ofv_datatype && !field_array.includes(fields[i].field_id.toString()) ) ) {
                    if( p_chosen_datatypes && !chosen_datatypes_array.includes(fields[i].ofv_datatype) ) {
                        winurlparams.delete('chosen_datatypes');
                        winurlparams.append('chosen_datatypes', p_chosen_datatypes+','+fields[i].ofv_datatype);
