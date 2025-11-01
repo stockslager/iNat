@@ -232,8 +232,10 @@ function buildMenu(fields) {
       let links = '';
       let taxon_param = '';
       let ofv_datatype_array = [];
+      let chosen_datatypes_array = [];
 
       ofv_datatype_array = p_ofv_datatype.split(',');
+      chosen_datatypes_array = p_chosen_datatypes.split(',');
  
       menu_string = '<div class="navbar">';
 
@@ -250,7 +252,7 @@ function buildMenu(fields) {
                // only show the link in the drop down when the datatype of the obs field matches one
                // of the datatypes in the ofv_datatype parameter.
                if( ofv_datatype_array.includes( fields[i].ofv_datatype ) ) {
-                   if( p_chosen_datatypes ) {
+                   if( p_chosen_datatypes && !chosen_datatypes_array.includes(fields[i].ofv_datatype) ) {
                        winurlparams.delete('chosen_datatypes');
                        winurlparams.append('chosen_datatypes', p_chosen_datatypes+','+fields[i].ofv_datatype);
                    } else {
