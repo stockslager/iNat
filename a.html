@@ -242,6 +242,8 @@ function buildMenu(fields) {
 
                // only show the link in the drop down when the datatype of the obs field matches one
                // of the datatypes in the ofv_datatype parameter.
+               console.log('arr ' + ofv_datatype_array[0]);
+               console.log('f   ' + fields[i].field_id);
                if( ofv_datatype_array.includes( fields[i].field_id ) ) {
                    links += furl(github_root+'a.html?'+winurlparams, fields[i].field_name);
                }
