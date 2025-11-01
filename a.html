@@ -165,10 +165,12 @@ async function getAllObservations(api_params, pagesToFetch, customUserAgent) {
 
   const obs_data = new ObservationsData( allObservations, total_results );
 
-  const jsonObj = JSON.stringify( allObservations );
+  //const jsonObj = JSON.stringify( allObservations );
+  const jsonObj = JSON.stringify( obs_data );
   sessionStorage.setItem( apibase+api_params, jsonObj );
 
-  return allObservations;
+  //return allObservations;
+  return obs_data;
 }
 
 function getAll() {
@@ -178,14 +180,14 @@ function getAll() {
       const pages = 4; // Fetch 2 pages of observations (max 400 results)
   
       console.log('Starting API calls...');
-      const observations = await getAllObservations( setParams(), pages, customUserAgent );
+      const observations_data = await getAllObservations( setParams(), pages, customUserAgent );
   
-      console.log('Fetched a total of ' + observations.length + ' observations.');
+      console.log('Fetched a total of ' + observations_data.observations.length + ' observations.');
   
       // Process observations
-      if( observations.length > 0 ) {
-         console.log('First observation:', observations[0]);
-         fresults(observations);
+      if( observations_data.observations.length > 0 ) {
+         console.log('First observation:', observations_data.observations[0]);
+         fresults(observations_data);
       } 
    })();
 };
@@ -318,9 +320,16 @@ function showRow(rec) {
     }
 }
  
-function fresults(results) {
+function fresults(xobj) {
    let box_array = [];
    let dd_array = [];
+   let total_results = xobj.total_results;
+      //let per_page = xobj.per_page;
+      //let page_curr = xobj.page;
+      //let page_max = Math.ceil(total_results/per_page);
+      //let page_prev = ((page_curr>1)?page_curr-1:null);
+      //let page_next = ((page_curr<page_max)?page_curr+1:null);
+   let results = xobj.
 
    for( let f=0; f<field_array.length; f++ ){
         box_array.push(new boxRow(field_array[f], '') );
