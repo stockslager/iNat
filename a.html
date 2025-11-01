@@ -277,7 +277,7 @@ function buildMenu(fields) {
       // and there is more than one observation field specified,
       // the observation fields can be merged since they're of the same type.
       // should they be merged?  well, maybe.  that's up to the user.
-      if( chosen_datatype_array.length === 1 && field_array.length > 1 ){
+      if( chosen_datatypes_array.length === 1 && field_array.length > 1 ){
           winurlparams.delete('operator');
           winurlparams.append('operator', 'merge');
           menu_string += buildMenuURL( furl(github_root+'a.html?'+winurlparams,'Merge') );
