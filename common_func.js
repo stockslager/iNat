@@ -100,6 +100,13 @@ function buildDD( name, content ) {
 }
 
 function buildDDTitle( content ) {
+  let dd = '<div class="dd_title">' + content +
+           '</div>';
+
+  return( dd );
+}
+
+function buildMenuURL( url ) {
   let dd = '<div id="menu_title">' + content +
            '</div>';
 
