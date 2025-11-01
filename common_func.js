@@ -1,6 +1,6 @@
 function fcomnum(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') }; 
 function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
-function faddelem(etype,eparent=null,eattributes={}) {
+function faddelem(etype,eparent=null,eattributes={}) { 
    let eobj = document.createElement(etype);
    for (let [key,value] of Object.entries(eattributes)) {
       if ( typeof value === 'object' && value !== null ) {
