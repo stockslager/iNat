@@ -31,6 +31,14 @@
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:400; font-size:16px; padding-top: 5px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    p { width:100%; }
    .npcicon { width:38px; height:38px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 5px; border-radius: 50px; }
+    .scrollable-dl-container {
+        max-height: 30px; /* Set a maximum height for the container */
+        overflow-y: auto;  /* Enable vertical scrolling when content exceeds max-height */
+        /* You can also use overflow: scroll; to always show the scrollbar */
+        /* or overflow-x: auto; for horizontal scrolling, if needed */
+        border: 1px solid #ccc; /* Optional: Add a border for visual clarity */
+        padding: 10px; /* Optional: Add padding inside the container */
+    }
 </style>
 <body>
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/js/plant_params_v10.js"></script>
@@ -251,8 +259,6 @@ function buildMenu(fields) {
 
                // only show the link in the drop down when the datatype of the obs field matches one
                // of the datatypes in the ofv_datatype parameter (and when it hasn't already been chosen).
-           console.log('field_id ' + fields[i].field_id);
-           console.log('arr ' + field_array[0]);
                if( ofv_datatype_array.includes( fields[i].ofv_datatype ) ) {
                    if( p_chosen_datatypes && !chosen_datatypes_array.includes(fields[i].ofv_datatype) ) {
                        winurlparams.delete('chosen_datatypes');
@@ -438,7 +444,7 @@ function fresults(xobj) {
       for( let e=0; e<box_array.length; e++ ){
            if( isMultipleOfFour(labelCount) ){
                if( labelCount === 0 ){
-                   dlString += '<span id="dltest"><table id="tablekey">';
+                   dlString += '<div class="scrollable-dl-container"><span id="dltest"><table id="tablekey">';
                    dlString += ('<tr id="trkey">  <td id="key">field id</td>  <td id="key">'+merged+'</td>  </tr>');                      
                } else {
                    dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
@@ -467,7 +473,7 @@ function fresults(xobj) {
            }
       }
 
-      dlString += '</table></span>';
+      dlString += '</table></span></div>';
      
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
