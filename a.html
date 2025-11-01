@@ -261,20 +261,28 @@ function buildMenu(fields) {
 
 function showRow(rec) {
     const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
-
-    if( rec.id.toString() === '243348038' ) {
-        console.log('length: ' + rec.ofvs.length);
-        console.log('field id ' + rec.ofvs[0].field_id.toString() );
-        console.log('rec: ' + rec);
-        return false;
-    }
  
     // if &obs_fields were passed in but none of the p_obs_fields match 
     //any of the observation fields on the observation, skip it.
     if( p_obs_fields ) {
         let matchFound = false;
+    if( rec.id.toString() === '243348038' ) {
+        console.log('length: ' + rec.ofvs.length);
+        console.log('field id ' + rec.ofvs[0].field_id.toString() );
+        console.log('rec: ' + rec);
+    }
         for( let i=0; i<rec.ofvs.length; i++ ) {
+    if( rec.id.toString() === '243348038' ) {
+        console.log('length: ' + rec.ofvs.length);
+        console.log('field id ' + rec.ofvs[0].field_id.toString() );
+        console.log('rec: ' + rec);
+    }
              if( field_array.includes( rec.ofvs[i].field_id.toString() ) ) {
+    if( rec.id.toString() === '243348038' ) {
+        console.log('length: ' + rec.ofvs.length);
+        console.log('field id ' + rec.ofvs[0].field_id.toString() );
+        console.log('rec: ' + rec);
+    }
                  matchFound = true;
                  break;
              }
