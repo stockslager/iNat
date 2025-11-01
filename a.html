@@ -225,6 +225,8 @@ function buildMenu(fields) {
       let links = '';
       let taxon_param = '';
 
+      let ofv_datatype_array = p_ofv_datatype.split(',');
+ 
       menu_string = '<div class="navbar">';
 
       if( fields && fields.length > 0 ) {
@@ -236,7 +238,12 @@ function buildMenu(fields) {
                    winurlparams.delete('obs_fields');
                    winurlparams.append('obs_fields', fields[i].field_id);
                }
-               links += furl(github_root+'a.html?'+winurlparams, fields[i].field_name);
+
+               // only show the link in the drop down when the datatype of the obs field matches one
+               // of the datatypes in the ofv_datatype parameter.
+               if( ofv_datatype_array.includes( fields[i].field_id ) ) {
+                   links += furl(github_root+'a.html?'+winurlparams, fields[i].field_name);
+               }
           }
 
           // when finished loading the drop-down set the obs_fields back to what was
@@ -250,7 +257,7 @@ function buildMenu(fields) {
       // if the comma delimited datatype array only has one datatype
       // the observation fields can be merged since they're of the same type.
       // should they be merged?  well, maybe.  that's up to the user.
-      if( p_ofv_datatype.split(',').length === 1 ){
+      if( ofv_datatype_array.length === 1 ){
           winurlparams.delete('operator');
           winurlparams.append('operator', 'merge');
           menu_string += buildMenuURL( furl(github_root+'a.html?'+winurlparams,'Merge') );
