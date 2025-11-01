@@ -242,7 +242,16 @@ function buildMenu(fields) {
           winurlparams.delete('obs_fields');
           winurlparams.append('obs_fields', p_obs_fields);
        
-          menu_string += buildDD('Field', links); 
+          menu_string += buildDD('Observation Fields', links); 
+      }
+
+      // if the comma delimited datatype array only has one datatype
+      // the observation fields can be merged since they're of the same type.
+      // should they be merged?  well, maybe.  that's up to the user.
+      if( p_ofv_datatype.split(',').length === 1 ){
+          winurlparams.delete('operator');
+          winurlparams.append('operator', 'merge');
+          menu_string += buildDDTitle( furl(github_root+'a.html?params='+winurlparams,'Merge') );
       }
  
       menu_string += '</div>';
