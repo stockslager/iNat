@@ -123,6 +123,7 @@ async function rateLimitedFetch(url, customUserAgent) {
 // Function to fetch multiple pages of observations sequentially
 async function getAllObservations(api_params, pagesToFetch, customUserAgent) {
   const allObservations = [];
+  let total_results = '';
   
   console.log('Fetching a total of ' + pagesToFetch + ' pages...');
  
@@ -145,28 +146,24 @@ async function getAllObservations(api_params, pagesToFetch, customUserAgent) {
       const data = await rateLimitedFetch(apiurl, customUserAgent);
 
       console.log('data... ' + data);
-      const observations_data = '';
-      observations_data = new ObservationsData( data );
-      //let total_results = xobj.total_results;
+      total_results = data.total_results;
       //let per_page = xobj.per_page;
       //let page_curr = xobj.page;
       //let page_max = Math.ceil(total_results/per_page);
       //let page_prev = ((page_curr>1)?page_curr-1:null);
       //let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      for( let i=0; i<observations_data.observations.length; i++ ) {
-           const obs = observations_data.observations[i];
-           allObservations.push( obs );
-      }
-      /*for( let i=0; i<data.results.length; i++ ) {
+      for( let i=0; i<data.results.length; i++ ) {
            const obs = new Observation( data.results[i] );
            allObservations.push( obs );
-      }*/
+      }
     } catch (error) {
       console.error('Failed to fetch page ' + page + '. Stopping.', error);
       break; // Exit the loop on failure
     }
   }
+
+  const obs_data = new ObservationsData( allObservations, total_results );
 
   const jsonObj = JSON.stringify( allObservations );
   sessionStorage.setItem( apibase+api_params, jsonObj );
