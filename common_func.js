@@ -107,7 +107,7 @@ function buildDDTitle( content ) {
 }
 
 function buildMenuURL( url ) {
-  let dd = '<div id="menu_title">' + url +
+  let dd = '<div id="menu_title">' + url +     
            '</div>';
 
   return( dd );
