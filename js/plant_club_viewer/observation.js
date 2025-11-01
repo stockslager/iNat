@@ -1,16 +1,9 @@
 class ObservationsData {
   
-  constructor(data) {
-     this.total_results          = data.total_results;
+  constructor(all_obs, total_results) {
+     this.total_results          = total_results;
        
-     this.observations = [];
-       
-     if( data.results && data.results.length>0 ) {
-         for( let i=0; i<data.results.length; i++ ) {
-              const obs = new Observation(data.results[i]);
-              this.observations.push(obs);
-         }
-     }
+     this.observations = all_obs;
   }  
 }
 
