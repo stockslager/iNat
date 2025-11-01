@@ -262,6 +262,10 @@ function buildMenu(fields) {
 function showRow(rec) {
     const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
 
+    if( rec.id.toString() === '243348038' ) {
+        console.log('field id ' + rec.ofvs[0].field_id.toString() );
+    }
+ 
     // if &obs_fields were passed in but none of the p_obs_fields match 
     //any of the observation fields on the observation, skip it.
     if( p_obs_fields ) {
@@ -313,9 +317,6 @@ function showRow(rec) {
                              return true;
                          }
                      } else {
-                         console.log('field_arr ' + field_array);
-                         console.log('tax ' + rec.ofvs[i].taxon_id);
-                         console.log('anc ' + rec.ofvs[i].taxon_min_species_ancestry);
                          const ofvs_ancestry_arr = rec.ofvs[i].taxon_min_species_ancestry.split(','); 
                          if( ofvs_ancestry_arr.includes(p_field_value.toString()) ) {
                              return true;
