@@ -220,6 +220,12 @@ function boxRow(field_id, field_name, field_value) {
     this.field_name  = field_name;
 }
 
+ function ddRow(field_id, field_name, ofv_datatype) {
+    this.field_id     = field_id;
+    this.field_name   = field_name;
+    this.ofv_datatype = ofv_datatype;
+}
+
 function buildMenu(fields) {
       let menu_string = '';
       let links = '';
@@ -244,7 +250,7 @@ function buildMenu(fields) {
                // of the datatypes in the ofv_datatype parameter.
                console.log('arr ' + ofv_datatype_array[0]);
                console.log('f   ' + fields[i].field_id);
-               if( ofv_datatype_array.includes( fields[i].field_id ) ) {
+               if( ofv_datatype_array.includes( fields[i].ofv_datatype ) ) {
                    links += furl(github_root+'a.html?'+winurlparams, fields[i].field_name);
                }
           }
@@ -388,7 +394,7 @@ function fresults(xobj) {
               for( let j=0; j<rec.ofvs.length; j++ ){
                    const matchingRow = dd_array.find(item => item.field_id.toString() === rec.ofvs[j].field_id.toString() );
                    if( !matchingRow ) {
-                       dd_array.push(new boxRow(rec.ofvs[j].field_id.toString(), rec.ofvs[j].name.toLowerCase(), '') );
+                       dd_array.push(new ddRow(rec.ofvs[j].field_id.toString(), rec.ofvs[j].name.toLowerCase(), rec.ofvs[j].datatype ) );
                    }
                
                    for( let r=0; r<field_array_copy.length; r++ ) {
