@@ -45,6 +45,7 @@ let p_place_id    = winurlparams.get('place_id') || '';
 let p_taxon_id    = winurlparams.get('taxon_id') || '';
 let p_operator    = winurlparams.get('operator') || '';
 let p_ofv_datatype = winurlparams.get('ofv_datatype') || 'taxon,text,numeric,date,time,datetime,dna';
+let p_chosen_datatypes = winurlparams.get('chosen_datatypes') || '';
 let p_obs_fields   = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_omit_users = winurlparams.get('omit_users') || '';
@@ -248,17 +249,24 @@ function buildMenu(fields) {
 
                // only show the link in the drop down when the datatype of the obs field matches one
                // of the datatypes in the ofv_datatype parameter.
-               console.log('arr ' + ofv_datatype_array[0]);
-               console.log('f   ' + fields[i].field_id);
                if( ofv_datatype_array.includes( fields[i].ofv_datatype ) ) {
+                   if( p_chosen_datatypes ) {
+                       winurlparams.delete('chosen_datatypes');
+                       winurlparams.append('chosen_datatypes', p_chosen_datatypes+','+fields[i].ofv_datatype);
+                   } else {
+                       winurlparams.delete('chosen_datatypes');
+                       winurlparams.append('chosen_datatypes', fields[i].ofv_datatype);
+                   }
                    links += furl(github_root+'a.html?'+winurlparams, fields[i].field_name);
                }
           }
 
-          // when finished loading the drop-down set the obs_fields back to what was
+          // when finished loading the drop-down set the obs_fields and chosen_datatypes back to what was
           // initially passed in, otherwise the last one will show up in the obs_field param for every link.
           winurlparams.delete('obs_fields');
           winurlparams.append('obs_fields', p_obs_fields);
+          winurlparams.delete('chosen_datatypes');
+          winurlparams.append('chosen_datatypes', p_chosen_datatypes);
        
           menu_string += buildDD('Observation Fields', links); 
       }
