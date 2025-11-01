@@ -51,6 +51,10 @@ let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_field_value  = winurlparams.get('field_value') || '';
 let field_array = [];
 
+// together specify the maximum amount of data to be returned by the api
+let per_page  = 50;
+let max_pages = 4;
+
 let api_params = '';
 
 if( p_obs_fields !== '' ){
@@ -136,7 +140,7 @@ async function getAllObservations(api_params, pagesToFetch, customUserAgent) {
   }
                              
   for (let page = 1; page <= pagesToFetch; page++) {
-    let pg = '&per_page=50&page='+page;
+    let pg = '&per_page='+per_page+'&page='+page;
     const apiurl  = apibase+api_params+pg;
 
     console.log('apiurl ' + apiurl );
@@ -324,6 +328,8 @@ function fresults(xobj) {
    let box_array = [];
    let dd_array = [];
    let total_results = xobj.total_results;
+   let display_count = 0;
+   let filtered_count = 0;
       //let per_page = xobj.per_page;
       //let page_curr = xobj.page;
       //let page_max = Math.ceil(total_results/per_page);
@@ -580,7 +586,10 @@ function fresults(xobj) {
          values.push({innerHTML:furl(root_people+rec.user_login,rec.user_login)}); 
 
          if( showRow(rec) ) {
+             display_count++;
              tempBrow.push(values);
+         } else {
+             filtered_count++;
          }
       };
        
@@ -593,9 +602,8 @@ function fresults(xobj) {
           }
       }  
 
-      faddelem('p',document.body,{innerHTML:'<br/>total observations: '+fcomnum(total_results)+' <br/>'});
- //            +'per page: '+fcomnum(per_page)+'<br />'
- //            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br />'});  */
+      faddelem('p',document.body,{innerHTML:'total obs: '+fcomnum(total_results)+' cached: '+results.length + '<br/>' + 
+                                            'displayed: ' + display_count + ' filtered: ' + filtered_count + });
 
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
