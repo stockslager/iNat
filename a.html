@@ -382,9 +382,11 @@ function buildRemoveObsFieldURL( box_row, box_array ){
     // remove the datatype from the list of chosen_datatypes.
     const count = box_array.filter(item => item === box_row.ofv_datatype).length;
     if( count === 1 ) {
+       console.log('one');
         let new_chosen_datatypes = removeItemFromCommaDelimitedList(p_chosen_datatypes, box_row.ofv_datatype);
         winurlparams.delete('chosen_datatypes');
         if( p_chosen_datatypes ) {
+         console.log('two ' + new_chosen_datatypes );
             winurlparams.append('chosen_datatypes', new_chosen_datatypes);
         }
     }
