@@ -137,3 +137,21 @@ function copyOpts( winurlparams ) {
    } 
    return( opts );
 }
+
+function removeItemFromCommaDelimitedList(listString, itemToRemove) {
+  // 1. Split the string into an array
+  //    .split(',') separates the string by commas.
+  //    .map(item => item.trim()) removes any leading/trailing whitespace from each item.
+  //    .filter(item => item !== '') removes empty strings that might result from multiple commas.
+  const listArray = listString.split(',').map(item => item.trim()).filter(item => item !== '');
+
+  // 2. Remove the desired item from the array
+  //    .filter(item => item !== itemToRemove) creates a new array excluding the specified item.
+  const updatedArray = listArray.filter(item => item !== itemToRemove);
+
+  // 3. Join the array back into a comma-delimited string
+  //    .join(',') concatenates the array elements with commas in between.
+  const updatedListString = updatedArray.join(',');
+
+  return updatedListString;
+}
