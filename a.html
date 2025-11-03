@@ -224,9 +224,10 @@ function isMultipleOfThree(num) {
   return num % 3 === 0;
 }
 
-function boxRow(field_id, field_name, field_value) {
-    this.field_id    = field_id;
-    this.field_name  = field_name;
+function boxRow(field_id, field_name, ofv_datatype) {
+    this.field_id     = field_id;
+    this.field_name   = field_name;
+    this.ofv_datatype = ofv_datatype;
 }
 
  function ddRow(field_id, field_name, ofv_datatype) {
@@ -370,10 +371,37 @@ function showRow(rec) {
         return true;
     }
 }
+
+function buildRemoveObsFieldURL(box_row){
+
+    let new_obs_fields_list = removeItemFromCommaDelimitedList(p_obs_fields, box_row.field_id);
+    winurlparams.delete('obs_fields');
+    winurlparams.append('obs_fields', new_obs_fields_list);
+
+    // if there is only one observation field in the remove box with this datatype,
+    // remove the datatype from the list of chosen_datatypes.
+    const count = box_array.filter(item => item === box_row.ofv_datatype).length;
+    if( count === 1 ) {
+        let new_chosen_datatypes = removeItemFromCommaDelimitedList(p_chosen_datatypes, box_row.ofv_datatype);
+        winurlparams.delete('chosen_datatypes');
+        if( p_chosen_datatypes ) {
+            winurlparams.append('chosen_datatypes', new_chosen_datatypes);
+        }
+    }
+
+    // build the url, and set the winurlparams back to what it was before.
+    let remove_url = ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html?'+winurlparams,box_row.field_id) + '</td>');
+    winurlparams.delete('obs_fields');
+    winurlparams.append('obs_fields', p_obs_fields);
+    winurlparams.delete('chosen_datatypes');
+    winurlparams.append('chosen_datatypes', p_chosen_datatypes);
+
+    return( remove_url );
+}
  
 function fresults(xobj) {
    let box_array = [];
-   let dd_array = [];
+   let add_array = [];
    let total_results = xobj.total_results;
    let display_count = 0;
    let filtered_count = 0;
@@ -414,22 +442,23 @@ function fresults(xobj) {
          let rec = results[i];
          if(rec.ofvs&&rec.ofvs.length>0){
               for( let j=0; j<rec.ofvs.length; j++ ){
-                   const matchingRow = dd_array.find(item => item.field_id.toString() === rec.ofvs[j].field_id.toString() );
+                   const matchingRow = add_array.find(item => item.field_id.toString() === rec.ofvs[j].field_id.toString() );
                    if( !matchingRow ) {
-                       dd_array.push(new ddRow(rec.ofvs[j].field_id.toString(), rec.ofvs[j].name.toLowerCase(), rec.ofvs[j].datatype ) );
+                       add_array.push(new ddRow(rec.ofvs[j].field_id.toString(), rec.ofvs[j].name.toLowerCase(), rec.ofvs[j].datatype ) );
                    }
                
                    for( let r=0; r<field_array_copy.length; r++ ) {
                         if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){
                             let box_row   = box_array.find( boxRow => boxRow.field_id === rec.ofvs[j].field_id.toString() );
-                            box_row.field_name = rec.ofvs[j].name.toString(); 
+                            box_row.field_name   = rec.ofvs[j].name.toString(); 
+                            box_row.ofv_datatype = rec.ofvs[j].ofv_datatype; 
                         }
                    }
               }
          }
       }
 
-      buildMenu(dd_array);
+      buildMenu(add_array);
       
       let firstCol = 'yes';
     
@@ -447,13 +476,7 @@ function fresults(xobj) {
       for( let e=0; e<box_array.length; e++ ){
            labelCount++;
            if( box_array[e].field_name !== '' ){
-
-               let new_obs_fields_list = removeItemFromCommaDelimitedList(p_obs_fields, box_array[e].field_id);
-               winurlparams.delete('obs_fields');
-               winurlparams.append('obs_fields', new_obs_fields_list);
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html?'+winurlparams,box_array[e].field_id) + '</td>');
-               winurlparams.delete('obs_fields');
-               winurlparams.append('obs_fields', p_obs_fields);
+               dlString += buildRemoveObsFieldURL();
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                if( p_operator !== 'merge' ){
                    labels.push({innerText:box_array[e].field_name});
