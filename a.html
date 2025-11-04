@@ -143,16 +143,7 @@ async function getAllObservations(api_params, pagesToFetch, customUserAgent) {
   let total_results = '';
   
   console.log('Fetching a total of ' + pagesToFetch + ' pages...');
- 
-  //const cache_str    = sessionStorage.getItem( apibase+api_params );
-  const cache_str    = sessionStorage.getItem( cache_name );
-
-  if( cache_str ) {
-      const parsed_cache = JSON.parse(cache_str); 
-      console.log('found cached observations... ' );
-      return( parsed_cache );
-  }
-                             
+                              
   for (let page = 1; page <= pagesToFetch; page++) {
     let pg = '&per_page='+per_page+'&page='+page;
     const apiurl  = apibase+api_params+pg;
@@ -200,9 +191,19 @@ function getAll() {
    (async () => {
       const customUserAgent = 'ObsFieldViewer/0.1 (@stockslager)'; 
       const pages = max_pages; 
-  
-      console.log('Starting API calls...');
-      const observations_data = await getAllObservations( setParams(), pages, customUserAgent );
+      const observations_data = '';
+
+      //const cache_str    = sessionStorage.getItem( apibase+api_params );
+      const cache_str    = sessionStorage.getItem( cache_name );
+
+      if( cache_str ) {
+          observations_data = JSON.parse(cache_str); 
+          console.log('found cached observations... ' );
+          console.log('First observation:', observations_data.observations[0]);
+      } else {
+          console.log('Starting API calls...');
+          observations_data = await getAllObservations( setParams(), pages, customUserAgent );
+      }
     
       // Process observations
       if( observations_data && observations_data.observations.length > 0 ) {
