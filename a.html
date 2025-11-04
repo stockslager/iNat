@@ -75,7 +75,8 @@ let cache_name = window.location.pathname;
 console.log(cache_name);
 
 if( p_clear_cache === 'yes' ) {
-  sessionStorage.removeItem( cache_name );
+    winurlparams.delete('clear_cache'); 
+    sessionStorage.removeItem( cache_name );
 }
  
 function setParams() {
@@ -316,7 +317,7 @@ function buildMenu(fields) {
           }
       }
 
-      menu_string += buildMenuURL( furl(github_root+'a.html','Reset') );
+      menu_string += buildHome( furl(github_root+'a.html','Reset') );
 
       menu_string += buildHome( furl(github_root+'a.html?clear_cache=yes','Start Over') );
  
