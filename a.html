@@ -398,6 +398,12 @@ function buildRemoveObsFieldURL( box_row, box_array ){
         }
     }
 
+    // if they are removing the one whose value was clicked, remove the field_value and field params.
+    if( box_row.field_id === p_field ) {
+        winurlparams.delete('field');
+        winurlparams.delete('field_value');
+    }
+
     // build the url, and set the winurlparams back to what it was before.
     let remove_url = ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html?'+winurlparams,box_row.field_id) + '</td>');
     winurlparams.delete('obs_fields');
