@@ -59,6 +59,7 @@ let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_omit_users = winurlparams.get('omit_users') || '';
 let p_omit_id = winurlparams.get('omit_id') || '';
 let p_omit_project = winurlparams.get('omit_projects') || '';
+let p_field        = winurlparams.get('field') || '';
 let p_field_value  = winurlparams.get('field_value') || '';
 let field_array = [];
 
@@ -613,7 +614,6 @@ function fresults(xobj) {
                           if( rec.ofvs[j].field_id.toString() === box_array[r].field_id.toString() ){
                               matchedCopy = 'yes';
                               if( rec.ofvs[j].value ) {
-                                  let param1 = '&field_value=' + rec.ofvs[j].value.toLowerCase();
                                   field1 = rec.ofvs[j].value.toLowerCase();
                                   displayName = rec.ofvs[j].value.toLowerCase();
                                 
@@ -624,8 +624,16 @@ function fresults(xobj) {
                                   }
                                   if( p_field_value === '' ){
                                       winurlparams.delete('field_value');
-                                      values.push({innerHTML:furl(github_root+'a.html?'+winurlparams+param1, field1)});
-                                      if( p_field_value ) { winurlparams.append('&field_value', p_field_value); }
+                                      winurlparams.append('field_value', rec.ofvs[j].value.toLowerCase());
+                                      winurlparams.delete('field');
+                                      winurlparams.append('field', rec.ofvs[j].field_id);
+                                      values.push({innerHTML:furl(github_root+'a.html?'+winurlparams, field1)});
+                                      winurlparams.delete('field_value');
+                                      winurlparams.delete('field');
+                                      if( p_field_value ) { 
+                                          winurlparams.append('field', p_field);
+                                          winurlparams.append('field_value', p_field_value); 
+                                      }
                                   } else {
                                       values.push({innerHTML:field1});
                                   }
