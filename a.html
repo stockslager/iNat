@@ -496,7 +496,11 @@ function fresults(xobj) {
       }*/
 
       dlString += '<span id="dltest"><table id="tablekey">';
-      dlString += ('<tr id="trkey">  <td id="key">field id</td>  <td id="key">'+merged+'</td>  </tr>');
+      dlString += '<tr id="trkey">';  
+      if( !p_taxon_id && !p_field ) {
+          dlString += '<td id="key">&nbsp;</td>';
+      }
+      dlString += '<td id="key">field id</td>  <td id="key">'+merged+'</td>  </tr>';
     
       for( let e=0; e<box_array.length; e++ ) {
            labelCount++;
