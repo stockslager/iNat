@@ -415,7 +415,7 @@ function buildRemoveObsFieldURL( box_row, box_array ){
     winurlparams.delete('taxon_id');
 
     // build the url, and set the winurlparams back to what it was before.
-    let remove_url = furl(github_root+'a.html?'+winurlparams,box_row.field_id);
+    let remove_url = furl(github_root+'a.html?'+winurlparams,'&#9003;');
     winurlparams.delete('obs_fields');
     winurlparams.append('obs_fields', p_obs_fields);
     winurlparams.delete('chosen_datatypes');
@@ -507,10 +507,10 @@ function fresults(xobj) {
            if( box_array[e].field_name !== '' ) {
                dlString += '<tr id="trkey">';
                if( !p_taxon_id && !p_field ) {
-                   dlString += '<td id="tdkey">remove</td>';
+                   dlString += '<td id="tdkey">'+buildRemoveObsFieldURL( box_array[e], box_array ) + '</td>';
                }
                dlString += '<td id="tdkey">';
-               dlString += buildRemoveObsFieldURL( box_array[e], box_array );
+               dlString += box_array[e].field_id;
                dlString += '</td>';
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                if( p_operator !== 'merge' ){
