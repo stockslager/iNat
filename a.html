@@ -182,19 +182,17 @@ function updateProgress(completed, total) {
 
 function buildProgressBar() {
    let progress_bar = [ { innerHTML:'<div class="container">' + 
-                                    '<h2>Fetch Progress (Rate Limited: 1 request/second)</h2>' + 
                                     '<div class="progress-container">' + 
                                     '<div class="progress-bar" id="progressBar"></div>' +
                                     '</div>' + 
                                     '<p id="progressText">0% Complete (0/0 requests)</p>' + 
-                                    '<button onclick="startFetching()">Start Fetching</button>' + 
                                     '<p id="status">Status: Waiting to start...</p>' +
                                     '</div>' }, ];
    faddelems('p',document.body,progress_bar);
 }
 
 // Function to fetch multiple pages of observations sequentially
-async function getAllObservations( pagesToFetch, customUserAgent ) {
+async function getAllObservations( max_pages, customUserAgent ) {
   const allObservations = [];
   let total_results = '';
   let api_params = '';
@@ -210,7 +208,7 @@ async function getAllObservations( pagesToFetch, customUserAgent ) {
       buildProgressBar();
   }
   
-  console.log('Fetching a total of ' + pagesToFetch + ' pages...');
+  console.log('Fetching a total of ' + max_pages + ' pages...');
 
   const progressBar = document.getElementById('progressBar');
   const progressText = document.getElementById('progressText');
@@ -219,18 +217,18 @@ async function getAllObservations( pagesToFetch, customUserAgent ) {
 
   statusElem.textContent = "Status: Fetching in progress...";  let isFetching = false;
  
-  for (let page = 1; page <= pagesToFetch; page++) {
+  for (let page = 1; page <= max_pages; page++) {
     let pg = '&per_page='+per_page+'&page='+page;
     const apiurl  = apibase+api_params+pg;
 
     console.log('apiurl ' + apiurl );
-    console.log('Fetching page ' + page + ' of ' + pagesToFetch + '...');
+    console.log('Fetching page ' + page + ' of ' + max_pages + '...');
     
     try {
       const data = await rateLimitedFetch(apiurl, customUserAgent);
 
       completedRequests++;
-      updateProgress(completedRequests, totalRequests);
+      updateProgress(completedRequests, max_pages);
      
       console.log('data... ' + data);
       total_results = data.total_results;
@@ -268,7 +266,6 @@ function getAll() {
  
    (async () => {
       const customUserAgent = 'ObsFieldViewer/0.1 (@stockslager)'; 
-      const pages = max_pages; 
       let observations_data = '';
 
       //const cache_str    = sessionStorage.getItem( apibase+api_params );
@@ -280,7 +277,7 @@ function getAll() {
           console.log('First observation:', observations_data.observations[0]);
       } else {
           console.log('Starting API calls...');
-          observations_data = await getAllObservations( pages, customUserAgent );
+          observations_data = await getAllObservations( max_pages, customUserAgent );
       }
     
       // Process observations
