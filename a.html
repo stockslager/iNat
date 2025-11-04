@@ -381,7 +381,7 @@ function buildRemoveObsFieldURL( box_row, box_array ){
     // if there is only one observation field in the remove box with this datatype,
     // remove the datatype from the list of chosen_datatypes.
     console.log('box_array ' + box_array);
-    const count = box_array.filter(item => item === box_row.ofv_datatype).length;
+    const count = box_array.filter(obj => obj.ofv_datatype === box_row.ofv_datatype).length;
     console.log('count ' + count );
     if( count === 1 ) {
        console.log('one');
