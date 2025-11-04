@@ -293,6 +293,10 @@ function buildMenu(fields) {
           winurlparams.delete('operator');
           winurlparams.append('operator', 'merge');
           menu_string += buildMenuURL( furl(github_root+'a.html?'+winurlparams,'Merge') );
+          winurlparams.delete('operator');
+          if( p_operator ) {
+              winurlparams.append('operator', p_operator);
+          }
       }
  
       menu_string += '</div>';
