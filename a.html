@@ -197,11 +197,10 @@ function getAll() {
   
       console.log('Starting API calls...');
       const observations_data = await getAllObservations( setParams(), pages, customUserAgent );
-  
-      console.log('Fetched a total of ' + observations_data.observations.length + ' observations.');
-  
+    
       // Process observations
       if( observations_data && observations_data.observations.length > 0 ) {
+         console.log('Fetched a total of ' + observations_data.observations.length + ' observations.');
          console.log('First observation:', observations_data.observations[0]);
          fresults(observations_data);
       } 
