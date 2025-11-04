@@ -198,9 +198,9 @@ function hideProgressBar() {
    const progress_status = document.getElementById('status');
 
    // Hide the elements
-   progress_bar.style.display     = 'none';
-   progress_text.style.display    = 'none';
-   progress_status.style.display  = 'none';
+   if( progress_bar )    { progress_bar.style.display     = 'none'; }
+   if( progress_text )   { progress_text.style.display    = 'none'; }
+   if( progress_status ) { progress_status.style.display  = 'none'; }
 }
 
 // Function to fetch multiple pages of observations sequentially
