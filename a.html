@@ -170,7 +170,7 @@ async function getAllObservations(api_params, pagesToFetch, customUserAgent) {
                                      '.  The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
                                      'Please add additional parameters that further reduce the number of results to be returned.  '}, ];
           faddelems('p',document.body,message);
-          throw;
+          throw new Error( message );
       }
 
       for( let i=0; i<data.results.length; i++ ) {
