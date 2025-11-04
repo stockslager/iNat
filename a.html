@@ -329,20 +329,22 @@ function showRow(rec) {
             if( p_field_value ) {
                 for( let i=0; i<rec.ofvs.length; i++ ) {
                      if( field_array.includes(rec.ofvs[i].field_id.toString() ) ) {
-                         if( rec.ofvs[i].datatype === 'taxon' && rec.ofvs[i].taxon_id ) {
-                             if( isNaN(rec.ofvs[i].value) ) {  // needed to handle case where type taxon has plain text value
+                         if( rec.ofvs[i].field_id.toString() === p_field.toString() ) {
+                             if( rec.ofvs[i].datatype === 'taxon' && rec.ofvs[i].taxon_id ) {
+                                 if( isNaN(rec.ofvs[i].value) ) {  // needed to handle case where type taxon has plain text value
+                                     if( p_field_value.toLowerCase().toString() === rec.ofvs[i].value.toLowerCase().toString() ) {
+                                         return true;
+                                     }
+                                 } else {
+                                     const ofvs_ancestry_arr = rec.ofvs[i].taxon_min_species_ancestry.split(','); 
+                                     if( ofvs_ancestry_arr.includes(p_field_value.toString()) ) {
+                                         return true;
+                                     }
+                                 }
+                             } else {
                                  if( p_field_value.toLowerCase().toString() === rec.ofvs[i].value.toLowerCase().toString() ) {
                                      return true;
                                  }
-                             } else {
-                                 const ofvs_ancestry_arr = rec.ofvs[i].taxon_min_species_ancestry.split(','); 
-                                 if( ofvs_ancestry_arr.includes(p_field_value.toString()) ) {
-                                     return true;
-                                 }
-                             }
-                         } else {
-                             if( p_field_value.toLowerCase().toString() === rec.ofvs[i].value.toLowerCase().toString() ) {
-                                 return true;
                              }
                          }
                      }
@@ -354,20 +356,22 @@ function showRow(rec) {
     } else if( p_field_value ) {
         for( let i=0; i<rec.ofvs.length; i++ ) {
              if( field_array.includes(rec.ofvs[i].field_id.toString()) ) {
-                 if( rec.ofvs[i].datatype === 'taxon' && rec.ofvs[i].taxon_id ) {
-                     if( isNaN(rec.ofvs[i].value) ) {  // needed to handle case where type taxon has plain text value
+                 if( rec.ofvs[i].field_id.toString() === p_field.toString() ) {
+                     if( rec.ofvs[i].datatype === 'taxon' && rec.ofvs[i].taxon_id ) {
+                         if( isNaN(rec.ofvs[i].value) ) {  // needed to handle case where type taxon has plain text value
+                             if( p_field_value.toLowerCase().toString() === rec.ofvs[i].value.toLowerCase().toString() ) {
+                                 return true;
+                             }
+                         } else {
+                             const ofvs_ancestry_arr = rec.ofvs[i].taxon_min_species_ancestry.split(','); 
+                             if( ofvs_ancestry_arr.includes(p_field_value.toString()) ) {
+                                 return true;
+                             }
+                         }
+                     } else {
                          if( p_field_value.toLowerCase().toString() === rec.ofvs[i].value.toLowerCase().toString() ) {
                              return true;
                          }
-                     } else {
-                         const ofvs_ancestry_arr = rec.ofvs[i].taxon_min_species_ancestry.split(','); 
-                         if( ofvs_ancestry_arr.includes(p_field_value.toString()) ) {
-                             return true;
-                         }
-                     }
-                 } else {
-                     if( p_field_value.toLowerCase().toString() === rec.ofvs[i].value.toLowerCase().toString() ) {
-                         return true;
                      }
                  }
              }
@@ -385,17 +389,11 @@ function buildRemoveObsFieldURL( box_row, box_array ){
 
     // if there is only one observation field in the remove box with this datatype,
     // remove the datatype from the list of chosen_datatypes.
-    console.log('box_array ' + box_array);
-    console.log('box_row_datatype ' + box_row.ofv_datatype);
-    console.log('box_row_field_id ' + box_row.field_id);
     const count = box_array.filter(obj => obj.ofv_datatype === box_row.ofv_datatype).length;
-    console.log('count ' + count );
     if( count === 1 ) {
-       console.log('one');
         let new_chosen_datatypes = removeItemFromCommaDelimitedList(p_chosen_datatypes, box_row.ofv_datatype);
         winurlparams.delete('chosen_datatypes');
         if( p_chosen_datatypes ) {
-         console.log('two ' + new_chosen_datatypes );
             winurlparams.append('chosen_datatypes', new_chosen_datatypes);
         }
     }
