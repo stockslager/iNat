@@ -31,7 +31,39 @@
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:400; font-size:16px; padding-top: 5px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    p { width:100%; }
    .npcicon { width:38px; height:38px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 5px; border-radius: 50px; }
-    }
+container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.progress-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 30px;
+    background-color: #4caf50;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+    transition: width 0.4s ease;
+}
+
+#progressText {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+} 
 </style>
 <body>
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/js/plant_params_v10.js"></script>
@@ -140,6 +172,14 @@ async function rateLimitedFetch(url, customUserAgent) {
   }
 }
 
+// Function to update the progress bar UI
+function updateProgress(completed, total) {
+    const percentage = (completed / total) * 100;
+    progressBar.style.width = percentage + '%';
+    progressBar.textContent = Math.round(percentage) + '%';
+    progressText.textContent = `${Math.round(percentage)}% Complete (${completed}/${totalRequests} requests)`;
+}
+
 // Function to fetch multiple pages of observations sequentially
 async function getAllObservations( pagesToFetch, customUserAgent ) {
   const allObservations = [];
@@ -157,7 +197,14 @@ async function getAllObservations( pagesToFetch, customUserAgent ) {
   }
   
   console.log('Fetching a total of ' + pagesToFetch + ' pages...');
-                              
+
+  const progressBar = document.getElementById('progressBar');
+  const progressText = document.getElementById('progressText');
+  const statusElem = document.getElementById('status');
+  let completedRequests = 0;
+
+  statusElem.textContent = "Status: Fetching in progress...";  let isFetching = false;
+ 
   for (let page = 1; page <= pagesToFetch; page++) {
     let pg = '&per_page='+per_page+'&page='+page;
     const apiurl  = apibase+api_params+pg;
@@ -168,6 +215,9 @@ async function getAllObservations( pagesToFetch, customUserAgent ) {
     try {
       const data = await rateLimitedFetch(apiurl, customUserAgent);
 
+      completedRequests++;
+      updateProgress(completedRequests, totalRequests);
+     
       console.log('data... ' + data);
       total_results = data.total_results;
 
