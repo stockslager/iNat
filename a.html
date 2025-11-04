@@ -404,6 +404,10 @@ function buildRemoveObsFieldURL( box_row, box_array ){
         winurlparams.delete('field_value');
     }
 
+    // if a taxon was selected, remove it since we can't tell if the taxon exists for whatever obs fields
+    // aren't being removed.
+    winurlparams.delete('taxon_id');
+
     // build the url, and set the winurlparams back to what it was before.
     let remove_url = ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'a.html?'+winurlparams,box_row.field_id) + '</td>');
     winurlparams.delete('obs_fields');
