@@ -54,6 +54,7 @@ let p_omit_id = winurlparams.get('omit_id') || '';
 let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_field        = winurlparams.get('field') || '';
 let p_field_value  = winurlparams.get('field_value') || '';
+let p_clear_cache  = winurlparams.get('clear_cache') || '';
 let field_array = [];
 
 // together specify the maximum amount of data to be returned by the api
@@ -69,8 +70,13 @@ if( p_obs_fields !== '' ){
 
 let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+let apiref = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
 let cache_name = window.location.pathname;
 console.log(cache_name);
+
+if( p_clear_cache === 'yes' ) {
+  sessionStorage.removeItem( cache_name );
+}
  
 function setParams() {
 
@@ -209,7 +215,9 @@ function getAll() {
 
 if( winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
     let instructions = [
-            {innerText:'This page requires a project_id and/or a user_id argument.  Add ?project_id=12345678 to the end of the url.'},
+            {innerText:'This page requires a project_id and/or a user_id argument.  ' + 
+                       'Add ?project_id=12345678 to the end of the url.  ' + 
+                       'This page will accept most parameters from the '+apiref+' API endpoint.'},
        ];
     faddelems('p',document.body,instructions);
 } else {
@@ -304,6 +312,10 @@ function buildMenu(fields) {
               }
           }
       }
+
+      menu_string += buildMenuURL( furl(github_root+'a.html','Reset') );
+
+      menu_string += buildHome( furl(github_root+'a.html?clear_cache=yes','Start Over') );
  
       menu_string += '</div>';
 
