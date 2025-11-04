@@ -180,6 +180,19 @@ function updateProgress(completed, total) {
     progressText.textContent = `${Math.round(percentage)}% Complete (${completed}/${totalRequests} requests)`;
 }
 
+function buildProgressBar() {
+   let progress_bar = [ { innerHTML:'<div class="container">' + 
+                                    '<h2>Fetch Progress (Rate Limited: 1 request/second)</h2>' + 
+                                    '<div class="progress-container">' + 
+                                    '<div class="progress-bar" id="progressBar"></div>' +
+                                    '</div>' + 
+                                    '<p id="progressText">0% Complete (0/0 requests)</p>' + 
+                                    '<button onclick="startFetching()">Start Fetching</button>' + 
+                                    '<p id="status">Status: Waiting to start...</p>' +
+                                    '</div>' }, ];
+   faddelems('p',document.body,instructions);
+}
+
 // Function to fetch multiple pages of observations sequentially
 async function getAllObservations( pagesToFetch, customUserAgent ) {
   const allObservations = [];
@@ -194,6 +207,7 @@ async function getAllObservations( pagesToFetch, customUserAgent ) {
       return;
   } else {
       api_params = setParams();
+      buildProgressBar();
   }
   
   console.log('Fetching a total of ' + pagesToFetch + ' pages...');
