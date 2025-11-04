@@ -190,6 +190,16 @@ function buildProgressBar() {
                                     '</div>' }, ];
    faddelems('p',document.body,progress_bar);
 }
+ 
+function hideProgressBar() {
+   // Get the elements
+  const progressBar = document.getElementById('progressBar');
+  const progressText = document.getElementById('progressText');
+
+   // Hide the elements
+   progressBar.style.display  = 'none';
+   progressText.style.display = 'none';
+}
 
 // Function to fetch multiple pages of observations sequentially
 async function getAllObservations( max_pages, customUserAgent ) {
@@ -252,6 +262,9 @@ async function getAllObservations( max_pages, customUserAgent ) {
   }
 
   const obs_data = new ObservationsData( allObservations, total_results );
+
+  // hide the progress bar once the fetching has completed successfully.
+  hideProgressBar();
 
   console.log('***setting cache***');
   const jsonObj = JSON.stringify( obs_data );
