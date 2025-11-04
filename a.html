@@ -181,7 +181,7 @@ function updateProgress(completed, total) {
 }
 
 function buildProgressBar() {
-   let progress_bar = [ { innerHTML:'<div class="container">' + 
+   let progress_bar = [ { innerHTML:'<div class="container" id="progress_div">' + 
                                     '<div class="progress-container">' + 
                                     '<div class="progress-bar" id="progressBar"></div>' +
                                     '</div>' + 
@@ -193,14 +193,16 @@ function buildProgressBar() {
  
 function hideProgressBar() {
    // Get the elements
-   const progress_bar    = document.getElementById('progressBar');
-   const progress_text   = document.getElementById('progressText');
-   const progress_status = document.getElementById('status');
+   const progress_div    = document.getElementById('progress_div');
+   //const progress_bar    = document.getElementById('progressBar');
+   //const progress_text   = document.getElementById('progressText');
+   //const progress_status = document.getElementById('status');
 
    // Hide the elements
-   if( progress_bar )    { progress_bar.style.display     = 'none'; }
-   if( progress_text )   { progress_text.style.display    = 'none'; }
-   if( progress_status ) { progress_status.style.display  = 'none'; }
+   if( progress_div )    { progress_div.style.display     = 'none'; }
+   //if( progress_bar )    { progress_bar.style.display     = 'none'; }
+   //if( progress_text )   { progress_text.style.display    = 'none'; }
+   //if( progress_status ) { progress_status.style.display  = 'none'; }
 }
 
 // Function to fetch multiple pages of observations sequentially
