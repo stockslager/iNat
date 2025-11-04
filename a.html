@@ -291,12 +291,18 @@ function buildMenu(fields) {
       // the observation fields can be merged since they're of the same type.
       // should they be merged?  well, maybe.  that's up to the user.
       if( chosen_datatypes_array.length === 1 && field_array.length > 1 ){
-          winurlparams.delete('operator');
-          winurlparams.append('operator', 'merge');
-          menu_string += buildMenuURL( furl(github_root+'a.html?'+winurlparams,'Merge') );
-          winurlparams.delete('operator');
-          if( p_operator ) {
+          if( p_operator && p_operator === 'merge' ) {
+              winurlparams.delete('operator');
+              menu_string += buildMenuURL( furl(github_root+'a.html?'+winurlparams,'Un-Merge') );
               winurlparams.append('operator', p_operator);
+          } else {
+              winurlparams.delete('operator');
+              winurlparams.append('operator', 'merge');
+              menu_string += buildMenuURL( furl(github_root+'a.html?'+winurlparams,'Merge') );
+              winurlparams.delete('operator');
+              if( p_operator ) {
+                  winurlparams.append('operator', p_operator);
+              }
           }
       }
  
