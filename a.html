@@ -144,13 +144,6 @@ if( p_clear_cache === 'yes' ) {
 }
 
 function buildQueryForm() {
-  /*faddelem('p',document.body,{innerHTML:('<div>' +
-                                           '<form action='+github_root+'choose_project.html>' +
-                                              '<label for="fname">Project Name</label>' +
-                                              '<input type="text" id="pname" name="q" placeholder="Enter a full or partial project name..">' +   
-                                              '<input type="submit" value="Search">' +
-                                           '</form>' +
-                                         '</div>')});*/
   faddelem('p',document.body,{innerHTML:('<div>' +
                                            '<form action='+github_root+'a.html>' +
                                               '<input type="text" id="qname" name="query" placeholder=""><br>' +   
@@ -271,12 +264,12 @@ async function getAllObservations( max_pages, customUserAgent ) {
   let total_results = '';
   let api_params = '';
 
-  if( winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
-      buildQueryForm();
-      let instructions = [ { innerHTML:'<br><br>This page requires a project_id and/or a user_id argument at a minimum.<br>' + 
+  if( winurlsearchstr==='' || (p_project_id === '' && p_user_id === '' && p_query === '') ) {
+      let instructions = [ { innerHTML:'<br><br>This page requires a project_id and/or a user_id argument at a minimum.  ' + 
                                        'Cache size is limited to '+ max_rows + ' observations at this time.<br>' + 
-                                       'This page will accept most parameters from the '+apiref+' API endpoint.'}, ];
+                                       'This page will accept most parameters from the '+apiref+' API endpoint.<br>'}, ];
       faddelems('p',document.body,instructions);
+      buildQueryForm();
       return;
   } else {
       api_params = setParams();
