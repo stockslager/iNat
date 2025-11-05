@@ -31,6 +31,10 @@
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:400; font-size:16px; padding-top: 5px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    p { width:100%; }
    .npcicon { width:38px; height:38px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 5px; border-radius: 50px; }
+   .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
+   .button { background:var(--color-alt); }
+   .button_inactive { background:none; color:var(--color-border); }
+
 container {
     background: white;
     padding: 20px;
@@ -64,6 +68,31 @@ container {
     font-size: 14px;
     color: #555;
 } 
+
+input[type=text], select {
+  width: 95%;
+  padding: 6px 10px;
+  margin: 4px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  width: fit-content;
+  background-color: #333;
+  color: white;
+  padding: 7px 10px;
+  margin: 4px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #171717;
+}
 </style>
 <body>
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/js/plant_params_v10.js"></script>
@@ -87,6 +116,7 @@ let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_field        = winurlparams.get('field') || '';
 let p_field_value  = winurlparams.get('field_value') || '';
 let p_clear_cache  = winurlparams.get('clear_cache') || '';
+let p_query        = winurlparams.get('query') || '';
 let field_array = [];
 
 // together specify the maximum amount of data to be returned by the api
@@ -112,9 +142,33 @@ if( p_clear_cache === 'yes' ) {
     winurlparams.delete('clear_cache'); 
     sessionStorage.removeItem( cache_name );
 }
+
+function buildQueryForm() {
+  faddelem('p',document.body,{innerHTML:('<div>' +
+                                           '<form action='+github_root+'a.html>' +
+                                              '<label for="fname">Query</label>' +
+                                              '<input type="text" id="qname" name="query" placeholder="Enter parameters accepted by the'+apiref+' API endpoint.'.">' +   
+                                              '<input type="submit" value="Query">' +
+                                           '</form>' +
+                                         '</div>')});
+}
+
+function ensureQuestionMark(str) {
+  if (str.startsWith('?')) {
+    return str;
+  } else {
+    return '?' + str;
+  }
+}
  
 function setParams() {
 
+    // if a query was passed in, there's no need to look at the url...
+    if( p_query ) {
+        api_params += ensureQuestionMark( p_query );
+        return api_params;
+    }
+ 
     // script requires a project_id or a user_id.
     if( p_project_id ) {
         api_params += '?project_id=' + p_project_id;
