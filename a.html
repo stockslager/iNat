@@ -266,10 +266,11 @@ async function getAllObservations( max_pages, customUserAgent ) {
   let api_params = '';
 
   if( winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
-      let instructions = [ { innerHTML:'This page requires a project_id and/or a user_id argument.  ' + 
+      buildQueryForm();
+      //let instructions = [ { innerHTML:'This page requires a project_id and/or a user_id argument.  ' + 
                                        'Add ?project_id=12345678 to the end of the url.  ' + 
                                        'This page will accept most parameters from the '+apiref+' API endpoint.'}, ];
-      faddelems('p',document.body,instructions);
+      //faddelems('p',document.body,instructions);
       return;
   } else {
       api_params = setParams();
