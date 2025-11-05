@@ -121,7 +121,7 @@ let field_array = [];
 
 // together specify the maximum amount of data to be returned by the api
 let per_page  = 100;
-let max_pages = 1;
+let max_pages = 2;
 let max_rows  = 1000;
 
 let api_params = '';
@@ -147,7 +147,7 @@ function buildQueryForm() {
   faddelem('p',document.body,{innerHTML:('<div>' +
                                            '<form action='+github_root+'a.html>' +
                                               '<label for="fname">Query</label>' +
-                                              '<input type="text" id="qname" name="query" placeholder="Enter parameters accepted by the '+apiref+' API endpoint.">' +   
+                                              '<input type="text" id="qname" name="query"' +   
                                               '<input type="submit" value="Query">' +
                                            '</form>' +
                                          '</div>')});
@@ -267,10 +267,10 @@ async function getAllObservations( max_pages, customUserAgent ) {
 
   if( winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
       buildQueryForm();
-      //let instructions = [ { innerHTML:'This page requires a project_id and/or a user_id argument.  ' + 
-      //                                 'Add ?project_id=12345678 to the end of the url.  ' + 
-      //                                 'This page will accept most parameters from the '+apiref+' API endpoint.'}, ];
-      //faddelems('p',document.body,instructions);
+      let instructions = [ { innerHTML:'<br><br>This page requires a project_id and/or a user_id argument at a minimum.<br>' + 
+                                       'Cache size is limited to '+ max_rows + ' observations at this time.<br>' + 
+                                       'This page will accept most parameters from the '+apiref+' API endpoint.'}, ];
+      faddelems('p',document.body,instructions);
       return;
   } else {
       api_params = setParams();
