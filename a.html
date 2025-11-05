@@ -146,7 +146,18 @@ if( p_clear_cache === 'yes' ) {
 function buildQueryForm() {
   faddelem('p',document.body,{innerHTML:('<div>' +
                                            '<form action='+github_root+'a.html>' +
-                                              '<input type="text" id="qname" name="query" placeholder=""><br>' +   
+                                              '<label for="ofvDropdown">Choose an ofv datatype:</label>' +
+                                              '<select id="ofvDropdown" name="ofv_datatype" required>' + 
+                                                      '<option value="text,numeric,date,time,datetime,taxon,dna">all datatypes</option>' + 
+                                                      '<option value="text">text</option>' + 
+                                                      '<option value="numeric">numeric</option>' + 
+                                                      '<option value="date">date</option>' + 
+                                                      '<option value="time">time</option>' + 
+                                                      '<option value="datetime">datetime</option>' + 
+                                                      '<option value="taxon">taxon</option>' + 
+                                                      '<option value="dna">dna</option>' + 
+                                                   '</select>' + 
+                                              '<input type="text" id="qname"    name="query"        placeholder=""><br>' +   
                                               '<input type="submit" value="Query">' +
                                            '</form>' +
                                          '</div>')});
