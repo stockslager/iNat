@@ -130,13 +130,26 @@ if( p_obs_fields !== '' ){
     field_array = p_obs_fields.split(",");
 }
 
+// remove the query params since it'll be going against the cache after the initial query
+winurlparams.delete('query');
+//winurlparams.delete('ofv_datatype');
+
+// add history without query and ofv_datatype params since we'll be going against cached data.
+if( p_query ) {
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.delete('query'); 
+    //currentUrl.searchParams.delete('ofv_datatype'); 
+    // add a new history entry (allowing back navigation)
+    window.history.pushState({}, document.title, currentUrl.toString());
+}
+
 let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
 let apirefname = 'iNaturalist Observations';
 let apiref = furl(apirefurl,apirefname);
 let cache_name = window.location.pathname;
-console.log(cache_name);
+console.log('cache name ~ ' + cache_name);
 
 if( p_clear_cache === 'yes' ) {
     winurlparams.delete('clear_cache'); 
@@ -269,15 +282,9 @@ function buildProgressBar() {
 function hideProgressBar() {
    // Get the elements
    const progress_div    = document.getElementById('progress_div');
-   //const progress_bar    = document.getElementById('progressBar');
-   //const progress_text   = document.getElementById('progressText');
-   //const progress_status = document.getElementById('status');
 
    // Hide the elements
    if( progress_div )    { progress_div.style.display     = 'none'; }
-   //if( progress_bar )    { progress_bar.style.display     = 'none'; }
-   //if( progress_text )   { progress_text.style.display    = 'none'; }
-   //if( progress_status ) { progress_status.style.display  = 'none'; }
 }
 
 // Function to fetch multiple pages of observations sequentially
@@ -469,7 +476,7 @@ function buildMenu(fields) {
       }
 
       menu_string += buildHome( furl(github_root+'observation_fields.html?clear_cache=yes','Start Over') );
-      menu_string += buildHome( furl(github_root+'observation_fields.html','Reset') );
+      menu_string += buildHome( furl(github_root+'observation_fields.html?ofv_datatype='+p_ofv_datatype,'Reset') );
  
       menu_string += '</div>';
 
