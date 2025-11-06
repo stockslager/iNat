@@ -148,14 +148,15 @@ function buildQueryForm() {
                                            '<form action='+github_root+'a.html>' +
                                               '<label for="ofvDropdown">Choose an ofv datatype:</label>' +
                                               '<select id="ofvDropdown" name="ofv_datatype" required>' + 
-                                                      '<option value="text,numeric,date,time,datetime,taxon,dna">all datatypes</option>' + 
-                                                      '<option value="text">text</option>' + 
-                                                      '<option value="numeric">numeric</option>' + 
-                                                      '<option value="date">date</option>' + 
-                                                      '<option value="time">time</option>' + 
-                                                      '<option value="datetime">datetime</option>' + 
-                                                      '<option value="taxon">taxon</option>' + 
-                                                      '<option value="dna">dna</option>' + 
+                                                      '<option value="">--Please choose an option--</option>' + 
+                                                      '<option value="text,numeric,date,time,datetime,taxon,dna">All</option>' + 
+                                                      '<option value="text">Text</option>' + 
+                                                      '<option value="numeric">Numeric</option>' + 
+                                                      '<option value="date">Date</option>' + 
+                                                      '<option value="time">Time</option>' + 
+                                                      '<option value="datetime">Datetime</option>' + 
+                                                      '<option value="taxon">Taxon</option>' + 
+                                                      '<option value="dna">DNA</option>' + 
                                                    '</select>' + 
                                               '<input type="text" id="qname"    name="query"        placeholder=""><br>' +   
                                               '<input type="submit" value="Query">' +
@@ -175,7 +176,7 @@ function setParams() {
 
     // if a query was passed in, there's no need to look at the url...
     if( p_query ) {
-        api_params += ensureQuestionMark( p_query );
+        api_params += ensureQuestionMark( p_query+'&'+p_ofv_datatype );
         return api_params;
     }
  
@@ -275,8 +276,8 @@ async function getAllObservations( max_pages, customUserAgent ) {
   let total_results = '';
   let api_params = '';
 
-  if( winurlsearchstr==='' || (p_project_id === '' && p_user_id === '' && p_query === '') ) {
-      let instructions = [ { innerHTML:'<br><br>This page requires a project_id and/or a user_id argument at a minimum.  ' + 
+  if( winurlsearchstr==='' || p_query === '' || p_ofv_datatype === '' ) ) {
+      let instructions = [ { innerHTML:'<br><br>This page requires a query (usually a project_id and/or a user_id argument) to limit the data returned.  An ofv_datatype is also required.<br>' + 
                                        'Cache size is limited to '+ max_rows + ' observations at this time.<br>' + 
                                        'This page will accept most parameters from the '+apiref+' API endpoint.<br>'}, ];
       faddelems('p',document.body,instructions);
