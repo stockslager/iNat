@@ -472,7 +472,6 @@ function buildMenu(fields) {
 }
 
 function showRow(rec) {
-    const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
  
     // if &obs_fields were passed in but none of the p_obs_fields match 
     //any of the observation fields on the observation, skip it.
@@ -491,6 +490,7 @@ function showRow(rec) {
     }
  
     if( p_taxon_id ) {
+        const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
         if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
             if( p_field_value ) {
                 for( let i=0; i<rec.ofvs.length; i++ ) {
