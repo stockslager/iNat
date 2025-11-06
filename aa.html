@@ -391,8 +391,7 @@ function getAll() {
          console.log('Fetched a total of ' + observations_data.observations.length + ' observations.');
          console.log('First observation:', observations_data.observations[0]);
          fresults(observations_data);
-         faddelem('p',document.body,{innerHTML:( '<br><br>Shareable URL...:<br>' + 
-                                                 '<input type="text" id="urlBox" value="'+github_root+'aa.html?'+winurlparams+'&query='+sessionStorage.getItem(cache_name+'query')+'" readonly>' ) } );
+         faddelem('p',document.body,{innerHTML:( '<br><br><br>Shareable URL...:<br>'+github_root+'aa.html?'+winurlparams+'&query='+sessionStorage.getItem(cache_name+'query')+'" readonly>' ) } );
       } 
    })();
 };
@@ -467,8 +466,7 @@ function buildMenu(fields) {
 
           // don't add the drop down if a taxon_id or field_value has been chosen.
           if( p_chosen_taxon_id || p_field_value ) {
-              menu_string += buildTitle( 'obsFieldsTitle', 'Observation Fields', 'sample tip' );
-              //menu_string += buildDDCustom('Observation Fields', links, 'obsFieldsDD' );
+              menu_string += buildTitle( 'obsFieldsTitle', 'Observation Fields', 'Disabled when a taxon or observation field value is in focus.' );
           } else {
               menu_string += buildDD('Observation Fields', links ); 
           }
