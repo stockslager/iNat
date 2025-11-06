@@ -457,8 +457,11 @@ function buildMenu(fields) {
           winurlparams.append('obs_fields', p_obs_fields);
           winurlparams.delete('chosen_datatypes');
           winurlparams.append('chosen_datatypes', p_chosen_datatypes);
-       
-          menu_string += buildDD('Observation Fields', links); 
+
+          // don't add the drop down if a taxon_id or field_value has been chosen.
+          if( !p_chosen_taxon_id && !p_field_value ) {
+              menu_string += buildDD('Observation Fields', links); 
+          }
       }
 
       // if the comma delimited datatype array only has one datatype
