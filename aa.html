@@ -116,8 +116,12 @@ let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_field        = winurlparams.get('field') || '';
 let p_field_value  = winurlparams.get('field_value') || '';
 let p_clear_cache  = winurlparams.get('clear_cache') || '';
-let p_query        = encodeURIComponent( winurlparams.get('query') || '' );
+let p_query        = winurlparams.get('query') || '' ;
 let field_array = [];
+
+if( p_query ) {
+    p_query = encodeURIComponent( p_query );
+}
 
 // together specify the maximum amount of data to be returned by the api
 let per_page  = 100;
@@ -144,6 +148,7 @@ winurlparams.delete('query');
 
 // add history without query and ofv_datatype params since we'll be going against cached data.
 if( p_query ) {
+    console.log('encoded query - ' + p_query);
     sessionStorage.setItem( cache_name+'query', p_query );
     const currentUrl = new URL(window.location.href);
     currentUrl.searchParams.delete('query'); 
