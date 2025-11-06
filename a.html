@@ -131,8 +131,15 @@ if( p_obs_fields !== '' ){
 }
 
 // remove the params since it'll be going against the cache after the initial query
-winurlparams.delete('query');
-winurlparams.delete('ofv_datatypes');
+//winurlparams.delete('query');
+//winurlparams.delete('ofv_datatype');
+
+// replace history without query and ofv_datatype params since we'll be going against cached data.
+const currentUrl = new URL(window.location.href);
+currentUrl.searchParams.delete('query'); 
+currentUrl.searchParams.delete('ofv_datatype'); 
+// add a new history entry (allowing back navigation)
+window.history.pushState({}, document.title, currentUrl.toString());
 
 let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
