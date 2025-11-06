@@ -432,6 +432,7 @@ function buildMenu(fields) {
 
       if( fields && fields.length > 0 ) {
           for( let i=0; i<fields.length; i++ ) {
+               chosen_datatypes_array = p_chosen_datatypes.split(',');
                if( p_obs_fields ) {
                    winurlparams.delete('obs_fields');
                    winurlparams.append('obs_fields', (p_obs_fields+','+fields[i].field_id));
@@ -442,11 +443,11 @@ function buildMenu(fields) {
 
                // only show the link in the drop down when the datatype of the obs field matches one
                // of the datatypes in the ofv_datatype parameter (and when it hasn't already been chosen).
-               if( ofv_datatype_array.includes( fields[i].ofv_datatype ) ) {
+               if( ofv_datatype_array.includes( fields[i].ofv_datatype.toLowerCase() ) ) {
                    if( p_chosen_datatypes && !chosen_datatypes_array.includes(fields[i].ofv_datatype) ) {
                        winurlparams.delete('chosen_datatypes');
                        winurlparams.append('chosen_datatypes', p_chosen_datatypes+','+fields[i].ofv_datatype);
-                   } else {
+                   } else if( !p_chosen_datatypes ) {
                        winurlparams.delete('chosen_datatypes');
                        winurlparams.append('chosen_datatypes', fields[i].ofv_datatype);
                    }
