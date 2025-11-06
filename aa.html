@@ -473,9 +473,10 @@ function buildMenu(fields) {
 
           // don't add the drop down if a taxon_id or field_value has been chosen.
           if( p_chosen_taxon_id || p_field_value ) {
-              menu_string += buildDDCustom('Observation Fields', links, 'obsFieldsDD', 'Disabled while taxon and/or obs field value are in focus.' ); 
+              menu_string += buildDDCustom('Observation Fields', links, 'obsFieldsDD', 'Disabled while taxon and/or obs field value are in focus.' );
+              document.getElementById("obsFieldsDD").disabled = true;
           } else {
-              menu_string += buildDDCustom('Observation Fields', links ); 
+              menu_string += buildDD('Observation Fields', links ); 
           }
       }
 
