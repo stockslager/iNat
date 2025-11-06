@@ -162,19 +162,13 @@ if( p_clear_cache === 'yes' ) {
     sessionStorage.removeItem( cache_name );
 }
 
-function buildDDCustom( name, content, ddname ) {
-  let dd = '<div id="' + ddname + '" class="dropdown">' +
-                 '<button class="dropbtn">' + name +
-                    '<i class="fa fa-caret-down"></i>' +
-                 '</button>' +
-                    '<div class="dropdown-content">' +
-                          content +
-                    '</div>' +
+function buildTitle( name, content, tooltip ) {
+  let dd = '<div id="'+name+'" class="dd_title" title="'+tooltip+'">' + content +
            '</div>';
 
   return( dd );
 }
-
+ 
 function buildQueryForm() {
   faddelem('p',document.body,{innerHTML:('<br><div>' +
                                            '<form action='+github_root+'aa.html>' +
@@ -473,7 +467,7 @@ function buildMenu(fields) {
 
           // don't add the drop down if a taxon_id or field_value has been chosen.
           if( p_chosen_taxon_id || p_field_value ) {
-              menu_string += buildMenuURL('Observation Fields');
+              menu_string += buildTitle( 'obsFieldsTitle', 'Observation Fields', 'sample tip' ) {
               //menu_string += buildDDCustom('Observation Fields', links, 'obsFieldsDD' );
           } else {
               menu_string += buildDDCustom('Observation Fields', links, 'obsFieldsDD' ); 
@@ -506,11 +500,6 @@ function buildMenu(fields) {
       menu_string += '</div>';
 
       faddelem('p',document.body,{innerHTML:(menu_string)});  
-
-      if( p_chosen_taxon_id || p_field_value ) {
-          //document.getElementById('obsFieldsDD').disabled = true;
-          document.getElementById('menu_title').title = 'test test';
-      }
 }
 
 function showRow(rec) {
