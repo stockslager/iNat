@@ -427,7 +427,6 @@ function buildMenu(fields) {
 
       ofv_datatype_array = p_ofv_datatype.split(',');
       chosen_datatypes_array = p_chosen_datatypes.split(',');
-      console.log('chosen ' + chosen_datatypes_array);
  
       menu_string = '<div class="navbar">';
 
@@ -446,11 +445,9 @@ function buildMenu(fields) {
                // of the datatypes in the ofv_datatype parameter (and when it hasn't already been chosen).
                if( ofv_datatype_array.includes( fields[i].ofv_datatype.toLowerCase() ) ) {
                    if( p_chosen_datatypes && !chosen_datatypes_array.includes(fields[i].ofv_datatype) ) {
-      console.log('chosena ' + chosen_datatypes_array);
                        winurlparams.delete('chosen_datatypes');
                        winurlparams.append('chosen_datatypes', p_chosen_datatypes+','+fields[i].ofv_datatype);
                    } else if( !p_chosen_datatypes ) {
-      console.log('chosenb ' + chosen_datatypes_array);
                        winurlparams.delete('chosen_datatypes');
                        winurlparams.append('chosen_datatypes', fields[i].ofv_datatype);
                    }
@@ -460,7 +457,6 @@ function buildMenu(fields) {
                    }
                }
           }
-      console.log('chosen2 ' + chosen_datatypes_array);
 
           // when finished loading the drop-down set the obs_fields and chosen_datatypes back to what was
           // initially passed in, otherwise the last one will show up in the obs_field param for every link.
