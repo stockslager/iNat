@@ -443,11 +443,13 @@ function buildMenu(fields) {
 
                // only show the link in the drop down when the datatype of the obs field matches one
                // of the datatypes in the ofv_datatype parameter (and when it hasn't already been chosen).
-               if( ofv_datatype_array.includes( fields[i].ofv_datatype ) ) {
+               if( ofv_datatype_array.includes( fields[i].ofv_datatype.toLowerCase() ) ) {
                    if( p_chosen_datatypes && !chosen_datatypes_array.includes(fields[i].ofv_datatype) ) {
+      console.log('chosena ' + chosen_datatypes_array);
                        winurlparams.delete('chosen_datatypes');
                        winurlparams.append('chosen_datatypes', p_chosen_datatypes+','+fields[i].ofv_datatype);
                    } else {
+      console.log('chosenb ' + chosen_datatypes_array);
                        winurlparams.delete('chosen_datatypes');
                        winurlparams.append('chosen_datatypes', fields[i].ofv_datatype);
                    }
