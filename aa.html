@@ -591,7 +591,7 @@ function buildRemoveObsFieldURL( box_row, box_array ){
 
     // if a taxon was selected, remove it since we can't tell if the taxon exists for whatever obs fields
     // aren't being removed.
-    winurlparams.delete('taxon_id');
+    winurlparams.delete('chosen_taxon_id');
 
     if( !p_chosen_taxon_id && !p_field && !p_operator ) {
         remove_url = furl(github_root+'aa.html?'+winurlparams,'&#9447;&nbsp;'+box_row.field_id);
@@ -732,9 +732,9 @@ function fresults(xobj) {
          }
 
          if( tax_id !== '' ) {
-             winurlparams.delete('taxon_id');
-             taxon = furl(github_root+'aa.html?'+winurlparams+'&taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
-             if( p_chosen_taxon_id ) { winurlparams.append('taxon_id', p_chosen_taxon_id); }
+             winurlparams.delete('chosen_taxon_id');
+             taxon = furl(github_root+'aa.html?'+winurlparams+'&chosen_taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
+             if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
          }
        
          values = [
