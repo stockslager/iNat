@@ -104,7 +104,7 @@ let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id  = winurlparams.get('project_id') || '';
 let p_user_id     = winurlparams.get('user_id') || '';
 let p_place_id    = winurlparams.get('place_id') || '';
-let p_taxon_id    = winurlparams.get('taxon_id') || '';
+let p_chosen_taxon_id    = winurlparams.get('chosen_taxon_id') || '';
 let p_operator    = winurlparams.get('operator') || '';
 let p_ofv_datatype = winurlparams.get('ofv_datatype') || 'taxon,text,numeric,date,time,datetime,dna';
 let p_chosen_datatypes = winurlparams.get('chosen_datatypes') || '';
@@ -507,9 +507,9 @@ function showRow(rec) {
         }
     }
  
-    if( p_taxon_id ) {
+    if( p_chosen_taxon_id ) {
         const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
-        if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
+        if( p_chosen_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_chosen_taxon_id.toString() )  ) {
             if( p_field_value ) {
                 for( let i=0; i<rec.ofvs.length; i++ ) {
                      if( field_array.includes(rec.ofvs[i].field_id.toString() ) ) {
@@ -593,7 +593,7 @@ function buildRemoveObsFieldURL( box_row, box_array ){
     // aren't being removed.
     winurlparams.delete('taxon_id');
 
-    if( !p_taxon_id && !p_field && !p_operator ) {
+    if( !p_chosen_taxon_id && !p_field && !p_operator ) {
         remove_url = furl(github_root+'aa.html?'+winurlparams,'&#9447;&nbsp;'+box_row.field_id);
     } else {
         remove_url = box_row.field_id;
@@ -734,7 +734,7 @@ function fresults(xobj) {
          if( tax_id !== '' ) {
              winurlparams.delete('taxon_id');
              taxon = furl(github_root+'aa.html?'+winurlparams+'&taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
-             if( p_taxon_id ) { winurlparams.append('taxon_id', p_taxon_id); }
+             if( p_chosen_taxon_id ) { winurlparams.append('taxon_id', p_chosen_taxon_id); }
          }
        
          values = [
