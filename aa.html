@@ -120,7 +120,6 @@ let p_query        = winurlparams.get('query') || '' ;
 let field_array = [];
 
 if( p_query ) {
-    console.log('asdfsadfsadfsdaf');
     p_query = encodeURIComponent( p_query );
 }
 
@@ -354,10 +353,8 @@ async function getAllObservations( max_pages, customUserAgent ) {
   const obs_data = new ObservationsData( allObservations, total_results );
 
   // hide the progress bar once the fetching has completed successfully.
-  console.log('***hiding***');
   hideProgressBar();
 
-  console.log('***setting cache***');
   const jsonObj = JSON.stringify( obs_data );
   sessionStorage.setItem( cache_name, jsonObj );
 
@@ -387,6 +384,7 @@ function getAll() {
          console.log('Fetched a total of ' + observations_data.observations.length + ' observations.');
          console.log('First observation:', observations_data.observations[0]);
          fresults(observations_data);
+         faddelems('p',document.body,{innerHTML( '<br><br>Shareable URL...:<br>'+github_root+'aa.html?'+winurlparams+'&query='+sessionStorage.getItem(cache_name+'query') ) } );
       } 
    })();
 };
@@ -484,7 +482,6 @@ function buildMenu(fields) {
  
       menu_string += buildHome( furl(github_root+'aa.html?clear_cache=yes','Start Over') );
       menu_string += buildHome( furl(github_root+'aa.html?ofv_datatype='+p_ofv_datatype,'Reset') );
-      menu_string += buildHome( furl(github_root+'aa.html?'+winurlparams+'&query='+sessionStorage.getItem(cache_name+'query'), 'Shareable URL' ) );
  
       menu_string += '</div>';
 
