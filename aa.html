@@ -449,7 +449,7 @@ function buildMenu(fields) {
       console.log('chosena ' + chosen_datatypes_array);
                        winurlparams.delete('chosen_datatypes');
                        winurlparams.append('chosen_datatypes', p_chosen_datatypes+','+fields[i].ofv_datatype);
-                   } else {
+                   } else if( !p_chosen_datatypes ) {
       console.log('chosenb ' + chosen_datatypes_array);
                        winurlparams.delete('chosen_datatypes');
                        winurlparams.append('chosen_datatypes', fields[i].ofv_datatype);
