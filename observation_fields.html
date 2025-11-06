@@ -31,6 +31,10 @@
    th { position:-webkit-sticky /*Safari*/; position:sticky; top:0; font-weight:400; font-size:16px; padding-top: 5px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; }
    p { width:100%; }
    .npcicon { width:38px; height:38px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 5px; border-radius: 50px; }
+   .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
+   .button { background:var(--color-alt); }
+   .button_inactive { background:none; color:var(--color-border); }
+
 container {
     background: white;
     padding: 20px;
@@ -64,6 +68,31 @@ container {
     font-size: 14px;
     color: #555;
 } 
+
+input[type=text], select {
+  width: 95%;
+  padding: 6px 10px;
+  margin: 4px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  width: fit-content;
+  background-color: #333;
+  color: white;
+  padding: 7px 10px;
+  margin: 4px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #171717;
+}
 </style>
 <body>
 <script src="https://cdn.jsdelivr.net/gh/stockslager/inat/js/plant_params_v10.js"></script>
@@ -87,6 +116,7 @@ let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_field        = winurlparams.get('field') || '';
 let p_field_value  = winurlparams.get('field_value') || '';
 let p_clear_cache  = winurlparams.get('clear_cache') || '';
+let p_query        = winurlparams.get('query') || '';
 let field_array = [];
 
 // together specify the maximum amount of data to be returned by the api
@@ -112,9 +142,49 @@ if( p_clear_cache === 'yes' ) {
     winurlparams.delete('clear_cache'); 
     sessionStorage.removeItem( cache_name );
 }
+
+function buildQueryForm() {
+  faddelem('p',document.body,{innerHTML:('<br><div>' +
+                                           '<form action='+github_root+'observation_fields.html>' +
+                                              '<label for="ofvDropdown">OFV datatype:<br></label>' +
+                                              '<select id="ofvDropdown" name="ofv_datatype" required>' + 
+                                                      '<option value="">-- Choose OFV Datatype --</option>' + 
+                                                      '<option value="text,numeric,date,time,datetime,taxon,dna">All</option>' + 
+                                                      '<option value="text">Text</option>' + 
+                                                      '<option value="numeric">Numeric</option>' + 
+                                                      '<option value="date">Date</option>' + 
+                                                      '<option value="time">Time</option>' + 
+                                                      '<option value="datetime">Datetime</option>' + 
+                                                      '<option value="taxon">Taxon</option>' + 
+                                                      '<option value="dna">DNA</option>' + 
+                                                   '</select><br><br>' + 
+                                              '<label for="qname">Query parameters:<br></label>' +
+                                              '<input type="text" id="qname"    name="query"        placeholder=""><br><br>' +   
+                                              '<input type="submit" value="Query"><br><br><br>' +
+                                           '</form>' +
+                                         '</div>')});
+  faddelem('p',document.body,{innerHTML:('An ofv datatype is required to limit results to be cached to only those observations that have observation fields.  ' + 
+                                         'Query parameters are also required to limit the data returned by the query.  (e.g. project_id=1234567&user_id=someuser)  ' +
+                                         'Cache size is limited to '+ max_rows + ' observations at this time.  ' + 
+                                         'This page will accept most parameters from the '+apiref+' API endpoint.')});
+}
+
+function ensureQuestionMark(str) {
+  if (str.startsWith('?')) {
+    return str;
+  } else {
+    return '?' + str;
+  }
+}
  
 function setParams() {
 
+    // if a query was passed in, there's no need to look at the url...
+    if( p_query ) {
+        api_params += ensureQuestionMark( p_query+'&ofv_datatype='+p_ofv_datatype );
+        return api_params;
+    }
+ 
     // script requires a project_id or a user_id.
     if( p_project_id ) {
         api_params += '?project_id=' + p_project_id;
@@ -211,11 +281,8 @@ async function getAllObservations( max_pages, customUserAgent ) {
   let total_results = '';
   let api_params = '';
 
-  if( winurlsearchstr==='' || (p_project_id === '' && p_user_id === '') ) {
-      let instructions = [ { innerHTML:'This page requires a project_id and/or a user_id argument.  ' + 
-                                       'Add ?project_id=12345678 to the end of the url.  ' + 
-                                       'This page will accept most parameters from the '+apiref+' API endpoint.'}, ];
-      faddelems('p',document.body,instructions);
+  if( winurlsearchstr==='' || p_query === '' || p_ofv_datatype === '' ) {
+      buildQueryForm();
       return;
   } else {
       api_params = setParams();
@@ -405,7 +472,6 @@ function buildMenu(fields) {
 }
 
 function showRow(rec) {
-    const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
  
     // if &obs_fields were passed in but none of the p_obs_fields match 
     //any of the observation fields on the observation, skip it.
@@ -424,6 +490,7 @@ function showRow(rec) {
     }
  
     if( p_taxon_id ) {
+        const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
         if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
             if( p_field_value ) {
                 for( let i=0; i<rec.ofvs.length; i++ ) {
