@@ -130,15 +130,15 @@ if( p_obs_fields !== '' ){
     field_array = p_obs_fields.split(",");
 }
 
-// remove the params since it'll be going against the cache after the initial query
+// remove the query params since it'll be going against the cache after the initial query
 winurlparams.delete('query');
-winurlparams.delete('ofv_datatype');
+//winurlparams.delete('ofv_datatype');
 
 // add history without query and ofv_datatype params since we'll be going against cached data.
 if( p_query ) {
     const currentUrl = new URL(window.location.href);
     currentUrl.searchParams.delete('query'); 
-    currentUrl.searchParams.delete('ofv_datatype'); 
+    //currentUrl.searchParams.delete('ofv_datatype'); 
     // add a new history entry (allowing back navigation)
     window.history.pushState({}, document.title, currentUrl.toString());
 }
