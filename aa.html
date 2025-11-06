@@ -162,6 +162,19 @@ if( p_clear_cache === 'yes' ) {
     sessionStorage.removeItem( cache_name );
 }
 
+function buildDDCustom( name, content, ddname, disabled ) {
+  let dd = '<div id=' + ddname + 'class="dropdown" disabled title="' + disabled + '">' +
+                 '<button class="dropbtn">' + name +
+                    '<i class="fa fa-caret-down"></i>' +
+                 '</button>' +
+                    '<div class="dropdown-content">' +
+                          content +
+                    '</div>' +
+           '</div>';
+
+  return( dd );
+}
+
 function buildQueryForm() {
   faddelem('p',document.body,{innerHTML:('<br><div>' +
                                            '<form action='+github_root+'aa.html>' +
@@ -460,7 +473,7 @@ function buildMenu(fields) {
 
           // don't add the drop down if a taxon_id or field_value has been chosen.
           if( !p_chosen_taxon_id && !p_field_value ) {
-              menu_string += buildDD('Observation Fields', links); 
+              menu_string += buildDDDustom('Observation Fields', links, 'obsFieldsDD', 'Disabled while taxon and/or obs field value are in focus.' ); 
           }
       }
 
