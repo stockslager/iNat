@@ -472,8 +472,10 @@ function buildMenu(fields) {
           winurlparams.append('chosen_datatypes', p_chosen_datatypes);
 
           // don't add the drop down if a taxon_id or field_value has been chosen.
-          if( !p_chosen_taxon_id && !p_field_value ) {
-              menu_string += buildDDDustom('Observation Fields', links, 'obsFieldsDD', 'Disabled while taxon and/or obs field value are in focus.' ); 
+          if( p_chosen_taxon_id || p_field_value ) {
+              menu_string += buildDDCustom('Observation Fields', links, 'obsFieldsDD', 'Disabled while taxon and/or obs field value are in focus.' ); 
+          } else {
+              menu_string += buildDDCustom('Observation Fields', links ); 
           }
       }
 
