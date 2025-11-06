@@ -146,9 +146,9 @@ if( p_clear_cache === 'yes' ) {
 function buildQueryForm() {
   faddelem('p',document.body,{innerHTML:('<div>' +
                                            '<form action='+github_root+'a.html>' +
-                                              '<label for="ofvDropdown">Choose an ofv datatype:</label>' +
+                                              '<label for="ofvDropdown">An ofv datatype is required to limit results to be cached to only those observations that have observation fields.</label>' +
                                               '<select id="ofvDropdown" name="ofv_datatype" required>' + 
-                                                      '<option value="">--Please choose an option--</option>' + 
+                                                      '<option value="">-- Choose OFV Datatype --</option>' + 
                                                       '<option value="text,numeric,date,time,datetime,taxon,dna">All</option>' + 
                                                       '<option value="text">Text</option>' + 
                                                       '<option value="numeric">Numeric</option>' + 
@@ -157,7 +157,9 @@ function buildQueryForm() {
                                                       '<option value="datetime">Datetime</option>' + 
                                                       '<option value="taxon">Taxon</option>' + 
                                                       '<option value="dna">DNA</option>' + 
-                                                   '</select>' + 
+                                                   '</select><br>' + 
+                                              '<label for="qname">Query parameters are also required to limit the data returned by the query.  (usually a project_id and/or a user_id argument)<br>' + 
+                                                                 'This page will accept most parameters from the '+apiref+' API endpoint.</label>' +
                                               '<input type="text" id="qname"    name="query"        placeholder=""><br>' +   
                                               '<input type="submit" value="Query">' +
                                            '</form>' +
