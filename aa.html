@@ -384,7 +384,8 @@ function getAll() {
          console.log('Fetched a total of ' + observations_data.observations.length + ' observations.');
          console.log('First observation:', observations_data.observations[0]);
          fresults(observations_data);
-         faddelem('p',document.body,{innerHTML:( '<br><br>Shareable URL...:<br>'+github_root+'aa.html?'+winurlparams+'&query='+sessionStorage.getItem(cache_name+'query') ) } );
+         faddelem('p',document.body,{innerHTML:( '<br><br>Shareable URL...:<br>' + 
+                                                 '<input type="text" id="urlBox" value="'+github_root+'aa.html?'+winurlparams+'&query='+sessionStorage.getItem(cache_name+'query')+'" readonly>' ) } );
       } 
    })();
 };
