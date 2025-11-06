@@ -146,7 +146,7 @@ if( p_clear_cache === 'yes' ) {
 
 function buildQueryForm() {
   faddelem('p',document.body,{innerHTML:('<br><div>' +
-                                           '<form action='+github_root+'observation_fields.html>' +
+                                           '<form action='+github_root+'a.html>' +
                                               '<label for="ofvDropdown">OFV datatype:<br></label>' +
                                               '<select id="ofvDropdown" name="ofv_datatype" required>' + 
                                                       '<option value="">-- Choose OFV Datatype --</option>' + 
@@ -434,7 +434,7 @@ function buildMenu(fields) {
                    }
 
                    if( !field_array.includes(fields[i].field_id.toString()) ) {
-                       links += furl(github_root+'observation_fields.html?'+winurlparams, fields[i].field_name);
+                       links += furl(github_root+'a.html?'+winurlparams, fields[i].field_name);
                    }
                }
           }
@@ -456,12 +456,12 @@ function buildMenu(fields) {
       if( chosen_datatypes_array.length === 1 && field_array.length > 1 ){
           if( p_operator && p_operator === 'merge' ) {
               winurlparams.delete('operator');
-              menu_string += buildMenuURL( furl(github_root+'observation_fields.html?'+winurlparams,'Un-Merge') );
+              menu_string += buildMenuURL( furl(github_root+'a.html?'+winurlparams,'Un-Merge') );
               winurlparams.append('operator', p_operator);
           } else {
               winurlparams.delete('operator');
               winurlparams.append('operator', 'merge');
-              menu_string += buildMenuURL( furl(github_root+'observation_fields.html?'+winurlparams,'Merge') );
+              menu_string += buildMenuURL( furl(github_root+'a.html?'+winurlparams,'Merge') );
               winurlparams.delete('operator');
               if( p_operator ) {
                   winurlparams.append('operator', p_operator);
@@ -469,8 +469,8 @@ function buildMenu(fields) {
           }
       }
 
-      menu_string += buildHome( furl(github_root+'observation_fields.html?clear_cache=yes','Start Over') );
-      menu_string += buildHome( furl(github_root+'observation_fields.html','Reset') );
+      menu_string += buildHome( furl(github_root+'a.html?clear_cache=yes','Start Over') );
+      menu_string += buildHome( furl(github_root+'a.html','Reset') );
  
       menu_string += '</div>';
 
@@ -582,7 +582,7 @@ function buildRemoveObsFieldURL( box_row, box_array ){
     winurlparams.delete('taxon_id');
 
     if( !p_taxon_id && !p_field && !p_operator ) {
-        remove_url = furl(github_root+'observation_fields.html?'+winurlparams,'&#9447;&nbsp;'+box_row.field_id);
+        remove_url = furl(github_root+'a.html?'+winurlparams,'&#9447;&nbsp;'+box_row.field_id);
     } else {
         remove_url = box_row.field_id;
     }
