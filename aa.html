@@ -473,7 +473,8 @@ function buildMenu(fields) {
 
           // don't add the drop down if a taxon_id or field_value has been chosen.
           if( p_chosen_taxon_id || p_field_value ) {
-              menu_string += buildDDCustom('Observation Fields', links, 'obsFieldsDD' );
+              menu_string += buildMenuURL('Observation Fields');
+              //menu_string += buildDDCustom('Observation Fields', links, 'obsFieldsDD' );
           } else {
               menu_string += buildDDCustom('Observation Fields', links, 'obsFieldsDD' ); 
           }
@@ -507,8 +508,8 @@ function buildMenu(fields) {
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 
       if( p_chosen_taxon_id || p_field_value ) {
-          document.getElementById('obsFieldsDD').disabled = true;
-          document.getElementById('obsFieldsDD').title = 'test test';
+          //document.getElementById('obsFieldsDD').disabled = true;
+          document.getElementById('menu_title').title = 'test test';
       }
 }
 
