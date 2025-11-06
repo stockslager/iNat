@@ -146,7 +146,7 @@ if( p_clear_cache === 'yes' ) {
 function buildQueryForm() {
   faddelem('p',document.body,{innerHTML:('<div>' +
                                            '<form action='+github_root+'a.html>' +
-                                              '<label for="ofvDropdown">An ofv datatype is required to limit results to be cached to only those observations that have observation fields.</label>' +
+                                              '<label for="ofvDropdown">OFV datatype:<br></label>' +
                                               '<select id="ofvDropdown" name="ofv_datatype" required>' + 
                                                       '<option value="">-- Choose OFV Datatype --</option>' + 
                                                       '<option value="text,numeric,date,time,datetime,taxon,dna">All</option>' + 
@@ -158,13 +158,15 @@ function buildQueryForm() {
                                                       '<option value="taxon">Taxon</option>' + 
                                                       '<option value="dna">DNA</option>' + 
                                                    '</select><br>' + 
-                                              '<label for="qname"><br>Query parameters are also required to limit the data returned by the query.  (e.g. project_id=1234567&user_id=someuser)<br>' +
-                                                                 'Cache size is limited to '+ max_rows + ' observations at this time.<br>' + 
-                                                                 'This page will accept most parameters from the '+apiref+' API endpoint.</label>' +
+                                              '<label for="qname"><Query parameters:<br></label>' +
                                               '<input type="text" id="qname"    name="query"        placeholder=""><br>' +   
-                                              '<input type="submit" value="Query">' +
+                                              '<input type="submit" value="Query"><br><br>' +
                                            '</form>' +
                                          '</div>')});
+  faddelem('p',document.body,{innerHTML:('An ofv datatype is required to limit results to be cached to only those observations that have observation fields.  ' + 
+                                         'Query parameters are also required to limit the data returned by the query.  (e.g. project_id=1234567&user_id=someuser)  ' +
+                                         'Cache size is limited to '+ max_rows + ' observations at this time.  ' + 
+                                         'This page will accept most parameters from the '+apiref+' API endpoint.')});
 }
 
 function ensureQuestionMark(str) {
