@@ -440,6 +440,9 @@ function buildMenu(fields) {
                    winurlparams.append('obs_fields', fields[i].field_id);
                }
 
+               winurlparams.delete('chosen_datatypes');
+               winurlparams.append('chosen_datatypes', p_chosen_datatypes);
+
                // only show the link in the drop down when the datatype of the obs field matches one
                // of the datatypes in the ofv_datatype parameter (and when it hasn't already been chosen).
                if( ofv_datatype_array.includes( fields[i].ofv_datatype.toLowerCase() ) ) {
@@ -449,7 +452,7 @@ function buildMenu(fields) {
                    } else if( !p_chosen_datatypes ) {
                        winurlparams.delete('chosen_datatypes');
                        winurlparams.append('chosen_datatypes', fields[i].ofv_datatype);
-                   }
+                   } 
 
                    if( !field_array.includes(fields[i].field_id.toString()) ) {
                        links += furl(github_root+'aa.html?'+winurlparams, fields[i].field_name);
