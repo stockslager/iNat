@@ -130,19 +130,6 @@ if( p_obs_fields !== '' ){
     field_array = p_obs_fields.split(",");
 }
 
-// remove the query params since it'll be going against the cache after the initial query
-winurlparams.delete('query');
-//winurlparams.delete('ofv_datatype');
-
-// add history without query and ofv_datatype params since we'll be going against cached data.
-if( p_query ) {
-    const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.delete('query'); 
-    //currentUrl.searchParams.delete('ofv_datatype'); 
-    // add a new history entry (allowing back navigation)
-    window.history.pushState({}, document.title, currentUrl.toString());
-}
-
 let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
@@ -150,6 +137,20 @@ let apirefname = 'iNaturalist Observations';
 let apiref = furl(apirefurl,apirefname);
 let cache_name = window.location.pathname;
 console.log('cache name ~ ' + cache_name);
+
+// remove the query params since it'll be going against the cache after the initial query
+winurlparams.delete('query');
+//winurlparams.delete('ofv_datatype');
+
+// add history without query and ofv_datatype params since we'll be going against cached data.
+if( p_query ) {
+    sessionStorage.setItem( cache_name+'query', p_query );
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.delete('query'); 
+    //currentUrl.searchParams.delete('ofv_datatype'); 
+    // add a new history entry (allowing back navigation)
+    window.history.pushState({}, document.title, currentUrl.toString());
+}
 
 if( p_clear_cache === 'yes' ) {
     winurlparams.delete('clear_cache'); 
@@ -474,9 +475,11 @@ function buildMenu(fields) {
               }
           }
       }
-
+ 
+    sessionStorage.setItem( cache_name+'query', p_query );
       menu_string += buildHome( furl(github_root+'aa.html?clear_cache=yes','Start Over') );
       menu_string += buildHome( furl(github_root+'aa.html?ofv_datatype='+p_ofv_datatype,'Reset') );
+      menu_string += buildHome( furl(github_root+'aa.html?'+winurlparams+'&query='+sessionStorage.getItem(cache_name+'query'), 'Shareable URL' ) );
  
       menu_string += '</div>';
 
