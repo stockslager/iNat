@@ -104,7 +104,7 @@ let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
 let p_project_id  = winurlparams.get('project_id') || '';
 let p_user_id     = winurlparams.get('user_id') || '';
 let p_place_id    = winurlparams.get('place_id') || '';
-let p_taxon_id    = winurlparams.get('taxon_id') || '';
+let p_chosen_taxon_id    = winurlparams.get('chosen_taxon_id') || '';
 let p_operator    = winurlparams.get('operator') || '';
 let p_ofv_datatype = winurlparams.get('ofv_datatype') || 'taxon,text,numeric,date,time,datetime,dna';
 let p_chosen_datatypes = winurlparams.get('chosen_datatypes') || '';
@@ -116,8 +116,12 @@ let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_field        = winurlparams.get('field') || '';
 let p_field_value  = winurlparams.get('field_value') || '';
 let p_clear_cache  = winurlparams.get('clear_cache') || '';
-let p_query        = winurlparams.get('query') || '';
+let p_query        = winurlparams.get('query') || '' ;
 let field_array = [];
+
+if( p_query ) {
+    p_query = encodeURIComponent( p_query );
+}
 
 // together specify the maximum amount of data to be returned by the api
 let per_page  = 100;
@@ -130,19 +134,6 @@ if( p_obs_fields !== '' ){
     field_array = p_obs_fields.split(",");
 }
 
-// remove the query params since it'll be going against the cache after the initial query
-winurlparams.delete('query');
-//winurlparams.delete('ofv_datatype');
-
-// add history without query and ofv_datatype params since we'll be going against cached data.
-if( p_query ) {
-    const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.delete('query'); 
-    //currentUrl.searchParams.delete('ofv_datatype'); 
-    // add a new history entry (allowing back navigation)
-    window.history.pushState({}, document.title, currentUrl.toString());
-}
-
 let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
@@ -151,14 +142,36 @@ let apiref = furl(apirefurl,apirefname);
 let cache_name = window.location.pathname;
 console.log('cache name ~ ' + cache_name);
 
+// remove the query params since it'll be going against the cache after the initial query
+winurlparams.delete('query');
+//winurlparams.delete('ofv_datatype');
+
+// add history without query and ofv_datatype params since we'll be going against cached data.
+if( p_query ) {
+    console.log('encoded query - ' + p_query);
+    sessionStorage.setItem( cache_name+'query', p_query );
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.delete('query'); 
+    //currentUrl.searchParams.delete('ofv_datatype'); 
+    // add a new history entry (allowing back navigation)
+    window.history.pushState({}, document.title, currentUrl.toString());
+}
+
 if( p_clear_cache === 'yes' ) {
     winurlparams.delete('clear_cache'); 
     sessionStorage.removeItem( cache_name );
 }
 
+function buildTitle( name, content, tooltip ) {
+  let dd = '<div id="'+name+'" class="dd_title" style="cursor:pointer;" title="'+tooltip+'">' + content +
+           '</div>';
+
+  return( dd );
+}
+ 
 function buildQueryForm() {
   faddelem('p',document.body,{innerHTML:('<br><div>' +
-                                           '<form action='+github_root+'observation_fields.html>' +
+                                           '<form action='+github_root+'aa.html>' +
                                               '<label for="ofvDropdown">OFV datatype:<br></label>' +
                                               '<select id="ofvDropdown" name="ofv_datatype" required>' + 
                                                       '<option value="">-- Choose OFV Datatype --</option>' + 
@@ -199,7 +212,7 @@ function setParams() {
 
     // if a query was passed in, there's no need to look at the url...
     if( p_query ) {
-        api_params += ensureQuestionMark( p_query+'&ofv_datatype='+p_ofv_datatype );
+        api_params += ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype );
         return api_params;
     }
  
@@ -347,10 +360,8 @@ async function getAllObservations( max_pages, customUserAgent ) {
   const obs_data = new ObservationsData( allObservations, total_results );
 
   // hide the progress bar once the fetching has completed successfully.
-  console.log('***hiding***');
   hideProgressBar();
 
-  console.log('***setting cache***');
   const jsonObj = JSON.stringify( obs_data );
   sessionStorage.setItem( cache_name, jsonObj );
 
@@ -380,6 +391,7 @@ function getAll() {
          console.log('Fetched a total of ' + observations_data.observations.length + ' observations.');
          console.log('First observation:', observations_data.observations[0]);
          fresults(observations_data);
+         faddelem('p',document.body,{innerHTML:( '<br><br><br>Shareable URL...:<br>'+github_root+'aa.html?'+winurlparams+'&query='+sessionStorage.getItem(cache_name+'query') ) } );
       } 
    })();
 };
@@ -440,7 +452,7 @@ function buildMenu(fields) {
                    }
 
                    if( !field_array.includes(fields[i].field_id.toString()) ) {
-                       links += furl(github_root+'observation_fields.html?'+winurlparams, fields[i].field_name);
+                       links += furl(github_root+'aa.html?'+winurlparams, fields[i].field_name);
                    }
                }
           }
@@ -451,8 +463,13 @@ function buildMenu(fields) {
           winurlparams.append('obs_fields', p_obs_fields);
           winurlparams.delete('chosen_datatypes');
           winurlparams.append('chosen_datatypes', p_chosen_datatypes);
-       
-          menu_string += buildDD('Observation Fields', links); 
+
+          // don't add the drop down if a taxon_id or field_value has been chosen.
+          if( p_chosen_taxon_id || p_field_value ) {
+              menu_string += buildTitle( 'obsFieldsTitle', 'Observation Fields', 'Disabled when a taxon or observation field value is in focus.' );
+          } else {
+              menu_string += buildDD('Observation Fields', links ); 
+          }
       }
 
       // if the comma delimited datatype array only has one datatype
@@ -462,21 +479,21 @@ function buildMenu(fields) {
       if( chosen_datatypes_array.length === 1 && field_array.length > 1 ){
           if( p_operator && p_operator === 'merge' ) {
               winurlparams.delete('operator');
-              menu_string += buildMenuURL( furl(github_root+'observation_fields.html?'+winurlparams,'Un-Merge') );
+              menu_string += buildMenuURL( furl(github_root+'aa.html?'+winurlparams,'Un-Merge') );
               winurlparams.append('operator', p_operator);
           } else {
               winurlparams.delete('operator');
               winurlparams.append('operator', 'merge');
-              menu_string += buildMenuURL( furl(github_root+'observation_fields.html?'+winurlparams,'Merge') );
+              menu_string += buildMenuURL( furl(github_root+'aa.html?'+winurlparams,'Merge') );
               winurlparams.delete('operator');
               if( p_operator ) {
                   winurlparams.append('operator', p_operator);
               }
           }
       }
-
-      menu_string += buildHome( furl(github_root+'observation_fields.html?clear_cache=yes','Start Over') );
-      menu_string += buildHome( furl(github_root+'observation_fields.html?ofv_datatype='+p_ofv_datatype,'Reset') );
+ 
+      menu_string += buildHome( furl(github_root+'aa.html?clear_cache=yes','Start Over') );
+      menu_string += buildHome( furl(github_root+'aa.html?ofv_datatype='+p_ofv_datatype,'Reset') );
  
       menu_string += '</div>';
 
@@ -501,9 +518,9 @@ function showRow(rec) {
         }
     }
  
-    if( p_taxon_id ) {
+    if( p_chosen_taxon_id ) {
         const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
-        if( p_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_taxon_id.toString() )  ) {
+        if( p_chosen_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_chosen_taxon_id.toString() )  ) {
             if( p_field_value ) {
                 for( let i=0; i<rec.ofvs.length; i++ ) {
                      if( field_array.includes(rec.ofvs[i].field_id.toString() ) ) {
@@ -578,17 +595,17 @@ function buildRemoveObsFieldURL( box_row, box_array ){
     }
 
     // if they are removing the one whose value was clicked, remove the field_value and field params.
-    if( box_row.field_id === p_field ) {
+    /*if( box_row.field_id === p_field ) {
         winurlparams.delete('field');
         winurlparams.delete('field_value');
-    }
+    }*/
 
     // if a taxon was selected, remove it since we can't tell if the taxon exists for whatever obs fields
     // aren't being removed.
-    winurlparams.delete('taxon_id');
+    winurlparams.delete('chosen_taxon_id');
 
-    if( !p_taxon_id && !p_field && !p_operator ) {
-        remove_url = furl(github_root+'observation_fields.html?'+winurlparams,'&#9447;&nbsp;'+box_row.field_id);
+    if( !p_chosen_taxon_id && !p_field && !p_operator ) {
+        remove_url = furl(github_root+'aa.html?'+winurlparams,'&#9447;&nbsp;'+box_row.field_id);
     } else {
         remove_url = box_row.field_id;
     }
@@ -726,9 +743,9 @@ function fresults(xobj) {
          }
 
          if( tax_id !== '' ) {
-             winurlparams.delete('taxon_id');
-             taxon = furl(github_root+'observation_fields.html?'+winurlparams+'&taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
-             if( p_taxon_id ) { winurlparams.append('taxon_id', p_taxon_id); }
+             winurlparams.delete('chosen_taxon_id');
+             taxon = furl(github_root+'aa.html?'+winurlparams+'&chosen_taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
+             if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
          }
        
          values = [
@@ -816,7 +833,7 @@ function fresults(xobj) {
                                       winurlparams.append('field_value', rec.ofvs[j].value.toLowerCase());
                                       winurlparams.delete('field');
                                       winurlparams.append('field', rec.ofvs[j].field_id);
-                                      values.push({innerHTML:furl(github_root+'observation_fields.html?'+winurlparams, field1)});
+                                      values.push({innerHTML:furl(github_root+'aa.html?'+winurlparams, field1)});
                                       winurlparams.delete('field_value');
                                       winurlparams.delete('field');
                                       if( p_field_value ) { 
