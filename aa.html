@@ -116,7 +116,7 @@ let p_omit_project = winurlparams.get('omit_projects') || '';
 let p_field        = winurlparams.get('field') || '';
 let p_field_value  = winurlparams.get('field_value') || '';
 let p_clear_cache  = winurlparams.get('clear_cache') || '';
-let p_query        = winurlparams.get('query') || '';
+let p_query        = encodeURIComponent( winurlparams.get('query') || '' );
 let field_array = [];
 
 // together specify the maximum amount of data to be returned by the api
@@ -199,7 +199,7 @@ function setParams() {
 
     // if a query was passed in, there's no need to look at the url...
     if( p_query ) {
-        api_params += ensureQuestionMark( p_query+'&ofv_datatype='+p_ofv_datatype );
+        api_params += ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype );
         return api_params;
     }
  
