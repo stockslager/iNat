@@ -140,7 +140,7 @@ if( p_query ) {
     currentUrl.searchParams.delete('query'); 
     currentUrl.searchParams.delete('ofv_datatype'); 
     // add a new history entry (allowing back navigation)
-    window.history.replaceState({}, document.title, currentUrl.toString());
+    window.history.pushState({}, document.title, currentUrl.toString());
 }
 
 let apibase = 'https://api.inaturalist.org/v1/observations';
