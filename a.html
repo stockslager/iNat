@@ -130,6 +130,10 @@ if( p_obs_fields !== '' ){
     field_array = p_obs_fields.split(",");
 }
 
+// remove the params since it'll be going against the cache after the initial query
+winurlparams.delete('query');
+winurlparams.delete('ofv_datatypes');
+
 let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
