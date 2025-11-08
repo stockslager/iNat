@@ -391,8 +391,10 @@ async function getAllObservations( max_pages, customUserAgent ) {
   // hide the progress bar once the fetching has completed successfully.
   hideProgressBar();
 
-  const jsonObj = JSON.stringify( obs_data );
-  sessionStorage.setItem( cache_name, jsonObj );
+  if( total_results > 0 ) {
+      const jsonObj = JSON.stringify( obs_data );
+      sessionStorage.setItem( cache_name, jsonObj );
+  }
 
   return obs_data;
 }
