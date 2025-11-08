@@ -118,7 +118,6 @@ let p_field_value  = winurlparams.get('field_value') || '';
 let p_clear_cache  = winurlparams.get('clear_cache') || '';
 let p_query        = winurlparams.get('query') || '' ;
 let field_array = [];
-let completedRequests = 0;
 
 if( p_query ) {
     p_query = encodeURIComponent( p_query );
@@ -262,9 +261,6 @@ async function rateLimitedFetch(url, customUserAgent) {
       throw new Error('API returned status code: ' + response.status );
     }
 
-    completedRequests++;
-    updateProgress(completedRequests, max_pages);
-    
     // Apply a delay before the next request to stay within the rate limit.
     // iNaturalist recommends about 1 request per second.
     await delay(1000);
@@ -309,6 +305,7 @@ async function getAllObservations( max_pages, customUserAgent ) {
   const allObservations = [];
   let total_results = '';
   let api_params = '';
+  let completedRequests = 0;
 
   if( winurlsearchstr==='' || p_query === '' || p_ofv_datatype === '' ) {
       buildQueryForm();
@@ -345,13 +342,17 @@ async function getAllObservations( max_pages, customUserAgent ) {
       }
 
       if( total_results >= max_rows ) {
+          hideProgressBar();
           let message = [ {innerText:'Total results returned from query is greater than the maximum allowed of ' + max_rows + 
                                      '.  The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
                                      'Please add additional parameters that further reduce the number of results to be returned.  '}, ];
           faddelems('p',document.body,message);
           return;
       }
-     
+
+      completedRequests++;
+      updateProgress(completedRequests, max_pages);
+    
       for( let i=0; i<data.results.length; i++ ) {
            const obs = new Observation( data.results[i] );
            allObservations.push( obs );
