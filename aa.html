@@ -333,11 +333,13 @@ async function getAllObservations( max_pages, customUserAgent ) {
     try {
       const data = await rateLimitedFetch(apiurl, customUserAgent);
 
-      completedRequests++;
-      updateProgress(completedRequests, max_pages);
-     
       console.log('data... ' + data);
-      total_results = data.total_results;
+      total_results     = data.total_results;
+      let calc_page_max = Math.ceil(total_results/per_page);
+
+      if( page === 1 && calc_page_max <= max_pages ) {
+          max_pages = calc_page_max;
+      }
 
       if( total_results >= max_rows ) {
           let message = [ {innerText:'Total results returned from query is greater than the maximum allowed of ' + max_rows + 
@@ -345,8 +347,11 @@ async function getAllObservations( max_pages, customUserAgent ) {
                                      'Please add additional parameters that further reduce the number of results to be returned.  '}, ];
           faddelems('p',document.body,message);
           return;
-       }
-
+      }
+     
+      completedRequests++;
+      updateProgress(completedRequests, max_pages);
+     
       for( let i=0; i<data.results.length; i++ ) {
            const obs = new Observation( data.results[i] );
            allObservations.push( obs );
