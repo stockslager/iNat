@@ -262,8 +262,8 @@ async function rateLimitedFetch(url, customUserAgent) {
           hideProgressBar();
           const errorBody = await response.json(); 
           const errorMessage = errorBody.errors?.[0]?.message || JSON.stringify(errorBody);
-          let message = [ {innerHTML:'<span id="error">&#9888; ' + 
-                                     '<br>' + errorMessage +  
+          let message = [ {innerHTML:'<span id="error">&#9888; <b>' + response.status + '</b>' + 
+                                     '<br><b>' + errorMessage.error + '</b>' +   
                                      '<br>A parameter unknown to the system was specified in the query parameters. ' + 
                                      '<br>Please adjust the parameter mentioned above. &nbsp;&nbsp;' + furl(github_root+'aa.html', 'return') + '</span>'}, ];
           faddelems('p',document.body,message);
