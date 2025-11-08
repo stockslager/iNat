@@ -261,9 +261,9 @@ async function rateLimitedFetch(url, customUserAgent) {
     if( response.status === 422 ) {
           hideProgressBar();
           let message = [ {innerHTML:'<span id="error">&#9888; ' + 
-                                     '<br>' + response.error +  
+                                     '<br>' + response.toString() +  
                                      '<br>A parameter unknown to the system was specified in the query parameters. ' + 
-                                     '<br><br>Please adjust the parameter mentioned above.  ' + furl(github_root+'aa.html', 'return') + '</span>'}, ];
+                                     '<br>Please adjust the parameter mentioned above. &nbsp;&nbsp;' + furl(github_root+'aa.html', 'return') + '</span>'}, ];
           faddelems('p',document.body,message);
     }
     
