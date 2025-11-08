@@ -257,6 +257,15 @@ async function rateLimitedFetch(url, customUserAgent) {
       await delay(60000); // Wait 60 seconds
       return rateLimitedFetch(url, customUserAgent); // Retry the request
     }
+
+    if( response.status === 422 ) {
+          hideProgressBar();
+          let message = [ {innerHTML:'<span id="error">&#9888; ' + 
+                                     '<br>' + response.error +  
+                                     '<br>A parameter unknown to the system was specified in the query parameters. ' + 
+                                     '<br><br>Please adjust the parameter mentioned above.  ' + furl(github_root+'aa.html', 'return') + '</span>'}, ];
+          faddelems('p',document.body,message);
+    }
     
     if (!response.ok) {
       throw new Error('API returned status code: ' + response.status );
@@ -349,7 +358,7 @@ async function getAllObservations( max_pages, customUserAgent ) {
                                      '<br>No observations were found for the observation field datatype(s) and query specified.... ' + 
                                      '<br><br>Query: ' + p_query + 
                                      '<br>Observation Field Datatypes: ' + p_ofv_datatypes + 
-                                     '<br><br>Please adjust the parameters that result in observations being found.  ' + furl(github_root+'aa.html', 'return') + '</span>'}, ];
+                                     '<br><br>Please adjust the parameters such that observations are found.  ' + furl(github_root+'aa.html', 'return') + '</span>'}, ];
           faddelems('p',document.body,message);
           return;
       }
