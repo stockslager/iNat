@@ -342,6 +342,18 @@ async function getAllObservations( max_pages, customUserAgent ) {
           max_pages = calc_page_max;
       }
 
+      if( total_results === 0 ) {
+          hideProgressBar();
+          let message = [ {innerHTML:'<span id="error">&#9888; ' + 
+                                     '<br>No results found for query.' + 
+                                     '<br>No observations were found for the observation field datatype(s) and query specified.... ' + 
+                                     '<br><br>Query: ' + p_query + 
+                                     '<br>Observation Field Datatypes: ' + p_ofv_datatypes + 
+                                     '<br><br>Please adjust the parameters that result in observations being found.  ' + furl(github_root+'aa.html', 'return') + '</span>'}, ];
+          faddelems('p',document.body,message);
+          return;
+      }
+   
       if( total_results >= max_rows ) {
           hideProgressBar();
           let message = [ {innerHTML:'<span id="error">&#9888; ' + 
