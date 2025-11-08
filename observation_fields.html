@@ -19,6 +19,7 @@
 
 <style>
    #menu_title { /*padding-top:1px;*/ font-size:16px; }
+   #error { margin-left:15px; margin-bottom: 10px; margin-top:50px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 8px; padding-bottom: 8px; padding-left: 8px; padding-right: 8px; }
    #dltest { max-height:76px; overflow-y:auto; /* overflow: scroll; */margin-left:15px; float:right; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; margin-bottom: 10px; white-space:nowrap; }
    #itable { float:right; width:fit-content; display: inline-table; justify-content:start; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }   
    #key { color:var(--color-text); text-decoration:underline; font: 16px Sans-Serif; padding:0; padding-right: 25px; }
@@ -125,8 +126,8 @@ if( p_query ) {
 
 // together specify the maximum amount of data to be returned by the api
 let per_page  = 100;
-let max_pages = 2;
-let max_rows  = 1000;
+let max_pages = 5;
+let max_rows  = 500;
 
 let api_params = '';
 
@@ -171,7 +172,7 @@ function buildTitle( name, content, tooltip ) {
  
 function buildQueryForm() {
   faddelem('p',document.body,{innerHTML:('<br><div>' +
-                                           '<form action='+github_root+'observation_fields.html>' +
+                                           '<form action='+github_root+'aa.html>' +
                                               '<label for="ofvDropdown">OFV datatype:<br></label>' +
                                               '<select id="ofvDropdown" name="ofv_datatype" required>' + 
                                                       '<option value="">-- Choose OFV Datatype --</option>' + 
@@ -260,7 +261,7 @@ async function rateLimitedFetch(url, customUserAgent) {
     if (!response.ok) {
       throw new Error('API returned status code: ' + response.status );
     }
-    
+
     // Apply a delay before the next request to stay within the rate limit.
     // iNaturalist recommends about 1 request per second.
     await delay(1000);
@@ -305,6 +306,7 @@ async function getAllObservations( max_pages, customUserAgent ) {
   const allObservations = [];
   let total_results = '';
   let api_params = '';
+  let completedRequests = 0;
 
   if( winurlsearchstr==='' || p_query === '' || p_ofv_datatype === '' ) {
       buildQueryForm();
@@ -319,7 +321,6 @@ async function getAllObservations( max_pages, customUserAgent ) {
   const progressBar = document.getElementById('progressBar');
   const progressText = document.getElementById('progressText');
   let statusElem = document.getElementById('status');
-  let completedRequests = 0;
 
   statusElem.textContent = "Status: Fetching in progress...";  let isFetching = false;
  
@@ -333,20 +334,27 @@ async function getAllObservations( max_pages, customUserAgent ) {
     try {
       const data = await rateLimitedFetch(apiurl, customUserAgent);
 
-      completedRequests++;
-      updateProgress(completedRequests, max_pages);
-     
       console.log('data... ' + data);
-      total_results = data.total_results;
+      total_results     = data.total_results;
+      let calc_page_max = Math.ceil(total_results/per_page);
+
+      if( page === 1 && calc_page_max <= max_pages ) {
+          max_pages = calc_page_max;
+      }
 
       if( total_results >= max_rows ) {
-          let message = [ {innerText:'Total results returned from query is greater than the maximum allowed of ' + max_rows + 
-                                     '.  The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
-                                     'Please add additional parameters that further reduce the number of results to be returned.  '}, ];
+          hideProgressBar();
+          let message = [ {innerHTML:'<span id="error">&#9888; ' + 
+                                     '<br>Total results returned from query is greater than the maximum allowed of ' + max_rows + '.' + 
+                                     '<br>The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
+                                     '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(github_root+'aa.html', 'return') + '</span>'}, ];
           faddelems('p',document.body,message);
           return;
-       }
+      }
 
+      completedRequests++;
+      updateProgress(completedRequests, max_pages);
+    
       for( let i=0; i<data.results.length; i++ ) {
            const obs = new Observation( data.results[i] );
            allObservations.push( obs );
@@ -391,7 +399,7 @@ function getAll() {
          console.log('Fetched a total of ' + observations_data.observations.length + ' observations.');
          console.log('First observation:', observations_data.observations[0]);
          fresults(observations_data);
-         faddelem('p',document.body,{innerHTML:( '<br><br><br>Shareable URL...:<br>'+github_root+'observation_fields.html?'+winurlparams+'&query='+sessionStorage.getItem(cache_name+'query') ) } );
+         faddelem('p',document.body,{innerHTML:( '<br><br><br>Shareable URL...:<br>'+github_root+'aa.html?'+winurlparams+'&query='+sessionStorage.getItem(cache_name+'query') ) } );
       } 
    })();
 };
@@ -455,7 +463,7 @@ function buildMenu(fields) {
                    } 
 
                    if( !field_array.includes(fields[i].field_id.toString()) ) {
-                       links += furl(github_root+'observation_fields.html?'+winurlparams, fields[i].field_name);
+                       links += furl(github_root+'aa.html?'+winurlparams, fields[i].field_name);
                    }
                }
           }
@@ -482,12 +490,12 @@ function buildMenu(fields) {
       if( chosen_datatypes_array.length === 1 && field_array.length > 1 ){
           if( p_operator && p_operator === 'merge' ) {
               winurlparams.delete('operator');
-              menu_string += buildMenuURL( furl(github_root+'observation_fields.html?'+winurlparams,'Un-Merge') );
+              menu_string += buildMenuURL( furl(github_root+'aa.html?'+winurlparams,'Un-Merge') );
               winurlparams.append('operator', p_operator);
           } else {
               winurlparams.delete('operator');
               winurlparams.append('operator', 'merge');
-              menu_string += buildMenuURL( furl(github_root+'observation_fields.html?'+winurlparams,'Merge') );
+              menu_string += buildMenuURL( furl(github_root+'aa.html?'+winurlparams,'Merge') );
               winurlparams.delete('operator');
               if( p_operator ) {
                   winurlparams.append('operator', p_operator);
@@ -495,8 +503,8 @@ function buildMenu(fields) {
           }
       }
  
-      menu_string += buildHome( furl(github_root+'observation_fields.html?clear_cache=yes','Start Over') );
-      menu_string += buildHome( furl(github_root+'observation_fields.html?ofv_datatype='+p_ofv_datatype,'Reset') );
+      menu_string += buildHome( furl(github_root+'aa.html?clear_cache=yes','Start Over') );
+      menu_string += buildHome( furl(github_root+'aa.html?ofv_datatype='+p_ofv_datatype,'Reset') );
  
       menu_string += '</div>';
 
@@ -608,7 +616,7 @@ function buildRemoveObsFieldURL( box_row, box_array ){
     winurlparams.delete('chosen_taxon_id');
 
     if( !p_chosen_taxon_id && !p_field && !p_operator ) {
-        remove_url = furl(github_root+'observation_fields.html?'+winurlparams,'&#9447;&nbsp;'+box_row.field_id);
+        remove_url = furl(github_root+'aa.html?'+winurlparams,'&#9447;&nbsp;'+box_row.field_id);
     } else {
         remove_url = box_row.field_id;
     }
@@ -747,7 +755,7 @@ function fresults(xobj) {
 
          if( tax_id !== '' ) {
              winurlparams.delete('chosen_taxon_id');
-             taxon = furl(github_root+'observation_fields.html?'+winurlparams+'&chosen_taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
+             taxon = furl(github_root+'aa.html?'+winurlparams+'&chosen_taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
              if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
          }
        
@@ -836,7 +844,7 @@ function fresults(xobj) {
                                       winurlparams.append('field_value', rec.ofvs[j].value.toLowerCase());
                                       winurlparams.delete('field');
                                       winurlparams.append('field', rec.ofvs[j].field_id);
-                                      values.push({innerHTML:furl(github_root+'observation_fields.html?'+winurlparams, field1)});
+                                      values.push({innerHTML:furl(github_root+'aa.html?'+winurlparams, field1)});
                                       winurlparams.delete('field_value');
                                       winurlparams.delete('field');
                                       if( p_field_value ) { 
