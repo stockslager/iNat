@@ -172,7 +172,7 @@ function buildTitle( name, content, tooltip ) {
  
 function buildQueryForm() {
   faddelem('p',document.body,{innerHTML:('<br><div>' +
-                                           '<form action='+github_root+'aa.html>' +
+                                           '<form action='+github_root+'observation_fields.html>' +
                                               '<label for="ofvDropdown">OFV datatype:<br></label>' +
                                               '<select id="ofvDropdown" name="ofv_datatype" required>' + 
                                                       '<option value="">-- Choose OFV Datatype --</option>' + 
@@ -347,7 +347,7 @@ async function getAllObservations( max_pages, customUserAgent ) {
           let message = [ {innerHTML:'<span id="error">&#9888; ' + 
                                      '<br>Total results returned from query is greater than the maximum allowed of ' + max_rows + '.' + 
                                      '<br>The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
-                                     '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(github_root+'aa.html', 'return') + '</span>'}, ];
+                                     '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(github_root+'observation_fields.html', 'return') + '</span>'}, ];
           faddelems('p',document.body,message);
           return;
       }
@@ -399,7 +399,7 @@ function getAll() {
          console.log('Fetched a total of ' + observations_data.observations.length + ' observations.');
          console.log('First observation:', observations_data.observations[0]);
          fresults(observations_data);
-         faddelem('p',document.body,{innerHTML:( '<br><br><br>Shareable URL...:<br>'+github_root+'aa.html?'+winurlparams+'&query='+sessionStorage.getItem(cache_name+'query') ) } );
+         faddelem('p',document.body,{innerHTML:( '<br><br><br>Shareable URL...:<br>'+github_root+'observation_fields.html?'+winurlparams+'&query='+sessionStorage.getItem(cache_name+'query') ) } );
       } 
    })();
 };
@@ -463,7 +463,7 @@ function buildMenu(fields) {
                    } 
 
                    if( !field_array.includes(fields[i].field_id.toString()) ) {
-                       links += furl(github_root+'aa.html?'+winurlparams, fields[i].field_name);
+                       links += furl(github_root+'observation_fields.html?'+winurlparams, fields[i].field_name);
                    }
                }
           }
@@ -490,12 +490,12 @@ function buildMenu(fields) {
       if( chosen_datatypes_array.length === 1 && field_array.length > 1 ){
           if( p_operator && p_operator === 'merge' ) {
               winurlparams.delete('operator');
-              menu_string += buildMenuURL( furl(github_root+'aa.html?'+winurlparams,'Un-Merge') );
+              menu_string += buildMenuURL( furl(github_root+'observation_fields.html?'+winurlparams,'Un-Merge') );
               winurlparams.append('operator', p_operator);
           } else {
               winurlparams.delete('operator');
               winurlparams.append('operator', 'merge');
-              menu_string += buildMenuURL( furl(github_root+'aa.html?'+winurlparams,'Merge') );
+              menu_string += buildMenuURL( furl(github_root+'observation_fields.html?'+winurlparams,'Merge') );
               winurlparams.delete('operator');
               if( p_operator ) {
                   winurlparams.append('operator', p_operator);
@@ -503,8 +503,8 @@ function buildMenu(fields) {
           }
       }
  
-      menu_string += buildHome( furl(github_root+'aa.html?clear_cache=yes','Start Over') );
-      menu_string += buildHome( furl(github_root+'aa.html?ofv_datatype='+p_ofv_datatype,'Reset') );
+      menu_string += buildHome( furl(github_root+'observation_fields.html?clear_cache=yes','Start Over') );
+      menu_string += buildHome( furl(github_root+'observation_fields.html?ofv_datatype='+p_ofv_datatype,'Reset') );
  
       menu_string += '</div>';
 
@@ -616,7 +616,7 @@ function buildRemoveObsFieldURL( box_row, box_array ){
     winurlparams.delete('chosen_taxon_id');
 
     if( !p_chosen_taxon_id && !p_field && !p_operator ) {
-        remove_url = furl(github_root+'aa.html?'+winurlparams,'&#9447;&nbsp;'+box_row.field_id);
+        remove_url = furl(github_root+'observation_fields.html?'+winurlparams,'&#9447;&nbsp;'+box_row.field_id);
     } else {
         remove_url = box_row.field_id;
     }
@@ -755,7 +755,7 @@ function fresults(xobj) {
 
          if( tax_id !== '' ) {
              winurlparams.delete('chosen_taxon_id');
-             taxon = furl(github_root+'aa.html?'+winurlparams+'&chosen_taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
+             taxon = furl(github_root+'observation_fields.html?'+winurlparams+'&chosen_taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
              if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
          }
        
@@ -844,7 +844,7 @@ function fresults(xobj) {
                                       winurlparams.append('field_value', rec.ofvs[j].value.toLowerCase());
                                       winurlparams.delete('field');
                                       winurlparams.append('field', rec.ofvs[j].field_id);
-                                      values.push({innerHTML:furl(github_root+'aa.html?'+winurlparams, field1)});
+                                      values.push({innerHTML:furl(github_root+'observation_fields.html?'+winurlparams, field1)});
                                       winurlparams.delete('field_value');
                                       winurlparams.delete('field');
                                       if( p_field_value ) { 
