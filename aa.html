@@ -344,9 +344,10 @@ async function getAllObservations( max_pages, customUserAgent ) {
 
       if( total_results >= max_rows ) {
           hideProgressBar();
-          let message = [ {innerHTML:'<span id="error">&#9888; Total results returned from query is greater than the maximum allowed of ' + max_rows + 
-                                     '.  The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
-                                     'Please add additional parameters that further reduce the number of results to be returned.  </span>'}, ];
+          let message = [ {innerHTML:'<span id="error">&#9888; ' + 
+                                     '<br>Total results returned from query is greater than the maximum allowed of ' + max_rows + '.' + 
+                                     '<br>The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
+                                     '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(github_root+'aa.html', 'return') + '</span>'}, ];
           faddelems('p',document.body,message);
           return;
       }
