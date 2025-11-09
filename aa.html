@@ -431,32 +431,29 @@ function getAll() {
 
 getAll();
 
-async function estimateSessionStorageSpace() {
-  if ("storage" in navigator && "estimate" in navigator.storage) {
+async function checkStorageEstimate() {
+  if (navigator.storage && navigator.storage.estimate) {
     try {
-      const { usage, quota } = await navigator.storage.estimate();
+      const estimate = await navigator.storage.estimate();
+      console.log(`Estimated usage: ${estimate.usage} bytes`);
+      console.log(`Estimated quota: ${estimate.quota} bytes`);
 
-      // Note: The 'usage' and 'quota' values from navigator.storage.estimate()
-      // represent the total storage used and available to the origin,
-      // including IndexedDB and Cache API, not just sessionStorage.
-      // However, it provides a good indication of the overall limits.
+      const percentageUsed = ((estimate.usage / estimate.quota) * 100).toFixed(2);
+      console.log(`Storage used: ${percentageUsed}%`);
 
-      const availableSpaceInBytes = quota - usage;
-      const availableSpaceInMB = availableSpaceInBytes / (1024 * 1024);
-
-      console.log(`Using ${usage} out of ${quota} bytes for the origin.`);
-      console.log(`You have approximately ${availableSpaceInMB.toFixed(2)} megabytes available for the origin.`);
-      console.log(`You have approximately ${availableSpaceInBytes} bytes available for the origin.`);
+      if (estimate.usageDetails) {
+        console.log("Usage details:", estimate.usageDetails);
+      }
     } catch (error) {
-      console.error("Error estimating storage space:", error);
+      console.error("Error estimating storage:", error);
     }
   } else {
-    console.log("StorageManager API not supported in this browser.");
+    console.warn("StorageManager.estimate() not supported in this browser.");
   }
 }
 
-estimateSessionStorageSpace();
-
+checkStorageEstimate();
+ 
 function isMultipleOfFour(num) {
   return num % 4 === 0;
 }
