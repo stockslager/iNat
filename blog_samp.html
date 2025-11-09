@@ -37,23 +37,16 @@ console.log('hostname ~ ' + window.location.hostname);
 
 // append return_to to the end of outlinks
 document.addEventListener('DOMContentLoaded', function() {
-    // Only target links within a specific widget container if possible, e.g., '.custom-outlink-widget'
-    const widgetContainer = document.querySelector('.custom-outlink-widget');
- console.log('one');
-    if (widgetContainer) {
- console.log('two');
-        const links = widgetContainer.querySelectorAll('a');
-        links.forEach(link => {
- console.log('three');
-            // Check if the link is external
-            if (link.hostname !== window.location.hostname) {
- console.log('four');
-                const currentUrl = encodeURIComponent(window.location.href);
-                const separator = link.href.includes('?') ? '&' : '?';
-                link.href += separator + 'returnurl=' + currentUrl;
-            }
-        });
+  var pageUrl = encodeURIComponent(window.location.href); // URL to be passed as the value
+
+  document.querySelectorAll('a').forEach(function(anchor) {
+    // This example targets links that do NOT point to the same domain
+    // You can change this condition to target all links or specific ones
+    if (anchor.href && anchor.hostname !== window.location.hostname) {
+      const separator = anchor.href.includes('?') ? '&' : '?';
+      anchor.href = `${anchor.href}${separator}returnto=${pageUrl}`;
     }
+  });
 });
  
 </script>
