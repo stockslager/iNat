@@ -118,6 +118,7 @@ let p_field        = winurlparams.get('field') || '';
 let p_field_value  = winurlparams.get('field_value') || '';
 let p_clear_cache  = winurlparams.get('clear_cache') || '';
 let p_query        = winurlparams.get('query') || '' ;
+let p_return_to    = winurlparams.get('returnto') || '';
 let field_array = [];
 
 if( p_query ) {
@@ -168,37 +169,6 @@ function buildTitle( name, content, tooltip ) {
            '</div>';
 
   return( dd );
-}
- 
-function buildQueryForm() {
-  faddelem('p',document.body,{innerHTML:('<br><div>' +
-                                           '<form action='+github_root+'observation_fields/blog_view.html>' +
-                                              '<label for="ofvDropdown">OFV datatype:<br></label>' +
-                                              '<select id="ofvDropdown" name="ofv_datatype" required>' + 
-                                                      '<option value="">-- Choose OFV Datatype --</option>' + 
-                                                      '<option value="text,numeric,date,time,datetime,taxon,dna">All</option>' + 
-                                                      '<option value="text">Text</option>' + 
-                                                      '<option value="numeric">Numeric</option>' + 
-                                                      '<option value="date">Date</option>' + 
-                                                      '<option value="time">Time</option>' + 
-                                                      '<option value="datetime">Datetime</option>' + 
-                                                      '<option value="taxon">Taxon</option>' + 
-                                                      '<option value="dna">DNA</option>' + 
-                                                   '</select><br><br>' + 
-                                              '<label for="qname">Query parameters:<br></label>' +
-                                              '<input type="text" id="qname"    name="query"        placeholder=""><br><br>' +   
-                                              '<input type="submit" value="Query"><br><br><br>' +
-                                           '</form>' +
-                                         '</div>')});
-
-  const dd = document.getElementById('ofvDropdown');
-  // Set the width of the dropdown to 250 pixels
-  dd.style.width = '250px';
- 
-  faddelem('p',document.body,{innerHTML:('An ofv datatype is required to limit results to be cached to only those observations that have observation fields.  ' + 
-                                         'Query parameters are also required to limit the data returned by the query.  (e.g. project_id=1234567&user_id=someuser)  ' +
-                                         'Cache size is limited to '+ max_rows + ' observations at this time.  ' + 
-                                         'This page will accept most parameters from the '+apiref+' API endpoint.')});
 }
 
 function ensureQuestionMark(str) {
@@ -320,7 +290,6 @@ async function getAllObservations( max_pages, customUserAgent ) {
   let completedRequests = 0;
 
   if( winurlsearchstr==='' || p_query === '' || p_ofv_datatype === '' ) {
-      buildQueryForm();
       return;
   } else {
       api_params = setParams();
@@ -424,7 +393,6 @@ function getAll() {
          console.log('Fetched a total of ' + observations_data.observations.length + ' observations.');
          console.log('First observation:', observations_data.observations[0]);
          fresults(observations_data);
-         faddelem('p',document.body,{innerHTML:( '<br><br><br>Shareable URL...:<br>'+github_root+'observation_fields/blog_view.html?'+winurlparams+'&query='+sessionStorage.getItem(cache_name+'query') ) } );
       } 
    })();
 };
@@ -452,31 +420,8 @@ async function checkStorageEstimate() {
   }
 }
 
-function getSessionStorageObjectSize(key) {
-  const item = sessionStorage.getItem(key);
-  if (item === null) {
-    return 0; // Object not found in sessionStorage
-  }
-
-  // Calculate the size in bytes (assuming UTF-8 encoding, where each character is 1 byte for ASCII, and more for other characters)
-  // For a more accurate byte count with non-ASCII characters, consider using TextEncoder
-  const sizeInBytes = new TextEncoder().encode(item).length; 
-  return sizeInBytes;
-}
-
-const objectSize = getSessionStorageObjectSize(cache_name);
-console.log(`Size of 'observations cached' in sessionStorage: ${objectSize} bytes`);
-
 checkStorageEstimate();
  
-function isMultipleOfFour(num) {
-  return num % 4 === 0;
-}
-
-function isMultipleOfThree(num) {
-  return num % 3 === 0;
-}
-
 function boxRow(field_id, field_name, ofv_datatype) {
     this.field_id     = field_id;
     this.field_name   = field_name;
@@ -501,73 +446,10 @@ function buildMenu(fields) {
  
       menu_string = '<div class="navbar">';
 
-      if( fields && fields.length > 0 ) {
-          for( let i=0; i<fields.length; i++ ) {
-               if( p_obs_fields ) {
-                   winurlparams.delete('obs_fields');
-                   winurlparams.append('obs_fields', (p_obs_fields+','+fields[i].field_id));
-               } else {
-                   winurlparams.delete('obs_fields');
-                   winurlparams.append('obs_fields', fields[i].field_id);
-               }
+      // don't add the drop down if a taxon_id or field_value has been chosen.
+      menu_string += buildDDTitle( 'Observation Fields' );
 
-               winurlparams.delete('chosen_datatypes');
-               winurlparams.append('chosen_datatypes', p_chosen_datatypes);
-
-               // only show the link in the drop down when the datatype of the obs field matches one
-               // of the datatypes in the ofv_datatype parameter (and when it hasn't already been chosen).
-               if( ofv_datatype_array.includes( fields[i].ofv_datatype.toLowerCase() ) ) {
-                   if( p_chosen_datatypes && !chosen_datatypes_array.includes(fields[i].ofv_datatype) ) {
-                       winurlparams.delete('chosen_datatypes');
-                       winurlparams.append('chosen_datatypes', p_chosen_datatypes+','+fields[i].ofv_datatype);
-                   } else if( !p_chosen_datatypes ) {
-                       winurlparams.delete('chosen_datatypes');
-                       winurlparams.append('chosen_datatypes', fields[i].ofv_datatype);
-                   } 
-
-                   if( !field_array.includes(fields[i].field_id.toString()) ) {
-                       links += furl(github_root+'observation_fields/blog_view.html?'+winurlparams, fields[i].field_name);
-                   }
-               }
-          }
-
-          // when finished loading the drop-down set the obs_fields and chosen_datatypes back to what was
-          // initially passed in, otherwise the last one will show up in the obs_field param for every link.
-          winurlparams.delete('obs_fields');
-          winurlparams.append('obs_fields', p_obs_fields);
-          winurlparams.delete('chosen_datatypes');
-          winurlparams.append('chosen_datatypes', p_chosen_datatypes);
-
-          // don't add the drop down if a taxon_id or field_value has been chosen.
-          if( p_chosen_taxon_id || p_field_value ) {
-              menu_string += buildTitle( 'obsFieldsTitle', 'Observation Fields', 'Disabled when a taxon or observation field value is in focus.' );
-          } else {
-              menu_string += buildDD('Observation Fields', links ); 
-          }
-      }
-
-      // if the comma delimited datatype array only has one datatype
-      // and there is more than one observation field specified,
-      // the observation fields can be merged since they're of the same type.
-      // should they be merged?  well, maybe.  that's up to the user.
-      if( chosen_datatypes_array.length === 1 && field_array.length > 1 ){
-          if( p_operator && p_operator === 'merge' ) {
-              winurlparams.delete('operator');
-              menu_string += buildMenuURL( furl(github_root+'observation_fields/blog_view.html?'+winurlparams,'Un-Merge') );
-              winurlparams.append('operator', p_operator);
-          } else {
-              winurlparams.delete('operator');
-              winurlparams.append('operator', 'merge');
-              menu_string += buildMenuURL( furl(github_root+'observation_fields/blog_view.html?'+winurlparams,'Merge') );
-              winurlparams.delete('operator');
-              if( p_operator ) {
-                  winurlparams.append('operator', p_operator);
-              }
-          }
-      }
- 
-      menu_string += buildHome( furl(github_root+'observation_fields/blog_view.html?clear_cache=yes','Start Over') );
-      menu_string += buildHome( furl(github_root+'observation_fields/blog_view.html?ofv_datatype='+p_ofv_datatype,'Reset') );
+      menu_string += buildHome( furl(p_return_to,'Return') );
  
       menu_string += '</div>';
 
@@ -668,21 +550,11 @@ function buildRemoveObsFieldURL( box_row, box_array ){
         }
     }
 
-    // if they are removing the one whose value was clicked, remove the field_value and field params.
-    /*if( box_row.field_id === p_field ) {
-        winurlparams.delete('field');
-        winurlparams.delete('field_value');
-    }*/
-
     // if a taxon was selected, remove it since we can't tell if the taxon exists for whatever obs fields
     // aren't being removed.
     winurlparams.delete('chosen_taxon_id');
 
-    if( !p_chosen_taxon_id && !p_field && !p_operator ) {
-        remove_url = furl(github_root+'observation_fields/blog_view.html?'+winurlparams,'&#9447;&nbsp;'+box_row.field_id);
-    } else {
-        remove_url = box_row.field_id;
-    }
+    remove_url = box_row.field_id;
 
     // build the url, and set the winurlparams back to what it was before.
     winurlparams.delete('obs_fields');
