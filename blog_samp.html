@@ -39,11 +39,15 @@ console.log('hostname ~ ' + window.location.hostname);
 document.addEventListener('DOMContentLoaded', function() {
     // Only target links within a specific widget container if possible, e.g., '.custom-outlink-widget'
     const widgetContainer = document.querySelector('.custom-outlink-widget');
+ console.log('one');
     if (widgetContainer) {
+ console.log('two');
         const links = widgetContainer.querySelectorAll('a');
         links.forEach(link => {
+ console.log('three');
             // Check if the link is external
             if (link.hostname !== window.location.hostname) {
+ console.log('four');
                 const currentUrl = encodeURIComponent(window.location.href);
                 const separator = link.href.includes('?') ? '&' : '?';
                 link.href += separator + 'returnurl=' + currentUrl;
