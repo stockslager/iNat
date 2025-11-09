@@ -1,0 +1,54 @@
+<!DOCTYPE html>      
+<html lang="en">       
+ 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Blog Sample" />
+<link rel="icon" type="image/png" href="/iNat/plant-icon-96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/iNat/plant-icon-96.svg" />
+<link rel="shortcut icon" href="/iNat/plant-club.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/iNat/plant-icon-192.png" />
+<meta name="apple-mobile-web-app-title" content="Blog Sample" />
+<link rel="manifest" href="/iNat/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css" href="/iNat/seed_library.css" />
+<script type="text/javascript" src='/iNat/common_func.js'> </script>
+<script type="text/javascript" src='/iNat/js/plant_params_v10.js'> </script>  
+<title>Blog Sample</title>
+</head>
+
+<style>
+   #menu_title { /*padding-top:1px;*/ font-size:16px; }
+   #error { margin-left:15px; margin-bottom: 10px; margin-top:50px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 8px; padding-bottom: 8px; padding-left: 8px; padding-right: 8px; }
+   #main { width:100%; }
+   p { width:100%; }
+</style>
+<body>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
+
+faddelem('p',document.body,{innerHTML:'<span id="error">hello i\'m a blog<br><br>' + 
+                                      furl(github_root+'aa.html', 'sample link with return_to appended') + '</span>'});
+
+console.log('hostname ~ ' + window.location.hostname);
+
+// append return_to to the end of outlinks
+document.addEventListener('DOMContentLoaded', function() {
+  var pageUrl = encodeURIComponent(window.location.href); 
+
+  document.querySelectorAll('a').forEach(function(anchor) {
+    // targets links that point to stockslager github repo
+    if (anchor.href.includes('stockslager') || anchor.hostname.includes('stockslager') ) {
+      const separator = anchor.href.includes('?') ? '&' : '?';
+      anchor.href = `${anchor.href}${separator}returnto=${pageUrl}`;
+    }
+  });
+});
+ 
+</script>
+</body>
+
+</html>
