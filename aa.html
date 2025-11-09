@@ -431,19 +431,30 @@ function getAll() {
 
 getAll();
 
-const usedCapacity = calculateUsedCapacityBytes();
-console.log(`Used capacity of localStorage: ${usedCapacity} bytes`);
-console.log(`Used capacity of localStorage: ${(usedCapacity / 1024).toFixed(2)} KB`);
+async function estimateSessionStorageSpace() {
+  if ("storage" in navigator && "estimate" in navigator.storage) {
+    try {
+      const { usage, quota } = await navigator.storage.estimate();
 
-function calculateUsedCapacityBytes() {
-  let totalBytes = 0;
-  for( let i = 0; i < localStorage.length; i++ ) {
-       const key = localStorage.key(i);
-       const value = localStorage.getItem(key);
-       totalBytes += (key.length * 2) + (value.length * 2); // Assuming 2 bytes per character
+      // Note: The 'usage' and 'quota' values from navigator.storage.estimate()
+      // represent the total storage used and available to the origin,
+      // including IndexedDB and Cache API, not just sessionStorage.
+      // However, it provides a good indication of the overall limits.
+
+      const availableSpaceInBytes = quota - usage;
+      const availableSpaceInMB = availableSpaceInBytes / (1024 * 1024);
+
+      console.log(`Using ${usage} out of ${quota} bytes for the origin.`);
+      console.log(`You have approximately ${availableSpaceInMB.toFixed(2)} megabytes available for the origin.`);
+    } catch (error) {
+      console.error("Error estimating storage space:", error);
+    }
+  } else {
+    console.log("StorageManager API not supported in this browser.");
   }
-  return totalBytes;
 }
+
+estimateSessionStorageSpace();
 
 function isMultipleOfFour(num) {
   return num % 4 === 0;
