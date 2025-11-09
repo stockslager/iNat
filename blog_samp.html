@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // You can change this condition to target all links or specific ones
     console.log('href ' + anchor.href);
     console.log('hostname ' + anchor.hostname);
-    if (anchor.href.startsWith('stockslager') && anchor.hostname.startsWith('stockslager') ) {
+    if (anchor.href.includes('stockslager') || anchor.hostname.includes('stockslager' ) {
       const separator = anchor.href.includes('?') ? '&' : '?';
       anchor.href = `${anchor.href}${separator}returnto=${pageUrl}`;
     }
