@@ -430,7 +430,21 @@ function getAll() {
 };
 
 getAll();
-  
+
+const usedCapacity = calculateUsedCapacityBytes();
+console.log(`Used capacity of localStorage: ${usedCapacity} bytes`);
+console.log(`Used capacity of localStorage: ${(usedCapacity / 1024).toFixed(2)} KB`);
+
+function calculateUsedCapacityBytes() {
+  let totalBytes = 0;
+  for( let i = 0; i < localStorage.length; i++ ) {
+       const key = localStorage.key(i);
+       const value = localStorage.getItem(key);
+       totalBytes += (key.length * 2) + (value.length * 2); // Assuming 2 bytes per character
+  }
+  return totalBytes;
+}
+
 function isMultipleOfFour(num) {
   return num % 4 === 0;
 }
