@@ -42,6 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('a').forEach(function(anchor) {
     // This example targets links that do NOT point to the same domain
     // You can change this condition to target all links or specific ones
+    console.log('href ' + anchor.href);
+    console.log('hostname ' + anchor.hostname);
     if (anchor.href.startsWith('stockslager') && anchor.hostname.startsWith('stockslager') ) {
       const separator = anchor.href.includes('?') ? '&' : '?';
       anchor.href = `${anchor.href}${separator}returnto=${pageUrl}`;
