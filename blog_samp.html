@@ -13,7 +13,7 @@
 <link rel="manifest" href="plant_club.webmanifest" />
 <link rel="stylesheet" type="text/css" href="seed_library.css" />
 <script type="text/javascript" src='common_func.js'> </script>
-<title>Observation Field Viewer</title>
+<title>Blog Sample</title>
 </head>
 
 <style>
@@ -29,8 +29,28 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
 
-faddelem('p',document.body,{innerHTML:'<span id="error">hello i\'m a blog</span>'});
+faddelem('p',document.body,{innerHTML:'<span id="error">hello i\'m a blog<br><br>' + 
+                                      furl(github_root+'aa.html', 'sample link with return_to appended') + '</span>'});
 
+console.log('hostname ~ ' + window.location.hostname);
+
+// append return_to to the end of outlinks
+document.addEventListener('DOMContentLoaded', function() {
+    // Only target links within a specific widget container if possible, e.g., '.custom-outlink-widget'
+    const widgetContainer = document.querySelector('.custom-outlink-widget');
+    if (widgetContainer) {
+        const links = widgetContainer.querySelectorAll('a');
+        links.forEach(link => {
+            // Check if the link is external
+            if (link.hostname !== window.location.hostname) {
+                const currentUrl = encodeURIComponent(window.location.href);
+                const separator = link.href.includes('?') ? '&' : '?';
+                link.href += separator + 'returnurl=' + currentUrl;
+            }
+        });
+    }
+});
+ 
 </script>
 </body>
 
