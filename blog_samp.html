@@ -37,13 +37,10 @@ console.log('hostname ~ ' + window.location.hostname);
 
 // append return_to to the end of outlinks
 document.addEventListener('DOMContentLoaded', function() {
-  var pageUrl = encodeURIComponent(window.location.href); // URL to be passed as the value
+  var pageUrl = encodeURIComponent(window.location.href); 
 
   document.querySelectorAll('a').forEach(function(anchor) {
-    // This example targets links that do NOT point to the same domain
-    // You can change this condition to target all links or specific ones
-    console.log('href ' + anchor.href);
-    console.log('hostname ' + anchor.hostname);
+    // targets links that point to stockslager github repo
     if (anchor.href.includes('stockslager') || anchor.hostname.includes('stockslager') ) {
       const separator = anchor.href.includes('?') ? '&' : '?';
       anchor.href = `${anchor.href}${separator}returnto=${pageUrl}`;
