@@ -125,12 +125,13 @@ async function getAllObservations( max_pages, customUserAgent ) {
    
       if( total_results >= max_rows ) {
           hideProgressBar();
-          let message = [ {innerHTML:'<span id="error">&#9888; ' + 
-                                     '<br>Total results returned from query is greater than the maximum allowed of ' + max_rows + '.' + 
-                                     '<br>The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
-                                     '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(window.location.pathname, 'return') + '</span>'}, ];
-          faddelems('p',document.body,message);
-          return;
+          let message = '<span id="error">&#9888; ' + 
+                        '<br>Total results returned from query is greater than the maximum allowed of ' + max_rows + '.' + 
+                        '<br>The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
+                        '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(window.location.pathname, 'return') + '</span>';
+          throw( new Error(message) );
+          //faddelems('p',document.body,message);
+          //return;
       }
 
       completedRequests++;
@@ -164,26 +165,29 @@ async function getAllObservations( max_pages, customUserAgent ) {
 function getAll() {
 
    (async () => {
-      const customUserAgent = 'ObsFieldViewer/0.1 (@stockslager)'; 
-      let observations_data = '';
+      try {
+         const customUserAgent = 'ObsFieldViewer/0.1 (@stockslager)'; 
+         let observations_data = '';
 
-      //const cache_str    = sessionStorage.getItem( apibase+api_params );
-      const cache_str    = sessionStorage.getItem( cache_name );
+         const cache_str    = sessionStorage.getItem( cache_name );
 
-      if( cache_str ) {
-          observations_data = JSON.parse(cache_str); 
-          console.log('found cached observations... ' );
-          console.log('First observation:', observations_data.observations[0]);
-      } else {
-          observations_data = await getAllObservations( max_pages, customUserAgent );
-      }
+         if( cache_str ) {
+             observations_data = JSON.parse(cache_str); 
+             console.log('found cached observations... ' );
+             console.log('First observation:', observations_data.observations[0]);
+         } else {
+             observations_data = await getAllObservations( max_pages, customUserAgent );
+         }
     
-      // Process observations
-      if( observations_data && observations_data.observations.length > 0 ) {
-         console.log('Fetched a total of ' + observations_data.observations.length + ' observations.');
-         console.log('First observation:', observations_data.observations[0]);
-         fresults(observations_data);
-      } 
+         // Process observations
+         if( observations_data && observations_data.observations.length > 0 ) {
+            console.log('Fetched a total of ' + observations_data.observations.length + ' observations.');
+            console.log('First observation:', observations_data.observations[0]);
+            fresults(observations_data);
+         }
+      } catch (error) {
+         throw error;
+      }
    })();
   
 };
