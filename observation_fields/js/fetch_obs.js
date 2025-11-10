@@ -23,7 +23,7 @@ async function rateLimitedFetch(url, customUserAgent) {
           let message = [ {innerHTML:'<span id="error">&#9888; <b>' + response.status + '</b>' + 
                                      '<br><b>' + errorMessage.toLowerCase() + '</b>' +   
                                      '<br>A parameter unknown to the system was specified in the query parameters. ' + 
-                                     '<br>Please adjust the parameter mentioned above. &nbsp;&nbsp;' + furl(github_root+'observation_fields/blog_view.html', 'return') + '</span>'}, ];
+                                     '<br>Please adjust the parameter mentioned above. &nbsp;&nbsp;' + furl(window.location.pathname, 'return') + '</span>'}, ];
           faddelems('p',document.body,message);
     }
     
