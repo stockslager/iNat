@@ -20,11 +20,11 @@ async function rateLimitedFetch(url, customUserAgent) {
           hideProgressBar();
           const errorBody = await response.json(); 
           const errorMessage = errorBody.errors?.[0]?.message || JSON.stringify(errorBody);
-          let message = [ {innerHTML:'<span id="error">&#9888; <b>' + response.status + '</b>' + 
-                                     '<br><b>' + errorMessage.toLowerCase() + '</b>' +   
-                                     '<br>A parameter unknown to the system was specified in the query parameters. ' + 
-                                     '<br>Please adjust the parameter mentioned above. &nbsp;&nbsp;' + furl(window.location.pathname, 'return') + '</span>'}, ];
-          faddelems('p',document.body,message);
+          let message = '<span id="error">&#9888; <b>' + response.status + '</b>' + 
+                        '<br><b>' + errorMessage.toLowerCase() + '</b>' +   
+                        '<br>A parameter unknown to the system was specified in the query parameters. ' + 
+                        '<br>Please adjust the parameter mentioned above. &nbsp;&nbsp;' + furl(window.location.pathname, 'return') + '</span>';
+          throw new Error(message);
     }
     
     if (!response.ok) {
@@ -113,14 +113,13 @@ async function getAllObservations( max_pages, customUserAgent ) {
 
       if( total_results === 0 ) {
           hideProgressBar();
-          let message = [ {innerHTML:'<span id="error">&#9888; ' + 
-                                     '<br>No results found for query.' + 
-                                     '<br>No observations were found for the observation field datatype(s) and query specified.... ' + 
-                                     '<br><br>Query: ' + p_query + 
-                                     '<br>Observation Field Datatypes: ' + p_ofv_datatype + 
-                                     '<br><br>Please adjust the parameters such that observations are found.  ' + furl(window.location.pathname, 'return') + '</span>'}, ];
-          faddelems('p',document.body,message);
-          return;
+          let message = '<span id="error">&#9888; ' + 
+                        '<br>No results found for query.' + 
+                        '<br>No observations were found for the observation field datatype(s) and query specified.... ' + 
+                        '<br><br>Query: ' + p_query + 
+                        '<br>Observation Field Datatypes: ' + p_ofv_datatype + 
+                        '<br><br>Please adjust the parameters such that observations are found.  ' + furl(window.location.pathname, 'return') + '</span>';
+          throw( new Error(message) );
       }
    
       if( total_results >= max_rows ) {
@@ -130,8 +129,6 @@ async function getAllObservations( max_pages, customUserAgent ) {
                         '<br>The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
                         '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(window.location.pathname, 'return') + '</span>';
           throw( new Error(message) );
-          //faddelems('p',document.body,message);
-          //return;
       }
 
       completedRequests++;
@@ -142,14 +139,9 @@ async function getAllObservations( max_pages, customUserAgent ) {
            allObservations.push( obs );
       }
     } catch (error) {
-      console.log('th1');
       throw error;
-      //console.error('Failed to fetch page ' + page + '. Stopping.', error);
-      //break; // Exit the loop on failure
     }
   }
-
-  console.log('asdfsd');
 
   const obs_data = new ObservationsData( allObservations, total_results );
 
