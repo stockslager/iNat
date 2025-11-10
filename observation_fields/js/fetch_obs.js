@@ -70,7 +70,7 @@ function hideProgressBar() {
 }
 
 // Function to fetch multiple pages of observations sequentially
-async function getAllObservations( max_pages, customUserAgent ) {
+async function getAllObservations( max_pages, customUserAgent, obs_data ) {
   const allObservations = [];
   let total_results = '';
   let api_params = '';
@@ -79,7 +79,7 @@ async function getAllObservations( max_pages, customUserAgent ) {
   if( winurlsearchstr==='' || p_query === '' || p_ofv_datatype === '' ) {
       return;
   } else {
-      api_params = setParams();
+      api_params = obs_data.api_params;
       buildProgressBar();
   }
 
@@ -151,7 +151,7 @@ async function getAllObservations( max_pages, customUserAgent ) {
   return obs_data;
 }
 
-async function getAll() {
+async function getAll(obs_data) {
 
    return (async () => {
       try {
@@ -165,7 +165,7 @@ async function getAll() {
              console.log('found cached observations... ' );
              console.log('First observation:', observations_data.observations[0]);
          } else {
-             observations_data = await getAllObservations( max_pages, customUserAgent );
+             observations_data = await getAllObservations( max_pages, customUserAgent, obs_data );
          }
     
          // Process observations
