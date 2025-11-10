@@ -163,8 +163,6 @@ async function getAllObservations( max_pages, customUserAgent ) {
 
 function getAll() {
 
-  try {
-  
    (async () => {
       const customUserAgent = 'ObsFieldViewer/0.1 (@stockslager)'; 
       let observations_data = '';
