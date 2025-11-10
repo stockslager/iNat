@@ -118,7 +118,7 @@ async function getAllObservations( max_pages, customUserAgent ) {
                                      '<br>No observations were found for the observation field datatype(s) and query specified.... ' + 
                                      '<br><br>Query: ' + p_query + 
                                      '<br>Observation Field Datatypes: ' + p_ofv_datatype + 
-                                     '<br><br>Please adjust the parameters such that observations are found.  ' + furl(github_root+'observation_fields/blog_view.html', 'return') + '</span>'}, ];
+                                     '<br><br>Please adjust the parameters such that observations are found.  ' + furl(window.location.pathname, 'return') + '</span>'}, ];
           faddelems('p',document.body,message);
           return;
       }
@@ -128,7 +128,7 @@ async function getAllObservations( max_pages, customUserAgent ) {
           let message = [ {innerHTML:'<span id="error">&#9888; ' + 
                                      '<br>Total results returned from query is greater than the maximum allowed of ' + max_rows + '.' + 
                                      '<br>The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
-                                     '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(github_root+'observation_fields/blog_view.html', 'return') + '</span>'}, ];
+                                     '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(window.location.pathname, 'return') + '</span>'}, ];
           faddelems('p',document.body,message);
           return;
       }
