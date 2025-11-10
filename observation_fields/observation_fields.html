@@ -245,13 +245,15 @@ function checkForCache() {
       }
 }
 
-try {
-   getAll();
-} catch ( error ) {
-   console.log('got it');
-   faddelem('p',document.body,{innerHTML:(error.message)});  
-}
-
+(async () => {
+  try {
+    await getAll(); // Await the async function call
+  } catch (error) {
+    faddelem('p',document.body,{innerHTML:(error.message)});  
+    console.error("Caught error from getAll():", error.message);
+  }
+})();
+ 
 checkForCache();
   
 function boxRow(field_id, field_name, ofv_datatype) {
