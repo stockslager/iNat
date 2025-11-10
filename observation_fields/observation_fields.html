@@ -129,8 +129,6 @@ let per_page  = 200;
 let max_pages = 5;
 let max_rows  = 1000;
 
-let api_params = '';
-
 if( p_obs_fields !== '' ){
     field_array = p_obs_fields.split(",");
 }
@@ -245,9 +243,12 @@ function checkForCache() {
       }
 }
 
+let api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype );
+let obs_data = new ObservationsData( '', '', api_params );
+
 (async () => {
   try {
-    await getAll(); // Await the async function call
+    await getAll(obs_data); // Await the async function call
   } catch (error) {
     hideProgressBar();
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + error.message + '</span>')});  
