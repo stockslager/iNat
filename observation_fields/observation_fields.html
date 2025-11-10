@@ -118,6 +118,7 @@ let p_field        = winurlparams.get('field') || '';
 let p_field_value  = winurlparams.get('field_value') || '';
 let p_clear_cache  = winurlparams.get('clear_cache') || '';
 let p_query        = winurlparams.get('query') || '' ;
+let obs_data = '';
 let field_array = [];
 
 if( p_query ) {
@@ -211,20 +212,37 @@ function checkForCache() {
       }
 }
 
-let api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype );
-let obs_data = new ObservationsData( '', '', api_params );
+function getObs() {
+  let api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype );
+  obs_data = new ObservationsData( '', '', api_params );
 
-(async () => {
-  try {
-    await getAll(obs_data); // Await the async function call
-  } catch (error) {
-    hideProgressBar();
-    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + error.message + '</span>')});  
-  }
-})();
+  (async () => {
+    try {
+      await getAll(obs_data); // Await the async function call
+    } catch (error) {
+      hideProgressBar();
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + error.message + '</span>')});  
+    }
+  })();
+}
+
+const cache_str    = sessionStorage.getItem( cache_name );
+
+if( cache_str ) {
+    obs_data = JSON.parse(cache_str); 
+    console.log('found cached observations... ' );
+    console.log('First observation:', observations_data.observations[0]);
+} else {
+    getObs();
+    if( !p_query ) { buildQueryForm(); }
+}
+
+if( obs_data && obs_data.observations.length > 0 ) {
+    console.log('Fetched a total of ' + obs_data.observations.length + ' observations.');
+    console.log('First observation:', obs_data.observations[0]);
+    fresults(obs_data);
+}
  
-checkForCache();
-  
 function boxRow(field_id, field_name, ofv_datatype) {
     this.field_id     = field_id;
     this.field_name   = field_name;
