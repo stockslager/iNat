@@ -166,6 +166,7 @@ async function getAll(obs_data) {
              console.log('First observation:', observations_data.observations[0]);
          } else {*/
              /*observations_data =*/ await getAllObservations( customUserAgent, obs_data );
+             console.log('first obs - ' + obs_data.observations[0]);
          //}
     
          // Process observations
