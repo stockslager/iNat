@@ -2,9 +2,9 @@ class ObservationsData {
   
   constructor(all_obs, total_results, api_params) {
      this.api_params             = api_params;
-     this.total_results          = total_results;
+     this.total_results          = 0;
        
-     this.observations = all_obs;
+     this.observations = [];
   }  
 }
 
