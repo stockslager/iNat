@@ -413,14 +413,16 @@ async function reportCacheSize(key) {
   await getSessionStorageObjectSize(cache_name);
 
   const item = sessionStorage.getItem(key);
-  if( item === null ) {
-     console.log(`Size of 'Cache Size: 0 bytes`);
+ 
+  if( item ) {
+      // Calculate the size in bytes (assuming UTF-8 encoding, where each character is 1 byte for ASCII, and more for other characters)
+      // For a more accurate byte count with non-ASCII characters, consider using TextEncoder
+      const sizeInBytes = new TextEncoder().encode(item).length; 
+      console.log(`Size of 'Cache Size: ${sizeInBytes} bytes`);
+  } else {
+      console.log(`Size of 'Cache Size: 0 bytes`);
   }
 
-  // Calculate the size in bytes (assuming UTF-8 encoding, where each character is 1 byte for ASCII, and more for other characters)
-  // For a more accurate byte count with non-ASCII characters, consider using TextEncoder
-  const sizeInBytes = new TextEncoder().encode(item).length; 
-  console.log(`Size of 'Cache Size: ${sizeInBytes} bytes`);
 }
 
 reportCacheSize();
