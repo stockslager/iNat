@@ -142,8 +142,10 @@ async function getAllObservations( max_pages, customUserAgent ) {
            allObservations.push( obs );
       }
     } catch (error) {
-      console.error('Failed to fetch page ' + page + '. Stopping.', error);
-      break; // Exit the loop on failure
+      console.log('th1');
+      throw error;
+      //console.error('Failed to fetch page ' + page + '. Stopping.', error);
+      //break; // Exit the loop on failure
     }
   }
 
