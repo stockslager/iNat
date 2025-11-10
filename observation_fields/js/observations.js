@@ -1,6 +1,7 @@
 class ObservationsData {
   
-  constructor(all_obs, total_results) {
+  constructor(all_obs, total_results, api_params) {
+     this.api_params             = api_params;
      this.total_results          = total_results;
        
      this.observations = all_obs;
