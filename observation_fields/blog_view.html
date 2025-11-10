@@ -126,13 +126,6 @@ if( p_query ) {
     p_query = encodeURIComponent( p_query );
 }
 
-// together specify the maximum amount of data to be returned by the api
-let per_page  = 200;
-let max_pages = 5;
-let max_rows  = 1000;
-
-let api_params = '';
-
 if( p_obs_fields !== '' ){
     field_array = p_obs_fields.split(",");
 }
@@ -180,33 +173,6 @@ function ensureQuestionMark(str) {
   }
 }
  
-function setParams() {
-
-    // if a query was passed in, there's no need to look at the url...
-    if( p_query ) {
-        api_params += ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype );
-        return api_params;
-    }
- 
-    // script requires a project_id or a user_id.
-    if( p_project_id ) {
-        api_params += '?project_id=' + p_project_id;
-        if( p_user_id ) {
-            api_params += '&user_id=' + p_user_id;
-        }
-    } else {
-        api_params += '?user_id=' + p_user_id;
-    }
- 
-    if( p_place_id )     { api_params += '&place_id='       + p_place_id;     }
-    if( p_omit_users )   { api_params += '&not_user_id='    + p_omit_users;   }
-    if( p_omit_id )      { api_params += '&not_id='         + p_omit_id;      }
-    if( p_omit_project ) { api_params += '&not_in_project=' + p_omit_project; } 
-    if( p_ofv_datatype ) { api_params += '&ofv_datatype='   + p_ofv_datatype; }
-
-    return( api_params );
-} 
-
 function checkForCache() {
 
       const cache_str    = sessionStorage.getItem( cache_name );
@@ -223,8 +189,18 @@ function checkForCache() {
       }
 }
 
-getAll();
+let api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype );
+let obs_data = new ObservationsData( '', '', api_params );
 
+(async () => {
+  try {
+    await getAll(obs_data); // Await the async function call
+  } catch (error) {
+    hideProgressBar();
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + error.message + '</span>')});  
+  }
+})();
+ 
 checkForCache();
 
 async function getSessionStorageObjectSize() {
