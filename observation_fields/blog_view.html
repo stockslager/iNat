@@ -399,7 +399,7 @@ function getAll() {
 
 getAll();
 
-async function getSessionStorageObjectSize(key) {
+async function getSessionStorageObjectSize() {
 
   try {
       const estimate = await navigator.storage.estimate();
@@ -408,7 +408,12 @@ async function getSessionStorageObjectSize(key) {
       console.error("Error estimating storage:", error);
     }
   } 
- 
+}
+
+async function reportCacheSize(key) {
+  const objectSize = await getSessionStorageObjectSize(cache_name);
+  console.log(`Size of 'Cache Size: ${objectSize} bytes`);
+
   const item = sessionStorage.getItem(key);
   if (item === null) {
     return 0; // Object not found in sessionStorage
@@ -418,11 +423,6 @@ async function getSessionStorageObjectSize(key) {
   // For a more accurate byte count with non-ASCII characters, consider using TextEncoder
   const sizeInBytes = new TextEncoder().encode(item).length; 
   return sizeInBytes;
-}
-
-async function reportCacheSize() {
-  const objectSize = await getSessionStorageObjectSize(cache_name);
-  console.log(`Size of 'Cache Size: ${objectSize} bytes`);
 }
 
 reportCacheSize();
