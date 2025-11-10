@@ -131,7 +131,7 @@ async function getAllObservations( max_pages, customUserAgent, obs_data ) {
     
       for( let i=0; i<data.results.length; i++ ) {
            const obs = new Observation( data.results[i] );
-           allObservations.push( obs );
+           obs_data.observations.push( obs );
       }
     } catch (error) {
       throw error;
