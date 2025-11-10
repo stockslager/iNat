@@ -245,7 +245,12 @@ function checkForCache() {
       }
 }
 
-getAll();
+try {
+   getAll();
+} catch ( error ) {
+   console.log('got it');
+   faddelem('p',document.body,{innerHTML:(error.message)});  
+}
 
 checkForCache();
   
