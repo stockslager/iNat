@@ -23,7 +23,7 @@ async function rateLimitedFetch(url, customUserAgent) {
           let message = '<b>' + response.status + '</b>' + 
                         '<br><b>' + errorMessage.toLowerCase() + '</b>' +   
                         '<br>A parameter unknown to the system was specified in the query parameters. ' + 
-                        '<br>Please adjust the parameter mentioned above. &nbsp;&nbsp;' + furl(window.location.pathname, 'return') + '</span>';
+                        '<br>Please adjust the parameter mentioned above. &nbsp;&nbsp;' + furl(window.location.pathname, 'return');
           throw new Error(message);
     }
     
@@ -117,7 +117,7 @@ async function getAllObservations( max_pages, customUserAgent ) {
                         '<br>No observations were found for the observation field datatype(s) and query specified.... ' + 
                         '<br><br>Query: ' + p_query + 
                         '<br>Observation Field Datatypes: ' + p_ofv_datatype + 
-                        '<br><br>Please adjust the parameters such that observations are found.  ' + furl(window.location.pathname, 'return') + '</span>';
+                        '<br><br>Please adjust the parameters such that observations are found.  ' + furl(window.location.pathname, 'return');
           throw( new Error(message) );
       }
    
@@ -125,7 +125,7 @@ async function getAllObservations( max_pages, customUserAgent ) {
           hideProgressBar();
           let message = '<br>Total results returned from query is greater than the maximum allowed of ' + max_rows + '.' + 
                         '<br>The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
-                        '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(window.location.pathname, 'return') + '</span>';
+                        '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(window.location.pathname, 'return');
           throw( new Error(message) );
       }
 
