@@ -20,7 +20,7 @@ async function rateLimitedFetch(url, customUserAgent) {
           hideProgressBar();
           const errorBody = await response.json(); 
           const errorMessage = errorBody.errors?.[0]?.message || JSON.stringify(errorBody);
-          let message = '<span id="error">&#9888; <b>' + response.status + '</b>' + 
+          let message = '<b>' + response.status + '</b>' + 
                         '<br><b>' + errorMessage.toLowerCase() + '</b>' +   
                         '<br>A parameter unknown to the system was specified in the query parameters. ' + 
                         '<br>Please adjust the parameter mentioned above. &nbsp;&nbsp;' + furl(window.location.pathname, 'return') + '</span>';
@@ -113,8 +113,7 @@ async function getAllObservations( max_pages, customUserAgent ) {
 
       if( total_results === 0 ) {
           hideProgressBar();
-          let message = '<span id="error">&#9888; ' + 
-                        '<br>No results found for query.' + 
+          let message = '<br>No results found for query.' + 
                         '<br>No observations were found for the observation field datatype(s) and query specified.... ' + 
                         '<br><br>Query: ' + p_query + 
                         '<br>Observation Field Datatypes: ' + p_ofv_datatype + 
@@ -124,8 +123,7 @@ async function getAllObservations( max_pages, customUserAgent ) {
    
       if( total_results >= max_rows ) {
           hideProgressBar();
-          let message = '<span id="error">&#9888; ' + 
-                        '<br>Total results returned from query is greater than the maximum allowed of ' + max_rows + '.' + 
+          let message = '<br>Total results returned from query is greater than the maximum allowed of ' + max_rows + '.' + 
                         '<br>The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
                         '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(window.location.pathname, 'return') + '</span>';
           throw( new Error(message) );
@@ -180,7 +178,6 @@ async function getAll() {
             fresults(observations_data);
          }
       } catch (error) {
-         console.log('hello');
          throw error;
       }
    })();
