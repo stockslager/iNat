@@ -290,12 +290,21 @@ async function getAllObservations( max_pages, customUserAgent ) {
   let completedRequests = 0;
 
   if( winurlsearchstr==='' || p_query === '' || p_ofv_datatype === '' ) {
+      let returnto = ''; 
+      if( p_return_to ) { returnto = '<br>Return to ' + furl(p_return_to, p_return_to); }
+   
+      let message = [ {innerHTML:'<span id="error">&#9888;' + 
+                                 '<br>No observations stored in cache. ' + 
+                                 '<br>This page requires a cache of data to be assembled upon entry, but no cache has been found.' + 
+                                 returnto + '</span>'}, ];
+      faddelems('p',document.body,message);
       return;
   } else {
       api_params = setParams();
       buildProgressBar();
   }
-  
+
+  console.log('Starting API calls...');
   console.log('Fetching a total of ' + max_pages + ' pages...');
 
   const progressBar = document.getElementById('progressBar');
@@ -384,7 +393,6 @@ function getAll() {
           console.log('found cached observations... ' );
           console.log('First observation:', observations_data.observations[0]);
       } else {
-          console.log('Starting API calls...');
           observations_data = await getAllObservations( max_pages, customUserAgent );
       }
     
@@ -418,9 +426,9 @@ async function reportCacheSize(key) {
       // Calculate the size in bytes (assuming UTF-8 encoding, where each character is 1 byte for ASCII, and more for other characters)
       // For a more accurate byte count with non-ASCII characters, consider using TextEncoder
       const sizeInBytes = new TextEncoder().encode(item).length; 
-      console.log(`Size of 'Cache Size: ${sizeInBytes} bytes`);
+      console.log('Cache Size: ' + sizeInBytes + ' bytes');
   } else {
-      console.log(`Size of 'Cache Size: 0 bytes`);
+      console.log('Cache Size: 0 bytes');
   }
 
 }
