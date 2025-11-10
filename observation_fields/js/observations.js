@@ -28,7 +28,6 @@ class Observation {
              } 
          }  
      }
-     console.log('Obs const...');
        
      if( rec.photos && rec.photos.length>0 ) {
          this.photos_url = rec.photos[0].url || '';
