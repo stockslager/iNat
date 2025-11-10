@@ -178,7 +178,11 @@ function getAll() {
           console.log('found cached observations... ' );
           console.log('First observation:', observations_data.observations[0]);
       } else {
-          observations_data = await getAllObservations( max_pages, customUserAgent );
+          try {
+              observations_data = await getAllObservations( max_pages, customUserAgent );
+          } catch (error) {
+              throw error;
+          }
       }
     
       // Process observations
