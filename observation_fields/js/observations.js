@@ -2,6 +2,9 @@ class ObservationsData {
   
   constructor(all_obs, total_results, api_params) {
      this.api_params             = api_params;
+     this.per_page               = 200;
+     this.max_pages              = 5;
+     this.max_rows               = 1000;
      this.total_results          = 0;
        
      this.observations = [];
