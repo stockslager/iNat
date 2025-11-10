@@ -70,7 +70,7 @@ function hideProgressBar() {
 }
 
 // Function to fetch multiple pages of observations sequentially
-async function getAllObservations( max_pages, customUserAgent, obs_data ) {
+async function getAllObservations( customUserAgent, obs_data ) {
   const allObservations = [];
   let total_results = '';
   let api_params = '';
@@ -84,7 +84,7 @@ async function getAllObservations( max_pages, customUserAgent, obs_data ) {
   }
 
   console.log('Starting API calls...');
-  console.log('Fetching a total of ' + max_pages + ' pages...');
+  console.log('Fetching a total of ' + obs_data.max_pages + ' pages...');
 
   const progressBar = document.getElementById('progressBar');
   const progressText = document.getElementById('progressText');
@@ -92,22 +92,22 @@ async function getAllObservations( max_pages, customUserAgent, obs_data ) {
 
   statusElem.textContent = "Status: Fetching in progress...";  let isFetching = false;
  
-  for (let page = 1; page <= max_pages; page++) {
-    let pg = '&per_page='+per_page+'&page='+page;
+  for (let page = 1; page <= obs_data.max_pages; page++) {
+    let pg = '&per_page='+obs_data.per_page+'&page='+page;
     const apiurl  = apibase+api_params+pg;
 
     console.log('apiurl ' + apiurl );
-    console.log('Fetching page ' + page + ' of ' + max_pages + '...');
+    console.log('Fetching page ' + page + ' of ' + obs_data.max_pages + '...');
     
     try {
       const data = await rateLimitedFetch(apiurl, customUserAgent);
 
       console.log('data... ' + data);
       total_results     = data.total_results;
-      let calc_page_max = Math.ceil(total_results/per_page);
+      let calc_page_max = Math.ceil(total_results/obs_data.per_page);
 
-      if( page === 1 && calc_page_max <= max_pages ) {
-          max_pages = calc_page_max;
+      if( page === 1 && calc_page_max <= obs_data.max_pages ) {
+          obs_data.max_pages = calc_page_max;
       }
 
       if( total_results === 0 ) {
@@ -119,15 +119,15 @@ async function getAllObservations( max_pages, customUserAgent, obs_data ) {
           throw( new Error(message) );
       }
    
-      if( total_results >= max_rows ) {
-          let message = '<br>Total results returned from query is greater than the maximum allowed of ' + max_rows + '.' + 
+      if( total_results >= obs_data.max_rows ) {
+          let message = '<br>Total results returned from query is greater than the maximum allowed of ' + obs_data.max_rows + '.' + 
                         '<br>The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
                         '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(window.location.pathname, 'return');
           throw( new Error(message) );
       }
 
       completedRequests++;
-      updateProgress(completedRequests, max_pages);
+      updateProgress(completedRequests, obs_data.max_pages);
     
       for( let i=0; i<data.results.length; i++ ) {
            const obs = new Observation( data.results[i] );
@@ -165,7 +165,7 @@ async function getAll(obs_data) {
              console.log('found cached observations... ' );
              console.log('First observation:', observations_data.observations[0]);
          } else {
-             observations_data = await getAllObservations( max_pages, customUserAgent, obs_data );
+             observations_data = await getAllObservations( customUserAgent, obs_data );
          }
     
          // Process observations
