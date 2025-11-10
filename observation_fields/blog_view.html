@@ -407,9 +407,7 @@ async function getSessionStorageObjectSize(key) {
     } catch (error) {
       console.error("Error estimating storage:", error);
     }
-  } else {
-    console.warn("StorageManager.estimate() not supported in this browser.");
-  }
+  } 
  
   const item = sessionStorage.getItem(key);
   if (item === null) {
