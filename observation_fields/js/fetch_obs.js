@@ -164,7 +164,7 @@ async function getAllObservations( max_pages, customUserAgent ) {
   return obs_data;
 }
 
-function getAll() {
+async function getAll() {
 
    (async () => {
       try {
