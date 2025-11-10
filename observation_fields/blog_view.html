@@ -421,6 +421,21 @@ async function checkStorageEstimate() {
 }
 
 checkStorageEstimate();
+
+function getSessionStorageObjectSize(key) {
+  const item = sessionStorage.getItem(key);
+  if (item === null) {
+    return 0; // Object not found in sessionStorage
+  }
+
+  // Calculate the size in bytes (assuming UTF-8 encoding, where each character is 1 byte for ASCII, and more for other characters)
+  // For a more accurate byte count with non-ASCII characters, consider using TextEncoder
+  const sizeInBytes = new TextEncoder().encode(item).length; 
+  return sizeInBytes;
+}
+
+const objectSize = getSessionStorageObjectSize(cache_name);
+console.log(`Size of 'observations cached' in sessionStorage: ${objectSize} bytes`);
  
 function boxRow(field_id, field_name, ofv_datatype) {
     this.field_id     = field_id;
