@@ -165,7 +165,9 @@ async function getAllObservations( max_pages, customUserAgent ) {
 }
 
 function getAll() {
- 
+
+  try {
+  
    (async () => {
       const customUserAgent = 'ObsFieldViewer/0.1 (@stockslager)'; 
       let observations_data = '';
@@ -178,11 +180,7 @@ function getAll() {
           console.log('found cached observations... ' );
           console.log('First observation:', observations_data.observations[0]);
       } else {
-          try {
-              observations_data = await getAllObservations( max_pages, customUserAgent );
-          } catch (error) {
-              throw error;
-          }
+          observations_data = await getAllObservations( max_pages, customUserAgent );
       }
     
       // Process observations
@@ -192,4 +190,8 @@ function getAll() {
          fresults(observations_data);
       } 
    })();
+  } catch ( error ) {
+      console.log('twoa');
+      throw error;
+  }
 };
