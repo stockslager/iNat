@@ -186,6 +186,16 @@ function checkForCache() {
                                      '<br>This page requires a cache of data to be assembled upon entry, but no cache has been found.' + 
                                      returnto + '</span>'}, ];
           faddelems('p',document.body,message);
+      } else {
+          if( obs_data && obs_data.observations.length > 0 ) {
+              console.log('Fetched a total of ' + obs_data.observations.length + ' observations.');
+              console.log('First observation:', obs_data.observations[0]);
+              fresults(obs_data);
+          } else {
+              let message = [ {innerHTML:'<span id="error">&#9888;' + 
+                                         '<br>No results found. </span>'}, ];
+              faddelems('p',document.body,message);
+          }
       }
 }
 
@@ -195,14 +205,13 @@ let obs_data = new ObservationsData( '', '', api_params );
 (async () => {
   try {
     await getAll(obs_data); // Await the async function call
+    checkForCache();
   } catch (error) {
     hideProgressBar();
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + error.message + '</span>')});  
   }
 })();
  
-checkForCache();
-
 async function getSessionStorageObjectSize() {
 
   try {
