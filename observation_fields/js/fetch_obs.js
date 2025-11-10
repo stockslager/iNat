@@ -119,10 +119,8 @@ async function getAllObservations( max_pages, customUserAgent ) {
                                      '<br><br>Query: ' + p_query + 
                                      '<br>Observation Field Datatypes: ' + p_ofv_datatype + 
                                      '<br><br>Please adjust the parameters such that observations are found.  ' + furl(window.location.pathname, 'return') + '</span>'}, ];
-        console.log('one');
-          throw new Error(message);
-          //faddelems('p',document.body,message);
-          //return;
+          faddelems('p',document.body,message);
+          return;
       }
    
       if( total_results >= max_rows ) {
@@ -131,9 +129,8 @@ async function getAllObservations( max_pages, customUserAgent ) {
                                      '<br>Total results returned from query is greater than the maximum allowed of ' + max_rows + '.' + 
                                      '<br>The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
                                      '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(window.location.pathname, 'return') + '</span>'}, ];
-          throw new Error(message);
-          //faddelems('p',document.body,message);
-          //return;
+          faddelems('p',document.body,message);
+          return;
       }
 
       completedRequests++;
@@ -144,10 +141,8 @@ async function getAllObservations( max_pages, customUserAgent ) {
            allObservations.push( obs );
       }
     } catch (error) {
-      console.log('two');
       console.error('Failed to fetch page ' + page + '. Stopping.', error);
-      throw error;
-      //break; // Exit the loop on failure
+      break; // Exit the loop on failure
     }
   }
 
@@ -182,9 +177,7 @@ function getAll() {
           console.log('found cached observations... ' );
           console.log('First observation:', observations_data.observations[0]);
       } else {
-          try {
           observations_data = await getAllObservations( max_pages, customUserAgent );
-          } catch (error) { console.log('bubb' + error ); throw error; }
       }
     
       // Process observations
@@ -193,10 +186,6 @@ function getAll() {
          console.log('First observation:', observations_data.observations[0]);
          fresults(observations_data);
       } 
-   })
-} catch ( error ) {
-      console.log('twoa');
-      throw error;
-  }     ();
+   })();
   
 };
