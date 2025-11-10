@@ -244,8 +244,15 @@ function checkForCache() {
           buildQueryForm();
       }
 }
- 
-getAll();
+
+try {
+   getAll();
+} catch (error) {
+    console.error("Inner catch block: Caught an error:", error.message);
+    // Re-throw the error to be caught by the outer catch block
+    faddelems('p',document.body,error.message);
+    //throw innerError; 
+  }
 
 checkForCache();
   
