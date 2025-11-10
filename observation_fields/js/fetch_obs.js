@@ -17,7 +17,6 @@ async function rateLimitedFetch(url, customUserAgent) {
     }
 
     if( response.status === 422 ) {
-          hideProgressBar();
           const errorBody = await response.json(); 
           const errorMessage = errorBody.errors?.[0]?.message || JSON.stringify(errorBody);
           let message = '<b>' + response.status + '</b>' + 
@@ -112,7 +111,6 @@ async function getAllObservations( max_pages, customUserAgent ) {
       }
 
       if( total_results === 0 ) {
-          hideProgressBar();
           let message = '<br>No results found for query.' + 
                         '<br>No observations were found for the observation field datatype(s) and query specified.... ' + 
                         '<br><br>Query: ' + p_query + 
@@ -122,7 +120,6 @@ async function getAllObservations( max_pages, customUserAgent ) {
       }
    
       if( total_results >= max_rows ) {
-          hideProgressBar();
           let message = '<br>Total results returned from query is greater than the maximum allowed of ' + max_rows + '.' + 
                         '<br>The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
                         '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(window.location.pathname, 'return');
