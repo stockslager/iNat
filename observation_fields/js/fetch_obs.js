@@ -102,7 +102,6 @@ async function getAllObservations( customUserAgent, obs_data ) {
     try {
       const data = await rateLimitedFetch(apiurl, customUserAgent);
 
-      console.log('data... ' + data);
       total_results     = data.total_results;
       let calc_page_max = Math.ceil(total_results/obs_data.per_page);
 
@@ -159,7 +158,6 @@ async function getAll(obs_data) {
        
          const customUserAgent = 'ObsFieldViewer/0.1 (@stockslager)'; 
          await getAllObservations( customUserAgent, obs_data );
-         console.log('first obs - ' + obs_data.observations[0]);
        
       } catch (error) {
          throw error;
