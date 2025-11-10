@@ -420,11 +420,14 @@ async function getSessionStorageObjectSize(key) {
   return sizeInBytes;
 }
 
-const objectSize = getSessionStorageObjectSize(cache_name);
-console.log(`Size of 'Cache Size: ${objectSize} bytes`);
+async function reportCacheSize() {
+  const objectSize = await getSessionStorageObjectSize(cache_name);
+  console.log(`Size of 'Cache Size: ${objectSize} bytes`);
+}
 
-checkStorageEstimate();
+reportCacheSize();
  
+
 function boxRow(field_id, field_name, ofv_datatype) {
     this.field_id     = field_id;
     this.field_name   = field_name;
