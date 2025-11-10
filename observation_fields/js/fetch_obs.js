@@ -184,7 +184,7 @@ function getAll() {
       } else {
           try {
           observations_data = await getAllObservations( max_pages, customUserAgent );
-          } catch (error) { console.log('bubb'); throw error; }
+          } catch (error) { console.log('bubb' + error ); throw error; }
       }
     
       // Process observations
@@ -193,9 +193,10 @@ function getAll() {
          console.log('First observation:', observations_data.observations[0]);
          fresults(observations_data);
       } 
-   })();
-  } catch ( error ) {
+   })
+} catch ( error ) {
       console.log('twoa');
       throw error;
-  }
+  }     ();
+  
 };
