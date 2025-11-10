@@ -203,15 +203,6 @@ function ensureQuestionMark(str) {
   }
 }
  
-function checkForCache() {
-
-      const cache_str    = sessionStorage.getItem( cache_name );
-
-      if( !cache_str && !p_query ) {
-          buildQueryForm();
-      }
-}
-
 function getObs() {
   let api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype );
   obs_data = new ObservationsData( '', '', api_params );
