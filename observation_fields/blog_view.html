@@ -399,30 +399,18 @@ function getAll() {
 
 getAll();
 
-async function checkStorageEstimate() {
-  if (navigator.storage && navigator.storage.estimate) {
-    try {
+function getSessionStorageObjectSize(key) {
+
+  try {
       const estimate = await navigator.storage.estimate();
-      console.log(`Estimated usage: ${estimate.usage} bytes`);
-      console.log(`Estimated quota: ${estimate.quota} bytes`);
-
-      const percentageUsed = ((estimate.usage / estimate.quota) * 100).toFixed(2);
-      console.log(`Storage used: ${percentageUsed}%`);
-
-      if (estimate.usageDetails) {
-        console.log("Usage details:", estimate.usageDetails);
-      }
+      console.log(`Total Avaiable: ${estimate.quota} bytes`);
     } catch (error) {
       console.error("Error estimating storage:", error);
     }
   } else {
     console.warn("StorageManager.estimate() not supported in this browser.");
   }
-}
-
-checkStorageEstimate();
-
-function getSessionStorageObjectSize(key) {
+ 
   const item = sessionStorage.getItem(key);
   if (item === null) {
     return 0; // Object not found in sessionStorage
@@ -435,7 +423,9 @@ function getSessionStorageObjectSize(key) {
 }
 
 const objectSize = getSessionStorageObjectSize(cache_name);
-console.log(`Size of 'observations cached' in sessionStorage: ${objectSize} bytes`);
+console.log(`Size of 'Cache Size: ${objectSize} bytes`);
+
+checkStorageEstimate();
  
 function boxRow(field_id, field_name, ofv_datatype) {
     this.field_id     = field_id;
