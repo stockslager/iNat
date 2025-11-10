@@ -119,6 +119,7 @@ async function getAllObservations( max_pages, customUserAgent ) {
                                      '<br><br>Query: ' + p_query + 
                                      '<br>Observation Field Datatypes: ' + p_ofv_datatype + 
                                      '<br><br>Please adjust the parameters such that observations are found.  ' + furl(window.location.pathname, 'return') + '</span>'}, ];
+        console.log('one');
           throw new Error(message);
           //faddelems('p',document.body,message);
           //return;
@@ -143,6 +144,7 @@ async function getAllObservations( max_pages, customUserAgent ) {
            allObservations.push( obs );
       }
     } catch (error) {
+      console.log('two');
       console.error('Failed to fetch page ' + page + '. Stopping.', error);
       throw error;
       //break; // Exit the loop on failure
