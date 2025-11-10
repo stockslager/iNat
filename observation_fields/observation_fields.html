@@ -249,6 +249,7 @@ function checkForCache() {
   try {
     await getAll(); // Await the async function call
   } catch (error) {
+    hideProgressBar();
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + error.message + '</span>')});  
   }
 })();
