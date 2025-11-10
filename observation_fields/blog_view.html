@@ -211,7 +211,7 @@ function checkForCache() {
 
       const cache_str    = sessionStorage.getItem( cache_name );
 
-      if( !cache_str ) {
+      if( !cache_str && !p_query ) {
           let returnto = ''; 
           if( p_return_to ) { returnto = '<br>Return to ' + furl(p_return_to, p_return_to); }
    
