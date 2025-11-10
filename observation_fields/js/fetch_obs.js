@@ -78,14 +78,6 @@ async function getAllObservations( max_pages, customUserAgent ) {
   let completedRequests = 0;
 
   if( winurlsearchstr==='' || p_query === '' || p_ofv_datatype === '' ) {
-      let returnto = ''; 
-      if( p_return_to ) { returnto = '<br>Return to ' + furl(p_return_to, p_return_to); }
-   
-      let message = [ {innerHTML:'<span id="error">&#9888;' + 
-                                 '<br>No observations stored in cache. ' + 
-                                 '<br>This page requires a cache of data to be assembled upon entry, but no cache has been found.' + 
-                                 returnto + '</span>'}, ];
-      faddelems('p',document.body,message);
       return;
   } else {
       api_params = setParams();
