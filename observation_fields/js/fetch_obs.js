@@ -138,7 +138,7 @@ async function getAllObservations( max_pages, customUserAgent ) {
     }
   }
 
-  const obs_data = new ObservationsData( allObservations, total_results );
+  //const obs_data = new ObservationsData( allObservations, total_results );
 
   // hide the progress bar once the fetching has completed successfully.
   hideProgressBar();
