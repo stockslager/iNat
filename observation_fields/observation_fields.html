@@ -219,6 +219,11 @@ function getObs() {
   (async () => {
     try {
       await getAll(obs_data); // Await the async function call
+      if( obs_data && obs_data.observations.length > 0 ) {
+          console.log('Fetched a total of ' + obs_data.observations.length + ' observations.');
+          console.log('First observation:', obs_data.observations[0]);
+          fresults(obs_data);
+      }
     } catch (error) {
       hideProgressBar();
       faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + error.message + '</span>')});  
@@ -232,16 +237,16 @@ if( cache_str ) {
     obs_data = JSON.parse(cache_str); 
     console.log('found cached observations... ' );
     console.log('First observation:', observations_data.observations[0]);
+    if( obs_data && obs_data.observations.length > 0 ) {
+        console.log('Fetched a total of ' + obs_data.observations.length + ' observations.');
+        console.log('First observation:', obs_data.observations[0]);
+        fresults(obs_data);
+    }
 } else {
     getObs();
     if( !p_query ) { buildQueryForm(); }
 }
 
-if( obs_data && obs_data.observations.length > 0 ) {
-    console.log('Fetched a total of ' + obs_data.observations.length + ' observations.');
-    console.log('First observation:', obs_data.observations[0]);
-    fresults(obs_data);
-}
  
 function boxRow(field_id, field_name, ofv_datatype) {
     this.field_id     = field_id;
