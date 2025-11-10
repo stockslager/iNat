@@ -156,24 +156,24 @@ async function getAll(obs_data) {
    return (async () => {
       try {
          const customUserAgent = 'ObsFieldViewer/0.1 (@stockslager)'; 
-         let observations_data = '';
+         //let observations_data = '';
 
-         const cache_str    = sessionStorage.getItem( cache_name );
+         //const cache_str    = sessionStorage.getItem( cache_name );
 
-         if( cache_str ) {
+         /*if( cache_str ) {
              observations_data = JSON.parse(cache_str); 
              console.log('found cached observations... ' );
              console.log('First observation:', observations_data.observations[0]);
-         } else {
-             observations_data = await getAllObservations( customUserAgent, obs_data );
-         }
+         } else {*/
+             /*observations_data =*/ await getAllObservations( customUserAgent, obs_data );
+         //}
     
          // Process observations
-         if( observations_data && observations_data.observations.length > 0 ) {
+         /*if( observations_data && observations_data.observations.length > 0 ) {
             console.log('Fetched a total of ' + observations_data.observations.length + ' observations.');
             console.log('First observation:', observations_data.observations[0]);
             fresults(observations_data);
-         }
+         }*/
       } catch (error) {
          throw error;
       }
