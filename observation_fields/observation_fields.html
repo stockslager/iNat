@@ -236,11 +236,18 @@ function setParams() {
     return( api_params );
 } 
 
-function replaceDoubleQuotes(str) {
-  return str.replace(/"/g, '%22');
-}
+function checkForCache() {
 
+      const cache_str    = sessionStorage.getItem( cache_name );
+
+      if( !cache_str ) {
+          buildQueryForm();
+      }
+}
+ 
 getAll();
+
+checkForCache();
   
 function boxRow(field_id, field_name, ofv_datatype) {
     this.field_id     = field_id;
