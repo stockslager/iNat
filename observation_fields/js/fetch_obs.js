@@ -188,6 +188,7 @@ function getAll() {
             fresults(observations_data);
          }
       } catch (error) {
+         console.log('hello');
          throw error;
       }
    })();
