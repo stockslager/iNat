@@ -404,10 +404,9 @@ async function getSessionStorageObjectSize() {
   try {
       const estimate = await navigator.storage.estimate();
       console.log(`Total Avaiable: ${estimate.quota} bytes`);
-    } catch (error) {
+  } catch (error) {
       console.error("Error estimating storage:", error);
-    }
-  } 
+  }
 }
 
 async function reportCacheSize(key) {
