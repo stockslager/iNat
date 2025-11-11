@@ -71,15 +71,12 @@ function hideProgressBar() {
 
 // Function to fetch multiple pages of observations sequentially
 async function getAllObservations( customUserAgent, obs_data ) {
-  const allObservations = [];
   let total_results = '';
-  let api_params = '';
   let completedRequests = 0;
 
   if( winurlsearchstr==='' || p_query === '' || p_ofv_datatype === '' ) {
       return;
   } else {
-      api_params = obs_data.api_params;
       buildProgressBar();
   }
 
@@ -94,7 +91,7 @@ async function getAllObservations( customUserAgent, obs_data ) {
  
   for (let page = 1; page <= obs_data.max_pages; page++) {
     let pg = '&per_page='+obs_data.per_page+'&page='+page;
-    const apiurl  = apibase+api_params+pg;
+    const apiurl  = apibase+obs_data.api_params+pg;
 
     console.log('apiurl ' + apiurl );
     console.log('Fetching page ' + page + ' of ' + obs_data.max_pages + '...');
@@ -136,8 +133,6 @@ async function getAllObservations( customUserAgent, obs_data ) {
       throw error;
     }
   }
-
-  //const obs_data = new ObservationsData( allObservations, total_results );
 
   // hide the progress bar once the fetching has completed successfully.
   hideProgressBar();
