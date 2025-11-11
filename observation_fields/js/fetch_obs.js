@@ -125,7 +125,7 @@ async function getAllObservations( customUserAgent, obs_data ) {
       if( page > 1 ) { await delay(1000); console.log('delay '+page); }
     
       let data = response.json();
-      console.log('data results ' + response.json());
+      console.log('data results2 ' + response.json());
 
       total_results     = data.total_results;
       let calc_page_max = Math.ceil(total_results/obs_data.per_page);
