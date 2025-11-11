@@ -122,9 +122,9 @@ async function getAllObservations( customUserAgent, obs_data ) {
 
       // Apply a delay before all but the first request to stay within the rate limit.
       // iNaturalist recommends about 1 request per second.
-      if( page > 1 ) { await delay(1000); console.log('delay '+page);}
+      if( page > 1 ) { await delay(1000); console.log('delay '+page); }
     
-      const data = response.json();
+      let data = response.json();
       console.log('data results ' + data.results);
 
       total_results     = data.total_results;
