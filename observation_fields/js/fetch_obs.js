@@ -144,6 +144,18 @@ async function getAllObservations( customUserAgent, obs_data ) {
     }
   }
 
+  // hide the progress bar once the fetching has completed successfully.
+  hideProgressBar();
+
+  if( total_results > 0 ) {
+      obs_data.total_results = total_results;
+      const jsonObj = JSON.stringify( obs_data );
+      sessionStorage.setItem( cache_name, jsonObj );
+  }
+
+  return obs_data;
+}
+
 // Function to fetch multiple pages of observations sequentially
 /*async function getAllObservations( customUserAgent, obs_data ) {
   let total_results = '';
@@ -211,7 +223,7 @@ async function getAllObservations( customUserAgent, obs_data ) {
     } catch (error) {
       throw error;
     }
-  }*/
+  }
  
   // hide the progress bar once the fetching has completed successfully.
   hideProgressBar();
@@ -223,7 +235,7 @@ async function getAllObservations( customUserAgent, obs_data ) {
   }
 
   return obs_data;
-}
+}*/
 
 async function getAll(obs_data) {
 
