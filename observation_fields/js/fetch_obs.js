@@ -99,13 +99,11 @@ async function getAllObservations( customUserAgent, obs_data ) {
     try {
       // Iidentifying application with a custom User-Agent
       const headers  = customUserAgent ? { 'User-Agent': customUserAgent } : {};
-      const response = await fetch(url, { headers });
+      const response = await fetch(apiurl, { headers });
 
-      // If "Too Many Requests" error, wait and retry.
+      // If "Too Many Requests" error.
       if( response.status === 429 ) {
           console.warn('Received HTTP 429 (Too Many Requests). Waiting 60 seconds before retrying.');
-          await delay(60000); // Wait 60 seconds
-          return rateLimitedFetch(url, customUserAgent); // Retry the request
       }
  
       if( response.status === 422 ) {
