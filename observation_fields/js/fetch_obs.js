@@ -138,6 +138,7 @@ async function getAllObservations( customUserAgent, obs_data ) {
   hideProgressBar();
 
   if( total_results > 0 ) {
+      obs_data.total_results = total_results;
       const jsonObj = JSON.stringify( obs_data );
       sessionStorage.setItem( cache_name, jsonObj );
   }
