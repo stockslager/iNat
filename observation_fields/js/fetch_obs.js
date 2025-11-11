@@ -97,7 +97,36 @@ async function getAllObservations( customUserAgent, obs_data ) {
     console.log('Fetching page ' + page + ' of ' + obs_data.max_pages + '...');
     
     try {
-      const data = await rateLimitedFetch(apiurl, customUserAgent);
+      // Iidentifying application with a custom User-Agent
+      const headers  = customUserAgent ? { 'User-Agent': customUserAgent } : {};
+      const response = await fetch(url, { headers });
+
+      // If "Too Many Requests" error, wait and retry.
+      if( response.status === 429 ) {
+          console.warn('Received HTTP 429 (Too Many Requests). Waiting 60 seconds before retrying.');
+          await delay(60000); // Wait 60 seconds
+          return rateLimitedFetch(url, customUserAgent); // Retry the request
+      }
+ 
+      if( response.status === 422 ) {
+          const errorBody = await response.json(); 
+          const errorMessage = errorBody.errors?.[0]?.message || JSON.stringify(errorBody);
+          let message = '<b>' + response.status + '</b>' + 
+                        '<br><b>' + errorMessage.toLowerCase() + '</b>' +   
+                        '<br>A parameter unknown to the system was specified in the query parameters. ' + 
+                        '<br>Please adjust the parameter mentioned above. &nbsp;&nbsp;' + furl(window.location.pathname, 'return');
+          throw new Error(message);
+      }
+    
+      if (!response.ok) {
+        throw new Error('API returned status code: ' + response.status );
+      }
+
+      // Apply a delay before all but the first request to stay within the rate limit.
+      // iNaturalist recommends about 1 request per second.
+      if( page > 1 ) { await delay(1000); console.log('delay '+page);}
+    
+      const data = response.json();
 
       total_results     = data.total_results;
       let calc_page_max = Math.ceil(total_results/obs_data.per_page);
