@@ -95,6 +95,86 @@ async function getAllObservations( customUserAgent, obs_data ) {
       // Apply a delay before all but the first request to stay within the rate limit.
       // iNaturalist recommends about 1 request per second.
       if( page > 1 ) { await delay(1000); console.log('delay '+page);}
+
+      fetch(apiurl, customerUserAgent)
+        .then((response) => {
+           if( !response.ok ) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+               return response.json();    
+        })
+        .then((data) => {
+           total_results     = data.total_results;
+           let calc_page_max = Math.ceil(total_results/obs_data.per_page);
+
+           if( page === 1 && calc_page_max <= obs_data.max_pages ) {
+               obs_data.max_pages = calc_page_max;
+           }
+
+           if( total_results === 0 ) {
+               let message = '<br>No results found for query.' + 
+                             '<br>No observations were found for the observation field datatype(s) and query specified.... ' + 
+                             '<br><br>Query: ' + p_query + 
+                             '<br>Observation Field Datatypes: ' + p_ofv_datatype + 
+                             '<br><br>Please adjust the parameters such that observations are found.  ' + furl(window.location.pathname, 'return');
+               throw( new Error(message) );
+           }
+
+           if( total_results >= obs_data.max_rows ) {
+               let message = '<br>Total results returned from query is greater than the maximum allowed of ' + obs_data.max_rows + '.' + 
+                             '<br>The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
+                             '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(window.location.pathname, 'return');
+               throw( new Error(message) );
+           }
+
+           completedRequests++;
+           updateProgress(completedRequests, obs_data.max_pages);
+
+           for( let i=0; i<data.results.length; i++ ) {
+                const obs = new Observation( data.results[i] );
+                obs_data.observations.push( obs );
+           }
+         
+        })
+        .catch((err) => {
+           console.error(err.message);
+           throw err;
+        });
+          
+    } catch (error) {
+      throw error;
+    }
+  }
+
+// Function to fetch multiple pages of observations sequentially
+/*async function getAllObservations( customUserAgent, obs_data ) {
+  let total_results = '';
+  let completedRequests = 0;
+
+  if( winurlsearchstr==='' || p_query === '' || p_ofv_datatype === '' ) {
+      return;
+  } else {
+      buildProgressBar();
+  }
+
+  console.log('Starting API calls...');
+  console.log('Fetching a total of ' + obs_data.max_pages + ' pages...');
+
+  const progressBar = document.getElementById('progressBar');
+  const progressText = document.getElementById('progressText');
+  let statusElem = document.getElementById('status');
+
+  statusElem.textContent = "Status: Fetching in progress...";  let isFetching = false;
+ 
+  for (let page = 1; page <= obs_data.max_pages; page++) {
+    let pg = '&per_page='+obs_data.per_page+'&page='+page;
+    const apiurl  = apibase+obs_data.api_params+pg;
+
+    console.log('apiurl ' + apiurl );
+    console.log('Fetching page ' + page + ' of ' + obs_data.max_pages + '...');
+    
+    try {
+      // Apply a delay before all but the first request to stay within the rate limit.
+      // iNaturalist recommends about 1 request per second.
+      if( page > 1 ) { await delay(1000); console.log('delay '+page);}
      
       const data = await fetchObs(apiurl, customUserAgent);
      
@@ -131,7 +211,7 @@ async function getAllObservations( customUserAgent, obs_data ) {
     } catch (error) {
       throw error;
     }
-  }
+  }*/
  
   // hide the progress bar once the fetching has completed successfully.
   hideProgressBar();
