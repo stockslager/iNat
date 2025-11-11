@@ -68,6 +68,8 @@ function hideProgressBar() {
 async function getAllObservations( customUserAgent, obs_data ) {
   let total_results = '';
   let completedRequests = 0;
+ 
+  const headers = customUserAgent ? { 'User-Agent': customUserAgent } : {};
 
   if( winurlsearchstr==='' || p_query === '' || p_ofv_datatype === '' ) {
       return;
@@ -94,9 +96,9 @@ async function getAllObservations( customUserAgent, obs_data ) {
     try {
       // Apply a delay before all but the first request to stay within the rate limit.
       // iNaturalist recommends about 1 request per second.
-      if( page > 1 ) { await delay(1000); console.log('delay '+page);}
+      if( page > 1 ) { await delay(6000); console.log('delay '+page);}
 
-      fetch(apiurl, customUserAgent)
+      fetch(apiurl, { headers })
         .then((response) => {
            if( !response.ok ) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
                return response.json();    
