@@ -98,51 +98,58 @@ async function getAllObservations( customUserAgent, obs_data ) {
       // iNaturalist recommends about 1 request per second.
       if( page > 1 ) { await delay(6000); console.log('delay '+page);}
 
-      fetch(apiurl, { headers })
-        .then((response) => {
-           if( !response.ok ) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-               return response.json();    
-        })
-        .then((data) => {
-           total_results     = data.total_results;
-           let calc_page_max = Math.ceil(total_results/obs_data.per_page);
+      const response = await fetch(apiurl, { headers });
 
-           if( page === 1 && calc_page_max <= obs_data.max_pages ) {
-               obs_data.max_pages = calc_page_max;
-           }
+      if( response.status === 422 ) {
+          const errorBody = await response.json(); 
+          const errorMessage = errorBody.errors?.[0]?.message || JSON.stringify(errorBody);
+          let message = '<b>' + response.status + '</b>' + 
+                        '<br><b>' + errorMessage.toLowerCase() + '</b>' +   
+                        '<br>A parameter unknown to the system was specified in the query parameters. ' + 
+                        '<br>Please adjust the parameter mentioned above. &nbsp;&nbsp;' + furl(window.location.pathname, 'return');
+          throw new Error(message);
+      }
+           
+      if( !response.ok ) { 
+          throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); 
+      }
+      
+      const data = await response.json();    
+           
+      total_results     = data.total_results;
+      let calc_page_max = Math.ceil(total_results/obs_data.per_page);
 
-           if( total_results === 0 ) {
-               let message = '<br>No results found for query.' + 
-                             '<br>No observations were found for the observation field datatype(s) and query specified.... ' + 
-                             '<br><br>Query: ' + p_query + 
-                             '<br>Observation Field Datatypes: ' + p_ofv_datatype + 
-                             '<br><br>Please adjust the parameters such that observations are found.  ' + furl(window.location.pathname, 'return');
-               throw( new Error(message) );
-           }
+      if( page === 1 && calc_page_max <= obs_data.max_pages ) {
+          obs_data.max_pages = calc_page_max;
+      }
 
-           if( total_results >= obs_data.max_rows ) {
-               let message = '<br>Total results returned from query is greater than the maximum allowed of ' + obs_data.max_rows + '.' + 
-                             '<br>The project_id, user_id and other parameters resulted in results that exceed the maximum allowed.  ' +
-                             '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + furl(window.location.pathname, 'return');
-               throw( new Error(message) );
-           }
+      if( total_results === 0 ) {
+          let message = '<br>No results found for query.' + 
+                        '<br><br>Please adjust the parameters such that observations are found.  ' + 
+                        furl(window.location.pathname, 'return');
+          throw( new Error(message) ); 
+      }
 
-           completedRequests++;
-           updateProgress(completedRequests, obs_data.max_pages);
+      if( total_results >= obs_data.max_rows ) {
+          let message = '<br>Total results returned from query is greater than the maximum allowed of ' + obs_data.max_rows + '.' + 
+                        '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + 
+                        furl(window.location.pathname, 'return');
+          throw( new Error(message) ); 
+      }
 
-           for( let i=0; i<data.results.length; i++ ) {
-                const obs = new Observation( data.results[i] );
-                obs_data.observations.push( obs );
-           }
+      completedRequests++;
+      updateProgress(completedRequests, obs_data.max_pages);
+
+      for( let i=0; i<data.results.length; i++ ) {
+           const obs = new Observation( data.results[i] );
+           obs_data.observations.push( obs );
+      }
          
-        })
-        .catch((err) => {
-           console.error(err.message);
-           throw err;
-        });
-          
     } catch (error) {
-      throw error;
+      console.error(error.message);
+      // might want to handle UI updates for the error here
+      statusElem.textContent = "Status: Error occurred.";
+      throw error; 
     }
   }
 
