@@ -96,7 +96,7 @@ async function getAllObservations( customUserAgent, obs_data ) {
       // iNaturalist recommends about 1 request per second.
       if( page > 1 ) { await delay(1000); console.log('delay '+page);}
 
-      fetch(apiurl, customerUserAgent)
+      fetch(apiurl, customUserAgent)
         .then((response) => {
            if( !response.ok ) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
                return response.json();    
