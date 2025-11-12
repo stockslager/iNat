@@ -27,7 +27,7 @@
    #itable { float:right; width:fit-content; display: inline-table; justify-content:start; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }   
    #key { color:var(--color-text); text-decoration:underline; font-size:16px; padding:0; padding-right: 25px; }
    #tablekey { display:inline-table; }
-   #trkey { padding:0; background:var(--color-base); border:none; border-collapse:collapse; }
+   #trkey { padding:2px; background:var(--color-base); border:none; border-collapse:collapse; }
    #tdkey { padding:0; padding-right: 25px; }
    #tdright { padding:0; padding-right: 25px; float:right; }
    #main { width:100%; }
@@ -759,7 +759,7 @@ function fresults(xobj) {
       winurlparams.delete('field_value');
       winurlparams.delete('field');
       faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">cached:</td><td id="tdkey">'     + results.length + '</td><td id="tdright">' + furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,'reset') + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">cached:</td><td id="tdkey">'     + results.length + '</td><td></td><td id="tdright">' + furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,'reset') + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">displayed:</td><td id="tdkey">'  + display_count  + '</td><td id="tdkey">hidden:</td><td id="tdkey">' + filtered_count + '</td></tr></table></span>'});
       if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
       if( p_field_value )     { winurlparams.append('field_value', p_field_value); }
