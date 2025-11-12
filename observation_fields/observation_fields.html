@@ -582,12 +582,11 @@ function fresults(xobj) {
           }
 
           obs_field_box += '</table></span></span>';
+          faddelem('p',document.body,{innerHTML:obs_field_box});
+
+          // hide the mismatch warning... only display it if there is a mismatch in the table.
+          document.getElementById("mismatch").style.display = "none"; 
       }
-
-      faddelem('p',document.body,{innerHTML:obs_field_box});
-
-      // hide the mismatch warning... only display it if there is a mismatch in the table.
-      document.getElementById("mismatch").style.display = "none"; 
 
       winurlparams.delete('chosen_taxon_id');
       winurlparams.delete('field_value');
