@@ -309,8 +309,14 @@ function buildMenu(fields) {
       if( chosen_datatypes_array.length === 1 && field_array.length > 1 ){
           if( p_operator && p_operator === 'merge' ) {
               winurlparams.delete('operator');
+              winurlparams.delete('chosen_taxon_id');
+              winurlparams.delete('field_value');
+              winurlparams.delete('field');
               menu_string += buildMenuURL( furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,'Un-Merge') );
               winurlparams.append('operator', p_operator);
+              if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
+              if( p_field_value )     { winurlparams.append('field_value', p_field_value); }
+              if( p_field )           { winurlparams.append('field', p_field); }
           } else {
               winurlparams.delete('operator');
               winurlparams.append('operator', 'merge');
@@ -544,7 +550,7 @@ function fresults(xobj) {
                } else {
                    if( firstCol === 'yes' ){
                        firstCol = 'no';
-                       labels.push({innerText:'Merged Fields (see upper right)'});
+                       labels.push({innerText:'merged Fields (see upper right)'});
                    } 
                }
            } else {
