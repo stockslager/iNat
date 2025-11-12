@@ -32,6 +32,7 @@
    #trkey { padding:0; background:var(--color-base); border:none; border-collapse:collapse; }
    #tdkey { padding:0; padding-right: 25px; }
    #tdright { padding:0; padding-right: 10px; float:right; }
+   #tdsecond { padding:0; padding-right: 0px; }
    #main { width:100%; }
    #h2 { font-weight:bold; font-size:20px; }
    p { width:100%; }
@@ -560,7 +561,7 @@ function fresults(xobj) {
            if( box_array[e].field_name !== '' ) {
                dlString += '<tr id="trkey">';
                dlString += '<td id="tdkey">'+buildRemoveObsFieldURL( box_array[e], box_array ) + '</td>';
-               dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
+               dlString += ('<td id="tdsecond">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                if( p_operator !== 'merge' ){
                    labels.push({innerText:box_array[e].field_name});
                } else {
@@ -571,7 +572,7 @@ function fresults(xobj) {
                }
            } else {
                dlString += ('<tr id="trkey"><td id="tdkey">' + box_array[e].field_id + '</td>');
-               dlString += ('<td id="tdkey">missing from this page</td></tr>');
+               dlString += ('<td id="tdsecond">missing from this page</td></tr>');
                if( p_operator !== 'merge' ) {
                    labels.push({innerText:''});
                }
