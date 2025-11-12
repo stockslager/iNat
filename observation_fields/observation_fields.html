@@ -588,6 +588,9 @@ function fresults(xobj) {
 
           obs_field_box += '</table></span></span>';
       }
+
+      // hide the mismatch warning... only display it if there is a mismatch in the table.
+      document.getElementById("mismatch").style.display = "none"; 
      
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
@@ -743,12 +746,14 @@ function fresults(xobj) {
          if( p_operator === 'merge' ){
               if( displayTaxonName !== '' ){
                   if( mismatch === 'yes' ){
+                      document.getElementById("mismatch").style.display = "inline"; 
                       displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
                   } else {
                       displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+')</span>';
                   }
               } else {
                   if( mismatch === 'yes' ){
+                      document.getElementById("mismatch").style.display = "inline"; 
                       displayName += ' ';
                       displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
                   } 
@@ -779,12 +784,6 @@ function fresults(xobj) {
        
 
       faddelem('p',document.body,{innerHTML:obs_field_box});
-
-      if( mismatch === 'yes' ) {
-          if( p_operator === 'merge' ){       
-              flower = '<span class="flowericon">&#x1F338; merged obs field values do not match.</span>';
-          }
-      }  
 
       winurlparams.delete('chosen_taxon_id');
       winurlparams.delete('field_value');
