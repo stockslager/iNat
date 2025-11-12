@@ -608,6 +608,8 @@ function fresults(xobj) {
 
          let emojiTitle = 'Merged Observation Fields:&#10;';
 
+         let merge_field = '';
+         let merge_field_value = '';
          if(rec.ofvs&&rec.ofvs.length>0){
               for( let r=0; r<box_array.length; r++ ) {
                  for( let j=0; j<rec.ofvs.length; j++ ){
@@ -638,11 +640,6 @@ function fresults(xobj) {
                           
                           field1 = rec.ofvs[j].value.toLowerCase();
 
-                          winurlparams.delete('field_value');
-                          winurlparams.append('field_value', rec.ofvs[j].value.toLowerCase());
-                          winurlparams.delete('field');
-                          winurlparams.append('field', rec.ofvs[j].field_id);
-                                    
                           if( rec.ofvs[j].taxon_id ){ 
                               let name  = rec.ofvs[j].taxon_name || '';
                               let cname = rec.ofvs[j].taxon_preferred_common_name || '';
@@ -650,6 +647,8 @@ function fresults(xobj) {
                                   field1 = name;
                                   displayCommonName = cname.toLowerCase();
                                   displayTaxonName = name;
+                                  merge_field = rec.ofvs[j].field_id;
+                                  merge_field_value = rec.ofvs[j].value.toLowerCase();
                                   displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   emojiTitle    += (rec.ofvs[j].field_id + ' ' + name + '&#10;');
                               } else { 
@@ -658,15 +657,11 @@ function fresults(xobj) {
                               }
                           } else {
                                   if( rec.ofvs[j].value.toLowerCase() !== 'unknown' ){
+                                      merge_field = rec.ofvs[j].field_id;
+                                      merge_field_value = rec.ofvs[j].value.toLowerCase();
                                       displayName    = rec.ofvs[j].value.toLowerCase();
                                   }
                                   emojiTitle    += (rec.ofvs[j].field_id + ' ' + rec.ofvs[j].value.toLowerCase() + '&#10;');
-                          }
-                          winurlparams.delete('field_value');
-                          winurlparams.delete('field');
-                          if( p_field_value ) { 
-                              winurlparams.append('field', p_field);
-                              winurlparams.append('field_value', p_field_value); 
                           }
                       }
 
@@ -726,7 +721,17 @@ function fresults(xobj) {
                       displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
                   } 
               }
+              winurlparams.delete('field_value');
+              winurlparams.append('field_value', merge_field_value);
+              winurlparams.delete('field');
+              winurlparams.append('field', merge_field);
               values.push({innerHTML:furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,displayName)});
+              winurlparams.delete('field_value');
+              winurlparams.delete('field');
+              if( p_field_value ) { 
+                  winurlparams.append('field', p_field);
+                  winurlparams.append('field_value', p_field_value); 
+              }
          }          
 
          values.push({innerHTML:user_icon});
