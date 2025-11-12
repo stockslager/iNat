@@ -474,7 +474,7 @@ function buildEmptyLink() {
       winurlparams.delete('chosen_taxon_id');
       winurlparams.delete('field_value');
       winurlparams.delete('field');
-      let empty_link = furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,'&#9447;&nbsp;');
+      let empty_link = furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,'empty');
       if( p_obs_fields )      { winurlparams.append('obs_fields', p_obs_fields); }
       if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
       if( p_field_value )     { winurlparams.append('field_value', p_field_value); }
@@ -504,7 +504,7 @@ function fresults(xobj) {
       let dlString = '';
       let labelCount = 0;
 
-      let merged = 'observation fields';
+      let merged = 'observation field';
       labels = [
             {innerText:'#'},
             {innerText:'photo'},
@@ -551,12 +551,12 @@ function fresults(xobj) {
 
       dlString += '<span id="dltest"><table id="tablekey">';
       dlString += '<tr id="trkey">';  
-      dlString += '<td id="key">'+buildEmptyLink()+'field ids</td>  <td id="key">'+merged+'</td><td id="tdkey"></td></tr>';
+      dlString += '<td id="tdkey">'+buildEmptyLink()+'</td><td id="key">field id</td>  <td id="key">'+merged+'</td><td id="tdkey"></td></tr>';
     
       for( let e=0; e<box_array.length; e++ ) {
            labelCount++;
            if( box_array[e].field_name !== '' ) {
-               dlString += '<tr id="trkey">';
+               dlString += '<tr id="trkey"><td id="tdkey"></td>';
                dlString += '<td id="tdkey">'+buildRemoveObsFieldURL( box_array[e], box_array ) + '</td>';
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                if( p_operator !== 'merge' ){
@@ -568,7 +568,7 @@ function fresults(xobj) {
                    } 
                }
            } else {
-               dlString += ('<tr id="trkey"><td id="tdkey">' + box_array[e].field_id + '</td>');
+               dlString += ('<tr id="trkey"><td id="tdkey"></td><td id="tdkey">' + box_array[e].field_id + '</td>');
                dlString += ('<td id="tdkey">missing from this page</td></tr>');
                if( p_operator !== 'merge' ) {
                    labels.push({innerText:''});
