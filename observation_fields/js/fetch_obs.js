@@ -42,7 +42,6 @@ async function getAllObservations( customUserAgent, obs_data ) {
   }
 
   console.log('Starting API calls...');
-  console.log('Fetching a total of ' + obs_data.max_pages + ' pages...');
 
   const progressBar = document.getElementById('progressBar');
   const progressText = document.getElementById('progressText');
