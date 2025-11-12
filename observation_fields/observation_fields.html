@@ -754,9 +754,9 @@ function fresults(xobj) {
           }
       }  
 
-      faddelem('p',document.body,{innerHTML:'<span id="stats">' + 
-                                            'total obs: ' + fcomnum(total_results)+' cached: '   + results.length + '<br/>' + 
-                                            'displayed: ' + display_count +        ' filtered: ' + filtered_count + '</span>'});
+      faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
+                                            '<tr><td>cached:</td><td>'     + results.length + '</td></tr>' + 
+                                            '<tr><td>displayed:</td></td>' + display_count  + '</td><td>hidden:</td><td>' + filtered_count + '</td></tr></table></span>'});
 
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
