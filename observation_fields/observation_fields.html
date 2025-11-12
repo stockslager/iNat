@@ -22,7 +22,7 @@
 <style>
    #menu_title { /*padding-top:1px;*/ font-size:16px; }
    #mismatch { padding-right:25px; padding-bottom:18px; }
-   #topright { padding-right:15px; display:flex; justify-content:flex-end; align-items: flex-end; white-space:nowrap; }
+   #topright { display:flex; justify-content:flex-end; align-items: flex-end; white-space:nowrap; }
    #error { margin-left:15px; margin-bottom: 10px; margin-top:50px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 8px; padding-bottom: 8px; padding-left: 8px; padding-right: 8px; }
    #stats { margin-bottom: 10px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 8px; padding-bottom: 8px; padding-left: 8px; padding-right: 8px; }
    #dltest { max-height:76px; overflow-y:auto; /* overflow: scroll; */ width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 8px; padding-bottom: 8px; padding-left: 8px; padding-right: 4px; margin-bottom: 10px; white-space:nowrap; }
@@ -589,17 +589,6 @@ function fresults(xobj) {
           // hide the mismatch warning... only display it if there is a mismatch in the table.
           document.getElementById("mismatch").style.display = "none"; 
       }
-
-      winurlparams.delete('chosen_taxon_id');
-      winurlparams.delete('field_value');
-      winurlparams.delete('field');
-      faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">cached:</td><td id="tdright">'     + results.length + '</td><td id="tdkey"></td><td id="tdright">' + furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,'reset') + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">displayed:</td><td id="tdright">'  + display_count  + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">hidden:</td><td id="tdright">'     + filtered_count + '</td></tr></table></span>'});
-      if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
-      if( p_field_value )     { winurlparams.append('field_value', p_field_value); }
-      if( p_field )           { winurlparams.append('field', p_field); }
      
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
@@ -790,7 +779,18 @@ function fresults(xobj) {
              filtered_count++;
          }
       };
-       
+
+      winurlparams.delete('chosen_taxon_id');
+      winurlparams.delete('field_value');
+      winurlparams.delete('field');
+      faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
+                                            '<tr id="trkey"><td id="tdkey">cached:</td><td id="tdright">'     + results.length + '</td><td id="tdkey"></td><td id="tdright">' + furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,'reset') + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">displayed:</td><td id="tdright">'  + display_count  + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">hidden:</td><td id="tdright">'     + filtered_count + '</td></tr></table></span>'});
+      if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
+      if( p_field_value )     { winurlparams.append('field_value', p_field_value); }
+      if( p_field )           { winurlparams.append('field', p_field); }
+    
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow  = faddelem('tr',thead);
