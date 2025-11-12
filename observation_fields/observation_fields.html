@@ -552,12 +552,12 @@ function fresults(xobj) {
 
       dlString += '<span id="dltest"><table id="tablekey">';
       dlString += '<tr id="trkey">';  
-      dlString += '<td id="keyx">'+buildEmptyLink()+'</td><td id="key">field id</td>  <td id="key">'+merged+'</td><td id="tdkey"></td></tr>';
+      dlString += '<td id="key">field id</td>  <td id="key">'+merged+'</td><td id="tdkey"></td><td id="keyx">'+buildEmptyLink()+'</td></tr>';
     
       for( let e=0; e<box_array.length; e++ ) {
            labelCount++;
            if( box_array[e].field_name !== '' ) {
-               dlString += '<tr id="trkey"><td id="tdkey"></td>';
+               dlString += '<tr id="trkey">';
                dlString += '<td id="tdkey">'+buildRemoveObsFieldURL( box_array[e], box_array ) + '</td>';
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                if( p_operator !== 'merge' ){
@@ -569,7 +569,7 @@ function fresults(xobj) {
                    } 
                }
            } else {
-               dlString += ('<tr id="trkey"><td id="tdkey"></td><td id="tdkey">' + box_array[e].field_id + '</td>');
+               dlString += ('<tr id="trkey"><td id="tdkey">' + box_array[e].field_id + '</td>');
                dlString += ('<td id="tdkey">missing from this page</td></tr>');
                if( p_operator !== 'merge' ) {
                    labels.push({innerText:''});
