@@ -250,12 +250,44 @@ function boxRow(field_id, field_name, ofv_datatype) {
     this.ofv_datatype = ofv_datatype;
 }
 
+function buildDropDownArray( results ) {
+   let add_array = [];
+   let field_array_copy = field_array;
+ 
+   // loop through the list of observation fields for each observation.  whenever there is one
+   // that doesn't exist in the array for the drop down, add it.
+   for( let i=0; i<results.length; i++ ) {
+        let rec = results[i];
+        if( rec.ofvs&&rec.ofvs.length>0 ){
+            for( let j=0; j<rec.ofvs.length; j++ ){
+                 const matchingRow = add_array.find(item => item.field_id.toString() === rec.ofvs[j].field_id.toString() );
+                 if( !matchingRow ) {
+                     add_array.push(new ddRow(rec.ofvs[j].field_id.toString(), rec.ofvs[j].name.toLowerCase(), rec.ofvs[j].datatype ) );
+                  }
+               
+                  for( let r=0; r<field_array_copy.length; r++ ) {
+                       if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){
+                           let box_row   = box_array.find( boxRow => boxRow.field_id === rec.ofvs[j].field_id.toString() );
+                           box_row.field_name   = rec.ofvs[j].name.toString(); 
+                           box_row.ofv_datatype = rec.ofvs[j].datatype; 
+                       }
+                  }
+             }
+        }
+   }
+
+   return add_array;
+}
+
 function buildMenu(fields) {
       let menu_string = '';
       let links = '';
       let taxon_param = '';
+      let fields = [];
       let ofv_datatype_array = [];
       let chosen_datatypes_array = [];
+
+      fields = buildDropDownArray(results);
 
       ofv_datatype_array = p_ofv_datatype.split(',');
       chosen_datatypes_array = p_chosen_datatypes.split(',');
@@ -492,7 +524,6 @@ function buildEmptyLink() {
 
 function fresults(xobj) {
    let box_array = [];
-   let add_array = [];
    let total_results = xobj.total_results;
    let display_count = 0;
    let filtered_count = 0;
@@ -505,9 +536,6 @@ function fresults(xobj) {
    if (results) {
 
       let labels = [];
-      let mismatch = '';
-      let field_array_copy = field_array;
-      let flower = '';
       let obs_field_box = '';
       let labelCount = 0;
 
@@ -524,27 +552,7 @@ function fresults(xobj) {
 
       let tempBrow = [];
 
-      for (let i=0; i<results.length; i++) {
-         let rec = results[i];
-         if(rec.ofvs&&rec.ofvs.length>0){
-              for( let j=0; j<rec.ofvs.length; j++ ){
-                   const matchingRow = add_array.find(item => item.field_id.toString() === rec.ofvs[j].field_id.toString() );
-                   if( !matchingRow ) {
-                       add_array.push(new ddRow(rec.ofvs[j].field_id.toString(), rec.ofvs[j].name.toLowerCase(), rec.ofvs[j].datatype ) );
-                   }
-               
-                   for( let r=0; r<field_array_copy.length; r++ ) {
-                        if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){
-                            let box_row   = box_array.find( boxRow => boxRow.field_id === rec.ofvs[j].field_id.toString() );
-                            box_row.field_name   = rec.ofvs[j].name.toString(); 
-                            box_row.ofv_datatype = rec.ofvs[j].datatype; 
-                        }
-                   }
-              }
-         }
-      }
-
-      buildMenu(add_array);
+      buildMenu(results);
       
       let firstCol = 'yes';
     
@@ -552,9 +560,6 @@ function fresults(xobj) {
     
       box_array = box_array.filter(box_array => box_array.field_name !== '');
 
-      /*if( box_array.length === 0 ){
-          labels.push({innerText:' '});
-      }*/
       if( p_obs_fields ) {
           obs_field_box += '<span id="topright"><span id="mismatch">&#127800; ~ obs field mismatch.</span><span id="dltest"><table id="tablekey">';
           obs_field_box += '<tr id="trkey">';  
