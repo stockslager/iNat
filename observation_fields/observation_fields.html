@@ -250,7 +250,7 @@ function boxRow(field_id, field_name, ofv_datatype) {
     this.ofv_datatype = ofv_datatype;
 }
 
-function buildDropDownArray( results ) {
+function buildDropDownArray( results, box_array ) {
    let add_array = [];
    let field_array_copy = field_array;
  
@@ -287,7 +287,7 @@ function buildMenu( results, box_array ) {
       let ofv_datatype_array = [];
       let chosen_datatypes_array = [];
 
-      fields = buildDropDownArray(results);
+      fields = buildDropDownArray(results, box_array);
 
       ofv_datatype_array = p_ofv_datatype.split(',');
       chosen_datatypes_array = p_chosen_datatypes.split(',');
