@@ -279,15 +279,12 @@ function buildDropDownArray( results, box_array ) {
    return add_array;
 }
 
-function buildMenu( results, box_array ) {
+function buildMenu( fields ) {
       let menu_string = '';
       let links = '';
       let taxon_param = '';
-      let fields = [];
       let ofv_datatype_array = [];
       let chosen_datatypes_array = [];
-
-      fields = buildDropDownArray(results, box_array);
 
       ofv_datatype_array = p_ofv_datatype.split(',');
       chosen_datatypes_array = p_chosen_datatypes.split(',');
@@ -552,7 +549,7 @@ function fresults(xobj) {
 
       let tempBrow = [];
 
-      buildMenu(results, box_array);
+      buildMenu( buildDropDownArray(results, box_array) );
       
       let firstCol = 'yes';
     
