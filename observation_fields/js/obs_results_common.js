@@ -1,3 +1,32 @@
+function buildDropDownArray( results, box_array ) {
+   let add_array = [];
+   let field_array_copy = field_array;
+ 
+   // loop through the list of observation fields for each observation.  whenever there is one
+   // that doesn't exist in the array for the drop down, add it.
+   for( let i=0; i<results.length; i++ ) {
+        let rec = results[i];
+        if( rec.ofvs&&rec.ofvs.length>0 ){
+            for( let j=0; j<rec.ofvs.length; j++ ){
+                 const matchingRow = add_array.find(item => item.field_id.toString() === rec.ofvs[j].field_id.toString() );
+                 if( !matchingRow ) {
+                     add_array.push(new ddRow(rec.ofvs[j].field_id.toString(), rec.ofvs[j].name.toLowerCase(), rec.ofvs[j].datatype ) );
+                  }
+               
+                  for( let r=0; r<field_array_copy.length; r++ ) {
+                       if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){
+                           let box_row   = box_array.find( boxRow => boxRow.field_id === rec.ofvs[j].field_id.toString() );
+                           box_row.field_name   = rec.ofvs[j].name.toString(); 
+                           box_row.ofv_datatype = rec.ofvs[j].datatype; 
+                       }
+                  }
+             }
+        }
+   }
+
+   return add_array;
+}
+
 function fresults(xobj) {
    let box_array = [];
    let total_results = xobj.total_results;
@@ -31,9 +60,7 @@ function fresults(xobj) {
       buildMenu( buildDropDownArray(results, box_array) );
       
       let firstCol = 'yes';
-    
-      labelCount = 0;
-    
+        
       box_array = box_array.filter(box_array => box_array.field_name !== '');
 
       if( p_obs_fields ) {
