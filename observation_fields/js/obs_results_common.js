@@ -4,7 +4,7 @@ function buildEmptyLink() {
       winurlparams.delete('chosen_taxon_id');
       winurlparams.delete('field_value');
       winurlparams.delete('field');
-      let empty_link = furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,'&#9447;');
+      let empty_link = furl(window.location.protocol+'?'+winurlparams,'&#9447;');
       if( p_operator )        { winurlparams.append('operator', p_operator); }
       if( p_obs_fields )      { winurlparams.append('obs_fields', p_obs_fields); }
       if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
@@ -144,7 +144,7 @@ function fresults(xobj) {
 
          if( tax_id !== '' ) {
              winurlparams.delete('chosen_taxon_id');
-             taxon = furl(github_root+'observation_fields/observation_fields.html?'+winurlparams+'&chosen_taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
+             taxon = furl(window.location.protocol+'?'+winurlparams+'&chosen_taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
              if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
          }
        
@@ -239,7 +239,7 @@ function fresults(xobj) {
                                       winurlparams.append('field_value', rec.ofvs[j].value.toLowerCase());
                                       winurlparams.delete('field');
                                       winurlparams.append('field', rec.ofvs[j].field_id);
-                                      values.push({innerHTML:furl(github_root+'observation_fields/observation_fields.html?'+winurlparams, field1)});
+                                      values.push({innerHTML:furl(window.location.protocol+'?'+winurlparams, field1)});
                                       winurlparams.delete('field_value');
                                       winurlparams.delete('field');
                                       if( p_field_value ) { 
@@ -284,7 +284,7 @@ function fresults(xobj) {
               winurlparams.append('field_value', merge_field_value);
               winurlparams.delete('field');
               winurlparams.append('field', merge_field);
-              values.push({innerHTML:furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,displayName)});
+              values.push({innerHTML:furl(window.location.protocol+'?'+winurlparams,displayName)});
               winurlparams.delete('field_value');
               winurlparams.delete('field');
               if( p_field_value ) { 
@@ -308,7 +308,7 @@ function fresults(xobj) {
       winurlparams.delete('field_value');
       winurlparams.delete('field');
       faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">cached:</td><td id="tdright">'     + results.length + '</td><td id="tdkey"></td><td id="tdright">' + furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,'reset') + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">cached:</td><td id="tdright">'     + results.length + '</td><td id="tdkey"></td><td id="tdright">' + furl(window.location.protocol+'.html?'+winurlparams,'reset') + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">displayed:</td><td id="tdright">'  + display_count  + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">hidden:</td><td id="tdright">'     + filtered_count + '</td></tr></table></span>'});
       if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
