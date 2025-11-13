@@ -308,7 +308,7 @@ function fresults(xobj) {
       winurlparams.delete('field_value');
       winurlparams.delete('field');
       faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">cached:</td><td id="tdright">'     + results.length + '</td><td id="tdkey"></td><td id="tdright">' + furl(window.location.protocol+'.html?'+winurlparams,'reset') + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">cached:</td><td id="tdright">'     + results.length + '</td><td id="tdkey"></td><td id="tdright">' + furl(window.location.protocol+'?'+winurlparams,'reset') + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">displayed:</td><td id="tdright">'  + display_count  + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">hidden:</td><td id="tdright">'     + filtered_count + '</td></tr></table></span>'});
       if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
