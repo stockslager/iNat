@@ -809,10 +809,10 @@ function fresults(xobj) {
            let brow = faddelem('tr',tbody);
            faddelems('td',brow,tempBrow[q]);
       }
-
-      faddelem('p',document.body,{innerHTML:'<br><br><br>Shareable link: <br>' + furl(github_root+'observation_fields/blog_view.html?'+winurlparams+'&query='+p_query, github_root+'observation_fields/blog_view.html?'+winurlparams+'&query='+p_query)});                                            '<tr id="trkey"><td id="tdkey">cached:</td><td id="tdright">'     + results.length + '</td><td id="tdkey"></td><td id="tdright">' + furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,'reset') + '</td></tr>' + 
-
-   }
+    
+      let shareable_link = furl(github_root+'observation_fields/blog_view.html?'+winurlparams+'&query='+p_query, github_root+'observation_fields/blog_view.html?'+winurlparams+'&query='+p_query);      
+      faddelem('p',document.body,{innerHTML:'<br><br><br>Shareable link: <br>' + shareable_link});
+    
    else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
 </script>
