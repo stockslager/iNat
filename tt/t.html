@@ -335,12 +335,7 @@ function fresults(xobj) {
       if( p_taxon_id ) {
           dlString = furl(github_root+'plant_grid.html'+all_params+'&state='+p_state+'&action=on&plant_id='+p_target_id+'&plant_name='+p_target_name+'&taxon_id='+p_taxon_id,'<span id="topright">All '+p_taxon_nm+'</span>');
       } 
-    
-      if( mode.includes('yard') || 
-          mode.includes('simple') ) {
-          dlString = '';
-      }
-    
+        
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+dlString+'<br />'});  
