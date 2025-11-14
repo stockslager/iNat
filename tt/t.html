@@ -331,9 +331,8 @@ function fresults(xobj) {
       console.log('building menu...');
       buildMenu( results );
 
-      console.log('taxo id ' + p_taxon_id);
       if( p_taxon_id ) {
-          dlString = furl(github_root+'plant_grid.html'+all_params+'&state='+p_state+'&action=on&plant_id='+p_target_id+'&plant_name='+p_target_name+'&taxon_id='+p_taxon_id,'<span id="topright">All '+p_taxon_nm+'</span>');
+          dlString = furl('https://www.inaturalist.org/observations/torquemap?interval=monthly&d1=2025&taxon_id='+p_taxon_id+'&project_id='+p_project_id+'&place_id='+p_place_id,'<span id="topright"><b>All '+capitalizeWords(p_taxon_nm)+'</b></span>');
       } 
         
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
