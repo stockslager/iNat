@@ -179,10 +179,10 @@ function buildMenu( results ) {
               
            let showDDOpts = getShowDDOpts( winurlparams );
              
-           links =  (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
-           links += (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1'+'&taxon_id=47126'+'&taxon_nm=Plants','<span style="padding-right:20px;">&#127807</span>Plants' ));           
+           links =  (furl(github_root+'tt/t.html'+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
+           links += (furl(github_root+'tt/t.html'+showDDOpts+'&page=1'+'&taxon_id=47126'+'&taxon_nm=Plants','<span style="padding-right:20px;">&#127807</span>Plants' ));           
            for( let j=0; j<configuration.sub_icons.length; j++ ) {
-                links += (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1'+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+                links += (furl(github_root+'tt/t.html'+showDDOpts+'&page=1'+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
            }
            if( mode.includes('onlytitle') ) {
                menu_string += ( buildDDTitle( capitalizeWords(p_taxon_nm) ) );
@@ -236,10 +236,10 @@ function buildMenu( results ) {
                 let showDDOpts = getShowDDOpts( winurlparams );
                 showDDOpts += '&sub_menu_array='+sub_taxon_arr;
              
-                links = (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
+                links = (furl(github_root+'tt/t.html'+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
                 for( let j=0; j<configuration.sub_icons.length; j++ ) {
                      if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
-                         links += (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1'+'&target_id='+configuration.sub_icons[j].taxon_id+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&target_name='+configuration.sub_icons[j].nm+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+                         links += (furl(github_root+'tt/t.html'+showDDOpts+'&page=1'+'&target_id='+configuration.sub_icons[j].taxon_id+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&target_name='+configuration.sub_icons[j].nm+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
                      }
                 }
               
@@ -271,7 +271,7 @@ function buildMenu( results ) {
                 if( p_taxon_id && behavior_field_value ) {
                     menu_string += buildTitle( behavior_field_value );
                 } else {
-                    links += furl(github_root+'plant_activity.html'+getObsFieldsDDOpts(winurlparams), 'All');
+                    links += furl(github_root+'tt/t.html'+getObsFieldsDDOpts(winurlparams), 'All');
                     for( let i=0; i<interactions.length; i++ ) {
                          if( interactions[i].dd_name && interactions[i].dd_menu.toString() === p_project_id ) {
                              default_title = interactions[i].dd_title;
@@ -287,7 +287,7 @@ function buildMenu( results ) {
                                      dd_title = interactions[i].dd_name;
                                  }
                              }
-                             links += furl(github_root+'plant_activity.html'+obs_fields_dd_copy_opts, interactions[i].dd_name);
+                             links += furl(github_root+'tt/t.html'+obs_fields_dd_copy_opts, interactions[i].dd_name);
                              link_count += 1;
                          }
                     }
