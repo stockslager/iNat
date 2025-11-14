@@ -525,11 +525,8 @@ else {
      .then(response => response.json())
      .then(data => {
       // Access your data here 
-      for( let i=0; i<data.configurations.length; i++ ) {
-           if( data.configurations[i].insect_project === p_project_id ) {
-               interactions = data.configurations[i].interactions;
-           }
-      }
+      p_project_id = data.configurations[0].insect_project;
+      interactions = data.configurations[0].interactions;
       console.log(data);
    })
      .catch(error => {
