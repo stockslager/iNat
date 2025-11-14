@@ -377,11 +377,12 @@ function fresults(xobj) {
 
          let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
          let grid_title  = ('&action=on&title='+(pref_tax_name||tax_name)+' on '+p_target_name);
+         let torque = furl('https://www.inaturalist.org/observations/torquemap?interval=monthly&d1=2025&taxon_id='+rec.taxon.id+'&project_id='+p_project_id+'&place_id='+p_place_id,displayName);
                                       
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(github_root+'plant_grid.html'+api_params+'&state='+p_state+'&taxon_id='+rec.taxon.id+grid_title+'&plant_id='+p_target_id+'&plant_name='+p_target_name,displayName)},
+                  {innerHTML:torque},
                   {innerText:rec.count||''},
                   ];
         
