@@ -239,7 +239,7 @@ function buildMenu( results ) {
                 links = (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
                 for( let j=0; j<configuration.sub_icons.length; j++ ) {
                      if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
-                         links += (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1'+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+                         links += (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1'+'&target_id='+configuration.sub_icons[j].taxon_id+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&target_name='+configuration.sub_icons[j].nm+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
                      }
                 }
               
@@ -332,7 +332,7 @@ function fresults(xobj) {
       buildMenu( results );
    
       if( !p_target_id ) {
-          dlString = furl(github_root+'plant_grid.html'+all_params+'&state='+p_state+'&action=on&plant_id='+p_target_id+'&plant_name='+p_target_name,'<span id="topright">All Organisms On Any Plant</span>');
+          dlString = furl(github_root+'plant_grid.html'+all_params+'&state='+p_state+'&action=on&plant_id='+p_target_id+'&plant_name='+p_target_name,'<span id="topright">All '+p_target_name+'</span>');
       } else {
           dlString = furl(github_root+'plant_grid.html'+all_params+'&state='+p_state+'&action=on&plant_id='+p_target_id+'&plant_name='+p_target_name,'<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
       }
