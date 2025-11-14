@@ -41,6 +41,7 @@ let p_menu            = winurlparams.get('menu') || '';
 let p_dd_menu         = winurlparams.get('dd_menu') || 'bugs';
 let p_tag_name        = winurlparams.get('tag_name') || '';
 let p_plant_name      = winurlparams.get('plant_name') || '';
+let p_params          = winurlparams.get('params') || '';
 let p_field = '';
 let p_field_value = '';
 let opts = '';
@@ -52,10 +53,14 @@ let interactions = [];
 // parse the seed project param to determine mode.
 let prj      = p_state.split('$')[0];
 let place    = p_state.split('$')[1];
-let p_params = p_state.split('$')[2];
+let params = p_state.split('$')[2];
 let user     = p_state.split('$')[3];
 let garden   = p_state.split('$')[4];
 let mode     = p_state.split('$')[5];
+
+if( params ) {
+    p_params = params;
+}
 
 if( p_project_id === 'cincinnati-nature-center-pollinator-garden' ) {
     winurlparams.delete('project_id');
