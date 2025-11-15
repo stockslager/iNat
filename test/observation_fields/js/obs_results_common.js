@@ -462,7 +462,7 @@ function fresults(cached_fields) {
          } else {
              filtered_count++;
          }
-      }; */
+      }; 
 
       winurlparams.delete('chosen_taxon_id');
       winurlparams.delete('field_value');
