@@ -82,7 +82,12 @@ function fresults(xobj) {
       if( p_obs_fields ) {
           obs_field_box += '<span id="topright"><span id="mismatch">&#127800; ~ obs field mismatch.</span><span id="dltest"><table id="tablekey">';
           obs_field_box += '<tr id="trkey">';  
-          obs_field_box += '<td id="key">field id</td>  <td id="key">'+merged+'</td><td id="tdkey"></td><td id="keyx">'+buildEmptyLink()+'</td></tr>';
+
+          if( p_operator ) {
+              obs_field_box += '<td id="key">field id</td>  <td id="key">'+merged+'</td><td id="tdkey"></td><td id="keyx"></td></tr>';
+          } else {
+              obs_field_box += '<td id="key">field id</td>  <td id="key">'+merged+'</td><td id="tdkey"></td><td id="keyx">'+buildEmptyLink()+'</td></tr>';
+          }
     
           for( let e=0; e<box_array.length; e++ ) {
                labelCount++;
