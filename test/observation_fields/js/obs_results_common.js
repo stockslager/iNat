@@ -172,8 +172,9 @@ function setAPIParams() {
   let api_params = p_query + '&page=1' + '&per_page=100';
 
   let apibase = 'https://api.inaturalist.org/v1/observations';
+  let url     = apibase+((api_params!='')?('?'+api_params):'');
 
-  console.log('api url**** ' + apibase+api_params);
+  console.log('api url**** ' + url);
 
   /*fetch(apiurl)
     .then((response) => {
@@ -198,7 +199,7 @@ function fresults(cached_fields) {
 
    let api_params = setAPIParams();
    
-   let observations = xobj.results;
+   let observations = '';//xobj.results;
 
    for( let f=0; f<field_array.length; f++ ){
         box_array.push(new boxRow(field_array[f], '') );
