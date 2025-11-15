@@ -196,7 +196,7 @@ function fresults(cached_fields) {
    let filtered_count = 0;
    let obs_fields = cached_fields.obs_fields;
 
-   let xobj = await getPage();
+   let xobj = getPage();
    
    let observations = xobj.results;
 
