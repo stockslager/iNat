@@ -146,7 +146,7 @@ async function getAllObservations( customUserAgent, obs_data ) {
       // cache and array of obs fields that are each unique within this dataset.
       for( let i=0; i<data.results.length; i++ ) {
            for( let j=0; j<data.results[i].ofvs.length; j++ ) {
-                if( !obsFieldExists(obs_data, data.results[i].ofvs.field_id) ) {
+                if( !obsFieldExists(obs_data, data.results[i].ofvs[j].field_id) ) {
                     const obs_field = new ObsField( data.results[i].ofvs[j] );
                     obs_data.obs_fields.push( obs_field );
                 }
