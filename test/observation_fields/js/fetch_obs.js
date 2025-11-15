@@ -104,7 +104,7 @@ async function getAllObservations( customUserAgent, obs_data ) {
       updateProgress(completedRequests, obs_data.max_pages);
 
       for( let i=0; i<data.results.length; i++ ) {
-           const obs = new Observation( data.results[i], obs_data.photo_loc );
+           const obs = new Observation( data.results[i] );
            obs_data.observations.push( obs );
       }
          
