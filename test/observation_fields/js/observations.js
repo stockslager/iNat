@@ -7,48 +7,7 @@ class ObservationsData {
      this.max_rows               = 1000;
      this.total_results          = 0;
        
-     this.observations = [];
-  }  
-}
-
-class Observation {
-  
-  constructor(rec) {
-     this.id                          = rec.id;
-    
-     if( rec.taxon ){
-         this.taxon_id                    = rec.taxon.id;
-         this.taxon_name                  = rec.taxon.name || '';
-         this.taxon_preferred_common_name = rec.taxon.preferred_common_name || '';
-         this.taxon_min_species_ancestry  = rec.taxon.min_species_ancestry || '';
-         this.photos_url                  = '';
-         this.taxon_default_photo_url     = '';
-
-         if( rec.taxon.default_photo ){
-             if( rec.taxon.default_photo.url ){
-                 this.taxon_default_photo_url = rec.taxon.default_photo.url;
-             } 
-         }  
-     }
-       
-     if( rec.photos && rec.photos.length>0 ) {
-         if( rec.photos[0].url ) {
-             this.photos_url = rec.photos[0].url;
-         }
-     } 
-       
-     this.user_icon                   = rec.user.icon || '';
-     this.user_login                  = rec.user.login || '';
-       
-
-     this.ofvs = [];
-       
-     if( rec.ofvs && rec.ofvs.length>0 ) {
-         for( let i=0; i<rec.ofvs.length; i++ ) {
-              const obs_field = new ObsField(rec.ofvs[i]);
-              this.ofvs.push(obs_field);
-         }
-     }
+     this.obs_fields = [];
   }  
 }
 
@@ -57,15 +16,176 @@ class ObsField {
   constructor(obs_field) {
      this.field_id         = obs_field.field_id;
      this.name             = obs_field.name.toLowerCase();
-     this.value            = obs_field.value.toLowerCase();
      this.datatype         = obs_field.datatype;
 
-     if( obs_field.taxon ) {
+     /*if( obs_field.taxon ) {
          this.taxon_id                    = obs_field.taxon.id;
          this.taxon_name                  = obs_field.taxon.name || '';
          this.taxon_preferred_common_name = obs_field.taxon.preferred_common_name || '';
          this.taxon_iconic_taxon_id       = obs_field.taxon.iconic_taxon_id || '';
          this.taxon_min_species_ancestry  = obs_field.taxon.min_species_ancestry || '';
-     }
+     }*/
   }    
 }
+
+// A simple function to create a delay
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms)); 
+
+// Function to update the progress bar UI
+function updateProgress(completed, total) {
+    const percentage = (completed / total) * 100;
+    progressBar.style.width = percentage + '%';
+    progressBar.textContent = Math.round(percentage) + '%';
+    progressText.textContent = `${Math.round(percentage)}% Complete (${completed}/${total} requests)`;
+}
+
+function buildProgressBar() {
+   let progress_bar = [ { innerHTML:'<div class="container" id="progress_div">' + 
+                                    '<div class="progress-container">' + 
+                                    '<div class="progress-bar" id="progressBar"></div>' +
+                                    '</div>' + 
+                                    '<p id="progressText">0% Complete (0/0 requests)</p>' + 
+                                    '<p id="status">Status: Waiting to start...</p>' +
+                                    '</div>' }, ];
+   faddelems('p',document.body,progress_bar);
+}
+ 
+function hideProgressBar() {
+   // Get the elements
+   const progress_div    = document.getElementById('progress_div');
+
+   // Hide the elements
+   if( progress_div )    { progress_div.style.display     = 'none'; }
+}
+
+function obsFieldExists(obs_data, field_id) ) {
+  for( let i=0; i<obs_data.obs_fields.length; i++ ) {
+       if( obs_data.obs_fields[i].field_id.toString() === field_id.toString() ) {
+           return true;
+       }
+  }
+
+  return false;
+}
+
+// Function to fetch multiple pages of observations sequentially
+async function getAllObservations( customUserAgent, obs_data ) {
+  let total_results = '';
+  let completedRequests = 0;
+ 
+  const headers = customUserAgent ? { 'User-Agent': customUserAgent } : {};
+
+  if( winurlsearchstr==='' || p_query === '' || p_ofv_datatype === '' ) {
+      return;
+  } else {
+      buildProgressBar();
+  }
+
+  console.log('Starting API calls...');
+
+  const progressBar = document.getElementById('progressBar');
+  const progressText = document.getElementById('progressText');
+  let statusElem = document.getElementById('status');
+
+  statusElem.textContent = "Status: Fetching in progress...";  let isFetching = false;
+ 
+  for (let page = 1; page <= obs_data.max_pages; page++) {
+    let pg = '&per_page='+obs_data.per_page+'&page='+page;
+    const apiurl  = apibase+obs_data.api_params+pg;
+
+    console.log('apiurl ' + apiurl );
+    console.log('Fetching page ' + page + ' of ' + obs_data.max_pages + '...');
+    
+    try {
+      // Apply a delay before all but the first request to stay within the rate limit.
+      // iNaturalist recommends about 1 request per second.
+      if( page > 1 ) { await delay(1500); }
+
+      const response = await fetch(apiurl, { headers });
+
+      if( response.status === 422 ) {
+          const errorBody = await response.json(); 
+          const errorMessage = errorBody.errors?.[0]?.message || JSON.stringify(errorBody);
+          let message = '<b>' + response.status + '</b>' + 
+                        '<br><b>' + errorMessage.toLowerCase() + '</b>' +   
+                        '<br>A parameter unknown to the system was specified in the query parameters. ' + 
+                        '<br>Please adjust the parameter mentioned above. &nbsp;&nbsp;' + furl(window.location.pathname, 'return');
+          throw new Error(message);
+      }
+           
+      if( !response.ok ) { 
+          throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); 
+      }
+      
+      const data = await response.json();    
+           
+      total_results     = data.total_results;
+      let calc_page_max = Math.ceil(total_results/obs_data.per_page);
+
+      if( page === 1 && calc_page_max <= obs_data.max_pages ) {
+          obs_data.max_pages = calc_page_max;
+      }
+
+      if( total_results === 0 ) {
+          let message = '<br>No results found for query.' + 
+                        '<br><br>Please adjust the parameters such that observations are found.  ' + 
+                        furl(window.location.pathname, 'return');
+          throw( new Error(message) ); 
+      }
+
+      if( total_results >= obs_data.max_rows ) {
+          let message = '<br>Total results returned from query is greater than the maximum allowed of ' + obs_data.max_rows + '.' + 
+                        '<br>Please add additional parameters that further reduce the number of results to be returned.  ' + 
+                        furl(window.location.pathname, 'return');
+          throw( new Error(message) ); 
+      }
+
+      completedRequests++;
+      updateProgress(completedRequests, obs_data.max_pages);
+
+      // cache and array of obs fields that are each unique within this dataset.
+      for( let i=0; i<data.results.length; i++ ) {
+           for( let j=0; j<data.results[i].ofvs.length; j++ ) {
+                if( !obsFieldExists(obs_data, data.results[i].ofvs.field_id) ) {
+                    const obs_field = new ObsField( data.results[i].ofvs[j] );
+                    obs_data.obs_fields.push( obs_field );
+                }
+           }
+      }
+         
+    } catch (error) {
+      console.error(error.message);
+      // might want to handle UI updates for the error here
+      statusElem.textContent = "Status: Error occurred.";
+      throw error; 
+    }
+  }
+
+  // hide the progress bar once the fetching has completed successfully.
+  hideProgressBar();
+
+  if( total_results > 0 ) {
+      obs_data.total_results = total_results;
+      const jsonObj = JSON.stringify( obs_data );
+      sessionStorage.setItem( cache_name, jsonObj );
+  }
+
+  return obs_data;
+}
+
+async function getAll(obs_data) {
+
+   return (async () => {
+    
+      try {
+       
+         const customUserAgent = 'ObsFieldViewer/0.1 (@stockslager)'; 
+         await getAllObservations( customUserAgent, obs_data );
+       
+      } catch (error) {
+         throw error;
+      }
+    
+   })();
+  
+};
