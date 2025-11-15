@@ -1,0 +1,287 @@
+<!DOCTYPE html>      
+<html lang="en">          
+ 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Observation Field Viewer" />
+<link rel="icon" type="image/png" href="/iNat/plant-icon-96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/iNat/plant-icon-96.svg" />
+<link rel="shortcut icon" href="/iNat/plant-club.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/iNat/plant-icon-192.png" />
+<meta name="apple-mobile-web-app-title" content="Observation Field Viewer" />
+<link rel="manifest" href="/iNat/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css" href="/iNat/seed_library.css" />
+<script type="text/javascript" src='/iNat/common_func.js'> </script>
+<script type="text/javascript" src='/iNat/test/observation_fields/js/observations.js'> </script>
+<script type="text/javascript" src='/iNat/test/observation_fields/js/fetch_obs.js'> </script>
+<script type="text/javascript" src='/iNat/test/observation_fields/js/obs_results_common.js'> </script>
+<script type="text/javascript" src='/iNat/js/plant_params_v10.js'> </script>
+<title>Observation Field Viewer</title>
+</head>
+
+<style>
+   #menu_title { /*padding-top:1px;*/ font-size:16px; }
+   #mismatch { padding-right:25px; padding-bottom:18px; }
+   #topright { display:flex; justify-content:flex-end; align-items: flex-end; white-space:nowrap; padding-right:0px; }
+   #error { margin-left:15px; margin-bottom: 10px; margin-top:50px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 8px; padding-bottom: 8px; padding-left: 8px; padding-right: 8px; }
+   #stats { margin-bottom: 10px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 8px; padding-bottom: 8px; padding-left: 8px; padding-right: 8px; }
+   #dltest { max-height:76px; overflow-y:auto; /* overflow: scroll; */ width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 8px; padding-bottom: 8px; padding-left: 8px; padding-right: 4px; margin-bottom: 10px; white-space:nowrap; }
+   #itable { float:right; width:fit-content; display: inline-table; justify-content:start; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }   
+   #key { color:var(--color-text); text-decoration:underline; padding:0; padding-right: 25px;}
+   #keylast { color:var(--color-text); text-decoration:underline; padding:0; padding-right: 10px;}
+   #keyx { color:var(--color-text); padding:0; padding-right: 5px; }
+   #tablekey { display:inline-table; }
+   #trkey { padding:0; background:var(--color-base); border:none; border-collapse:collapse; }
+   #tdkey { padding:0; padding-right: 25px; }
+   #tdright { padding:0; padding-right: 10px; float:right; }
+   #tdsecond { padding:0; padding-right: 0px; }
+   #main { width:100%; }
+   #h2 { font-weight:bold; font-size:20px; }
+   p { width:100%; }
+   .npcicon { width:38px; height:38px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 5px; border-radius: 50px; }
+   .button, .button_inactive { display:inline-block; margin-left:10px; margin-top:10px; height:32px; width:32px; border:1px solid var(--color-border); border-radius:35%; font-size:24px; vertical-align:middle; text-align:center; }
+   .button { background:var(--color-alt); }
+   .button_inactive { background:none; color:var(--color-border); }
+
+container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.progress-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 30px;
+    background-color: #4caf50;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+    transition: width 0.4s ease;
+}
+
+#progressText {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+} 
+
+input[type=text], select {
+  width: 95%;
+  padding: 6px 10px;
+  margin: 4px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  width: fit-content;
+  background-color: #333;
+  color: white;
+  padding: 7px 10px;
+  margin: 4px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #171717;
+}
+</style>
+<body>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
+let p_chosen_taxon_id    = winurlparams.get('chosen_taxon_id') || '';
+let p_operator    = winurlparams.get('operator') || '';
+let p_ofv_datatype = winurlparams.get('ofv_datatype') || 'taxon,text,numeric,date,time,datetime,dna';
+let p_chosen_datatypes = winurlparams.get('chosen_datatypes') || '';
+let p_obs_fields   = winurlparams.get('obs_fields') || '';
+let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
+let p_field        = winurlparams.get('field') || '';
+let p_field_value  = winurlparams.get('field_value') || '';
+let p_clear_cache  = winurlparams.get('clear_cache') || '';
+let p_query        = winurlparams.get('query') || '' ;
+let p_return_to    = winurlparams.get('returnto') || '';
+let field_array = [];
+
+if( p_query ) {
+    p_query = encodeURIComponent( p_query );
+}
+
+if( p_obs_fields !== '' ){
+    field_array = p_obs_fields.split(",");
+}
+
+let apibase = 'https://api.inaturalist.org/v1/observations';
+let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
+let apirefname = 'iNaturalist Observations';
+let apiref = furl(apirefurl,apirefname);
+let cache_name = window.location.pathname;
+console.log('cache name ~ ' + cache_name);
+
+// remove the query params since it'll be going against the cache after the initial query
+winurlparams.delete('query');
+//winurlparams.delete('ofv_datatype');
+
+// add history without query and ofv_datatype params since we'll be going against cached data.
+if( p_query ) {
+    console.log('encoded query - ' + p_query);
+    sessionStorage.setItem( cache_name+'query', p_query );
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.delete('query'); 
+    //currentUrl.searchParams.delete('ofv_datatype'); 
+    // add a new history entry (allowing back navigation)
+    window.history.pushState({}, document.title, currentUrl.toString());
+}
+
+if( p_clear_cache === 'yes' ) {
+    winurlparams.delete('clear_cache'); 
+    sessionStorage.removeItem( cache_name );
+}
+
+function buildTitle( name, content, tooltip ) {
+  let dd = '<div id="'+name+'" class="dd_title" style="cursor:pointer;" title="'+tooltip+'">' + content +
+           '</div>';
+
+  return( dd );
+}
+
+function ensureQuestionMark(str) {
+  if (str.startsWith('?')) {
+    return str;
+  } else {
+    return '?' + str;
+  }
+}
+
+function getObs() {
+  let api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype );
+  obs_data = new ObservationsData( '', '', api_params );
+
+  (async () => {
+    try {
+      await getAll(obs_data); // Await the async function call
+      if( obs_data && obs_data.observations.length > 0 ) {
+          console.log('Fetched a total of ' + obs_data.observations.length + ' observations.');
+          console.log('First observation:', obs_data.observations[0]);
+          fresults(obs_data);
+      }
+    } catch (error) {
+      hideProgressBar();
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + error.message + '</span>')});  
+    }
+  })();
+}
+
+const cache_str    = sessionStorage.getItem( cache_name );
+
+if( cache_str ) {
+    obs_data = JSON.parse(cache_str); 
+    console.log('found cached observations... ' );
+    console.log('First observation:', obs_data.observations[0].toString());
+    if( obs_data && obs_data.observations.length > 0 ) {
+        console.log('Fetched a total of ' + obs_data.observations.length + ' observations.');
+        console.log('First observation:', obs_data.observations[0]);
+        fresults(obs_data);
+    }
+} else {
+    if( !p_query ) {
+        let returnto = ''; 
+        if( p_return_to ) { returnto = '<br>Return to ' + furl(p_return_to, p_return_to); }
+   
+        let message = [ {innerHTML:'<span id="error">&#9888;' + 
+                                   '<br>No observations stored in cache. ' + 
+                                   '<br>This page requires a cache of data to be assembled upon entry, but no cache has been found.' + 
+                                   returnto + '</span>'}, ];
+        faddelems('p',document.body,message);
+    } else {
+        getObs();
+    }
+}
+ 
+async function getSessionStorageObjectSize() {
+
+  try {
+      const estimate = await navigator.storage.estimate();
+      console.log(`Total Avaiable: ${estimate.quota} bytes`);
+  } catch (error) {
+      console.error("Error estimating storage:", error);
+  }
+}
+
+async function reportCacheSize(key) {
+  await getSessionStorageObjectSize(cache_name);
+
+  const item = sessionStorage.getItem(key);
+ 
+  if( item ) {
+      // Calculate the size in bytes (assuming UTF-8 encoding, where each character is 1 byte for ASCII, and more for other characters)
+      // For a more accurate byte count with non-ASCII characters, consider using TextEncoder
+      const sizeInBytes = new TextEncoder().encode(item).length; 
+      console.log('Cache Size: ' + sizeInBytes + ' bytes');
+  } else {
+      console.log('Cache Size: 0 bytes');
+  }
+
+}
+
+reportCacheSize();
+ 
+
+function boxRow(field_id, field_name, ofv_datatype) {
+    this.field_id     = field_id;
+    this.field_name   = field_name;
+    this.ofv_datatype = ofv_datatype;
+}
+
+ function ddRow(field_id, field_name, ofv_datatype) {
+    this.field_id     = field_id;
+    this.field_name   = field_name;
+    this.ofv_datatype = ofv_datatype;
+}
+
+function buildMenu(fields) {
+      let menu_string = '';
+      let links = '';
+      let taxon_param = '';
+      let ofv_datatype_array = [];
+      let chosen_datatypes_array = [];
+
+      ofv_datatype_array = p_ofv_datatype.split(',');
+      chosen_datatypes_array = p_chosen_datatypes.split(',');
+ 
+      menu_string = '<div class="navbar">';
+
+      // don't add the drop down if a taxon_id or field_value has been chosen.
+      menu_string += buildDDTitle( 'Observation Fields' );
+
+      menu_string += buildHome( furl(p_return_to,'Return') );
+ 
+      menu_string += '</div>';
+
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+
+</script>
+</body>
+
+</html>
