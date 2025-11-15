@@ -270,7 +270,7 @@ function fresults(xobj) {
              pref_tax_name = rec.taxon_preferred_common_name || '';
            
              if( rec.taxon_default_photo_url ){
-                 tax_photo = '<img class="icon" src="'+rec.taxon_default_photo_url+'" />';
+                 tax_photo = '<img class="icon" src="'+xobj.photo_loc+rec.taxon_default_photo_url+'" />';
              }
          }
 
@@ -279,12 +279,17 @@ function fresults(xobj) {
              taxon = furl(window.location.protocol+'?'+winurlparams+'&chosen_taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
              if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
          }
+
+         let obs_photo = '';
+         if( rec.photos_url ) {  
+             obs_photo = xobj.photo_loc+rec.photos_url;
+         }
        
          values = [
                   {innerText:i+1},
                   {innerHTML:tax_photo},
                   {innerHTML:taxon},
-                  {innerHTML:furl(root_observations+rec.id,'<img class="mini_photo2" src="'+(rec.photos_url||'')+'" />')},
+                  {innerHTML:furl(root_observations+rec.id,'<img class="mini_photo2" src="'+obs_photo+'" />')},
               ];
 
          let user_icon = rec.user_icon || '';
