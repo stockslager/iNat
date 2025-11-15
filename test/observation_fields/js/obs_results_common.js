@@ -149,17 +149,17 @@ function buildDropDownArray( results, box_array ) {
    // that doesn't exist in the array for the drop down, add it.
    for( let i=0; i<results.length; i++ ) {
         let rec = results[i];
-        if( rec.ofvs&&rec.ofvs.length>0 ){
-            for( let j=0; j<rec.ofvs.length; j++ ){
-                 const matchingRow = add_array.find(item => item.field_id.toString() === rec.ofvs[j].field_id.toString() );
+        if( rec.obs_fields&&rec.obs_fields.length>0 ){
+            for( let j=0; j<rec.obs_fields.length; j++ ){
+                 const matchingRow = add_array.find(item => item.field_id.toString() === rec.obs_fields[j].field_id.toString() );
                  if( !matchingRow ) {
-                     add_array.push(new ddRow(rec.ofvs[j].field_id.toString(), rec.ofvs[j].name.toLowerCase(), rec.ofvs[j].datatype ) );
+                     add_array.push(new ddRow(rec.obs_fields[j].field_id.toString(), rec.obs_fields[j].name.toLowerCase(), rec.obs_fields[j].datatype ) );
                   }
                
                   for( let r=0; r<field_array_copy.length; r++ ) {
-                       if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){
-                           let box_row   = box_array.find( boxRow => boxRow.field_id === rec.ofvs[j].field_id.toString() );
-                           box_row.field_name   = rec.ofvs[j].name.toString(); 
+                       if( field_array_copy[r] === rec.obs_fields[j].field_id.toString() ){
+                           let box_row   = box_array.find( boxRow => boxRow.field_id === rec.obs_fields[j].field_id.toString() );
+                           box_row.field_name   = rec.obs_fields[j].name.toString(); 
                            box_row.ofv_datatype = rec.ofvs[j].datatype; 
                        }
                   }
@@ -445,7 +445,7 @@ function fresults(xobj) {
       winurlparams.delete('field_value');
       winurlparams.delete('field');
       faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">cached:</td><td id="tdright">'     + results.length + '</td><td id="tdkey"></td><td id="tdright">' + furl(window.location.protocol+'?'+winurlparams,'reset') + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">cached:</td><td id="tdright">'     + total_results  + '</td><td id="tdkey"></td><td id="tdright">' + furl(window.location.protocol+'?'+winurlparams,'reset') + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">displayed:</td><td id="tdright">'  + display_count  + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">hidden:</td><td id="tdright">'     + filtered_count + '</td></tr></table></span>'});
       if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
