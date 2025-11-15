@@ -209,9 +209,8 @@ function getObs() {
   (async () => {
     try {
       await getAll(obs_data); // Await the async function call
-      if( obs_data && obs_data.observations.length > 0 ) {
-          console.log('Fetched a total of ' + obs_data.observations.length + ' observations.');
-          console.log('First observation:', obs_data.observations[0]);
+      if( obs_data && obs_data.total_results > 0 ) {
+          console.log('Fetched a total of ' + obs_data.total_results + ' observations.');
           fresults(obs_data);
           let shareable_link = (github_root+'observation_fields/blog_view.html?'+winurlparams+'&query='+sessionStorage.getItem( cache_name+'query' ));
           faddelem('p',document.body,{innerHTML:'<br><br><br>Shareable link: <br>' + shareable_link});
