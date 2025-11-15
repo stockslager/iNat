@@ -167,7 +167,7 @@ function buildDropDownArray( obs_fields, box_array ) {
    return add_array;
 }
 
-function getPage() {
+async function getPage() {
 
   let api_params = decodeURIComponent(p_query) + '&ofv_datatype='+ p_ofv_datatype + '&page=1' + '&per_page=100';
 
@@ -176,7 +176,7 @@ function getPage() {
 
   console.log('api url**** ' + url);
 
-  fetch(apiurl)
+  await fetch(apiurl)
     .then((response) => {
        if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
        return response.json();
@@ -196,7 +196,7 @@ function fresults(cached_fields) {
    let filtered_count = 0;
    let obs_fields = cached_fields.obs_fields;
 
-   let xobj = getPage();
+   let xobj = await getPage();
    
    let observations = xobj.results;
 
