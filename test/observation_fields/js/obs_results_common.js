@@ -175,7 +175,7 @@ function fresults(xobj) {
    let total_results = xobj.total_results;
    let display_count = 0;
    let filtered_count = 0;
-   let results = xobj.observations;
+   let results = xobj.obs_fields;
 
    for( let f=0; f<field_array.length; f++ ){
         box_array.push(new boxRow(field_array[f], '') );
