@@ -6,6 +6,7 @@ class ObservationsData {
      this.max_pages              = 5;
      this.max_rows               = 1000;
      this.total_results          = 0;
+     this.photo_loc              = 'https://inaturalist-open-data.s3.amazonaws.com/photos/';
        
      this.observations = [];
   }  
@@ -13,7 +14,7 @@ class ObservationsData {
 
 class Observation {
   
-  constructor(rec) {
+  constructor(rec, photo_loc) {
      this.id                          = rec.id;
     
      if( rec.taxon ){
@@ -24,16 +25,31 @@ class Observation {
 
          if( rec.taxon.default_photo ){
              if( rec.taxon.default_photo.url ){
-                 this.taxon_default_photo_url = rec.taxon.default_photo.url;
+                 const startIndex = rec.taxon.default_photo.url.indexOf(photo_loc);
+
+                 if( startIndex !== -1 ) {
+                     this.taxon_default_photo_url = rec.taxon.default_photo.url.substring(startIndex + photo_loc.length);
+                 } else {
+                     this.taxon_default_photo_url = '';
+                     console.log('** photo url not found for photo **');
+                 }                 
              } 
          }  
      }
        
      if( rec.photos && rec.photos.length>0 ) {
-         this.photos_url = rec.photos[0].url || '';
-     } else {
          this.photos_url = '';
-     }
+         if( rec.photos[0].url ) {
+             const startIndex = rec.photos[0].url.indexOf(photo_loc);
+
+             if( startIndex !== -1 ) {
+                 this.photos_url = rec.photos[0].url.substring(startIndex + photo_loc.length);
+             } else {
+                 this.photos_url = '';
+                 console.log('** photo url not found for photo **');
+             }  
+         }
+     } 
        
      this.user_icon                   = rec.user.icon || '';
      this.user_login                  = rec.user.login || '';
