@@ -158,7 +158,7 @@ function buildDropDownArray( obs_fields, box_array ) {
                  if( field_array_copy[r] === obs_fields[j].field_id.toString() ){
                      let box_row   = box_array.find( boxRow => boxRow.field_id === obs_fields[j].field_id.toString() );
                      box_row.field_name   = obs_fields[j].name.toString(); 
-                     box_row.ofv_datatype = rec.ofvs[j].datatype; 
+                     box_row.ofv_datatype = obs_fields[j].datatype; 
                  }
             }
         }
