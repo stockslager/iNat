@@ -270,7 +270,7 @@ function fresults(xobj) {
              pref_tax_name = rec.taxon_preferred_common_name || '';
            
              if( rec.taxon_default_photo_url ){
-                 tax_photo = '<img class="icon" src="'+xobj.photo_loc+rec.taxon_default_photo_url+'" />';
+                 tax_photo = '<img class="icon" src="'+rec.taxon_default_photo_url+'" />';
              }
          }
 
@@ -282,7 +282,7 @@ function fresults(xobj) {
 
          let obs_photo = '';
          if( rec.photos_url ) {  
-             obs_photo = xobj.photo_loc+rec.photos_url;
+             obs_photo = rec.photos_url;
          }
        
          values = [
