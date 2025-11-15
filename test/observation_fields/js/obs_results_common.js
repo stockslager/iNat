@@ -171,16 +171,34 @@ function setAPIParams() {
 
   let api_params = p_query + '&page=1' + '&per_page=100';
 
+  let apibase = 'https://api.inaturalist.org/v1/observations';
+
+  console.log('api url**** ' + apibase+api_params);
+
+  /*fetch(apiurl)
+    .then((response) => {
+       if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+       return response.json();
+    })
+    .then((data) => { fresults(data); })
+    .catch((err) => {
+       console.error(err.message);
+       faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+    });*/
+
   return api_params;
 }
 
-function fresults(cached_fields, xobj) {
+function fresults(cached_fields) {
    let box_array = [];
    let total_results = cached_fields.total_results;
-   let observations = xobj.results;
    let display_count = 0;
    let filtered_count = 0;
    let obs_fields = cached_fields.obs_fields;
+
+   let api_params = setAPIParams();
+   
+   let observations = xobj.results;
 
    for( let f=0; f<field_array.length; f++ ){
         box_array.push(new boxRow(field_array[f], '') );
@@ -250,8 +268,6 @@ function fresults(cached_fields, xobj) {
           // hide the mismatch warning... only display it if there is a mismatch in the table.
           document.getElementById("mismatch").style.display = "none"; 
       }
-
-      let api_params = setAPIParams();
      
       for (let i=0; i<observations.length; i++) {
          let rec = observations[i];
