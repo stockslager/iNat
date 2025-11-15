@@ -246,7 +246,7 @@ function fresults(xobj) {
           document.getElementById("mismatch").style.display = "none"; 
       }
      
-      for (let i=0; i<results.length; i++) {
+      /*for (let i=0; i<results.length; i++) {
          let rec = results[i];
          let tax_name = '';
          let pref_tax_name = '';
@@ -439,7 +439,7 @@ function fresults(xobj) {
          } else {
              filtered_count++;
          }
-      };
+      }; */
 
       winurlparams.delete('chosen_taxon_id');
       winurlparams.delete('field_value');
