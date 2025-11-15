@@ -181,7 +181,7 @@ function setAPIParams() {
        if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
        return response.json();
     })
-    .then((data) => { fresults(data); })
+    .then((data) => { data; })
     .catch((err) => {
        console.error(err.message);
        faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
