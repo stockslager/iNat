@@ -167,7 +167,7 @@ function buildDropDownArray( obs_fields, box_array ) {
    return add_array;
 }
 
-function setAPIParams() {
+function getPage() {
 
   let api_params = decodeURIComponent(p_query) + '&ofv_datatype='+ p_ofv_datatype + '&page=1' + '&per_page=100';
 
@@ -181,7 +181,7 @@ function setAPIParams() {
        if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
        return response.json();
     })
-    .then((data) => { data; })
+    .then((data) => { return data; })
     .catch((err) => {
        console.error(err.message);
        faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
@@ -196,7 +196,7 @@ function fresults(cached_fields) {
    let filtered_count = 0;
    let obs_fields = cached_fields.obs_fields;
 
-   let xobj = setAPIParams();
+   let xobj = getPage();
    
    let observations = xobj.results;
 
