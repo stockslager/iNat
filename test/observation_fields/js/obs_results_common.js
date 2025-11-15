@@ -141,29 +141,26 @@ function buildEmptyLink() {
       return empty_link;
 }
 
-function buildDropDownArray( results, box_array ) {
+function buildDropDownArray( obs_fields, box_array ) {
    let add_array = [];
    let field_array_copy = field_array;
  
    // loop through the list of observation fields for each observation.  whenever there is one
    // that doesn't exist in the array for the drop down, add it.
-   for( let i=0; i<results.length; i++ ) {
-        let rec = results[i];
-        if( rec.obs_fields&&rec.obs_fields.length>0 ){
-            for( let j=0; j<rec.obs_fields.length; j++ ){
-                 const matchingRow = add_array.find(item => item.field_id.toString() === rec.obs_fields[j].field_id.toString() );
-                 if( !matchingRow ) {
-                     add_array.push(new ddRow(rec.obs_fields[j].field_id.toString(), rec.obs_fields[j].name.toLowerCase(), rec.obs_fields[j].datatype ) );
-                  }
+   if( obs_fields&&obs_fields.length>0 ){
+       for( let j=0; j<obs_fields.length; j++ ){
+            const matchingRow = add_array.find(item => item.field_id.toString() === obs_fields[j].field_id.toString() );
+            if( !matchingRow ) {
+                add_array.push(new ddRow(obs_fields[j].field_id.toString(), obs_fields[j].name.toLowerCase(), obs_fields[j].datatype ) );
+            }
                
-                  for( let r=0; r<field_array_copy.length; r++ ) {
-                       if( field_array_copy[r] === rec.obs_fields[j].field_id.toString() ){
-                           let box_row   = box_array.find( boxRow => boxRow.field_id === rec.obs_fields[j].field_id.toString() );
-                           box_row.field_name   = rec.obs_fields[j].name.toString(); 
-                           box_row.ofv_datatype = rec.ofvs[j].datatype; 
-                       }
-                  }
-             }
+            for( let r=0; r<field_array_copy.length; r++ ) {
+                 if( field_array_copy[r] === obs_fields[j].field_id.toString() ){
+                     let box_row   = box_array.find( boxRow => boxRow.field_id === obs_fields[j].field_id.toString() );
+                     box_row.field_name   = obs_fields[j].name.toString(); 
+                     box_row.ofv_datatype = rec.ofvs[j].datatype; 
+                 }
+            }
         }
    }
 
