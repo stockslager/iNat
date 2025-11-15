@@ -58,7 +58,7 @@ function hideProgressBar() {
    if( progress_div )    { progress_div.style.display     = 'none'; }
 }
 
-function obsFieldExists(obs_data, field_id) ) {
+function obsFieldExists( obs_data, field_id ) {
   for( let i=0; i<obs_data.obs_fields.length; i++ ) {
        if( obs_data.obs_fields[i].field_id.toString() === field_id.toString() ) {
            return true;
