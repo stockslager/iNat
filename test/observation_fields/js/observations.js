@@ -6,7 +6,6 @@ class ObservationsData {
      this.max_pages              = 5;
      this.max_rows               = 1000;
      this.total_results          = 0;
-     this.photo_loc              = 'https://inaturalist-open-data.s3.amazonaws.com/photos/';
        
      this.observations = [];
   }  
@@ -14,7 +13,7 @@ class ObservationsData {
 
 class Observation {
   
-  constructor(rec, photo_loc) {
+  constructor(rec) {
      this.id                          = rec.id;
     
      if( rec.taxon ){
@@ -22,32 +21,19 @@ class Observation {
          this.taxon_name                  = rec.taxon.name || '';
          this.taxon_preferred_common_name = rec.taxon.preferred_common_name || '';
          this.taxon_min_species_ancestry  = rec.taxon.min_species_ancestry || '';
+         this.photos_url                  = '';
+         this.taxon_default_photo_url     = '';
 
          if( rec.taxon.default_photo ){
              if( rec.taxon.default_photo.url ){
-                 const startIndex = rec.taxon.default_photo.url.indexOf(photo_loc);
-
-                 if( startIndex !== -1 ) {
-                     this.taxon_default_photo_url = rec.taxon.default_photo.url.substring(startIndex + photo_loc.length);
-                 } else {
-                     this.taxon_default_photo_url = '';
-                     console.log('** photo url not found for photo **');
-                 }                 
+                 this.taxon_default_photo_url = rec.taxon.default_photo.url;
              } 
          }  
      }
        
      if( rec.photos && rec.photos.length>0 ) {
-         this.photos_url = '';
          if( rec.photos[0].url ) {
-             const startIndex = rec.photos[0].url.indexOf(photo_loc);
-
-             if( startIndex !== -1 ) {
-                 this.photos_url = rec.photos[0].url.substring(startIndex + photo_loc.length);
-             } else {
-                 this.photos_url = '';
-                 console.log('** photo url not found for photo **');
-             }  
+             this.photos_url = rec.photos[0].url;
          }
      } 
        
