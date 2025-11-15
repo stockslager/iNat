@@ -111,7 +111,7 @@ function buildRemoveObsFieldURL( box_row, box_array ){
     winurlparams.delete('chosen_taxon_id');
 
     if( !p_chosen_taxon_id && !p_field && !p_operator ) {
-        remove_url = furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,'&#9447;&nbsp;'+box_row.field_id);
+        remove_url = furl(window.location.protocol+'?'+winurlparams,'&#9447;&nbsp;'+box_row.field_id);
     } else {
         remove_url = box_row.field_id;
     }
