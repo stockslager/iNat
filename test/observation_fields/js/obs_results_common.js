@@ -74,7 +74,7 @@ function showRow( rec ) {
  
     if( p_chosen_taxon_id ) {
         const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
-        if( p_chosen_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_chosen_taxon_id.toString() )  ) {
+        if( p_chosen_taxon_id.toString() === rec.taxon.id.toString() || ancestry_arr.includes( p_chosen_taxon_id.toString() )  ) {
             if( p_field_value ) {
                 return hasMatchingFieldValue(rec);
             } else {
@@ -167,18 +167,26 @@ function buildDropDownArray( obs_fields, box_array ) {
    return add_array;
 }
 
-function fresults(xobj) {
+function setAPIParams() {
+
+  let api_params = p_query + '&page=1' + '&per_page=100';
+
+  return api_params;
+}
+
+function fresults(cached_fields, xobj) {
    let box_array = [];
-   let total_results = xobj.total_results;
+   let total_results = cached_fields.total_results;
+   let observations = xobj.results;
    let display_count = 0;
    let filtered_count = 0;
-   let results = xobj.obs_fields;
+   let obs_fields = cached_fields.obs_fields;
 
    for( let f=0; f<field_array.length; f++ ){
         box_array.push(new boxRow(field_array[f], '') );
    }
  
-   if (results) {
+   if( obs_fields && observations ) {
 
       let labels = [];
       let obs_field_box = '';
@@ -197,7 +205,7 @@ function fresults(xobj) {
 
       let tempBrow = [];
 
-      buildMenu( buildDropDownArray(results, box_array) );
+      buildMenu( buildDropDownArray(obs_fields, box_array) );
       
       let firstCol = 'yes';
         
@@ -242,9 +250,11 @@ function fresults(xobj) {
           // hide the mismatch warning... only display it if there is a mismatch in the table.
           document.getElementById("mismatch").style.display = "none"; 
       }
+
+      let api_params = setAPIParams();
      
-      /*for (let i=0; i<results.length; i++) {
-         let rec = results[i];
+      for (let i=0; i<observations.length; i++) {
+         let rec = observations[i];
          let tax_name = '';
          let pref_tax_name = '';
          let tax_photo = '<div class="clipart"></div>'; 
@@ -261,13 +271,13 @@ function fresults(xobj) {
          let matchTaxonId = '';
          let taxon = '';
          
-         if( rec.taxon_id ){
-             tax_id = rec.taxon_id;
-             tax_name = rec.taxon_name || '';
-             pref_tax_name = rec.taxon_preferred_common_name || '';
+         if( rec.taxon.id ){
+             tax_id = rec.taxon.id;
+             tax_name = rec.taxon.name || '';
+             pref_tax_name = rec.taxon.preferred_common_name || '';
            
-             if( rec.taxon_default_photo_url ){
-                 tax_photo = '<img class="icon" src="'+rec.taxon_default_photo_url+'" />';
+             if( rec.taxon.default_photo.url ){
+                 tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
              }
          }
 
@@ -278,8 +288,8 @@ function fresults(xobj) {
          }
 
          let obs_photo = '';
-         if( rec.photos_url ) {  
-             obs_photo = rec.photos_url;
+         if( rec.photos && rec.photos[0].url ) {  
+             obs_photo = rec.photos[0].url;
          }
        
          values = [
@@ -289,7 +299,7 @@ function fresults(xobj) {
                   {innerHTML:furl(root_observations+rec.id,'<img class="mini_photo2" src="'+obs_photo+'" />')},
               ];
 
-         let user_icon = rec.user_icon || '';
+         let user_icon = rec.user.icon || '';
          
          if( user_icon === '' ){
             user_icon += '<div class="npcicon"></div>';
@@ -317,11 +327,11 @@ function fresults(xobj) {
                           } else if( dataType !== rec.ofvs[j].datatype ){
                               mismatch = 'yes';
                           }
-                          if( rec.ofvs[j].taxon_id ){
+                          if( rec.ofvs[j].taxon.id ){
                               if( matchTaxonId === '' ){
-                                  matchTaxonId = rec.ofvs[j].taxon_id;
+                                  matchTaxonId = rec.ofvs[j].taxon.id;
                               }
-                              if( rec.ofvs[j].taxon_id !== matchTaxonId ){
+                              if( rec.ofvs[j].taxon.id !== matchTaxonId ){
                                   mismatch = 'yes';
                               }
                           }
@@ -331,10 +341,10 @@ function fresults(xobj) {
                           
                           field1 = rec.ofvs[j].value.toLowerCase();
 
-                          if( rec.ofvs[j].taxon_id ){ 
-                              let name  = rec.ofvs[j].taxon_name || '';
-                              let cname = rec.ofvs[j].taxon_preferred_common_name || '';
-                              if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon_iconic_taxon_id.toString() ){
+                          if( rec.ofvs[j].taxon.id ){ 
+                              let name  = rec.ofvs[j].taxon.name || '';
+                              let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                              if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
                                   field1 = name;
                                   displayCommonName = cname.toLowerCase();
                                   displayTaxonName = name;
@@ -363,9 +373,9 @@ function fresults(xobj) {
                                   field1 = rec.ofvs[j].value.toLowerCase();
                                   displayName = rec.ofvs[j].value.toLowerCase();
                                 
-                                  if( rec.ofvs[j].taxon_id ){
-                                      let name  = rec.ofvs[j].taxon_name || '';
-                                      let cname = rec.ofvs[j].taxon_preferred_common_name || '';
+                                  if( rec.ofvs[j].taxon.id ){
+                                      let name  = rec.ofvs[j].taxon.name || '';
+                                      let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                                       field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   }
                                   if( p_field_value === '' ){
@@ -428,7 +438,7 @@ function fresults(xobj) {
          }          
 
          values.push({innerHTML:user_icon});
-         values.push({innerHTML:furl(root_people+rec.user_login,rec.user_login)}); 
+         values.push({innerHTML:furl(root_people+rec.user.login,rec.user.login)}); 
 
          if( showRow(rec) ) {
              display_count++;
@@ -442,7 +452,7 @@ function fresults(xobj) {
       winurlparams.delete('field_value');
       winurlparams.delete('field');
       faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">cached:</td><td id="tdright">'     + total_results  + '</td><td id="tdkey"></td><td id="tdright">' + furl(window.location.protocol+'?'+winurlparams,'reset') + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">dataset:</td><td id="tdright">'    + total_results  + '</td><td id="tdkey"></td><td id="tdright">' + furl(window.location.protocol+'?'+winurlparams,'reset') + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">displayed:</td><td id="tdright">'  + display_count  + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">hidden:</td><td id="tdright">'     + filtered_count + '</td></tr></table></span>'});
       if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
