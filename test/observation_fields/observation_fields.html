@@ -218,7 +218,8 @@ function getObs() {
       }
     } catch (error) {
       hideProgressBar();
-      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + error.message + '</span>')});  
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + error.message + '</span>')});
+      throw error;
     }
   })();
 }
