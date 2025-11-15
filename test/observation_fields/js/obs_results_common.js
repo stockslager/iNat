@@ -176,7 +176,7 @@ function setAPIParams() {
 
   console.log('api url**** ' + url);
 
-  /*fetch(apiurl)
+  fetch(apiurl)
     .then((response) => {
        if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
        return response.json();
@@ -185,9 +185,8 @@ function setAPIParams() {
     .catch((err) => {
        console.error(err.message);
        faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-    });*/
+    });
 
-  return api_params;
 }
 
 function fresults(cached_fields) {
@@ -197,9 +196,9 @@ function fresults(cached_fields) {
    let filtered_count = 0;
    let obs_fields = cached_fields.obs_fields;
 
-   let api_params = setAPIParams();
+   let xobj = setAPIParams();
    
-   let observations = '';//xobj.results;
+   let observations = xobj.results;
 
    for( let f=0; f<field_array.length; f++ ){
         box_array.push(new boxRow(field_array[f], '') );
