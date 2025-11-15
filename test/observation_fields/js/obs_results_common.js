@@ -169,7 +169,7 @@ function buildDropDownArray( obs_fields, box_array ) {
 
 function setAPIParams() {
 
-  let api_params = p_query + '&page=1' + '&per_page=100';
+  let api_params = decodeURIComponent(p_query) + '&page=1' + '&per_page=100';
 
   let apibase = 'https://api.inaturalist.org/v1/observations';
   let url     = apibase+((api_params!='')?('?'+api_params):'');
