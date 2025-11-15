@@ -208,10 +208,10 @@ function getObs() {
 
   (async () => {
     try {
-      let data = await getAll(obs_data); // Await the async function call
+      await getAll(obs_data); // Await the async function call
       if( obs_data && obs_data.obs_fields && obs_data.obs_fields.length > 0 ) {
           console.log('Found a total of ' + obs_data.total_results + ' with ' + obs_data.obs_fields.length + ' unique obs fields.');
-          fresults(obs_data, data);
+          fresults(obs_data);
           let shareable_link = (github_root+'observation_fields/blog_view.html?'+winurlparams+'&query='+sessionStorage.getItem( cache_name+'query' ));
           faddelem('p',document.body,{innerHTML:'<br><br><br>Shareable link: <br>' + shareable_link});
       }
