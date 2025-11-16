@@ -224,7 +224,7 @@ function fresults(xobj) {
          if( configuration.sub_icons && !p_sub_menu_array ) {
                 if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
                     for( let j=0; j<configuration.sub_icons.length; j++ ) {
-                         if( results[i].taxon.ancestor_ids.includes( configuration.sub_icons[j].taxon_id ) {
+                         if( results[i].taxon.ancestor_ids.includes( configuration.sub_icons[j].taxon_id ) ) {
                              sub_taxon_arr.push( configuration.sub_icons[j].taxon_id );
                          }
                          /*for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
