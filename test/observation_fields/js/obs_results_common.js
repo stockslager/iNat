@@ -143,11 +143,11 @@ function buildMenu(sub_taxon_arr) {
        let tname = p_taxon_name || 'Fauna';
 
        let copy_url_params = buildFilterParams( '', p_field, p_field_value, '', p_field_name );
-       links = (furl(window.location.protocol+'?'+winurlparams,'<span style="padding-right:20px;">&#10133;</span>all' ));
+       links = (furl(window.location.protocol+'?'+copy_url_params,'<span style="padding-right:20px;">&#10133;</span>all' ));
        for( let j=0; j<configuration.sub_icons.length; j++ ) {
             if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
                 let copy_url_params = buildFilterParams( configuration.sub_icons[j].taxon_id, p_field, p_field_value, configuration.sub_icons[j].nm, p_field_name );
-                links += (furl(window.location.protocol+'?'+copy_url_params,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+                links += (furl(window.location.protocol+'?'+copy_url_params,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm.toLowerCase() ));
             }
        }
               
@@ -159,10 +159,11 @@ function buildMenu(sub_taxon_arr) {
 
    links = '';
    if( configuration.taxa && configuration.taxa.length > 0 ) {
-       links += furl(window.location.protocol+'?'+winurlparams,'All');
+       let copy_url_params = buildFilterParams( p_chosen_taxon_id, '', '', p_taxon_name, '' );
+       links += furl(window.location.protocol+'?'+copy_url_params,'all');
        for( let i=0; i<configuration.taxa.length; i++ ) {
             let copy_url_params = buildFilterParams( p_chosen_taxon_id, configuration.field_id, configuration.taxa[i].taxon_id, p_taxon_name, configuration.taxa[i].taxon_name );
-            links += furl(window.location.protocol+'?'+copy_url_params,configuration.taxa[i].taxon_name);
+            links += furl(window.location.protocol+'?'+copy_url_params,configuration.taxa[i].taxon_name.toLowerCase());
        }
    }
  
