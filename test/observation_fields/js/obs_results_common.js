@@ -204,6 +204,20 @@ function fresults(xobj) {
 
       let tempBrow = [];
 
+      for (let i=0; i<observations.length; i++) {
+         let rec = observations[i];
+         if(rec.ofvs&&rec.ofvs.length>0){
+              for( let r=0; r<field_array_copy.length; r++ ) {
+                 for( let j=0; j<rec.ofvs.length; j++ ){
+                      if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){
+                          let box_row   = box_array.find( boxRow => boxRow.field_id === rec.ofvs[j].field_id.toString() );
+                          box_row.field_name = rec.ofvs[j].name.toString();
+                      }
+                 }
+              }
+         }
+      }
+
       //buildMenu( buildDropDownArray(obs_fields, box_array) );
       
       let firstCol = 'yes';
