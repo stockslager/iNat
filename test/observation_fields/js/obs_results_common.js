@@ -218,17 +218,17 @@ function fresults(xobj) {
          if( configuration.sub_icons && !p_sub_menu_array ) {
                 if( !sub_taxon_arr.includes(rec.taxon.id.toString()) ) {
                     for( let j=0; j<configuration.sub_icons.length; j++ ) {
-                         if( rec.taxon.ancestor_ids.includes( configuration.sub_icons[j].taxon_id ) ) {
+                         /*if( rec.taxon.ancestor_ids.includes( configuration.sub_icons[j].taxon_id ) ) {
                              console.log('hello');
                              sub_taxon_arr.push( configuration.sub_icons[j].taxon_id );
-                         }
-                         /*for( let k=0; k<rec.taxon.ancestor_ids.length; k++ ) {
+                         }*/
+                         for( let k=0; k<rec.taxon.ancestor_ids.length; k++ ) {
                               if( rec.taxon.ancestor_ids[k].toString() === configuration.sub_icons[j].taxon_id.toString() ){
                                   if( !sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
                                       sub_taxon_arr.push( configuration.sub_icons[j].taxon_id );
                                   }
                               }
-                          }*/
+                          }
                      }
                 }
          }
