@@ -219,6 +219,7 @@ function fresults(xobj) {
                 if( !sub_taxon_arr.includes(rec.taxon.id.toString()) ) {
                     for( let j=0; j<configuration.sub_icons.length; j++ ) {
                          if( rec.taxon.ancestor_ids.includes( configuration.sub_icons[j].taxon_id ) ) {
+                             console.log('hello');
                              sub_taxon_arr.push( configuration.sub_icons[j].taxon_id );
                          }
                          /*for( let k=0; k<rec.taxon.ancestor_ids.length; k++ ) {
