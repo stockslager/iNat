@@ -271,7 +271,12 @@ function fresults(xobj) {
 
          if( tax_id !== '' ) {
              winurlparams.delete('chosen_taxon_id');
-             taxon = furl(window.location.protocol+'?'+winurlparams+'&chosen_taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
+             winurlparams.append('chosen_taxon_id', tax_id);
+             winurlparams.delete('field_value');
+             winurlparams.append('field_value', p_field_value);
+             winurlparams.delete('field');
+             winurlparams.append('field', p_field);
+             taxon = furl(window.location.protocol+'?'+winurlparams,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
              if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
          }
 
