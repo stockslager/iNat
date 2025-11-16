@@ -142,7 +142,6 @@ function buildMenu() {
       }
  
       if( links ) { menu_string += buildDD('ddPlant', getTaxonName(configuration, p_field_value), links); }
-      document.getElementById('ddPlant').textContent = 'hello';
 
       menu_string += '</div>';
 
@@ -206,6 +205,8 @@ function fresults(xobj) {
       }
     
       faddelem('p',document.body,{innerHTML:(buildMenu())});  
+
+      document.getElementById('ddPlant').textContent = 'hello';
       
       let firstCol = 'yes';
         
