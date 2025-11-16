@@ -262,8 +262,8 @@ function setupAPIParams( configurations ) {
 
    //if( !configuration ) {
        let message = 'Configuration file ('+p_params+'.json) must have an insect_project specified.' + 
-                     'There is no insect_project parameter specified in '+p_params+'.json' + 
-                     'Please add a valid insect_project parameter to '+p_params+'.json';
+                     '<br>There is no insect_project parameter specified in '+p_params+'.json' + 
+                     '<br>Please add a valid insect_project parameter to '+p_params+'.json';
        throw new Error(message);
    //}
 
@@ -290,7 +290,6 @@ function setupAPIParams( configurations ) {
 }
 
 async function asyncGetData() {
-   let err = 'no';
    let api_params = '';
 
    if( !p_params ) {
@@ -313,16 +312,14 @@ async function asyncGetData() {
    })
      .catch(error => {
       console.error('Error fetching JSON:', error.message);
-      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + error.message + '</span>')}); 
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
       throw error;
-      err = 'yes';
    });
 
    let apibase = 'https://api.inaturalist.org/v1/observations';
    let apiurl = apibase+api_params;
    console.log('api url ' + apiurl);
 
-   if( err === 'no' ) {
        if (winurlsearchstr==='' || (p_project_id === '' ) ) {
           let instructions = [
              {innerText:'This page requires a project_id argument.  Add ?project_id=12345678 to the end of the url.  It will default to the "7623 - plant that the organism was found on" observation field if &obs_field=xxx is not passed in.'},
@@ -340,7 +337,6 @@ async function asyncGetData() {
              faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
           });*/
        }
-   }
 }
 
 // need to pull resources from a json file to pass into an api
