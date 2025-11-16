@@ -153,22 +153,23 @@ function buildMenu(sub_taxon_arr) {
               
                 menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
             }
+   }
     
 ////////////////////////////////////////
     
-      if( configuration.taxa && configuration.taxa.length > 0 ) {
-          links += furl(window.location.protocol+'?'+winurlparams,'All');
-          for( let i=0; i<configuration.taxa.length; i++ ) {
-               let copy_url_params = buildFilterParams( p_chosen_taxon_id, configuration.field_id, configuration.taxa[i].taxon_id, p_taxon_name, configuration.taxa[i].taxon_name );
-               links += furl(window.location.protocol+'?'+copy_url_params,configuration.taxa[i].taxon_name);
-          }
-      }
+   if( configuration.taxa && configuration.taxa.length > 0 ) {
+       links += furl(window.location.protocol+'?'+winurlparams,'All');
+       for( let i=0; i<configuration.taxa.length; i++ ) {
+            let copy_url_params = buildFilterParams( p_chosen_taxon_id, configuration.field_id, configuration.taxa[i].taxon_id, p_taxon_name, configuration.taxa[i].taxon_name );
+            links += furl(window.location.protocol+'?'+copy_url_params,configuration.taxa[i].taxon_name);
+       }
+   }
  
-      if( links ) { menu_string += buildPlantDD('ddPlant', getTaxonName(configuration, p_field_value), links); }
+   if( links ) { menu_string += buildPlantDD('ddPlant', getTaxonName(configuration, p_field_value), links); }
 
-      menu_string += '</div>';
+   menu_string += '</div>';
 
-      return menu_string;
+   return menu_string;
 }
 
 function fresults(xobj) {
