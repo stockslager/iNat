@@ -172,6 +172,13 @@ function fresults(xobj) {
    let display_count = 0;
    let filtered_count = 0;
 
+   let total_results = xobj.total_results;
+   let per_page = xobj.per_page;
+   let page_curr = xobj.page;
+   let page_max = Math.ceil(total_results/per_page);
+   let page_prev = ((page_curr>1)?page_curr-1:null);
+   let page_next = ((page_curr<page_max)?page_curr+1:null);
+
    let observations = xobj.results;
 
    for( let f=0; f<field_array.length; f++ ){
