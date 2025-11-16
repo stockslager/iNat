@@ -107,7 +107,7 @@ function buildFilterParams( chosen_taxon_id, field, field_value, taxon_name, fie
 }
 
 function getTaxonName( configuration, taxon_id ) {
-   let taxon_name = capitalizeWords(p_field_name) || 'Fauna';
+   let taxon_name = capitalizeWords(p_field_name) || 'Flora';
 
    for( let i=0; i<configuration.taxa.length; i++ ) {
         if( taxon_id === configuration.taxa[i].taxon_id ) {
