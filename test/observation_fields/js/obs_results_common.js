@@ -139,7 +139,8 @@ function buildMenu(sub_taxon_arr) {
    
    if( configuration.sub_icons ) { 
        let tname = p_taxon_name || 'Wildlife';
-                 
+
+       let copy_url_params = buildFilterParams( '', p_field, p_field_value, '', p_field_name );
        links = (furl(window.location.protocol+'?'+winurlparams,'<span style="padding-right:20px;">&#10133;</span>all' ));
        for( let j=0; j<configuration.sub_icons.length; j++ ) {
             if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
@@ -152,7 +153,7 @@ function buildMenu(sub_taxon_arr) {
    }
     
    // stick the word "on" in between wildlife and plants.
-   buildDDTitle( 'On' );
+   menu_string += buildDDTitle( 'On' );
 
    links = '';
    if( configuration.taxa && configuration.taxa.length > 0 ) {
