@@ -88,43 +88,6 @@ function showRow( rec ) {
     }
 }
 
-function buildRemoveObsFieldURL( box_row, box_array ){
-
-    let remove_url = '';
-    let new_obs_fields_list = removeItemFromCommaDelimitedList(p_obs_fields, box_row.field_id);
-    winurlparams.delete('obs_fields');
-    winurlparams.append('obs_fields', new_obs_fields_list);
-
-    // if there is only one observation field in the remove box with this datatype,
-    // remove the datatype from the list of chosen_datatypes.
-    const count = box_array.filter(obj => obj.ofv_datatype === box_row.ofv_datatype).length;
-    if( count === 1 ) {
-        let new_chosen_datatypes = removeItemFromCommaDelimitedList(p_chosen_datatypes, box_row.ofv_datatype);
-        winurlparams.delete('chosen_datatypes');
-        if( p_chosen_datatypes ) {
-            winurlparams.append('chosen_datatypes', new_chosen_datatypes);
-        }
-    }
-
-    // if a taxon was selected, remove it since we can't tell if the taxon exists for whatever obs fields
-    // aren't being removed.
-    winurlparams.delete('chosen_taxon_id');
-
-    if( !p_chosen_taxon_id && !p_field && !p_operator ) {
-        remove_url = furl(window.location.protocol+'?'+winurlparams,'&#9447;&nbsp;'+box_row.field_id);
-    } else {
-        remove_url = box_row.field_id;
-    }
-
-    // build the url, and set the winurlparams back to what it was before.
-    winurlparams.delete('obs_fields');
-    winurlparams.append('obs_fields', p_obs_fields);
-    winurlparams.delete('chosen_datatypes');
-    winurlparams.append('chosen_datatypes', p_chosen_datatypes);
-
-    return( remove_url );
-}
-
 function buildEmptyLink() {
       winurlparams.delete('operator');
       winurlparams.delete('obs_fields');
@@ -252,7 +215,7 @@ function fresults(xobj) {
                labelCount++;
                if( box_array[e].field_name !== '' ) {
                    obs_field_box += '<tr id="trkey">';
-                   obs_field_box += '<td id="tdkey">'+buildRemoveObsFieldURL( box_array[e], box_array ) + '</td>';
+                   obs_field_box += '<td id="tdkey">'+ box_array[e].field_id + '</td>';
                    obs_field_box += ('<td id="tdsecond">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                    if( p_operator !== 'merge' ){
                        labels.push({innerText:box_array[e].field_name});
