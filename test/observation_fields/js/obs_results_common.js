@@ -167,6 +167,35 @@ function buildDropDownArray( obs_fields, box_array ) {
    return add_array;
 }
 
+function getTaxonName( configuration, taxon_id ) {
+   let taxon_name = 'Plant';
+
+   for( let i=0; i<configuration.taxa.length; i++ ) {
+        if( taxon_id === configuration.taxa[i].taxon_id ) {
+            taxon_name = configuration.taxa[i].taxon_name;
+        }
+   }
+   return taxon_name;
+}
+
+function buildMenu() {
+      let menu_string = '';
+      let links = '';
+
+      menu_string = '<div class="navbar">';
+      
+      if( configuration.taxa && configuration.taxa.length > 0 ) {
+          links += furl(window.location.protocol+'?'+winurlparams,'All');
+          for( let i=0; i<configuration.taxa.length; i++ ) {
+               links += furl(window.location.protocol+'?'+winurlparams+'&field_value='+configuration.taxa[i].taxon_id,configuration.taxa[i].taxon_name);
+          }
+      }
+ 
+      if( links ) { menu_string += buildDD(getTaxonName(configuration, p_taxon_id), links); }
+
+      menu_string += '</div>';
+}
+
 function fresults(xobj) {
    let box_array = [];
    let display_count = 0;
@@ -219,7 +248,7 @@ function fresults(xobj) {
          }
       }
 
-      //buildMenu( buildDropDownArray(obs_fields, box_array) );
+      buildMenu(  );
       
       let firstCol = 'yes';
         
