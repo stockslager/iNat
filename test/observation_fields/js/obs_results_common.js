@@ -107,7 +107,7 @@ function buildFilterParams( chosen_taxon_id, field, field_value, taxon_name, fie
 }
 
 function getTaxonName( configuration, taxon_id ) {
-   let taxon_name = capitalizeWords(p_field_name) || 'Plant';
+   let taxon_name = capitalizeWords(p_field_name) || 'Plants';
 
    for( let i=0; i<configuration.taxa.length; i++ ) {
         if( taxon_id === configuration.taxa[i].taxon_id ) {
@@ -138,15 +138,17 @@ function buildMenu(sub_taxon_arr) {
    menu_string = '<div class="navbar">';
    
    if( configuration.sub_icons ) { 
-                  
-                links = (furl(window.location.protocol+'?'+winurlparams,'<span style="padding-right:20px;">&#10133;</span>all' ));
-                for( let j=0; j<configuration.sub_icons.length; j++ ) {
-                     if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
-                         links += (furl(window.location.protocol+'?'+winurlparams+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
-                     }
-                }
+       let tname = p_taxon_name || 'Wildlife';
+                 
+       links = (furl(window.location.protocol+'?'+winurlparams,'<span style="padding-right:20px;">&#10133;</span>all' ));
+       for( let j=0; j<configuration.sub_icons.length; j++ ) {
+            if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
+                let copy_url_params = buildFilterParams( configuration.sub_icons[j].taxon_id, p_field, p_field_value, configuration.sub_icons[j].nm, p_field_name );
+                links += (furl(window.location.protocol+'?'+copy_url_params,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+            }
+       }
               
-                menu_string += ( buildDD( capitalizeWords(p_taxon_name), links) );
+       menu_string += ( buildDD( capitalizeWords(tname), links) );
    }
     
 ////////////////////////////////////////
