@@ -370,15 +370,16 @@ function fresults(xobj) {
                               if( rec.ofvs[j].value ) {
                                   field1 = rec.ofvs[j].value.toLowerCase();
                                   displayName = rec.ofvs[j].value.toLowerCase();
+                                  let dname = '';
                                 
                                   if( rec.ofvs[j].taxon.id ){
                                       let name  = rec.ofvs[j].taxon.name || '';
                                       let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                                      let dname = cname.toLowerCase() || name.toLowerCase() || '';
+                                      dname     = cname.toLowerCase() || name.toLowerCase() || 'unknown';
                                       field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   }
                                   if( p_field_value === '' ){
-                                      let copy_url_params = buildFilterParams( p_chosen_taxon_id, rec.ofvs[j].field_id, rec.ofvs[j].value.toLowerCase(), p_taxon_name, dname  );
+                                      let copy_url_params = buildFilterParams( p_chosen_taxon_id, rec.ofvs[j].field_id, rec.ofvs[j].value.toLowerCase(), p_taxon_name, (dname||displayName)  );
                                       values.push({innerHTML:furl(window.location.protocol+'?'+copy_url_params, field1)});
                                   } else {
                                       values.push({innerHTML:field1});
