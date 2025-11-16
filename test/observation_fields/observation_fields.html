@@ -300,8 +300,7 @@ async function asyncGetData() {
    let api_params = '';
 
    if( !p_params ) {
-       let message = '<b>' + response.status + '</b>' + 
-                     '<br>A valid .json must be passed in as ?params=some.json. '; 
+       let message = 'A valid .json must be passed in as ?params=some.json. '; 
        faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + message + '</span>')});  
        throw new Error(message);
    }
