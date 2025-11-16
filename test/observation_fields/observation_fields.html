@@ -111,7 +111,6 @@ let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
 let p_chosen_taxon_id    = winurlparams.get('chosen_taxon_id') || '';
 let p_operator    = winurlparams.get('operator') || '';
 let p_ofv_datatype = winurlparams.get('ofv_datatype') || 'taxon,text,numeric,date,time,datetime,dna';
-let p_chosen_datatypes = winurlparams.get('chosen_datatypes') || '';
 let p_obs_fields   = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_field        = winurlparams.get('field') || '';
@@ -149,96 +148,6 @@ function boxRow(field_id, field_name, ofv_datatype) {
     this.field_name   = field_name;
     this.ofv_datatype = ofv_datatype;
 }
-
-/*function buildMenu( fields ) {
-      let menu_string = '';
-      let links = '';
-      let taxon_param = '';
-      let ofv_datatype_array = [];
-      let chosen_datatypes_array = [];
-
-      ofv_datatype_array = p_ofv_datatype.split(',');
-      chosen_datatypes_array = p_chosen_datatypes.split(',');
- 
-      menu_string = '<div class="navbar">';
-
-      if( fields && fields.length > 0 ) {
-          for( let i=0; i<fields.length; i++ ) {
-               if( p_obs_fields ) {
-                   winurlparams.delete('obs_fields');
-                   winurlparams.append('obs_fields', (p_obs_fields+','+fields[i].field_id));
-               } else {
-                   winurlparams.delete('obs_fields');
-                   winurlparams.append('obs_fields', fields[i].field_id);
-               }
-
-               winurlparams.delete('chosen_datatypes');
-               winurlparams.append('chosen_datatypes', p_chosen_datatypes);
-
-               // only show the link in the drop down when the datatype of the obs field matches one
-               // of the datatypes in the ofv_datatype parameter (and when it hasn't already been chosen).
-               if( ofv_datatype_array.includes( fields[i].ofv_datatype.toLowerCase() ) ) {
-                   if( p_chosen_datatypes && !chosen_datatypes_array.includes(fields[i].ofv_datatype) ) {
-                       winurlparams.delete('chosen_datatypes');
-                       winurlparams.append('chosen_datatypes', p_chosen_datatypes+','+fields[i].ofv_datatype);
-                   } else if( !p_chosen_datatypes ) {
-                       winurlparams.delete('chosen_datatypes');
-                       winurlparams.append('chosen_datatypes', fields[i].ofv_datatype);
-                   } 
-
-                   if( !field_array.includes(fields[i].field_id.toString()) ) {
-                       links += furl(window.location.protocol+'?'+winurlparams, fields[i].field_name);
-                   }
-               }
-          }
-
-          // when finished loading the drop-down set the obs_fields and chosen_datatypes back to what was
-          // initially passed in, otherwise the last one will show up in the obs_field param for every link.
-          winurlparams.delete('obs_fields');
-          winurlparams.append('obs_fields', p_obs_fields);
-          winurlparams.delete('chosen_datatypes');
-          winurlparams.append('chosen_datatypes', p_chosen_datatypes);
-
-          // don't add the drop down if a taxon_id or field_value has been chosen.
-          if( p_chosen_taxon_id || p_field_value ) {
-              menu_string += buildTitle( 'obsFieldsTitle', 'Observation Fields', 'Disabled when a taxon or observation field value is in focus.' );
-          } else {
-              menu_string += buildDD('Observation Fields', links ); 
-          }
-      }
-
-      // if the comma delimited datatype array only has one datatype
-      // and there is more than one observation field specified,
-      // the observation fields can be merged since they're of the same type.
-      // should they be merged?  well, maybe.  that's up to the user.
-      if( chosen_datatypes_array.length === 1 && field_array.length > 1 ){
-          if( p_operator && p_operator === 'merge' ) {
-              winurlparams.delete('operator');
-              winurlparams.delete('chosen_taxon_id');
-              winurlparams.delete('field_value');
-              winurlparams.delete('field');
-              menu_string += buildMenuURL( furl(window.location.protocol+'?'+winurlparams,'Un-Merge') );
-              winurlparams.append('operator', p_operator);
-              if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
-              if( p_field_value )     { winurlparams.append('field_value', p_field_value); }
-              if( p_field )           { winurlparams.append('field', p_field); }
-          } else {
-              winurlparams.delete('operator');
-              winurlparams.append('operator', 'merge');
-              menu_string += buildMenuURL( furl(window.location.protocol+'?'+winurlparams,'Merge') );
-              winurlparams.delete('operator');
-              if( p_operator ) {
-                  winurlparams.append('operator', p_operator);
-              }
-          }
-      }
- 
-      //menu_string += buildHome( furl(window.location.protocol+'?clear_cache=yes','Start Over') );
- 
-      menu_string += '</div>';
-
-      faddelem('p',document.body,{innerHTML:(menu_string)});  
-}*/
 
 function setupAPIParams( configurations ) {
 
