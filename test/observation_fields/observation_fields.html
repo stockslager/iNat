@@ -261,10 +261,10 @@ function setupAPIParams( configurations ) {
    }
 
    //if( !configuration ) {
-       faddelem('p',document.body,{innerText:'Configuration file ('+p_params+'.json) must have an insect_project specified.'});
-       faddelem('p',document.body,{innerText:'There is no insect_project parameter specified in '+p_params+'.json'});
-       faddelem('p',document.body,{innerText:'Please add a valid insect_project parameter to '+p_params+'.json'});
-       throw new Error('No configurations defined.');
+       let message = 'Configuration file ('+p_params+'.json) must have an insect_project specified.' + 
+                     'There is no insect_project parameter specified in '+p_params+'.json' + 
+                     'Please add a valid insect_project parameter to '+p_params+'.json';
+       throw new Error(message);
    //}
 
    if( !configuration.field_name ) {
