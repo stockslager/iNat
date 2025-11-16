@@ -124,12 +124,6 @@ if( p_obs_fields !== '' ){
     field_array = p_obs_fields.split(",");
 }
 
-let apibase = 'https://api.inaturalist.org/v1/observations';
-let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
-let apirefname = 'iNaturalist Observations';
-let apiref = furl(apirefurl,apirefname);
-
 function buildTitle( name, content, tooltip ) {
   let dd = '<div id="'+name+'" class="dd_title" style="cursor:pointer;" title="'+tooltip+'">' + content +
            '</div>';
@@ -322,9 +316,8 @@ async function asyncGetData() {
       err = 'yes';
    });
 
-   let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
-   let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
-   let apiurl = apibase+(api_params);
+   let apibase = 'https://api.inaturalist.org/v1/observations';
+   let apiurl = apibase+api_params;
    console.log('api url ' + apiurl);
 
    if( err === 'no' ) {
