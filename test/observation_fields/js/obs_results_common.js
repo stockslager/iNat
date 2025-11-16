@@ -113,6 +113,20 @@ function getTaxonName( configuration, taxon_id ) {
    return taxon_name;
 }
 
+// functions for menu bar
+function buildPlantDD( id, name, content ) {
+  let dd = '<div class="dropdown">' +
+                 '<button class="dropbtn" id="'+id+'">' + name +
+                    '<i class="fa fa-caret-down"></i>' +
+                 '</button>' +
+                    '<div class="dropdown-content">' +
+                          content +
+                    '</div>' +
+           '</div>';
+
+  return( dd );
+}
+
 function buildMenu() {
       let menu_string = '';
       let links = '';
@@ -127,7 +141,8 @@ function buildMenu() {
           }
       }
  
-      if( links ) { menu_string += buildDD(getTaxonName(configuration, p_field_value), links); }
+      if( links ) { menu_string += buildDD('ddPlant', getTaxonName(configuration, p_field_value), links); }
+      document.getElementById('ddPlant').textContent = 'hello';
 
       menu_string += '</div>';
 
