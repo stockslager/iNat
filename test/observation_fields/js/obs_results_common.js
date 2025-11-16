@@ -8,7 +8,7 @@ function hasFieldValueThatMatchesMergedValue( rec ) {
                        return true;
                    }
                } else {
-                   const ofvs_ancestry_arr = rec.ofvs[i].taxon_min_species_ancestry.split(','); 
+                   const ofvs_ancestry_arr = rec.ofvs[i].taxon.min_species_ancestry.split(','); 
                    if( ofvs_ancestry_arr.includes(p_field_value.toString()) ) {
                        return true;
                    }
@@ -38,7 +38,7 @@ function hasMatchingFieldValue( rec ) {
                            return true;
                        }
                    } else {
-                       const ofvs_ancestry_arr = rec.ofvs[i].taxon_min_species_ancestry.split(','); 
+                       const ofvs_ancestry_arr = rec.ofvs[i].taxon.min_species_ancestry.split(','); 
                        if( ofvs_ancestry_arr.includes(p_field_value.toString()) ) {
                            return true;
                        }
@@ -73,7 +73,7 @@ function showRow( rec ) {
     }
  
     if( p_chosen_taxon_id ) {
-        const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
+        const ancestry_arr = rec.taxon.min_species_ancestry.split(','); 
         if( p_chosen_taxon_id.toString() === rec.taxon.id.toString() || ancestry_arr.includes( p_chosen_taxon_id.toString() )  ) {
             if( p_field_value ) {
                 return hasMatchingFieldValue(rec);
