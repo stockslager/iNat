@@ -167,37 +167,11 @@ function buildDropDownArray( obs_fields, box_array ) {
    return add_array;
 }
 
-async function getPage() {
-
-  let api_params = decodeURIComponent(p_query) + '&ofv_datatype='+ p_ofv_datatype + '&page=1' + '&per_page=100';
-
-  let apibase = 'https://api.inaturalist.org/v1/observations';
-  let url     = apibase+((api_params!='')?('?'+api_params):'');
-
-  console.log('api url**** ' + url);
-
-  await fetch(apiurl)
-    .then((response) => {
-       if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
-       return response.json();
-    })
-    .then((data) => { return data; })
-    .catch((err) => {
-       console.error(err.message);
-       faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-    });
-
-}
-
-function fresults(cached_fields) {
+function fresults(xobj) {
    let box_array = [];
-   let total_results = cached_fields.total_results;
    let display_count = 0;
    let filtered_count = 0;
-   let obs_fields = cached_fields.obs_fields;
 
-   let xobj = getPage();
-   
    let observations = xobj.results;
 
    for( let f=0; f<field_array.length; f++ ){
