@@ -298,6 +298,13 @@ function setupAPIParams( configurations ) {
 async function asyncGetData() {
    let err = 'no';
    let api_params = '';
+
+   if( !p_params ) {
+       let message = '<b>' + response.status + '</b>' + 
+                     '<br>A valid .json must be passed in as ?params=some.json. '; 
+       faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + message + '</span>')});  
+       throw new Error(message);
+   }
  
    console.log('json ' + json_root+p_params);
    await fetch((json_root+p_params+'.json'))
@@ -308,12 +315,6 @@ async function asyncGetData() {
            console.log('setting up defaults...');
            api_params = setupAPIParams(data.configurations);
       } 
-      if( response.status === 404 ) {
-          let message = '<b>' + response.status + '</b>' + 
-                        '<br>A valid .json must be passed in as ?params=some.json. '; 
-          faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + message + '</span>')});  
-          throw new Error(message);
-      }
       console.log(data);
    })
      .catch(error => {
