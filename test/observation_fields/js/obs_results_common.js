@@ -107,7 +107,7 @@ function buildFilterParams( chosen_taxon_id, field, field_value, taxon_name, fie
 }
 
 function getTaxonName( configuration, taxon_id ) {
-   let taxon_name = capitalizeWords(p_field_name) || 'Plants';
+   let taxon_name = capitalizeWords(p_field_name) || 'Fauna';
 
    for( let i=0; i<configuration.taxa.length; i++ ) {
         if( taxon_id === configuration.taxa[i].taxon_id ) {
@@ -138,7 +138,7 @@ function buildMenu(sub_taxon_arr) {
    menu_string = '<div class="navbar">';
    
    if( configuration.sub_icons ) { 
-       let tname = p_taxon_name || 'Wildlife';
+       let tname = p_taxon_name || 'Fauna';
 
        let copy_url_params = buildFilterParams( '', p_field, p_field_value, '', p_field_name );
        links = (furl(window.location.protocol+'?'+winurlparams,'<span style="padding-right:20px;">&#10133;</span>all' ));
@@ -168,6 +168,7 @@ function buildMenu(sub_taxon_arr) {
 
    menu_string += '</div>';
 
+   console.log('menu ' + menu_string);
    return menu_string;
 }
 
@@ -225,7 +226,6 @@ function fresults(xobj) {
                     for( let j=0; j<configuration.sub_icons.length; j++ ) {
                          const min_arr = rec.taxon.min_species_ancestry.split(','); 
                          if( min_arr.includes(configuration.sub_icons[j].taxon_id) ) {
-                             console.log('hello');
                              sub_taxon_arr.push( configuration.sub_icons[j].taxon_id );
                          }
                          /*for( let k=0; k<rec.taxon.ancestor_ids.length; k++ ) {
