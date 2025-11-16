@@ -308,6 +308,12 @@ async function asyncGetData() {
            console.log('setting up defaults...');
            api_params = setupAPIParams(data.configurations);
       } 
+      if( response.status === 404 ) {
+          let message = '<b>' + response.status + '</b>' + 
+                        '<br>A valid .json must be passed in as ?params=some.json. '); 
+          faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + message + '</span>')});  
+          throw new Error(message);
+      }
       console.log(data);
    })
      .catch(error => {
