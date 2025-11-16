@@ -116,6 +116,7 @@ let p_obs_fields   = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_field        = winurlparams.get('field') || '';
 let p_field_value  = winurlparams.get('field_value') || '';
+let p_params       = winurlparams.get('params') || '';
 let obs_data = '';
 let field_array = [];
 
@@ -250,8 +251,57 @@ function buildMenu( fields ) {
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
+function setupAPIParams( configurations ) {
+
+   let api_params = '';
+ 
+   if( configurations.length === 0 ) {
+       faddelem('p',document.body,{innerText:'Configuration file ('+p_params+'.json) contains no valid configurations.'});
+       faddelem('p',document.body,{innerText:'There are no configurations specified in '+p_params+'.json'});
+       faddelem('p',document.body,{innerText:'Please add at least one valid configuration to '+p_params+'.json'});
+       throw new Error('No configurations defined.');
+   }
+
+   for( let i=0; i<configurations.length; i++ ) {
+        if( configurations[i].insect_project ) {
+            console.log('found config');
+            configuration = configurations[i];
+        }
+   }
+
+   if( !configuration ) {
+       faddelem('p',document.body,{innerText:'Configuration file ('+p_params+'.json) contains no valid configurations for &insect_project='+p_project_id+'.'});
+       faddelem('p',document.body,{innerText:'There are no configurations specified in '+p_params+'.json'});
+       faddelem('p',document.body,{innerText:'Please add a valid configuration to '+p_params+'.json for &insect_project='+p_project_id});
+       throw new Error('No configurations defined.');
+   }
+
+   if( !configuration.field_name ) {
+       faddelem('p',document.body,{innerText:'Configuration file ('+p_params+'.json) contains no valid field_name.'});
+       faddelem('p',document.body,{innerText:'There is no field_name specified in '+p_params+'.json'});
+       faddelem('p',document.body,{innerText:'Please add a valid configuration to '+p_params+'.json for an observation field_name.'});
+       throw new Error('No field name specified.');
+   }
+
+   api_params += ('?project_id='+configuration.insect_project);
+
+   api_params += '&field:'+configuration.field_name;
+   api_params += '&ofv_datatype='+p_ofv_datatype;
+ 
+   if( configuration.default_place ) { api_params += '&place_id='+configuration.default_place; }
+
+   api_params += api_params;
+   api_params += '&per_page=200';
+
+   if( p_taxon_id ) { api_params += '&taxon_id='+p_taxon_id; }
+   if( p_page     ) { api_params += '&page='+p_page; }
+
+   return api_params;
+}
+
 async function asyncGetData() {
    let err = 'no';
+   let api_params = '';
  
    console.log('json ' + json_root+p_params);
    await fetch((json_root+p_params+'.json'))
@@ -260,7 +310,7 @@ async function asyncGetData() {
       // Access your data here 
       if( data.configurations ) {
            console.log('setting up defaults...');
-           setUpDefaults(data.configurations);
+           api_params = setupAPIParams(data.configurations);
       } 
       console.log(data);
    })
@@ -271,7 +321,7 @@ async function asyncGetData() {
 
    let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
    let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
-   let apiurl = apibase+(all_params);
+   let apiurl = apibase+(api_params);
    console.log('api url ' + apiurl);
 
    if( err === 'no' ) {
@@ -281,7 +331,7 @@ async function asyncGetData() {
           ];
           faddelems('p',document.body,instructions);
        } else {
-          await fetch(apiurl)
+  /*        await fetch(apiurl)
           .then((response) => {
              if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
              return response.json();
@@ -290,7 +340,7 @@ async function asyncGetData() {
           .catch((err) => {
              console.error(err.message);
              faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
-          });
+          });*/
        }
    }
 }
