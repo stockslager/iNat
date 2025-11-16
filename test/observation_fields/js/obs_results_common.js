@@ -168,7 +168,7 @@ function buildMenu(sub_taxon_arr) {
    }
  
    if( links ) { 
-       menu_string += buildDD('ddPlant', getTaxonName(configuration, p_field_value), links); 
+       menu_string += buildDD( getTaxonName(configuration, p_field_value), links ); 
    } else {
        menu_string += buildDDTitle( getTaxonName(configuration, p_field_value) );
    }
