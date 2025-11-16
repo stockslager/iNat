@@ -208,7 +208,7 @@ function fresults(xobj) {
           if( p_operator ) {
               obs_field_box += '<td id="key">field id</td>  <td id="key">'+merged+'</td><td id="tdkey"></td><td id="keyx"></td></tr>';
           } else {
-              obs_field_box += '<td id="key">field id</td>  <td id="key">'+merged+'</td><td id="tdkey"></td><td id="keyx">'+buildEmptyLink()+'</td></tr>';
+              obs_field_box += '<td id="key">field id</td>  <td id="key">'+merged+'</td><td id="tdkey"></td></tr>';
           }
     
           for( let e=0; e<box_array.length; e++ ) {
