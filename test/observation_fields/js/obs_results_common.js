@@ -193,7 +193,7 @@ function buildMenu() {
           }
       }
  
-      if( links ) { menu_string += buildDD(getTaxonName(configuration, p_taxon_id), links); }
+      if( links ) { menu_string += buildDD(getTaxonName(configuration, p_field_value), links); }
 
       menu_string += '</div>';
 
