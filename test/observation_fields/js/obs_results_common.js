@@ -178,7 +178,7 @@ function fresults(xobj) {
         box_array.push(new boxRow(field_array[f], '') );
    }
  
-   if( obs_fields && observations ) {
+   if( observations ) {
 
       let labels = [];
       let obs_field_box = '';
@@ -197,7 +197,7 @@ function fresults(xobj) {
 
       let tempBrow = [];
 
-      buildMenu( buildDropDownArray(obs_fields, box_array) );
+      //buildMenu( buildDropDownArray(obs_fields, box_array) );
       
       let firstCol = 'yes';
         
