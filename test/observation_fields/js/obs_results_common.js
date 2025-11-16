@@ -188,6 +188,10 @@ function fresults(xobj) {
    let page_prev = ((page_curr>1)?page_curr-1:null);
    let page_next = ((page_curr<page_max)?page_curr+1:null);
 
+   if( p_obs_fields !== '' ){
+       field_array = p_obs_fields.split(",");
+   }
+
    let observations = xobj.results;
 
    for( let f=0; f<field_array.length; f++ ){
