@@ -138,21 +138,15 @@ function buildMenu(sub_taxon_arr) {
    menu_string = '<div class="navbar">';
    
    if( configuration.sub_icons ) { 
-    
-            if( configuration.sub_icons ) {
-              
-                let showDDOpts = getShowDDOpts( winurlparams );
-                showDDOpts += '&sub_menu_array='+sub_taxon_arr;
-             
-                links = (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
+                  
+                links = (furl(window.location.protocol+'?'+winurlparams,'<span style="padding-right:20px;">&#10133;</span>all' ));
                 for( let j=0; j<configuration.sub_icons.length; j++ ) {
                      if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
-                         links += (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1'+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+                         links += (furl(window.location.protocol+'?'+winurlparams+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
                      }
                 }
               
                 menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
-            }
    }
     
 ////////////////////////////////////////
