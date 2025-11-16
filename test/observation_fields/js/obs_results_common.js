@@ -146,7 +146,7 @@ function buildMenu(sub_taxon_arr) {
                      }
                 }
               
-                menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
+                menu_string += ( buildDD( capitalizeWords(p_taxon_name), links) );
    }
     
 ////////////////////////////////////////
