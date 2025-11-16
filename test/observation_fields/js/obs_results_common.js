@@ -204,6 +204,7 @@ function fresults(xobj) {
 
       let tempBrow = [];
 
+      let field_array_copy = field_array;
       for (let i=0; i<observations.length; i++) {
          let rec = observations[i];
          if(rec.ofvs&&rec.ofvs.length>0){
