@@ -183,8 +183,10 @@ function buildMenu() {
       let links = '';
 
       menu_string = '<div class="navbar">';
-      
+
+ console.log('one');
       if( configuration.taxa && configuration.taxa.length > 0 ) {
+       console.log('two');
           links += furl(window.location.protocol+'?'+winurlparams,'All');
           for( let i=0; i<configuration.taxa.length; i++ ) {
                links += furl(window.location.protocol+'?'+winurlparams+'&field_value='+configuration.taxa[i].taxon_id,configuration.taxa[i].taxon_name);
@@ -195,6 +197,7 @@ function buildMenu() {
 
       menu_string += '</div>';
 
+ console.log('menu ' + menu_string);
       return menu_string;
 }
 
