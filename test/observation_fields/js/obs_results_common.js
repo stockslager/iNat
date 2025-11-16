@@ -141,7 +141,7 @@ function buildMenu() {
           }
       }
  
-      if( links ) { menu_string += buildDD('ddPlant', getTaxonName(configuration, p_field_value), links); }
+      if( links ) { menu_string += buildPlantDD('ddPlant', getTaxonName(configuration, p_field_value), links); }
 
       menu_string += '</div>';
 
