@@ -88,6 +88,27 @@ function showRow( rec ) {
     }
 }
 
+function copyOpts( winurlparams ) {
+   let opts='';
+   // build param list for url's used in fresults
+   for( const [key, value] of winurlparams.entries() ) { 
+        if( opts === '' ){
+            opts += "?";
+        } else {
+            opts += "&";
+        }
+        opts += key;
+        opts += "=";
+
+        if( key === 'page' ){
+            opts += '1';
+        } else {
+            opts += value;
+        }
+   } 
+   return( opts );
+}
+
 function buildFilterParams( chosen_taxon_id, field, field_value ) {
       let copyurlparams = copyOpts(winurlparams);
  
