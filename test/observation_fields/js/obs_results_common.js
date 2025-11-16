@@ -131,12 +131,31 @@ function buildPlantDD( id, name, content ) {
   return( dd );
 }
 
-function buildMenu() {
-      let menu_string = '';
-      let links = '';
+function buildMenu(sub_taxon_arr) {
+   let menu_string = '';
+   let links = '';
 
-      menu_string = '<div class="navbar">';
-
+   menu_string = '<div class="navbar">';
+   
+   if( configuration.sub_icons ) { 
+    
+            if( configuration.sub_icons ) {
+              
+                let showDDOpts = getShowDDOpts( winurlparams );
+                showDDOpts += '&sub_menu_array='+sub_taxon_arr;
+             
+                links = (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
+                for( let j=0; j<configuration.sub_icons.length; j++ ) {
+                     if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
+                         links += (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1'+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+                     }
+                }
+              
+                menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
+            }
+    
+////////////////////////////////////////
+    
       if( configuration.taxa && configuration.taxa.length > 0 ) {
           links += furl(window.location.protocol+'?'+winurlparams,'All');
           for( let i=0; i<configuration.taxa.length; i++ ) {
@@ -192,10 +211,32 @@ function fresults(xobj) {
       } 
 
       let tempBrow = [];
-
+///////////////////////
+   let sub_taxon_arr = [];
+   if( p_sub_menu_array ) {
+       sub_taxon_arr = p_sub_menu_array;
+   } 
+///////////////////////
       let field_array_copy = field_array;
       for (let i=0; i<observations.length; i++) {
          let rec = observations[i];
+         if( configuration.sub_icons && !p_sub_menu_array ) {
+                if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
+                    for( let j=0; j<configuration.sub_icons.length; j++ ) {
+                         if( results[i].taxon.ancestor_ids.includes( configuration.sub_icons[j].taxon_id ) {
+                             sub_taxon_arr.push( configuration.sub_icons[j].taxon_id );
+                         }
+                         /*for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
+                              if( results[i].taxon.ancestor_ids[k].toString() === configuration.sub_icons[j].taxon_id.toString() ){
+                                  if( !sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
+                                      sub_taxon_arr.push( configuration.sub_icons[j].taxon_id );
+                                  }
+                              }
+                          }*/
+                     }
+                }
+         }
+       
          if(rec.ofvs&&rec.ofvs.length>0){
               for( let r=0; r<field_array_copy.length; r++ ) {
                  for( let j=0; j<rec.ofvs.length; j++ ){
@@ -208,7 +249,7 @@ function fresults(xobj) {
          }
       }
     
-      faddelem('p',document.body,{innerHTML:(buildMenu())});  
+      faddelem('p',document.body,{innerHTML:(buildMenu(sub_taxon_arr))});  
       
       let firstCol = 'yes';
         
