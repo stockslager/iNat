@@ -194,6 +194,8 @@ function buildMenu() {
       if( links ) { menu_string += buildDD(getTaxonName(configuration, p_taxon_id), links); }
 
       menu_string += '</div>';
+
+      return menu_string;
 }
 
 function fresults(xobj) {
@@ -247,8 +249,8 @@ function fresults(xobj) {
               }
          }
       }
-
-      buildMenu(  );
+    
+      faddelem('p',document.body,{innerHTML:(buildMenu())});  
       
       let firstCol = 'yes';
         
