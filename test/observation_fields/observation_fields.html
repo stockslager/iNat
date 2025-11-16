@@ -276,6 +276,10 @@ function setupAPIParams( configurations ) {
        throw new Error(message);
    }
 
+   // p_obs_fields needs to be populated from the configuration since it won't be 
+   // passed in for this custom view of the data.
+   p_obs_fields = configuration.field_id;
+
    api_params += ('?project_id='+configuration.insect_project);
 
    api_params += '&field:'+configuration.field_name;
