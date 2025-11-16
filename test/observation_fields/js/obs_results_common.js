@@ -151,8 +151,10 @@ function buildMenu(sub_taxon_arr) {
        menu_string += ( buildDD( capitalizeWords(tname), links) );
    }
     
-////////////////////////////////////////
-    
+   // stick the word "on" in between wildlife and plants.
+   buildDDTitle( 'On' );
+
+   links = '';
    if( configuration.taxa && configuration.taxa.length > 0 ) {
        links += furl(window.location.protocol+'?'+winurlparams,'All');
        for( let i=0; i<configuration.taxa.length; i++ ) {
