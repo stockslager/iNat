@@ -89,17 +89,17 @@ function showRow( rec ) {
 }
 
 function buildFilterParams( chosen_taxon_id, field, field_value ) {
-      let copy = copyOpts(winurlparams);
+      let copyurlparams = copyOpts(winurlparams);
  
-      copy.delete('chosen_taxon_id');
-      copy.delete('field_value');
-      copy.delete('field');
+      copyurlparams.delete('chosen_taxon_id');
+      copyurlparams.delete('field_value');
+      copyurlparams.delete('field');
 
-      if( chosen_taxon_id ) { copy.append('chosen_taxon_id', chosen_taxon_id); }
-      if( field )           { copy.append('field', field); }
-      if( field_value )     { copy.append('field_value', field_value); } 
+      if( chosen_taxon_id ) { copyurlparams.append('chosen_taxon_id', chosen_taxon_id); }
+      if( field )           { copyurlparams.append('field', field); }
+      if( field_value )     { copyurlparams.append('field_value', field_value); } 
  
-      return copy;
+      return copyurlparams;
 }
 
 function getTaxonName( configuration, taxon_id ) {
