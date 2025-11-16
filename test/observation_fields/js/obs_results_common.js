@@ -164,7 +164,11 @@ function buildMenu(sub_taxon_arr) {
        }
    }
  
-   if( links ) { menu_string += buildPlantDD('ddPlant', getTaxonName(configuration, p_field_value), links); }
+   if( links ) { 
+       menu_string += buildPlantDD('ddPlant', getTaxonName(configuration, p_field_value), links); 
+   } else {
+       menu_string += buildDDTitle( 'Flora' );
+   }
 
    menu_string += '</div>';
 
