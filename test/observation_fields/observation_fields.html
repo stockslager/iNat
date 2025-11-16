@@ -116,8 +116,6 @@ let p_obs_fields   = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_field        = winurlparams.get('field') || '';
 let p_field_value  = winurlparams.get('field_value') || '';
-let p_clear_cache  = winurlparams.get('clear_cache') || '';
-let p_query        = winurlparams.get('query') || '' ;
 let obs_data = '';
 let field_array = [];
 
@@ -134,27 +132,6 @@ let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
 let apirefname = 'iNaturalist Observations';
 let apiref = furl(apirefurl,apirefname);
-let cache_name = window.location.pathname;
-console.log('cache name ~ ' + cache_name);
-
-// remove the query params since it'll be going against the cache after the initial query
-winurlparams.delete('query');
-//winurlparams.delete('ofv_datatype');
-
-// add history without query and ofv_datatype params since we'll be going against cached data.
-if( p_query ) {
-    console.log('encoded query - ' + p_query);
-    sessionStorage.setItem( cache_name+'query', p_query );
-    const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.delete('query'); 
-    // add a new history entry (allowing back navigation)
-    window.history.pushState({}, document.title, currentUrl.toString());
-}
-
-if( p_clear_cache === 'yes' ) {
-    winurlparams.delete('clear_cache'); 
-    sessionStorage.removeItem( cache_name );
-}
 
 function buildTitle( name, content, tooltip ) {
   let dd = '<div id="'+name+'" class="dd_title" style="cursor:pointer;" title="'+tooltip+'">' + content +
@@ -163,37 +140,6 @@ function buildTitle( name, content, tooltip ) {
   return( dd );
 }
  
-function buildQueryForm() {
-  faddelem('p',document.body,{innerHTML:('<br><div>' +
-                                           '<form action='+window.location.protocol+'>' +
-                                              '<label for="ofvDropdown">OFV datatype:<br></label>' +
-                                              '<select id="ofvDropdown" name="ofv_datatype" required>' + 
-                                                      '<option value="">-- Choose OFV Datatype --</option>' + 
-                                                      '<option value="text,numeric,date,time,datetime,taxon,dna">All</option>' + 
-                                                      '<option value="text">Text</option>' + 
-                                                      '<option value="numeric">Numeric</option>' + 
-                                                      '<option value="date">Date</option>' + 
-                                                      '<option value="time">Time</option>' + 
-                                                      '<option value="datetime">Datetime</option>' + 
-                                                      '<option value="taxon">Taxon</option>' + 
-                                                      '<option value="dna">DNA</option>' + 
-                                                   '</select><br><br>' + 
-                                              '<label for="qname">Query parameters:<br></label>' +
-                                              '<input type="text" id="qname"    name="query"        placeholder=""><br><br>' +   
-                                              '<input type="submit" value="Query"><br><br><br>' +
-                                           '</form>' +
-                                         '</div>')});
-
-  const dd = document.getElementById('ofvDropdown');
-  // Set the width of the dropdown to 250 pixels
-  dd.style.width = '250px';
- 
-  faddelem('p',document.body,{innerHTML:('An ofv datatype is required to limit results to be cached to only those observations that have observation fields.  ' + 
-                                         'Query parameters are also required to limit the data returned by the query.  (e.g. project_id=1234567&user_id=someuser)  ' +
-                                         'Cache size is limited to '+ obs_data.max_rows + ' observations at this time.  ' + 
-                                         'This page will accept most parameters from the '+apiref+' API endpoint.')});
-}
-
 function ensureQuestionMark(str) {
   if (str.startsWith('?')) {
     return str;
@@ -201,44 +147,6 @@ function ensureQuestionMark(str) {
     return '?' + str;
   }
 }
-
-function getObs() {
-  let api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype );
-  obs_data = new ObservationsData( '', '', api_params );
-
-  (async () => {
-    try {
-      await getAll(obs_data); // Await the async function call
-      if( obs_data && obs_data.obs_fields && obs_data.obs_fields.length > 0 ) {
-          console.log('Found a total of ' + obs_data.total_results + ' with ' + obs_data.obs_fields.length + ' unique obs fields.');
-          fresults(obs_data);
-          let shareable_link = (github_root+'observation_fields/blog_view.html?'+winurlparams+'&query='+sessionStorage.getItem( cache_name+'query' ));
-          faddelem('p',document.body,{innerHTML:'<br><br><br>Shareable link: <br>' + shareable_link});
-      }
-    } catch (error) {
-      hideProgressBar();
-      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + error.message + '</span>')});
-      throw error;
-    }
-  })();
-}
-
-const cache_str    = sessionStorage.getItem( cache_name );
-
-if( cache_str ) {
-    obs_data = JSON.parse(cache_str); 
-    console.log('found cached observation fields... ' );
-    if( obs_data && obs_data.obs_fields && obs_data.obs_fields.length > 0 ) {
-        console.log('Found a total of ' + obs_data.total_results + ' with ' + obs_data.obs_fields.length + ' unique obs fields.');
-        fresults(obs_data);
-        let shareable_link = (github_root+'observation_fields/blog_view.html?'+winurlparams+'&query='+sessionStorage.getItem( cache_name+'query' ));
-        faddelem('p',document.body,{innerHTML:'<br><br><br>Shareable link: <br>' + shareable_link});
-    }
-} else {
-    getObs();
-    if( !p_query ) { buildQueryForm(); }
-}
-
  
 function boxRow(field_id, field_name, ofv_datatype) {
     this.field_id     = field_id;
@@ -335,13 +243,66 @@ function buildMenu( fields ) {
           }
       }
  
-      menu_string += buildHome( furl(window.location.protocol+'?clear_cache=yes','Start Over') );
+      //menu_string += buildHome( furl(window.location.protocol+'?clear_cache=yes','Start Over') );
  
       menu_string += '</div>';
 
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
+async function asyncGetData() {
+   let err = 'no';
+ 
+   console.log('json ' + json_root+p_params);
+   await fetch((json_root+p_params+'.json'))
+     .then(response => response.json())
+     .then(data => {
+      // Access your data here 
+      if( data.configurations ) {
+           console.log('setting up defaults...');
+           setUpDefaults(data.configurations);
+      } 
+      console.log(data);
+   })
+     .catch(error => {
+      console.error('Error fetching JSON:', error);
+      err = 'yes';
+   });
+
+   let apirefurl = 'http://api.inaturalist.org/v1/docs/#!/Observations/get_observations_species_counts';
+   let apibase = 'https://api.inaturalist.org/v1/observations/species_counts';
+   let apiurl = apibase+(all_params);
+   console.log('api url ' + apiurl);
+
+   if( err === 'no' ) {
+       if (winurlsearchstr==='' || (p_project_id === '' ) ) {
+          let instructions = [
+             {innerText:'This page requires a project_id argument.  Add ?project_id=12345678 to the end of the url.  It will default to the "7623 - plant that the organism was found on" observation field if &obs_field=xxx is not passed in.'},
+          ];
+          faddelems('p',document.body,instructions);
+       } else {
+          await fetch(apiurl)
+          .then((response) => {
+             if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+             return response.json();
+          })
+          .then((data) => { fresults(data); })
+          .catch((err) => {
+             console.error(err.message);
+             faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+          });
+       }
+   }
+}
+
+// need to pull resources from a json file to pass into an api
+// so needs to be asynchronous. 
+const request = async () => {
+   asyncGetData();
+}
+
+request();  
+ 
 </script>
 </body>
 
