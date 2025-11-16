@@ -312,6 +312,7 @@ async function asyncGetData() {
    })
      .catch(error => {
       console.error('Error fetching JSON:', error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888; ' + error.message + '</span>')});  
       err = 'yes';
    });
 
