@@ -199,7 +199,11 @@ function setupAPIParams( configurations ) {
 
    api_params += ('?project_id='+configuration.insect_project);
 
-   api_params += '&field:'+configuration.field_name;
+   if( p_chosen_taxon_id ) { 
+       api_params += ('&taxon_id='+p_chosen_taxon_id);
+   }
+
+   api_params += '&field:'+configuration.field_name+'='+p_field_value;
    api_params += '&ofv_datatype='+p_ofv_datatype;
  
    if( configuration.default_place ) { api_params += '&place_id='+configuration.default_place; }
