@@ -49,16 +49,6 @@ var obsurl     = obsurlbase+'?'+winurlparams.toString();
 
 let configuration = '';
 
-// find key/value pair for &field: param if one was passed in
-let p_field = '';
-let field_key = '';
-for (const [key, value] of winurlparams.entries()) {
-  if( key.startsWith('field') ){
-      field_key = key;
-      p_field = ('&'+key+'='+value);
-  }
-}   
-
 // defaults for grid
 var cellpx       = 122;
 var spacerpx     =   4;
