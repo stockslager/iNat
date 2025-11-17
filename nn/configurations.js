@@ -8,7 +8,7 @@ function getShowMenuName( config_data, taxon_id ) {
             console.log('two');
              if( config_data.sub_icons[i].taxon_id.toString() === taxon_id.toString() ) {
                  console.log('three');
-                 show_menu_name = config_data.sub_icons[i].taxon_nm;
+                 show_menu_name = config_data.sub_icons[i].nm;
                  break;
              }
         }
