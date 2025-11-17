@@ -145,10 +145,13 @@ function setUpDefaults(configurations) {
 
    api_params += ('?project_id='+configuration.insect_project);
    //api_params += '&hrank=species';
+
+   let field_val_param = ''
+   if( configuration.field_value ) { field_val_param = configuration.field_value; }
  
    // filter by field when not displaying the yard list
    if( !mode.includes('yard') ) {
-       api_params += '&field:'+configuration.field_name+'='+configuration.field_value;
+       api_params += '&field:'+configuration.field_name+'='+field_val_param;
        api_params += behavior_params;
    }
 
