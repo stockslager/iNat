@@ -1,4 +1,31 @@
-async function asyncGetConfigurations(params) {
+function findConfiguration( config_data, params, project_id ) {
+    let configuration = '';
+   
+    // check for null, or zero configurations
+    if( !config_data.configurations || config_data.configurations.length === 0 ) {
+        let message = 'Configuration file ('+params+'.json) contains no valid configurations.' + 
+                      '<br>There are no configurations specified in '+params+'.json' + 
+                      '<br>Please add at least one valid configuration to '+params+'.json';
+        throw new Error(message);
+    }
+
+    for( let i=0; i<config_data.configurations.length; i++ ) {
+         if( config_data.configurations[i].insect_project === project_id ) {
+             configuration = config_data.configurations[i];
+         }
+    }
+
+    if( !configuration ) {
+        let message = 'Configuration file ('+params+'.json) must have an insect_project specified.' + 
+                      '<br>There is no insect_project parameter specified in '+params+'.json' + 
+                      '<br>Please add a valid insect_project parameter to '+params+'.json';
+        throw new Error(message);
+    }
+
+    return configuration;
+}
+
+async function asyncGetConfiguration( params, project_id ) {
    console.log('fetching json: ' + json_root + params);
 
    try {
@@ -9,19 +36,9 @@ async function asyncGetConfigurations(params) {
       }
 
       const data = await response.json();
-      
-      // Access and manipulate global variables if necessary
-      /*for( let i=0; i<data.configurations.length; i++ ) {
-           if( data.configurations[i].insect_project === p_project_id ) {
-               interactions = data.configurations[i].interactions;
-           }
-           if( data.configurations[i].art_project === p_project_id ) {
-               configuration = data.configurations[i];
-           }
-      }*/
-      
+            
       // Return the data object when successful
-      return data; 
+      return ( findConfiguration(data, params, project_id) ); 
 
    } catch (error) {
       console.error('Error fetching JSON:', error);
