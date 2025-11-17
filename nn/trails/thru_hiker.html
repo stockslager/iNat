@@ -62,15 +62,6 @@ let p_user_id     = p_state.split('$')[3];
 let garden        = p_state.split('$')[4];
 let mode          = p_state.split('$')[5];
 
-// find key/value pair for &field: param if one was passed in
-for (const [key, value] of winurlparams.entries()) {
-  if( key.startsWith('field') ){
-      behavior_field = key;
-      behavior_field_value = value;
-      behavior_params = '&'+behavior_field+'='+behavior_field_value;
-  }
-}  
-
 function getShowDDOpts( winurlparams ) { 
    let opts='';
    // build param list for url's used in fresults
@@ -144,11 +135,8 @@ function setUpDefaults(configurations) {
    let field_val_param = ''
    if( configuration.field_value ) { field_val_param = configuration.field_value; }
  
-   // filter by field when not displaying the yard list
-   if( !mode.includes('yard') ) {
-       api_params += '&field:'+configuration.field_name+'='+field_val_param;
-       api_params += behavior_params;
-   }
+   // filter by field (usually trail name)... should change to generic filter
+   api_params += '&field:'+configuration.field_name+'='+field_val_param;
 
    if( p_place_id ) { api_params += '&place_id='+p_place_id; }
    if( p_user_id )  { api_params += '&user_id='+p_user_id; }
