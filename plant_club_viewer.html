@@ -12,7 +12,6 @@
 <meta name="apple-mobile-web-app-title" content="Plant Club Viewer" />
 <link rel="manifest" href="plant_club.webmanifest" />
 <link rel="stylesheet" type="text/css" href="seed_library.css" />
-<script type="text/javascript" src='common_func.js'> </script>
 <title>Plant Club Viewer</title>
 </head>
 
@@ -30,6 +29,8 @@
    .npcicon { width:38px; height:38px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 5px; border-radius: 50px; }
 </style>
 <body>
+<script type="text/javascript" src='common_func.js'> </script>
+<script type="text/javascript" src='/iNat/js/plant_params_v10.js'> </script>
 <script>
 let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
@@ -101,11 +102,6 @@ winurlparams.delete('photo_curl_filename_prefix');
 let apibase = 'https://api.inaturalist.org/v1/observations';
 let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
 let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
-
-</script> 
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/library_params_v4.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/stockslager/inat/rewild_common_func_v2.js"></script>
-<script> 
 
 function replaceDoubleQuotes(str) {
   return str.replace(/"/g, '%22');
