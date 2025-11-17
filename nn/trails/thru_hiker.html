@@ -29,7 +29,7 @@ let p_prefix       = winurlparams.get('prefix') || '';
 let p_show_menu     = winurlparams.get('show_menu') || 'no';
 let p_sub_menu_array    = winurlparams.get('sub_menu_array') || '';
 let p_state         = winurlparams.get('state') || '';
-let p_taxon_nm      = winurlparams.get('taxon_nm') || 'Show';
+let p_menu_name     = winurlparams.get('menu_name') || 'Show';
 let p_page          = winurlparams.get('page') || '';
 let p_obs_fields    = winurlparams.get('obs_fields') || '';
 let behavior_field = '';
@@ -82,7 +82,7 @@ function getShowDDOpts( winurlparams ) {
    let opts='';
    // build param list for url's used in fresults
    for( const [key, value] of winurlparams.entries() ) { 
-        if( key !== 'taxon_id' && key !== 'taxon_nm' && key !== 'sub_menu_array' && key !== 'page' ){
+        if( key !== 'taxon_id' && key !== 'menu_name' && key !== 'sub_menu_array' && key !== 'page' ){
             if( opts === '' ){
                 opts += "?";
             } else {
@@ -179,14 +179,14 @@ function buildMenu( results ) {
            let showDDOpts = getShowDDOpts( winurlparams );
              
            links =  (furl(window.location.protocol+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
-           links += (furl(window.location.protocol+showDDOpts+'&page=1'+'&taxon_id=47126'+'&taxon_nm=Plants','<span style="padding-right:20px;">&#127807</span>Plants' ));           
+           links += (furl(window.location.protocol+showDDOpts+'&page=1'+'&taxon_id=47126'+'&menu_name=Plants','<span style="padding-right:20px;">&#127807</span>Plants' ));           
            for( let j=0; j<configuration.sub_icons.length; j++ ) {
-                links += (furl(window.location.protocol+showDDOpts+'&page=1'+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+                links += (furl(window.location.protocol+showDDOpts+'&page=1'+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&menu_name='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
            }
            if( mode.includes('onlytitle') ) {
-               menu_string += ( buildDDTitle( capitalizeWords(p_taxon_nm) ) );
+               menu_string += ( buildDDTitle( capitalizeWords(p_menu_name) ) );
            } else {
-               menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
+               menu_string += ( buildDD( capitalizeWords(p_menu_name), links) );
            }
        }
 
@@ -236,11 +236,11 @@ function buildMenu( results ) {
                 links = (furl(window.location.protocol+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
                 for( let j=0; j<configuration.sub_icons.length; j++ ) {
                      if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
-                         links += (furl(window.location.protocol+showDDOpts+'&page=1'+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+                         links += (furl(window.location.protocol+showDDOpts+'&page=1'+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&menu_name='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
                      }
                 }
               
-                menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
+                menu_string += ( buildDD( capitalizeWords(p_menu_name), links) );
             }
 
             links = '';
