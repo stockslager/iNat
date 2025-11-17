@@ -2,10 +2,12 @@
 function getShowMenuName( config_data, taxon_id ) {
     let show_menu_name = '';
 
-    for( let i=0; i<config_data.sub_icons; i++) {
-         if( config_data.sub_icons[i].taxon_id.toString() === taxon_id.toString() ) {
-             return taxon_nm;
-         }
+    if( config_data.sub_icons ) {
+        for( let i=0; i<config_data.sub_icons.length; i++) {
+             if( config_data.sub_icons[i].taxon_id.toString() === taxon_id.toString() ) {
+                 show_menu_name = config_data.sub_icons[i].taxon_nm;
+             }
+        }
     }
 
     if( !show_menu_name ) { console.log('Show Menu Name Not Found'); }
