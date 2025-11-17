@@ -15,6 +15,10 @@
 <link rel="stylesheet" type="text/css" href="/iNat/seed_library.css" />
 <title>Thru Hiker Grid</title>
 </head>
+
+<style>
+   #error { margin-left:15px; margin-bottom: 10px; margin-top:50px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 8px; padding-bottom: 8px; padding-left: 8px; padding-right: 8px; }
+</style>
     
 <body>
 <script type="text/javascript" src='/iNat/common_func.js'> </script>
@@ -25,7 +29,6 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr);
-let p_project_id = winurlparams.get('project_id') || '';
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
 let p_taxon_nm   = winurlparams.get('taxon_nm') || 'Show';
 var cellpx       = winurlparams.get('cellpx') || 122;
@@ -45,14 +48,16 @@ let p_hide_home  = winurlparams.get('hide_home') || 'no';
 let p_hide_dds   = winurlparams.get('hide_dds') || 'no';
 
 // parse the seed project param to determine mode.
-let prj      = p_state.split('$')[0];
-let place    = p_state.split('$')[1];
-let p_params = p_state.split('$')[2];
-let user     = p_state.split('$')[3];
-let garden   = p_state.split('$')[4];
-let mode     = p_state.split('$')[5];
-let obs_id   = p_state.split('$')[6] || '';
-let avail    = p_state.split('$')[7] || '';
+let p_project_id      = p_state.split('$')[0];
+let p_place_id        = p_state.split('$')[1];
+let p_params          = p_state.split('$')[2];
+let p_user_id         = p_state.split('$')[3];
+let p_garden          = p_state.split('$')[4];
+let p_mode            = p_state.split('$')[5];
+let obs_id            = p_state.split('$')[6] || '';
+let avail             = p_state.split('$')[7] || '';
+
+var api_base = 'https://api.inaturalist.org/v1/observations'
 
 // don't show organsims that have only been id'd to genus and above, otherwise the number's
 // won't match other counts
@@ -114,11 +119,7 @@ winurlparams.delete('cellpx');
 winurlparams.delete('spacerpx');
 winurlparams.delete('rows');
 winurlparams.delete('columns');
-var obsurlbase = 'https://www.inaturalist.org/observations';
-var obsurl = obsurlbase+'?'+winurlparams.toString();
 winurlparams.append('per_page',recsmax);
-var apiurlbase = 'https://api.inaturalist.org/v1/observations'
-var apiurl = apiurlbase+'?'+winurlparams.toString();
 
 function getShowDDOpts( winurlparams ) { 
    let opts='';
@@ -136,10 +137,6 @@ function getShowDDOpts( winurlparams ) {
         }
    } 
    return( opts );
-}
-
-function buildLifeStageMenu(data, obs_fields) {
-
 }
 
 function buildMenu() {
@@ -163,21 +160,39 @@ function buildMenu() {
 <script src="/iNat/nn/configurations.js"></script>
 <script>
     
-function buildPage(data) {  
+function buildPage(data, configurations) {  
    faddelem('p',document.body,{innerHTML:buildMenu()}); 
    buildGrid(data);    
 };
+
+function setupAPIParams( config ) {
+    
+    let api_params = '';
+
+    api_params += '?project_id='+config.insect_project;
+    
+    if( p_taxon_id ) { api_params += '&taxon_id='+p_taxon_id; }
+    if( p_place_id ) { api_params += '&place_id='+p_place_id; }
+    if( p_user_id )  { api_params += '&user_id='+p_user_id; }
+
+    return api_params;
+}
     
 async function gatherResources() {
   try {
       // Await the result of getObservations() and store the actual data
-      await getConfigurations();
-      const obs_data = await getObservations(); 
-       // Pass the data to the buildPage function
-      buildPage(obs_data); 
+      const config_data   = await asyncGetConfiguration( p_params, p_project_id );
+      const api_params    = setupAPIParams( config_data );
+      const api_url       = api_base+api_params;
+      console.log('api url: ' + api_url);
+      //const obs_data      = await apiFetch( api_url ); 
+      // Pass the data to the buildPage function
+      //buildPage(obs_data, config_data.configurations); 
 
     } catch (error) {
       console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
     }
 }
 
