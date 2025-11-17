@@ -48,7 +48,7 @@ async function asyncGetConfiguration( params, project_id ) {
       if( !response.ok ) {
           if( response.status === 404 ) {
               let message = 'Name of .json must be specified in the url.' + 
-                            '<br>A parameters file named '+params+'has no matching .json configuration file.' + 
+                            '<br>A parameters file named '+params+' has no matching .json configuration file.' + 
                             '<br>Please add the name of a valid .json file to the url.';
               throw new Error(message);
           }
