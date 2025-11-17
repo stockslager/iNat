@@ -56,7 +56,24 @@ function findConfiguration( config_data, params, project_id ) {
     return configuration;
 }
 
+// function to handle fetching / caching of configurations
 async function asyncGetConfiguration( params, project_id ) {
+
+   const storageKey = ('nn_configCache_'+params);
+   const cachedData = sessionStorage.getItem(storageKey);
+
+   // --- Check the cache first ---
+   if( cachedData ) {
+       console.log('Returning configuration from cache: ' + storageKey);
+       try {
+          const data = JSON.parse(cachedData);
+          return findConfiguration(data, params, project_id);
+       } catch (e) {
+          console.error("Error parsing cached JSON, fetching new data.");
+          sessionStorage.removeItem(storageKey); // Clear bad cache entry
+       }
+   }  
+    
    console.log('fetching json: ' + json_root + params);
 
    if( !params ) {
@@ -80,6 +97,11 @@ async function asyncGetConfiguration( params, project_id ) {
       }
 
       const data = await response.json();
+
+      // Store data in session storage before returning 
+      // sessionStorage only stores strings, so we must use JSON.stringify
+      sessionStorage.setItem(storageKey, JSON.stringify(data));
+      console.log('Stored configuration in session storage: ' + storageKey);
             
       // Return the data object when successful
       return ( findConfiguration(data, params, project_id) ); 
