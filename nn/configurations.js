@@ -23,9 +23,9 @@ function findConfiguration( config_data, params, project_id ) {
     }
 
     if( !configuration ) {
-        let message = 'Configuration not found for ('+params+'.json).' + 
-                      '<br>A configuration with a matching project ('+project_id+'.json) must exist in '+params+'.json.' + 
-                      '<br>Please add a valid project parameter to '+params+'.json';
+        let message = 'Configuration not found.' + 
+                      '<br>A configuration with a matching project ('+project_id+') does not exist in '+params+'.json.' + 
+                      '<br>Please verify the project ('+project_id+') in the url and make sure it exists in '+params+'.json.';
         throw new Error(message);
     }
 
