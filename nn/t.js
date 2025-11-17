@@ -93,6 +93,6 @@ async function asyncGetConfigurations() {
 // need to pull resources from a json file to pass into an api
 // so needs to be asynchronous. 
 const getConfigurations = async () => {
-   asyncGetObservationsData();
+   asyncGetConfigurations();
 }
 
