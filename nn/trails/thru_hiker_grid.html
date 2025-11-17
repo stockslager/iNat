@@ -169,13 +169,16 @@ function buildPage(data) {
 };
     
 async function gatherResources() {
-  await getConfigurations();
-    
-  // Await the result of getObservations() and store the actual data
-  const obs_data = await getObservations(); 
-  
-  // Pass the data to the buildPage function
-  buildPage(obs_data);
+  try {
+      // Await the result of getObservations() and store the actual data
+      await getConfigurations();
+      const obs_data = await getObservations(); 
+       // Pass the data to the buildPage function
+      buildPage(obs_data); 
+
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
 }
 
 gatherResources();  
