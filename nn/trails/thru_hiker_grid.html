@@ -16,10 +16,6 @@
 <title>Thru Hiker Grid</title>
 </head>
 
-<style>
-   #error { margin-left:15px; margin-bottom: 10px; margin-top:50px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 8px; padding-bottom: 8px; padding-left: 8px; padding-right: 8px; }
-</style>
-    
 <body>
 <script type="text/javascript" src='/iNat/common_func.js'> </script>
 <script type="text/javascript" src='/iNat/js/plant_params_v10.js'> </script>
@@ -30,22 +26,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr);
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
-let p_taxon_nm   = winurlparams.get('taxon_nm') || 'Show';
-var cellpx       = winurlparams.get('cellpx') || 122;
-var spacerpx     = winurlparams.get('spacerpx') || 4;
-var rows         = winurlparams.get('rows') || 30;
-var columns      = winurlparams.get('columns') || 3;
-let p_action     = winurlparams.get('action') || '';
-let p_list       = winurlparams.get('list') || '';
-let p_tag_name   = winurlparams.get('tag_name') || '';
-let p_menu       = winurlparams.get('menu') || '';
-let p_plant_id   = winurlparams.get('plant_id') || '';
-let p_plant_name = winurlparams.get('plant_name') || '';
-let p_cache_check = winurlparams.get('cache_check') || '';
-let p_life       = winurlparams.get('life') || 'Life Stage';
 let p_state      = winurlparams.get('state') || '';
-let p_hide_home  = winurlparams.get('hide_home') || 'no';
-let p_hide_dds   = winurlparams.get('hide_dds') || 'no';
 
 // parse the seed project param to determine mode.
 let p_project_id      = p_state.split('$')[0];
@@ -64,15 +45,8 @@ var obsurlbase = root_observations;
 // won't match other counts
 //winurlparams.append('lrank', 'subspecies');
 
-let annotations_array = [];
-let interactions = [];
 let configuration = '';
 
-let seed_param = '';
-if( p_state ) {
-    state_param = '&state='+p_state;
-}
-   
 // find key/value pair for &field: param if one was passed in
 let p_field = '';
 let field_key = '';
@@ -83,12 +57,13 @@ for (const [key, value] of winurlparams.entries()) {
   }
 }   
 
-var recsmax = columns * rows - 1;
+// defaults for grid
+var cellpx       = 122;
+var spacerpx     =   4;
+var rows         =  30;
+var columns      =   3;
+var recsmax      = columns * rows - 1;
 
-winurlparams.delete('cellpx');
-winurlparams.delete('spacerpx');
-winurlparams.delete('rows');
-winurlparams.delete('columns');
 winurlparams.append('per_page',recsmax);
 
 function getMapParams() {
