@@ -198,17 +198,12 @@ function fresults(xobj) {
       console.log('building menu...');
       buildMenu( results );
    
-      if( !p_taxon_id ) {
-          dlString = furl('./thru_hiker_grid.html?state='+p_state,'<span id="topright">All Organisms On Any Plant</span>');
+      if( !p_menu_id ) {
+          dlString = furl('./thru_hiker_grid.html?state='+p_state,'<span id="topright">All Observations</span>');
       } else {
-          dlString = furl('./thru_hiker_grid.html?state='+p_state+'&taxon_id='+p_taxon_id+'&menu_id='+p_menu_id,'<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
+          dlString = furl('./thru_hiker_grid.html?state='+p_state+'&taxon_id='+p_taxon_id+'&menu_id='+p_menu_id,'<span id="toprightbold">Just '+capitalizeWords(dlString)+'</span>');
       }
 
-      if( mode.includes('yard') || 
-          mode.includes('simple') ) {
-          dlString = '';
-      }
-    
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+dlString+'<br />'});  
@@ -252,11 +247,17 @@ function fresults(xobj) {
          }
 
          let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
+
+         let menu_id_param = '';
+
+         if( p_menu_id ) {
+             menu_id_param = getShowMenuName( configuration, p_menu_id );
+         }
                                       
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl('./thru_hiker_grid.html?state='+p_state+'&taxon_id='+rec.taxon.id,displayName)},
+                  {innerHTML:furl('./thru_hiker_grid.html?state='+p_state+'&taxon_id='+rec.taxon.id+menu_id_param,displayName)},
                   {innerText:rec.count||''},
                   ];
         
