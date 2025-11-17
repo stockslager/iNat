@@ -76,8 +76,9 @@ function getMapParams() {
    if( p_user_id  ) { map_params += '&user_id='+p_user_id; }
    if( p_place_id ) { map_params += '&place_id='+p_place_id; }
    if( p_taxon_id ) { map_params += '&taxon_id='+p_taxon_id; }
-
-   if( p_field    ) { map_params += p_field; }
+ 
+   // filter by field (usually trail name)... should change to generic filter
+   api_params += '&field:'+configuration.field_name+'='+(configuration.field_value||'');
 
    return map_params;
 }
