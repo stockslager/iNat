@@ -35,6 +35,13 @@ function findConfiguration( config_data, params, project_id ) {
 async function asyncGetConfiguration( params, project_id ) {
    console.log('fetching json: ' + json_root + params);
 
+   if( !params ) {
+       let message = 'Name of .json must be specified in the url.' + 
+                     '<br>There are no params in the url to be matched with a .json configuration file.' + 
+                     '<br>Please add the name of a valid .json file to the url.';
+       throw new Error(message);
+   }
+
    try {
       const response = await fetch(json_root + params + '.json');
 
