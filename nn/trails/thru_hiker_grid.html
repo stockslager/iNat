@@ -163,14 +163,14 @@ function buildMenu() {
 <script src="/iNat/nn/configurations.js"></script>
 <script>
     
-function fresults(data) {  
+function buildPage(data) {  
    faddelem('p',document.body,{innerHTML:buildMenu()}); 
    buildGrid(data);    
 };
     
 async function gatherResources() {
   await getConfigurations();
-  getObservations();
+  buildPage( getObservations() );
 }
 
 gatherResources();  
