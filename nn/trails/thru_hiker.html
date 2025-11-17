@@ -30,14 +30,8 @@ let p_show_menu     = winurlparams.get('show_menu') || 'no';
 let p_sub_menu_array    = winurlparams.get('sub_menu_array') || '';
 let p_state         = winurlparams.get('state') || '';
 let p_page          = winurlparams.get('page') || '';
-let p_obs_fields    = winurlparams.get('obs_fields') || '';
-let behavior_field = '';
-let behavior_field_value = '';
-let obs_field_array = [];
 let configuration = '';
 let configurations = [];
-let interactions = [];
-let seed_param = '';
 let field_name = '';
 let dlString = '';
 
@@ -84,24 +78,6 @@ function buildTitle( title ) {
    return ('<div class="dd_title">'+title+'</div>');
 }
 
-function getObsFieldsDDOpts(winurlparams) {
-   let opts='';
-   // build param list for url's used in fresults
-   for( const [key, value] of winurlparams.entries() ) { 
-        if( !key.startsWith('field') && key !== 'obs_fields' && key !== 'sub_menu_array' ){
-            if( opts === '' ){
-                opts += "?";
-            } else {
-                opts += "&";
-            }
-            opts += key;
-            opts += "=";
-            opts += value;
-        }
-   } 
-   return( opts );
-}
-
 function setUpDefaults(configurations) {
 
    if( configurations.length === 0 ) {
@@ -126,8 +102,6 @@ function setUpDefaults(configurations) {
    }
 
    menu_name = getShowMenuName(configuration, p_menu_id) || 'Show';
-
-   interactions   = configuration.interactions;
 
    api_params += ('?project_id='+configuration.insect_project);
    //api_params += '&hrank=species';
