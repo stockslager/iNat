@@ -24,7 +24,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
-let p_taxon_name  = winurlparams.get('taxon_name') || '';
+let p_menu_name  = winurlparams.get('menu_name') || '';
 let p_prefix       = winurlparams.get('prefix') || '';
 let p_show_menu     = winurlparams.get('show_menu') || 'no';
 let p_sub_menu_array    = winurlparams.get('sub_menu_array') || '';
@@ -74,7 +74,7 @@ for (const [key, value] of winurlparams.entries()) {
 if( mode.includes('yard') ) {
     dlString = 'Yard List';
 } else {
-    dlString = (capitalizeWords((p_prefix+' on '+p_taxon_name)));
+    dlString = (capitalizeWords((p_prefix+' on '+p_menu_name)));
 }
 document.title = dlString;
   
@@ -223,7 +223,7 @@ function buildMenu( results ) {
        }
    }
    
-   if( ( p_taxon_id || p_taxon_name ) ||
+   if( ( p_taxon_id || p_menu_name ) ||
        ( p_show_menu === 'yes' ) ||
        ( configuration.sub_icons ) ) { 
     
@@ -246,17 +246,6 @@ function buildMenu( results ) {
             links = '';
             let link_count = 0;
             let dd_title = '';
-
-            let show_behavior = configuration.show_behavior || 'no';
-            if( p_taxon_name === 'all plants' ) {
-                if( show_behavior === 'on_all' ) {
-                    show_behavior = 'yes';
-                }
-            } else {
-                if( show_behavior === 'by_plant' ) {
-                    show_behavior = 'yes';
-                }
-            }      
 
             let default_title = '';
 
@@ -320,7 +309,7 @@ function fresults(xobj) {
       if( !p_taxon_id ) {
           dlString = furl('./thru_hiker_grid.html'+all_params+'&state='+p_state,'<span id="topright">All Organisms On Any Plant</span>');
       } else {
-          dlString = furl('./thru_hiker_grid.html'+all_params+'&state='+p_state+'&taxon_id='+p_taxon_id+'&taxon_name='+p_taxon_name,'<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
+          dlString = furl('./thru_hiker_grid.html'+all_params+'&state='+p_state+'&taxon_id='+p_taxon_id+'&menu_name='+p_menu_name,'<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
       }
 
       if( mode.includes('yard') || 
@@ -371,12 +360,11 @@ function fresults(xobj) {
          }
 
          let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
-         let grid_title  = ('&action=on&title='+(pref_tax_name||tax_name)+' on '+p_taxon_name);
                                       
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl('./thru_hiker_grid.html'+api_params+'&state='+p_state+'&taxon_id='+rec.taxon.id+grid_title+'&taxon_name='+nm,displayName)},
+                  {innerHTML:furl('./thru_hiker_grid.html'+api_params+'&state='+p_state+'&taxon_id='+rec.taxon.id,displayName)},
                   {innerText:rec.count||''},
                   ];
         
