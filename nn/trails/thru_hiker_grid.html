@@ -47,7 +47,7 @@ var obsurl     = obsurlbase+'?'+winurlparams.toString();
 // won't match other counts
 //winurlparams.append('lrank', 'subspecies');
 
-let configuration = '';
+let config = '';
 
 // defaults for grid
 var cellpx       = 122;
@@ -58,7 +58,7 @@ var recsmax      = columns * rows - 1;
 
 winurlparams.append('per_page',recsmax);
 
-function getMapParams(config) {
+function getMapParams() {
    let map_params = '';
 
    map_params += '?project_id='+p_project_id;
@@ -73,7 +73,7 @@ function getMapParams(config) {
    return map_params;
 }
 
-function buildMenu(config) {
+function buildMenu() {
 
    let links = '';
    let menu_string = '';
@@ -94,7 +94,7 @@ function buildMenu(config) {
 <script src="/iNat/nn/configurations.js"></script>
 <script>
     
-function buildPage(data, config) {  
+function buildPage(data) {  
    faddelem('p',document.body,{innerHTML:buildMenu(config)}); 
    buildGrid(data);    
 };
@@ -119,6 +119,7 @@ async function gatherResources() {
   try {
       // Await the result of getObservations() and store the actual data
       const config_data   = await asyncGetConfiguration( p_params, p_project_id );
+      config = config_data;
       console.log('config data ' + JSON.stringify(config_data) );
       const api_params    = setupAPIParams( config_data );
       const api_url       = api_base+api_params;
