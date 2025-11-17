@@ -1,3 +1,18 @@
+// find the taxon name given the taxon_id in the list of sub_icons in the configuration
+function getShowMenuName( config_data, taxon_id ) {
+    let show_menu_name = '';
+
+    for( let i=0; i<config_data.sub_icons; i++) {
+         if( config_data.sub_icons[i].taxon_id.toString() === taxon_id.toString() ) {
+             return taxon_nm;
+         }
+    }
+
+    if( !show_menu_name ) { console.log('Show Menu Name Not Found'); }
+    
+    return show_menu_name;
+}
+
 function findConfiguration( config_data, params, project_id ) {
     let configuration = '';
    
