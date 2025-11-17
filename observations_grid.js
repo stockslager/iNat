@@ -48,3 +48,48 @@ function buildGrid(data) {
       if (obsseq===0) { break; };
    };
 }
+
+async function asyncGetObservationsData() {
+   console.log('json ' + json_root+p_params);
+   await fetch((json_root+p_params+'.json'))
+     .then(response => response.json())
+     .then(data => {
+      // Access your data here 
+      for( let i=0; i<data.configurations.length; i++ ) {
+           if( data.configurations[i].insect_project === p_project_id ) {
+               interactions = data.configurations[i].interactions;
+           }
+           if( data.configurations[i].art_project === p_project_id ) {
+               configuration = data.configurations[i];
+           }
+      }
+      console.log(data);
+   })
+     .catch(error => {
+      console.error('Error fetching JSON:', error);
+   });
+
+   if (window.location.search==='') {
+      faddelem('p',document.body,{innerHTML:'This is a quick and dirty example of a widget to display iNaturalist observations in a grid. It is based on the '+furl('https://api.inaturalist.org/v1/docs/#!/Observations/get_observations','Observation Search API endpoint')+' and can accept any of the parameters for that endpoint. Additionally, it accepts 4 more parameters that will allow the grid to be customized: columns, rows, cellpx, and spacerpx.'});
+      faddelem('p',document.body,{innerHTML:'Suppose the address of this page is '+furl(winurlexsearchstr)+', and you want to see '+furl(famp(apiurlbase+'?taxon_id=3&place_id=9'),'birds in New Mexico')+' in a 3 (high) x 5 (wide) grid where each cell is 75px x 75px and where each cell is separated by a 2px spacer, then you would open '+furl(famp(winurlexsearchstr+'?rows=3&columns=5&cellpx=75&spacerpx=2&taxon_id=3&place_id=9'))+' in your browser.'});
+      faddelem('p',document.body,{innerHTML:'Note that the actual size of the image files is 75px x 75px. So setting the cellpx higher than 75 will make the images look blurry. Only the first photo in an observation will be shown, or else ❎ will be shown when an observation has no photos. The last cell in the grid will always be either a "no data" or "more" button. So a 3x5 grid will show only up to 14 observations.'});
+   } else {
+        await fetch(apiurl)
+          .then((response) => {
+             if (!response.ok) { throw new Error(response.status+' ('+response.statusText+') returned from '+response.url); };
+             return response.json();
+          })
+          .then((data) => { fresults(data); })
+          .catch((err) => {
+             console.error(err.message);
+             faddelem('p',document.body,{innerHTML:'There was a problem retrieving data. Error '+err.message+'.'})
+        });
+   };
+
+}
+
+// need to pull resources from a json file to pass into an api
+// so needs to be asynchronous. 
+const getObservations = async () => {
+   asyncGetObservationsData();
+}
