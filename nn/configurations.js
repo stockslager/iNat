@@ -3,9 +3,13 @@ function getShowMenuName( config_data, taxon_id ) {
     let show_menu_name = '';
 
     if( config_data.sub_icons ) {
+        console.log('one');
         for( let i=0; i<config_data.sub_icons.length; i++) {
+            console.log('two');
              if( config_data.sub_icons[i].taxon_id.toString() === taxon_id.toString() ) {
+                 console.log('three');
                  show_menu_name = config_data.sub_icons[i].taxon_nm;
+                 break;
              }
         }
     }
