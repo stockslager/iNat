@@ -2,12 +2,15 @@
 function getShowMenuName( config_data, taxon_id ) {
     let show_menu_name = '';
 
+    // hard coding for plants since it's not shown on the main activity.
+    // need to revisit.
+    if( taxon_id.toString() === '47126' ) {
+        return 'plants';
+    }
+
     if( config_data.sub_icons ) {
-        console.log('one');
         for( let i=0; i<config_data.sub_icons.length; i++) {
-            console.log('two');
              if( config_data.sub_icons[i].taxon_id.toString() === taxon_id.toString() ) {
-                 console.log('three');
                  show_menu_name = config_data.sub_icons[i].nm;
                  break;
              }
