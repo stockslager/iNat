@@ -166,10 +166,13 @@ function fresults(data) {
    faddelem('p',document.body,{innerHTML:buildMenu()}); 
    buildGrid(data);    
 };
-
-await getConfigurations();
     
-getObservations();  
+async function gatherResources() {
+  await getConfiguration();
+  getObservations();
+}
+
+gatherResources();  
  
 </script>
 </body>
