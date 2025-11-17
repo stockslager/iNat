@@ -46,10 +46,6 @@ let api_params = '';
 let all_params = '';
 let behavior_params = '';
 
-const current_url = new URL(window.location.href); 
-current_url.search = ''; // Clears the query string
-const url_without_params = current_url.toString();
- 
 // find the html name to pass to other pages for nav
 let path = window.location.pathname;
 let html_name = path.substring(path.lastIndexOf('/') + 1);
@@ -336,9 +332,9 @@ function fresults(xobj) {
       buildMenu( results );
    
       if( !p_target_id ) {
-          dlString = furl(url_without_params+all_params+'&state='+p_state+'&action=on&plant_id='+p_target_id+'&plant_name='+p_target_name,'<span id="topright">All Organisms On Any Plant</span>');
+          dlString = furl('./thru_hiker_grid.html'+all_params+'&state='+p_state+'&action=on&plant_id='+p_target_id+'&plant_name='+p_target_name,'<span id="topright">All Organisms On Any Plant</span>');
       } else {
-          dlString = furl(url_without_params+all_params+'&state='+p_state+'&action=on&plant_id='+p_target_id+'&plant_name='+p_target_name,'<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
+          dlString = furl('./thru_hiker_grid.html'+all_params+'&state='+p_state+'&action=on&plant_id='+p_target_id+'&plant_name='+p_target_name,'<span id="toprightbold">'+capitalizeWords(dlString)+'</span>');
       }
 
       if( mode.includes('yard') || 
@@ -392,7 +388,7 @@ function fresults(xobj) {
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl(url_without_params+api_params+'&state='+p_state+'&taxon_id='+rec.taxon.id+grid_title+'&plant_id='+p_target_id+'&plant_name='+p_target_name,displayName)},
+                  {innerHTML:furl('./thru_hiker_grid.html'+api_params+'&state='+p_state+'&taxon_id='+rec.taxon.id+grid_title+'&plant_id='+p_target_id+'&plant_name='+p_target_name,displayName)},
                   {innerText:rec.count||''},
                   ];
         
