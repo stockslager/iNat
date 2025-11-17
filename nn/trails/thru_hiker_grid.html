@@ -119,7 +119,7 @@ async function gatherResources() {
   try {
       // Await the result of getObservations() and store the actual data
       const config_data   = await asyncGetConfiguration( p_params, p_project_id );
-      console.log('config data ' + config_data );
+      console.log('config data ' + JSON.stringify(config_data) );
       const api_params    = setupAPIParams( config_data );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
