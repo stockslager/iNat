@@ -47,7 +47,7 @@ var obsurl     = obsurlbase+'?'+winurlparams.toString();
 // won't match other counts
 //winurlparams.append('lrank', 'subspecies');
 
-let config = '';
+//let config = '';
 
 // defaults for grid
 var cellpx       = 122;
@@ -58,7 +58,7 @@ var recsmax      = columns * rows - 1;
 
 winurlparams.append('per_page',recsmax);
 
-function getMapParams() {
+function getMapParams(config) {
    let map_params = '';
 
    map_params += '?project_id='+p_project_id;
@@ -73,7 +73,7 @@ function getMapParams() {
    return map_params;
 }
 
-function buildMenu() {
+function buildMenu(config) {
 
    let links = '';
    let menu_string = '';
@@ -82,7 +82,7 @@ function buildMenu() {
    if( p_menu_id ) { menu_params += '&taxon_id=' + p_menu_id + '&menu_id=' + p_menu_id; }
 
    menu_string = '<div class="navbar">';
-   menu_string += buildMenuURL( furl(github_root+'plant_map.html'+getMapParams(),"Map") );
+   menu_string += buildMenuURL( furl(github_root+'plant_map.html'+getMapParams(config),"Map") );
    menu_string += buildHome(    furl(github_root+'nn/trails/thru_hiker.html?state='+p_state+menu_params,'&#127807;') );
    menu_string += '</div>';
    
@@ -94,7 +94,7 @@ function buildMenu() {
 <script src="/iNat/nn/configurations.js"></script>
 <script>
     
-function buildPage(data) {  
+function buildPage(data, config) {  
    faddelem('p',document.body,{innerHTML:buildMenu(config)}); 
    buildGrid(data);    
 };
@@ -119,7 +119,7 @@ async function gatherResources() {
   try {
       // Await the result of getObservations() and store the actual data
       const config_data   = await asyncGetConfiguration( p_params, p_project_id );
-      config = config_data;
+      //config = config_data;
       console.log('config data ' + JSON.stringify(config_data) );
       const api_params    = setupAPIParams( config_data );
       const api_url       = api_base+api_params;
