@@ -85,13 +85,15 @@ function buildMenu() {
 
    let links = '';
    let menu_string = '';
+   let grid_params = '';
+
+   if( p_taxon_id && p_taxon_name ) {
+       grid_params += '&target_id='+p_taxon_id+'&target_name='+p_taxon_name;
+   }
 
    menu_string = '<div class="navbar">';
-
    menu_string += buildMenuURL( furl(github_root+'plant_map.html'+getMapParams(),"Map") );
-
-   menu_string += buildHome( furl(github_root+'nn/trails/thru_hiker.html?state='+p_state+'&target_id='+p_taxon_id+'&target_name='+p_taxon_name,'&#127807;') );
-
+   menu_string += buildHome(    furl(github_root+'nn/trails/thru_hiker.html?state='+p_state+grid_params,'&#127807;') );
    menu_string += '</div>';
    
    return menu_string;
