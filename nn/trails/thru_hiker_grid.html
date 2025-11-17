@@ -68,7 +68,7 @@ function getMapParams() {
    if( p_taxon_id ) { map_params += '&taxon_id='+p_taxon_id; }
  
    // filter by field (usually trail name)... should change to generic filter
-   api_params += '&field:'+configuration.field_name+'='+(configuration.field_value||'');
+   map_params += '&field:'+configuration.field_name+'='+(configuration.field_value||'');
 
    return map_params;
 }
@@ -108,6 +108,9 @@ function setupAPIParams( config ) {
     if( p_taxon_id ) { api_params += '&taxon_id='+p_taxon_id; }
     if( p_place_id ) { api_params += '&place_id='+p_place_id; }
     if( p_user_id )  { api_params += '&user_id='+p_user_id; }
+
+    // filter by field (usually trail name)... should change to generic filter
+    api_params += '&field:'+configuration.field_name+'='+(configuration.field_value||'');
 
     return api_params;
 }
