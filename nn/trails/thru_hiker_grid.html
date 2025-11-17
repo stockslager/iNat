@@ -58,7 +58,7 @@ var recsmax      = columns * rows - 1;
 
 winurlparams.append('per_page',recsmax);
 
-function getMapParams() {
+function getMapParams(config) {
    let map_params = '';
 
    map_params += '?project_id='+p_project_id;
@@ -68,12 +68,12 @@ function getMapParams() {
    if( p_taxon_id ) { map_params += '&taxon_id='+p_taxon_id; }
  
    // filter by field (usually trail name)... should change to generic filter
-   map_params += '&field:'+configuration.field_name+'='+(configuration.field_value||'');
+   map_params += '&field:'+config.field_name+'='+(config.field_value||'');
 
    return map_params;
 }
 
-function buildMenu() {
+function buildMenu(config) {
 
    let links = '';
    let menu_string = '';
@@ -94,8 +94,8 @@ function buildMenu() {
 <script src="/iNat/nn/configurations.js"></script>
 <script>
     
-function buildPage(data, configurations) {  
-   faddelem('p',document.body,{innerHTML:buildMenu()}); 
+function buildPage(data, config) {  
+   faddelem('p',document.body,{innerHTML:buildMenu(config)}); 
    buildGrid(data);    
 };
 
@@ -124,7 +124,7 @@ async function gatherResources() {
       console.log('api url: ' + api_url);
       const obs_data      = await apiFetch( api_url ); 
       // Pass the data to the buildPage function
-      buildPage(obs_data, config_data.configurations); 
+      buildPage(obs_data, config_data); 
 
     } catch (error) {
       console.error("An error occurred:", error);
