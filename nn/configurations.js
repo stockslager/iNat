@@ -15,10 +15,17 @@ function findConfiguration( config_data, params, project_id ) {
          }
     }
 
+    if( !project_id ) {
+        let message = 'A project parameter is required.' + 
+                      '<br>There is no project parameter in the url to be matched with a configuration in '+params+'.json' + 
+                      '<br>Please add a valid project parameter to the url.';
+        throw new Error(message);
+    }
+
     if( !configuration ) {
-        let message = 'Configuration file ('+params+'.json) must have an insect_project specified.' + 
-                      '<br>There is no insect_project parameter specified in '+params+'.json' + 
-                      '<br>Please add a valid insect_project parameter to '+params+'.json';
+        let message = 'Configuration not found for ('+params+'.json).' + 
+                      '<br>A configuration with a matching project ('+project_id+'.json) must exist in '+params+'.json.' + 
+                      '<br>Please add a valid project parameter to '+params+'.json';
         throw new Error(message);
     }
 
