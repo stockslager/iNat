@@ -228,6 +228,7 @@ function fresults(xobj) {
       let field_array_copy = field_array;
       for (let i=0; i<observations.length; i++) {
          let rec = observations[i];
+         console.log('obs id ' + rec.id );
          if( configuration.sub_icons && !p_sub_menu_array ) {
                 if( !sub_taxon_arr.includes(rec.taxon.id.toString()) ) {
                     for( let j=0; j<configuration.sub_icons.length; j++ ) {
