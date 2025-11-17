@@ -256,6 +256,7 @@ async function asyncGetData() {
           .catch((err) => {
              console.error(err.message);
              faddelem('p',document.body,{innerText:'There was a problem retrieving data. Error '+err.message+'.'});
+             throw err;
    });
 }
 
