@@ -26,7 +26,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr);
 let p_taxon_id   = winurlparams.get('taxon_id') || '';
-let p_taxon_name = winurlparams.get('taxon_name') || '';
+let p_menu_id    = winurlparams.get('menu_id') || '';
 let p_state      = winurlparams.get('state') || '';
 
 // parse the seed project param to determine mode.
@@ -39,8 +39,9 @@ let p_mode            = p_state.split('$')[5];
 let obs_id            = p_state.split('$')[6] || '';
 let avail             = p_state.split('$')[7] || '';
 
-var api_base = 'https://api.inaturalist.org/v1/observations'
+var api_base   = 'https://api.inaturalist.org/v1/observations'
 var obsurlbase = root_observations;
+var obsurl     = obsurlbase+'?'+winurlparams.toString();
 
 // don't show organsims that have only been id'd to genus and above, otherwise the number's
 // won't match other counts
@@ -85,15 +86,15 @@ function buildMenu() {
 
    let links = '';
    let menu_string = '';
-   let grid_params = '';
+   let menu_params = '';
 
-   if( p_taxon_id && p_taxon_name ) {
-       grid_params += '&target_id='+p_taxon_id+'&target_name='+p_taxon_name;
+   if( p_menu_id ) {
+       menu_params += '&menu_id='+menu_id;
    }
 
    menu_string = '<div class="navbar">';
    menu_string += buildMenuURL( furl(github_root+'plant_map.html'+getMapParams(),"Map") );
-   menu_string += buildHome(    furl(github_root+'nn/trails/thru_hiker.html?state='+p_state+grid_params,'&#127807;') );
+   menu_string += buildHome(    furl(github_root+'nn/trails/thru_hiker.html?state='+p_state+menu_params,'&#127807;') );
    menu_string += '</div>';
    
    return menu_string;
