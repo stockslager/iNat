@@ -58,8 +58,7 @@ let obs_id            = p_state.split('$')[6] || '';
 let avail             = p_state.split('$')[7] || '';
 
 var api_base = 'https://api.inaturalist.org/v1/observations'
-var obsurlbase = 'https://www.inaturalist.org/observations';
-//var obsurl = obsurlbase+'?'+winurlparams.toString();
+var obsurlbase = root_observations;
 
 // don't show organsims that have only been id'd to genus and above, otherwise the number's
 // won't match other counts
@@ -148,7 +147,7 @@ function buildMenu() {
 
    menu_string = '<div class="navbar">';
 
-   menu_string += buildMenuURL( furl(github_root+'plant_map.html'+all_opts,"map") );
+   menu_string += buildMenuURL( furl(github_root+'plant_map.html'+all_opts,"Map") );
 
    menu_string += buildHome( furl(github_root+'nn/trails/thru_hiker.html?state='+p_state+'&target_id='+p_plant_id+'&target_name='+p_plant_name,'&#127807;') );
 
