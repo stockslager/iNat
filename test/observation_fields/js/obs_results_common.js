@@ -426,8 +426,8 @@ function fresults(xobj) {
                                   field1 = rec.ofvs[j].value.toLowerCase();
                                   displayName = rec.ofvs[j].value.toLowerCase();
                                   let dname = '';
-                                
-                                  if( rec.ofvs[j].taxon.id ){
+
+                                  if( rec.ofvs[j].taxon && rec.ofvs[j].taxon.id ){
                                       let name  = rec.ofvs[j].taxon.name || '';
                                       let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                                       dname     = cname.toLowerCase() || name.toLowerCase() || 'unknown';
