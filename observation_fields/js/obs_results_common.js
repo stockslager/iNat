@@ -90,6 +90,7 @@ function showRow( rec ) {
 
 function buildRemoveObsFieldURL( box_row, box_array ){
 
+    let url = window.location.origin + window.location.pathname;   
     let remove_url = '';
     let new_obs_fields_list = removeItemFromCommaDelimitedList(p_obs_fields, box_row.field_id);
     winurlparams.delete('obs_fields');
@@ -111,7 +112,7 @@ function buildRemoveObsFieldURL( box_row, box_array ){
     winurlparams.delete('chosen_taxon_id');
 
     if( !p_chosen_taxon_id && !p_field && !p_operator ) {
-        remove_url = furl(window.location.protocol+'?'+winurlparams,'&#9447;&nbsp;'+box_row.field_id);
+        remove_url = furl(url+'?'+winurlparams,'&#9447;&nbsp;'+box_row.field_id);
     } else {
         remove_url = box_row.field_id;
     }
@@ -126,12 +127,14 @@ function buildRemoveObsFieldURL( box_row, box_array ){
 }
 
 function buildEmptyLink() {
+      let url = window.location.origin + window.location.pathname; 
+ 
       winurlparams.delete('operator');
       winurlparams.delete('obs_fields');
       winurlparams.delete('chosen_taxon_id');
       winurlparams.delete('field_value');
       winurlparams.delete('field');
-      let empty_link = furl(window.location.protocol+'?'+winurlparams,'&#9447;');
+      let empty_link = furl(url+'?'+winurlparams,'&#9447;');
       if( p_operator )        { winurlparams.append('operator', p_operator); }
       if( p_obs_fields )      { winurlparams.append('obs_fields', p_obs_fields); }
       if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
@@ -176,6 +179,7 @@ function fresults(xobj) {
    let display_count = 0;
    let filtered_count = 0;
    let results = xobj.observations;
+   let url = window.location.origin + window.location.pathname;   
 
    for( let f=0; f<field_array.length; f++ ){
         box_array.push(new boxRow(field_array[f], '') );
@@ -276,7 +280,7 @@ function fresults(xobj) {
 
          if( tax_id !== '' ) {
              winurlparams.delete('chosen_taxon_id');
-             taxon = furl(window.location.protocol+'?'+winurlparams+'&chosen_taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
+             taxon = furl(url+'?'+winurlparams+'&chosen_taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
              if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
          }
        
@@ -371,7 +375,7 @@ function fresults(xobj) {
                                       winurlparams.append('field_value', rec.ofvs[j].value.toLowerCase());
                                       winurlparams.delete('field');
                                       winurlparams.append('field', rec.ofvs[j].field_id);
-                                      values.push({innerHTML:furl(window.location.protocol+'?'+winurlparams, field1)});
+                                      values.push({innerHTML:furl(url+'?'+winurlparams, field1)});
                                       winurlparams.delete('field_value');
                                       winurlparams.delete('field');
                                       if( p_field_value ) { 
@@ -416,7 +420,7 @@ function fresults(xobj) {
               winurlparams.append('field_value', merge_field_value);
               winurlparams.delete('field');
               winurlparams.append('field', merge_field);
-              values.push({innerHTML:furl(window.location.protocol+'?'+winurlparams,displayName)});
+              values.push({innerHTML:furl(url+'?'+winurlparams,displayName)});
               winurlparams.delete('field_value');
               winurlparams.delete('field');
               if( p_field_value ) { 
@@ -440,7 +444,7 @@ function fresults(xobj) {
       winurlparams.delete('field_value');
       winurlparams.delete('field');
       faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">cached:</td><td id="tdright">'     + results.length + '</td><td id="tdkey"></td><td id="tdright">' + furl(window.location.protocol+'?'+winurlparams,'reset') + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">cached:</td><td id="tdright">'     + results.length + '</td><td id="tdkey"></td><td id="tdright">' + furl(url+'?'+winurlparams,'reset') + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">displayed:</td><td id="tdright">'  + display_count  + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">hidden:</td><td id="tdright">'     + filtered_count + '</td></tr></table></span>'});
       if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
