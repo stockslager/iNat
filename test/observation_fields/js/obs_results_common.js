@@ -325,7 +325,7 @@ function fresults(xobj) {
          let matchTaxonId = '';
          let taxon = '';
          
-         if( rec.taxon.id ){
+         if( rec.taxon && rec.taxon.id ){
              tax_id = rec.taxon.id;
              tax_name = rec.taxon.name || '';
              pref_tax_name = rec.taxon.preferred_common_name || '';
