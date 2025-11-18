@@ -91,8 +91,6 @@ function showRow( rec ) {
 function buildFilterParams( chosen_taxon_id, field, field_value, taxon_name, field_name) {
       let copyurlparams = new URLSearchParams(JSON.parse(JSON.stringify(Object.fromEntries(winurlparams))));
 
- console.log('prot ' + window.location.protocol);
-
       copyurlparams.delete('chosen_taxon_id');
       copyurlparams.delete('field_value');
       copyurlparams.delete('field');
@@ -142,6 +140,7 @@ function buildPlantDD( id, name, content ) {
 }
 
 function buildMenu(sub_taxon_arr) {
+   let url = window.location.origin + window.location.pathname;   
    let menu_string = '';
    let links = '';
 
@@ -151,11 +150,11 @@ function buildMenu(sub_taxon_arr) {
        let tname = p_taxon_name || 'Fauna';
 
        let copy_url_params = buildFilterParams( '', p_field, p_field_value, '', p_field_name );
-       links = (furl(window.location.protocol+'?'+copy_url_params,'<span style="padding-right:20px;">&#10133;</span>all' ));
+       links = (furl(url+'?'+copy_url_params,'<span style="padding-right:20px;">&#10133;</span>all' ));
        for( let j=0; j<configuration.sub_icons.length; j++ ) {
             if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
                 let copy_url_params = buildFilterParams( configuration.sub_icons[j].taxon_id, p_field, p_field_value, configuration.sub_icons[j].nm, p_field_name );
-                links += (furl(window.location.protocol+'?'+copy_url_params,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm.toLowerCase() ));
+                links += (furl(url+'?'+copy_url_params,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm.toLowerCase() ));
             }
        }
               
@@ -168,10 +167,10 @@ function buildMenu(sub_taxon_arr) {
    links = '';
    if( configuration.taxa && configuration.taxa.length > 0 ) {
        let copy_url_params = buildFilterParams( p_chosen_taxon_id, '', '', p_taxon_name, '' );
-       links += furl(window.location.protocol+'?'+copy_url_params,'all');
+       links += furl(url+'?'+copy_url_params,'all');
        for( let i=0; i<configuration.taxa.length; i++ ) {
             let copy_url_params = buildFilterParams( p_chosen_taxon_id, configuration.field_id, configuration.taxa[i].taxon_id, p_taxon_name, configuration.taxa[i].taxon_name );
-            links += furl(window.location.protocol+'?'+copy_url_params,configuration.taxa[i].taxon_name.toLowerCase());
+            links += furl(url+'?'+copy_url_params,configuration.taxa[i].taxon_name.toLowerCase());
        }
    }
  
@@ -191,6 +190,7 @@ function fresults(xobj) {
    let box_array = [];
    let display_count = 0;
    let filtered_count = 0;
+   let url = window.location.origin + window.location.pathname;   
 
    let total_results = xobj.total_results;
    let per_page = xobj.per_page;
@@ -343,7 +343,7 @@ function fresults(xobj) {
                  tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
              }
              let copy_url_params = buildFilterParams( tax_id, p_field, p_field_value, disp_nm, p_field_name );
-             taxon = furl(window.location.protocol+'?'+copy_url_params,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
+             taxon = furl(url+'?'+copy_url_params,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
          }
 
          let obs_photo = '';
@@ -443,7 +443,7 @@ function fresults(xobj) {
                                   }
                                   if( p_field_value === '' ){
                                       let copy_url_params = buildFilterParams( p_chosen_taxon_id, rec.ofvs[j].field_id, rec.ofvs[j].value.toLowerCase(), p_taxon_name, (dname||displayName)  );
-                                      values.push({innerHTML:furl(window.location.protocol+'?'+copy_url_params, field1)});
+                                      values.push({innerHTML:furl(url+'?'+copy_url_params, field1)});
                                   } else {
                                       values.push({innerHTML:field1});
                                   }
@@ -480,7 +480,7 @@ function fresults(xobj) {
               }
               let dname = displayCommonName.toLowerCase() || displayTaxonName.toLowerCase || displayName.toLowerCase() || '';
               let copy_url_params = buildFilterParams( p_chosen_taxon_id, merge_field, merge_field_value, p_taxon_name, dname  );
-              values.push({innerHTML:furl(window.location.protocol+'?'+copy_url_params,displayName)});
+              values.push({innerHTML:furl(url+'?'+copy_url_params,displayName)});
          }          
 
          values.push({innerHTML:user_icon});
@@ -496,7 +496,7 @@ function fresults(xobj) {
 
       let copy_url_params = buildFilterParams( '', '', '', '', '' );
       faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">dataset:</td><td id="tdright">'    + total_results  + '</td><td id="tdkey"></td><td id="tdright">' + furl(window.location.protocol+'?'+copy_url_params,'reset') + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">dataset:</td><td id="tdright">'    + total_results  + '</td><td id="tdkey"></td><td id="tdright">' + furl(url+'?'+copy_url_params,'reset') + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">displayed:</td><td id="tdright">'  + display_count  + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">hidden:</td><td id="tdright">'     + filtered_count + '</td></tr></table></span>'});
     
