@@ -97,6 +97,7 @@ function buildFilterParams( chosen_taxon_id, field, field_value, taxon_name, fie
       copyurlparams.delete('taxon_name');
       copyurlparams.delete('field_name');
       copyurlparams.delete('page');
+      copyurlparams.delete('per_page');
 
       if( chosen_taxon_id ) { copyurlparams.append('chosen_taxon_id', chosen_taxon_id); }
       if( field )           { copyurlparams.append('field', field); }
