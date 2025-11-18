@@ -80,7 +80,17 @@ function buildMenu(config) {
    if( p_menu_id ) { menu_params += '&taxon_id=' + p_menu_id + '&menu_id=' + p_menu_id; }
 
    menu_string = '<div class="navbar">';
-   menu_string += buildMenuURL( furl(github_root+'plant_map.html'+getMapParams(config),"Map") );
+
+   // if all observations was selected... show the time series
+   // if a taxon is in focus, just show the regular map
+   if( !p_menu_id && !p_taxon_id ) {
+       links  +=  furl(github_root+ 'plant_map.html'+getMapParams(config),"Map") );
+       links  +=  furl(root_observations+'torquemap'+getMapParams(config)+'&interval=monthly', "Time Series");
+       menu_string += ( buildDD( 'Maps', links) );
+   } else {
+       menu_string += buildMenuURL( furl(github_root+'plant_map.html'+getMapParams(config),"Map") );
+   }
+      
    menu_string += buildHome(    furl(github_root+'nn/trails/thru_hiker.html?state='+p_state+menu_params,'&#127807;') );
    menu_string += '</div>';
    
