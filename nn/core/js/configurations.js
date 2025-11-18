@@ -35,6 +35,11 @@ function findConfiguration( config_data, params, component ) {
         throw new Error(message);
     }
 
+    // if no component was passed in, return all of them
+    if( !component ) {
+        return( config_data.configurations );
+    }
+
     for( let i=0; i<config_data.configurations.length; i++ ) {
          if( config_data.configurations[i].component === component ) {
              configuration = config_data.configurations[i];
@@ -59,6 +64,8 @@ function findConfiguration( config_data, params, component ) {
 }
 
 // function to handle fetching / caching of configurations
+// returns one configuration if component name is passed in
+// otherwise returns all configurations.
 async function asyncGetConfiguration( params, component ) {
 
    const storageKey   = ('nn_configCache_'+params);
