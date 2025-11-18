@@ -88,10 +88,11 @@ function buildPage( configs ) {
 <script>
 
 async function gatherResources() {
+  let json_path = json_root + p_params;
  
   try {
       // Await the result of getConfigurations() and store the actual data
-      const configs   = await asyncGetConfiguration( p_params );
+      const configs   = await asyncGetConfiguration( json_path );
      
       // Pass the data to the buildPage function
       buildPage( configs ); 
