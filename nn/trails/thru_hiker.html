@@ -69,20 +69,6 @@ function setupAPIParams(config) {
    return api_params;
 }
 
-function getMapParams(config) {
-   let map_params = '';
-
-   map_params += '?project_id='+p_project_id;
-   
-   if( p_user_id  ) { map_params += '&user_id='+p_user_id; }
-   if( p_place_id ) { map_params += '&place_id='+p_place_id; }
- 
-   // filter by field (usually trail name)... should change to generic filter
-   map_params += '&field:'+config.field_name+'='+(config.field_value||'');
-
-   return map_params;
-}
-
 function buildFilterParams() {
       let copyurlparams = new URLSearchParams(JSON.parse(JSON.stringify(Object.fromEntries(winurlparams))))
 
@@ -114,9 +100,6 @@ function buildMenu( results, config ) {
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
    }
 
-   let time_series = furl(root_observations+'torquemap'+getMapParams(config)+'&interval=monthly', "Time Series");
- 
-   menu_string += ( buildMenuURL(time_series) );  
    menu_string += buildHome( furl(github_root+'yard_dashboard.html?params='+p_params,'&#127807;') );
 
    menu_string += '</div>';
