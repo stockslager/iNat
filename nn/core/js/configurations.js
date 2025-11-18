@@ -104,7 +104,13 @@ async function asyncGetConfiguration( params, component ) {
       console.log('Stored configuration in session storage: ' + storageKey);
             
       // Return the data object when successful
-      return ( findConfiguration(data, params, component) ); 
+      // when an individual component is passed in, find that configuration to return
+      // when a component isn't passed in, return all configurations
+      if( component ) {
+          return( findConfiguration(data, params, component) );  
+      } else {
+          return( data.configurations );
+      }
 
    } catch (error) {
       console.error('Error fetching JSON:', error);
