@@ -29,9 +29,9 @@ function findConfiguration( config_data, params, component ) {
    
     // check for null, or zero configurations
     if( !config_data.configurations || config_data.configurations.length === 0 ) {
-        let message = 'Configuration file ('+params+'.json) contains no valid configurations.  ' + 
-                      'There are no configurations specified in '+params+'.json  ' + 
-                      'Please add at least one valid configuration to '+params+'.json  ';
+        let message = `Configuration file ('+params+'.json) contains no valid configurations.   
+                       There are no configurations specified in `+params+`.json  
+                       Please add at least one valid configuration to `+params+`.json `;
         throw new Error(message);
     }
 
@@ -47,16 +47,16 @@ function findConfiguration( config_data, params, component ) {
     }
 
     if( !component ) {
-        let message = 'A component parameter is required.  ' + 
-                      'There is no component parameter in the url to be matched with a configuration in '+params+'.json  ' + 
-                      'Please add a valid component parameter to the url.';
+        let message = `A component parameter is required.  
+                       There is no component parameter in the url to be matched with a configuration in `+params+`.json    
+                       Please add a valid component parameter to the url.`;
         throw new Error(message);
     }
 
     if( !configuration ) {
-        let message = 'Configuration not found.  ' + 
-                      'A configuration with a matching component ('+component+') does not exist in '+params+'.json.  ' + 
-                      'Please verify the component ('+component+') in the url and make sure it exists in '+params+'.json.';
+        let message = `Configuration not found.   
+                       A configuration with a matching component (`+component+`) does not exist in `+params+`.json.  
+                       Please verify the component (`+component+`) in the url and make sure it exists in `+params+`.json.`;
         throw new Error(message);
     }
 
@@ -86,9 +86,9 @@ async function asyncGetConfiguration( params, component ) {
    console.log('fetching json: ' + params);
 
    if( !params ) {
-       let message = 'Name of .json must be specified in the url.  ' + 
-                     'There are no params in the url to be matched with a .json configuration file.  ' + 
-                     'Please add the name of a valid .json file to the url.';
+       let message = `Name of .json must be specified in the url.  
+                      There are no params in the url to be matched with a .json configuration file.   
+                      Please add the name of a valid .json file to the url.`;
        throw new Error(message);
    }
 
@@ -97,8 +97,8 @@ async function asyncGetConfiguration( params, component ) {
 
       if( !response.ok ) {
           if( response.status === 404 ) {
-              let message = 'A parameters file named '+params+' has no matching .json configuration file.  ' + 
-                            'Please add the name of a valid .json file to the url.';
+              let message = `A parameters file named `+params+` has no matching .json configuration file.   
+                             Please add the name of a valid .json file to the url.`;
               throw new Error(message);
           }
           throw new Error(`HTTP error! status: ${response.status}`);
