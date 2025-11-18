@@ -104,14 +104,15 @@ function buildMenu( results, config ) {
    let links = '';
    let icons = '';
    let menu_string = '';
-
+   let url = window.location.origin + window.location.pathname;   
+ 
    menu_string = '<div class="navbar">';
  
    if( config.sub_icons ) {
-       links =  (furl(window.location.protocol+buildFilterParams(),'<span style="padding-right:20px;">&#10133;</span>all' ));
-       links += (furl(window.location.protocol+buildFilterParams()+'&taxon_id=47126'+'&menu_id=47126','<span style="padding-right:20px;">&#127807</span>plants' ));           
+       links =  (furl(url+buildFilterParams(),'<span style="padding-right:20px;">&#10133;</span>all' ));
+       links += (furl(url+buildFilterParams()+'&taxon_id=47126'+'&menu_id=47126','<span style="padding-right:20px;">&#127807</span>plants' ));           
        for( let j=0; j<config.sub_icons.length; j++ ) {
-            links += (furl(window.location.protocol+buildFilterParams()+'&taxon_id='+config.sub_icons[j].taxon_id+'&menu_id='+config.sub_icons[j].taxon_id,'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
+            links += (furl(url+buildFilterParams()+'&taxon_id='+config.sub_icons[j].taxon_id+'&menu_id='+config.sub_icons[j].taxon_id,'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
        }
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
    }
