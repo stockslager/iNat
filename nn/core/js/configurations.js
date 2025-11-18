@@ -22,7 +22,7 @@ function getShowMenuName( config_data, taxon_id ) {
     return show_menu_name;
 }
 
-function findConfiguration( config_data, params, project_id ) {
+function findConfiguration( config_data, params, component ) {
     let configuration = '';
    
     // check for null, or zero configurations
@@ -34,22 +34,22 @@ function findConfiguration( config_data, params, project_id ) {
     }
 
     for( let i=0; i<config_data.configurations.length; i++ ) {
-         if( config_data.configurations[i].insect_project === project_id ) {
+         if( config_data.configurations[i].component === component ) {
              configuration = config_data.configurations[i];
          }
     }
 
-    if( !project_id ) {
-        let message = 'A project parameter is required.' + 
-                      '<br>There is no project parameter in the url to be matched with a configuration in '+params+'.json' + 
-                      '<br>Please add a valid project parameter to the url.';
+    if( !component ) {
+        let message = 'A component parameter is required.' + 
+                      '<br>There is no component parameter in the url to be matched with a configuration in '+params+'.json' + 
+                      '<br>Please add a valid component parameter to the url.';
         throw new Error(message);
     }
 
     if( !configuration ) {
         let message = 'Configuration not found.' + 
-                      '<br>A configuration with a matching project ('+project_id+') does not exist in '+params+'.json.' + 
-                      '<br>Please verify the project ('+project_id+') in the url and make sure it exists in '+params+'.json.';
+                      '<br>A configuration with a matching component ('+component+') does not exist in '+params+'.json.' + 
+                      '<br>Please verify the component ('+component+') in the url and make sure it exists in '+params+'.json.';
         throw new Error(message);
     }
 
@@ -57,17 +57,17 @@ function findConfiguration( config_data, params, project_id ) {
 }
 
 // function to handle fetching / caching of configurations
-async function asyncGetConfiguration( params, project_id ) {
+async function asyncGetConfiguration( params, component ) {
 
-   const storageKey = ('nn_configCache_'+params);
-   const cachedData = sessionStorage.getItem(storageKey);
+   const storageKey   = ('nn_configCache_'+params);
+   const cachedData   = sessionStorage.getItem(storageKey);
 
    // --- Check the cache first ---
    if( cachedData ) {
        console.log('Returning configuration from cache: ' + storageKey);
        try {
           const data = JSON.parse(cachedData);
-          return findConfiguration(data, params, project_id);
+          return findConfiguration(data, params, component);
        } catch (e) {
           console.error("Error parsing cached JSON, fetching new data.");
           sessionStorage.removeItem(storageKey); // Clear bad cache entry
@@ -104,7 +104,7 @@ async function asyncGetConfiguration( params, project_id ) {
       console.log('Stored configuration in session storage: ' + storageKey);
             
       // Return the data object when successful
-      return ( findConfiguration(data, params, project_id) ); 
+      return ( findConfiguration(data, params, component) ); 
 
    } catch (error) {
       console.error('Error fetching JSON:', error);
