@@ -134,7 +134,7 @@ function buildPage(xobj, config) {
       if( !p_menu_id ) {
           dlString = furl('./thru_hiker_grid.html?state='+p_state,'<span id="topright">All Observations</span>');
       } else {
-          dlString = furl('./thru_hiker_grid.html?state='+p_state+'&taxon_id='+p_taxon_id+'&menu_id='+p_menu_id,'<span id="topright">Just '+capitalizeWords(menu_name)+'</span>');
+          dlString = furl('./thru_hiker_grid.html?state='+p_state+'&taxon_id='+p_taxon_id+'&menu_id='+p_menu_id,'<span id="topright">All '+capitalizeWords(menu_name)+'</span>');
       }
 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
