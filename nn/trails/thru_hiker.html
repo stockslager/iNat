@@ -197,6 +197,13 @@ function buildPage(xobj, config) {
 
 async function gatherResources() {
   let api_base = 'https://api.inaturalist.org/v1/observations/species_counts';
+
+  if( !p_component ) {
+      let message = 'Component name required.  ' + 
+                    'Component name is required for displaying data.  ' + 
+                    'Please add the name of a valid component to the url parameters.';
+      throw new Error(message);
+  }
  
   try {
       // Await the result of getObservations() and store the actual data
