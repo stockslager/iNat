@@ -124,9 +124,19 @@ function setupAPIParams( config ) {
 }
     
 async function gatherResources() {
+
+  let json_path = json_root + p_params;
+
+  if( !p_component ) {
+      let message = 'Component name required.  ' + 
+                    'Component name is required for displaying data.  ' + 
+                    'Please add the name of a valid component to the url parameters.';
+      throw new Error(message);
+  }
+   
   try {
       // Await the result of getObservations() and store the actual data
-      const config_data   = await asyncGetConfiguration( p_params, p_component );
+      const config_data   = await asyncGetConfiguration( json_path, p_component );
       const api_params    = setupAPIParams( config_data );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
