@@ -6,10 +6,10 @@
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
 <meta name="apple-mobile-web-app-title" content="Thru-Hiker" />
 <meta name="description" content="Thru Hiker" />
-<link rel="icon" type="image/png"            href="../core/assets/plant-icon-96.png" sizes="96x96" />
-<link rel="icon" type="image/svg+xml"        href="../core/assets/plant-icon-96.svg" />
-<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
 <link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
 <link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
 <link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
 <title>Thru Hiker</title>
@@ -25,18 +25,15 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
 let p_taxon_id       = winurlparams.get('taxon_id') || '';
 let p_menu_id        = winurlparams.get('menu_id') || '';
-let p_prefix         = winurlparams.get('prefix') || '';
-let p_show_menu      = winurlparams.get('show_menu') || 'no';
 let p_sub_menu_array = winurlparams.get('sub_menu_array') || '';
 let p_state          = winurlparams.get('state') || '';
 let p_page           = winurlparams.get('page') || '';
  
-let field_name = '';
 let dlString   = '';
 let menu_name  = '';
 
 // find the html name to pass to other pages for nav
-let path = window.location.pathname;
+let path      = window.location.pathname;
 let html_name = path.substring(path.lastIndexOf('/') + 1);
  
 // the place selected was added to seed_project parameter and needs to be
