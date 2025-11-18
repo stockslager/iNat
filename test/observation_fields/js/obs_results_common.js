@@ -102,6 +102,10 @@ function buildFilterParams( chosen_taxon_id, field, field_value, taxon_name, fie
       if( field_value )     { copyurlparams.append('field_value', field_value); } 
       if( taxon_name )      { copyurlparams.append('taxon_name', taxon_name); }
       if( field_name )      { copyurlparams.append('field_name', field_name); }
+
+      // whenever they filter the results the page needs to be set back to page 1
+      // otherwise they'll stay on page 'x' after the rows have been filtered by their selection.
+      copyurlparams.append('page', '1');
  
       return copyurlparams;
 }
