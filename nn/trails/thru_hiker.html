@@ -92,21 +92,21 @@ function setupAPIParams(config) {
    return api_params;
 }
  
-function buildMenu( results ) {
+function buildMenu( results, config ) {
 
    let links = '';
    let icons = '';
    let menu_string = '';
 
    menu_string = '<div class="navbar">';
-   if( configuration.sub_icons ) {
+   if( config.sub_icons ) {
               
        let showDDOpts = getShowDDOpts( winurlparams );
              
        links =  (furl(window.location.protocol+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
        links += (furl(window.location.protocol+showDDOpts+'&page=1'+'&taxon_id=47126'+'&menu_id=47126','<span style="padding-right:20px;">&#127807</span>plants' ));           
-       for( let j=0; j<configuration.sub_icons.length; j++ ) {
-            links += (furl(window.location.protocol+showDDOpts+'&page=1'+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&menu_id='+configuration.sub_icons[j].taxon_id,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
+       for( let j=0; j<config.sub_icons.length; j++ ) {
+            links += (furl(window.location.protocol+showDDOpts+'&page=1'+'&taxon_id='+config.sub_icons[j].taxon_id+'&menu_id='+config.sub_icons[j].taxon_id,'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
        }
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
    }
@@ -128,7 +128,7 @@ function buildPage(xobj, config) {
       let labels = [];
 
       console.log('building menu...');
-      buildMenu( results );
+      buildMenu( results, config );
    
       if( !p_menu_id ) {
           dlString = furl('./thru_hiker_grid.html?state='+p_state,'<span id="topright">All Observations</span>');
