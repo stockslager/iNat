@@ -89,7 +89,9 @@ function showRow( rec ) {
 }
 
 function buildFilterParams( chosen_taxon_id, field, field_value, taxon_name, field_name) {
-      let copyurlparams = new URLSearchParams(JSON.parse(JSON.stringify(Object.fromEntries(winurlparams))))
+      let copyurlparams = new URLSearchParams(JSON.parse(JSON.stringify(Object.fromEntries(winurlparams))));
+
+ console.log('prot ' + window.location.protocol);
 
       copyurlparams.delete('chosen_taxon_id');
       copyurlparams.delete('field_value');
