@@ -25,22 +25,7 @@ let winurlexsearchstr  = winurlstr.replace(winurlsearchstr,'');
 let winurlparams       = new URLSearchParams(winurlsearchstr.substring(1));
 let p_params           = winurlparams.get('params') || 'cwg';
 
-let config = '';
-let configs = [];
- 
-function setUpDefaults(configurations) {
-
-   if( configurations.length === 0 ) {
-       faddelem('p',document.body,{innerText:'Configuration file ('+p_params+'.json) contains no valid configurations.'});
-       faddelem('p',document.body,{innerText:'There are no configurations specified in '+p_params+'.json'});
-       faddelem('p',document.body,{innerText:'Please add at least one valid configuration to '+p_params+'.json'});
-       throw new Error('No configurations defined.');
-   }
-   configs = configurations;
-   config  = configurations[0];
-}
-
-function buildMenu( configs ) {
+function buildMenu() {
       let menu_string = '';
       let params = '';
 
@@ -57,8 +42,9 @@ function buildMenu( configs ) {
 
 function buildPage( configs ) {
 
-      buildMenu(configs);
+      buildMenu();
 
+ console.log('project ' + configs[0].project);
       //let all_url = furl(github_root+'yard_dashboard.html?params='+p_params,'<span id="topright">All Observations</span>');
       
       faddelem('p',document.body,{innerHTML:'total modes: ' + '1' + ' <br/>'
