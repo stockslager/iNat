@@ -15,58 +15,6 @@
 <title>Thru Hiker</title>
 </head>
 
-<style>
-.dropdown_right {
-  float: right;
-  overflow: hidden;
-  cursor: pointer;
-  font-size: 16px;  
-  border: none;
-  outline: none;
-  color: white;
-  background-color: inherit;
-  font-family: inherit;
-  margin: 0;
-}
-
-.dropdown_right-content {
-  display: none;
-  position: absolute;
-  font-size: 16px;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown_right-content a {
-  float: none;
-  color: black;
-  padding: 10px 14px 10px 14px;
-  /*padding: 10px 14px;*/
-  text-decoration: none;
-  display: block;
-  text-align: left;
-}
-
-.dropdown_right-content a:hover {
-  background-color: #ddd;
-}
- 
-.dropdown_right-content a:first-child {
-  border-radius: 5px 5px 0 0;
-}
-
-.dropdown_right-content a:last-child {
-  border-radius: 0 0 5px 5px;
-}
-
-.dropdown_right:hover .dropdown-content {
-  display: block;
-}
-
-</style>
-
 <body>
 <script type="text/javascript" src='/iNat/common_func.js'> </script>
 <script type="text/javascript" src='/iNat/js/plant_params_v10.js'> </script>
@@ -103,19 +51,6 @@ let p_user_id     = p_state.split('$')[3];
 let garden        = p_state.split('$')[4];
 let mode          = p_state.split('$')[5];
 
-function buildDDRight( name, content ) {
-  let dd = '<div class="dropdown_right">' +
-                 '<button class="dropbtn">' + name +
-                    '<i class="fa fa-caret-down"></i>' +
-                 '</button>' +
-                    '<div class="dropdown-content">' +
-                          content +
-                    '</div>' +
-           '</div>';
-
-  return( dd );
-}
- 
 function getShowDDOpts( winurlparams ) { 
    let opts='';
    // build param list for url's used in fresults
@@ -158,23 +93,6 @@ function setupAPIParams(config) {
    return api_params;
 }
 
-function getMapParams(config) {
-   let map_params = '';
-
-   map_params += ('?project_id='+config.insect_project);
-
-   let field_val_param = ''
-   if( config.field_value ) { field_val_param = config.field_value; }
- 
-   // filter by field (usually trail name)... should change to generic filter
-   map_params += '&field:'+config.field_name+'='+field_val_param;
-
-   if( p_place_id ) { map_params += '&place_id=' + p_place_id; }
-   if( p_user_id )  { map_params += '&user_id='  + p_user_id;  }
-
-   return map_params;
-}
- 
 function buildMenu( results, config ) {
 
    let links = '';
@@ -194,10 +112,6 @@ function buildMenu( results, config ) {
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
    }
 
-   links  = furl(github_root+'plant_map.html'+getMapParams(config),"Map");
-   links += furl(root_observations+'torquemap'+getMapParams(config)+'&interval=monthly', "Time Series");
- 
-   menu_string += ( buildDDRight('Maps', links) );       
    menu_string += '</div>';
  
    faddelem('p',document.body,{innerHTML:(menu_string)});
