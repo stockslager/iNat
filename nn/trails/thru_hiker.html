@@ -19,21 +19,21 @@
 <script type="text/javascript" src='/iNat/common_func.js'> </script>
 <script type="text/javascript" src='/iNat/js/plant_params_v10.js'> </script>
 <script>
-let winurlstr = window.location.href;
-let winurlsearchstr = window.location.search;
+let winurlstr         = window.location.href;
+let winurlsearchstr   = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
-let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let p_taxon_id   = winurlparams.get('taxon_id') || '';
-let p_menu_id    = winurlparams.get('menu_id') || '';
-let p_prefix       = winurlparams.get('prefix') || '';
-let p_show_menu     = winurlparams.get('show_menu') || 'no';
-let p_sub_menu_array    = winurlparams.get('sub_menu_array') || '';
-let p_state         = winurlparams.get('state') || '';
-let p_page          = winurlparams.get('page') || '';
+let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
+let p_taxon_id       = winurlparams.get('taxon_id') || '';
+let p_menu_id        = winurlparams.get('menu_id') || '';
+let p_prefix         = winurlparams.get('prefix') || '';
+let p_show_menu      = winurlparams.get('show_menu') || 'no';
+let p_sub_menu_array = winurlparams.get('sub_menu_array') || '';
+let p_state          = winurlparams.get('state') || '';
+let p_page           = winurlparams.get('page') || '';
+ 
 let field_name = '';
-let dlString = '';
-
-let menu_name = '';
+let dlString   = '';
+let menu_name  = '';
 
 // find the html name to pass to other pages for nav
 let path = window.location.pathname;
@@ -67,10 +67,6 @@ function getShowDDOpts( winurlparams ) {
         }
    } 
    return( opts );
-}
-
-function buildTitle( title ) {
-   return ('<div class="dd_title">'+title+'</div>');
 }
 
 function setUpAPIParams(config) {
