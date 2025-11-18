@@ -38,10 +38,7 @@ let menu_name  = '';
 // find the html name to pass to other pages for nav
 let path = window.location.pathname;
 let html_name = path.substring(path.lastIndexOf('/') + 1);
-console.log(html_name);
  
-let opts = copyOpts( winurlparams );
-
 // the place selected was added to seed_project parameter and needs to be
 // parsed if control is returning from the insects page.
 let p_project_id  = p_state.split('$')[0];
@@ -50,24 +47,6 @@ let p_params      = p_state.split('$')[2];
 let p_user_id     = p_state.split('$')[3];
 let garden        = p_state.split('$')[4];
 let mode          = p_state.split('$')[5];
-
-function getShowDDOpts( winurlparams ) { 
-   let opts='';
-   // build param list for url's used in fresults
-   for( const [key, value] of winurlparams.entries() ) { 
-        if( key !== 'taxon_id' && key !== 'menu_id' && key !== 'sub_menu_array' && key !== 'page' ){
-            if( opts === '' ){
-                opts += "?";
-            } else {
-                opts += "&";
-            }
-            opts += key;
-            opts += "=";
-            opts += value;
-        }
-   } 
-   return( opts );
-}
 
 function setupAPIParams(config) {
    let api_params = '';
@@ -106,6 +85,19 @@ function getMapParams(config) {
 
    return map_params;
 }
+
+function buildFilterParams() {
+      let copyurlparams = new URLSearchParams(JSON.parse(JSON.stringify(Object.fromEntries(winurlparams))))
+
+      copyurlparams.delete('taxon_id');
+      copyurlparams.delete('menu_id');
+      copyurlparams.delete('sub_menu_array');
+      copyurlparams.delete('page');
+
+      copyurlparams.append('page', '1');
+ 
+      return copyurlparams;
+}
  
 function buildMenu( results, config ) {
 
@@ -116,12 +108,10 @@ function buildMenu( results, config ) {
    menu_string = '<div class="navbar">';
  
    if( config.sub_icons ) {
-       let showDDOpts = getShowDDOpts( winurlparams );
-             
-       links =  (furl(window.location.protocol+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
-       links += (furl(window.location.protocol+showDDOpts+'&page=1'+'&taxon_id=47126'+'&menu_id=47126','<span style="padding-right:20px;">&#127807</span>plants' ));           
+       links =  (furl(window.location.protocol+buildFilterParams(),'<span style="padding-right:20px;">&#10133;</span>all' ));
+       links += (furl(window.location.protocol+buildFilterParams()+'&taxon_id=47126'+'&menu_id=47126','<span style="padding-right:20px;">&#127807</span>plants' ));           
        for( let j=0; j<config.sub_icons.length; j++ ) {
-            links += (furl(window.location.protocol+showDDOpts+'&page=1'+'&taxon_id='+config.sub_icons[j].taxon_id+'&menu_id='+config.sub_icons[j].taxon_id,'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
+            links += (furl(window.location.protocol+buildFilterParams()+'&taxon_id='+config.sub_icons[j].taxon_id+'&menu_id='+config.sub_icons[j].taxon_id,'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
        }
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
    }
@@ -147,7 +137,6 @@ function buildPage(xobj, config) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let labels = [];
 
-      console.log('building menu...');
       buildMenu( results, config );
    
       if( !p_menu_id ) {
