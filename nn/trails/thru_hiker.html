@@ -15,6 +15,18 @@
 <title>Thru Hiker</title>
 </head>
 
+<style>
+.dd_right {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 12px 14px;
+  text-decoration: none;
+}
+
+</style>
+
 <body>
 <script type="text/javascript" src='/iNat/common_func.js'> </script>
 <script type="text/javascript" src='/iNat/js/plant_params_v10.js'> </script>
@@ -51,6 +63,13 @@ let p_user_id     = p_state.split('$')[3];
 let garden        = p_state.split('$')[4];
 let mode          = p_state.split('$')[5];
 
+function buildDDRight( content ) {
+  let dd = '<div class="dd_right">' + content +
+           '</div>';
+
+  return( dd );
+}
+ 
 function getShowDDOpts( winurlparams ) { 
    let opts='';
    // build param list for url's used in fresults
@@ -132,7 +151,7 @@ function buildMenu( results, config ) {
    links  = furl(github_root+'plant_map.html'+getMapParams(config),"Map");
    links += furl(root_observations+'torquemap'+getMapParams(config)+'&interval=monthly', "Time Series");
  
-   menu_string += ( buildDD('Maps', links) );       
+   menu_string += ( buildDDRight('Maps', links) );       
    menu_string += '</div>';
  
    faddelem('p',document.body,{innerHTML:(menu_string)});
