@@ -284,7 +284,7 @@ function fresults(xobj) {
                    obs_field_box += '<td id="tdkey">'+ box_array[e].field_id + '</td>';
                    obs_field_box += ('<td id="tdsecond">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                    if( p_operator !== 'merge' ){
-                       labels.push({innerText:box_array[e].field_name});
+                       labels.push({innerText:box_array[e].field_name.toLowerCase()});
                    } else {
                        if( firstCol === 'yes' ){
                            firstCol = 'no';
