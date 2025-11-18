@@ -44,7 +44,6 @@ function buildPage( configs ) {
 
       buildMenu();
 
- console.log('project ' + configs[0].project);
       //let all_url = furl(github_root+'yard_dashboard.html?params='+p_params,'<span id="topright">All Observations</span>');
       
       faddelem('p',document.body,{innerHTML:'total modes: ' + '1' + ' <br/>'
@@ -69,6 +68,7 @@ function buildPage( configs ) {
       for( let i=0; i<configs.length; i++ ) {
            let brow = '';
            let values = [];
+           let config = configs[i];
     
            if( config.component === 'hiker' ) {
                brow = faddelem('tr',tbody);
