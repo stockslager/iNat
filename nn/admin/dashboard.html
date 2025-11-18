@@ -71,7 +71,7 @@ function buildPage( configs ) {
            let config = configs[i];
     
            if( config.component === 'hiker' ) {
-               let hiker_params = '?state='+config.project||''+'$'+config.default_place||''+'$'+p_params+'$'+config.user_id+'$$'+'hiker'+$;
+               let hiker_params = ('?state='+(config.project||'')+'$'+(config.default_place||'')+'$'+p_params+'$'+config.user_id+'$$'+'hiker'+$);
                brow = faddelem('tr',tbody);
                values = [
                   {innerHTML:furl(github_root+'../nn/trails/thru_hiker.html'+hiker_params,'&#x1F97E;')},
