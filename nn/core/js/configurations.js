@@ -22,6 +22,8 @@ function getShowMenuName( config_data, taxon_id ) {
     return show_menu_name;
 }
 
+// returns all configurations if a component is not passed in.
+// returns a specific component if a component is passed in.
 function findConfiguration( config_data, params, component ) {
     let configuration = '';
    
@@ -31,6 +33,12 @@ function findConfiguration( config_data, params, component ) {
                       '<br>There are no configurations specified in '+params+'.json' + 
                       '<br>Please add at least one valid configuration to '+params+'.json';
         throw new Error(message);
+    }
+
+    // when an individual component isn't passed in, return all configurations
+    if( !component ) {
+        console.log('No component specified, returning all configurations');
+        return config_data.configurations;
     }
 
     for( let i=0; i<config_data.configurations.length; i++ ) {
@@ -103,14 +111,7 @@ async function asyncGetConfiguration( params, component ) {
       sessionStorage.setItem(storageKey, JSON.stringify(data));
       console.log('Stored configuration in session storage: ' + storageKey);
             
-      // Return the data object when successful
-      // when an individual component is passed in, find that configuration to return
-      // when a component isn't passed in, return all configurations
-      if( component ) {
-          return( findConfiguration(data, params, component) );  
-      } else {
-          return( data.configurations );
-      }
+      return( findConfiguration(data, params, component) );  
 
    } catch (error) {
       console.error('Error fetching JSON:', error);
