@@ -128,13 +128,6 @@ async function gatherResources() {
   let json_path = json_root + p_params;
    
   try {
-      if( !p_component ) {
-          let message = 'Component name required.  ' + 
-                        'Component name is required for displaying data.  ' + 
-                        'Please add the name of a valid component to the url parameters.';
-          throw new Error(message);
-      }
-     
       // Await the result of getObservations() and store the actual data
       const config_data   = await asyncGetConfiguration( json_path, p_component );
       const api_params    = setupAPIParams( config_data );
@@ -152,7 +145,13 @@ async function gatherResources() {
     }
 }
 
-gatherResources();  
+if( !p_component ) {
+    let message = `Component name required.  Component name is required for displaying data.  
+                   Please add the name of a valid component to the url parameters.`;
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
  
 </script>
 </body>
