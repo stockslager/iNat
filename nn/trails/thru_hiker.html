@@ -92,6 +92,23 @@ function setupAPIParams(config) {
 
    return api_params;
 }
+
+function getMapParams(config) {
+   let map_params = '';
+
+   map_params += ('?project_id='+config.insect_project);
+
+   let field_val_param = ''
+   if( config.field_value ) { field_val_param = config.field_value; }
+ 
+   // filter by field (usually trail name)... should change to generic filter
+   map_params += '&field:'+config.field_name+'='+field_val_param;
+
+   if( p_place_id ) { map_params += '&place_id=' + p_place_id; }
+   if( p_user_id )  { map_params += '&user_id='  + p_user_id;  }
+
+   return map_params;
+}
  
 function buildMenu( results, config ) {
 
@@ -100,8 +117,8 @@ function buildMenu( results, config ) {
    let menu_string = '';
 
    menu_string = '<div class="navbar">';
+ 
    if( config.sub_icons ) {
-              
        let showDDOpts = getShowDDOpts( winurlparams );
              
        links =  (furl(window.location.protocol+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
@@ -112,7 +129,12 @@ function buildMenu( results, config ) {
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
    }
 
+   links  = furl(github_root+'plant_map.html'+getMapParams(config),"Map");
+   links += furl(root_observations+'torquemap'+getMapParams(config)+'&interval=monthly', "Time Series");
+ 
+   menu_string += ( buildDD('Maps', links) );       
    menu_string += '</div>';
+ 
    faddelem('p',document.body,{innerHTML:(menu_string)});
 }
 
