@@ -92,12 +92,10 @@ function setUpAPIParams(config) {
    if( p_place_id ) { api_params += '&place_id='+p_place_id; }
    if( p_user_id )  { api_params += '&user_id='+p_user_id; }
 
-   all_params += api_params;
-   all_params += '&per_page=200';
+   api_params += '&per_page=10';
+   api_params += '&page='+p_page;
 
-   if( p_taxon_id ) { all_params += '&taxon_id='+p_taxon_id; }
-   if( p_page     ) { all_params += '&page='+p_page; }
-
+   return api_params;
 }
  
 function buildMenu( results ) {
