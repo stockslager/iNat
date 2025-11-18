@@ -16,15 +16,21 @@
 </head>
 
 <style>
-.dd_right {
-  float: left;
-  font-size: 16px;
-  color: white;
-  text-align: center;
-  padding: 12px 14px;
-  text-decoration: none;
+.dropdown_right {
+  float: right;
+  overflow: hidden;
 }
 
+.dropdown_right {
+  cursor: pointer;
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: white;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
 </style>
 
 <body>
@@ -63,8 +69,14 @@ let p_user_id     = p_state.split('$')[3];
 let garden        = p_state.split('$')[4];
 let mode          = p_state.split('$')[5];
 
-function buildDDRight( content ) {
-  let dd = '<div class="dd_right">' + content +
+function buildDDRight( name, content ) {
+  let dd = '<div class="dropdown_right">' +
+                 '<button class="dropbtn">' + name +
+                    '<i class="fa fa-caret-down"></i>' +
+                 '</button>' +
+                    '<div class="dropdown-content">' +
+                          content +
+                    '</div>' +
            '</div>';
 
   return( dd );
