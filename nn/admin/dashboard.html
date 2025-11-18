@@ -70,6 +70,23 @@ function buildPage( configs ) {
            let values = [];
            let config = configs[i];
     
+           if( config.component === 'plants' ) {
+               let hiker_params = '?state='+config.project+'$'+config.default_place+'$'+p_params+'$'+config.user_id+'$$'+'hiker'+'$';
+               brow = faddelem('tr',tbody);
+               values = [
+                  {innerHTML:furl('../../plant_list.html?params='+p_params, '&#x1F97E;'  )},
+                  {innerHTML:furl('../../plant_list.html?params='+p_params, config.title )},
+                  {innerText:config.title+' hike.'},
+               ];
+               faddelems('td',brow,values);
+           }
+      }
+ 
+      for( let i=0; i<configs.length; i++ ) {
+           let brow = '';
+           let values = [];
+           let config = configs[i];
+    
            if( config.component === 'hiker' ) {
                let hiker_params = '?state='+config.project+'$'+config.default_place+'$'+p_params+'$'+config.user_id+'$$'+'hiker'+'$';
                brow = faddelem('tr',tbody);
