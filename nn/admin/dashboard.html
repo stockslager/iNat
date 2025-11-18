@@ -40,7 +40,7 @@ function setUpDefaults(configurations) {
    config  = configurations[0];
 }
 
-function buildMenu(configs) {
+function buildMenu( configs ) {
       let menu_string = '';
       let params = '';
 
@@ -55,22 +55,15 @@ function buildMenu(configs) {
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
-function buildTable() {
+function buildPage( configs ) {
 
-      let nbr_of_modes = 0;
-      if( config.plant_project || config.plant_ids ) { nbr_of_modes++; }
-      if( config.observers_project )                 { nbr_of_modes++; }
-      if( config.art_project )                       { nbr_of_modes++; }
-      if( config.seed_project )                      { nbr_of_modes++; }
+      buildMenu(configs);
 
-      let all_url = '';
-      if( p_params === 'horizon' ) {
-          all_url = furl(github_root+'yard_dashboard.html?params='+p_params,'<span id="topright">All Observations</span>');
-      }
+      //let all_url = furl(github_root+'yard_dashboard.html?params='+p_params,'<span id="topright">All Observations</span>');
       
-      faddelem('p',document.body,{innerHTML:'total modes: ' + nbr_of_modes + ' <br/>'
+      faddelem('p',document.body,{innerHTML:'total modes: ' + '1' + ' <br/>'
                  +'per page: 10<br />'
-                 +'page: 1 of 1' + all_url + '<br />'});  
+                 +'page: 1 of 1' + /*all_url +*/ '<br />'});  
  
       let labels = [];
 
@@ -86,79 +79,45 @@ function buildTable() {
       
       faddelems('th',hrow,labels);
       let tbody = faddelem('tbody',table);
-      let brow = '';
-      let values = [];
 
-      if( config.plant_project || config.plant_ids ) {
-          brow = faddelem('tr',tbody);
-          values = [
-                  {innerHTML:furl(github_root+'plant_list.html?params='+p_params+'&mode=pro_visitor','&#127807;')},
-                  {innerHTML:furl(github_root+'plant_list.html?params='+p_params+'&mode=pro_visitor','Wildlife')},
-                  {innerText:'Shows the wildlife activity observed occurring on each plant in the garden.'},
-                ];
-          faddelems('td',brow,values);
-      }
-
-      if( config.observers_project ) {
-          brow = faddelem('tr',tbody);
-          values = [
-                  {innerHTML:furl(github_root+'plant_activity_observers.html?project_id='+config.insect_project+'&params='+p_params+'&mode=pro_observer','&#128100;')},
-                  {innerHTML:furl(github_root+'plant_activity_observers.html?project_id='+config.insect_project+'&params='+p_params+'&mode=pro_observer','Observers')},
-                  {innerText:'Shows the species counts for each observer that shared wildlife activity occurring on a plant in the garden.'},
-                ];
-          faddelems('td',brow,values);
-      }
-
-      if( config.art_project ) {
-          brow = faddelem('tr',tbody);
-          values = [
-                  {innerHTML:furl(github_root+'plant_artists.html?params='+p_params+'&mode=pro_artist','&#127912;')},
-                  {innerHTML:furl(github_root+'plant_artists.html?params='+p_params+'&mode=pro_artist','Journals')},
-                  {innerText:'Shows the journal entries for anyone participating on iNat and in an in-network journaling meet-up.'},
-                ];
-          faddelems('td',brow,values);
-      }
-
-      if( config.seed_project ) {
-          brow = faddelem('tr',tbody);
-          values = [
-                  {innerHTML:furl(github_root+'plant_seeds.html?params='+p_params+'&mode=pro_seed', '&#x1F330;')},
-                  {innerHTML:furl(github_root+'plant_seeds.html?params='+p_params+'&mode=pro_seed', 'Seeds')},
-                  {innerText:'Shows a seed library with offerings collected from hilighted native parent colonies by our network of collectors.  Also shows any wildlife activity occurring on the parent colonies in the actual garden the seeds were collected from.'},
-                ];
-          faddelems('td',brow,values);
-
-          brow = faddelem('tr',tbody);
-          values = [
-                  {innerHTML:'&#x1F331;'},
-                  {innerText:'Propagators'},
-                  {innerText:'Coming Soon.  Shows the list of plants successfully propagated by each propagator in the network.'},
-                ];
-          faddelems('td',brow,values);
+      for( let i=0; i<configs.length; i++ ) {
+           let brow = '';
+           let values = [];
+    
+           if( config.component === 'hiker' ) {
+               brow = faddelem('tr',tbody);
+               values = [
+                  {innerHTML:furl(github_root+'../trails/thru_hiker.html?state='+config.project+'$'+config.default_place+'$','&#127807;')},
+                  {innerHTML:furl(github_root+'../trails/thru_hiker.html?params='+p_params,config.title)},
+                  {innerText:config.title+' hike.'},
+               ];
+               faddelems('td',brow,values);
+           }
       }
 };
 
-   console.log('json ' + json_root+p_params);
-   fetch((json_root+p_params+'.json'))
-     .then(response => response.json())
-     .then(data => {
-        // Access your data here 
-        if( data.configurations ) {
-             console.log('setting up defaults...');
-             setUpDefaults(data.configurations);
-             console.log('building menu...');
-             buildMenu(data.configurations);
-             console.log('building table...');
-             buildTable();         
-        }
-      })
-     .catch(error => {
-      faddelem('p',document.body,{innerText:'There was a problem retrieving '+p_params+'.json.'});
-      faddelem('p',document.body,{innerText:'A valid configuration file is required to be specified as a url parameter. (e.g. ?params=bugs_cnc).'});
-      throw new Error('Error fetching JSON');
-});
+</script>
+<script src="../core/js/configurations.js"></script>
+<script>
+
+async function gatherResources() {
+ 
+  try {
+      // Await the result of getConfigurations() and store the actual data
+      const configs   = await asyncGetConfiguration( p_params, p_component );
+     
+      // Pass the data to the buildPage function
+      buildPage(obs_data, configs); 
+
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+gatherResources();  
 
 </script>
 </body>
-
 </html>
