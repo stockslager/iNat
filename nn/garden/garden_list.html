@@ -254,7 +254,7 @@ function buildMenu(configs) {
       // let them select which configuration (plant list) they'd like.
       if( configs.length > 1 ) {
           for( let i=0; i<configs.length; i++ ) {
-               garden_links += furl(github_root+'plant_list.html'+params+menu_params+mode_params+taxon_param+'&garden='+configs[i].title,configs[i].title);
+               garden_links += furl(github_root+'garden_list.html'+params+menu_params+mode_params+taxon_param+'&garden='+configs[i].title,configs[i].title);
           }
       }
       menu_string = '<div class="navbar">';
@@ -275,9 +275,9 @@ function buildMenu(configs) {
       }
  
       if( configuration.places && configuration.places.length > 0 ) {
-          //links += furl(github_root+'plant_list.html'+params+menu_params+mode_params+'&place_id='+configuration.default_place+taxon_param,'All');
+          //links += furl(github_root+'garden_list.html'+params+menu_params+mode_params+'&place_id='+configuration.default_place+taxon_param,'All');
           for( let i=0; i<configuration.places.length; i++ ) {
-               links += furl(github_root+'plant_list.html'+params+menu_params+mode_params+taxon_param,configuration.places[i].place_name);
+               links += furl(github_root+'garden_list.html'+params+menu_params+mode_params+taxon_param,configuration.places[i].place_name);
           }
       }
   
@@ -285,9 +285,9 @@ function buildMenu(configs) {
       links = '';
 
       if( configuration.taxa && configuration.taxa.length > 0 ) {
-          links += furl(github_root+'plant_list.html'+params+menu_params+mode_params,'All');
+          links += furl(github_root+'garden_list.html'+params+menu_params+mode_params,'All');
           for( let i=0; i<configuration.taxa.length; i++ ) {
-               links += furl(github_root+'plant_list.html'+params+menu_params+mode_params+'&taxon_id='+configuration.taxa[i].taxon_id,configuration.taxa[i].taxon_name);
+               links += furl(github_root+'garden_list.html'+params+menu_params+mode_params+'&taxon_id='+configuration.taxa[i].taxon_id,configuration.taxa[i].taxon_name);
           }
       }
  
