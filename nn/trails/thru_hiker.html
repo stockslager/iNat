@@ -119,7 +119,8 @@ function buildMenu( results, config ) {
 
    let time_series = furl(root_observations+'torquemap'+getMapParams(config)+'&interval=monthly', "Time Series");
  
-   menu_string += ( buildHome(time_series) );       
+   menu_string += ( buildMenuURL(time_series) );  
+   menu_string += buildHome( furl(github_root+'yard_dashboard.html?params='+p_params,'&#127807;') );
 
    menu_string += '</div>';
  
