@@ -12,6 +12,8 @@ const ATTRIBUTE_PLANTNAME = 'plantname';
 const ATTRIBUTE_TAXONID   = 'taxonid';
 const ATTRIBUTE_MENUID    = 'menuid';
 const ATTRIBUTE_MENUNAME  = 'menuname';
+const ATTRIBUTE_PAGE      = 'page';
+
 
 // application state
 let appState = {
@@ -25,7 +27,8 @@ let appState = {
   [ATTRIBUTE_PLANTNAME]: '',
   [ATTRIBUTE_TAXONID]:   '',
   [ATTRIBUTE_MENUID]:    '',
-  [ATTRIBUTE_MENUNAME]:  ''
+  [ATTRIBUTE_MENUNAME]:  '',
+  [ATTRIBUTE_PAGE]:      ''
 };
 
 /*
@@ -47,7 +50,8 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_PLANTNAME]: '',
     [ATTRIBUTE_TAXONID]:   '',
     [ATTRIBUTE_MENUID]:    '', 
-    [ATTRIBUTE_MENUNAME]:  ''
+    [ATTRIBUTE_MENUNAME]:  '',
+    [ATTRIBUTE_PAGE]:      ''
   };
 
   // Combine defaults with any provided initial values using the spread syntax
@@ -144,6 +148,7 @@ function getPlantName(state) { return (getAttribute(state, ATTRIBUTE_PLANTNAME))
 function getTaxonId(state)   { return (getAttribute(state, ATTRIBUTE_TAXONID)); }
 function getMenuId(state)    { return (getAttribute(state, ATTRIBUTE_MENUID)); }
 function getMenuName(state)  { return (getAttribute(state, ATTRIBUTE_MENUNAME)); }
+function getPage(state)      { return (getAttribute(state, ATTRIBUTE_PAGE)); }
 
 /*
  * Helper Setters (Optional but Recommended) ---
@@ -159,8 +164,9 @@ function setComponent(state, value)  { return (setAttribute(state, ATTRIBUTE_COM
 function setPlantId(state, value)    { return (setAttribute(state, ATTRIBUTE_PLANTID, value)); }
 function setPlantName(state, value)  { return (setAttribute(state, ATTRIBUTE_PLANTNAME, value)); }
 function setTaxonId(state, value)    { return (setAttribute(state, ATTRIBUTE_TAXONID, value)); }
-function setMenuId(state, value)    { return (setAttribute(state, ATTRIBUTE_MENUID, value)); }
-function setMenuName(state, value)  { return (setAttribute(state, ATTRIBUTE_MENUNAME, value)); }
+function setMenuId(state, value)     { return (setAttribute(state, ATTRIBUTE_MENUID, value)); }
+function setMenuName(state, value)   { return (setAttribute(state, ATTRIBUTE_MENUNAME, value)); }
+function setPage(state, value)       { return (setAttribute(state, ATTRIBUTE_PAGE, value)); }
 
 /*
  * Helper Getters 
@@ -227,6 +233,15 @@ function getMenuNameParam(state, param_nm)   {
   let menu_name = getMenuName(state);
   if( menu_name ) { 
       return (param_nm + menu_name);
+  } else {
+      return '';
+  }
+}
+
+function getPageParam(state, param_nm)   { 
+  let page = getPage(state);
+  if( page ) { 
+      return (param_nm + page);
   } else {
       return '';
   }
