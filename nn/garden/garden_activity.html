@@ -1,0 +1,233 @@
+<!DOCTYPE html>     
+<html lang="en">    
+ 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="apple-mobile-web-app-title" content="Garden Activity" />
+<meta name="description" content="Garden Activity" />
+<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
+<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+<title>Garden Activity</title>
+</head>
+
+<body>
+<script type="text/javascript"   src='../core/js/common_func.js'> </script>
+<script type="text/javascript"   src='../core/js/roots.js'> </script>
+<script>
+let winurlstr         = window.location.href;
+let winurlsearchstr   = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
+let p_taxon_id       = winurlparams.get('taxon_id') || '';
+let p_menu_id        = winurlparams.get('menu_id') || '';
+let p_sub_menu_array = winurlparams.get('sub_menu_array') || '';
+let p_state          = winurlparams.get('state') || '';
+let p_page           = winurlparams.get('page') || '';
+ 
+let dlString   = '';
+let menu_name  = '';
+
+// find the html name to pass to other pages for nav
+let path      = window.location.pathname;
+let html_name = path.substring(path.lastIndexOf('/') + 1);
+ 
+// the place selected was added to seed_project parameter and needs to be
+// parsed if control is returning from the insects page.
+let p_project_id  = p_state.split('$')[0];
+let p_place_id    = p_state.split('$')[1];
+let p_params      = p_state.split('$')[2];
+let p_user_id     = p_state.split('$')[3];
+let garden        = p_state.split('$')[4];
+let p_component   = p_state.split('$')[5];
+let p_target_id   = p_state.split('$')[6];
+
+function setupAPIParams(config) {
+   let api_params = '';
+
+   menu_name = getShowMenuName(config, p_menu_id) || 'Show';
+
+   api_params += ('?project_id='+config.project);
+   //api_params += '&hrank=species';
+
+   let field_val_param = ''
+   if( config.field_value ) { field_val_param = config.field_value; }
+ 
+   // filter by field (usually trail name)... should change to generic filter
+   api_params += '&field:'+config.field_name+'='+field_val_param;
+
+   if( p_place_id ) { api_params += '&place_id=' + p_place_id; }
+   if( p_user_id )  { api_params += '&user_id='  + p_user_id;  }
+   if( p_taxon_id ) { api_params += '&taxon_id=' + p_taxon_id; }
+
+   api_params += '&per_page=10';
+   api_params += '&page='+p_page;
+
+   return api_params;
+}
+
+function buildFilterParams() {
+      let copyurlparams = new URLSearchParams(JSON.parse(JSON.stringify(Object.fromEntries(winurlparams))))
+
+      copyurlparams.delete('taxon_id');
+      copyurlparams.delete('menu_id');
+      copyurlparams.delete('sub_menu_array');
+      copyurlparams.delete('page');
+
+      copyurlparams.append('page', '1');
+ 
+      return copyurlparams;
+}
+ 
+function buildMenu( results, config ) {
+
+   let links = '';
+   let icons = '';
+   let menu_string = '';
+   let url = window.location.origin + window.location.pathname;   
+ 
+   menu_string = '<div class="navbar">';
+ 
+   if( config.sub_icons ) {
+       links =  (furl(url+'?'+buildFilterParams(),'<span style="padding-right:20px;">&#10133;</span>all' ));
+       links += (furl(url+'?'+buildFilterParams()+'&taxon_id=47126'+'&menu_id=47126','<span style="padding-right:20px;">&#127807</span>plants' ));           
+       for( let j=0; j<config.sub_icons.length; j++ ) {
+            links += (furl(url+'?'+buildFilterParams()+'&taxon_id='+config.sub_icons[j].taxon_id+'&menu_id='+config.sub_icons[j].taxon_id,'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
+       }
+       menu_string += ( buildDD( capitalizeWords(menu_name), links) );
+   }
+
+   menu_string += buildHome( furl('../admin/dashboard.html?params='+p_params,'&#127807;') );
+
+   menu_string += '</div>';
+ 
+   faddelem('p',document.body,{innerHTML:(menu_string)});
+}
+
+function buildPage(xobj, config) {
+   let results = xobj.results;
+ 
+   if (results) {
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+      let labels = [];
+
+      buildMenu( results, config );
+   
+      if( !p_menu_id ) {
+          dlString = furl('./garden_grid.html?state='+p_state,'<span id="topright">All Observations</span>');
+      } else {
+          dlString = furl('./garden_grid.html?state='+p_state+'&taxon_id='+p_taxon_id+'&menu_id='+p_menu_id,'<span id="topright">All '+capitalizeWords(menu_name)+'</span>');
+      }
+
+      faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
+             +'per page: '+fcomnum(per_page)+'<br />'
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+dlString+'<br />'});  
+
+      labels = [
+            {innerText:'#'},
+            {innerText:'Photo'},
+            {innerText:'Name'}, 
+            {innerText:' '},
+      ];
+
+      let table = faddelem('table',document.body,{id:'main'});                    
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+      
+      faddelems('th',hrow,labels);
+      let tbody = faddelem('tbody',table);
+
+      for (let i=0; i<results.length; i++) {
+         let rec = results[i];
+         let tax_name = '';
+         let pref_tax_name = '';
+         let nm = '';
+         let tax_photo = '<div class="clipart">&#127807</div>'; 
+         let tax_id = '';
+         let taxon = '';
+
+         let brow = faddelem('tr',tbody);
+
+         if( rec.taxon ){
+             tax_id = rec.taxon.id;
+             tax_name = rec.taxon.name || '';
+             pref_tax_name = rec.taxon.preferred_common_name || '';
+             nm = pref_tax_name || tax_name;
+           
+             if( rec.taxon.default_photo ){
+                 if( rec.taxon.default_photo.url ){
+                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
+                 }
+             }
+         }
+
+         let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
+
+         let values = [
+                  {innerText:i+1},
+                  {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
+                  {innerHTML:furl('./garden_grid.html?state='+p_state+'&taxon_id='+rec.taxon.id+'&menu_id='+p_menu_id,displayName)},
+                  {innerText:rec.count||''},
+                  ];
+        
+         faddelems('td',brow,values);
+      };
+
+      // buttons to go to prev or next page
+      let nav = faddelem('div',document.body,{id:'nav'});
+      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
+};
+
+</script>
+<script src="../core/js/configurations.js"></script>
+<script>
+
+async function gatherResources() {
+  let api_base  = 'https://api.inaturalist.org/v1/observations/species_counts';
+  let json_path = json_root + p_params;
+ 
+  try {
+   
+      // Await the result of getObservations() and store the actual data
+      const config_data   = await asyncGetConfiguration( json_path, p_component );
+      const api_params    = setupAPIParams( config_data );
+      const api_url       = api_base+api_params;
+      console.log('api url: ' + api_url);
+      const obs_data      = await apiFetch( api_url ); 
+     
+      // Pass the data to the buildPage function
+      buildPage(obs_data, config_data); 
+
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+if( !p_component ) {
+    let message = `Component name required.  Component name is required for displaying data.  
+                   Please add the name of a valid component to the url parameters.`;
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
+ 
+</script>
+</body>
+
+</html>
