@@ -113,26 +113,10 @@ function buildMenu( results, config ) {
        }
    }
 
-          /*  if( configuration.sub_icons ) {
-              
-                let showDDOpts = getShowDDOpts( winurlparams );
-                showDDOpts += '&sub_menu_array='+sub_taxon_arr;
-             
-                links = (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1','<span style="padding-right:20px;">&#10133;</span>all' ));
-                for( let j=0; j<configuration.sub_icons.length; j++ ) {
-                     if( sub_taxon_arr.includes( configuration.sub_icons[j].taxon_id ) ) {
-                         links += (furl(github_root+'plant_activity.html'+showDDOpts+'&page=1'+'&taxon_id='+configuration.sub_icons[j].taxon_id+'&taxon_nm='+configuration.sub_icons[j].nm,'<span style="padding-right:20px;">'+configuration.sub_icons[j].icon+'</span>'+configuration.sub_icons[j].nm ));
-                     }
-                }
-              
-                menu_string += ( buildDD( capitalizeWords(p_taxon_nm), links) );
-            }*/
- 
    if( config.sub_icons ) {
-       links =  (furl(url+'?'+buildFilterParams(),'<span style="padding-right:20px;">&#10133;</span>all' ));
-       links += (furl(url+'?'+buildFilterParams()+'&taxon_id=47126'+'&menu_id=47126','<span style="padding-right:20px;">&#127807</span>plants' ));           
+       links =  (furl(url+'?'+buildFilterParams()+'&sub_menu_array='+sub_taxon_arr,'<span style="padding-right:20px;">&#10133;</span>all' ));
        for( let j=0; j<config.sub_icons.length; j++ ) {
-            links += (furl(url+'?'+buildFilterParams()+'&taxon_id='+config.sub_icons[j].taxon_id+'&menu_id='+config.sub_icons[j].taxon_id,'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
+            links += (furl(url+'?'+buildFilterParams()+'&sub_menu_array='+sub_taxon_arr+'&taxon_id='+config.sub_icons[j].taxon_id+'&menu_id='+config.sub_icons[j].taxon_id,'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
        }
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
    }
