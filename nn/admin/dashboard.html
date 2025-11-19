@@ -18,12 +18,14 @@
 <body>
 <script type="text/javascript"   src='../core/js/common_func.js'> </script>
 <script type="text/javascript"   src='../core/js/roots.js'> </script>
+<script type="text/javascript"   src='../core/js/store.js'> </script>
 <script>
 let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr  = winurlstr.replace(winurlsearchstr,'');
 let winurlparams       = new URLSearchParams(winurlsearchstr.substring(1));
 let p_params           = winurlparams.get('params') || 'cwg';
+let state              = createNewStateInstance();
 
 function buildMenu() {
       let menu_string = '';
@@ -88,6 +90,9 @@ function buildPage( configs ) {
            let config = configs[i];
     
            if( config.component === 'hiker' ) {
+               state = setAttribute( state, ATTRIBUTE_COMPONENT, 'hiker' );
+               state = setAttribute( state, ATTRIBUTE_PARAMS,    p_params );
+               state = setAttribute( state, ATTRIBUTE_USER,      config.user_id );
                let hiker_params = '?state='+config.project+'$'+config.default_place+'$'+p_params+'$'+config.user_id+'$$'+'hiker'+'$';
                brow = faddelem('tr',tbody);
                values = [
