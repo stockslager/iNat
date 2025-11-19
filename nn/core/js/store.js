@@ -22,6 +22,27 @@ let applicationState = {
   [ATTRIBUTE_PLANTNAME]: ''
 };
 
+// Creates and returns a hiker application state object.
+// This function defines the default structure and values for the state.
+// @param {object} initialValues Optional starting values to override defaults.
+// @returns {object} A new application state instance.
+function createNewHikerInstance(initialValues = {}) {
+  // Define the BASE or DEFAULT values for your state properties
+  const baseState = {
+    [ATTRIBUTE_PROJECT]:   '',
+    [ATTRIBUTE_PLACE]:     '',
+    [ATTRIBUTE_PARAMS]:    '',
+    [ATTRIBUTE_USER]:      '',
+    [ATTRIBUTE_GARDEN]:    '',
+    [ATTRIBUTE_COMPONENT]: 'hiker',
+    [ATTRIBUTE_PLANTID]:   '', 
+    [ATTRIBUTE_PLANTNAME]: ''
+  };
+
+  // Combine defaults with any provided initial values using the spread syntax
+  return { ...baseState, ...initialValues };
+}
+
 // Core Get/Set Functions ---
 // Retrieves a value from the state object using a dynamic attribute key.
 // @param {object} state The current state object.
