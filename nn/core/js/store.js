@@ -146,3 +146,33 @@ function setGarden(state, value)     { return (setAttribute(state, ATTRIBUTE_GAR
 function setComponent(state, value)  { return (setAttribute(state, ATTRIBUTE_COMPONENT, value)); }
 function setPlantId(state, value)    { return (setAttribute(state, ATTRIBUTE_PLANTID, value)); }
 function setPlantName(state, value)  { return (setAttribute(state, ATTRIBUTE_PLANTNAME, value)); }
+
+/*
+ * component based validation
+ *
+ * Validates the state for Hiker-specific requirements.
+ * Ensures the 'params' attribute has a value.
+ * 
+ * @param {object} state The current application state object.
+ * @returns {string} An error message if invalid, otherwise an empty string.
+ */
+function validateHiker(state) {
+  let message = '';
+  
+  // getParams(state) returns the value of the 'params' attribute.
+  // The '!' operator checks if that value is falsy (empty string, null, undefined, false, 0)
+  if( !getParams(state) ) {
+      message = `Params are required.  There is no value in the &params parameter.  
+                 The value should match the name of a .json configuration file`
+      return message;
+  }
+
+  if( !getComponent(state) ) {
+      message = `Component name required.  Component name is required for displaying data.  
+                 Component name should exist in the configuration file identified by the &params=xxxxx`
+      return message;
+  }
+  
+  // If the value is truthy, return an empty string indicating success
+  return '';
+}
