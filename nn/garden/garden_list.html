@@ -137,7 +137,7 @@ function buildMenu(configs) {
       if( p_place_id )       { place_param += '&place_id='+p_place_id; }
       if( p_taxon_id )       { taxon_param += '&taxon_id='+p_taxon_id; }
       if( p_insect_project ) { menu_params += '&insect_project='+p_insect_project; }
-      if( p_mode )           { mode_params += '&mode='+p_mode; }
+      if( p_component )      { component_params += '&mode='+p_component; }
 
       // if multiple configurations exist, build a menu showing each configuration and
       // let them select which configuration (plant list) they'd like.
@@ -182,9 +182,7 @@ function buildMenu(configs) {
  
       if( links ) { menu_string += buildDD(getTaxonName(configuration, p_taxon_id), links); }
 
-      if( p_mode.startsWith('pro') ) {
-          menu_string += buildHome(furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;'));
-      }
+      menu_string += buildHome(furl(github_root+'plant_dashboard.html?params='+p_params,'&#127807;'));
 
       menu_string += '</div>';
 
@@ -225,8 +223,8 @@ function buildPage(xobj, config) {
       let garden_param = '';
       if( p_garden ) { garden_param = '$'+p_garden; } else { garden_param = '$'; }
 
-      let mode_param = '';
-      if( p_mode ) { mode_param = '$'+p_mode; } else { mode_param = '$'; }
+      let component_param = '';
+      if( p_component ) { component_param = '$'+p_component; } else { component_param = '$'; }
 
       let filter_taxon_param = '';
       if( p_taxon_id ) { filter_taxon_param = '$'+p_taxon_id; } else { filter_taxon_param = '$'; }
@@ -245,17 +243,10 @@ function buildPage(xobj, config) {
       if( p_nm2 ) { suffix = p_nm2; }
 
       if( show_behavior === 'on_all' ) {
-          if( p_mode.includes('observer') ) {
-              on_all = furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+config.insect_project+'&garden='+config.title+'&mode='+p_mode,'<span id="topright">'+p_title+' any plant</span>');
-          } else {
-              on_all = furl(github_root+'plant_activity.html?target_name=all%20plants'+state_param,'<span id="topright">'+p_title+' any plant</span>');
-          }
+          on_all = furl(github_root+'plant_activity.html?target_name=all%20plants'+state_param,'<span id="topright">'+p_title+' any plant</span>');
       } else {
-          if( p_mode.includes('observer') ) {
-              on_all = furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+config.insect_project+'&garden='+config.title+'&mode='+p_mode,'<span id="topright">'+p_title+' any plant</span>');
-          } else {
-              nn_on_all = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
-          }
+          on_all = furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+config.insect_project+'&garden='+config.title,'<span id="topright">'+p_title+' any plant</span>');
+          //nn_on_all = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
       }
 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
@@ -313,19 +304,11 @@ function buildPage(xobj, config) {
              target = pref_tax_name.toLowerCase();
          }
 
-         if( p_mode.includes('visitor') ) {
-             values = [
-                  {innerText:i+1},
-                  {innerHTML:image},
-                  {innerHTML:furl(github_root+'plant_activity.html?'+'target_name='+header_name+state_param+'&target_id='+target,displayName)},
-                  ];
-         } else if( p_mode.includes('observer') ) {
-             values = [
-                  {innerText:i+1},
-                  {innerHTML:image},
-                  {innerHTML:furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+config.insect_project+'&garden='+config.title+'&plant_id='+target+'&plant_name='+header_name+'&mode='+p_mode, displayName)},
-                  ];
-         }
+         values = [
+            {innerText:i+1},
+            {innerHTML:image},
+            {innerHTML:furl(github_root+'plant_activity.html?'+'target_name='+header_name+state_param+'&target_id='+target,displayName)},
+         ];
         
          faddelems('td',brow,values);
       };
