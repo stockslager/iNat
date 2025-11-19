@@ -91,12 +91,12 @@ function buildMenu( results, config ) {
    if( config.sub_icons ) {
        let url_state = JSON.stringify(buildFilterParams());
        console.log('st ' + url_state);
-       links =  (furl(url+url_state,'<span style="padding-right:20px;">&#10133;</span>all' ));
-       url_state = setMenuId(url_state, '47126'); // plants 
-       links += (furl(url+url_state,'<span style="padding-right:20px;">&#127807</span>plants' ));           
+       links =  (furl(url+buildParameterList(url_state),'<span style="padding-right:20px;">&#10133;</span>all' ));
+       url_state = setMenuId(url_state, '47126');  // plants 
+       links += (furl(url+buildParameterList(url_state),'<span style="padding-right:20px;">&#127807</span>plants' ));           
        for( let j=0; j<config.sub_icons.length; j++ ) {
             url_state = setMenuId(url_state, config.sub_icons[j].taxon_id);
-            links += (furl(url+url_state,'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
+            links += (furl(url+buildParameterList(url_state),'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
        }
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
    }
