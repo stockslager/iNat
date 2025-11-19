@@ -28,7 +28,8 @@ let p_taxon_id       = winurlparams.get('taxon_id') || '';
 let p_menu_id        = winurlparams.get('menu_id') || '';
 let p_sub_menu_array = winurlparams.get('sub_menu_array') || '';
 let p_page           = winurlparams.get('page') || '1';  
-let p_state          = buildStateFromParams(winurlparams);
+
+appState       = buildStateFromParams(winurlparams);
  
 let dlString   = '';
 let menu_name  = '';
@@ -95,7 +96,7 @@ function buildMenu( results, config ) {
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
    }
 
-   menu_string += buildHome( furl('../admin/dashboard.html?params='+getParams(p_state),'&#127807;') );
+   menu_string += buildHome( furl('../admin/dashboard.html?params='+getParams(appState),'&#127807;') );
 
    menu_string += '</div>';
  
@@ -117,9 +118,9 @@ function buildPage(xobj, config) {
       buildMenu( results, config );
    
       if( !p_menu_id ) {
-          dlString = furl('./thru_hiker_grid.html'+buildParameterList(p_state),'<span id="topright">All Observations</span>');
+          dlString = furl('./thru_hiker_grid.html'+buildParameterList(appState),'<span id="topright">All Observations</span>');
       } else {
-          dlString = furl('./thru_hiker_grid.html'+buildParameterList(p_state)+'&menu_id='+p_menu_id,'<span id="topright">All '+capitalizeWords(menu_name)+'</span>');
+          dlString = furl('./thru_hiker_grid.html'+buildParameterList(appState)+'&menu_id='+p_menu_id,'<span id="topright">All '+capitalizeWords(menu_name)+'</span>');
       }
 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
@@ -197,12 +198,12 @@ function buildPage(xobj, config) {
 
 async function gatherResources() {
   let api_base  = 'https://api.inaturalist.org/v1/observations/species_counts';
-  let json_path = json_root + getParams(p_state);
+  let json_path = json_root + getParams(appState);
  
   try {
    
       // Await the result of getObservations() and store the actual data
-      const config_data   = await asyncGetConfiguration( json_path, getComponent(p_state) );
+      const config_data   = await asyncGetConfiguration( json_path, getComponent(appState) );
       const api_params    = setupAPIParams( config_data );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
@@ -218,7 +219,7 @@ async function gatherResources() {
     }
 }
 
-let message = validateHiker(p_state);
+let message = validateHiker(appState);
  
 if( message ) {
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
