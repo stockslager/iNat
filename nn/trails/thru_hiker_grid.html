@@ -104,11 +104,12 @@ function setupAPIParams( config ) {
     api_params += '?project_id='+config.project;
     
     if( p_taxon_id ) { api_params += '&taxon_id='+p_taxon_id; }
-    if( p_place_id ) { api_params += '&place_id='+p_place_id; }
-    if( p_user_id )  { api_params += '&user_id='+p_user_id; }
 
-    // filter by field (usually trail name)... should change to generic filter
-    api_params += '&field:'+config.field_name+'='+(config.field_value||'');
+    // default these to what's in the config even though the state sometimes
+    // holds the same attributes for other components.
+    if( config.user_id          ) { api_params += '&user_id='  + config.user_id; }
+    if( config.default_place_id ) { api_params += '&place_id=' + config.default_place_id; }  
+    api_params += '&field:'+config.field_name+'='+(config.field_value||'');  // should change to generic filter?
 
     return api_params;
 }
