@@ -68,7 +68,7 @@ function buildMenu(config) {
 
    let id = getMenuId(appState);
 
-   menu_params += '&taxon_id=' + id + '&menu_id=' + id; 
+   if( id ) { menu_params += '&taxon_id=' + id + '&menu_id=' + id; }
 
    menu_string = '<div class="navbar">';
 
@@ -104,7 +104,7 @@ function setupAPIParams( config ) {
 
     api_params += '?project_id='+config.project;
     
-    api_params += '&taxon_id='+getTaxonId(appState); 
+    api_params += getTaxonIdParam(appState); 
 
     // default these to what's in the config even though the state sometimes
     // holds the same attributes for other components.
