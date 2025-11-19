@@ -26,9 +26,8 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams   = new URLSearchParams(winurlsearchstr);
-let p_taxon_id     = winurlparams.get('taxon_id') || '';
-let p_menu_id      = winurlparams.get('menu_id') || '';
-let p_state        = buildStateFromParams(winurlparams);
+
+appState       = buildStateFromParams(winurlparams);
 
 var api_base   = 'https://api.inaturalist.org/v1/observations'
 var obsurlbase = root_observations;
@@ -51,8 +50,8 @@ function getMapParams(config) {
    let map_params = '';
 
    map_params += '?project_id='+config.project;
-   
-   if( p_taxon_id ) { map_params += '&taxon_id='+p_taxon_id; }
+
+   map_params += getTaxonIdParam(appState, '&taxon_id='); 
  
    map_params += '&user_id='+config.user_id; 
    map_params += '&place_id='+config.default_place_id; 
@@ -67,13 +66,15 @@ function buildMenu(config) {
    let menu_string = '';
    let menu_params = '';
 
-   if( p_menu_id ) { menu_params += '&taxon_id=' + p_menu_id + '&menu_id=' + p_menu_id; }
+   let id = getMenuId(appState);
+
+   menu_params += '&taxon_id=' + id + '&menu_id=' + id; }
 
    menu_string = '<div class="navbar">';
 
    // if all observations was selected... show the time series
    // if a taxon is in focus, just show the regular map
-   if( !p_menu_id && !p_taxon_id ) {
+   if( !getMenuId(appState) && !getTaxonId(appState) ) {
        links  +=  furl(github_root+ 'plant_map.html'+getMapParams(config),"Map");
        links  +=  furl(root_observations+'torquemap'+getMapParams(config)+'&interval=monthly', "Time Series");
        menu_string += ( buildDD( 'Maps', links) );
@@ -81,7 +82,7 @@ function buildMenu(config) {
        menu_string += buildMenuURL( furl(github_root+'plant_map.html'+getMapParams(config),"Map") );
    }
       
-   menu_string += buildHome(    furl(github_root+'nn/trails/thru_hiker.html'+buildParameterList(p_state)+menu_params,'&#127807;') );
+   menu_string += buildHome(    furl(github_root+'nn/trails/thru_hiker.html'+buildParameterList(appState)+menu_params,'&#127807;') );
    menu_string += '</div>';
    
    return menu_string;
@@ -103,7 +104,7 @@ function setupAPIParams( config ) {
 
     api_params += '?project_id='+config.project;
     
-    if( p_taxon_id ) { api_params += '&taxon_id='+p_taxon_id; }
+    api_params += '&taxon_id='+getTaxonId(appState); }
 
     // default these to what's in the config even though the state sometimes
     // holds the same attributes for other components.
@@ -116,11 +117,11 @@ function setupAPIParams( config ) {
     
 async function gatherResources() {
 
-  let json_path = json_root + getParams(p_state);
+  let json_path = json_root + getParams(appState);
    
   try {
       // Await the result of getObservations() and store the actual data
-      const config_data   = await asyncGetConfiguration( json_path, getComponent(p_state) );
+      const config_data   = await asyncGetConfiguration( json_path, getComponent(appState) );
       const api_params    = setupAPIParams( config_data );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
@@ -136,7 +137,7 @@ async function gatherResources() {
     }
 }
 
-let message = validateHiker(p_state);
+let message = validateHiker(appState);
  
 if( message ) {
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
