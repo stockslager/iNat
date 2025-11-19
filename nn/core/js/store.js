@@ -14,7 +14,7 @@ const ATTRIBUTE_MENUID    = 'menuid';
 const ATTRIBUTE_MENUNAME  = 'menuname';
 
 // application state
-let applicationState = {
+let appState = {
   [ATTRIBUTE_PROJECT]:   '',
   [ATTRIBUTE_PLACE]:     '',
   [ATTRIBUTE_PARAMS]:    '',
