@@ -9,6 +9,9 @@ const ATTRIBUTE_GARDEN    = 'garden';
 const ATTRIBUTE_COMPONENT = 'component';
 const ATTRIBUTE_PLANTID   = 'plantid';
 const ATTRIBUTE_PLANTNAME = 'plantname';
+const ATTRIBUTE_TAXONID   = 'taxonid';
+const ATTRIBUTE_MENUID    = 'menuid';
+const ATTRIBUTE_MENUNAME  = 'menuname';
 
 // application state
 let applicationState = {
@@ -19,7 +22,10 @@ let applicationState = {
   [ATTRIBUTE_GARDEN]:    '',
   [ATTRIBUTE_COMPONENT]: '',
   [ATTRIBUTE_PLANTID]:   '',
-  [ATTRIBUTE_PLANTNAME]: ''
+  [ATTRIBUTE_PLANTNAME]: '',
+  [ATTRIBUTE_TAXONID]:   '',
+  [ATTRIBUTE_MENUID]:    '',
+  [ATTRIBUTE_MENUNAME]:  ''
 };
 
 /*
@@ -38,7 +44,10 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_GARDEN]:    '',
     [ATTRIBUTE_COMPONENT]: '',
     [ATTRIBUTE_PLANTID]:   '', 
-    [ATTRIBUTE_PLANTNAME]: ''
+    [ATTRIBUTE_PLANTNAME]: '',
+    [ATTRIBUTE_TAXONID]:   '',
+    [ATTRIBUTE_MENUID]:    '', 
+    [ATTRIBUTE_MENUNAME]:  ''
   };
 
   // Combine defaults with any provided initial values using the spread syntax
@@ -132,6 +141,9 @@ function getGarden(state)    { return (getAttribute(state, ATTRIBUTE_GARDEN)); }
 function getComponent(state) { return (getAttribute(state, ATTRIBUTE_COMPONENT)); }
 function getPlantId(state)   { return (getAttribute(state, ATTRIBUTE_PLANTID)); }
 function getPlantName(state) { return (getAttribute(state, ATTRIBUTE_PLANTNAME)); }
+function getTaxonId(state)   { return (getAttribute(state, ATTRIBUTE_TAXONID)); }
+function getMenuId(state)    { return (getAttribute(state, ATTRIBUTE_MENUID)); }
+function getMenuName(state)  { return (getAttribute(state, ATTRIBUTE_MENUNAME)); }
 
 /*
  * Helper Setters (Optional but Recommended) ---
@@ -146,6 +158,9 @@ function setGarden(state, value)     { return (setAttribute(state, ATTRIBUTE_GAR
 function setComponent(state, value)  { return (setAttribute(state, ATTRIBUTE_COMPONENT, value)); }
 function setPlantId(state, value)    { return (setAttribute(state, ATTRIBUTE_PLANTID, value)); }
 function setPlantName(state, value)  { return (setAttribute(state, ATTRIBUTE_PLANTNAME, value)); }
+function setTaxonId(state, value)    { return (setAttribute(state, ATTRIBUTE_TAXONID, value)); }
+function setMenuId(state, value)    { return (setAttribute(state, ATTRIBUTE_MENUID, value)); }
+function setMenuName(state, value)  { return (setAttribute(state, ATTRIBUTE_MENUNAME, value)); }
 
 /*
  * Helper Getters 
@@ -184,6 +199,34 @@ function getPlantIdParam(state, param_nm)   {
   let plant_id = getPlantId(state);
   if( plant_id ) { 
       return (param_nm + plant_id);
+  } else {
+      return '';
+  }
+}
+
+
+function getTaxonIdParam(state, param_nm)   { 
+  let taxon_id = getTaxonId(state);
+  if( taxon_id ) { 
+      return (param_nm + taxon_id);
+  } else {
+      return '';
+  }
+}
+
+function getMenuIdParam(state, param_nm)      { 
+  let menu_id = getMenuId(state);
+  if( menu_id ) { 
+      return (param_nm + menu_id);
+  } else {
+      return '';
+  }
+}
+
+function getMenuNameParam(state, param_nm)   { 
+  let menu_name = getMenuName(state);
+  if( menu_name ) { 
+      return (param_nm + menu_name);
   } else {
       return '';
   }
