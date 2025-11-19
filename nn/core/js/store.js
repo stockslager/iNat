@@ -169,7 +169,7 @@ function validateHiker(state) {
 
   if( !getComponent(state) ) {
       message = `Component name required.  Component name is required for displaying data.  
-                 Component name should exist in the configuration file identified by the &params=xxxxx`
+                 Component name should exist in the configuration file identified by the \&params=xxxxx`
       return message;
   }
   
