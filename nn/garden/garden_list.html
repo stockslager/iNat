@@ -83,27 +83,21 @@ function getAfter(str, char) {
 function setupAPIParams( configuration ) {
    let api_params = '';
  
-   if( !configuration.default_place && !configuration.plant_project ) {
-       faddelem('p',document.body,{innerText:'A plant_project or default_place must be specified in '+p_params+'.json'});
-       throw new Error('A plant_project or default_place must be specified in '+p_params+'.json');
+   if( !configuration.plant_project ) {
+       faddelem('p',document.body,{innerText:`A plant_project must be specified in `+p_params+`.json`});
+       throw new Error(`A plant_project or default_place must be specified in `+p_params+`.json`);
    }
-
+       
+   api_params += '?project_id='+configuration.plant_project;
    api_params += '&iconic_taxa=plantae';
 
    if( configuration.plant_filter )       { api_params += configuration.plant_filter;  } 
-   if( configuration.default_place )      { api_params += configuration.default_place; }
-   if( configuration.plant_ids )          { api_params += configuration.plant_ids;  }
-   if( configuration.taxon_ids )          { api_params += configuration.taxon_ids; }
-   if( configuration.plant_list_user_id ) { api_params += configuration.plant_list_user_id; }
-   if( configuration.tag_name )           { api_params += configuration.tag_name; }
+   if( configuration.default_place )      { api_params += '&place_id=' + configuration.default_place; }
+   if( configuration.plant_ids )          { api_params += '&id='       + configuration.plant_ids;  }
+   if( configuration.taxon_ids )          { api_params += '&taxon_id=' + configuration.taxon_ids; }
+   if( configuration.plant_list_user_id ) { api_params += '&user_id='  + configuration.plant_list_user_id; }
+   if( configuration.tag_name )           { api_params += '&tag='      + configuration.tag_name; }
  
-   if( configuration.plant_project ) {
-       if( !p_project_id ) {
-           api_params  += configuration.plant_project;
-           p_project_id = configuration.plant_project;
-       }
-   }
-
    return api_params;
 }
 
