@@ -172,6 +172,12 @@ function validateHiker(state) {
                     'Component name should exist in the configuration file identified by the &amp;params=xxxxx';
       return message;
   }
+
+  if( !getUser(state) ) {
+      let message = 'User is missing.  User is a required url parameter.  ' +   
+                    'Please add a valid user to the url.  &amp;user=xxxxx';
+      return message;
+  }
   
   return;
 }
