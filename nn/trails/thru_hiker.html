@@ -89,8 +89,8 @@ function buildMenu( results, config ) {
    menu_string = '<div class="navbar">';
  
    if( config.sub_icons ) {
-       let url_state = JSON.stringify(buildFilterParams());
-       console.log('st ' + url_state);
+       let url_state = buildFilterParams();
+    
        links =  (furl(url+buildParameterList(url_state),'<span style="padding-right:20px;">&#10133;</span>all' ));
        url_state = setMenuId(url_state, '47126');  // plants 
        links += (furl(url+buildParameterList(url_state),'<span style="padding-right:20px;">&#127807</span>plants' ));           
