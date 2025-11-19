@@ -26,8 +26,8 @@ let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
 let p_taxon_id       = winurlparams.get('taxon_id') || '';
 let p_menu_id        = winurlparams.get('menu_id') || '';
 let p_sub_menu_array = winurlparams.get('sub_menu_array') || '';
-let p_state          = winurlparams.get('state') || '';
 let p_page           = winurlparams.get('page') || '';
+let p_state          = buildStateFromParams(winurlparams);
  
 let dlString   = '';
 let menu_name  = '';
@@ -36,15 +36,6 @@ let menu_name  = '';
 let path      = window.location.pathname;
 let html_name = path.substring(path.lastIndexOf('/') + 1);
  
-// the place selected was added to seed_project parameter and needs to be
-// parsed if control is returning from the insects page.
-let p_project_id  = p_state.split('$')[0];
-let p_place_id    = p_state.split('$')[1];
-let p_params      = p_state.split('$')[2];
-let p_user_id     = p_state.split('$')[3];
-let garden        = p_state.split('$')[4];
-let p_component   = p_state.split('$')[5];
-
 function setupAPIParams(config) {
    let api_params = '';
 
@@ -218,7 +209,7 @@ async function gatherResources() {
     }
 }
 
-if( !p_component ) {
+if( !getComponent(p_state) ) {
     let message = `Component name required.  Component name is required for displaying data.  
                    Please add the name of a valid component to the url parameters.`;
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
