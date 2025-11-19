@@ -191,7 +191,7 @@ function buildMenu(configs) {
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
-function fresults(xobj) {
+function buildPage(xobj, config) {
    let results = xobj.results;
    let box_array = [];
  
@@ -220,7 +220,7 @@ function fresults(xobj) {
       if( p_params ) { json = '$'+p_params; } else { json = '$'; }
 
       let user_param = '';
-      if( configuration.user_id ) { user_param = '$'+configuration.user_id; } else { user_param = '$'; }
+      if( config.user_id ) { user_param = '$'+config.user_id; } else { user_param = '$'; }
 
       let garden_param = '';
       if( p_garden ) { garden_param = '$'+p_garden; } else { garden_param = '$'; }
@@ -237,22 +237,22 @@ function fresults(xobj) {
       let nn_on_all = '';
 
       let prefix = '';
-      let suffix = configuration.title;
+      let suffix = config.title;
 
-      let show_behavior = configuration.show_behavior || 'no';
+      let show_behavior = config.show_behavior || 'no';
     
       if( p_nm1 ) { prefix = p_nm1; }
       if( p_nm2 ) { suffix = p_nm2; }
 
       if( show_behavior === 'on_all' ) {
           if( p_mode.includes('observer') ) {
-              on_all = furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+'&mode='+p_mode,'<span id="topright">'+p_title+' any plant</span>');
+              on_all = furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+config.insect_project+'&garden='+config.title+'&mode='+p_mode,'<span id="topright">'+p_title+' any plant</span>');
           } else {
               on_all = furl(github_root+'plant_activity.html?target_name=all%20plants'+state_param,'<span id="topright">'+p_title+' any plant</span>');
           }
       } else {
           if( p_mode.includes('observer') ) {
-              on_all = furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+'&mode='+p_mode,'<span id="topright">'+p_title+' any plant</span>');
+              on_all = furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+config.insect_project+'&garden='+config.title+'&mode='+p_mode,'<span id="topright">'+p_title+' any plant</span>');
           } else {
               nn_on_all = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
           }
@@ -302,14 +302,14 @@ function fresults(xobj) {
 
          let image = '<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />';
 
-         let use_plant_project_images = configuration.use_plant_project_images || 'no';
+         let use_plant_project_images = config.use_plant_project_images || 'no';
 
          if( p_project_id === '255754' || p_project_id === '260252' || use_plant_project_images === 'yes' ) {
              image = furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />');
          }
 
          let target = rec.taxon.id;
-         if( configuration.use_names_lookup === 'no' && rec.taxon.preferred_common_name ) {
+         if( config.use_names_lookup === 'no' && rec.taxon.preferred_common_name ) {
              target = pref_tax_name.toLowerCase();
          }
 
@@ -323,7 +323,7 @@ function fresults(xobj) {
              values = [
                   {innerText:i+1},
                   {innerHTML:image},
-                  {innerHTML:furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+configuration.insect_project+'&garden='+configuration.title+'&plant_id='+target+'&plant_name='+header_name+'&mode='+p_mode, displayName)},
+                  {innerHTML:furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+config.insect_project+'&garden='+config.title+'&plant_id='+target+'&plant_name='+header_name+'&mode='+p_mode, displayName)},
                   ];
          }
         
