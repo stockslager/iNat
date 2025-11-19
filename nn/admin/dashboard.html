@@ -93,7 +93,7 @@ function buildPage( configs ) {
                state = setAttribute( state, ATTRIBUTE_COMPONENT, 'hiker' );
                state = setAttribute( state, ATTRIBUTE_PARAMS,    p_params );
                state = setAttribute( state, ATTRIBUTE_USER,      config.user_id );
-               let hiker_params = '?state='+config.project+'$'+config.default_place+'$'+p_params+'$'+config.user_id+'$$'+'hiker'+'$';
+               let hiker_params = buildParameterList(state);
                brow = faddelem('tr',tbody);
                values = [
                   {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,'&#x1F97E;')},
