@@ -24,10 +24,7 @@ let winurlstr         = window.location.href;
 let winurlsearchstr   = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
-let p_taxon_id       = winurlparams.get('taxon_id') || '';
-let p_menu_id        = winurlparams.get('menu_id') || '';
-let p_sub_menu_array = winurlparams.get('sub_menu_array') || '';
-let p_page           = winurlparams.get('page') || '1';  
+let p_sub_menu_array  = winurlparams.get('sub_menu_array') || ''; // remember filter for this page only
 
 appState       = buildStateFromParams(winurlparams);
  
@@ -41,7 +38,7 @@ let html_name = path.substring(path.lastIndexOf('/') + 1);
 function setupAPIParams(config) {
    let api_params = '';
 
-   menu_name = getShowMenuName(config, p_menu_id) || 'Show';
+   menu_name = getShowMenuName( config, getMenuId(appState) ) || 'Show';
 
    api_params += ('?project_id='+config.project);
    //api_params += '&hrank=species';
@@ -57,10 +54,9 @@ function setupAPIParams(config) {
    if( config.user_id          ) { api_params += '&user_id='  + config.user_id; }
    if( config.default_place_id ) { api_params += '&place_id=' + config.default_place_id; }  
  
-   if( p_taxon_id )        { api_params += '&taxon_id=' + p_taxon_id; }
-
+   api_params += getMenuId(appState); 
+   api_params += getPage(appState);
    api_params += '&per_page=10';
-   api_params += '&page='+p_page;
 
    return api_params;
 }
@@ -117,10 +113,10 @@ function buildPage(xobj, config) {
 
       buildMenu( results, config );
    
-      if( !p_menu_id ) {
+      if( !getMenuId(appState) ) {
           dlString = furl('./thru_hiker_grid.html'+buildParameterList(appState),'<span id="topright">All Observations</span>');
       } else {
-          dlString = furl('./thru_hiker_grid.html'+buildParameterList(appState)+'&menu_id='+p_menu_id,'<span id="topright">All '+capitalizeWords(menu_name)+'</span>');
+          dlString = furl('./thru_hiker_grid.html'+buildParameterList(appState),'<span id="topright">All '+capitalizeWords(menu_name)+'</span>');
       }
 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
@@ -165,11 +161,8 @@ function buildPage(xobj, config) {
 
              let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
 
-          console.log('app state ' + JSON.stringify(appState));
              let urlState = appState;  // creates a copy
              urlState = setTaxonId(urlState, rec.taxon.id);
-             urlState = setMenuId(urlState, p_menu_id);
-          console.log('url state ' + JSON.stringify(urlState) );
 
              let values = [
                   {innerText:i+1},
