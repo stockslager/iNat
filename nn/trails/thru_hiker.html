@@ -24,7 +24,6 @@ let winurlstr         = window.location.href;
 let winurlsearchstr   = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
-let p_sub_menu_array  = winurlparams.get('sub_menu_array') || ''; // remember filter for this page only
 
 appState       = buildStateFromParams(winurlparams);
 
@@ -75,7 +74,7 @@ function buildFilterParams() {
       urlState = setTaxonId(urlState, '');
       urlState = setMenuId(urlState, '');
       urlState = setPage(urlState, '1');
-      urlState = setFilterTaxonArray(urlState, '');
+      urlState = setTaxonDD(urlState, '');
 
       return urlState;
 }
