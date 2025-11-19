@@ -12,6 +12,7 @@ const ATTRIBUTE_PLANTNAME = 'plantname';
 const ATTRIBUTE_TAXONID   = 'taxonid';
 const ATTRIBUTE_MENUID    = 'menuid';
 const ATTRIBUTE_MENUNAME  = 'menuname';
+const ATTRIBUTE_TAXONDD   = 'taxondd';
 const ATTRIBUTE_PAGE      = 'page';
 
 
@@ -28,6 +29,7 @@ let appState = {
   [ATTRIBUTE_TAXONID]:   '',
   [ATTRIBUTE_MENUID]:    '',
   [ATTRIBUTE_MENUNAME]:  '',
+  [ATTRIBUTE_TAXONDD]:   '',
   [ATTRIBUTE_PAGE]:      ''
 };
 
@@ -51,6 +53,7 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_TAXONID]:   '',
     [ATTRIBUTE_MENUID]:    '', 
     [ATTRIBUTE_MENUNAME]:  '',
+    [ATTRIBUTE_TAXONDD]:   '',
     [ATTRIBUTE_PAGE]:      ''
   };
 
@@ -148,6 +151,7 @@ function getPlantName(state) { return (getAttribute(state, ATTRIBUTE_PLANTNAME))
 function getTaxonId(state)   { return (getAttribute(state, ATTRIBUTE_TAXONID)); }
 function getMenuId(state)    { return (getAttribute(state, ATTRIBUTE_MENUID)); }
 function getMenuName(state)  { return (getAttribute(state, ATTRIBUTE_MENUNAME)); }
+function getTaxonDD(state)   { return (getAttribute(state, ATTRIBUTE_TAXONDD)); }
 function getPage(state)      { return (getAttribute(state, ATTRIBUTE_PAGE)); }
 
 /*
@@ -166,6 +170,7 @@ function setPlantName(state, value)  { return (setAttribute(state, ATTRIBUTE_PLA
 function setTaxonId(state, value)    { return (setAttribute(state, ATTRIBUTE_TAXONID, value)); }
 function setMenuId(state, value)     { return (setAttribute(state, ATTRIBUTE_MENUID, value)); }
 function setMenuName(state, value)   { return (setAttribute(state, ATTRIBUTE_MENUNAME, value)); }
+function setTaxonDD(state, value)    { return (setAttribute(state, ATTRIBUTE_TAXONDD, value)); }
 function setPage(state, value)       { return (setAttribute(state, ATTRIBUTE_PAGE, value)); }
 
 /*
@@ -233,6 +238,15 @@ function getMenuNameParam(state, param_nm)   {
   let menu_name = getMenuName(state);
   if( menu_name ) { 
       return (param_nm + menu_name);
+  } else {
+      return '';
+  }
+}
+
+function getTaxonDDParam(state, param_nm)   { 
+  let taxon_dd = getTaxonDD(state);
+  if( taxon_dd ) { 
+      return (param_nm + taxon_dd);
   } else {
       return '';
   }
