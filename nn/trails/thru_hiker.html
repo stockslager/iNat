@@ -41,6 +41,7 @@ function setupAPIParams(config) {
    let api_params = '';
 
    menu_name = getShowMenuName( config, getMenuId(appState) ) || 'Show';
+console.log('app state4 ' + JSON.stringify(appState));
 
    api_params += ('?project_id='+config.project);
    //api_params += '&hrank=species';
@@ -55,7 +56,8 @@ function setupAPIParams(config) {
    // holds the same attributes for other components.
    if( config.user_id          ) { api_params += '&user_id='  + config.user_id; }
    if( config.default_place_id ) { api_params += '&place_id=' + config.default_place_id; }  
- 
+
+console.log('app state5 ' + JSON.stringify(appState));
    api_params += getMenuIdParam(appState, '&taxon_id='); 
    api_params += getPageParam(appState, '&page=');
    api_params += '&per_page=10';
@@ -199,6 +201,7 @@ async function gatherResources() {
    
       // Await the result of getObservations() and store the actual data
       const config_data   = await asyncGetConfiguration( json_path, getComponent(appState) );
+console.log('app state3 ' + JSON.stringify(appState));
       const api_params    = setupAPIParams( config_data );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
@@ -215,6 +218,8 @@ async function gatherResources() {
 }
 
 let message = validateHiker(appState);
+console.log('app state2 ' + JSON.stringify(appState));
+
  
 if( message ) {
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
