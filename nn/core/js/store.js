@@ -162,14 +162,14 @@ function validateHiker(state) {
   // getParams(state) returns the value of the 'params' attribute.
   // The '!' operator checks if that value is falsy (empty string, null, undefined, false, 0)
   if( !getParams(state) ) {
-      let message = 'Params are required.  There is no value in the \&params parameter.  ' +
+      let message = 'Params are required.  There is no value in the &amp;params parameter.  ' +
                     'The value should match the name of a .json configuration file';
       return message;
   }
 
   if( !getComponent(state) ) {
       let message = 'Component name required.  Component name is required for displaying data.' +   
-                    'Component name should exist in the configuration file identified by the \&params=xxxxx';
+                    'Component name should exist in the configuration file identified by the &amp;params=xxxxx';
       return message;
   }
   
