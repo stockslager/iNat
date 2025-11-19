@@ -148,6 +148,48 @@ function setPlantId(state, value)    { return (setAttribute(state, ATTRIBUTE_PLA
 function setPlantName(state, value)  { return (setAttribute(state, ATTRIBUTE_PLANTNAME, value)); }
 
 /*
+ * Helper Getters 
+ * These take the state and a url parameter name as input (e.g. &place_id=).
+ * They concatenate the attribute value after the param_nm and return the concatenated string.
+ * They simplify code for downstream api's. 
+ */
+function getPlaceParam(state, param_nm) { 
+  let place = getPlace(state);
+  if( place ) { 
+      return (param_nm + place);
+  } else {
+      return '';
+  }
+}
+
+function getProjectParam(state, param_nm)   { 
+  let project = getProject(state);
+  if( project ) { 
+      return (param_nm + project);
+  } else {
+      return '';
+  }
+}
+
+function getUserParam(state, param_nm)      { 
+  let user = getUser(state);
+  if( user ) { 
+      return (param_nm + user);
+  } else {
+      return '';
+  }
+}
+
+function getPlantIdParam(state, param_nm)   { 
+  let plant_id = getPlantId(state);
+  if( plant_id ) { 
+      return (param_nm + plant_id);
+  } else {
+      return '';
+  }
+}
+
+/*
  * component based validation
  *
  * Validates the state for Hiker-specific requirements.
