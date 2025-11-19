@@ -70,16 +70,14 @@ console.log('menu id ' + getMenuIdParam(appState, '&taxon_id='));
 }
 
 function buildFilterParams() {
-      let copyurlparams = new URLSearchParams(JSON.parse(JSON.stringify(Object.fromEntries(winurlparams))))
+      let urlState = appState;  // creates a copy
+      
+      urlState = setTaxonId(urlState, '');
+      urlState = setMenuId(urlState, '');
+      urlState = setPage(urlState, '1');
+      urlState = setFilterTaxonArray(urlState, '');
 
-      copyurlparams.delete('taxon_id');
-      copyurlparams.delete('menu_id');
-      copyurlparams.delete('sub_menu_array');
-      copyurlparams.delete('page');
-
-      copyurlparams.append('page', '1');
- 
-      return copyurlparams;
+      return urlState;
 }
  
 function buildMenu( results, config ) {
@@ -92,10 +90,13 @@ function buildMenu( results, config ) {
    menu_string = '<div class="navbar">';
  
    if( config.sub_icons ) {
-       links =  (furl(url+'?'+buildFilterParams(),'<span style="padding-right:20px;">&#10133;</span>all' ));
-       links += (furl(url+'?'+buildFilterParams()+'&taxon_id=47126'+'&menu_id=47126','<span style="padding-right:20px;">&#127807</span>plants' ));           
+       let url_state = buildFilterParams();
+       links =  (furl(url+url_state,'<span style="padding-right:20px;">&#10133;</span>all' ));
+       url_state = setMenuId(url_state, '47126'); // plants 
+       links += (furl(url+url_state,'<span style="padding-right:20px;">&#127807</span>plants' ));           
        for( let j=0; j<config.sub_icons.length; j++ ) {
-            links += (furl(url+'?'+buildFilterParams()+'&taxon_id='+config.sub_icons[j].taxon_id+'&menu_id='+config.sub_icons[j].taxon_id,'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
+            url_state = setMenuId(url_state, config.sub_icons[j].taxon_id);
+            links += (furl(url+url_state,'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
        }
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
    }
