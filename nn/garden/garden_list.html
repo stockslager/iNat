@@ -136,7 +136,6 @@ function buildMenu(configs) {
       if( p_params )         { params      += '?params='+p_params; }   
       if( p_place_id )       { place_param += '&place_id='+p_place_id; }
       if( p_taxon_id )       { taxon_param += '&taxon_id='+p_taxon_id; }
-      if( p_insect_project ) { menu_params += '&insect_project='+p_insect_project; }
       if( p_component )      { component_params += '&mode='+p_component; }
 
       // if multiple configurations exist, build a menu showing each configuration and
@@ -211,6 +210,7 @@ function buildPage(xobj, config) {
             {innerText:'Name'}, 
       ];
 
+      let insect_param = '';
       let place_param = '';
       if( p_place_id ) { place_param = '$'+p_place_id; } else { place_param = '$'; }
 
@@ -229,7 +229,7 @@ function buildPage(xobj, config) {
       let filter_taxon_param = '';
       if( p_taxon_id ) { filter_taxon_param = '$'+p_taxon_id; } else { filter_taxon_param = '$'; }
 
-      let state_param = ('&state='+p_insect_project+place_param+json+user_param+garden_param+mode_param+filter_taxon_param);
+      let state_param = ('&state='+insect_param+place_param+json+user_param+garden_param+mode_param+filter_taxon_param);
 
       let on_all = '';
       let nn_on_all = '';
@@ -243,11 +243,9 @@ function buildPage(xobj, config) {
       if( p_nm2 ) { suffix = p_nm2; }
 
       if( show_behavior === 'on_all' ) {
-          on_all = furl(github_root+'plant_activity.html?target_name=all%20plants'+state_param,'<span id="topright">'+p_title+' any plant</span>');
-      } else {
-          on_all = furl(github_root+'plant_activity_observers.html?params='+p_params+'&project_id='+config.insect_project+'&garden='+config.title,'<span id="topright">'+p_title+' any plant</span>');
           //nn_on_all = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
-      }
+          on_all = furl(github_root+'plant_activity.html?target_name=all%20plants'+state_param,'<span id="topright">'+p_title+' any plant</span>');
+      } 
 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
                  +'per page: '+fcomnum(per_page)+ nn_on_all + '<br />'
