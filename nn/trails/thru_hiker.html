@@ -149,9 +149,8 @@ function buildPage(xobj, config) {
          let tax_id = '';
          let taxon = '';
 
-         let brow = faddelem('tr',tbody);
-
-         if( rec.taxon ){
+         if( rec.taxon ) {
+             let brow = faddelem('tr',tbody);
              tax_id = rec.taxon.id;
              tax_name = rec.taxon.name || '';
              pref_tax_name = rec.taxon.preferred_common_name || '';
@@ -162,18 +161,22 @@ function buildPage(xobj, config) {
                      tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
                  }
              }
-         }
 
-         let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
+             let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
 
-         let values = [
+             let urlState = applicationState;  // creates a copy
+             urlState = setTaxonId(urlState, rec.taxon.id);
+             urlState = setMenuId(urlState, p_menu_id);
+
+             let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl('./thru_hiker_grid.html'+buildParameterList(p_state)+'&taxon_id='+rec.taxon.id+'&menu_id='+p_menu_id,displayName)},
+                  {innerHTML:furl('./thru_hiker_grid.html'+buildParameterList(urlState),displayName)},
                   {innerText:rec.count||''},
                   ];
         
-         faddelems('td',brow,values);
+             faddelems('td',brow,values);
+         }
       };
 
       // buttons to go to prev or next page
