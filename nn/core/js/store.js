@@ -43,6 +43,28 @@ function createNewStateInstance(initialValues = {}) {
   return { ...baseState, ...initialValues };
 }
 
+// Builds a URL query parameter string from the current state.
+// Filters out attributes that are null, undefined, or empty strings.
+// @param {object} state The current application state object.
+// @returns {string} A formatted URL parameter string (e.g., "?key1=val1&key2=val2").
+function buildParameterList(state) {
+  const params = new URLSearchParams();
+
+  // Iterate over every key in the state object
+  for (const key in state) {
+    // Check if the property exists and isn't empty/null/undefined
+    if (state.hasOwnProperty(key) && state[key] !== null && state[key] !== undefined && state[key] !== '') {
+      params.append(key, state[key]);
+    }
+  }
+
+  // URLSearchParams automatically handles encoding and formatting
+  const queryString = params.toString();
+
+  // Return with a leading '?' if there are parameters, otherwise an empty string
+  return queryString ? `?${queryString}` : '';
+}
+
 // Core Get/Set Functions ---
 // Retrieves a value from the state object using a dynamic attribute key.
 // @param {object} state The current state object.
