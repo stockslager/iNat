@@ -194,6 +194,9 @@ function getPlantIdParam(state, param_nm)   {
  *
  * Validates the state for Hiker-specific requirements.
  * Ensures the 'params' attribute has a value.
+ * Ensures the 'component' attribute has a value. 
+ * Everything else should come from the configuration.
+ * Configuration is validated in configuration.js
  * 
  * @param {object} state The current application state object.
  * @returns {string} An error message if invalid, otherwise an empty string.
@@ -215,11 +218,5 @@ function validateHiker(state) {
       return message;
   }
 
-  if( !getUser(state) ) {
-      let message = 'User is missing.  User is a required url parameter.  ' +   
-                    'Please add a valid user to the url.  &amp;user=xxxxx';
-      return message;
-  }
-  
   return;
 }
