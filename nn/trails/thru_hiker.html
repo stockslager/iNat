@@ -117,9 +117,9 @@ function buildPage(xobj, config) {
       buildMenu( results, config );
    
       if( !p_menu_id ) {
-          dlString = furl('./thru_hiker_grid.html?state='+p_state,'<span id="topright">All Observations</span>');
+          dlString = furl('./thru_hiker_grid.html'+buildParameterList(p_state),'<span id="topright">All Observations</span>');
       } else {
-          dlString = furl('./thru_hiker_grid.html?state='+p_state+'&menu_id='+p_menu_id,'<span id="topright">All '+capitalizeWords(menu_name)+'</span>');
+          dlString = furl('./thru_hiker_grid.html'+buildParameterList(p_state)+'&menu_id='+p_menu_id,'<span id="topright">All '+capitalizeWords(menu_name)+'</span>');
       }
 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
@@ -169,7 +169,7 @@ function buildPage(xobj, config) {
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl('./thru_hiker_grid.html?state='+p_state+'&taxon_id='+rec.taxon.id+'&menu_id='+p_menu_id,displayName)},
+                  {innerHTML:furl('./thru_hiker_grid.html'+buildParameterList(p_state)+'&taxon_id='+rec.taxon.id+'&menu_id='+p_menu_id,displayName)},
                   {innerText:rec.count||''},
                   ];
         
