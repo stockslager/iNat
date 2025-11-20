@@ -411,19 +411,46 @@ function validateArt(state) {
 }
 
 /*
+ * Used to clean up the state when returning to the garden list. 
+ * @param {object} state The current application state object.
+ * @returns {object} a copy with new values stored on a new state.
+ */
+function clearForGardenListParams(state) {
+  let urlState = state;  
+
+  urlState = setPlace(urlState, '');
+  urlState = setUser(urlState, '');
+  urlState = setTaxonId(urlState, ''); 
+  urlState = setMenuId(urlState, '');
+  urlState = setMenuName(urlState, '');
+  urlState = setTaxonDD(urlState, '');
+  urlState = setPage(urlState, '');
+  urlState = setPerPage(urlState, '');
+
+  return urlState;
+}
+
+/*
  * Used to clean up the state when returning to the dashboard. 
  * @param {object} state The current application state object.
  * @returns {object} a copy with new values stored on a new state.
  */
 function clearForDashParams(state) {
   let urlState = state;  
-      
-  urlState = setTaxonId(urlState, '');
+
+  urlState = setPlace(urlState, '');
+  urlState = setProject(urlState, '');
+  urlState = setUser(urlState, '');
+  urlState = setGarden(urlState, '');
+  urlState = setComponent(urlState, '');
+  urlState = setPlantId(urlState, '');
+  urlState = setPlantName(urlState, '');
+  urlState = setTaxonId(urlState, ''); 
   urlState = setMenuId(urlState, '');
+  urlState = setMenuName(urlState, '');
+  urlState = setTaxonDD(urlState, '');
   urlState = setPage(urlState, '');
   urlState = setPerPage(urlState, '');
-  urlState = setTaxonDD(urlState, '');
-  urlState = setComponent(urlState, '');
 
   return urlState;
 }
