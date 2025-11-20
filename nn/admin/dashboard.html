@@ -42,12 +42,10 @@ function buildMenu() {
       let menu_string = '';
       let params = '';
 
-      if( p_params )         { params      += '?params='+p_params; }   
-
       menu_string = '<div class="navbar">';
       menu_string += buildDDTitle('');
 
-      menu_string += buildHome(furl(github_root+'plant_about.html?params='+p_params,'<span style="font_size: 16px;">About</span>'));
+      menu_string += buildHome(furl(github_root+'plant_about.html'+buildParameterList(appState),'<span style="font_size: 16px;">About</span>'));
       menu_string += '</div>';
  
       faddelem('p',document.body,{innerHTML:(menu_string)});  
@@ -57,8 +55,6 @@ function buildPage( configs ) {
 
       buildMenu();
 
-      //let all_url = furl(github_root+'yard_dashboard.html?params='+p_params,'<span id="topright">All Observations</span>');
-       
       let labels = [];
 
       labels = [
@@ -86,7 +82,6 @@ function buildPage( configs ) {
            let config = configs[i];
     
            if( config.component === 'plants' ) {
-               appState = setParams( appState, p_params );
                appState = setComponent( appState, 'plants' );
                let plant_params = buildParameterList(appState);
                brow = faddelem('tr',tbody);
@@ -105,7 +100,6 @@ function buildPage( configs ) {
            let config = configs[i];
     
            if( config.component === 'hiker' ) {
-               appState = setParams( appState, p_params );
                appState = setComponent( appState, 'hiker' );
                let hiker_params = buildParameterList(appState);
                brow = faddelem('tr',tbody);
