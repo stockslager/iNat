@@ -290,8 +290,36 @@ function getPerPageParam(state, param_nm)   {
 function validateHiker(state) {
   let message = '';
   
-  // getParams(state) returns the value of the 'params' attribute.
-  // The '!' operator checks if that value is falsy (empty string, null, undefined, false, 0)
+  if( !getParams(state) ) {
+      let message = 'Params are required.  There is no value in the &amp;params parameter.  ' +
+                    'The value should match the name of a .json configuration file';
+      return message;
+  }
+
+  if( !getComponent(state) ) {
+      let message = 'Component name required.  Component name is required for displaying data.' +   
+                    'Component name should exist in the configuration file identified by the &amp;params=xxxxx';
+      return message;
+  }
+
+  return;
+}
+
+/*
+ * component based validation
+ *
+ * Validates the state for Garden-specific requirements.
+ * Ensures the 'params' attribute has a value.
+ * Ensures the 'component' attribute has a value. 
+ * Everything else should come from the configuration.
+ * Configuration is validated in configuration.js
+ * 
+ * @param {object} state The current application state object.
+ * @returns {string} An error message if invalid, otherwise an empty string.
+ */
+function validateGarden(state) {
+  let message = '';
+  
   if( !getParams(state) ) {
       let message = 'Params are required.  There is no value in the &amp;params parameter.  ' +
                     'The value should match the name of a .json configuration file';
