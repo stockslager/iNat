@@ -55,6 +55,10 @@ function buildPage( configs ) {
 
       buildMenu();
 
+      faddelem('p',document.body,{innerHTML:CONST_COMPONENTS + configs.length + ' <br/>'
+                 + CONST_PERPAGE + '<br />'
+                 + CONST_PGS + '<br />'});  
+
       let labels = [];
 
       labels = [
@@ -62,23 +66,15 @@ function buildPage( configs ) {
             {innerText:CONST_COMPONENT},
             {innerText:CONST_DESCRIPTION}, 
       ];
-
-      let table = ''; let thead = ''; let hrow = ''; let tbody = '';
+ 
+      let table = faddelem('table',document.body,{id:'main'});                    
+      let thead = faddelem('thead',table);
+      let hrow  = faddelem('tr',thead);
+      
+      faddelems('th',hrow,labels);
+      let tbody = faddelem('tbody',table);
  
       for( let i=0; i<configs.length; i++ ) {
-           if( i === 0 ) {
-               faddelem('p',document.body,{innerHTML:CONST_COMPONENTS + configs.length + ' <br/>'
-                 + CONST_PERPAGE + '<br />'
-                 + CONST_PGS + '<br />'});  
-
-               table = faddelem('table',document.body,{id:'main'});                    
-               thead = faddelem('thead',table);
-               hrow = faddelem('tr',thead);
-      
-               faddelems('th',hrow,labels);
-               tbody = faddelem('tbody',table);
-           }
-       
            let brow = '';
            let values = [];
            let config = configs[i];
