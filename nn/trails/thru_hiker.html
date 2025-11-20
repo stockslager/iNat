@@ -82,7 +82,9 @@ function buildMenu( results, config ) {
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
    }
 
-   menu_string += buildHome( furl('../admin/dashboard.html?params='+getParams(appState),'&#127807;') );
+   let url_state = clearSpeciesCountsParams(appState);
+ 
+   menu_string  += buildHome( furl('../admin/dashboard.html'+url_state,'&#127807;') );
 
    menu_string += '</div>';
  
