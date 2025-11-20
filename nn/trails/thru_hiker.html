@@ -59,17 +59,6 @@ function setupAPIParams(config) {
 
    return api_params;
 }
-
-function buildFilterParams() {
-      let urlState = appState;  // creates a copy
-      
-      urlState = setTaxonId(urlState, '');
-      urlState = setMenuId(urlState, '');
-      urlState = setPage(urlState, '1');
-      urlState = setTaxonDD(urlState, '');
-
-      return urlState;
-}
  
 function buildMenu( results, config ) {
 
@@ -81,7 +70,7 @@ function buildMenu( results, config ) {
    menu_string = '<div class="navbar">';
  
    if( config.sub_icons ) {
-       let url_state = buildFilterParams();
+       let url_state = clearSpeciesCountsParams(appState);
     
        links =  (furl(url+buildParameterList(url_state),'<span style="padding-right:20px;">&#10133;</span>all' ));
        url_state = setMenuId(url_state, '47126');  // plants 
