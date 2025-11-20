@@ -308,7 +308,22 @@ function validateHiker(state) {
 }
 
 /*
- * Used from the pages in the app that display species counts (PlantActivity.html, ThruHiker.html, etc.)
+ * Used from the pages in the app that display the plant list (GardenList.html)
+ * Used to reset params before rendering the back link in the plant list menu.
+ * @param {object} state The current application state object.
+ * @returns {object} a copy with new values stored on a new state to supply url parameters to a link.
+ */
+function clearGardenListParams(state) {
+  let urlState = state; 
+
+  urlState = setTaxonId( urlState, '' );
+  urlState = setPlace( urlState, '' );
+
+  return urlState;
+}
+
+/*
+ * Used from the pages in the app that display species counts (GardenActivity.html, ThruHiker.html, etc.)
  * Used for params before rendering the back link in the species counts menu and before rendering the links 
  * in the Show drop down for e.g.
  * @param {object} state The current application state object.
@@ -327,7 +342,7 @@ function clearSpeciesCountsParams(state) {
 }
 
 /*
- * Used from the pages in the app that display the images grid (PlantGrid.html, ThruHikerGrid.html, etc.)
+ * Used from the pages in the app that display the images grid (GardenGrid.html, ThruHikerGrid.html, etc.)
  * Used to reset params before rendering the back link in the grid menu.
  * @param {object} state The current application state object.
  * @returns {object} a copy with new values stored on a new state to supply url parameters to a link.
