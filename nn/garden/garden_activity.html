@@ -128,11 +128,11 @@ function buildPage(xobj, config) {
       buildMenu( results, config );
 
       if( !getMenuId(appState) ) {
-          let titleString = CONST_ON_PREFIX+getPlantName(appState);
+          let titleString = capitalizeWords(CONST_ON_PREFIX+getPlantName(appState));
           dlString = furl('./garden_grid.html'+buildParameterList(appState),'<span id="topright">'+titleString+'</span>');
       } else {
           let urlState = appState;  // creates a copy
-          let titleString = capitalizeWords(getMenuName(appState))+CONST_ON_PREFIX+getPlantName(appState);
+          let titleString = capitalizeWords(getMenuName(appState)+CONST_ON_PREFIX+getPlantName(appState));
           urlState = setTaxonId(urlState, getMenuId(appState));  // set taxon id to menu id if a filter was chosen for say, birds.
           dlString = furl('./garden_grid.html'+buildParameterList(appState),'<span id="topright">'+titleString+'</span>');
       }
