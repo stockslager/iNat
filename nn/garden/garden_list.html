@@ -113,21 +113,6 @@ function getPlaceName( configuration, place_id ) {
    }
    return place_name;
 }
-
-// returns a copy of the state parameter with the new place
-function setPlace( state, place_id ) {
-   let state_copy = '';
-
-   state_copy += state.split('$')[0] + '$';
-   state_copy += place_id            + '$';
-   state_copy += state.split('$')[2] + '$';
-   state_copy += state.split('$')[3] + '$';
-   state_copy += state.split('$')[4] + '$';
-   state_copy += state.split('$')[5] + '$';
-   state_copy += state.split('$')[6] + '$';
-
-   return state_copy; 
-}
  
 function buildMenu( config ) {
       let menu_string = '';
