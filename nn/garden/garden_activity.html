@@ -29,7 +29,11 @@ appState       = buildStateFromParams(winurlparams);
  
 let dlString   = '';
 let menu_name  = '';
+
+// constants 
 const CONST_PER_PAGE = '10';
+const CONST_ON_PREFIX = ' On ';
+const CONST_SHOW = 'Show';
 
 // find the html name to pass to other pages for nav
 let path      = window.location.pathname;
@@ -38,16 +42,14 @@ let html_name = path.substring(path.lastIndexOf('/') + 1);
 function setupAPIParams(config) {
    let api_params = '';
 
-   menu_name = getShowMenuName(config, getMenuId(appState)) || 'Show';
+   menu_name = getShowMenuName(config, getMenuId(appState)) || CONST_SHOW;
 
    api_params += ('?project_id='+config.insect_project);
    //api_params += '&hrank=species';
 
-   let field_val_param = ''
-   if( config.field_value ) { field_val_param = config.field_value; }
- 
-   // filter by field (usually trail name)... should change to generic filter
-   api_params += '&field:'+config.field_name+'='+field_val_param;
+   // filter by field... uses the plant_id (the taxon_id) for the plant
+   // chosen from the garden list.
+   api_params += '&field:'+config.field_name+'='+getPlantId(appState);
 
    // default these to what's in the config even though the state sometimes
    // holds the same attributes for other components.
@@ -126,11 +128,13 @@ function buildPage(xobj, config) {
       buildMenu( results, config );
 
       if( !getMenuId(appState) ) {
-          dlString = furl('./garden_grid.html'+buildParameterList(appState),'<span id="topright">All Observations</span>');
+          let titleString = CONST_ON_PREFIX+getPlantName(appState);
+          dlString = furl('./garden_grid.html'+buildParameterList(appState),'<span id="topright">'+titleString+'</span>');
       } else {
           let urlState = appState;  // creates a copy
+          let titleString = capitalizeWords(getMenuName(appState))+CONST_ON_PREFIX+getPlantName(appState);
           urlState = setTaxonId(urlState, getMenuId(appState));  // set taxon id to menu id if a filter was chosen for say, birds.
-          dlString = furl('./garden_grid.html'+buildParameterList(appState),'<span id="topright">All '+capitalizeWords(menu_name)+'</span>');
+          dlString = furl('./garden_grid.html'+buildParameterList(appState),'<span id="topright">'+titleString+'</span>');
       }
 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
