@@ -60,19 +60,6 @@ function setupAPIParams(config) {
 
    return api_params;
 }
-
-function buildFilterParams() {
-      let copyurlparams = new URLSearchParams(JSON.parse(JSON.stringify(Object.fromEntries(winurlparams))))
-
-      copyurlparams.delete('taxon_id');
-      copyurlparams.delete('menu_id');
-      copyurlparams.delete('sub_menu_array');
-      copyurlparams.delete('page');
-
-      copyurlparams.append('page', '1');
- 
-      return copyurlparams;
-}
  
 function buildMenu( results, config ) {
 
@@ -105,10 +92,12 @@ function buildMenu( results, config ) {
    }
 
    if( config.sub_icons ) {
-       links =  (furl(url+'?'+buildFilterParams()+'&sub_menu_array='+sub_taxon_arr,'<span style="padding-right:20px;">&#10133;</span>all' ));
+       let urlState = clearSpeciesCountsParams(appState);
+       links =  (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">&#10133;</span>all' ));
        for( let j=0; j<config.sub_icons.length; j++ ) {
             if( sub_taxon_arr.includes( config.sub_icons[j].taxon_id ) ) {
-                links += (furl(url+'?'+buildFilterParams()+'&sub_menu_array='+sub_taxon_arr+'&taxon_id='+config.sub_icons[j].taxon_id+'&menu_id='+config.sub_icons[j].taxon_id,'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
+                urlState  = setMenuId(url_state, config.sub_icons[j].taxon_id);
+                links    += (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
             }
        }
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
