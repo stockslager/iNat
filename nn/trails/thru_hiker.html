@@ -32,8 +32,10 @@ let dlString   = '';
 let menu_name  = '';
 
 // page & api specific constants
-const CONST_PLANTS_TAXON = '47196';
-const CONST_API_PER_PAGE = '10';
+const CONST_HIKER_ALL_OBS = 'All Observations';
+const CONST_HIKER_ALL     = 'All ';
+const CONST_PLANTS_TAXON  = '47196';
+const CONST_API_PER_PAGE  = '10';
 
 // find the html name to pass to other pages for nav
 let path      = window.location.pathname;
@@ -113,16 +115,16 @@ function buildPage(xobj, config) {
       buildMenu( results, config );
    
       if( !getMenuId(appState) ) {
-          dlString = furl('./thru_hiker_grid.html'+buildParameterList(appState),'<span id="topright">All Observations</span>');
+          dlString = furl('./thru_hiker_grid.html'+buildParameterList(appState),'<span id="topright">'+CONST_HIKER_ALL_OBS+'</span>');
       } else {
           let urlState = appState;  // creates a copy
           urlState = setTaxonId(urlState, getMenuId(appState));  // set taxon id to menu id if a filter was chosen for say, birds.
-          dlString = furl('./thru_hiker_grid.html'+buildParameterList(urlState),'<span id="topright">All '+capitalizeWords(menu_name)+'</span>');
+          dlString = furl('./thru_hiker_grid.html'+buildParameterList(urlState),'<span id="topright">'+CONST_HIKER_ALL+capitalizeWords(menu_name)+'</span>');
       }
 
-      faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
-             +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+dlString+'<br />'});  
+      faddelem('p',document.body,{innerHTML:CONST_TOTAL_SPECIES+fcomnum(total_results)+' <br/>'
+             +CONST_PER_PAGE+fcomnum(per_page)+'<br />'
+             +CONST_PAGE+fcomnum(page_curr)+' of '+fcomnum(page_max)+dlString+'<br />'});  
 
       labels = [
             {innerText:'#'},
