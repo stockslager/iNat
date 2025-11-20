@@ -29,6 +29,7 @@ appState       = buildStateFromParams(winurlparams);
 
 let dlString   = '';
 let menu_name  = '';
+let CONST_PER_PAGE = '10';
 
 // find the html name to pass to other pages for nav
 let path      = window.location.pathname;
@@ -55,7 +56,7 @@ function setupAPIParams(config) {
 
    api_params += getMenuIdParam(appState, '&taxon_id='); 
    api_params += getPageParam(appState, '&page=');
-   api_params += '&per_page=10';
+   api_params += '&per_page='+CONST_PER_PAGE;
 
    return api_params;
 }
