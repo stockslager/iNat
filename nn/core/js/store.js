@@ -292,3 +292,21 @@ function validateHiker(state) {
 
   return;
 }
+
+/*
+ * Used from the pages in the app that display species counts (PlantActivity.html, ThruHiker.html, etc.)
+ * Used for params before rendering the home link and before rendering the links in the Show drop down for e.g.
+ * @param {object} state The current application state object.
+ * @returns {object} a copy with new values stored on a new state to supply url parameters to a link.
+ */
+function clearSpeciesCountsParams(state) {
+  let urlState = state;  // creates a copy
+      
+  urlState = setTaxonId(urlState, '');
+  urlState = setMenuId(urlState, '');
+  urlState = setPage(urlState, '1');
+  urlState = setTaxonDD(urlState, '');
+
+  return urlState;
+}
+  
