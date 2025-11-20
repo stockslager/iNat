@@ -14,7 +14,7 @@ const ATTRIBUTE_MENUID    = 'menuid';
 const ATTRIBUTE_MENUNAME  = 'menuname';
 const ATTRIBUTE_TAXONDD   = 'taxondd';
 const ATTRIBUTE_PAGE      = 'page';
-
+const ATTRIBUTE_PER_PAGE  = 'per_page';
 
 // application state
 let appState = {
@@ -30,7 +30,9 @@ let appState = {
   [ATTRIBUTE_MENUID]:    '',
   [ATTRIBUTE_MENUNAME]:  '',
   [ATTRIBUTE_TAXONDD]:   '',
-  [ATTRIBUTE_PAGE]:      ''
+  [ATTRIBUTE_PAGE]:      '',
+  [ATTRIBUTE_PER_PAGE]:  ''
+
 };
 
 /*
@@ -54,7 +56,8 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_MENUID]:    '', 
     [ATTRIBUTE_MENUNAME]:  '',
     [ATTRIBUTE_TAXONDD]:   '',
-    [ATTRIBUTE_PAGE]:      ''
+    [ATTRIBUTE_PAGE]:      '',
+    [ATTRIBUTE_PER_PAGE]:  ''
   };
 
   // Combine defaults with any provided initial values using the spread syntax
@@ -153,6 +156,7 @@ function getMenuId(state)    { return (getAttribute(state, ATTRIBUTE_MENUID)); }
 function getMenuName(state)  { return (getAttribute(state, ATTRIBUTE_MENUNAME)); }
 function getTaxonDD(state)   { return (getAttribute(state, ATTRIBUTE_TAXONDD)); }
 function getPage(state)      { return (getAttribute(state, ATTRIBUTE_PAGE)); }
+function getPerPage(state)   { return (getAttribute(state, ATTRIBUTE_PER_PAGE)); }
 
 /*
  * Helper Setters (Optional but Recommended) ---
@@ -172,6 +176,7 @@ function setMenuId(state, value)     { return (setAttribute(state, ATTRIBUTE_MEN
 function setMenuName(state, value)   { return (setAttribute(state, ATTRIBUTE_MENUNAME, value)); }
 function setTaxonDD(state, value)    { return (setAttribute(state, ATTRIBUTE_TAXONDD, value)); }
 function setPage(state, value)       { return (setAttribute(state, ATTRIBUTE_PAGE, value)); }
+function setPerPage(state, value)    { return (setAttribute(state, ATTRIBUTE_PER_PAGE, value)); }
 
 /*
  * Helper Getters 
@@ -261,6 +266,15 @@ function getPageParam(state, param_nm)   {
   }
 }
 
+function getPerPageParam(state, param_nm)   { 
+  let per_page = getPerPage(state);
+  if( per_page ) { 
+      return (param_nm + per_page);
+  } else {
+      return '';
+  }
+}
+
 /*
  * component based validation
  *
@@ -306,6 +320,7 @@ function clearSpeciesCountsParams(state) {
   urlState = setTaxonId(urlState, '');
   urlState = setMenuId(urlState, '');
   urlState = setPage(urlState, '');
+  urlState = setPerPage(urlState, '');
   urlState = setTaxonDD(urlState, '');
 
   return urlState;
