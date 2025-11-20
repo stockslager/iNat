@@ -32,6 +32,7 @@ let dlString   = '';
 let menu_name  = '';
 
 // page & api specific constants
+const CONST_PLANTS_TAXON = '47196';
 const CONST_API_PER_PAGE = '10';
 
 // find the html name to pass to other pages for nav
@@ -78,9 +79,9 @@ function buildMenu( results, config ) {
        url_state = setMenuId(url_state, '');
        url_state = setMenuName(url_state, '');
     
-       links =  (furl(url+buildParameterList(url_state),'<span style="padding-right:20px;">&#10133;</span>all' ));
-       url_state = setMenuId(url_state, '47126');  // plants 
-       links += (furl(url+buildParameterList(url_state),'<span style="padding-right:20px;">&#127807</span>plants' ));           
+       links =  (furl(url+buildParameterList(url_state),'<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>'+CONST_ALL ));
+       url_state = setMenuId(url_state, CONST_PLANTS_TAXON);  // plants 
+       links += (furl(url+buildParameterList(url_state),'<span style="padding-right:20px;">'+CONST_LEAF_UTF8+'</span>plants' ));           
        for( let j=0; j<config.sub_icons.length; j++ ) {
             url_state = setMenuId(url_state, config.sub_icons[j].taxon_id);
             links += (furl(url+buildParameterList(url_state),'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
