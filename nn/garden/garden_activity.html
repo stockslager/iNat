@@ -23,11 +23,8 @@ let winurlstr         = window.location.href;
 let winurlsearchstr   = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
-let p_taxon_id       = winurlparams.get('taxon_id') || '';
-let p_menu_id        = winurlparams.get('menu_id') || '';
-let p_sub_menu_array = winurlparams.get('sub_menu_array') || '';
-let p_state          = winurlparams.get('state') || '';
-let p_page           = winurlparams.get('page') || '';
+
+appState       = buildStateFromParams(winurlparams);
  
 let dlString   = '';
 let menu_name  = '';
@@ -36,20 +33,10 @@ let menu_name  = '';
 let path      = window.location.pathname;
 let html_name = path.substring(path.lastIndexOf('/') + 1);
  
-// the place selected was added to seed_project parameter and needs to be
-// parsed if control is returning from the insects page.
-let p_project_id  = p_state.split('$')[0];
-let p_place_id    = p_state.split('$')[1];
-let p_params      = p_state.split('$')[2];
-let p_user_id     = p_state.split('$')[3];
-let garden        = p_state.split('$')[4];
-let p_component   = p_state.split('$')[5];
-let p_target_id   = p_state.split('$')[6];
-
 function setupAPIParams(config) {
    let api_params = '';
 
-   menu_name = getShowMenuName(config, p_menu_id) || 'Show';
+   menu_name = getShowMenuName(config, getMenuId(appState)) || 'Show';
 
    api_params += ('?project_id='+config.insect_project);
    //api_params += '&hrank=species';
@@ -60,12 +47,14 @@ function setupAPIParams(config) {
    // filter by field (usually trail name)... should change to generic filter
    api_params += '&field:'+config.field_name+'='+field_val_param;
 
-   if( p_place_id ) { api_params += '&place_id=' + p_place_id; }
-   if( p_user_id )  { api_params += '&user_id='  + p_user_id;  }
-   if( p_taxon_id ) { api_params += '&taxon_id=' + p_taxon_id; }
-
-   api_params += '&per_page=10';
-   api_params += '&page='+p_page;
+   // default these to what's in the config even though the state sometimes
+   // holds the same attributes for other components.
+   if( config.user_id          ) { api_params += '&user_id='  + config.user_id; }
+   if( config.default_place_id ) { api_params += '&place_id=' + config.default_place_id; }  
+ 
+   api_params += getMenuIdParam(appState, '&taxon_id='); 
+   api_params += getPageParam(appState, '&page=');
+   api_params += '&per_page='+CONST_PER_PAGE;
 
    return api_params;
 }
@@ -93,8 +82,8 @@ function buildMenu( results, config ) {
    menu_string = '<div class="navbar">';
 
    let sub_taxon_arr = [];
-   if( p_sub_menu_array ) {
-       sub_taxon_arr = p_sub_menu_array;
+   if( getTaxonDD(appState) ) {
+       sub_taxon_arr = getTaxonDD(appState);
    } else {
        if( config.sub_icons ) {
            for( let i=0; i<results.length; i++) {
@@ -123,7 +112,8 @@ function buildMenu( results, config ) {
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
    }
 
-   menu_string += buildHome( furl('./garden_list.html?state='+p_state,'&#127807;') );
+   let urlState = clearSpeciesCountsParams(appState);
+   menu_string += buildHome( furl('./garden_list.html'+buildParameterList(urlState,'&#127807;') );
 
    menu_string += '</div>';
  
@@ -143,11 +133,13 @@ function buildPage(xobj, config) {
       let labels = [];
 
       buildMenu( results, config );
-   
-      if( !p_menu_id ) {
-          dlString = furl('./garden_grid.html?state='+p_state,'<span id="topright">All Observations</span>');
+
+      if( !getMenuId(appState) ) {
+          dlString = furl('./garden_grid.html'+buildParameterList(appState),'<span id="topright">All Observations</span>');
       } else {
-          dlString = furl('./garden_grid.html?state='+p_state+'&taxon_id='+p_taxon_id+'&menu_id='+p_menu_id,'<span id="topright">All '+capitalizeWords(menu_name)+'</span>');
+          let urlState = appState;  // creates a copy
+          urlState = setTaxonId(urlState, getMenuId(appState));  // set taxon id to menu id if a filter was chosen for say, birds.
+          dlString = furl('./garden_grid.html'+buildParameterList(appState),'<span id="topright">All '+capitalizeWords(menu_name)+'</span>');
       }
 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
@@ -194,10 +186,13 @@ function buildPage(xobj, config) {
 
          let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
 
+         let urlState = appState;  // creates a copy
+         urlState = setTaxonId(urlState, rec.taxon.id);
+       
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl('./garden_grid.html?state='+p_state+'&taxon_id='+rec.taxon.id+'&menu_id='+p_menu_id,displayName)},
+                  {innerHTML:furl('./garden_grid.html'+buildParameterList(urlState),displayName)},
                   {innerText:rec.count||''},
                   ];
         
@@ -220,12 +215,12 @@ function buildPage(xobj, config) {
 
 async function gatherResources() {
   let api_base  = 'https://api.inaturalist.org/v1/observations/species_counts';
-  let json_path = json_root + p_params;
+  let json_path = json_root + getParams(appState);
  
   try {
    
       // Await the result of getObservations() and store the actual data
-      const config_data   = await asyncGetConfiguration( json_path, p_component );
+      const config_data   = await asyncGetConfiguration( json_path, getComponent(appState) );
       const api_params    = setupAPIParams( config_data );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
@@ -241,9 +236,9 @@ async function gatherResources() {
     }
 }
 
-if( !p_component ) {
-    let message = `Component name required.  Component name is required for displaying data.  
-                   Please add the name of a valid component to the url parameters.`;
+let message = validateGarden(appState);
+ 
+if( message ) {
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
 } else {
     gatherResources(); 
