@@ -1,4 +1,8 @@
 // store.js
+const COMPONENT_GARDEN    = 'plants';
+const COMPONENT_HIKER     = 'hiker';
+const COMPONENT_YARD      = 'yard';
+const COMPONENT_ART       = 'art';
 
 // --- Constants for Attribute Keys ---
 const ATTRIBUTE_PROJECT   = 'project';
@@ -278,6 +282,29 @@ function getPerPageParam(state, param_nm)   {
 /*
  * component based validation
  *
+ * Validates the state for parameters requirements.
+ * Ensures the 'params' attribute has a value.
+ * Everything else should come from the configuration.
+ * Configuration is validated in configuration.js
+ * 
+ * @param {object} state The current application state object.
+ * @returns {string} An error message if invalid, otherwise an empty string.
+ */
+function validateConfig(state) {
+  let message = '';
+  
+  if( !getParams(state) ) {
+      let message = 'Params are required.  There is no value in the &amp;params parameter.  ' +
+                    'The value should match the name of a .json configuration file';
+      return message;
+  }
+
+  return;
+}
+
+/*
+ * component based validation
+ *
  * Validates the state for Hiker-specific requirements.
  * Ensures the 'params' attribute has a value.
  * Ensures the 'component' attribute has a value. 
@@ -289,14 +316,11 @@ function getPerPageParam(state, param_nm)   {
  */
 function validateHiker(state) {
   let message = '';
-  
-  if( !getParams(state) ) {
-      let message = 'Params are required.  There is no value in the &amp;params parameter.  ' +
-                    'The value should match the name of a .json configuration file';
-      return message;
-  }
 
-  if( !getComponent(state) ) {
+  message = validateConfig(state);
+  if( message ) { return message; }
+
+  if( getComponent(state) !== COMPONENT_HIKER ) {
       let message = 'Component name required.  Component name is required for displaying data.' +   
                     'Component name should exist in the configuration file identified by the &amp;params=xxxxx';
       return message;
@@ -320,13 +344,64 @@ function validateHiker(state) {
 function validateGarden(state) {
   let message = '';
   
-  if( !getParams(state) ) {
-      let message = 'Params are required.  There is no value in the &amp;params parameter.  ' +
-                    'The value should match the name of a .json configuration file';
+  message = validateConfig(state);
+  if( message ) { return message; }
+
+  if( getComponent(state) !== COMPONENT_GARDEN ) {
+      let message = 'Component name required.  Component name is required for displaying data.' +   
+                    'Component name should exist in the configuration file identified by the &amp;params=xxxxx';
       return message;
   }
 
-  if( !getComponent(state) ) {
+  return;
+}
+
+/*
+ * component based validation
+ *
+ * Validates the state for yard specific requirements.
+ * Ensures the 'params' attribute has a value.
+ * Ensures the 'component' attribute has a value. 
+ * Everything else should come from the configuration.
+ * Configuration is validated in configuration.js
+ * 
+ * @param {object} state The current application state object.
+ * @returns {string} An error message if invalid, otherwise an empty string.
+ */
+function validateYard(state) {
+  let message = '';
+  
+  message = validateConfig(state);
+  if( message ) { return message; }
+
+  if( getComponent(state) !== COMPONENT_YARD ) {
+      let message = 'Component name required.  Component name is required for displaying data.' +   
+                    'Component name should exist in the configuration file identified by the &amp;params=xxxxx';
+      return message;
+  }
+
+  return;
+}
+
+/*
+ * component based validation
+ *
+ * Validates the state for Artwork specific requirements.
+ * Ensures the 'params' attribute has a value.
+ * Ensures the 'component' attribute has a value. 
+ * Everything else should come from the configuration.
+ * Configuration is validated in configuration.js
+ * 
+ * @param {object} state The current application state object.
+ * @returns {string} An error message if invalid, otherwise an empty string.
+ */
+function validateArt(state) {
+  let message = '';
+  
+  message = validateConfig(state);
+  if( message ) { return message; }
+
+  if( getComponent(state) !== COMPONENT_ART ) {
       let message = 'Component name required.  Component name is required for displaying data.' +   
                     'Component name should exist in the configuration file identified by the &amp;params=xxxxx';
       return message;
