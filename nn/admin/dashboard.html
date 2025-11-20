@@ -63,18 +63,20 @@ function buildPage( configs ) {
             {innerText:CONST_DESCRIPTION}, 
       ];
 
-      let table = faddelem('table',document.body,{id:'main'});                    
-
+      let table = ''; let thead = ''; let hrow = ''; let tbody = '';
+ 
       for( let i=0; i<configs.length; i++ ) {
            if( i === 0 ) {
                faddelem('p',document.body,{innerHTML:CONST_COMPONENTS + configs.length + ' <br/>'
                  + CONST_PERPAGE + '<br />'
                  + CONST_PGS + '<br />'});  
-               let thead = faddelem('thead',table);
-               let hrow = faddelem('tr',thead);
+
+               table = faddelem('table',document.body,{id:'main'});                    
+               thead = faddelem('thead',table);
+               hrow = faddelem('tr',thead);
       
                faddelems('th',hrow,labels);
-               let tbody = faddelem('tbody',table);
+               tbody = faddelem('tbody',table);
            }
        
            let brow = '';
