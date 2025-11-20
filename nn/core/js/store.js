@@ -320,7 +320,7 @@ function clearSpeciesCountsParams(state) {
 function clearGridParams(state) {
   let urlState = state; 
 
-  urlState = setTaxonId( url_state, '' );
+  urlState = setTaxonId( urlState, '' );
 
   return urlState;
 }
