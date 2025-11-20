@@ -2,7 +2,8 @@
 const CONST_TOTAL_SPECIES  = 'total species: ';  // common api results header
 const CONST_PAGE           = 'page: ';           // common api results header 
 const CONST_PER_PAGE       = 'per page: ';       // common api results header
-const CONST_ON_ALL_PLANTS  = 'On All Plants';
+const CONST_ON             = 'On ';
+const CONST_ALL_PLANTS     = 'All Plants';
 
 // show menu
 const CONST_ALL            = 'all';              // common show drop down label
