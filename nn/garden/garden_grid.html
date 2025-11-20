@@ -56,7 +56,8 @@ function getMapParams(config) {
 
    if( config.default_place_id ) { map_params += '&place_id='+config.default_place_id; } 
    if( config.user_id )          { map_params += '&user_id='+config.user_id; }
-  
+
+   console.log('app ' + getPlantId(appState));
    map_params += '&field:'+config.field_name+'=' + getPlantId(appState);  
 
    return map_params;
