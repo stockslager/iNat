@@ -16,6 +16,7 @@
 </head>
 
 <body>
+<script type="text/javascript"   src='../core/js/global_const.js'> </script>
 <script type="text/javascript"   src='../core/js/common_func.js'> </script>
 <script type="text/javascript"   src='../core/js/roots.js'> </script>
 <script type="text/javascript"   src='../core/js/store.js'> </script>
@@ -78,7 +79,7 @@ function buildPage( configs ) {
                let plant_params = buildParameterList(state);
                brow = faddelem('tr',tbody);
                values = [
-                  {innerHTML:furl('../garden/garden_list.html'+plant_params, '&#127807;'  )},
+                  {innerHTML:furl('../garden/garden_list.html'+plant_params, CONST_LEAF_UTF8  )},
                   {innerHTML:furl('../garden/garden_list.html'+plant_params, config.title )},
                   {innerText:config.title+' hike.'},
                ];
@@ -97,7 +98,7 @@ function buildPage( configs ) {
                let hiker_params = buildParameterList(state);
                brow = faddelem('tr',tbody);
                values = [
-                  {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,'&#x1F97E;')},
+                  {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,CONST_BOOT_UTF8 )},
                   {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,config.title)},
                   {innerText:config.title+' hike.'},
                ];
