@@ -16,6 +16,7 @@
 </head>
 
 <body>
+<script type="text/javascript"   src='../core/js/global_const.js'> </script>
 <script type="text/javascript"   src='../core/js/common_func.js'> </script>
 <script type="text/javascript"   src='../core/js/roots.js'> </script>
 <script type="text/javascript"   src='../core/js/store.js'> </script>
@@ -31,11 +32,7 @@ let dlString   = '';
 let menu_name  = '';
 
 // constants 
-const CONST_PER_PAGE  = '10';
-const CONST_SHOW      = 'Show';
-const CONST_ALL       = 'all';
-const CONST_PLUS_UTF8 = '&#10133;'
-const CONST_LEAF_UTF8 = '&#127807;';
+const CONST_API_PER_PAGE  = '10';
  
 // find the html name to pass to other pages for nav
 let path      = window.location.pathname;
@@ -60,7 +57,7 @@ function setupAPIParams(config) {
  
    api_params += getMenuIdParam(appState, '&taxon_id='); 
    api_params += getPageParam(appState, '&page=');
-   api_params += '&per_page='+CONST_PER_PAGE;
+   api_params += '&per_page='+CONST_API_PER_PAGE;
 
    return api_params;
 }
