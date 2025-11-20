@@ -177,6 +177,7 @@ function buildPage(xobj, config) {
           //nn_on_all = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
           let urlState = appState;
           urlState = setPlantName(urlState, CONST_ON_ALL_PLANTS);
+          urlState = setPlantId(urlState, '');  // scrub plant id since it might have been set previously
           on_all = furl('./garden_activity.html'+buildParameterList(urlState),'<span id="topright">'+CONST_ON_ALL_PLANTS+'</span>');
       } 
 
