@@ -93,7 +93,7 @@ function buildMenu( results, config ) {
    }
 
    if( config.sub_icons ) {
-       let urlState = clearSpeciesCountsParams(appState);
+       let urlState = clearForGardenListParams(appState);  // since all effectively resets the page
        links =  (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>'+CONST_ALL ));
        for( let j=0; j<config.sub_icons.length; j++ ) {
             if( sub_taxon_arr.includes( config.sub_icons[j].taxon_id ) ) {
