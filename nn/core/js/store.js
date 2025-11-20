@@ -305,7 +305,7 @@ function clearSpeciesCountsParams(state) {
       
   urlState = setTaxonId(urlState, '');
   urlState = setMenuId(urlState, '');
-  urlState = setPage(urlState, '1');
+  urlState = setPage(urlState, '');
   urlState = setTaxonDD(urlState, '');
 
   return urlState;
