@@ -74,7 +74,9 @@ function buildMenu( results, config ) {
    menu_string = '<div class="navbar">';
  
    if( config.sub_icons ) {
-       let url_state = clearSpeciesCountsParams(appState);
+       let url_state = appState;
+       url_state = setMenuId(url_state, '');
+       url_state = setMenuName(url_state, '');
     
        links =  (furl(url+buildParameterList(url_state),'<span style="padding-right:20px;">&#10133;</span>all' ));
        url_state = setMenuId(url_state, '47126');  // plants 
