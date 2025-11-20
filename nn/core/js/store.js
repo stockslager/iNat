@@ -295,17 +295,32 @@ function validateHiker(state) {
 
 /*
  * Used from the pages in the app that display species counts (PlantActivity.html, ThruHiker.html, etc.)
- * Used for params before rendering the home link and before rendering the links in the Show drop down for e.g.
+ * Used for params before rendering the back link in the species counts menu and before rendering the links 
+ * in the Show drop down for e.g.
  * @param {object} state The current application state object.
  * @returns {object} a copy with new values stored on a new state to supply url parameters to a link.
  */
 function clearSpeciesCountsParams(state) {
-  let urlState = state;  // creates a copy
+  let urlState = state;  
       
   urlState = setTaxonId(urlState, '');
   urlState = setMenuId(urlState, '');
   urlState = setPage(urlState, '1');
   urlState = setTaxonDD(urlState, '');
+
+  return urlState;
+}
+
+/*
+ * Used from the pages in the app that display the images grid (PlantGrid.html, ThruHikerGrid.html, etc.)
+ * Used to reset params before rendering the back link in the grid menu.
+ * @param {object} state The current application state object.
+ * @returns {object} a copy with new values stored on a new state to supply url parameters to a link.
+ */
+function clearGridParams(state) {
+  let urlState = state; 
+
+  urlState = setTaxonId( url_state, '' );
 
   return urlState;
 }
