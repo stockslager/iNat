@@ -33,16 +33,17 @@ let configs = [];
 
 appState       = buildStateFromParams(winurlparams);
 
-let opts = copyOpts( winurlparams ) || '';
-
-winurlparams.delete('per_page');
-winurlparams.append('per_page','100');
-
-winurlparams.delete('options');
-let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
-winurlparams.delete('idextra_user_id');
-let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
-winurlparams.delete('photo_curl_filename_prefix');
+// constants 
+const CONST_TOTAL_SPECIES  = 'total species: ';
+const CONST_PAGE           = 'page: ';
+const CONST_PER_PAGE       = 'per page: ';
+const CONST_API_PER_PAGE   = '10';
+const CONST_ALL            = 'All';
+const CONST_ANY_PLANT      = ' Any Plant';
+const CONST_ALL_PLANTS     = 'All Plants'
+const CONST_SHOW           = 'Show';
+const CONST_PLUS_UTF8      = '&#10133;'
+const CONST_LEAF_UTF8      = '&#127807;';
   
 function sortWithNull(arr, ascending = true) {
   for( let i=0; i<arr.length; i++ ) {
@@ -88,6 +89,9 @@ function setupAPIParams( configuration ) {
    if( configuration.taxon_ids )          { api_params += '&taxon_id=' + configuration.taxon_ids; }
    if( configuration.plant_list_user_id ) { api_params += '&user_id='  + configuration.plant_list_user_id; }
    if( configuration.tag_name )           { api_params += '&tag='      + configuration.tag_name; }
+
+   api_params += getPageParam(appState, '&page=');
+   api_params += '&per_page='+CONST_API_PER_PAGE;
  
    return api_params;
 }
@@ -133,7 +137,7 @@ function buildMenu( config ) {
       links = '';
 
       if( config.taxa && config.taxa.length > 0 ) {
-          links += furl('./garden_list.html'+buildParameterList(appState),'All');
+          links += furl('./garden_list.html'+buildParameterList(appState),CONST_ALL);
           for( let i=0; i<config.taxa.length; i++ ) {
                let urlState = appState;
                urlState = setTaxonId( urlState, config.taxa[i].taxon_id );
@@ -146,7 +150,7 @@ function buildMenu( config ) {
       menu_string += buildDDTitle(config.title);
 
       let urlState  = clearGardenListParams(appState);
-      menu_string  += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),'&#127807;'));
+      menu_string  += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
 
       menu_string += '</div>';
 
@@ -191,13 +195,13 @@ function buildPage(xobj, config) {
       if( show_behavior === 'on_all' ) {
           //nn_on_all = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
           let urlState = appState;
-          urlState = setPlantName(urlState, 'all%20plants');
-          on_all = furl('./garden_activity.html'+buildParameterList(urlState),'<span id="topright">'+p_title+' any plant</span>');
+          urlState = setPlantName(urlState, CONST_ALL_PLANTS);
+          on_all = furl('./garden_activity.html'+buildParameterList(urlState),'<span id="topright">'+p_title+CONST_ANY_PLANT'</span>');
       } 
 
-      faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
-                 +'per page: '+fcomnum(per_page)+ nn_on_all + '<br />'
-                 +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+on_all+'<br />'});  
+      faddelem('p',document.body,{innerHTML:CONST_TOTAL_SPECIES+fcomnum(total_results)+' <br/>'
+                 +CONST_PER_PAGE+fcomnum(per_page)+ nn_on_all + '<br />'
+                 +CONST_PAGE+fcomnum(page_curr)+' of '+fcomnum(page_max)+on_all+'<br />'});  
 
       let table = faddelem('table',document.body,{id:'main'});                    
       let thead = faddelem('thead',table);
