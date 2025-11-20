@@ -190,7 +190,9 @@ function buildPage(xobj, config) {
 
       if( show_behavior === 'on_all' ) {
           //nn_on_all = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
-          on_all = furl('./garden_activity.html?'+state_param+'$all%20plants','<span id="topright">'+p_title+' any plant</span>');
+          let urlState = appState;
+          urlState = setPlantName(urlState, 'all%20plants');
+          on_all = furl('./garden_activity.html'+buildParameterList(urlState),'<span id="topright">'+p_title+' any plant</span>');
       } 
 
       faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
@@ -248,10 +250,14 @@ function buildPage(xobj, config) {
              target = pref_tax_name.toLowerCase();
          }
 
+         let urlState = appState;
+         urlState = setPlantId(urlState, rec.taxon.id);
+         urlState = setPlantName(urlState, header_name);
+
          values = [
             {innerText:i+1},
             {innerHTML:image},
-            {innerHTML:furl('./garden_activity.html?'+state_param+'$'+header_name+'$'+rec.taxon.id,displayName)},
+            {innerHTML:furl('./garden_activity.html'+buildParameterList(urlState),displayName)},
          ];
         
          faddelems('td',brow,values);
