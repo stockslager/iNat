@@ -29,7 +29,13 @@ let p_params           = winurlparams.get('params') || 'cwg';
 let state              = createNewStateInstance();
 
 // page specific constants...
-const CONST_GARDEN_DESC = 'Wildlife value of individual plants in this restoration area.';
+const CONST_ICON        = 'Icon';
+const CONST_COMPONENT   = 'Component';
+const CONST_DESCRIPTION = 'Description';
+const CONST_COMPONENTS  = 'components: ';
+const CONST_PERPAGE     = 'per page: 20';
+const CONST_PGS         = 'page: 1'
+const CONST_GARDEN_DESC = 'Wildlife value of individual plants at this location.';
 const CONST_HIKER_DESC  = 'Species encountered during this trek.';
 
 function buildMenu() {
@@ -52,27 +58,29 @@ function buildPage( configs ) {
       buildMenu();
 
       //let all_url = furl(github_root+'yard_dashboard.html?params='+p_params,'<span id="topright">All Observations</span>');
-      
-      faddelem('p',document.body,{innerHTML:'total modes: ' + '1' + ' <br/>'
-                 +'per page: 10<br />'
-                 +'page: 1 of 1' + /*all_url +*/ '<br />'});  
- 
+       
       let labels = [];
 
       labels = [
-            {innerText:'Icon'},
-            {innerText:'Mode'},
-            {innerText:'Description'}, 
+            {innerText:CONST_ICON},
+            {innerText:CONST_COMPONENT},
+            {innerText:CONST_DESCRIPTION}, 
       ];
 
       let table = faddelem('table',document.body,{id:'main'});                    
-      let thead = faddelem('thead',table);
-      let hrow = faddelem('tr',thead);
-      
-      faddelems('th',hrow,labels);
-      let tbody = faddelem('tbody',table);
 
       for( let i=0; i<configs.length; i++ ) {
+           if( i === 0 ) {
+               faddelem('p',document.body,{innerHTML:CONST_COMPONENTS + configs.length + ' <br/>'
+                 + CONST_PERPAGE'<br />'
+                 + CONST_PGS + /*all_url +*/ '<br />'});  
+               let thead = faddelem('thead',table);
+               let hrow = faddelem('tr',thead);
+      
+               faddelems('th',hrow,labels);
+               let tbody = faddelem('tbody',table);
+           }
+       
            let brow = '';
            let values = [];
            let config = configs[i];
@@ -85,7 +93,7 @@ function buildPage( configs ) {
                values = [
                   {innerHTML:furl('../garden/garden_list.html'+plant_params, CONST_SUNFLOWER_UTF8  )},
                   {innerHTML:furl('../garden/garden_list.html'+plant_params, config.title )},
-                  {innerText:CONST_HIKER_DESC},
+                  {innerText:CONST_GARDEN_DESC},
                ];
                faddelems('td',brow,values);
            }
@@ -104,7 +112,7 @@ function buildPage( configs ) {
                values = [
                   {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,CONST_BOOT_UTF8 )},
                   {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,config.title)},
-                  {innerText:CONST_GARDEN_DESC},
+                  {innerText:CONST_HIKER_DESC},
                ];
                faddelems('td',brow,values);
            }
