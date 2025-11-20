@@ -411,28 +411,11 @@ function validateArt(state) {
 }
 
 /*
- * Used from the pages in the app that display the plant list (GardenList.html)
- * Used to reset params before rendering the back link in the plant list menu.
+ * Used to clean up the state when returning to the dashboard. 
  * @param {object} state The current application state object.
- * @returns {object} a copy with new values stored on a new state to supply url parameters to a link.
+ * @returns {object} a copy with new values stored on a new state.
  */
-function clearGardenListParams(state) {
-  let urlState = state; 
-
-  urlState = setTaxonId( urlState, '' );
-  urlState = setPlace( urlState, '' );
-
-  return urlState;
-}
-
-/*
- * Used from the pages in the app that display species counts (GardenActivity.html, ThruHiker.html, etc.)
- * Used for params before rendering the back link in the species counts menu and before rendering the links 
- * in the Show drop down for e.g.
- * @param {object} state The current application state object.
- * @returns {object} a copy with new values stored on a new state to supply url parameters to a link.
- */
-function clearSpeciesCountsParams(state) {
+function clearForDashParams(state) {
   let urlState = state;  
       
   urlState = setTaxonId(urlState, '');
@@ -440,6 +423,7 @@ function clearSpeciesCountsParams(state) {
   urlState = setPage(urlState, '');
   urlState = setPerPage(urlState, '');
   urlState = setTaxonDD(urlState, '');
+  urlState = setComponent(urlState, '');
 
   return urlState;
 }
@@ -450,7 +434,7 @@ function clearSpeciesCountsParams(state) {
  * @param {object} state The current application state object.
  * @returns {object} a copy with new values stored on a new state to supply url parameters to a link.
  */
-function clearGridParams(state) {
+function clearForSpeciesCountsParams(state) {
   let urlState = state; 
 
   urlState = setTaxonId( urlState, '' );
