@@ -28,6 +28,10 @@ let winurlparams       = new URLSearchParams(winurlsearchstr.substring(1));
 let p_params           = winurlparams.get('params') || 'cwg';
 let state              = createNewStateInstance();
 
+// page specific constants...
+const CONST_GARDEN_DESC = 'Wildlife value of individual plants in this restoration area.';
+const CONST_HIKER_DESC  = 'Species encountered during this trek.';
+
 function buildMenu() {
       let menu_string = '';
       let params = '';
@@ -81,7 +85,7 @@ function buildPage( configs ) {
                values = [
                   {innerHTML:furl('../garden/garden_list.html'+plant_params, CONST_SUNFLOWER_UTF8  )},
                   {innerHTML:furl('../garden/garden_list.html'+plant_params, config.title )},
-                  {innerText:config.title+' hike.'},
+                  {innerText:CONST_HIKER_DESC},
                ];
                faddelems('td',brow,values);
            }
@@ -100,7 +104,7 @@ function buildPage( configs ) {
                values = [
                   {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,CONST_BOOT_UTF8 )},
                   {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,config.title)},
-                  {innerText:config.title+' hike.'},
+                  {innerText:CONST_GARDEN_DESC},
                ];
                faddelems('td',brow,values);
            }
