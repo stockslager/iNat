@@ -32,7 +32,6 @@ let menu_name  = '';
 
 // constants 
 const CONST_PER_PAGE = '10';
-const CONST_ON_PREFIX = ' On ';
 const CONST_SHOW = 'Show';
 const CONST_PLUS_UTF8 = '&#10133;'
 const CONST_LEAF_UTF8 = '&#127807;';
@@ -130,11 +129,11 @@ function buildPage(xobj, config) {
       buildMenu( results, config );
 
       if( !getMenuId(appState) ) {
-          let titleString = capitalizeWords(CONST_ON_PREFIX+getPlantName(appState));
+          let titleString = capitalizeWords(getPlantName(appState));
           dlString = furl('./garden_grid.html'+buildParameterList(appState),'<span id="topright">'+titleString+'</span>');
       } else {
           let urlState = appState;  // creates a copy
-          let titleString = capitalizeWords(getMenuName(appState)+CONST_ON_PREFIX+getPlantName(appState));
+          let titleString = capitalizeWords(getMenuName(appState)+getPlantName(appState));
           urlState = setTaxonId(urlState, getMenuId(appState));  // set taxon id to menu id if a filter was chosen for say, birds.
           dlString = furl('./garden_grid.html'+buildParameterList(appState),'<span id="topright">'+titleString+'</span>');
       }
