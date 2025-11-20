@@ -53,16 +53,6 @@ function sortWithNull(arr, ascending = true) {
   return arr;
 }
 
-function capitalizeWords(str) {
-  return str.toLowerCase().split(' ').map(function(word) {
-    return word.charAt(0).toUpperCase() + word.slice(1);
-  }).join(' ');
-}
-
-function getAfter(str, char) {
-  return str.split(char)[1];
-}
-
 function setupAPIParams( configuration ) {
    let api_params = '';
  
@@ -196,7 +186,7 @@ function buildPage(xobj, config) {
 
       let table = faddelem('table',document.body,{id:'main'});                    
       let thead = faddelem('thead',table);
-      let hrow = faddelem('tr',thead);
+      let hrow  = faddelem('tr',thead);
       
       faddelems('th',hrow,labels);
       let tbody = faddelem('tbody',table);
@@ -228,11 +218,8 @@ function buildPage(xobj, config) {
              }
          }
 
-         let displayName    = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
-
-         let values = [];
-
-         let image = '<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />';
+         let displayName  = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
+         let image        = '<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />';
 
          let use_plant_project_images = config.use_plant_project_images || 'no';
 
@@ -249,7 +236,7 @@ function buildPage(xobj, config) {
          urlState = setPlantId(urlState, rec.taxon.id);
          urlState = setPlantName(urlState, header_name);
 
-         values = [
+         let values = [
             {innerText:i+1},
             {innerHTML:image},
             {innerHTML:furl('./garden_activity.html'+buildParameterList(urlState),displayName)},
