@@ -34,7 +34,9 @@ let menu_name  = '';
 const CONST_PER_PAGE = '10';
 const CONST_ON_PREFIX = ' On ';
 const CONST_SHOW = 'Show';
-
+const CONST_PLUS_UTF8 = '&#10133;'
+const CONST_LEAF_UTF8 = '&#127807;';
+ 
 // find the html name to pass to other pages for nav
 let path      = window.location.pathname;
 let html_name = path.substring(path.lastIndexOf('/') + 1);
@@ -95,7 +97,7 @@ function buildMenu( results, config ) {
 
    if( config.sub_icons ) {
        let urlState = clearSpeciesCountsParams(appState);
-       links =  (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">&#10133;</span>all' ));
+       links =  (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>all' ));
        for( let j=0; j<config.sub_icons.length; j++ ) {
             if( sub_taxon_arr.includes( config.sub_icons[j].taxon_id ) ) {
                 urlState  = setMenuId(urlState, config.sub_icons[j].taxon_id);
@@ -106,7 +108,7 @@ function buildMenu( results, config ) {
    }
 
    let urlState = clearSpeciesCountsParams(appState);
-   menu_string += buildHome( furl('./garden_list.html'+buildParameterList(urlState), '&#127807;') );
+   menu_string += buildHome( furl('./garden_list.html'+buildParameterList(urlState), CONST_LEAF_UTF8) );
 
    menu_string += '</div>';
  
