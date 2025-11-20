@@ -101,9 +101,12 @@ function setupAPIParams( config ) {
     api_params += '?project_id='+config.project;
     
     api_params += getTaxonIdParam(appState, '&taxon_id='); 
-    api_params += getUserIdParam(appState);  
-  
+
+    // the yard component might user the user_id from the session, but it's not needed here.
+    // possibly the place_id will need to come from the session eventually...
+    // if there's a garden with multiple places.
     if( config.default_place_id ) { api_params += '&place_id=' + config.default_place_id; }  
+    if( config.user_id )          { api_params += '&user_id='  + config.user_id; }  
   
     api_params += '&field:'+config.field_name+'='+(config.field_value||'');  // should change to generic filter?
 
