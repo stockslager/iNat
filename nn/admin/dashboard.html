@@ -26,7 +26,7 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr  = winurlstr.replace(winurlsearchstr,'');
 let winurlparams       = new URLSearchParams(winurlsearchstr.substring(1));
  
-let appState           = buildStateFromParams();
+let appState           = buildStateFromParams(winurlparams);
 
 // page specific constants...
 const CONST_ICON        = 'Icon';
