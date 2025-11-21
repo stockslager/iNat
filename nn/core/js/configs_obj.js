@@ -39,6 +39,7 @@ class ConfigurationItem {
      */
     constructor(configData) {
         this.component = configData.component;
+        this.project = configData.project;
         this.insectProject = configData.insect_project;
         this.plantProject = configData.plant_project;
         this.seedProject = configData.seed_project;
