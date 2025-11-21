@@ -65,9 +65,18 @@ function setupAPIParams( configuration ) {
    if( configuration.plant_filter )       { api_params += '&'+configuration.plant_filter;  } 
    if( configuration.default_place )      { api_params += '&place_id=' + configuration.default_place; }
    if( configuration.plant_ids )          { api_params += '&id='       + configuration.plant_ids;  }
-   if( configuration.taxon_ids )          { api_params += '&taxon_id=' + configuration.taxon_ids; }
    if( configuration.plant_list_user_id ) { api_params += '&user_id='  + configuration.plant_list_user_id; }
    if( configuration.tag_name )           { api_params += '&tag='      + configuration.tag_name; }
+
+   // if a plant_id was chosen in the plant drop-down, use that plant_id.  if not, 
+   // use the taxon_id(s) from the config when present.
+   if( getPlantId(appState ) {
+       api_params += getPlantIdParam(appState);
+   } else {
+       if( configuration.taxon_ids ) { 
+           api_params += '&taxon_id=' + configuration.taxon_ids; 
+       }
+   }
 
    api_params += getPageParam(appState, '&page=');
    api_params += '&per_page='+CONST_API_PER_PAGE;
@@ -116,11 +125,11 @@ function buildMenu( config ) {
       links = '';
 
       if( config.taxa && config.taxa.length > 0 ) {
-          links += furl('./garden_list.html'+buildParameterList(appState),CONST_ALL);
+          links += furl('./garden_list.html'+buildParameterList(appState),CONST_ALL.toLowerCase());
           for( let i=0; i<config.taxa.length; i++ ) {
                let urlState = appState;
-               urlState = setTaxonId( urlState, config.taxa[i].taxon_id );
-               links += furl('./garden_list.html'+buildParameterList(urlState),config.taxa[i].taxon_name);
+               urlState = setPlantId( urlState, config.taxa[i].taxon_id );
+               links += furl('./garden_list.html'+buildParameterList(urlState),config.taxa[i].taxon_name.toLowerCase());
           }
       }
  
