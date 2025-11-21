@@ -77,24 +77,24 @@ function buildMenu( results, config ) {
    menu_string = '<div class="navbar">';
  
    if( config.sub_icons ) {
-       let url_state = appState;
-       url_state = setMenuId(url_state, '');
-       url_state = setMenuName(url_state, '');
-       url_state = setPage(url_state, '1');     // set the page to 1 anytime they choose to filter.
+       let urlState = appState;
+       urlState = setMenuId(urlState, '');
+       urlState = setMenuName(urlState, '');
+       urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
     
-       links =  (furl(url+buildParameterList(url_state),'<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>'+CONST_ALL ));
-       url_state = setMenuId(url_state, CONST_PLANTS_TAXON);  // plants 
-       links += (furl(url+buildParameterList(url_state),'<span style="padding-right:20px;">'+CONST_LEAF_UTF8+'</span>plants' ));           
+       links =  (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>'+CONST_ALL ));
+       urlState = setMenuId(urlState, CONST_PLANTS_TAXON);  // plants 
+       links += (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+CONST_LEAF_UTF8+'</span>plants' ));           
        for( let j=0; j<config.sub_icons.length; j++ ) {
-            url_state = setMenuId(url_state, config.sub_icons[j].taxon_id);
-            links += (furl(url+buildParameterList(url_state),'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
+            urlState = setMenuId(urlState, config.sub_icons[j].taxon_id);
+            links += (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
        }
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
    }
 
-   let url_state = clearForDashParams(appState);
+   let urlState = clearForDashParams(appState);
  
-   menu_string  += buildHome( furl('../admin/dashboard.html'+buildParameterList(url_state), CONST_BOOT_UTF8) );
+   menu_string  += buildHome( furl('../admin/dashboard.html'+buildParameterList(urlState), CONST_BOOT_UTF8) );
 
    menu_string += '</div>';
  
