@@ -463,6 +463,8 @@ function clearForGardenListParams(state) {
   urlState = setUser(urlState, '');
   urlState = setTaxonId(urlState, ''); 
   urlState = setTaxonName(urlState, '');
+  urlState = setPlantId(urlState, '');
+  urlState = setPlantName(urlState, '');
   urlState = setMenuId(urlState, '');
   urlState = setMenuName(urlState, '');
   urlState = setTaxonDD(urlState, '');
