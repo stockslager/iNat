@@ -17,6 +17,8 @@ const ATTRIBUTE_TAXONID   = 'taxonid';
 const ATTRIBUTE_TAXONNAME = 'taxonname';
 const ATTRIBUTE_MENUID    = 'menuid';
 const ATTRIBUTE_MENUNAME  = 'menuname';
+const ATTRIBUTE_PLANTMENUID    = 'menuid';
+const ATTRIBUTE_PLANTMENUNAME  = 'menuname';
 const ATTRIBUTE_TAXONDD   = 'taxondd';
 const ATTRIBUTE_PAGE      = 'page';
 const ATTRIBUTE_PER_PAGE  = 'per_page';
@@ -35,6 +37,8 @@ let appState = {
   [ATTRIBUTE_TAXONNAME]: '',
   [ATTRIBUTE_MENUID]:    '',
   [ATTRIBUTE_MENUNAME]:  '',
+  [ATTRIBUTE_PLANTMENUID]:    '',
+  [ATTRIBUTE_PLANTMENUNAME]:  '',
   [ATTRIBUTE_TAXONDD]:   '',
   [ATTRIBUTE_PAGE]:      '',
   [ATTRIBUTE_PER_PAGE]:  ''
@@ -62,6 +66,8 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_TAXONNAME]: '',
     [ATTRIBUTE_MENUID]:    '', 
     [ATTRIBUTE_MENUNAME]:  '',
+    [ATTRIBUTE_PLANTMENUID]:    '', 
+    [ATTRIBUTE_PLANTMENUNAME]:  '',
     [ATTRIBUTE_TAXONDD]:   '',
     [ATTRIBUTE_PAGE]:      '',
     [ATTRIBUTE_PER_PAGE]:  ''
@@ -150,42 +156,46 @@ function setAttribute(state, attribute, value) {
  * Helper Getters 
  * These abstract away the getAttribute call for cleaner code elsewhere.
  */
-function getPlace(state)     { return (getAttribute(state, ATTRIBUTE_PLACE)); }
-function getProject(state)   { return (getAttribute(state, ATTRIBUTE_PROJECT)); }
-function getParams(state)    { return (getAttribute(state, ATTRIBUTE_PARAMS)); }
-function getUser(state)      { return (getAttribute(state, ATTRIBUTE_USER)); }
-function getGarden(state)    { return (getAttribute(state, ATTRIBUTE_GARDEN)); }
-function getComponent(state) { return (getAttribute(state, ATTRIBUTE_COMPONENT)); }
-function getPlantId(state)   { return (getAttribute(state, ATTRIBUTE_PLANTID)); }
-function getPlantName(state) { return (getAttribute(state, ATTRIBUTE_PLANTNAME)); }
-function getTaxonId(state)   { return (getAttribute(state, ATTRIBUTE_TAXONID)); }
-function getTaxonName(state) { return (getAttribute(state, ATTRIBUTE_TAXONNAME)); }
-function getMenuId(state)    { return (getAttribute(state, ATTRIBUTE_MENUID)); }
-function getMenuName(state)  { return (getAttribute(state, ATTRIBUTE_MENUNAME)); }
-function getTaxonDD(state)   { return (getAttribute(state, ATTRIBUTE_TAXONDD)); }
-function getPage(state)      { return (getAttribute(state, ATTRIBUTE_PAGE)); }
-function getPerPage(state)   { return (getAttribute(state, ATTRIBUTE_PER_PAGE)); }
+function getPlace(state)          { return (getAttribute(state, ATTRIBUTE_PLACE)); }
+function getProject(state)        { return (getAttribute(state, ATTRIBUTE_PROJECT)); }
+function getParams(state)         { return (getAttribute(state, ATTRIBUTE_PARAMS)); }
+function getUser(state)           { return (getAttribute(state, ATTRIBUTE_USER)); }
+function getGarden(state)         { return (getAttribute(state, ATTRIBUTE_GARDEN)); }
+function getComponent(state)      { return (getAttribute(state, ATTRIBUTE_COMPONENT)); }
+function getPlantId(state)        { return (getAttribute(state, ATTRIBUTE_PLANTID)); }
+function getPlantName(state)      { return (getAttribute(state, ATTRIBUTE_PLANTNAME)); }
+function getTaxonId(state)        { return (getAttribute(state, ATTRIBUTE_TAXONID)); }
+function getTaxonName(state)      { return (getAttribute(state, ATTRIBUTE_TAXONNAME)); }
+function getMenuId(state)         { return (getAttribute(state, ATTRIBUTE_MENUID)); }
+function getMenuName(state)       { return (getAttribute(state, ATTRIBUTE_MENUNAME)); }
+function getPlantMenuId(state)    { return (getAttribute(state, ATTRIBUTE_PLANTMENUID)); }
+function getPlantMenuName(state)  { return (getAttribute(state, ATTRIBUTE_PLANTMENUNAME)); }
+function getTaxonDD(state)        { return (getAttribute(state, ATTRIBUTE_TAXONDD)); }
+function getPage(state)           { return (getAttribute(state, ATTRIBUTE_PAGE)); }
+function getPerPage(state)        { return (getAttribute(state, ATTRIBUTE_PER_PAGE)); }
 
 /*
  * Helper Setters (Optional but Recommended) ---
  * Remember to reassign the result of these functions back to 'applicationState'
  * in your main application logic.
  */
-function setPlace(state, value)      { return (setAttribute(state, ATTRIBUTE_PLACE, value)); }
-function setProject(state, value)    { return (setAttribute(state, ATTRIBUTE_PROJECT, value)); }
-function setParams(state, value)     { return (setAttribute(state, ATTRIBUTE_PARAMS, value)); }
-function setUser(state, value)       { return (setAttribute(state, ATTRIBUTE_USER, value)); }
-function setGarden(state, value)     { return (setAttribute(state, ATTRIBUTE_GARDEN, value)); }
-function setComponent(state, value)  { return (setAttribute(state, ATTRIBUTE_COMPONENT, value)); }
-function setPlantId(state, value)    { return (setAttribute(state, ATTRIBUTE_PLANTID, value)); }
-function setPlantName(state, value)  { return (setAttribute(state, ATTRIBUTE_PLANTNAME, value)); }
-function setTaxonId(state, value)    { return (setAttribute(state, ATTRIBUTE_TAXONID, value)); }
-function setTaxonName(state, value)  { return (setAttribute(state, ATTRIBUTE_TAXONNAME, value)); }
-function setMenuId(state, value)     { return (setAttribute(state, ATTRIBUTE_MENUID, value)); }
-function setMenuName(state, value)   { return (setAttribute(state, ATTRIBUTE_MENUNAME, value)); }
-function setTaxonDD(state, value)    { return (setAttribute(state, ATTRIBUTE_TAXONDD, value)); }
-function setPage(state, value)       { return (setAttribute(state, ATTRIBUTE_PAGE, value)); }
-function setPerPage(state, value)    { return (setAttribute(state, ATTRIBUTE_PER_PAGE, value)); }
+function setPlace(state, value)           { return (setAttribute(state, ATTRIBUTE_PLACE, value)); }
+function setProject(state, value)         { return (setAttribute(state, ATTRIBUTE_PROJECT, value)); }
+function setParams(state, value)          { return (setAttribute(state, ATTRIBUTE_PARAMS, value)); }
+function setUser(state, value)            { return (setAttribute(state, ATTRIBUTE_USER, value)); }
+function setGarden(state, value)          { return (setAttribute(state, ATTRIBUTE_GARDEN, value)); }
+function setComponent(state, value)       { return (setAttribute(state, ATTRIBUTE_COMPONENT, value)); }
+function setPlantId(state, value)         { return (setAttribute(state, ATTRIBUTE_PLANTID, value)); }
+function setPlantName(state, value)       { return (setAttribute(state, ATTRIBUTE_PLANTNAME, value)); }
+function setTaxonId(state, value)         { return (setAttribute(state, ATTRIBUTE_TAXONID, value)); }
+function setTaxonName(state, value)       { return (setAttribute(state, ATTRIBUTE_TAXONNAME, value)); }
+function setMenuId(state, value)          { return (setAttribute(state, ATTRIBUTE_MENUID, value)); }
+function setMenuName(state, value)        { return (setAttribute(state, ATTRIBUTE_MENUNAME, value)); }
+function setPlantMenuId(state, value)     { return (setAttribute(state, ATTRIBUTE_PLANTMENUID, value)); }
+function setPlantMenuName(state, value)   { return (setAttribute(state, ATTRIBUTE_PLANTMENUNAME, value)); }
+function setTaxonDD(state, value)         { return (setAttribute(state, ATTRIBUTE_TAXONDD, value)); }
+function setPage(state, value)            { return (setAttribute(state, ATTRIBUTE_PAGE, value)); }
+function setPerPage(state, value)         { return (setAttribute(state, ATTRIBUTE_PER_PAGE, value)); }
 
 /*
  * Helper Getters 
@@ -257,6 +267,24 @@ function getMenuIdParam(state, param_nm)      {
 }
 
 function getMenuNameParam(state, param_nm)   { 
+  let menu_name = getMenuName(state);
+  if( menu_name ) { 
+      return (param_nm + menu_name);
+  } else {
+      return '';
+  }
+}
+
+function getPlantMenuIdParam(state, param_nm)      { 
+  let menu_id = getMenuId(state);
+  if( menu_id ) { 
+      return (param_nm + menu_id);
+  } else {
+      return '';
+  }
+}
+
+function getPlantMenuNameParam(state, param_nm)   { 
   let menu_name = getMenuName(state);
   if( menu_name ) { 
       return (param_nm + menu_name);
