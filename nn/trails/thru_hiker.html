@@ -34,7 +34,6 @@ let menu_name  = '';
 // page & api specific constants
 const CONST_HIKER_ALL_OBS = 'All Observations';
 const CONST_HIKER_ALL     = 'All ';
-const CONST_PLANTS_TAXON  = '47126';
 const CONST_API_PER_PAGE  = '10';
 
 // find the html name to pass to other pages for nav
@@ -83,8 +82,6 @@ function buildMenu( results, config ) {
        urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
     
        links =  (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>'+CONST_ALL ));
-       urlState = setMenuId(urlState, CONST_PLANTS_TAXON);  // plants 
-       links += (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+CONST_LEAF_UTF8+'</span>plants' ));           
        for( let j=0; j<config.sub_icons.length; j++ ) {
             urlState = setMenuId(urlState, config.sub_icons[j].taxon_id);
             links += (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
