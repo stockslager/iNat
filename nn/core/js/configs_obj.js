@@ -63,3 +63,90 @@ class ConfigurationItem {
         return `${this.title} (${this.component})`;
     }
 }
+
+/**
+ * Main class to manage the entire configuration structure.
+ */
+class ConfigManager {
+    /**
+     * @param {object} jsonData - The raw JSON object imported into JavaScript.
+     */
+    constructor(jsonData) {
+        // Map the main configurations array to ConfigurationItem instances
+        this.configurations = jsonData.configurations.map(config => new ConfigurationItem(config));
+        
+        // Map the default_sub_icons array to SubIcon instances
+        this.defaultSubIcons = jsonData.default_sub_icons.map(iconData => new SubIcon(iconData));
+    }
+
+    /**
+     * Find a specific configuration by component name.
+     * @param {string} componentName 
+     * @returns {ConfigurationItem | undefined}
+     */
+    getConfigByComponent(componentName) {
+        return this.configurations.find(config => config.component === componentName);
+    }
+}
+
+// function to handle fetching / caching of configurations
+// returns one configuration if component name is passed in
+// otherwise returns all configurations.
+async function asyncGetConfiguration( params, component ) {
+
+   const storageKey   = ('nn_configCache_'+params);
+   const cachedData   = sessionStorage.getItem(storageKey);
+
+   // --- Check the cache first ---
+   if( cachedData ) {
+       console.log('Returning configuration from cache: ' + storageKey);
+       try {
+          const configs = JSON.parse(cachedData);
+          return configs;
+       } catch (e) {
+          console.error("Error parsing cached JSON, fetching new data.");
+          sessionStorage.removeItem(storageKey); // Clear bad cache entry
+       }
+   }  
+    
+   console.log('fetching json: ' + params);
+
+   if( !params ) {
+       let message = `Name of .json must be specified in the url.  
+                      There are no params in the url to be matched with a .json configuration file.   
+                      Please add the name of a valid .json file to the url.`;
+       throw new Error(message);
+   }
+
+   try {
+      const response = await fetch(params + '.json');
+
+      if( !response.ok ) {
+          if( response.status === 404 ) {
+              let message = `A parameters file named `+params+` has no matching .json configuration file.   
+                             Please add the name of a valid .json file to the url.`;
+              throw new Error(message);
+          }
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Initialize the manager with the data
+      const manager = new ConfigManager(data);
+
+      // Store data in session storage before returning 
+      // sessionStorage only stores strings, so we must use JSON.stringify
+      sessionStorage.setItem(storageKey, JSON.stringify(manager));
+      console.log('Stored configuration in session storage: ' + storageKey);
+
+       
+      return( configs );  
+
+   } catch (error) {
+      console.error('Error fetching JSON:', error);
+      
+      // Re-throw the error so the caller can catch it and handle it
+      throw error; 
+   }
+}
