@@ -103,8 +103,8 @@ async function asyncGetConfiguration( params, component ) {
    if( cachedData ) {
        console.log('Returning configuration from cache: ' + storageKey);
        try {
-          const configs = JSON.parse(cachedData);
-          return configs;
+          const plantsConfig = JSON.parse(cachedData);
+          return plantsConfig;
        } catch (e) {
           console.error("Error parsing cached JSON, fetching new data.");
           sessionStorage.removeItem(storageKey); // Clear bad cache entry
@@ -160,7 +160,7 @@ if( manager.defaultSubIcons ) {
       console.log('Stored configuration in session storage: ' + storageKey);
 
        
-      return( configs );  
+      return( plantsConfig );  
 
    } catch (error) {
       console.error('Error fetching JSON:', error);
