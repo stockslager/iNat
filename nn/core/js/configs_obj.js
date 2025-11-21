@@ -142,7 +142,7 @@ console.log(`There are ${manager.configurations.length} configurations loaded.`)
 
 const plantsConfig = manager.getConfigByComponent('plants');
 console.log(`Found config title: ${plantsConfig.getFullTitle()}`);
-if( plantsConfig.taxa ) {
+if( plantsConfig.taxa.length > 0 ) {
     console.log(`First taxon name: ${plantsConfig.taxa[0].taxonName}`);
 }
 console.log(`Is hidden on any condition? ${plantsConfig.hideOnAny}`);
