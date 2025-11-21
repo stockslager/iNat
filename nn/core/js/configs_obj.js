@@ -103,10 +103,20 @@ async function asyncGetConfiguration( params, component ) {
    if( cachedData ) {
        console.log('Returning configuration from cache: ' + storageKey);
        try {
-          const plantsConfig = JSON.parse(cachedData);
-          return plantsConfig;
+          const rawData = JSON.parse(cachedData);
+          
+          // Reconstruct the Manager from the raw data structure 
+          // stored in the cache string. The rawData will be a generic JS object 
+          // that matches the structure of the *entire* original JSON file.
+          const managerInstance = new ConfigManager(rawData);
+          
+          // Now safely get the specific config using a class method
+          const plantsConfig = managerInstance.getConfigByComponent(component || 'plants'); 
+          
+          return plantsConfig; 
+
        } catch (e) {
-          console.error("Error parsing cached JSON, fetching new data.");
+          console.error("Error parsing or rehydrating cached JSON:", e);
           sessionStorage.removeItem(storageKey); // Clear bad cache entry
        }
    }  
