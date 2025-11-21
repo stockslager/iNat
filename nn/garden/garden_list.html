@@ -166,12 +166,12 @@ function buildPage(xobj, config) {
     
       if( show_behavior === 'on_all' ) {
           //title_1 = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
-          title_1 = '<span id="toprightbold">'+config.title+'</span>';
           let urlState = appState;
           urlState = setPlantName(urlState, CONST_ALL_PLANTS);  // don't include "on" since it'll be added on later.
           urlState = setPlantId(urlState, '');  // scrub plant id since it might have been set previously
-          title_3 = furl('./garden_activity.html'+buildParameterList(urlState),'<span id="topright">'+CONST_ON+CONST_ALL_PLANTS+'</span>');
+          title_3 = furl('./garden_activity.html'+buildParameterList(urlState),'<span id="topright">'+config.title+'</span>');
       } else {
+          title_3 = '<span id="toprightbold">'+config.title+'</span>';
       }
 
       faddelem('p',document.body,{innerHTML:CONST_TOTAL_SPECIES+fcomnum(total_results) + title_1 + ' <br/>'
