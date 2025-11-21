@@ -112,9 +112,9 @@ async function asyncGetConfiguration( params, component ) {
           const managerInstance = new ConfigManager(rawData);
           
           // Now safely get the specific config using a class method
-          const plantsConfig = managerInstance.getConfigByComponent(component || 'plants'); 
+          const config = managerInstance.getConfigByComponent(component); 
           
-          return plantsConfig; 
+          return config; 
 
        } catch (e) {
           console.error("Error parsing or rehydrating cached JSON:", e);
@@ -151,12 +151,12 @@ async function asyncGetConfiguration( params, component ) {
        console.log('ddddd');
 console.log(`There are ${manager.configurations.length} configurations loaded.`);
 
-const plantsConfig = manager.getConfigByComponent('plants');
-console.log(`Found config title: ${plantsConfig.getFullTitle()}`);
-if( plantsConfig.taxa.length > 0 ) {
-    console.log(`First taxon name: ${plantsConfig.taxa[0].taxonName}`);
+const config = manager.getConfigByComponent(component);
+console.log(`Found config title: ${config.getFullTitle()}`);
+if( config.taxa.length > 0 ) {
+    console.log(`First taxon name: ${config.taxa[0].taxonName}`);
 }
-console.log(`Is hidden on any condition? ${plantsConfig.hideOnAny}`);
+console.log(`Is hidden on any condition? ${config.hideOnAny}`);
 
 console.log('Default sub icons include:');
 if( manager.defaultSubIcons ) {
@@ -171,7 +171,7 @@ if( manager.defaultSubIcons ) {
       console.log('Stored configuration in session storage: ' + storageKey);
 
        
-      return( plantsConfig );  
+      return( config );  
 
    } catch (error) {
       console.error('Error fetching JSON:', error);
