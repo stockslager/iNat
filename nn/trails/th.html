@@ -41,7 +41,7 @@ let path      = window.location.pathname;
 let html_name = path.substring(path.lastIndexOf('/') + 1);
 
 // find the taxon name given the taxon_id in the list of sub_icons in the configuration
-function getShowMenuName( plantsConfig, taxon_id ) {
+function getShowMenuName( hikerConfig, taxon_id ) {
     let show_menu_name = '';
 
     // hard coding for plants since it's not shown on the main activity.
@@ -50,10 +50,10 @@ function getShowMenuName( plantsConfig, taxon_id ) {
         return 'plants';
     }
 
-    if( plantsConfig.subIcons ) {
-        for( let i=0; i<plantsConfig.subIcons.length; i++) {
-             if( plantsConfig.subIcons[i].taxonId.toString() === taxon_id.toString() ) {
-                 show_menu_name = plantsConfig.subIcons[i].name;
+    if( hikerConfig.subIcons ) {
+        for( let i=0; i<hikerConfig.subIcons.length; i++) {
+             if( hikerConfig.subIcons[i].taxonId.toString() === taxon_id.toString() ) {
+                 show_menu_name = hikerConfig.subIcons[i].name;
                  break;
              }
         }
@@ -64,24 +64,24 @@ function getShowMenuName( plantsConfig, taxon_id ) {
     return show_menu_name;
 }
  
-function setupAPIParams( plantsConfig ) {
+function setupAPIParams( hikerConfig ) {
    let api_params = '';
 
-   menu_name = getShowMenuName( plantsConfig, getMenuId(appState) ) || 'Show';
+   menu_name = getShowMenuName( hikerConfig, getMenuId(appState) ) || 'Show';
 
-   api_params += ('?project_id='+plantsConfig.project);
+   api_params += ('?project_id='+hikerConfig.project);
    //api_params += '&hrank=species';
 
    let field_val_param = ''
-   if( plantsConfig.fieldValue ) { field_val_param = plantsConfig.fieldValue; }
+   if( hikerConfig.fieldValue ) { field_val_param = hikerConfig.fieldValue; }
  
    // filter by field (usually trail name)... should change to generic filter
-   api_params += '&field:'+plantsConfig.fieldName+'='+field_val_param;
+   api_params += '&field:'+hikerConfig.fieldName+'='+field_val_param;
 
    // default these to what's in the config even though the state sometimes
    // holds the same attributes for other components.
-   if( plantsConfig.userId         ) { api_params += '&user_id='  + plantsConfig.userId; }
-   if( plantsConfig.defaultPlaceId ) { api_params += '&place_id=' + plantsConfig.defaultPlaceId; }  
+   if( hikerConfig.userId         ) { api_params += '&user_id='  + hikerConfig.userId; }
+   if( hikerConfig.defaultPlaceId ) { api_params += '&place_id=' + hikerConfig.defaultPlaceId; }  
 
    api_params += getMenuIdParam(appState, '&taxon_id='); 
    api_params += getPageParam(appState, '&page=');
@@ -90,7 +90,7 @@ function setupAPIParams( plantsConfig ) {
    return api_params;
 }
  
-function buildMenu( results, plantsConfig ) {
+function buildMenu( results, hikerConfig ) {
 
    let links = '';
    let icons = '';
@@ -99,16 +99,16 @@ function buildMenu( results, plantsConfig ) {
  
    menu_string = '<div class="navbar">';
  
-   if( plantsConfig.subIcons ) {
+   if( hikerConfig.subIcons ) {
        let urlState = appState;
        urlState = setMenuId(urlState, '');
        urlState = setMenuName(urlState, '');
        urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
     
        links =  (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>'+CONST_ALL ));
-       for( let j=0; j<plantsConfig.subIcons.length; j++ ) {
-            urlState = setMenuId(urlState, plantsConfig.subIcons[j].taxonId);
-            links += (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+plantsConfig.subIcons[j].icon+'</span>'+plantsConfig.subIcons[j].name));
+       for( let j=0; j<hikerConfig.subIcons.length; j++ ) {
+            urlState = setMenuId(urlState, hikerConfig.subIcons[j].taxonId);
+            links += (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+hikerConfig.subIcons[j].icon+'</span>'+hikerConfig.subIcons[j].name));
        }
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
    }
@@ -122,7 +122,7 @@ function buildMenu( results, plantsConfig ) {
    faddelem('p',document.body,{innerHTML:(menu_string)});
 }
 
-function buildPage(xobj, plantsConfig) {
+function buildPage(xobj, hikerConfig) {
    let results = xobj.results;
  
    if (results) {
@@ -134,7 +134,7 @@ function buildPage(xobj, plantsConfig) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let labels = [];
 
-      buildMenu( results, plantsConfig );
+      buildMenu( results, hikerConfig );
    
 /*      if( !getMenuId(appState) ) {
           dlString = furl('./thru_hiker_grid.html'+buildParameterList(appState),'<span id="topright">'+CONST_HIKER_ALL_OBS+'</span>');
@@ -222,17 +222,17 @@ async function gatherResources() {
   try {
    
       // Await the result of getObservations() and store the actual data
-      const plantsConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
+      const hikerConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
     console.log('done');
-console.log('full title: ' + plantsConfig.getFullTitle());
-console.log('title: ' + plantsConfig.title);
-      const api_params    = setupAPIParams( plantsConfig );
+console.log('full title: ' + hikerConfig.getFullTitle());
+console.log('title: ' + hikerConfig.title);
+      const api_params    = setupAPIParams( hikerConfig );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
       /*const obs_data      = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
-      buildPage(obs_data, plantsConfig); */
+      buildPage(obs_data, hikerConfig); */
 
     } catch (error) {
       console.error("An error occurred:", error);
