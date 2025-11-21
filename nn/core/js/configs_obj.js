@@ -43,6 +43,7 @@ class ConfigurationItem {
         this.insectProject = configData.insect_project;
         this.plantProject = configData.plant_project;
         this.seedProject = configData.seed_project;
+        this.userId = configData.user_id;
         this.title = configData.title;
         this.hideOnAny = configData.hide_on_any === 'yes'; // Convert string "yes" to boolean
         this.plantFilter = configData.plant_filter;
