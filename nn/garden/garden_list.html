@@ -33,6 +33,7 @@ appState       = buildStateFromParams(winurlparams);
 
 // page / api specific constants 
 const CONST_API_PER_PAGE   = '10';
+const CONST_CUSTOM_PLANT   = 'Plant';
   
 function sortWithNull(arr, ascending = true) {
   for( let i=0; i<arr.length; i++ ) {
@@ -84,17 +85,6 @@ function setupAPIParams( configuration ) {
    return api_params;
 }
 
-function getTaxonName( configuration, taxon_id ) {
-   let taxon_name = 'Plant';
-
-   for( let i=0; i<configuration.taxa.length; i++ ) {
-        if( taxon_id === configuration.taxa[i].taxon_id ) {
-            taxon_name = configuration.taxa[i].taxon_name;
-        }
-   }
-   return taxon_name;
-}
-
 function getPlaceName( configuration, place_id ) {
    let place_name = 'Place';
 
@@ -137,8 +127,9 @@ function buildMenu( config ) {
                links += furl('./garden_list.html'+buildParameterList(urlState),config.taxa[i].taxon_name);
           }
       }
- 
-      if( links ) { menu_string += buildDD(getPlantName(appState), links); }
+
+      let plant_name = getPlantName(appState) || CONST_CUSTOM_PLANT;  // plant name would be null if no filter has been selected
+      if( links ) { menu_string += buildDD( plant_name, links); }
 
       let urlState  = clearForDashParams(appState);
       menu_string  += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
