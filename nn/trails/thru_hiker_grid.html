@@ -77,11 +77,11 @@ function buildMenu(config) {
    // if all observations was selected... show the time series
    // if a taxon is in focus, just show the regular map
    if( !getMenuId(appState) && !getTaxonId(appState) ) {
-       links  +=  furl(github_root+ '../admin/map.html'+getMapParams(config),"Map");
+       links  +=  furl('../admin/map.html'+getMapParams(config),"Map");
        links  +=  furl(root_observations+'torquemap'+getMapParams(config)+'&interval=monthly', "Time Series");
        menu_string += ( buildDD( 'Maps', links) );
    } else {
-       menu_string += buildMenuURL( furl(github_root+'../admin/map.html'+getMapParams(config),"Map") );
+       menu_string += buildMenuURL( furl('../admin/map.html'+getMapParams(config),"Map") );
    }
    
    let url_state = clearForSpeciesCountsParams( appState );
