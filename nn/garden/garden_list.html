@@ -159,18 +159,20 @@ function buildPage(xobj, config) {
       ];
 
       let title_1 = '';
-      let title_2 = '<span id="toprightbold">'+config.title+'</span>';
+      let title_2 = '';
       let title_3 = '';
 
       let show_behavior = config.show_behavior || 'no';
     
       if( show_behavior === 'on_all' ) {
           //title_1 = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
+          title_1 = '<span id="toprightbold">'+config.title+'</span>';
           let urlState = appState;
           urlState = setPlantName(urlState, CONST_ALL_PLANTS);  // don't include "on" since it'll be added on later.
           urlState = setPlantId(urlState, '');  // scrub plant id since it might have been set previously
           title_3 = furl('./garden_activity.html'+buildParameterList(urlState),'<span id="topright">'+CONST_ON+CONST_ALL_PLANTS+'</span>');
-      } 
+      } else {
+      }
 
       faddelem('p',document.body,{innerHTML:CONST_TOTAL_SPECIES+fcomnum(total_results) + title_1 + ' <br/>'
                  + CONST_PER_PAGE+fcomnum(per_page)+ title_2 + '<br />'
