@@ -25,8 +25,6 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
-let p_nm1         = winurlparams.get('nm1') || '';
-let p_nm2         = winurlparams.get('nm2') || '';
 
 let configuration = '';
 let configs = [];
@@ -128,8 +126,6 @@ function buildMenu( config ) {
  
       if( links ) { menu_string += buildDD(getTaxonName(config, getTaxonId(appState)), links); }
 
-      menu_string += buildDDTitle(config.title);
-
       let urlState  = clearForDashParams(appState);
       menu_string  += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
 
@@ -162,28 +158,23 @@ function buildPage(xobj, config) {
             {innerText:'Name'}, 
       ];
 
-      let on_all = '';
-      let nn_on_all = '';
-
-      let prefix = '';
-      let suffix = config.title;
+      let title_1 = config.title;
+      let title_2 = '';
+      let title_3 = '';
 
       let show_behavior = config.show_behavior || 'no';
     
-      if( p_nm1 ) { prefix = p_nm1; }
-      if( p_nm2 ) { suffix = p_nm2; }
-
       if( show_behavior === 'on_all' ) {
-          //nn_on_all = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
+          //title_1 = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
           let urlState = appState;
           urlState = setPlantName(urlState, CONST_ALL_PLANTS);  // don't include "on" since it'll be added on later.
           urlState = setPlantId(urlState, '');  // scrub plant id since it might have been set previously
-          on_all = furl('./garden_activity.html'+buildParameterList(urlState),'<span id="topright">'+CONST_ON+CONST_ALL_PLANTS+'</span>');
+          title_3 = furl('./garden_activity.html'+buildParameterList(urlState),'<span id="topright">'+CONST_ON+CONST_ALL_PLANTS+'</span>');
       } 
 
-      faddelem('p',document.body,{innerHTML:CONST_TOTAL_SPECIES+fcomnum(total_results)+' <br/>'
-                 +CONST_PER_PAGE+fcomnum(per_page)+ nn_on_all + '<br />'
-                 +CONST_PAGE+fcomnum(page_curr)+' of '+fcomnum(page_max)+on_all+'<br />'});  
+      faddelem('p',document.body,{innerHTML:CONST_TOTAL_SPECIES+fcomnum(total_results) + title_1 + ' <br/>'
+                 + CONST_PER_PAGE+fcomnum(per_page)+ title_2 + '<br />'
+                 + CONST_PAGE+fcomnum(page_curr)+' of '+fcomnum(page_max) + title_3 + '<br />'});  
 
       let table = faddelem('table',document.body,{id:'main'});                    
       let thead = faddelem('thead',table);
