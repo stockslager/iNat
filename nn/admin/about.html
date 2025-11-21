@@ -37,10 +37,9 @@ let p_field   = winurlparams.get('field' || '');
   
 appState  =  buildStateFromParams(winurlparams);
 
-function buildMenu(data) {
+function buildMenu(configuration) {
       let menu_string = '';
       let links = '';
-      configuration = data.configurations[0];
  
       menu_string = '<div class="navbar">';
       if( configuration.plant_project )      { links += furl('./about.html?params='+getParams(appState)+'&field=plant_project',      "plant_project"); }
@@ -77,6 +76,8 @@ function buildMenu(data) {
 }
 
 function displayJson(configuration) {
+
+    buildMenu(configuration);
 
     let def_place_no_prj = '';
     if( !configuration.plant_project ) {
