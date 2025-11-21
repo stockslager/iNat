@@ -1,3 +1,8 @@
+const CONST_CONFIGS_OBJ_PLANTS = 'plants';
+const CONST_CONFIGS_OBJ_HIKER  = 'hiker';
+const CONST_CONFIGS_OBJ_YARD   = 'yard';
+const CONST_CONFIGS_OBJ_ART    = 'art';
+
 /**
  * Represents a single taxon entry (e.g., American Asters).
  */
@@ -55,6 +60,33 @@ class ConfigurationItem {
         // Map nested arrays to their respective classes
         this.taxa = configData.taxa ? configData.taxa.map(t => new Taxon(t)) : [];
         this.subIcons = configData.sub_icons ? configData.sub_icons.map(s => new SubIcon(s)) : [];
+
+        // --- type/presence validation ---
+        if (typeof configData.component !== 'string' || configData.component.trim().length === 0) {
+            // missing component
+            throw new Error('Configuration Item requires a valid non-empty "component".');
+        }
+
+        // Ensure 'hideOnAny' is always a boolean
+        if (configData.hide_on_any !== 'yes' && configData.hide_on_any !== 'no') {
+            console.warn(`Invalid value for hide_on_any: ${configData.hide_on_any}. Defaulting to 'no'.`);
+            this.hideOnAny = false; 
+        } else {
+            this.hideOnAny = configData.hide_on_any === 'yes';
+        }
+
+        // component is plants but "project" and/or "insect_project" is not set.
+        if( configData.component === CONST_CONFIG_OBJ_HIKER && (configData.project.trim().length === 0 || configData.insect_project.trim().length === 0 ) {
+            throw new Error('Configuration Item requires valid non-empty "project" and "insect_project" attributes.');
+        }
+        // component is hiker but "project" is not set.
+        if( configData.component === CONST_CONFIG_OBJ_HIKER && configData.project.trim().length === 0 ) {
+            throw new Error('Configuration Item requires a valid non-empty "project".');
+        }
+        // component is art but "project" is not set.
+        if( configData.component === CONST_CONFIG_OBJ_HIKER && configData.project.trim().length === 0 ) {
+            throw new Error('Configuration Item requires a valid non-empty "project".');
+        }
     }
 
     /**
