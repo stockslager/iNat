@@ -69,10 +69,10 @@ function setupAPIParams( configuration ) {
    if( configuration.plant_list_user_id ) { api_params += '&user_id='  + configuration.plant_list_user_id; }
    if( configuration.tag_name )           { api_params += '&tag='      + configuration.tag_name; }
 
-   // if a plant_id was chosen in the plant drop-down, use that plant_id.  if not, 
+   // if a taxon_id was chosen in the plant drop-down, use that taxon_id.  if not, 
    // use the taxon_id(s) from the config when present.
-   if( getPlantId(appState) ) {
-       api_params += '&taxon_id='+getPlantId(appState);
+   if( getTaxonId(appState) ) {
+       api_params += '&taxon_id='+getTaxonId(appState);
    } else {
        if( configuration.taxon_ids ) { 
            api_params += '&taxon_id=' + configuration.taxon_ids; 
@@ -116,19 +116,19 @@ function buildMenu( config ) {
 
       if( config.taxa && config.taxa.length > 0 ) {
           let urlState = appState;
-          urlState     = setPlantId(urlState, '');
-          urlState     = setPlantName(urlState, '');
+          urlState     = setTaxonId(urlState, '');
+          urlState     = setTaxonName(urlState, '');
           urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
           links       += furl('./garden_list.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
           for( let i=0; i<config.taxa.length; i++ ) {
                let urlState = appState;
-               urlState = setPlantId(   urlState, config.taxa[i].taxon_id );
-               urlState = setPlantName( urlState, config.taxa[i].taxon_name );
+               urlState = setTaxonId(   urlState, config.taxa[i].taxon_id );
+               urlState = setTaxonName( urlState, config.taxa[i].taxon_name );
                links += furl('./garden_list.html'+buildParameterList(urlState),config.taxa[i].taxon_name);
           }
       }
 
-      let plant_name = getPlantName(appState) || CONST_CUSTOM_PLANT;  // plant name would be null if no filter has been selected
+      let plant_name = getTaxonName(appState) || CONST_CUSTOM_PLANT;  // taxon name would be null if no filter has been selected
       if( links ) { menu_string += buildDD( plant_name, links); }
 
       let urlState  = clearForDashParams(appState);
@@ -172,8 +172,10 @@ function buildPage(xobj, config) {
       if( show_behavior === 'on_all' ) {
           //title_1 = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
           let urlState = appState;
+          urlState = setTaxonId(urlState, '');                  // this page uses taxon id wrt flora... the next page, fauna
+          urlState = setTaxonName(urlState, '');                // this page uses taxon name wrt flora... the next page, fauna
           urlState = setPlantName(urlState, CONST_ALL_PLANTS);  // don't include "on" since it'll be added on later.
-          urlState = setPlantId(urlState, '');  // scrub plant id since it might have been set previously
+          urlState = setPlantId(urlState, '');                  // scrub plant id since it might have been set previously
           title_3 = furl('./garden_activity.html'+buildParameterList(urlState),'<span id="topright">'+config.title+'</span>');
       } else {
           title_3 = '<span id="toprightbold">'+config.title+'</span>';
@@ -231,7 +233,11 @@ function buildPage(xobj, config) {
              target = pref_tax_name.toLowerCase();
          }
 
+         // this page uses taxon id/name wrt to flora, the next page, fauna
+         // plant id (the selected taxon on this page) is passed to the next to search for in the &field:some+field=value.
          let urlState = appState;
+         urlState = setTaxonId(urlState, '');
+         urlState = setTaxonName(urlState, '');
          urlState = setPlantId(urlState, rec.taxon.id);
          urlState = setPlantName(urlState, header_name);
 
