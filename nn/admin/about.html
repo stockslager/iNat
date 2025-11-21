@@ -34,6 +34,8 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
 let p_field   = winurlparams.get('field' || '');
+
+winurlparams.delete('field');
   
 appState  =  buildStateFromParams(winurlparams);
 
