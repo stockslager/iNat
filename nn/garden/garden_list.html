@@ -132,12 +132,13 @@ function buildMenu( config ) {
           links       += furl('./garden_list.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
           for( let i=0; i<config.taxa.length; i++ ) {
                let urlState = appState;
-               urlState = setPlantId( urlState, config.taxa[i].taxon_id );
+               urlState = setPlantId(   urlState, config.taxa[i].taxon_id );
+               urlState = setPlantName( urlState, config.taxa[i].taxon_nm );
                links += furl('./garden_list.html'+buildParameterList(urlState),config.taxa[i].taxon_name);
           }
       }
  
-      if( links ) { menu_string += buildDD(getTaxonName(config, getTaxonId(appState)), links); }
+      if( links ) { menu_string += buildDD(getPlantName(appState), links); }
 
       let urlState  = clearForDashParams(appState);
       menu_string  += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
