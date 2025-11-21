@@ -71,7 +71,7 @@ function setupAPIParams( configuration ) {
    // if a plant_id was chosen in the plant drop-down, use that plant_id.  if not, 
    // use the taxon_id(s) from the config when present.
    if( getPlantId(appState) ) {
-       api_params += getPlantIdParam(appState);
+       api_params += getPlantIdParam(appState, '&taxon_id=');
    } else {
        if( configuration.taxon_ids ) { 
            api_params += '&taxon_id=' + configuration.taxon_ids; 
