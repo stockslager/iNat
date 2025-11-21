@@ -142,13 +142,17 @@ console.log(`There are ${manager.configurations.length} configurations loaded.`)
 
 const plantsConfig = manager.getConfigByComponent('plants');
 console.log(`Found config title: ${plantsConfig.getFullTitle()}`);
-console.log(`First taxon name: ${plantsConfig.taxa[0].taxonName}`);
+if( plantsConfig.taxa ) {
+    console.log(`First taxon name: ${plantsConfig.taxa[0].taxonName}`);
+}
 console.log(`Is hidden on any condition? ${plantsConfig.hideOnAny}`);
 
 console.log('Default sub icons include:');
-manager.defaultSubIcons.forEach(icon => {
-    console.log(`- ${icon.icon} (${icon.name})`);
-});
+if( manager.defaultSubIcons ) {
+    manager.defaultSubIcons.forEach(icon => {
+        console.log(`- ${icon.icon} (${icon.name})`);
+    });
+}
 
       // Store data in session storage before returning 
       // sessionStorage only stores strings, so we must use JSON.stringify
