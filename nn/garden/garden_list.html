@@ -71,8 +71,8 @@ function setupAPIParams( configuration ) {
 
    // if a taxon_id was chosen in the plant drop-down, use that taxon_id.  if not, 
    // use the taxon_id(s) from the config when present.
-   if( getTaxonId(appState) ) {
-       api_params += '&taxon_id='+getTaxonId(appState);
+   if( getPlantMenuId(appState) ) {
+       api_params += '&taxon_id='+getPlantMenuId(appState);
    } else {
        if( configuration.taxon_ids ) { 
            api_params += '&taxon_id=' + configuration.taxon_ids; 
@@ -116,19 +116,19 @@ function buildMenu( config ) {
 
       if( config.taxa && config.taxa.length > 0 ) {
           let urlState = appState;
-          urlState     = setTaxonId(urlState, '');
-          urlState     = setTaxonName(urlState, '');
+          urlState     = setPlantMenuId(urlState, '');
+          urlState     = setPlantMenuName(urlState, '');
           urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
           links       += furl('./garden_list.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
           for( let i=0; i<config.taxa.length; i++ ) {
                let urlState = appState;
-               urlState = setTaxonId(   urlState, config.taxa[i].taxon_id );
-               urlState = setTaxonName( urlState, config.taxa[i].taxon_name );
+               urlState = setPlantMenuId(   urlState, config.taxa[i].taxon_id );
+               urlState = setPlantMenuName( urlState, config.taxa[i].taxon_name );
                links += furl('./garden_list.html'+buildParameterList(urlState),config.taxa[i].taxon_name);
           }
       }
 
-      let plant_name = getTaxonName(appState) || CONST_CUSTOM_PLANT;  // taxon name would be null if no filter has been selected
+      let plant_name = getPlantMenuName(appState) || CONST_CUSTOM_PLANT;  // if no menu filter selected, set to const "Plant"
       if( links ) { menu_string += buildDD( plant_name, links); }
 
       let urlState  = clearForDashParams(appState);
@@ -172,8 +172,8 @@ function buildPage(xobj, config) {
       if( show_behavior === 'on_all' ) {
           //title_1 = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
           let urlState = appState;
-          urlState = setTaxonId(urlState, '');                  // this page uses taxon id wrt flora... the next page, fauna
-          urlState = setTaxonName(urlState, '');                // this page uses taxon name wrt flora... the next page, fauna
+          urlState = setPlantMenuId(urlState, '');                  
+          urlState = setPlantMenuName(urlState, '');                
           urlState = setPlantName(urlState, CONST_ALL_PLANTS);  // don't include "on" since it'll be added on later.
           urlState = setPlantId(urlState, '');                  // scrub plant id since it might have been set previously
           title_3 = furl('./garden_activity.html'+buildParameterList(urlState),'<span id="topright">'+config.title+'</span>');
