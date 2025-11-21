@@ -163,7 +163,7 @@ function displayJson(configuration) {
                                                '</td></tr></table><span id="seperator"></span>')});
     }
  
-    const prettyJson = JSON.stringify(data, null, 2);
+    const prettyJson = JSON.stringify(configuration, null, 2);
     faddelem('p',document.body,{innerHTML:('<b>Entire '+getParams(appState)+'.json:</b>' +
                                            '<pre id="json-display"></pre>')});
     document.getElementById('json-display').textContent = prettyJson;
