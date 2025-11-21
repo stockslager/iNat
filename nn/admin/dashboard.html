@@ -78,8 +78,11 @@ function buildPage( configs ) {
            let brow = '';
            let values = [];
            let config = configs[i];
+
+       console.log('one');
     
            if( config.component === 'plants' ) {
+            console.log('two');
                appState = setComponent( appState, 'plants' );
                let plant_params = buildParameterList(appState);
                brow = faddelem('tr',tbody);
@@ -124,6 +127,7 @@ async function gatherResources() {
       const configs   = await asyncGetConfiguration( json_path );
      
       // Pass the data to the buildPage function
+      console.log('pl ' + JSON.stringify(configs));
       buildPage(configs); 
 
     } catch (error) {
