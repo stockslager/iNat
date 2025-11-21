@@ -76,7 +76,9 @@ class ConfigManager {
         this.configurations = jsonData.configurations.map(config => new ConfigurationItem(config));
         
         // Map the default_sub_icons array to SubIcon instances
-        this.defaultSubIcons = jsonData.default_sub_icons.map(iconData => new SubIcon(iconData));
+        if( jsonData.default_sub_icons ) {
+            this.defaultSubIcons = jsonData.default_sub_icons.map(iconData => new SubIcon(iconData));
+        }
     }
 
     /**
@@ -131,9 +133,11 @@ async function asyncGetConfiguration( params, component ) {
       }
 
       const data = await response.json();
+       console.log('h1');
 
       // Initialize the manager with the data
       const manager = new ConfigManager(data);
+       console.log('ddddd');
 
       // Store data in session storage before returning 
       // sessionStorage only stores strings, so we must use JSON.stringify
