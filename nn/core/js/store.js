@@ -5,23 +5,23 @@ const COMPONENT_YARD      = 'yard';
 const COMPONENT_ART       = 'art';
 
 // --- Constants for Attribute Keys ---
-const ATTRIBUTE_PROJECT   = 'project';
-const ATTRIBUTE_PLACE     = 'place';
-const ATTRIBUTE_PARAMS    = 'params';
-const ATTRIBUTE_USER      = 'user';
-const ATTRIBUTE_GARDEN    = 'garden';
-const ATTRIBUTE_COMPONENT = 'component';
-const ATTRIBUTE_PLANTID   = 'plantid';
-const ATTRIBUTE_PLANTNAME = 'plantname';
-const ATTRIBUTE_TAXONID   = 'taxonid';
-const ATTRIBUTE_TAXONNAME = 'taxonname';
-const ATTRIBUTE_MENUID    = 'menuid';
-const ATTRIBUTE_MENUNAME  = 'menuname';
-const ATTRIBUTE_PLANTMENUID    = 'menuid';
-const ATTRIBUTE_PLANTMENUNAME  = 'menuname';
-const ATTRIBUTE_TAXONDD   = 'taxondd';
-const ATTRIBUTE_PAGE      = 'page';
-const ATTRIBUTE_PER_PAGE  = 'per_page';
+const ATTRIBUTE_PROJECT        = 'project';
+const ATTRIBUTE_PLACE          = 'place';
+const ATTRIBUTE_PARAMS         = 'params';
+const ATTRIBUTE_USER           = 'user';
+const ATTRIBUTE_GARDEN         = 'garden';
+const ATTRIBUTE_COMPONENT      = 'component';
+const ATTRIBUTE_PLANTID        = 'plantid';
+const ATTRIBUTE_PLANTNAME      = 'plantname';
+const ATTRIBUTE_TAXONID        = 'taxonid';
+const ATTRIBUTE_TAXONNAME      = 'taxonname';
+const ATTRIBUTE_MENUID         = 'menuid';
+const ATTRIBUTE_MENUNAME       = 'menuname';
+const ATTRIBUTE_PLANTMENUID    = 'plantmenuid';
+const ATTRIBUTE_PLANTMENUNAME  = 'plantmenuname';
+const ATTRIBUTE_TAXONDD        = 'taxondd';
+const ATTRIBUTE_PAGE           = 'page';
+const ATTRIBUTE_PER_PAGE       = 'per_page';
 
 // application state
 let appState = {
