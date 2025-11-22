@@ -491,6 +491,8 @@ function clearForDashParams(state) {
   urlState = setPlantName(urlState, '');
   urlState = setTaxonId(urlState, ''); 
   urlState = setTaxonName(urlState, '');
+  urlState = setPlantMenuId(urlState, '');
+  urlState = setPlantMenuName(urlState, '');
   urlState = setMenuId(urlState, '');
   urlState = setMenuName(urlState, '');
   urlState = setTaxonDD(urlState, '');
