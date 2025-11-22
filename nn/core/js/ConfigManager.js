@@ -43,12 +43,14 @@ class ConfigurationItem {
      * @param {object} configData - The configuration data object.
      */
     constructor(configData) {
+        console.log('TRACE 1: configData.user_id is:', configData.user_id);
         this.component = configData.component;
         this.project = configData.project ?? null;
         this.insectProject = configData.insect_project ?? null;
         this.plantProject = configData.plant_project ?? null;
         this.seedProject = configData.seed_project ?? null;
         this.userId = configData.user_id ?? null;
+        console.log('TRACE 2: this.userId is:', this.userId);
         this.title = configData.title ?? null;
         this.hideOnAny = (configData.hide_on_any === 'yes') ?? false; // Convert string "yes" to boolean
         this.plantFilter = configData.plant_filter ?? null;
