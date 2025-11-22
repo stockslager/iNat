@@ -137,8 +137,13 @@ function buildPage( configs ) {
                faddelems('td',brow,values);
            }
       }
-};
+};  
+</script>
 
+<script type="text/javascript"   src="../core/js/ConfigManager.js"> </script>
+<script type="text/javascript"   src="../core/js/api_fetch.js">     </script>
+
+<script>
 function setupAPIParams( configManager ) {
     
     let api_params = '';
@@ -156,13 +161,7 @@ function setupAPIParams( configManager ) {
 
     return api_params;
 }
-  
-</script>
-
-<script type="text/javascript"   src="../core/js/ConfigManager.js"> </script>
-<script type="text/javascript"   src="../core/js/api_fetch.js">     </script>
-
-<script>
+ 
 async function gatherResources() {
   var api_base   = 'https://api.inaturalist.org/v1/observations'
   let json_path = json_root + getParams(appState);
