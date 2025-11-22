@@ -26,9 +26,6 @@ let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
 
-let configuration = '';
-let configs = [];
-
 appState       = buildStateFromParams(winurlparams);
 
 // page / api specific constants 
@@ -52,31 +49,31 @@ function sortWithNull(arr, ascending = true) {
   return arr;
 }
 
-function setupAPIParams( configuration ) {
+function setupAPIParams( plantConfig ) {
    let api_params = '';
  
-   if( !configuration.plant_project ) {
+   if( !plantConfig.plantProject ) {
        faddelem('p',document.body,{innerText:'A plant_project must be specified in '+getParams(appState)+'.json'});
        throw new Error('A plant_project or default_place must be specified in '+getParams(appState)+'.json');
    }
        
-   api_params += '?project_id='+configuration.plant_project;
+   api_params += '?project_id='+plantConfig.plantProject;
    api_params += '&iconic_taxa=plantae';
 
-   if( configuration.plant_field )        { api_params += '&field:'    + configuration.plant_field;  } 
-   if( configuration.plant_field_value )  { api_params += '='          + configuration.plant_field_value;
-   if( configuration.default_place )      { api_params += '&place_id=' + configuration.default_place; }
-   if( configuration.plant_ids )          { api_params += '&id='       + configuration.plant_ids;  }
-   if( configuration.plant_list_user_id ) { api_params += '&user_id='  + configuration.plant_list_user_id; }
-   if( configuration.tag_name )           { api_params += '&tag='      + configuration.tag_name; }
+   if( plantConfig.plantPield )        { api_params += '&field:'    + plantConfig.plantField;  } 
+   if( plantConfig.plantFieldValue )   { api_params += '='          + plantConfig.plantFieldValue;
+   if( plantConfig.defaultPlace )      { api_params += '&place_id=' + plantConfig.defaultPlace; }
+   if( plantConfig.plantIds )          { api_params += '&id='       + plantConfig.plantIds;  }
+   if( plantConfig.plantListUserId )   { api_params += '&user_id='  + plantConfig.plantListUserId; }
+   if( plantConfig.tagName )           { api_params += '&tag='      + plantConfig.tagName; }
 
    // if a taxon_id was chosen in the plant drop-down, use that taxon_id.  if not, 
    // use the taxon_id(s) from the config when present.
    if( getPlantMenuId(appState) ) {
        api_params += '&taxon_id='+getPlantMenuId(appState);
    } else {
-       if( configuration.taxon_ids ) { 
-           api_params += '&taxon_id=' + configuration.taxon_ids; 
+       if( plantConfig.taxonIds ) { 
+           api_params += '&taxon_id=' + plantConfig.taxonIds; 
        }
    }
 
@@ -86,12 +83,12 @@ function setupAPIParams( configuration ) {
    return api_params;
 }
 
-function getPlaceName( configuration, place_id ) {
+function getPlaceName( plantConfig, place_id ) {
    let place_name = 'Place';
 
-   for( let i=0; i<configuration.places.length; i++ ) {
-        if( place_id === configuration.places[i].place_id ) {
-            place_name = configuration.places[i].place_name; 
+   for( let i=0; i<plantConfig.places.length; i++ ) {
+        if( place_id === plantConfig.places[i].placeId ) {
+            place_name = plantConfig.places[i].placeName; 
         }
    }
    return place_name;
@@ -262,11 +259,12 @@ function buildPage(xobj, config) {
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
-
 </script>
-<script src="../core/js/configurations.js"></script>
-<script>
 
+<script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
+<script type="text/javascript"   src="../core/js/api_fetch.js"></script>
+
+<script>
 async function gatherResources() {
   let api_base  = 'https://api.inaturalist.org/v1/observations/species_counts';
   let json_path = json_root + getParams(appState);
@@ -274,14 +272,15 @@ async function gatherResources() {
   try {
    
       // Await the result of getObservations() and store the actual data
-      const config_data   = await asyncGetConfiguration( json_path, getComponent(appState) );
-      const api_params    = setupAPIParams( config_data );
+      const plantConfig  = await asyncGetplantConfig( json_path, getComponent(appState) );
+      console.log('full config title: ' + config.getFullTitle());
+      const api_params    = setupAPIParams( plantConfig );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
-      const obs_data      = await apiFetch( api_url ); 
+      //const obs_data      = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
-      buildPage(obs_data, config_data); 
+      //buildPage(obs_data, plantConfig); 
 
     } catch (error) {
       console.error("An error occurred:", error);
@@ -290,7 +289,7 @@ async function gatherResources() {
     }
 }
 
-let message = validateGarden(appState);
+let message = validatePlants(appState);
  
 if( message ) {
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
