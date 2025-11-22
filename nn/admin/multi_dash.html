@@ -38,6 +38,7 @@ const CONST_PGS         = 'page: 1'
 const CONST_GARDEN_DESC = 'Wildlife value of individual plants at this location.';
 const CONST_HIKER_DESC  = 'Species encountered during this trek.';
 const CONST_CUSTOM_GARDEN_LIST   = 'Garden List';
+const CONST_CUSTOM_PLANTS = 'plants';
 
 function buildMenu() {
       let menu_string = '';
@@ -82,9 +83,9 @@ function buildPage( configs ) {
 
        console.log('one ' + config.component);
     
-           if( config.component === 'plants' ) {
+           if( config.component === CONST_CUSTOM_PLANTS ) {
             console.log('two');
-               appState = setComponent( appState, 'plants' 
+               appState = setComponent( appState, 'plants' );
                let urlState = appState;  // immediately make a copy to create link params
 
                if( results && config.split_list && config.split_list === 'yes' ) {
