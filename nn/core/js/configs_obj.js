@@ -92,16 +92,21 @@ class ConfigurationItem {
 
 /**
  * Main class to manage the entire configuration structure.
+ * @param {object} jsonData - The raw JSON object imported into JavaScript.
  */
 class ConfigManager {
-    /**
-     * @param {object} jsonData - The raw JSON object imported into JavaScript.
-     */
     constructor(jsonData) {
         this.configurations = jsonData.configurations.map(config => {
-            return new ConfigurationItem(config);
-        });
-        
+            try {
+                return new ConfigurationItem(config);
+            } catch (error) {
+                // Log the specific validation error message, but continue execution
+                console.error(`Skipping invalid configuration entry: ${error.message}`);
+                // Return null so we can filter this invalid entry out later
+                return null; 
+            }
+        }).filter(item => item !== null); // Filter out all the 'null' entries
+
         // Map the default_sub_icons array to SubIcon instances
         if( jsonData.default_sub_icons ) {
             this.defaultSubIcons = jsonData.default_sub_icons.map(iconData => new SubIcon(iconData));
@@ -126,84 +131,59 @@ async function asyncGetConfiguration( params, component ) {
    const storageKey   = ('nn_configCache_'+params);
    const cachedData   = sessionStorage.getItem(storageKey);
    
-   // We will store the final config/manager instance we want to return here
    let finalConfigInstance;
 
    // --- Check the cache first ---
    if( cachedData ) {
-       console.log('Returning configuration from cache: ' + storageKey);
        try {
           const rawData = JSON.parse(cachedData);
-          
-          // REHYDRATE: If we have cached data, we must convert it back into class instances
           const managerInstance = new ConfigManager(rawData);
           
-          // Determine what to return
-          if (component) {
-              finalConfigInstance = managerInstance.getConfigByComponent(component);
-          } else {
-              finalConfigInstance = managerInstance; // Return the whole manager if no specific component requested
-          }
-
+          finalConfigInstance = component 
+                                ? managerInstance.getConfigByComponent(component) 
+                                : managerInstance;
+          
           if (finalConfigInstance) {
-              return finalConfigInstance; // Successfully retrieved from cache
+              return finalConfigInstance; 
           } else {
-              // Component not found in cached data, maybe the config structure changed?
+              // If we requested a specific component that wasn't found (maybe it was skipped/invalid)
               throw new Error(`Requested component "${component}" not found in cache.`);
           }
 
        } catch (e) {
           console.error("Error processing cached configuration, fetching new data:", e.message);
-          sessionStorage.removeItem(storageKey); // Clear bad cache entry
-          // Continue execution to fetch fresh data
+          sessionStorage.removeItem(storageKey); 
        }
    }  
     
-   // --- Fetch New Data (Only runs if cache check failed or missed) ---
-
+   // --- Fetch New Data ---
    if( !params ) {
        throw new Error(`Name of .json file must be specified in the URL/params.`);
    }
 
    try {
       const response = await fetch(params + '.json');
-
       if( !response.ok ) {
-          if( response.status === 404 ) {
-              throw new Error(`A parameters file named ${params} has no matching .json configuration file.`);
-          }
-          throw new Error(`HTTP error! status: ${response.status}`);
+          // Handles network-level errors cleanly
+          throw new Error(`HTTP error! status: ${response.status} when fetching ${params}.json`);
       }
 
       const data = await response.json();
        
-      // If the ConfigManager constructor throws a validation error, 
-      // the `catch` block immediately below will execute.
       const manager = new ConfigManager(data);
 
-      // Store data in session storage BEFORE returning
-      // We store the *entire* manager object structure as a string
       sessionStorage.setItem(storageKey, JSON.stringify(manager));
       console.log('Stored configuration in session storage: ' + storageKey);
 
-      // Determine what to return from the fetch path
-      if (component) {
-        // Return a single configuration item
-        finalConfigInstance = manager.getConfigByComponent(component);
-        if (!finalConfigInstance) {
-            throw new Error(`Requested component "${component}" not found in the fetched configuration.`);
-        }
-      } else {
-        // Return the full manager instance
-        finalConfigInstance = manager;
-      }
+      finalConfigInstance = component 
+                            ? manager.getConfigByComponent(component) 
+                            : manager;
       
       return finalConfigInstance;  
 
    } catch (error) {
-      // This catches Fetch errors AND validation errors from the ConfigManager constructor
-      console.error('Fatal Error during configuration fetch or validation:', error.message);
-      // Re-throw the error so the code that called asyncGetConfiguration can handle it 
-      throw error; 
+      // This primarily catches Fetch errors or serious JSON parse errors
+      console.error('Fatal Error during configuration fetch:', error.message);
+      throw error; // Re-throw the network/fetch error
    }
 }
