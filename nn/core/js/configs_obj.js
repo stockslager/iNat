@@ -68,11 +68,11 @@ class ConfigurationItem {
         }
 
         // component is plants but "project" and/or "insect_project" is not set.
-        if( configData.component === CONST_CONFIGS_OBJ_PLANTS ) {
+        /*if( configData.component === CONST_CONFIGS_OBJ_PLANTS ) {
             if( configData.project.trim().length === 0 || configData.insect_project.trim().length === 0 )  {
                 throw new Error('Configuration Item requires valid non-empty "project" and "insect_project" attributes.');
             } 
-        }
+        }*/
         // component is hiker but "project" is not set.
         if( configData.component === CONST_CONFIGS_OBJ_HIKER ) {
             if( configData.project.trim().length === 0 ) {
