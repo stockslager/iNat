@@ -68,17 +68,23 @@ class ConfigurationItem {
         }
 
         // component is plants but "project" and/or "insect_project" is not set.
-        if( configData.component === CONST_CONFIGS_OBJ_PLANTS && (configData.project.trim().length === 0 || configData.insect_project.trim().length === 0 ) ) {
-            throw new Error('Configuration Item requires valid non-empty "project" and "insect_project" attributes.');
+        if( configData.component === CONST_CONFIGS_OBJ_PLANTS ) {
+            if( configData.project.trim().length === 0 || configData.insect_project.trim().length === 0 )  {
+                throw new Error('Configuration Item requires valid non-empty "project" and "insect_project" attributes.');
+            } 
         }
         // component is hiker but "project" is not set.
-        if( configData.component === CONST_CONFIGS_OBJ_HIKER && configData.project.trim().length === 0 ) {
-            throw new Error('Configuration Item requires a valid non-empty "project".');
+        if( configData.component === CONST_CONFIGS_OBJ_HIKER ) {
+            if( configData.project.trim().length === 0 ) {
+                throw new Error('Configuration Item requires a valid non-empty "project".');
+            }
         }
         // component is art but "project" is not set.
-        if( configData.component === CONST_CONFIGS_OBJ_ART && configData.project.trim().length === 0 ) {
-            throw new Error('Configuration Item requires a valid non-empty "project".');
-        }
+        if( configData.component === CONST_CONFIGS_OBJ_ART ) {
+            if( configData.project.trim().length === 0 ) {
+                throw new Error('Configuration Item requires a valid non-empty "project".');
+            }
+        } 
     }
 
     /**
