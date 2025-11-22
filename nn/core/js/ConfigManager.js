@@ -1,6 +1,6 @@
 const CONST_CONFIGS_OBJ_PLANTS = 'plants';
 const CONST_CONFIGS_OBJ_HIKER  = 'hiker';
-const CONST_CONFIGS_OBJ_YARD   = 'yard';
+const CONST_CONFIGS_OBJ_YARD   = 'yard'; 
 const CONST_CONFIGS_OBJ_ART    = 'art';
 
 /**
