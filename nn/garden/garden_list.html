@@ -49,7 +49,7 @@ function sortWithNull(arr, ascending = true) {
   return arr;
 }
 
-/*function setupAPIParams( plantConfig ) {
+function setupAPIParams( plantConfig ) {
    let api_params = '';
  
    if( !plantConfig.plantProject ) {
@@ -93,7 +93,7 @@ function getPlaceName( plantConfig, place_id ) {
    }
    return place_name;
 }
- 
+/*
 function buildMenu( config, results ) {
       let menu_string = '';
       let links = '';
@@ -275,9 +275,9 @@ async function gatherResources() {
       // Await the result of getObservations() and store the actual data
       const plantConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
       console.log('full config title: ' + plantConfig.getFullTitle());
-      //const api_params    = setupAPIParams( plantConfig );
-     // const api_url       = api_base+api_params;
-      //console.log('api url: ' + api_url);
+      const api_params    = setupAPIParams( plantConfig );
+      const api_url       = api_base+api_params;
+      console.log('api url: ' + api_url);
       //const obs_data      = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
