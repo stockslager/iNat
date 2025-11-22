@@ -94,7 +94,7 @@ function buildPage( xobj, configManager ) {
                    console.log('three');
                    for( let k=0; k<results[i].ofvs.length; k++ ) {
                         console.log('field name ' + results[i].ofvs[k].field_name);
-                        if( results[i].ofvs[k].field_name.toLowerCase() === 'garden list' ) {
+                        if( results[i].ofvs[k].field_name && results[i].ofvs[k].field_name.toLowerCase() === 'garden list' ) {
                             if( !garden_list_arr.includes(results[i].ofvs[k].field_value.toString().toLowerCase() ) ) {
                                 garden_list_arr.push(results[i].ofvs[k].field_value.toString().toLowerCase());
                             }
