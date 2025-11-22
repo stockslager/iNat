@@ -142,30 +142,26 @@ class ConfigManager {
 async function asyncGetConfiguration( params, component ) {
 
    const storageKey   = ('nn_configCache_'+params);
-   const cachedDataString = sessionStorage.getItem(storageKey); // Use string variable name
+   const cachedDataString = sessionStorage.getItem(storageKey); 
    
+   let managerInstance;
    let finalConfigInstance;
-
-   // Helper function to process raw data consistently
-   const processData = (data, requestedComponent) => {
-       // Assuming ConfigManager handles optional fields with '?? null' internally now
-       const manager = new ConfigManager(data); 
-
-       if (requestedComponent) {
-           return manager.getConfigByComponent(requestedComponent);
-       } else {
-           return manager;
-       }
-   };
 
    // --- Check the cache first ---
    if( cachedDataString ) {
        try {
-          const rawData = JSON.parse(cachedDataString);
+          // Parse the RAW string from cache into a plain JS object
+          const rawData = JSON.parse(cachedDataString); 
+          
           console.log('Returning configuration from cache: ' + storageKey);
           
-          finalConfigInstance = processData(rawData, component);
+          // Process the raw data using your classes (attaches methods, sanitizes data)
+          managerInstance = new ConfigManager(rawData);
 
+          finalConfigInstance = component 
+                                ? managerInstance.getConfigByComponent(component) 
+                                : managerInstance;
+          
           if (finalConfigInstance) {
               return finalConfigInstance; // Returns a consistent class instance
           } else {
@@ -189,16 +185,19 @@ async function asyncGetConfiguration( params, component ) {
           throw new Error(`HTTP error! status: ${response.status} when fetching ${params}.json`);
       }
 
+      // Get the raw data object from the network
       const data = await response.json();
        
-      // Process data into class instances
-      const manager = new ConfigManager(data);
+      // Store the *raw JSON string* in the cache immediately, not the processed manager string
+      sessionStorage.setItem(storageKey, JSON.stringify(data));
+      console.log('Stored raw configuration string in session storage: ' + storageKey);
 
-      // Store the *string representation* of the processed manager object
-      sessionStorage.setItem(storageKey, JSON.stringify(manager));
-      console.log('Stored configuration in session storage: ' + storageKey);
+      // Process the raw data using your classes (attaches methods, sanitizes data)
+      managerInstance = new ConfigManager(data);
 
-      finalConfigInstance = processData(data, component); // Use the same helper function
+      finalConfigInstance = component 
+                            ? managerInstance.getConfigByComponent(component) 
+                            : managerInstance;
       
       return finalConfigInstance; // Returns a consistent class instance  
 
