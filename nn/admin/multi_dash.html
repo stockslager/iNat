@@ -80,13 +80,12 @@ function buildPage( xobj, configManager ) {
       let tbody = faddelem('tbody',table);
 
       let garden_list_arr = [];
+      appState = setComponent( appState, CONST_CUSTOM_PLANTS );
+      let urlState = appState;  // immediately make a copy to create link params
  
       for( let i=0; i<results.length; i++ ) {
            let brow = '';
            let values = [];
-
-           appState = setComponent( appState, CONST_CUSTOM_PLANTS );
-           let urlState = appState;  // immediately make a copy to create link params
 
            //if( config.splitList && config.splitList === 'yes' ) {
                console.log('one');
