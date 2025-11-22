@@ -53,9 +53,10 @@ function buildMenu() {
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
-function buildPage( xobj ) {
+function buildPage( xobj, configManager ) {
 
-      let obs_data = xobj.results;
+      let obs_data  = xobj.results;
+      let config    = configManager.getConfigByComponent(CONST_CUSTOM_PLANTS);
 
       buildMenu();
 
@@ -81,7 +82,6 @@ function buildPage( xobj ) {
       for( let i=0; i<obs_data.length; i++ ) {
            let brow = '';
            let values = [];
-           let config = obs_data[i];
 
        console.log('one ' + config.component);
     
@@ -90,7 +90,7 @@ function buildPage( xobj ) {
                appState = setComponent( appState, 'plants' );
                let urlState = appState;  // immediately make a copy to create link params
 
-               if( results && config.split_list && config.split_list === 'yes' ) {
+               if( results && config.splitList && config.splitList === 'yes' ) {
                    console.log('one');
                    garden_list_arr = [];
                    for( let j=0; j<results.length; j++ ) {
@@ -122,7 +122,7 @@ function buildPage( xobj ) {
            }
       }
  
-      for( let i=0; i<obs_data.length; i++ ) {
+    /*  for( let i=0; i<obs_data.length; i++ ) {
            let brow = '';
            let values = [];
            let config = obs_data[i];
@@ -138,7 +138,7 @@ function buildPage( xobj ) {
                ];
                faddelems('td',brow,values);
            }
-      }
+      }*/
 };  
 </script>
 
@@ -181,7 +181,7 @@ async function gatherResources() {
       const obs_data        = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
-      buildPage(obs_data); 
+      buildPage(obs_data, configManager); 
 
     } catch (error) {
       console.error("An error occurred:", error);
