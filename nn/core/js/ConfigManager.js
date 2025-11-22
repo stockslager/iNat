@@ -129,20 +129,24 @@ async function asyncGetConfiguration( params, component ) {
        throw new Error(`Name of .json file must be specified in the URL/params.`);
    }
 
-   try {
-      const response = await fetch(params + '.json');
-      if( !response.ok ) {
-          throw new Error(`HTTP error! status: ${response.status} when fetching ${params}.json`);
-      }
+      try {
+        const response = await fetch(params + '.json');
+        // ... error handling for response ...
 
-      const data = await response.json();
-       
-      // Store the *raw JSON string* in the cache immediately
-      sessionStorage.setItem(storageKey, JSON.stringify(data));
-      console.log('Stored raw configuration string in session storage: ' + storageKey);
+        const data = await response.json(); // The raw data object
 
-      // Process the raw data using your classes
-      managerInstance = new ConfigManager(data);
+        // --- ADDED DEBUGGING LOGS ---
+        console.log('DEBUG: Raw data object right after fetch:', data); 
+        console.log('DEBUG: Hiker entry in raw data has userId:', data.configurations.find(c => c.component === 'hiker').user_id);
+        
+        // Store the *raw JSON string* in the cache immediately
+        sessionStorage.setItem(storageKey, JSON.stringify(data));
+        console.log('Stored raw configuration string in session storage: ' + storageKey);
+        // --- END DEBUGGING LOGS ---
+
+
+        // Process the raw data using your classes
+        managerInstance = new ConfigManager(data);
 
       finalConfigInstance = component 
                             ? managerInstance.getConfigByComponent(component) 
