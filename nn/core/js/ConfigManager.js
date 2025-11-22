@@ -142,31 +142,33 @@ class ConfigManager {
 async function asyncGetConfiguration( params, component ) {
 
    const storageKey   = ('nn_configCache_'+params);
-   const cachedData   = sessionStorage.getItem(storageKey);
+   const cachedDataString = sessionStorage.getItem(storageKey); // Use string variable name
    
    let finalConfigInstance;
 
+   // Helper function to process raw data consistently
+   const processData = (data, requestedComponent) => {
+       // Assuming ConfigManager handles optional fields with '?? null' internally now
+       const manager = new ConfigManager(data); 
+
+       if (requestedComponent) {
+           return manager.getConfigByComponent(requestedComponent);
+       } else {
+           return manager;
+       }
+   };
+
    // --- Check the cache first ---
-   if( cachedData ) {
+   if( cachedDataString ) {
        try {
-          const rawData = JSON.parse(cachedData);
-          const managerInstance = new ConfigManager(rawData);
-
-           console.log('raw ' + JSON.stringify(rawData));
-           console.log('mgr ' + JSON.stringify(managerInstance));
-console.log('mgr (snapshot): ' + JSON.stringify(managerInstance));
-
-// OR log a deep copy
-console.log('mgr (deep copy):', JSON.parse(JSON.stringify(managerInstance)));
-           
-          finalConfigInstance = component 
-                                ? managerInstance.getConfigByComponent(component) 
-                                : managerInstance;
+          const rawData = JSON.parse(cachedDataString);
+          console.log('Returning configuration from cache: ' + storageKey);
           
+          finalConfigInstance = processData(rawData, component);
+
           if (finalConfigInstance) {
-              return finalConfigInstance; 
+              return finalConfigInstance; // Returns a consistent class instance
           } else {
-              // If we requested a specific component that wasn't found (maybe it was skipped/invalid)
               throw new Error(`Requested component "${component}" not found in cache.`);
           }
 
@@ -184,26 +186,24 @@ console.log('mgr (deep copy):', JSON.parse(JSON.stringify(managerInstance)));
    try {
       const response = await fetch(params + '.json');
       if( !response.ok ) {
-          // Handles network-level errors cleanly
           throw new Error(`HTTP error! status: ${response.status} when fetching ${params}.json`);
       }
 
       const data = await response.json();
        
+      // Process data into class instances
       const manager = new ConfigManager(data);
 
+      // Store the *string representation* of the processed manager object
       sessionStorage.setItem(storageKey, JSON.stringify(manager));
       console.log('Stored configuration in session storage: ' + storageKey);
 
-      finalConfigInstance = component 
-                            ? manager.getConfigByComponent(component) 
-                            : manager;
+      finalConfigInstance = processData(data, component); // Use the same helper function
       
-      return finalConfigInstance;  
+      return finalConfigInstance; // Returns a consistent class instance  
 
    } catch (error) {
-      // This primarily catches Fetch errors or serious JSON parse errors
       console.error('Fatal Error during configuration fetch:', error.message);
-      throw error; // Re-throw the network/fetch error
+      throw error; 
    }
 }
