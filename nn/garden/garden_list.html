@@ -34,7 +34,6 @@ appState       = buildStateFromParams(winurlparams);
 // page / api specific constants 
 const CONST_API_PER_PAGE   = '10';
 const CONST_CUSTOM_PLANT   = 'Plant';
-const CONST_CUSTOM_GARDEN_LIST   = 'Garden List';
   
 function sortWithNull(arr, ascending = true) {
   for( let i=0; i<arr.length; i++ ) {
@@ -133,36 +132,6 @@ function buildMenu( config, results ) {
 
       // split list (if they have more than one value in garden-list...
       links = '';
-
-      if( results && config.split_list && config.split_list === 'yes' ) {
-        console.log('one');
-          garden_list_arr = [];
-          for( let j=0; j<results.length; j++ ) {
-            console.log('two');
-               if( results[j].ofvs ) {
-                 console.log('three');
-                   for( let k=0; k<results[j].ofvs.length; k++ ) {
-                     console.log('field name ' + results[j].ofvs[k].field_name);
-                        if( results[j].ofvs[k].field_name.toLowerCase() === 'garden list' ) {
-                            if( !garden_list_arr.includes(results[j].ofvs[k].field_value.toString().toLowerCase() ) ) {
-                                garden_list_arr.push(results[j].ofvs[k].field_value.toString().toLowerCase());
-                            }
-                        }
-                   }
-               }
-          }
-        
-          let urlState = appState;
-          urlState     = setGardenListValue(urlState, '');
-          urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
-          links       += furl('./garden_list.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
-          for( let i=0; i<garden_list_arr.length; i++ ) {
-               urlState = setGardenListValue( urlState, garden_list_arr[i] );
-               links += furl('./garden_list.html'+buildParameterList(urlState),garden_list_arr[i]);
-          }
-      }
-
-      if( links ) { menu_string += buildDD( CONST_CUSTOM_GARDEN_LIST, links); }
   
       let urlState  = clearForDashParams(appState);
       menu_string  += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
