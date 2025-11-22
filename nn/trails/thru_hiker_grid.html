@@ -18,9 +18,9 @@
 
 <body>
 <script type="text/javascript"   src='../core/js/global_const.js'> </script>
-<script type="text/javascript"   src='../core/js/common_func.js'> </script>
-<script type="text/javascript"   src='../core/js/roots.js'> </script>
-<script type="text/javascript"   src='../core/js/store.js'> </script>
+<script type="text/javascript"   src='../core/js/common_func.js'>  </script>
+<script type="text/javascript"   src='../core/js/roots.js'>        </script>
+<script type="text/javascript"   src='../core/js/store.js'>        </script>
 <script>
 //get parameters from the url
 let winurlstr = window.location.href;
@@ -47,22 +47,22 @@ var recsmax      = columns * rows - 1;
 
 winurlparams.append('per_page',recsmax);
 
-function getMapParams(config) {
+function getMapParams(hikerConfig) {
    let map_params = '';
 
-   map_params += '?project_id='+config.project;
+   map_params += '?project_id='+hikerConfig.project;
 
    map_params += getTaxonIdParam(appState, '&taxon_id='); 
 
-   if( config.default_place_id ) { map_params += '&place_id='+config.default_place_id; } 
+   if( hikerConfig.defaultPlaceId ) { map_params += '&place_id='+hikerConfig.defaultPlaceId; } 
    
-   map_params += '&user_id='+config.user_id; 
-   map_params += '&field:'+config.field_name+'='+(config.field_value||'');  // should change to generic filter?
+   map_params += '&user_id='+hikerConfig.userId; 
+   map_params += '&field:'+hikerConfig.fieldName+'='+(hikerConfig.fieldValue||'');  // should change to generic filter?
 
    return map_params;
 }
 
-function buildMenu(config) {
+function buildMenu( hikerConfig ) {
 
    let links = '';
    let menu_string = '';
@@ -77,11 +77,11 @@ function buildMenu(config) {
    // if all observations was selected... show the time series
    // if a taxon is in focus, just show the regular map
    if( !getMenuId(appState) && !getTaxonId(appState) ) {
-       links  +=  furl('../admin/map.html'+getMapParams(config),"Map");
-       links  +=  furl(root_observations+'torquemap'+getMapParams(config)+'&interval=monthly', "Time Series");
+       links  +=  furl('../admin/map.html'+getMapParams(hikerConfig),"Map");
+       links  +=  furl(root_observations+'torquemap'+getMapParams(hikerConfig)+'&interval=monthly', "Time Series");
        menu_string += ( buildDD( 'Maps', links) );
    } else {
-       menu_string += buildMenuURL( furl('../admin/map.html'+getMapParams(config),"Map") );
+       menu_string += buildMenuURL( furl('../admin/map.html'+getMapParams(hikerConfig),"Map") );
    }
    
    let url_state = clearForSpeciesCountsParams( appState );
@@ -91,48 +91,51 @@ function buildMenu(config) {
    
    return menu_string;
 }
-
-</script>
-<script src="../core/js/grid.js"></script>
-<script src="../core/js/configurations.js"></script>
-<script>
     
-function buildPage(data, config) {  
-   faddelem('p',document.body,{innerHTML:buildMenu(config)}); 
+function buildPage( data, hikerConfig ) {  
+   faddelem('p',document.body,{innerHTML:buildMenu( hikerConfig )}); 
    buildGrid(data);    
 };
 
-function setupAPIParams( config ) {
+function setupAPIParams( hikerConfig ) {
     
     let api_params = '';
 
-    api_params += '?project_id='+config.project;
+    api_params += '?project_id='+hikerConfig.project;
     
     api_params += getTaxonIdParam(appState, '&taxon_id='); 
 
     // default these to what's in the config even though the state sometimes
     // holds the same attributes for other components.
-    if( config.user_id          ) { api_params += '&user_id='  + config.user_id; }
-    if( config.default_place_id ) { api_params += '&place_id=' + config.default_place_id; }  
-    api_params += '&field:'+config.field_name+'='+(config.field_value||'');  // should change to generic filter?
+    if( hikerConfig.userId          ) { api_params += '&user_id='  + hikerConfig.userId; }
+    if( hikerConfig.defaultPlaceId  ) { api_params += '&place_id=' + hikerConfig.defaultPlaceId; }  
+    api_params += '&field:'+hikerConfig.fieldName+'='+(hikerConfig.fieldValue||'');  // should change to generic filter?
 
     return api_params;
 }
-    
-async function gatherResources() {
 
+</script>
+
+<script type="text/javascript"   src="../core/js/grid.js">          </script>
+<script type="text/javascript"   src="../core/js/ConfigManager.js"> </script>
+<script type="text/javascript"   src="../core/js/api_fetch.js">     </script>
+
+<script>
+async function gatherResources() {
   let json_path = json_root + getParams(appState);
-   
+ 
   try {
+   
       // Await the result of getObservations() and store the actual data
-      const config_data   = await asyncGetConfiguration( json_path, getComponent(appState) );
-      const api_params    = setupAPIParams( config_data );
+      const hikerConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
+      console.log('full config title: ' + hikerConfig.getFullTitle());
+      const api_params    = setupAPIParams( hikerConfig );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
       const obs_data      = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
-      buildPage(obs_data, config_data); 
+      buildPage(obs_data, hikerConfig); 
 
     } catch (error) {
       console.error("An error occurred:", error);
