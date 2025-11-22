@@ -152,7 +152,11 @@ async function asyncGetConfiguration( params, component ) {
 
            console.log('raw ' + JSON.stringify(rawData));
            console.log('mgr ' + JSON.stringify(managerInstance));
-          
+console.log('mgr (snapshot): ' + JSON.stringify(managerInstance));
+
+// OR log a deep copy
+console.log('mgr (deep copy):', JSON.parse(JSON.stringify(managerInstance)));
+           
           finalConfigInstance = component 
                                 ? managerInstance.getConfigByComponent(component) 
                                 : managerInstance;
