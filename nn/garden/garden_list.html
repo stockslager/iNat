@@ -139,7 +139,8 @@ function buildMenu( config, results ) {
           for( let j=0; j<results.length; j++ ) {
                if( results[j].ofvs ) {
                    for( let k=0; k<results[j].ofvs.length; k++ ) {
-                        if( results[j].ofvs[k].field_name.toLowerCase() === 'garden+list' ) {
+                     console.log('field name ' + results[j].ofvs[k].field_name);
+                        if( results[j].ofvs[k].field_name.toLowerCase() === 'garden list' ) {
                             if( !garden_list_arr.includes(results[j].ofvs[k].field_value.toString().toLowerCase() ) ) {
                                 garden_list_arr.push(results[j].ofvs[k].field_value.toString().toLowerCase());
                             }
