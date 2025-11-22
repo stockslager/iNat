@@ -1,0 +1,198 @@
+<!DOCTYPE html>  
+<html lang="en">   
+ 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" /> 
+<meta name="apple-mobile-web-app-title" content="iNat Dashboard" />
+<meta name="description" content="iNat Custom Dashboard" />
+<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
+<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+<title>iNat Custom Dashboard</title>
+</head>
+
+<body>
+<script type="text/javascript"   src='../core/js/global_const.js'> </script>
+<script type="text/javascript"   src='../core/js/common_func.js'> </script>
+<script type="text/javascript"   src='../core/js/roots.js'> </script>
+<script type="text/javascript"   src='../core/js/store.js'> </script>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr    = window.location.search;
+let winurlexsearchstr  = winurlstr.replace(winurlsearchstr,'');
+let winurlparams       = new URLSearchParams(winurlsearchstr.substring(1));
+ 
+appState  =  buildStateFromParams(winurlparams);
+
+// page specific constants...
+const CONST_ICON        = 'Icon';
+const CONST_COMPONENT   = 'Component';
+const CONST_DESCRIPTION = 'Description';
+const CONST_COMPONENTS  = 'components: ';
+const CONST_PERPAGE     = 'per page: 20';
+const CONST_PGS         = 'page: 1'
+const CONST_GARDEN_DESC = 'Wildlife value of individual plants at this location.';
+const CONST_HIKER_DESC  = 'Species encountered during this trek.';
+const CONST_CUSTOM_GARDEN_LIST   = 'Garden List';
+
+function buildMenu() {
+      let menu_string = '';
+      let params = '';
+
+      menu_string = '<div class="navbar">';
+      menu_string += buildDDTitle('');
+
+      menu_string += buildHome(furl('./about.html'+buildParameterList(appState),'<span style="font_size: 16px;">About</span>'));
+      menu_string += '</div>';
+ 
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+
+function buildPage( configs ) {
+
+      buildMenu();
+
+      faddelem('p',document.body,{innerHTML:CONST_COMPONENTS + configs.length + ' <br/>'
+                 + CONST_PERPAGE + '<br />'
+                 + CONST_PGS + '<br />'});  
+
+      let labels = [];
+
+      labels = [
+            {innerText:CONST_ICON},
+            {innerText:CONST_COMPONENT},
+            {innerText:CONST_DESCRIPTION}, 
+      ];
+ 
+      let table = faddelem('table',document.body,{id:'main'});                    
+      let thead = faddelem('thead',table);
+      let hrow  = faddelem('tr',thead);
+      
+      faddelems('th',hrow,labels);
+      let tbody = faddelem('tbody',table);
+ 
+      for( let i=0; i<configs.length; i++ ) {
+           let brow = '';
+           let values = [];
+           let config = configs[i];
+
+       console.log('one ' + config.component);
+    
+           if( config.component === 'plants' ) {
+            console.log('two');
+               appState = setComponent( appState, 'plants' 
+               let urlState = appState;  // immediately make a copy to create link params
+
+               if( results && config.split_list && config.split_list === 'yes' ) {
+                   console.log('one');
+                   garden_list_arr = [];
+                   for( let j=0; j<results.length; j++ ) {
+                        console.log('two');
+                        if( results[j].ofvs ) {
+                            console.log('three');
+                            for( let k=0; k<results[j].ofvs.length; k++ ) {
+                                 console.log('field name ' + results[j].ofvs[k].field_name);
+                                 if( results[j].ofvs[k].field_name.toLowerCase() === 'garden list' ) {
+                                     if( !garden_list_arr.includes(results[j].ofvs[k].field_value.toString().toLowerCase() ) ) {
+                                         garden_list_arr.push(results[j].ofvs[k].field_value.toString().toLowerCase());
+                                     }
+                                 }
+                            }
+                        }
+                   }
+             
+                   for( let i=0; i<garden_list_arr.length; i++ ) {
+                        urlState = setGardenListValue( urlState, garden_list_arr[i] );
+                        brow = faddelem('tr',tbody);
+                        values = [
+                           {innerHTML:furl('./garden_list.html'+buildParameterList(urlState),CONST_LEAF_UT8)},
+                           {innerHTML:furl('./garden_list.html'+buildParameterList(urlState),capitalizeWords(garden_list_arr[i]))},
+                           {innerText:CONST_GARDEN_DESC},
+                        ];
+                        faddelems('td',brow,values);
+                   }
+               }
+           }
+      }
+ 
+      for( let i=0; i<configs.length; i++ ) {
+           let brow = '';
+           let values = [];
+           let config = configs[i];
+    
+           if( config.component === 'hiker' ) {
+               appState = setComponent( appState, 'hiker' );
+               let hiker_params = buildParameterList(appState);
+               brow = faddelem('tr',tbody);
+               values = [
+                  {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,CONST_BOOT_UTF8 )},
+                  {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,config.title)},
+                  {innerText:CONST_HIKER_DESC},
+               ];
+               faddelems('td',brow,values);
+           }
+      }
+};
+
+function setupAPIParams( configManager ) {
+    
+    let api_params = '';
+
+    api_params += '?project_id='+configManager.plantProject;
+
+    if( configManager.defaultPlaceId ) { api_params += '&place_id=' + configManager.defaultPlaceId; }  
+    if( configManager.userId )         { api_params += '&user_id='  + configManager.userId; }  
+
+    if( configManager.plantField ) {
+        api_params += '&field:' + configManager.plantField + '=';
+    } else {
+        api_params += '&field:' + CONST_CUSTOM_GARDEN_LIST + '=';
+    }
+
+    return api_params;
+}
+  
+</script>
+
+<script type="text/javascript"   src="../core/js/ConfigManager.js"> </script>
+<script type="text/javascript"   src="../core/js/api_fetch.js">     </script>
+
+<script>
+async function gatherResources() {
+  var api_base   = 'https://api.inaturalist.org/v1/observations'
+  let json_path = json_root + getParams(appState);
+ 
+  try {
+   
+      // Await the result of getObservations() and store the actual data
+      const configsManager  = await asyncGetConfiguration( json_path );
+      const api_params      = setupAPIParams( configManager );
+      const api_url         = api_base+api_params;
+      console.log('api url: ' + api_url);
+      //const obs_data      = await apiFetch( api_url ); 
+     
+      // Pass the data to the buildPage function
+      //buildPage(obs_data, hikerConfig); 
+
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+let message = validateConfig(appState);
+ 
+if( message ) {
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
+ 
+</script>
+</body>
+</html>
