@@ -148,13 +148,15 @@ function setupAPIParams( configManager ) {
     
     let api_params = '';
 
-    api_params += '?project_id='+configManager.plantProject;
+    let configObj = configManager.getConfigByComponent(getComponent(appState));
 
-    if( configManager.defaultPlaceId ) { api_params += '&place_id=' + configManager.defaultPlaceId; }  
-    if( configManager.userId )         { api_params += '&user_id='  + configManager.userId; }  
+    api_params += '?project_id='+configObj.plantProject;
 
-    if( configManager.plantField ) {
-        api_params += '&field:' + configManager.plantField + '=';
+    if( configObj.defaultPlaceId ) { api_params += '&place_id=' + configObj.defaultPlaceId; }  
+    if( configObj.userId )         { api_params += '&user_id='  + configObj.userId; }  
+
+    if( configObj.plantField ) {
+        api_params += '&field:' + configObj.plantField + '=';
     } else {
         api_params += '&field:' + CONST_CUSTOM_GARDEN_LIST + '=';
     }
