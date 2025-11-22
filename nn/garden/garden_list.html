@@ -85,9 +85,9 @@ function buildMenu( config, results ) {
           urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
           links       += furl('./garden_list.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
           for( let i=0; i<config.taxa.length; i++ ) {
-               urlState = setPlantMenuId(   urlState, config.taxa[i].taxon_id );
-               urlState = setPlantMenuName( urlState, config.taxa[i].taxon_name );
-               links += furl('./garden_list.html'+buildParameterList(urlState),config.taxa[i].taxon_name);
+               urlState = setPlantMenuId(   urlState, config.taxa[i].taxonId );
+               urlState = setPlantMenuName( urlState, config.taxa[i].taxonName );
+               links += furl('./garden_list.html'+buildParameterList(urlState),config.taxa[i].taxonName);
           }
       }
 
