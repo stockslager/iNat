@@ -173,6 +173,7 @@ async function gatherResources() {
    
       // Await the result of getObservations() and store the actual data
       const configManager   = await asyncGetConfiguration( json_path );
+      console.log('full config title: ' + configManager.getFullTitle());
       const api_params      = setupAPIParams( configManager );
       const api_url         = api_base+api_params;
       console.log('api url: ' + api_url);
