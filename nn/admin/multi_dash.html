@@ -53,11 +53,13 @@ function buildMenu() {
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
-function buildPage( configs ) {
+function buildPage( xobj ) {
+
+      let obs_data = xobj.results;
 
       buildMenu();
 
-      faddelem('p',document.body,{innerHTML:CONST_COMPONENTS + configs.length + ' <br/>'
+      faddelem('p',document.body,{innerHTML:CONST_COMPONENTS + obs_data.length + ' <br/>'
                  + CONST_PERPAGE + '<br />'
                  + CONST_PGS + '<br />'});  
 
@@ -76,10 +78,10 @@ function buildPage( configs ) {
       faddelems('th',hrow,labels);
       let tbody = faddelem('tbody',table);
  
-      for( let i=0; i<configs.length; i++ ) {
+      for( let i=0; i<obs_data.length; i++ ) {
            let brow = '';
            let values = [];
-           let config = configs[i];
+           let config = obs_data[i];
 
        console.log('one ' + config.component);
     
@@ -120,10 +122,10 @@ function buildPage( configs ) {
            }
       }
  
-      for( let i=0; i<configs.length; i++ ) {
+      for( let i=0; i<obs_data.length; i++ ) {
            let brow = '';
            let values = [];
-           let config = configs[i];
+           let config = obs_data[i];
     
            if( config.component === 'hiker' ) {
                appState = setComponent( appState, 'hiker' );
@@ -176,10 +178,10 @@ async function gatherResources() {
       const api_params      = setupAPIParams( configManager );
       const api_url         = api_base+api_params;
       console.log('api url: ' + api_url);
-      //const obs_data      = await apiFetch( api_url ); 
+      const obs_data        = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
-      //buildPage(obs_data, hikerConfig); 
+      buildPage(obs_data); 
 
     } catch (error) {
       console.error("An error occurred:", error);
