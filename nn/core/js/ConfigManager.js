@@ -136,12 +136,12 @@ async function asyncGetConfiguration( params, component ) {
         const data = await response.json(); // The raw data object
 
         // --- ADDED DEBUGGING LOGS ---
-        console.log('DEBUG: Raw data object right after fetch:', data); 
-        console.log('DEBUG: Hiker entry in raw data has userId:', data.configurations.find(c => c.component === 'hiker').user_id);
+        //console.log('DEBUG: Raw data object right after fetch:', data); 
+        //console.log('DEBUG: Hiker entry in raw data has userId:', data.configurations.find(c => c.component === 'hiker').user_id);
         
         // Store the *raw JSON string* in the cache immediately
         sessionStorage.setItem(storageKey, JSON.stringify(data));
-        console.log('Stored raw configuration string in session storage: ' + storageKey);
+        //console.log('Stored raw configuration string in session storage: ' + storageKey);
         // --- END DEBUGGING LOGS ---
 
 
