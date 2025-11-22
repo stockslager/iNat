@@ -39,32 +39,7 @@ const CONST_WITHOUT_TAXON_PLANTAE = '47126';
 let path      = window.location.pathname;
 let html_name = path.substring(path.lastIndexOf('/') + 1);
  
-function setupAPIParams(config) {
-   let api_params = '';
-
-   menu_name = getShowMenuName(config, getMenuId(appState)) || CONST_SHOW;
-
-   api_params += ('?project_id='+config.insect_project);
-   //api_params += '&hrank=species';
-
-   // filter by field... uses the plant_id (the taxon_id) for the plant
-   // chosen from the garden list.
-   api_params += '&field:'+config.field_name+'='+getPlantId(appState);
-
-   // default these to what's in the config even though the state sometimes
-   // holds the same attributes for other components.
-   if( config.user_id          ) { api_params += '&user_id='  + config.user_id; }
-   if( config.default_place_id ) { api_params += '&place_id=' + config.default_place_id; }  
- 
-   api_params += getMenuIdParam(appState, '&taxon_id='); 
-   api_params += getPageParam(appState, '&page=');
-   api_params += '&without_taxon_id='+CONST_WITHOUT_TAXON_PLANTAE; // only interested in visitors to plants here
-   api_params += '&per_page='+CONST_API_PER_PAGE;
-
-   return api_params;
-}
- 
-function buildMenu( results, config ) {
+function buildMenu( results, plantsConfig ) {
 
    let links = '';
    let icons = '';
@@ -77,14 +52,14 @@ function buildMenu( results, config ) {
    if( getTaxonDD(appState) ) {
        sub_taxon_arr = getTaxonDD(appState);
    } else {
-       if( config.sub_icons ) {
+       if( plantsConfig.subIcons ) {
            for( let i=0; i<results.length; i++) {
                 if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
-                    for( let j=0; j<config.sub_icons.length; j++ ) {
+                    for( let j=0; j<plantsConfig.subIcons.length; j++ ) {
                          for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
-                              if( results[i].taxon.ancestor_ids[k].toString() === config.sub_icons[j].taxon_id.toString() ){
-                                  if( !sub_taxon_arr.includes( config.sub_icons[j].taxon_id ) ) {
-                                      sub_taxon_arr.push( config.sub_icons[j].taxon_id );
+                              if( results[i].taxon.ancestor_ids[k].toString() === plantsConfig.subIcons[j].taxon_id.toString() ){
+                                  if( !sub_taxon_arr.includes( plantsConfig.subIcons[j].taxon_id ) ) {
+                                      sub_taxon_arr.push( plantsConfig.subIcons[j].taxon_id );
                                   }
                               }
                           }
@@ -94,17 +69,17 @@ function buildMenu( results, config ) {
        }
    }
 
-   if( config.sub_icons ) {
+   if( plantsConfig.subIcons ) {
        let urlState = appState;
        urlState = setMenuId(urlState, '');
        urlState = setMenuName(urlState, '');
        urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
 
        links =  (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>'+CONST_ALL ));
-       for( let j=0; j<config.sub_icons.length; j++ ) {
-            if( sub_taxon_arr.includes( config.sub_icons[j].taxon_id ) ) {
-                urlState  = setMenuId(urlState, config.sub_icons[j].taxon_id);
-                links    += (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+config.sub_icons[j].icon+'</span>'+config.sub_icons[j].nm ));
+       for( let j=0; j<plantsConfig.subIcons.length; j++ ) {
+            if( sub_taxon_arr.includes( plantsConfig.subIcons[j].taxonId ) ) {
+                urlState  = setMenuId(urlState, plantsConfig.subIcons[j].taxonId);
+                links    += (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+plantsConfig.subIcons[j].icon+'</span>'+plantsConfig.subIcons[j].name ));
             }
        }
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
@@ -118,8 +93,10 @@ function buildMenu( results, config ) {
    faddelem('p',document.body,{innerHTML:(menu_string)});
 }
 
-function buildPage(xobj, config) {
+function buildPage(xobj, plantsConfig) {
    let results = xobj.results;
+
+   menu_name = getShowMenuName(plantsConfig, getMenuId(appState)) || CONST_SHOW;
  
    if (results) {
       let total_results = xobj.total_results;
@@ -130,7 +107,7 @@ function buildPage(xobj, config) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let labels = [];
 
-      buildMenu( results, config );
+      buildMenu( results, plantsConfig );
 
       if( !getMenuId(appState) ) {
           let titleString = CONST_ON+capitalizeWords(getPlantName(appState));
@@ -208,11 +185,36 @@ function buildPage(xobj, config) {
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
-
 </script>
-<script src="../core/js/configurations.js"></script>
-<script>
+ 
+<script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
+<script type="text/javascript"   src="../core/js/api_fetch.js"></script>
 
+<script>
+function setupAPIParams(plantsConfig) {
+   let api_params = '';
+
+   api_params += ('?project_id='+plantsConfig.insectProject);
+   //api_params += '&hrank=species';
+
+   // filter by field... uses the plant_id (the taxon_id) for the plant
+   // chosen from the garden list.
+   api_params += '&field:'+plantsConfig.fieldName+'='+getPlantId(appState);
+
+   // default these to what's in the config even though the state sometimes
+   // holds the same attributes for other components.
+   if( plantsConfig.userId          ) { api_params += '&user_id='  + plantsConfig.userId; }
+   if( plantsConfig.defaultPlace    ) { api_params += '&place_id=' + plantsConfig.defaultPlace; }  
+ 
+   api_params += getMenuIdParam(appState, '&taxon_id='); 
+   api_params += getPageParam(appState, '&page=');
+   api_params += '&without_taxon_id='+CONST_WITHOUT_TAXON_PLANTAE; // only interested in visitors to plants here
+   api_params += '&per_page='+CONST_API_PER_PAGE;
+
+   return api_params;
+}
+ 
+ 
 async function gatherResources() {
   let api_base  = 'https://api.inaturalist.org/v1/observations/species_counts';
   let json_path = json_root + getParams(appState);
@@ -220,14 +222,15 @@ async function gatherResources() {
   try {
    
       // Await the result of getObservations() and store the actual data
-      const config_data   = await asyncGetConfiguration( json_path, getComponent(appState) );
-      const api_params    = setupAPIParams( config_data );
+      const plantsConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
+      console.log('full config title: ' + plantsConfig.getFullTitle());
+      const api_params    = setupAPIParams( plantsConfig );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
-      const obs_data      = await apiFetch( api_url ); 
+      //const obs_data      = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
-      buildPage(obs_data, config_data); 
+      //buildPage(obs_data, plantsConfig); 
 
     } catch (error) {
       console.error("An error occurred:", error);
