@@ -55,7 +55,7 @@ function buildMenu() {
 
 function buildPage( xobj, configManager ) {
 
-      let obs_data  = xobj.results;
+      let results   = xobj.results;
       let config    = configManager.getConfigByComponent(CONST_CUSTOM_PLANTS);
 
       buildMenu();
@@ -79,31 +79,24 @@ function buildPage( xobj, configManager ) {
       faddelems('th',hrow,labels);
       let tbody = faddelem('tbody',table);
  
-      for( let i=0; i<obs_data.length; i++ ) {
+      for( let i=0; i<results.length; i++ ) {
            let brow = '';
            let values = [];
 
-       console.log('one ' + config.component);
-    
-           if( config.component === CONST_CUSTOM_PLANTS ) {
-            console.log('two');
-               appState = setComponent( appState, 'plants' );
-               let urlState = appState;  // immediately make a copy to create link params
+           appState = setComponent( appState, CONST_CUSTOM_PLANTS );
+           let urlState = appState;  // immediately make a copy to create link params
 
-               if( results && config.splitList && config.splitList === 'yes' ) {
-                   console.log('one');
-                   garden_list_arr = [];
-                   for( let j=0; j<results.length; j++ ) {
-                        console.log('two');
-                        if( results[j].ofvs ) {
-                            console.log('three');
-                            for( let k=0; k<results[j].ofvs.length; k++ ) {
-                                 console.log('field name ' + results[j].ofvs[k].field_name);
-                                 if( results[j].ofvs[k].field_name.toLowerCase() === 'garden list' ) {
-                                     if( !garden_list_arr.includes(results[j].ofvs[k].field_value.toString().toLowerCase() ) ) {
-                                         garden_list_arr.push(results[j].ofvs[k].field_value.toString().toLowerCase());
-                                     }
-                                 }
+           if( config.splitList && config.splitList === 'yes' ) {
+               console.log('one');
+               garden_list_arr = [];
+               console.log('two');
+               if( obs_data[j].ofvs ) {
+                   console.log('three');
+                   for( let k=0; k<obs_data[j].ofvs.length; k++ ) {
+                        console.log('field name ' + obs_data[j].ofvs[k].field_name);
+                        if( results[j].ofvs[k].field_name.toLowerCase() === 'garden list' ) {
+                            if( !garden_list_arr.includes(results[j].ofvs[k].field_value.toString().toLowerCase() ) ) {
+                                garden_list_arr.push(results[j].ofvs[k].field_value.toString().toLowerCase());
                             }
                         }
                    }
