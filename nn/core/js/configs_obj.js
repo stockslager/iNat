@@ -56,6 +56,7 @@ class ConfigurationItem {
         this.defaultPlace = configData.default_place;
         this.fieldId = configData.field_id;
         this.fieldName = configData.field_name;
+        this.fieldValue = configData.field_value;
         
         // Map nested arrays to their respective classes
         this.taxa = configData.taxa ? configData.taxa.map(t => new Taxon(t)) : [];
