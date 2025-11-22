@@ -5,23 +5,24 @@ const COMPONENT_YARD      = 'yard';
 const COMPONENT_ART       = 'art';
 
 // --- Constants for Attribute Keys ---
-const ATTRIBUTE_PROJECT        = 'project';
-const ATTRIBUTE_PLACE          = 'place';
-const ATTRIBUTE_PARAMS         = 'params';
-const ATTRIBUTE_USER           = 'user';
-const ATTRIBUTE_GARDEN         = 'garden';
-const ATTRIBUTE_COMPONENT      = 'component';
-const ATTRIBUTE_PLANTID        = 'plantid';
-const ATTRIBUTE_PLANTNAME      = 'plantname';
-const ATTRIBUTE_TAXONID        = 'taxonid';
-const ATTRIBUTE_TAXONNAME      = 'taxonname';
-const ATTRIBUTE_MENUID         = 'menuid';
-const ATTRIBUTE_MENUNAME       = 'menuname';
-const ATTRIBUTE_PLANTMENUID    = 'plantmenuid';
-const ATTRIBUTE_PLANTMENUNAME  = 'plantmenuname';
-const ATTRIBUTE_TAXONDD        = 'taxondd';
-const ATTRIBUTE_PAGE           = 'page';
-const ATTRIBUTE_PER_PAGE       = 'per_page';
+const ATTRIBUTE_PROJECT         = 'project';
+const ATTRIBUTE_PLACE           = 'place';
+const ATTRIBUTE_PARAMS          = 'params';
+const ATTRIBUTE_USER            = 'user';
+const ATTRIBUTE_GARDEN          = 'garden';
+const ATTRIBUTE_COMPONENT       = 'component';
+const ATTRIBUTE_PLANTID         = 'plantid';
+const ATTRIBUTE_PLANTNAME       = 'plantname';
+const ATTRIBUTE_TAXONID         = 'taxonid';
+const ATTRIBUTE_TAXONNAME       = 'taxonname';
+const ATTRIBUTE_MENUID          = 'menuid';
+const ATTRIBUTE_MENUNAME        = 'menuname';
+const ATTRIBUTE_PLANTMENUID     = 'plantmenuid';
+const ATTRIBUTE_PLANTMENUNAME   = 'plantmenuname';
+const ATTRIBUTE_GARDENLISTVALUE = 'gardenlistvalue';
+const ATTRIBUTE_TAXONDD         = 'taxondd';
+const ATTRIBUTE_PAGE            = 'page';
+const ATTRIBUTE_PER_PAGE        = 'per_page';
 
 // application state
 let appState = {
@@ -39,6 +40,7 @@ let appState = {
   [ATTRIBUTE_MENUNAME]:  '',
   [ATTRIBUTE_PLANTMENUID]:    '',
   [ATTRIBUTE_PLANTMENUNAME]:  '',
+  [ATTRIBUTE_GARDENLISTVALUE]:  '',
   [ATTRIBUTE_TAXONDD]:   '',
   [ATTRIBUTE_PAGE]:      '',
   [ATTRIBUTE_PER_PAGE]:  ''
@@ -68,6 +70,7 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_MENUNAME]:  '',
     [ATTRIBUTE_PLANTMENUID]:    '', 
     [ATTRIBUTE_PLANTMENUNAME]:  '',
+    [ATTRIBUTE_GARDENLISTVALUE]: '';
     [ATTRIBUTE_TAXONDD]:   '',
     [ATTRIBUTE_PAGE]:      '',
     [ATTRIBUTE_PER_PAGE]:  ''
@@ -156,23 +159,24 @@ function setAttribute(state, attribute, value) {
  * Helper Getters 
  * These abstract away the getAttribute call for cleaner code elsewhere.
  */
-function getPlace(state)          { return (getAttribute(state, ATTRIBUTE_PLACE)); }
-function getProject(state)        { return (getAttribute(state, ATTRIBUTE_PROJECT)); }
-function getParams(state)         { return (getAttribute(state, ATTRIBUTE_PARAMS)); }
-function getUser(state)           { return (getAttribute(state, ATTRIBUTE_USER)); }
-function getGarden(state)         { return (getAttribute(state, ATTRIBUTE_GARDEN)); }
-function getComponent(state)      { return (getAttribute(state, ATTRIBUTE_COMPONENT)); }
-function getPlantId(state)        { return (getAttribute(state, ATTRIBUTE_PLANTID)); }
-function getPlantName(state)      { return (getAttribute(state, ATTRIBUTE_PLANTNAME)); }
-function getTaxonId(state)        { return (getAttribute(state, ATTRIBUTE_TAXONID)); }
-function getTaxonName(state)      { return (getAttribute(state, ATTRIBUTE_TAXONNAME)); }
-function getMenuId(state)         { return (getAttribute(state, ATTRIBUTE_MENUID)); }
-function getMenuName(state)       { return (getAttribute(state, ATTRIBUTE_MENUNAME)); }
-function getPlantMenuId(state)    { return (getAttribute(state, ATTRIBUTE_PLANTMENUID)); }
-function getPlantMenuName(state)  { return (getAttribute(state, ATTRIBUTE_PLANTMENUNAME)); }
-function getTaxonDD(state)        { return (getAttribute(state, ATTRIBUTE_TAXONDD)); }
-function getPage(state)           { return (getAttribute(state, ATTRIBUTE_PAGE)); }
-function getPerPage(state)        { return (getAttribute(state, ATTRIBUTE_PER_PAGE)); }
+function getPlace(state)           { return (getAttribute(state, ATTRIBUTE_PLACE)); }
+function getProject(state)         { return (getAttribute(state, ATTRIBUTE_PROJECT)); }
+function getParams(state)          { return (getAttribute(state, ATTRIBUTE_PARAMS)); }
+function getUser(state)            { return (getAttribute(state, ATTRIBUTE_USER)); }
+function getGarden(state)          { return (getAttribute(state, ATTRIBUTE_GARDEN)); }
+function getComponent(state)       { return (getAttribute(state, ATTRIBUTE_COMPONENT)); }
+function getPlantId(state)         { return (getAttribute(state, ATTRIBUTE_PLANTID)); }
+function getPlantName(state)       { return (getAttribute(state, ATTRIBUTE_PLANTNAME)); }
+function getTaxonId(state)         { return (getAttribute(state, ATTRIBUTE_TAXONID)); }
+function getTaxonName(state)       { return (getAttribute(state, ATTRIBUTE_TAXONNAME)); }
+function getMenuId(state)          { return (getAttribute(state, ATTRIBUTE_MENUID)); }
+function getMenuName(state)        { return (getAttribute(state, ATTRIBUTE_MENUNAME)); }
+function getPlantMenuId(state)     { return (getAttribute(state, ATTRIBUTE_PLANTMENUID)); }
+function getPlantMenuName(state)   { return (getAttribute(state, ATTRIBUTE_PLANTMENUNAME)); }
+function getGardenListValue(state) { return (getAttribute(state, ATTRIBUTE_GARDENLISTVALUE)); }
+function getTaxonDD(state)         { return (getAttribute(state, ATTRIBUTE_TAXONDD)); }
+function getPage(state)            { return (getAttribute(state, ATTRIBUTE_PAGE)); }
+function getPerPage(state)         { return (getAttribute(state, ATTRIBUTE_PER_PAGE)); }
 
 /*
  * Helper Setters (Optional but Recommended) ---
@@ -193,6 +197,7 @@ function setMenuId(state, value)          { return (setAttribute(state, ATTRIBUT
 function setMenuName(state, value)        { return (setAttribute(state, ATTRIBUTE_MENUNAME, value)); }
 function setPlantMenuId(state, value)     { return (setAttribute(state, ATTRIBUTE_PLANTMENUID, value)); }
 function setPlantMenuName(state, value)   { return (setAttribute(state, ATTRIBUTE_PLANTMENUNAME, value)); }
+function setGardenListValue(state, value) { return (setAttribute(state, ATTRIBUTE_GARDENLISTVALUE, value)); }
 function setTaxonDD(state, value)         { return (setAttribute(state, ATTRIBUTE_TAXONDD, value)); }
 function setPage(state, value)            { return (setAttribute(state, ATTRIBUTE_PAGE, value)); }
 function setPerPage(state, value)         { return (setAttribute(state, ATTRIBUTE_PER_PAGE, value)); }
@@ -288,6 +293,15 @@ function getPlantMenuNameParam(state, param_nm)   {
   let menu_name = getMenuName(state);
   if( menu_name ) { 
       return (param_nm + menu_name);
+  } else {
+      return '';
+  }
+}
+
+function getGardenListValueParam(state, param_nm)   { 
+  let garden_list_value = getGardenListValue(state);
+  if( garden_list_value ) { 
+      return (param_nm + garden_list_value);
   } else {
       return '';
   }
@@ -493,6 +507,7 @@ function clearForDashParams(state) {
   urlState = setTaxonName(urlState, '');
   urlState = setPlantMenuId(urlState, '');
   urlState = setPlantMenuName(urlState, '');
+  urlState = setGardenListValue(urlState, '');
   urlState = setMenuId(urlState, '');
   urlState = setMenuName(urlState, '');
   urlState = setTaxonDD(urlState, '');
