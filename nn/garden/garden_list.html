@@ -274,9 +274,9 @@ async function gatherResources() {
       // Await the result of getObservations() and store the actual data
       const plantConfig  = await asyncGetplantConfig( json_path, getComponent(appState) );
       console.log('full config title: ' + config.getFullTitle());
-      const api_params    = setupAPIParams( plantConfig );
-      const api_url       = api_base+api_params;
-      console.log('api url: ' + api_url);
+      //const api_params    = setupAPIParams( plantConfig );
+     // const api_url       = api_base+api_params;
+      //console.log('api url: ' + api_url);
       //const obs_data      = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
@@ -289,7 +289,7 @@ async function gatherResources() {
     }
 }
 
-let message = validatePlants(appState);
+let message = validateGarden(appState);
  
 if( message ) {
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
