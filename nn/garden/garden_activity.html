@@ -57,9 +57,9 @@ function buildMenu( results, plantsConfig ) {
                 if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
                     for( let j=0; j<plantsConfig.subIcons.length; j++ ) {
                          for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
-                              if( results[i].taxon.ancestor_ids[k].toString() === plantsConfig.subIcons[j].taxon_id.toString() ){
-                                  if( !sub_taxon_arr.includes( plantsConfig.subIcons[j].taxon_id ) ) {
-                                      sub_taxon_arr.push( plantsConfig.subIcons[j].taxon_id );
+                              if( results[i].taxon.ancestor_ids[k].toString() === plantsConfig.subIcons[j].taxonId.toString() ){
+                                  if( !sub_taxon_arr.includes( plantsConfig.subIcons[j].taxonId ) ) {
+                                      sub_taxon_arr.push( plantsConfig.subIcons[j].taxonId );
                                   }
                               }
                           }
