@@ -63,10 +63,10 @@ class ConfigurationItem {
         this.subIcons = configData.sub_icons ? configData.sub_icons.map(s => new SubIcon(s)) : [];
 
         // --- type/presence validation ---
-        if (typeof configData.component !== 'string' || configData.component.trim().length === 0) {
+     /*   if (typeof configData.component !== 'string' || configData.component.trim().length === 0) {
             // missing component
             throw new Error('Configuration Item requires a valid non-empty "component".');
-        }
+        }*/
 
         // component is plants but "project" and/or "insect_project" is not set.
         /*if( configData.component === CONST_CONFIGS_OBJ_PLANTS ) {
@@ -75,7 +75,7 @@ class ConfigurationItem {
             } 
         }*/
         // component is hiker but "project" is not set.
-        if( configData.component === CONST_CONFIGS_OBJ_HIKER ) {
+   /*     if( configData.component === CONST_CONFIGS_OBJ_HIKER ) {
             if( configData.project.trim().length === 0 ) {
                 throw new Error('Configuration Item requires a valid non-empty "project".');
             }
@@ -85,7 +85,7 @@ class ConfigurationItem {
             if( configData.project.trim().length === 0 ) {
                 throw new Error('Configuration Item requires a valid non-empty "project".');
             }
-        } 
+        } */
     }
 
     /**
