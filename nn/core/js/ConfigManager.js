@@ -40,9 +40,12 @@ class ConfigurationItem {
         
         // Ensure hideOnAny results in a boolean or default to false
         this.hideOnAny = (configData.hide_on_any === 'yes') ?? false; 
-        
+
+        this.plantIds   = configData.plant_ids ?? null;
         this.plantField = configData.plant_field ?? null;
         this.plantFieldValue = configData.plant_field_value ?? null;
+        this.plantListUserId = configData.plant_list_user_id ?? null;
+        this.plantTagName    = configData.plant_tag_name ?? null;
         this.defaultPlace = configData.default_place ?? null;
         this.fieldId = configData.field_id ?? null;
         this.fieldName = configData.field_name ?? null;
