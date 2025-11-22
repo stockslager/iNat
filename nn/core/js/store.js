@@ -70,7 +70,7 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_MENUNAME]:  '',
     [ATTRIBUTE_PLANTMENUID]:    '', 
     [ATTRIBUTE_PLANTMENUNAME]:  '',
-    [ATTRIBUTE_GARDENLISTVALUE]: '';
+    [ATTRIBUTE_GARDENLISTVALUE]: '',
     [ATTRIBUTE_TAXONDD]:   '',
     [ATTRIBUTE_PAGE]:      '',
     [ATTRIBUTE_PER_PAGE]:  ''
