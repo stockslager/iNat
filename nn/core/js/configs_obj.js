@@ -67,16 +67,8 @@ class ConfigurationItem {
             throw new Error('Configuration Item requires a valid non-empty "component".');
         }
 
-        // Ensure 'hideOnAny' is always a boolean
-        if (configData.hide_on_any !== 'yes' && configData.hide_on_any !== 'no') {
-            console.warn(`Invalid value for hide_on_any: ${configData.hide_on_any}. Defaulting to 'no'.`);
-            this.hideOnAny = false; 
-        } else {
-            this.hideOnAny = configData.hide_on_any === 'yes';
-        }
-
         // component is plants but "project" and/or "insect_project" is not set.
-        if( configData.component === CONST_CONFIG_OBJ_HIKER && (configData.project.trim().length === 0 || configData.insect_project.trim().length === 0 ) {
+        if( configData.component === CONST_CONFIG_OBJ_PLANTS && (configData.project.trim().length === 0 || configData.insect_project.trim().length === 0 ) ) {
             throw new Error('Configuration Item requires valid non-empty "project" and "insect_project" attributes.');
         }
         // component is hiker but "project" is not set.
@@ -84,7 +76,7 @@ class ConfigurationItem {
             throw new Error('Configuration Item requires a valid non-empty "project".');
         }
         // component is art but "project" is not set.
-        if( configData.component === CONST_CONFIG_OBJ_HIKER && configData.project.trim().length === 0 ) {
+        if( configData.component === CONST_CONFIG_OBJ_ART && configData.project.trim().length === 0 ) {
             throw new Error('Configuration Item requires a valid non-empty "project".');
         }
     }
@@ -106,8 +98,9 @@ class ConfigManager {
      * @param {object} jsonData - The raw JSON object imported into JavaScript.
      */
     constructor(jsonData) {
-        // Map the main configurations array to ConfigurationItem instances
-        this.configurations = jsonData.configurations.map(config => new ConfigurationItem(config));
+        this.configurations = jsonData.configurations.map(config => {
+            return new ConfigurationItem(config);
+        });
         
         // Map the default_sub_icons array to SubIcon instances
         if( jsonData.default_sub_icons ) {
@@ -126,12 +119,15 @@ class ConfigManager {
 }
 
 // function to handle fetching / caching of configurations
-// returns one configuration if component name is passed in
-// otherwise returns all configurations.
+// returns one configuration if component name is passed in (component is optional)
+// otherwise returns all configurations (via the manager object).
 async function asyncGetConfiguration( params, component ) {
 
    const storageKey   = ('nn_configCache_'+params);
    const cachedData   = sessionStorage.getItem(storageKey);
+   
+   // We will store the final config/manager instance we want to return here
+   let finalConfigInstance;
 
    // --- Check the cache first ---
    if( cachedData ) {
@@ -139,29 +135,34 @@ async function asyncGetConfiguration( params, component ) {
        try {
           const rawData = JSON.parse(cachedData);
           
-          // Reconstruct the Manager from the raw data structure 
-          // stored in the cache string. The rawData will be a generic JS object 
-          // that matches the structure of the *entire* original JSON file.
+          // REHYDRATE: If we have cached data, we must convert it back into class instances
           const managerInstance = new ConfigManager(rawData);
           
-          // Now safely get the specific config using a class method
-          const config = managerInstance.getConfigByComponent(component); 
-          
-          return config; 
+          // Determine what to return
+          if (component) {
+              finalConfigInstance = managerInstance.getConfigByComponent(component);
+          } else {
+              finalConfigInstance = managerInstance; // Return the whole manager if no specific component requested
+          }
+
+          if (finalConfigInstance) {
+              return finalConfigInstance; // Successfully retrieved from cache
+          } else {
+              // Component not found in cached data, maybe the config structure changed?
+              throw new Error(`Requested component "${component}" not found in cache.`);
+          }
 
        } catch (e) {
-          console.error("Error parsing or rehydrating cached JSON:", e);
+          console.error("Error processing cached configuration, fetching new data:", e.message);
           sessionStorage.removeItem(storageKey); // Clear bad cache entry
+          // Continue execution to fetch fresh data
        }
    }  
     
-   console.log('fetching json: ' + params);
+   // --- Fetch New Data (Only runs if cache check failed or missed) ---
 
    if( !params ) {
-       let message = `Name of .json must be specified in the url.  
-                      There are no params in the url to be matched with a .json configuration file.   
-                      Please add the name of a valid .json file to the url.`;
-       throw new Error(message);
+       throw new Error(`Name of .json file must be specified in the URL/params.`);
    }
 
    try {
@@ -169,47 +170,40 @@ async function asyncGetConfiguration( params, component ) {
 
       if( !response.ok ) {
           if( response.status === 404 ) {
-              let message = `A parameters file named `+params+` has no matching .json configuration file.   
-                             Please add the name of a valid .json file to the url.`;
-              throw new Error(message);
+              throw new Error(`A parameters file named ${params} has no matching .json configuration file.`);
           }
           throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-       console.log('h1');
-
-      // Initialize the manager with the data
+       
+      // If the ConfigManager constructor throws a validation error, 
+      // the `catch` block immediately below will execute.
       const manager = new ConfigManager(data);
-       console.log('ddddd');
-console.log(`There are ${manager.configurations.length} configurations loaded.`);
 
-const config = manager.getConfigByComponent(component);
-console.log(`Found config title: ${config.getFullTitle()}`);
-if( config.taxa.length > 0 ) {
-    console.log(`First taxon name: ${config.taxa[0].taxonName}`);
-}
-console.log(`Is hidden on any condition? ${config.hideOnAny}`);
-
-console.log('Default sub icons include:');
-if( manager.defaultSubIcons ) {
-    manager.defaultSubIcons.forEach(icon => {
-        console.log(`- ${icon.icon} (${icon.name})`);
-    });
-}
-
-      // Store data in session storage before returning 
-      // sessionStorage only stores strings, so we must use JSON.stringify
+      // Store data in session storage BEFORE returning
+      // We store the *entire* manager object structure as a string
       sessionStorage.setItem(storageKey, JSON.stringify(manager));
       console.log('Stored configuration in session storage: ' + storageKey);
 
-       
-      return( config );  
+      // Determine what to return from the fetch path
+      if (component) {
+        // Return a single configuration item
+        finalConfigInstance = manager.getConfigByComponent(component);
+        if (!finalConfigInstance) {
+            throw new Error(`Requested component "${component}" not found in the fetched configuration.`);
+        }
+      } else {
+        // Return the full manager instance
+        finalConfigInstance = manager;
+      }
+      
+      return finalConfigInstance;  
 
    } catch (error) {
-      console.error('Error fetching JSON:', error);
-      
-      // Re-throw the error so the caller can catch it and handle it
+      // This catches Fetch errors AND validation errors from the ConfigManager constructor
+      console.error('Fatal Error during configuration fetch or validation:', error.message);
+      // Re-throw the error so the code that called asyncGetConfiguration can handle it 
       throw error; 
    }
 }
