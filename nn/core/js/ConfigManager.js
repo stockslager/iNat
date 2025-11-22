@@ -30,6 +30,8 @@ class SubIcon {
 class ConfigurationItem {
     constructor(configData) {
         console.log('plant ids ' + configData.plant_ids);
+        console.log('plant field ' + configData.plant_field);
+        console.log('plant prj ' + configData.plant_project);
         // Use the nullish coalescing operator (??) to ensure properties are never undefined
         this.component = configData.component ?? null;
         this.project = configData.project ?? null;
@@ -45,6 +47,8 @@ class ConfigurationItem {
         this.plantIds   = configData.plant_ids ?? null;
         console.log('plant ids 2 ' + this.plantIds);
         this.plantField = configData.plant_field ?? null;
+        console.log('plant field2 ' + this.plantField);
+        console.log('plant prj2 ' + this.plantProject);
         this.plantFieldValue = configData.plant_field_value ?? null;
         this.plantListUserId = configData.plant_list_user_id ?? null;
         this.plantTagName    = configData.plant_tag_name ?? null;
