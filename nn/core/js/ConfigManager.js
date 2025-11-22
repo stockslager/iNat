@@ -44,29 +44,33 @@ class ConfigurationItem {
      */
     constructor(configData) {
         this.component = configData.component;
-        this.project = configData.project;
-        this.insectProject = configData.insect_project;
-        this.plantProject = configData.plant_project;
-        this.seedProject = configData.seed_project;
-        this.userId = configData.user_id;
-        this.title = configData.title;
-        this.hideOnAny = configData.hide_on_any === 'yes'; // Convert string "yes" to boolean
-        this.plantFilter = configData.plant_filter;
-        this.plantFilterValue = configData.plant_filter_value;
-        this.defaultPlace = configData.default_place;
-        this.fieldId = configData.field_id;
-        this.fieldName = configData.field_name;
-        this.fieldValue = configData.field_value;
+        this.project = configData.project ?? null;
+        this.insectProject = configData.insect_project ?? null;
+        this.plantProject = configData.plant_project ?? null;
+        this.seedProject = configData.seed_project ?? null;
+        this.userId = configData.user_id ?? null;
+        this.title = configData.title ?? null;
+        this.hideOnAny = (configData.hide_on_any === 'yes') ?? false; // Convert string "yes" to boolean
+        this.plantFilter = configData.plant_filter ?? null;
+        this.plantFilterValue = configData.plant_filter_value ?? null;
+        this.defaultPlace = configData.default_place ?? null;
+        this.fieldId = configData.field_id ?? null;
+        this.fieldName = configData.field_name ?? null;
+        this.fieldValue = configData.field_value ?? null;
         
         // Map nested arrays to their respective classes
-        this.taxa = configData.taxa ? configData.taxa.map(t => new Taxon(t)) : [];
-        this.subIcons = configData.sub_icons ? configData.sub_icons.map(s => new SubIcon(s)) : [];
+        this.taxa = configData.taxa?.map(t => new Taxon(t)) ?? [];
+        this.subIcons = configData.sub_icons?.map(s => new SubIcon(s)) ?? [];
 
         // --- type/presence validation ---
-     /*   if (typeof configData.component !== 'string' || configData.component.trim().length === 0) {
-            // missing component
-            throw new Error('Configuration Item requires a valid non-empty "component".');
-        }*/
+        // --- Validations (if kept) ---
+        // Your validation logic must now check for 'null' instead of just undefined/empty string
+        const isNullOrEmpty = (value) => value === null || typeof value !== 'string' || value.trim().length === 0;
+
+        if (isNullOrEmpty(this.component)) {
+            // Log a warning or handle as needed, but do not throw an error to keep the item in the list
+            console.warn('Component is missing for an entry.');
+        }
 
         // component is plants but "project" and/or "insect_project" is not set.
         /*if( configData.component === CONST_CONFIGS_OBJ_PLANTS ) {
