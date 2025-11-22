@@ -146,8 +146,8 @@ async function asyncGetConfiguration( params, component ) {
           const rawData = JSON.parse(cachedData);
           const managerInstance = new ConfigManager(rawData);
 
-           console.log('raw ' + rawData);
-           console.log('mgr ' + managerInstance);
+           console.log('raw ' + JSON.stringify(rawData));
+           console.log('mgr ' + JSON.stringify(managerInstance));
           
           finalConfigInstance = component 
                                 ? managerInstance.getConfigByComponent(component) 
