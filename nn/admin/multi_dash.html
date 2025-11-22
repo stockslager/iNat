@@ -60,7 +60,7 @@ function buildPage( xobj, configManager ) {
 
       buildMenu();
 
-      faddelem('p',document.body,{innerHTML:CONST_COMPONENTS + obs_data.length + ' <br/>'
+      faddelem('p',document.body,{innerHTML:CONST_COMPONENTS + results.length + ' <br/>'
                  + CONST_PERPAGE + '<br />'
                  + CONST_PGS + '<br />'});  
 
@@ -90,13 +90,13 @@ function buildPage( xobj, configManager ) {
                console.log('one');
                garden_list_arr = [];
                console.log('two');
-               if( obs_data[j].ofvs ) {
+               if( results[i].ofvs ) {
                    console.log('three');
-                   for( let k=0; k<obs_data[j].ofvs.length; k++ ) {
-                        console.log('field name ' + obs_data[j].ofvs[k].field_name);
-                        if( results[j].ofvs[k].field_name.toLowerCase() === 'garden list' ) {
-                            if( !garden_list_arr.includes(results[j].ofvs[k].field_value.toString().toLowerCase() ) ) {
-                                garden_list_arr.push(results[j].ofvs[k].field_value.toString().toLowerCase());
+                   for( let k=0; k<results[i].ofvs.length; k++ ) {
+                        console.log('field name ' + results[i].ofvs[k].field_name);
+                        if( results[i].ofvs[k].field_name.toLowerCase() === 'garden list' ) {
+                            if( !garden_list_arr.includes(results[i].ofvs[k].field_value.toString().toLowerCase() ) ) {
+                                garden_list_arr.push(results[i].ofvs[k].field_value.toString().toLowerCase());
                             }
                         }
                    }
