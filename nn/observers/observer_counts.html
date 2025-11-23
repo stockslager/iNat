@@ -26,6 +26,8 @@ let winurlsearchstr   = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams   = new URLSearchParams(winurlsearchstr.substring(1));
 
+const CONST_WITHOUT_TAXON_PLANTAE = '47126';
+
 appState       = buildStateFromParams(winurlparams);
     
 function furlArrow(url,txt=url) { return '<a href="'+url+'" id="arrow">'+txt+'</a>'; };
