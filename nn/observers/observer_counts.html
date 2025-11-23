@@ -27,6 +27,7 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams   = new URLSearchParams(winurlsearchstr.substring(1));
 
 const CONST_WITHOUT_TAXON_PLANTAE = '47126';
+const CONST_CACHE_KEY_SUFFIX      = 'gardeners';
 
 appState       = buildStateFromParams(winurlparams);
     
@@ -158,7 +159,7 @@ class Record {
   }
 }
   
-function storeData(xobj) {
+function storeData( xobj, cache_key ) {
    let results = xobj.results;
 
    if (results) {
@@ -171,7 +172,7 @@ function storeData(xobj) {
 
       // Serialize the object to JSON string so it can be stored in session
       const result_string = JSON.stringify(result);
-      sessionStorage.setItem('gardeners', result_string);
+      sessionStorage.setItem( cache_key, result_string );
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); };
 }
@@ -201,21 +202,23 @@ async function gatherResources() {
       const api_params    = setupAPIParams( observerConfig );
       const api_url       = apibase+api_params;
       console.log('api url: ' + api_url);
-/*      let obs_data = '';
+      let obs_data = '';
+
+      let cache_key = getComponent(appState)+CACHE_KEY_SUFFIX;
 
       // check the cache for previously retrieved gardener data
-      if( sessionStorage.getItem('gardeners') ) {
-          console.log('found garden observer list');
-          obs_data   =  parseStoredData(sessionStorage.getItem('gardeners')), );
+      if( sessionStorage.getItem(cache_key) ) {
+          console.log('found garden observers cache');
+          obs_data   =  parseStoredData(sessionStorage.getItem(cache_key)), );
       } else {
           // fetch and store in session 
           obs_data   = await apiFetch( api_url );
-          storeData( obs_data );
+          storeData( obs_data, cache_key );
       }
 
       // Pass the data to the buildPage function
-      buildPage( parseStoredData(sessionStorage.getItem('gardeners'), observerConfig ); 
-*/
+      buildPage( parseStoredData(obs_data, observerConfig ); 
+
     } catch (error) {
       console.error("An error occurred:", error);
       faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
