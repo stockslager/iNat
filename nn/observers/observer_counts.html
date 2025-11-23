@@ -52,9 +52,9 @@ function buildPage( xobj ) {
 
    if( results ) {
 
-      let total_results = results.total_results;
-      let per_page  = results.per_page;
-      let page_curr = results.page;
+      let total_results = xobj.total_results;
+      let per_page  = xobj.per_page;
+      let page_curr = xobj.page;
       let page_max  = Math.ceil(total_results/per_page);
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
