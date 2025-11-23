@@ -29,21 +29,26 @@ let winurlparams       = new URLSearchParams(winurlsearchstr.substring(1));
 appState  =  buildStateFromParams(winurlparams);
 
 // page specific constants...
-const CONST_ICON        = 'Icon';
-const CONST_COMPONENT   = 'Component';
-const CONST_DESCRIPTION = 'Description';
-const CONST_COMPONENTS  = 'components: ';
-const CONST_PERPAGE     = 'per page: 20';
-const CONST_PGS         = 'page: 1'
-const CONST_GARDEN_DESC = 'Wildlife value of individual plants at this location.';
-const CONST_HIKER_DESC  = 'Species encountered during this trek.';
+const CONST_ICON         = 'Icon';
+const CONST_COMPONENT    = 'Component';
+const CONST_DESCRIPTION  = 'Description';
+const CONST_COMPONENTS   = 'components: ';
+const CONST_PERPAGE      = 'per page: 20';
+const CONST_PGS          = 'page: 1';
+const CONST_GARDEN_DESC  = 'Wildlife value of individual plants at this location.';
+const CONST_HIKER_DESC   = 'Species encountered during this trek.';
+const CONST_PLANT_VALUE  = 'Plant Value';
+const CONST_BIODIVERSITY = 'Biodiversity';
+const CONST_THRU_HIKES   = 'Thru Hikes';
+const CONST_ART          = 'Art & Journaling';
+const CONST_OBSERVERS    = 'Observers Network';
 
 function buildMenu() {
       let menu_string = '';
       let params = '';
 
       menu_string = '<div class="navbar">';
-      menu_string += buildDDTitle('');
+      menu_string += buildDDTitle(configManager[0].title);
 
       menu_string += buildHome(furl('./about.html'+buildParameterList(appState),'<span style="font_size: 16px;">About</span>'));
       menu_string += '</div>';
@@ -51,11 +56,11 @@ function buildMenu() {
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
-function buildPage( configs ) {
+function buildPage( configManager ) {
 
-      buildMenu();
+      buildMenu( configManager );
 
-      faddelem('p',document.body,{innerHTML:CONST_COMPONENTS + configs.length + ' <br/>'
+      faddelem('p',document.body,{innerHTML:CONST_COMPONENTS + configManager.length + ' <br/>'
                  + CONST_PERPAGE + '<br />'
                  + CONST_PGS + '<br />'});  
 
@@ -74,31 +79,28 @@ function buildPage( configs ) {
       faddelems('th',hrow,labels);
       let tbody = faddelem('tbody',table);
  
-      for( let i=0; i<configs.length; i++ ) {
+      for( let i=0; i<configManager.length; i++ ) {
            let brow = '';
            let values = [];
-           let config = configs[i];
+           let config = configManager[i];
 
-       console.log('one ' + config.component);
-    
            if( config.component === 'plants' ) {
-            console.log('two');
                appState = setComponent( appState, 'plants' );
                let plant_params = buildParameterList(appState);
                brow = faddelem('tr',tbody);
                values = [
                   {innerHTML:furl('../garden/garden_list.html'+plant_params, CONST_LEAF_UTF8  )},
-                  {innerHTML:furl('../garden/garden_list.html'+plant_params, config.title )},
+                  {innerHTML:furl('../garden/garden_list.html'+plant_params, CONST_PLANT_VALUE )},
                   {innerText:CONST_GARDEN_DESC},
                ];
                faddelems('td',brow,values);
            }
       }
  
-      for( let i=0; i<configs.length; i++ ) {
+      for( let i=0; i<configManager.length; i++ ) {
            let brow = '';
            let values = [];
-           let config = configs[i];
+           let config = configManager[i];
     
            if( config.component === 'hiker' ) {
                appState = setComponent( appState, 'hiker' );
@@ -106,29 +108,40 @@ function buildPage( configs ) {
                brow = faddelem('tr',tbody);
                values = [
                   {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,CONST_BOOT_UTF8 )},
-                  {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,config.title)},
+                  {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,CONST_THRU_HIKES)},
+                  {innerText:CONST_HIKER_DESC},
+               ];
+               faddelems('td',brow,values);
+           }
+
+           if( config.component === 'observers' ) {
+               appState = setComponent( appState, 'observers' );
+               let hiker_params = buildParameterList(appState);
+               brow = faddelem('tr',tbody);
+               values = [
+                  {innerHTML:furl('../observers/observer_counts.html'+hiker_params,CONST_NPC_UTF8 )},
+                  {innerHTML:furl('../observers/observer_counts.html'+hiker_params,CONST_OBSERVERS)},
                   {innerText:CONST_HIKER_DESC},
                ];
                faddelems('td',brow,values);
            }
       }
 };
-
 </script>
-<script src="../core/js/configurations.js"></script>
-<script>
+ 
+<script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
+<script type="text/javascript"   src="../core/js/api_fetch.js"></script>
 
+<script>
 async function gatherResources() {
   let json_path = json_root + getParams(appState);
  
   try {
-   
-      // Await the result of getObservations() and store the actual data
-      const configs   = await asyncGetConfiguration( json_path );
+      // get the configurations
+      const configManager   = await asyncGetConfiguration( json_path );
      
       // Pass the data to the buildPage function
-      console.log('pl ' + JSON.stringify(configs));
-      buildPage(configs); 
+      buildPage( configManager ); 
 
     } catch (error) {
       console.error("An error occurred:", error);
