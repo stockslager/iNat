@@ -47,22 +47,22 @@ var recsmax      = columns * rows - 1;
 
 winurlparams.append('per_page',recsmax);
 
-function getMapParams(hikerConfig) {
+function getMapParams(plantsConfig) {
    let map_params = '';
 
-   map_params += '?project_id='+hikerConfig.insect_project;
+   map_params += '?project_id='+plantsConfig.insect_project;
 
    map_params += getTaxonIdParam(appState, '&taxon_id='); 
 
-   if( hikerConfig.default_place_id ) { map_params += '&place_id='+hikerConfig.default_place_id; } 
-   if( hikerConfig.user_id )          { map_params += '&user_id='+hikerConfig.user_id; }
+   if( plantsConfig.default_place_id ) { map_params += '&place_id='+plantsConfig.default_place_id; } 
+   if( plantsConfig.user_id )          { map_params += '&user_id='+plantsConfig.user_id; }
 
-   map_params += ('&field:'+hikerConfig.field_name+'=' + getPlantId(appState));  
+   map_params += ('&field:'+plantsConfig.field_name+'=' + getPlantId(appState));  
 
    return map_params;
 }
 
-function buildMenu(hikerConfig) {
+function buildMenu(plantsConfig) {
 
    let links = '';
    let menu_string = '';
@@ -74,7 +74,7 @@ function buildMenu(hikerConfig) {
 
    menu_string = '<div class="navbar">';
 
-   menu_string += buildMenuURL( furl('../admin/map.html'+getMapParams(hikerConfig),"Map") );
+   menu_string += buildMenuURL( furl('../admin/map.html'+getMapParams(plantsConfig),"Map") );
    
    let url_state = clearForSpeciesCountsParams( appState );
    
@@ -84,25 +84,25 @@ function buildMenu(hikerConfig) {
    return menu_string;
 }
 
-function buildPage(data, hikerConfig) {  
-   faddelem('p',document.body,{innerHTML:buildMenu(hikerConfig)}); 
+function buildPage(data, plantsConfig) {  
+   faddelem('p',document.body,{innerHTML:buildMenu(plantsConfig)}); 
    buildGrid(data);    
 };
 
-function setupAPIParams( hikerConfig ) {
+function setupAPIParams( plantsConfig ) {
     
     let api_params = '';
 
-    api_params += '?project_id='+hikerConfig.insectProject;
+    api_params += '?project_id='+plantsConfig.insectProject;
     api_params += getTaxonIdParam(appState, '&taxon_id='); 
 
     // the yard component might user the user_id from the session, but it's not needed here.
     // possibly the place_id will need to come from the session eventually...
     // if there's a garden with multiple places.
-    if( hikerConfig.defaultPlace ) { api_params += '&place_id=' + hikerConfig.defaultPlace; }  
-    if( hikerConfig.userId )       { api_params += '&user_id='  + hikerConfig.userId; }  
+    if( plantsConfig.defaultPlace ) { api_params += '&place_id=' + plantsConfig.defaultPlace; }  
+    if( plantsConfig.userId )       { api_params += '&user_id='  + plantsConfig.userId; }  
   
-    api_params += '&field:'+hikerConfig.fieldName+'=' + getPlantId(appState);
+    api_params += '&field:'+plantsConfig.fieldName+'=' + getPlantId(appState);
 
     return api_params;
 }
@@ -120,15 +120,15 @@ async function gatherResources() {
   try {
    
       // Await the result of getObservations() and store the actual data
-      const hikerConfig   = await asyncGetConfiguration( json_path, getComponent(appState) );
-      console.log('full config title: ' + hikerConfig.getFullTitle());
-      const api_params    = setupAPIParams( hikerConfig );
-      const api_url       = api_base+api_params;
+      const plantsConfig   = await asyncGetConfiguration( json_path, getComponent(appState) );
+      console.log('full config title: ' + plantsConfig.getFullTitle());
+      const api_params     = setupAPIParams( plantsConfig );
+      const api_url        = api_base+api_params;
       console.log('api url: ' + api_url);
-      const obs_data      = await apiFetch( api_url ); 
+      const obs_data       = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
-      buildPage(obs_data, hikerConfig); 
+      buildPage(obs_data, plantsConfig); 
 
     } catch (error) {
       console.error("An error occurred:", error);
@@ -137,7 +137,7 @@ async function gatherResources() {
     }
 }
 
-let message = validateHiker(appState);
+let message = validateGarden(appState);
  
 if( message ) {
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
