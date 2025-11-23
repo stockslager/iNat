@@ -234,11 +234,6 @@ function buildPage(xobj, config) {
 function setupAPIParams( plantConfig ) {
    let api_params = '';
  
-   if( !plantConfig.plantProject ) {
-       faddelem('p',document.body,{innerText:'A plant_project must be specified in '+getParams(appState)+'.json'});
-       throw new Error('A plant_project or default_place must be specified in '+getParams(appState)+'.json');
-   }
-       
    api_params += '?project_id='+plantConfig.project;
    api_params += '&iconic_taxa=plantae';
 
