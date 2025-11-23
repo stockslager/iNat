@@ -50,9 +50,9 @@ function buildPage( xobj ) {
 
    if( results ) {
 
-      let total_results = result.total_results;
-      let per_page  = result.per_page;
-      let page_curr = result.page;
+      let total_results = results.total_results;
+      let per_page  = results.per_page;
+      let page_curr = results.page;
       let page_max  = Math.ceil(total_results/per_page);
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
@@ -78,10 +78,10 @@ function buildPage( xobj ) {
       faddelems('th',hrow,labels);
       
       let tbody = faddelem('tbody',table);
-      for (let i=0; i<result.recs.length; i++) {
+      for (let i=0; i<results.recs.length; i++) {
          let target_url = '';     
          let brow = faddelem('tr',tbody);
-         let rec = result.recs[i];
+         let rec = results.recs[i];
          let lists = '';
          let user_icon = rec.icon || '';
          
