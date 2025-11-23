@@ -114,7 +114,7 @@ function getShowMenuName( plantsConfig, taxon_id ) {
 function buildPage(xobj, plantsConfig) {
    let results = xobj.results;
 
-   menu_name = getShowMenuName(plantsConfig, getMenuId(appState)) || CONST_SHOW;
+   menu_name = plantsConfig.getSubIconNameByTaxonId(plantsConfig, getMenuId(appState)) || CONST_SHOW;
  
    if (results) {
       let total_results = xobj.total_results;
