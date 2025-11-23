@@ -1,0 +1,234 @@
+<!DOCTYPE html> 
+<html lang="en">  
+ 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="apple-mobile-web-app-title" content="Garden Observers" />
+<meta name="description" content="Garden Observers" />
+<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
+<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+<title>Garden Observers</title>
+</head>
+
+<body>
+<script type="text/javascript"   src='../core/js/global_const.js'> </script>
+<script type="text/javascript"   src='../core/js/common_func.js'> </script>
+<script type="text/javascript"   src='../core/js/roots.js'> </script>
+<script type="text/javascript"   src='../core/js/store.js'> </script>
+<script>
+let winurlstr         = window.location.href;
+let winurlsearchstr   = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams   = new URLSearchParams(winurlsearchstr.substring(1));
+
+appState       = buildStateFromParams(winurlparams);
+    
+function furlArrow(url,txt=url) { return '<a href="'+url+'" id="arrow">'+txt+'</a>'; };
+
+function buildMenu(configs) {
+      let menu_string = '';
+      menu_string =  '<div class="navbar">';
+      menu_string += buildDDTitle('');
+
+      let urlState  = clearForDashParams(appState);
+      menu_string += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),'&#127807;'));
+      menu_string += '</div>';
+
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+ 
+function buildPage( xobj ) {
+   let results = xobj.results;
+
+   if( results ) {
+
+      let total_results = result.total_results;
+      let per_page  = result.per_page;
+      let page_curr = result.page;
+      let page_max  = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+
+      let on_all = '<span id="topright">showing counts for<br> <b>' +
+                   getPlantName(appState)||CONST_ALL_PLANTS + '</b></span>';
+    
+      faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + on_all2 + '<br />' 
+            +'per page: '+fcomnum(per_page)+ on_all + '<br />'
+            +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
+            });
+
+      let table = faddelem('table',document.body,{id:'main'});
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+
+      let labels = [
+         {innerText:'#'},
+         {innerText:'Icon '},
+         {innerText:'User' },
+         {innerText:'Observations'  },
+      ];
+      faddelems('th',hrow,labels);
+      
+      let tbody = faddelem('tbody',table);
+      for (let i=0; i<result.recs.length; i++) {
+         let target_url = '';     
+         let brow = faddelem('tr',tbody);
+         let rec = result.recs[i];
+         let lists = '';
+         let user_icon = rec.icon || '';
+         
+         if( user_icon === '' ){
+            user_icon += '<div class="npcicon"></div>';
+         } else {
+            user_icon = '<img class="exp_icon" src="'+user_icon+'" />';
+         }
+
+         let values = [
+            {innerText:i+1},
+            {innerHTML:user_icon},
+            {innerHTML:furl(root_people+rec.user_login,rec.user_login)},
+            {innerHTML:furl('./observer_activity.html?'+buildParameterList(appState),rec.obs_count )},
+         ];
+         faddelems('td',brow,values);
+      };
+
+      // buttons to go to prev or next page
+      let nav = faddelem('div',document.body,{id:'nav'});
+      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); };
+};
+
+</script>
+ 
+<script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
+<script type="text/javascript"   src="../core/js/api_fetch.js"></script>
+
+<script>
+function setUpAPIParams( observerConfig ) {
+
+   let api_params = '';
+
+   // default these to what's in the config even though the state sometimes
+   // holds the same attributes for other components.
+   api_params += ('?project_id='+observerConfig.project);
+   if( observerConfig.userId          ) { api_params += '&user_id='  + observerConfig.userId; }
+   if( observerConfig.defaultPlace    ) { api_params += '&place_id=' + observerConfig.defaultPlace; } 
+
+   // filter by field... uses the plant_id (the taxon_id) for the plant
+   // chosen from the garden list.
+   if( observerConfig.fieldName ) {
+      api_params += '&without_taxon_id='+CONST_WITHOUT_TAXON_PLANTAE; // only interested in visitors to plants here
+      api_params += '&field:'+observerConfig.fieldName+'='+getPlantId(appState);
+   }
+ 
+   api_params += getMenuIdParam(appState, '&taxon_id=');          
+   api_params += getPageParam(appState, '&page=');
+   api_params += '&per_page='+CONST_API_PER_PAGE;
+
+   return api_params;
+}
+
+class Result {
+  constructor(total_results, per_page, page, recs) {
+    this.total_results = total_results;
+    this.per_page = per_page;
+    this.page = page;
+    this.recs = recs;
+  }
+}
+
+class Record {
+  constructor(count, icon, user_login, species_count, obs_count) {
+    this.count = count;
+    this.icon = icon;
+    this.user_login = user_login;
+    this.species_count = species_count;
+    this.obs_count = obs_count;
+  }
+}
+  
+function storeData(xobj) {
+   let results = xobj.results;
+
+   if (results) {
+      let record_array = [];
+      for( let i=0; i<results.length; i++ ) {
+           const record = new Record((i+1), results[i].user.icon, results[i].user.login, results[i].species_count, results[i].observation_count);
+           record_array.push(record);
+      }
+      const result = new Result( xobj.total_results, xobj.per_page, xobj.page, JSON.stringify(record_array) );
+
+      // Serialize the object to JSON string so it can be stored in session
+      const result_string = JSON.stringify(result);
+      sessionStorage.setItem('gardeners', result_string);
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); };
+}
+
+function parseStoredData(gardeners) {
+   // Check if value exists before parsing
+   if( gardeners ) {
+       // Parse the string back to an object
+       const retrievedRec = JSON.parse(gardeners);
+       retrievedRec.recs = JSON.parse(retrievedRec.recs);
+       return retrievedRec;
+   } else {
+       console.log("No object found in session storage for key 'myObject'");
+       throw new Error("No object found in session storage.");
+   }
+}
+
+async function gatherResources() {
+  let apibase   = 'https://api.inaturalist.org/v1/observations/observers';
+  let json_path = json_root + getParams(appState);
+ 
+  try {
+   
+      // Await the result of getObservations() and store the actual data
+      const observerConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
+      console.log('full config title: ' + observerConfig.getFullTitle());
+      const api_params    = setupAPIParams( observerConfig );
+      const api_url       = api_base+api_params;
+      console.log('api url: ' + api_url);
+/*      let obs_data = '';
+
+      // check the cache for previously retrieved gardener data
+      if( sessionStorage.getItem('gardeners') ) {
+          console.log('found garden observer list');
+          obs_data   =  parseStoredData(sessionStorage.getItem('gardeners')), );
+      } else {
+          // fetch and store in session 
+          obs_data   = await apiFetch( api_url );
+          storeData( obs_data );
+      }
+
+      // Pass the data to the buildPage function
+      buildPage( parseStoredData(sessionStorage.getItem('gardeners'), observerConfig ); 
+*/
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+let message = validateGarden(appState);
+ 
+if( message ) {
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
+ 
+</script>
+</body>
+</html>
