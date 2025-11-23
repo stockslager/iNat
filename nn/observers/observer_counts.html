@@ -205,17 +205,16 @@ async function gatherResources() {
       const api_params    = setupAPIParams( observerConfig );
       const api_url       = apibase+api_params;
       console.log('api url: ' + api_url);
-      let obs_data = '';
 
       let cache_key = getComponent(appState)+CONST_CACHE_KEY_SUFFIX;
 
       // check the cache for previously retrieved gardener data
       if( sessionStorage.getItem(cache_key) ) {
           console.log('found garden observers cache');
-          obs_data   =  parseStoredData( sessionStorage.getItem(cache_key) );
+          //obs_data   =  parseStoredData( sessionStorage.getItem(cache_key) );
       } else {
           // fetch and store in session 
-          obs_data   = await apiFetch( api_url );
+          let obs_data = await apiFetch( api_url );
           await storeData( obs_data, cache_key );
       }
 
