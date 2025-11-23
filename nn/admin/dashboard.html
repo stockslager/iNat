@@ -37,7 +37,7 @@ const CONST_PERPAGE      = 'per page: 20';
 const CONST_PGS          = 'page: 1';
 const CONST_GARDEN_DESC  = 'Wildlife value of individual plants at this location.';
 const CONST_HIKER_DESC   = 'Species encountered during this trek.';
-const CONST_OBSERVERS_DESC   = 'The network of individual observers collecting observational wildlife value data at this location.';
+const CONST_OBSERVERS_DESC   = 'The network of individual observers collecting plant value data at this location.';
 const CONST_PLANT_VALUE  = 'Plant Value';
 const CONST_BIODIVERSITY = 'Biodiversity';
 const CONST_THRU_HIKES   = 'Thru Hikes';
@@ -49,7 +49,6 @@ function buildMenu( configManager ) {
       let params = '';
 
       menu_string = '<div class="navbar">';
-      menu_string += buildDDTitle(configManager.configurations[0].title);
 
       menu_string += buildHome(furl('./about.html'+buildParameterList(appState),'<span style="font_size: 16px;">About</span>'));
       menu_string += '</div>';
@@ -62,8 +61,8 @@ function buildPage( configManager ) {
       buildMenu( configManager );
 
       faddelem('p',document.body,{innerHTML:CONST_COMPONENTS + configManager.configurations.length + ' <br/>'
-                 + CONST_PERPAGE + '<br />'
-                 + CONST_PGS + '<br />'});  
+                 + CONST_PERPAGE  + '<br />'
+                 + CONST_PGS + '<span id="toprightbold">' + configManager.configurations[0].title + '</span><br />'});  
 
       let labels = [];
 
