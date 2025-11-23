@@ -50,14 +50,14 @@ winurlparams.append('per_page',recsmax);
 function getMapParams(plantsConfig) {
    let map_params = '';
 
-   map_params += '?project_id='+plantsConfig.insect_project;
+   map_params += '?project_id='+plantsConfig.insectProject;
 
    map_params += getTaxonIdParam(appState, '&taxon_id='); 
 
-   if( plantsConfig.default_place_id ) { map_params += '&place_id='+plantsConfig.default_place_id; } 
-   if( plantsConfig.user_id )          { map_params += '&user_id='+plantsConfig.user_id; }
+   if( plantsConfig.defaultPlace )    { map_params += '&place_id='+plantsConfig.defaultPlace; } 
+   if( plantsConfig.userId )          { map_params += '&user_id='+plantsConfig.userId; }
 
-   map_params += ('&field:'+plantsConfig.field_name+'=' + getPlantId(appState));  
+   map_params += ('&field:'+plantsConfig.fieldName+'=' + getPlantId(appState));  
 
    return map_params;
 }
