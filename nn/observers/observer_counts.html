@@ -216,7 +216,7 @@ async function gatherResources() {
       } else {
           // fetch and store in session 
           obs_data   = await apiFetch( api_url );
-          storeData( obs_data, cache_key );
+          await storeData( obs_data, cache_key );
       }
 
       // Pass the data to the buildPage function
