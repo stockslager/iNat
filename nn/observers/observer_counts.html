@@ -219,7 +219,7 @@ async function gatherResources() {
       }
 
       // Pass the data to the buildPage function
-      buildPage( obs_data ); 
+      buildPage( parseStoredData( sessionStorage.getItem(cache_key) ); 
 
     } catch (error) {
       console.error("An error occurred:", error);
