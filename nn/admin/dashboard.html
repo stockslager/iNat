@@ -48,7 +48,7 @@ function buildMenu( configManager ) {
       let params = '';
 
       menu_string = '<div class="navbar">';
-      menu_string += buildDDTitle(configManager[0].title);
+      menu_string += buildDDTitle(configManager.configurations[0].title);
 
       menu_string += buildHome(furl('./about.html'+buildParameterList(appState),'<span style="font_size: 16px;">About</span>'));
       menu_string += '</div>';
@@ -79,10 +79,10 @@ function buildPage( configManager ) {
       faddelems('th',hrow,labels);
       let tbody = faddelem('tbody',table);
  
-      for( let i=0; i<configManager.length; i++ ) {
+      for( let i=0; i<configManager.configurations.length; i++ ) {
            let brow = '';
            let values = [];
-           let config = configManager[i];
+           let config = configManager.configurations[i];
 
            if( config.component === 'plants' ) {
                appState = setComponent( appState, 'plants' );
@@ -97,10 +97,10 @@ function buildPage( configManager ) {
            }
       }
  
-      for( let i=0; i<configManager.length; i++ ) {
+      for( let i=0; i<configManager.configurations.length; i++ ) {
            let brow = '';
            let values = [];
-           let config = configManager[i];
+           let config = configManager.configurations[i];
     
            if( config.component === 'hiker' ) {
                appState = setComponent( appState, 'hiker' );
