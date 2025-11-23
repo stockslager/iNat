@@ -37,6 +37,7 @@ const CONST_PERPAGE      = 'per page: 20';
 const CONST_PGS          = 'page: 1';
 const CONST_GARDEN_DESC  = 'Wildlife value of individual plants at this location.';
 const CONST_HIKER_DESC   = 'Species encountered during this trek.';
+const CONST_OBSERVERS_DESC   = 'The network of individual observers collecting observational wildlife value data at this location.';
 const CONST_PLANT_VALUE  = 'Plant Value';
 const CONST_BIODIVERSITY = 'Biodiversity';
 const CONST_THRU_HIKES   = 'Thru Hikes';
@@ -60,7 +61,7 @@ function buildPage( configManager ) {
 
       buildMenu( configManager );
 
-      faddelem('p',document.body,{innerHTML:CONST_COMPONENTS + configManager.length + ' <br/>'
+      faddelem('p',document.body,{innerHTML:CONST_COMPONENTS + configManager.configurations.length + ' <br/>'
                  + CONST_PERPAGE + '<br />'
                  + CONST_PGS + '<br />'});  
 
@@ -121,7 +122,7 @@ function buildPage( configManager ) {
                values = [
                   {innerHTML:furl('../observers/observer_counts.html'+hiker_params,CONST_NPC_UTF8 )},
                   {innerHTML:furl('../observers/observer_counts.html'+hiker_params,CONST_OBSERVERS)},
-                  {innerText:CONST_HIKER_DESC},
+                  {innerText:CONST_OBSERVERS_DESC},
                ];
                faddelems('td',brow,values);
            }
