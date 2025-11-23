@@ -74,6 +74,24 @@ class ConfigurationItem {
     getFullTitle() {
         return `${this.title} (${this.component})`;
     }
+
+    // find the taxon name given the taxon_id in the list of sub_icons in the configuration
+    getSubIconNameByTaxonId( plantsConfig, taxon_id ) {
+        let sub_icon_name = '';
+
+        if( this.subIcons ) {
+            for( let i=0; i<this.subIcons.length; i++) {
+                 if( this.subIcons[i].taxonId.toString() === taxon_id.toString() ) {
+                     sub_icon_name = this.subIcons[i].name;
+                     break;
+                 }
+            }
+        }
+
+        if( !sub_icon_name ) { console.log('Sub Icon Name Not Found'); }
+    
+        return sub_icon_name;
+    }
 }
 
 /**
