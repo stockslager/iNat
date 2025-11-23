@@ -93,24 +93,6 @@ function buildMenu( results, plantsConfig ) {
    faddelem('p',document.body,{innerHTML:(menu_string)});
 }
 
-// find the taxon name given the taxon_id in the list of sub_icons in the configuration
-function getShowMenuName( plantsConfig, taxon_id ) {
-    let show_menu_name = '';
-
-    if( plantsConfig.subIcons ) {
-        for( let i=0; i<plantsConfig.subIcons.length; i++) {
-             if( plantsConfig.subIcons[i].taxonId.toString() === taxon_id.toString() ) {
-                 show_menu_name = plantsConfig.subIcons[i].name;
-                 break;
-             }
-        }
-    }
-
-    if( !show_menu_name ) { console.log('Show Menu Name Not Found'); }
-    
-    return show_menu_name;
-}
- 
 function buildPage(xobj, plantsConfig) {
    let results = xobj.results;
 
