@@ -33,7 +33,7 @@ appState       = buildStateFromParams(winurlparams);
     
 function furlArrow(url,txt=url) { return '<a href="'+url+'" id="arrow">'+txt+'</a>'; };
 
-function buildMenu(configs) {
+function buildMenu() {
       let menu_string = '';
       menu_string =  '<div class="navbar">';
       menu_string += buildDDTitle('');
@@ -48,6 +48,7 @@ function buildMenu(configs) {
 function buildPage( xobj ) {
    let results = xobj.results;
 
+   buildMenu();
    console.log('results ' + JSON.stringify(xobj.results));
 
    if( results ) {
