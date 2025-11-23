@@ -47,22 +47,22 @@ var recsmax      = columns * rows - 1;
 
 winurlparams.append('per_page',recsmax);
 
-function getMapParams(config) {
+function getMapParams(hikerConfig) {
    let map_params = '';
 
-   map_params += '?project_id='+config.insect_project;
+   map_params += '?project_id='+hikerConfig.insect_project;
 
    map_params += getTaxonIdParam(appState, '&taxon_id='); 
 
-   if( config.default_place_id ) { map_params += '&place_id='+config.default_place_id; } 
-   if( config.user_id )          { map_params += '&user_id='+config.user_id; }
+   if( hikerConfig.default_place_id ) { map_params += '&place_id='+hikerConfig.default_place_id; } 
+   if( hikerConfig.user_id )          { map_params += '&user_id='+hikerConfig.user_id; }
 
-   map_params += ('&field:'+config.field_name+'=' + getPlantId(appState));  
+   map_params += ('&field:'+hikerConfig.field_name+'=' + getPlantId(appState));  
 
    return map_params;
 }
 
-function buildMenu(config) {
+function buildMenu(hikerConfig) {
 
    let links = '';
    let menu_string = '';
@@ -74,7 +74,7 @@ function buildMenu(config) {
 
    menu_string = '<div class="navbar">';
 
-   menu_string += buildMenuURL( furl('../admin/map.html'+getMapParams(config),"Map") );
+   menu_string += buildMenuURL( furl('../admin/map.html'+getMapParams(hikerConfig),"Map") );
    
    let url_state = clearForSpeciesCountsParams( appState );
    
@@ -84,48 +84,51 @@ function buildMenu(config) {
    return menu_string;
 }
 
-</script>
-<script src="../core/js/grid.js"></script>
-<script src="../core/js/configurations.js"></script>
-<script>
-    
-function buildPage(data, config) {  
-   faddelem('p',document.body,{innerHTML:buildMenu(config)}); 
+function buildPage(data, hikerConfig) {  
+   faddelem('p',document.body,{innerHTML:buildMenu(hikerConfig)}); 
    buildGrid(data);    
 };
 
-function setupAPIParams( config ) {
+function setupAPIParams( hikerConfig ) {
     
     let api_params = '';
 
-    api_params += '?project_id='+config.insect_project;
+    api_params += '?project_id='+hikerConfig.insectProject;
     api_params += getTaxonIdParam(appState, '&taxon_id='); 
 
     // the yard component might user the user_id from the session, but it's not needed here.
     // possibly the place_id will need to come from the session eventually...
     // if there's a garden with multiple places.
-    if( config.default_place_id ) { api_params += '&place_id=' + config.default_place_id; }  
-    if( config.user_id )          { api_params += '&user_id='  + config.user_id; }  
+    if( hikerConfig.defaultPlace ) { api_params += '&place_id=' + hikerConfig.defaultPlace; }  
+    if( hikerConfig.userId )       { api_params += '&user_id='  + hikerConfig.userId; }  
   
-    api_params += '&field:'+config.field_name+'=' + getPlantId(appState);
+    api_params += '&field:'+hikerConfig.fieldName+'=' + getPlantId(appState);
 
     return api_params;
 }
+</script>
     
-async function gatherResources() {
+<script type="text/javascript"   src="../core/js/grid.js">          </script>
+<script type="text/javascript"   src="../core/js/ConfigManager.js"> </script>
+<script type="text/javascript"   src="../core/js/api_fetch.js">     </script>
 
-  let json_path = json_root + getParams(appState);
+<script>
    
+async function gatherResources() {
+  let json_path = json_root + getParams(appState);
+ 
   try {
+   
       // Await the result of getObservations() and store the actual data
-      const config_data   = await asyncGetConfiguration( json_path, getComponent(appState) );
-      const api_params    = setupAPIParams( config_data );
+      const hikerConfig   = await asyncGetConfiguration( json_path, getComponent(appState) );
+      console.log('full config title: ' + hikerConfig.getFullTitle());
+      const api_params    = setupAPIParams( hikerConfig );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
       const obs_data      = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
-      buildPage(obs_data, config_data); 
+      buildPage(obs_data, hikerConfig); 
 
     } catch (error) {
       console.error("An error occurred:", error);
@@ -134,15 +137,14 @@ async function gatherResources() {
     }
 }
 
-let message = validateGarden(appState);
+let message = validateHiker(appState);
  
 if( message ) {
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
 } else {
     gatherResources(); 
 }
- 
+   
 </script>
 </body>
-
 </html>
