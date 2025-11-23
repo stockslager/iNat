@@ -17,6 +17,7 @@ const ATTRIBUTE_TAXONID         = 'taxonid';
 const ATTRIBUTE_TAXONNAME       = 'taxonname';
 const ATTRIBUTE_MENUID          = 'menuid';
 const ATTRIBUTE_MENUNAME        = 'menuname';
+const ATTRIBUTE_SPECIESMENUARR  = 'speciesmenuarr';
 const ATTRIBUTE_PLANTMENUID     = 'plantmenuid';
 const ATTRIBUTE_PLANTMENUNAME   = 'plantmenuname';
 const ATTRIBUTE_GARDENLISTVALUE = 'gardenlistvalue';
@@ -38,6 +39,7 @@ let appState = {
   [ATTRIBUTE_TAXONNAME]: '',
   [ATTRIBUTE_MENUID]:    '',
   [ATTRIBUTE_MENUNAME]:  '',
+  [ATTRIBUTE_SPECIESMENUARR]: '',
   [ATTRIBUTE_PLANTMENUID]:    '',
   [ATTRIBUTE_PLANTMENUNAME]:  '',
   [ATTRIBUTE_GARDENLISTVALUE]:  '',
@@ -68,6 +70,7 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_TAXONNAME]: '',
     [ATTRIBUTE_MENUID]:    '', 
     [ATTRIBUTE_MENUNAME]:  '',
+    [ATTRIBUTE_SPECIESMENUARR]: '',
     [ATTRIBUTE_PLANTMENUID]:    '', 
     [ATTRIBUTE_PLANTMENUNAME]:  '',
     [ATTRIBUTE_GARDENLISTVALUE]: '',
@@ -171,6 +174,7 @@ function getTaxonId(state)         { return (getAttribute(state, ATTRIBUTE_TAXON
 function getTaxonName(state)       { return (getAttribute(state, ATTRIBUTE_TAXONNAME)); }
 function getMenuId(state)          { return (getAttribute(state, ATTRIBUTE_MENUID)); }
 function getMenuName(state)        { return (getAttribute(state, ATTRIBUTE_MENUNAME)); }
+function getSpeciesMenuArr(state)  { return (getAttribute(state, ATTRIBUTE_SPECIESMENUARR)); }
 function getPlantMenuId(state)     { return (getAttribute(state, ATTRIBUTE_PLANTMENUID)); }
 function getPlantMenuName(state)   { return (getAttribute(state, ATTRIBUTE_PLANTMENUNAME)); }
 function getGardenListValue(state) { return (getAttribute(state, ATTRIBUTE_GARDENLISTVALUE)); }
@@ -195,6 +199,7 @@ function setTaxonId(state, value)         { return (setAttribute(state, ATTRIBUT
 function setTaxonName(state, value)       { return (setAttribute(state, ATTRIBUTE_TAXONNAME, value)); }
 function setMenuId(state, value)          { return (setAttribute(state, ATTRIBUTE_MENUID, value)); }
 function setMenuName(state, value)        { return (setAttribute(state, ATTRIBUTE_MENUNAME, value)); }
+function setSpeciesMenuArr(state, value)  { return (setAttribute(state, ATTRIBUTE_SPECIESMENUARR, value)); }
 function setPlantMenuId(state, value)     { return (setAttribute(state, ATTRIBUTE_PLANTMENUID, value)); }
 function setPlantMenuName(state, value)   { return (setAttribute(state, ATTRIBUTE_PLANTMENUNAME, value)); }
 function setGardenListValue(state, value) { return (setAttribute(state, ATTRIBUTE_GARDENLISTVALUE, value)); }
@@ -481,6 +486,7 @@ function clearForGardenListParams(state) {
   urlState = setPlantName(urlState, '');
   urlState = setMenuId(urlState, '');
   urlState = setMenuName(urlState, '');
+  urlState = setSpeciesMenuArr(urlState, '');
   urlState = setTaxonDD(urlState, '');
   urlState = setPage(urlState, '');
   urlState = setPerPage(urlState, '');
@@ -510,6 +516,7 @@ function clearForDashParams(state) {
   urlState = setGardenListValue(urlState, '');
   urlState = setMenuId(urlState, '');
   urlState = setMenuName(urlState, '');
+  urlState = setSpeciesMenuArr(urlState, '');
   urlState = setTaxonDD(urlState, '');
   urlState = setPage(urlState, '');
   urlState = setPerPage(urlState, '');
