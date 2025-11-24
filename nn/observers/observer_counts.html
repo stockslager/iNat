@@ -215,8 +215,10 @@ async function gatherResources() {
       } else {
           // fetch and store in session 
           let obs_data = await apiFetch( api_url );
+          console.log('obs1 ' + JSON.stringify(obs_data));
           storeData( obs_data, cache_key );
       }
+      console.log('obs2 ' + sessionStorage.getItem(cache_key));
 
       // Pass the data to the buildPage function
       buildPage( parseStoredData( sessionStorage.getItem(cache_key) ) ); 
