@@ -15,6 +15,14 @@
 <title>Garden Observers</title>
 </head>
 
+<style>
+   #stats { margin-bottom: 10px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 8px; padding-bottom: 8px; padding-left: 8px; padding-right: 8px; }
+   #tablekey { display:inline-table; }
+   #trkey { padding:0; background:var(--color-base); border:none; border-collapse:collapse; }
+   #tdkey { padding:0; padding-right: 25px; }
+   #tdright { padding:0; padding-right: 10px; float:right; }
+</style>
+
 <body>
 <script type="text/javascript"   src='../core/js/global_const.js'> </script>
 <script type="text/javascript"   src='../core/js/common_func.js'> </script>
@@ -59,14 +67,24 @@ function buildPage( xobj ) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let on_all = '<span id="topright">showing counts for <b>' +
-                   getPlantName(appState)||CONST_ALL_PLANTS + '</b></span>';
+      let on_all1 = '<span id="topright">showing counts for <b>';
+      let on_all2 = getPlantName(appState)||CONST_ALL_PLANTS + '</b></span>';
     
-      faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + '<br />' 
+      /*faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + '<br />' 
             +'per page: '+fcomnum(per_page)+ on_all + '<br />'
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
-            });
+            });*/
 
+      faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
+                                            '<tr id="trkey"><td id="tdkey">members:</td>  <td id="tdright">'  + fcomnum(total_results) + '</td>/tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">per page:</td> <td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">page:</td>     <td id="tdright">'  + fcomnum(page_curr)     + '</td></tr></table></span>'});
+
+      faddelem('p',document.body,{innerHTML:'<span id="topright"><table id="tablekey">' +
+                                            '<tr id="trkey"><td id="tdkey">members:</td>  <td id="tdright"></td>/tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">per page:</td> <td id="tdright">'  + on_all1 + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">page:</td>     <td id="tdright"><' + on_all2 + '</td></tr></table></span>'});
+ 
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
