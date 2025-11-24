@@ -68,8 +68,9 @@ function buildPage( xobj ) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
+      let plants  = getPlantName(appState) || CONST_ALL_PLANTS;
       let on_all1 = '<span id="topright">showing counts for';
-      let on_all2 = '<b>' + getPlantName(appState)||CONST_ALL_PLANTS + '</b></span>';
+      let on_all2 = '<b>' + plants + '</b></span>';
     
       /*faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + '<br />' 
             +'per page: '+fcomnum(per_page)+ on_all + '<br />'
