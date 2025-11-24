@@ -576,19 +576,11 @@ function fgetexample(seq) {
 //  a map extent. (if not included, the map will default to the whole world)
 //  a base map definition. (technically you can define many basemap layers, but these examples each only have one.)
 //  one or more overlay layers
-if (fexample(1,'All Observations Worldwide','A basic map with green markers on a dark basemap. The opacity of the markers is scaled for a density factor. In this example, the density factor of Layer 1 is 500,000, which means that the cell that a given marker represents should have at least 500,000 observations in it if the marker is 100% opaque. Cells with fewer observations will be proportionately less opaque. The stock iNaturalist maps and a density map of iNaturalist observations from GBIF are included as layer options for comparison. (Click on the checkboxes below to toggle layers on/off.) This map also has a red point that marks iNaturalist HQ just to show that points can also be mapped.')) {
-   fcreatebaselayer(0,bm_s_osm.url,bm_s_osm.description,bm_s_osm.attribution,true,'grayscale(100%) brightness(50%) contrast(250%)','',true); 
-   fcreatertlayer(2,inat_points.url,inat_points.description,inat_points.attribution,false);
-   fcreatertlayer(3,inat_circles.url,inat_circles.description,inat_circles.attribution,false);
-   fcreatertlayer(4,inat_heat.url,inat_heat.description,inat_heat.attribution,false);
-   fcreatertlayer(5,inat_grid.url,inat_grid.description,inat_grid.attribution,false);
-   fcreatertlayer(6,gbif_density_point_py.url,gbif_density_point_py.description,gbif_density_point_py.attribution,false);
-   fcreateutflayer(1,utfgridapi.url,'All Observations',utfgridapi.attr,true,{type:'circle_med',scaleType:'opacity',scaleFactor:500000,colorRGB:[0,255,0]});
-   var lpoints = [
-      {lat:37.769772,lng:-122.466126,descr:'California Academy of Sciences (iNaturalist HQ)'},
-      // {lat:0,lng:0,descr:'center'},
-   ];
-   fcreateptlayer(7,lpoints,null,null,true,{type:'diamond_overlap',scaleType:'opacity',scaleFactor:1,colorRGB:[255,0,0]});
+if (fexample(1,'Monarchs on Milkweed','To make this work for NN, we would need to pass in the insect species along with the plant species from the ui flow.')) {
+   fmapextent({?nelat:39.73449580585855,nelng:-83.7129903305322,swlat:38.696072040252595,swlng:-85.0917745102197}); // Cincinnati Nature Center (NN Network), Cincinnati OH
+   fcreatebaselayer(0,bm_s_osm.url,bm_s_osm.description,bm_s_osm.attribution,true,'grayscale(100%) invert(100%) brightness(60%) sepia(100%) hue-rotate(180deg) saturate(150%)','',true);
+   fcreateutflayer(1,utfgridapi.url+'?project_id=255754','Monarch Larva',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:10,colorRGB:[255,0,0]});
+   fcreateutflayer(2,utfgridapi.url+'?project_id=255754','Monarch Adults',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:10,colorRGB:[255,255,0]});
 };
 if (fexample(2,'Worldwide Observations by Year (2016-2019)','This shows observations for 4 different years using markers of 4 different colors on a dark basemap. The markers for the different years appear in different corners of a given cell so that all 4 years can be visually represented together without overlapping.')) {
    fcreatebaselayer(0,bm_s_osm.url,bm_s_osm.description,bm_s_osm.attribution,true,'grayscale(100%) invert(100%) brightness(50%)','',true);
