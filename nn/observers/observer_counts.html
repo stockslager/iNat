@@ -22,7 +22,7 @@
    #trkey { padding:0; background:var(--color-base); border:none; border-collapse:collapse; }
    #tdkey { padding:0; padding-right: 25px; }
    #tdright {  padding:0; padding-right: 5px; float:right; }
-   #tdright2 { padding:0; padding-right: 5px; float:right; text-align:right; }
+   #tdright2 { padding:0; padding-right: 5px; float:right; text-align:left; }
 </style>
 
 <body>
@@ -69,7 +69,7 @@ function buildPage( xobj ) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let plants  = getPlantName(appState) || CONST_ALL_PLANTS;
+      let plants  = getPlantName(appState) || CONST_ALL_PLANTS.toLowerCase();
       let on_all1 = 'showing counts for';
       let on_all2 = '<b>' + plants + '</b>';
     
