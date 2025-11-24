@@ -577,7 +577,7 @@ function fgetexample(seq) {
 //  a base map definition. (technically you can define many basemap layers, but these examples each only have one.)
 //  one or more overlay layers
 if (fexample(1,'Monarchs on Milkweed','To make this work for NN, we would need to pass in the insect species along with the plant species from the ui flow.')) {
-   fmapextent({?nelat:39.73449580585855,nelng:-83.7129903305322,swlat:38.696072040252595,swlng:-85.0917745102197}); // Cincinnati Nature Center (NN Network), Cincinnati OH
+   fmapextent({nelat:39.73449580585855,nelng:-83.7129903305322,swlat:38.696072040252595,swlng:-85.0917745102197}); // Cincinnati Nature Center (NN Network), Cincinnati OH
    fcreatebaselayer(0,bm_s_osm.url,bm_s_osm.description,bm_s_osm.attribution,true,'grayscale(100%) invert(100%) brightness(60%) sepia(100%) hue-rotate(180deg) saturate(150%)','',true);
    fcreateutflayer(1,utfgridapi.url+'?project_id=255754&verifiable=any&field:Plant%20that%20the%20organism%20was%20found%20on=125381&term_id=1&term_value_id=6','Monarch Larva',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:10,colorRGB:[255,0,0]});
    fcreateutflayer(2,utfgridapi.url+'?project_id=255754&verifiable=any&field:Plant%20that%20the%20organism%20was%20found%20on=125381&term_id=1&term_value_id=2','Monarch Adults',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:10,colorRGB:[255,255,0]});
