@@ -620,13 +620,13 @@ if (fexample(4,'Observations in South / East Asia','This map shows the same data
    fcreatertlayer(6,inat_grid.url,inat_grid.description,inat_grid.attribution,false);
    fcreatertlayer(7,gbif_density_point_py.url,gbif_density_point_py.description,gbif_density_point_py.attribution,false);
 };
-if (fexample(5,'Monarch Observations by Month (July 2019 to October 2019), aka Fall 2019 Monarch Migration','This applies some concepts from previous example maps, along with a filter on a specific taxon, to show geographic shifts in observations for that taxon over time.')) {
-   fmapextent({swlat:13.290435858313753,swlng:-125.83712134009516,nelat:52.407256269196154,nelng:-63.551673623382214}); // Continental US + Mexico
+if (fexample(5,'Observations by iconic taxa at Cincinnati Nature Center','example')) {
+   fmapextent({swlat:39.11552045015577,swlng:-84.2607069038786,nelat:39.136694138058836,nelng:-84.23401355976239}); // Cincinnati Nature Center, Cincinnati OH
    fcreatebaselayer(0,bm_s_osm.url,bm_s_osm.description,bm_s_osm.attribution,true,'grayscale(100%) invert(100%) brightness(60%) sepia(100%) hue-rotate(180deg) saturate(150%)');
-   fcreateutflayer(1,utfgridapi.url+'?taxon_id=48662&year=2019&month=10','Observations of Monarchs in October 2019',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:10,colorRGB:[255,0,0]});
-   fcreateutflayer(2,utfgridapi.url+'?taxon_id=48662&year=2019&month=9','Observations of Monarchs in September 2019',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:10,colorRGB:[255,255,0]});
-   fcreateutflayer(3,utfgridapi.url+'?taxon_id=48662&year=2019&month=8','Observations of Monarchs in August 2019',utfgridapi.attr,true,{type:'square_bl',scaleType:'opacity',scaleFactor:10,colorRGB:[0,255,0]});
-   fcreateutflayer(4,utfgridapi.url+'?taxon_id=48662&year=2019&month=7','Observations of Monarchs in July 2019',utfgridapi.attr,true,{type:'square_br',scaleType:'opacity',scaleFactor:10,colorRGB:[0,0,255]});
+   fcreateutflayer(1,utfgridapi.url+'?iconic_taxa=plantae','Observations of Plants',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:10,colorRGB:[255,0,0]});
+   fcreateutflayer(2,utfgridapi.url+'?iconic_taxa=reptilia','Observations of Reptiles',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:10,colorRGB:[255,255,0]});
+   fcreateutflayer(3,utfgridapi.url+'?iconic_taxa=amphibia','Observations of Amphibians',utfgridapi.attr,true,{type:'square_bl',scaleType:'opacity',scaleFactor:10,colorRGB:[0,255,0]});
+   fcreateutflayer(4,utfgridapi.url+'?iconic_taxa=insecta','Observations of Insects',utfgridapi.attr,true,{type:'square_br',scaleType:'opacity',scaleFactor:10,colorRGB:[0,0,255]});
 };
 if (fexample(6,'Observations of Different Kinds of Organisms in the Greater Houston Area (Houston, TX, USA)','This uses the 4-corners-of-a-cell technique from previous example maps to visualize observations for 4 different kinds of organisms. It also uses a terrain basemap just for fun. This is similar to the pin maps that iNaturalist provides (included below as a layer option), but instead of each marker representing a single random observation, they represent a group of observations in a given cell on the map, with opacity scaled for observation density. (Click on the checkboxes below to toggle layers on/off.)')) {
    fmapextent({swlat:28.779301713220775,swlng:-96.61523133516312,nelat:30.609263330698013,nelng:-94.20131103135645}); // Greater Houston
