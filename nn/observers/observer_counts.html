@@ -76,15 +76,15 @@ function buildPage( xobj ) {
             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+'<br />'
             });*/
 
-      faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">members:</td>  <td id="tdright">'  + fcomnum(total_results) + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">per page:</td> <td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">page:</td>     <td id="tdright">'  + fcomnum(page_curr)     + '</td></tr></table></span>'});
-
       faddelem('p',document.body,{innerHTML:'<span id="statsright"><table id="tablekey">' +
                                             '<tr id="trkey"><td id="tdright">'  +           '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdright">'  + on_all1 + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdright"><' + on_all2 + '</td></tr></table></span>'});
+
+      faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
+                                            '<tr id="trkey"><td id="tdkey">members:</td>  <td id="tdright">'  + fcomnum(total_results) + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">per page:</td> <td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">page:</td>     <td id="tdright">'  + fcomnum(page_curr)     + '</td></tr></table></span>'});
  
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
