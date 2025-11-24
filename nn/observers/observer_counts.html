@@ -67,8 +67,8 @@ function buildPage( xobj ) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let on_all1 = '<span id="topright">showing counts for <b>';
-      let on_all2 = getPlantName(appState)||CONST_ALL_PLANTS + '</b></span>';
+      let on_all1 = '<span id="topright">showing counts for';
+      let on_all2 = '<b>' + getPlantName(appState)||CONST_ALL_PLANTS + '</b></span>';
     
       /*faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + '<br />' 
             +'per page: '+fcomnum(per_page)+ on_all + '<br />'
@@ -81,7 +81,7 @@ function buildPage( xobj ) {
                                             '<tr id="trkey"><td id="tdkey">page:</td>     <td id="tdright">'  + fcomnum(page_curr)     + '</td></tr></table></span>'});
 
       faddelem('p',document.body,{innerHTML:'<span id="topright"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdright">'  +           '</td>/tr>' + 
+                                            '<tr id="trkey"><td id="tdright">'  +           '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdright">'  + on_all1 + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdright"><' + on_all2 + '</td></tr></table></span>'});
  
