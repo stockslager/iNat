@@ -425,7 +425,7 @@ function fcreatelayer(lseq,ltype,lurl,marker=null) {
 //this includes a bgcolor parameter this is handled but not used by any of the examples.
 function fcreatebaselayer(lseq,lurl,ldescr=null,lattr=null,visible=true,stylefilter=null,bgcolor=null,disabled=false) {
    var layer = fcreatelayer(lseq,'basemap',lurl);
-   var isDisabled = (disabled === 1) ? ' disabled' : ''; 
+   var isDisabled = (disabled === true) ? ' disabled' : ''; 
    if (stylefilter!==null) { layer.style.filter = stylefilter; };
    if (bgcolor!==null) { layer.style.bgcolor = bgcolor; };
    var entry = faddelem('div',keybody,'keyentry');
