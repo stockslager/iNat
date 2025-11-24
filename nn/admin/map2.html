@@ -426,6 +426,7 @@ function fcreatelayer(lseq,ltype,lurl,marker=null) {
 function fcreatebaselayer(lseq,lurl,ldescr=null,lattr=null,visible=true,stylefilter=null,bgcolor=null,disabled=false) {
    var layer = fcreatelayer(lseq,'basemap',lurl);
    var isDisabled = (disabled === true) ? ' disabled' : ''; 
+   console.log('isdis ' + isDisabled);
    if (stylefilter!==null) { layer.style.filter = stylefilter; };
    if (bgcolor!==null) { layer.style.bgcolor = bgcolor; };
    var entry = faddelem('div',keybody,'keyentry');
