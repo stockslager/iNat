@@ -49,7 +49,6 @@ function buildPage( xobj ) {
    let results = xobj.recs;
 
    buildMenu();
-   console.log('results ' + JSON.stringify(xobj.results));
 
    if( results ) {
 
@@ -60,7 +59,7 @@ function buildPage( xobj ) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let on_all = '<span id="topright">showing counts for<br> <b>' +
+      let on_all = '<span id="topright">showing counts for <b>' +
                    getPlantName(appState)||CONST_ALL_PLANTS + '</b></span>';
     
       faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + '<br />' 
