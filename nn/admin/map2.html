@@ -28,16 +28,12 @@
 
 <body>
 <div id='nav'>
-   <h3>Examples of Custom iNaturalist Observation Density Maps Based on UTFGrids</h3>
-   <p>Note: This was originally created before the introduction of iNaturalist's Grid style tiles, which are conceptually the same kind of visualization as provided here. Unless you have a need for customization not available with the Grid tiles, it will be better to use those tiles in most cases.</p>
-   <p>iNaturalist provides <a href="https://api.inaturalist.org/v1/docs/#/Observation_Tiles">3 built-in types</a> of observation maps: point maps, circle heatmaps, and regular heatmaps. While useful, these maps have limited formatting options. It's possible to create custom maps using downloaded observation data, but that approach can be resource-intensive, especially for large datasets.</p>
-   <p>But there's an alternative. iNaturalist provides <a href="https://api.inaturalist.org/v1/docs/#/UTFGrid">UTFgrids</a> which usually are paired with its map tiles to enhance user interactions. But these UTFgrids also contain observation counts per unique UTFgrid cell (aka cellcount) which can be used to produce ad hoc observation density maps.</p>
-   <p>This page provides examples of such maps, representing only the tip of the iceberg of possibilities. Select examples from the list below or by specifying an example in the URL.</p>
-   <p>For simplicity, the example maps are static (no zoom / pan). Performance may vary based on your system setup. Finally, these UTFgrid data may not be precise enough in certain ways for use cases requiring lots of precision.</p>
+   <h3>Application of Custom iNaturalist Observation Density Maps Based on UTFGrids</h3>
+   <p>Note: This is a customized for our regional nature center build using the following iNat stirfry repo as a starting point.</p>
    <select id='examplelist' onchange='fgetexample(this.value);'>
       <option selected='true' value='nosel' disabled='disabled'>Select an Example:</option>   
    </select>
-   <h3>Example Map Details</h3>
+   <h3>Map Details</h3>
 </div>
 <script>
 let map = faddelem('div',document.body,null,'map');
