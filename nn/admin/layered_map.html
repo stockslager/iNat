@@ -587,13 +587,15 @@ function fgetexample(seq) {
    fcreateutflayer(2,utfgridapi.url+'?project_id=255754&verifiable=any&field:Plant%20that%20the%20organism%20was%20found%20on=125381&term_id=1&term_value_id=2','Monarch Adults',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:1,colorRGB:[255,255,0]});
 };*/
 if( p_project_id ) {
+    let pt = '';
+    if( p_taxon_id ) { pt = '&taxon_id='+p_taxon_id; }
     if( fexample(1,'Monarchs on '+p_plant_name+'.','Select individual lifestages to see occurences of that life-stage observed on '+p_plant_name+'.')) {
        fmapextent({nelat:39.73449580585855,nelng:-83.7129903305322,swlat:38.696072040252595,swlng:-85.0917745102197}); // Cincinnati Nature Center (NN Network), Cincinnati OH
        fcreatebaselayer(0,bm_s_osm.url,bm_s_osm.description,bm_s_osm.attribution,true,'grayscale(100%) invert(100%) brightness(60%) sepia(100%) hue-rotate(180deg) saturate(150%)','',true);
-       fcreateutflayer(1,utfgridapi.url+'?project_id='+p_project_id+'&taxon_id='+p_taxon_id+'&verifiable=any&field:Plant%20that%20the%20organism%20was%20found%20on='+p_plant_id+'&term_id=1&term_value_id=7','Egg',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[255,0,0]});
-       fcreateutflayer(2,utfgridapi.url+'?project_id='+p_project_id+'&taxon_id='+p_taxon_id+'&verifiable=any&field:Plant%20that%20the%20organism%20was%20found%20on='+p_plant_id+'&term_id=1&term_value_id=4','Pupa',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[255,0,0]});
-       fcreateutflayer(3,utfgridapi.url+'?project_id='+p_project_id+'&taxon_id='+p_taxon_id+'&verifiable=any&field:Plant%20that%20the%20organism%20was%20found%20on='+p_plant_id+'&term_id=1&term_value_id=6','Larva',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[255,0,0]});
-       fcreateutflayer(4,utfgridapi.url+'?project_id='+p_project_id+'&taxon_id='+p_taxon_id+'&verifiable=any&field:Plant%20that%20the%20organism%20was%20found%20on='+p_plant_id+'&term_id=1&term_value_id=2','Adult',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:1,colorRGB:[255,255,0]});
+       fcreateutflayer(1,utfgridapi.url+'?project_id='+p_project_id+pt+'&verifiable=any&field:Plant%20that%20the%20organism%20was%20found%20on='+p_plant_id+'&term_id=1&term_value_id=7','Egg',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[255,0,0]});
+       fcreateutflayer(2,utfgridapi.url+'?project_id='+p_project_id+pt+'&verifiable=any&field:Plant%20that%20the%20organism%20was%20found%20on='+p_plant_id+'&term_id=1&term_value_id=4','Pupa',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[255,0,0]});
+       fcreateutflayer(3,utfgridapi.url+'?project_id='+p_project_id+pt+'&verifiable=any&field:Plant%20that%20the%20organism%20was%20found%20on='+p_plant_id+'&term_id=1&term_value_id=6','Larva',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[255,0,0]});
+       fcreateutflayer(4,utfgridapi.url+'?project_id='+p_project_id+pt+'&verifiable=any&field:Plant%20that%20the%20organism%20was%20found%20on='+p_plant_id+'&term_id=1&term_value_id=2','Adult',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:1,colorRGB:[255,255,0]});
     };
 /*if (fexample(3,'Observations by iconic taxa at CNC','')) {
    fmapextent({swlat:39.11552045015577,swlng:-84.2607069038786,nelat:39.136694138058836,nelng:-84.23401355976239}); // Cincinnati Nature Center, Cincinnati OH
