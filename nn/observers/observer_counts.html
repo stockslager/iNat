@@ -21,8 +21,8 @@
    #tablekey { display:inline-table; }
    #trkey { padding:0; background:var(--color-base); border:none; border-collapse:collapse; }
    #tdkey { padding:0; padding-right: 25px; }
-   #tdright { padding:0; padding-right: 10px; float:right; }
-   #tdright2 { padding:0; padding-right: 10px; float:right; text-align:right; }
+   #tdright {  padding:0; padding-right: 5px; float:right; }
+   #tdright2 { padding:0; padding-right: 5px; float:right; text-align:right; }
 </style>
 
 <body>
@@ -70,8 +70,8 @@ function buildPage( xobj ) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
       let plants  = getPlantName(appState) || CONST_ALL_PLANTS;
-      let on_all1 = '<span id="topright">showing counts for';
-      let on_all2 = '<b>' + plants + '</b></span>';
+      let on_all1 = 'showing counts for';
+      let on_all2 = '<b>' + plants + '</b>';
     
       /*faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + '<br />' 
             +'per page: '+fcomnum(per_page)+ on_all + '<br />'
