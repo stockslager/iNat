@@ -132,7 +132,7 @@ function buildPage(xobj, observerConfig) {
           dlString = furl('./observer_grid.html'+buildParameterList(urlState),'<span id="topright">'+CONST_ON+titleString+'</span>');
       }
 
-      let plants  = getPlantName(appState) || CONST_ALL_PLANTS.toLowerCase();
+      let plants  = observerConfig.getSubIconNameByTaxonId(observerConfig, getMenuId(appState)) || CONST_ALL_PLANTS.toLowerCase();
       let on_all1 = getMenuName(appState) || 'all wildlife';
       let on_all2 = 'observed on ' + plants;
       let on_all3 = 'by ' + getUser(appState);
