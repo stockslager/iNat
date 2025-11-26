@@ -114,11 +114,19 @@ function buildPage( xobj ) {
             user_icon = '<img class="exp_icon" src="'+user_icon+'" />';
          }
 
+         // this page uses taxon id/name wrt to flora, the next page, fauna
+         // plant id (the selected taxon on this page) is passed to the next to search for in the &field:some+field=value.
+         let urlState = appState;
+         urlState = setPage(urlState, '');
+         urlState = setTaxonId(urlState, '');
+         urlState = setTaxonName(urlState, '');
+         urlState = setUserId(urlState, rec.user_login);
+
          let values = [
             {innerText:i+1},
             {innerHTML:user_icon},
             {innerHTML:furl(root_people+rec.user_login,rec.user_login)},
-            {innerHTML:furl('./observer_activity.html'+buildParameterList(appState),rec.obs_count )},
+            {innerHTML:furl('./observer_activity.html'+buildParameterList(urlState),rec.obs_count )},
          ];
          faddelems('td',brow,values);
       };
