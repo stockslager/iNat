@@ -122,7 +122,7 @@ function buildPage(xobj, observerConfig) {
 
       buildMenu( results, observerConfig );
 
-      if( !getMenuId(appState) ) {
+     /* if( !getMenuId(appState) ) {
           let titleString = CONST_ON+capitalizeWords(getPlantName(appState));
           dlString = furl('./observer_grid.html'+buildParameterList(appState),'<span id="topright">'+titleString+'</span>');
       } else {
@@ -130,7 +130,7 @@ function buildPage(xobj, observerConfig) {
           let titleString = capitalizeWords(getMenuName(appState)+getPlantName(appState));
           urlState = setTaxonId(urlState, getMenuId(appState));  // set taxon id to menu id if a filter was chosen for say, birds.
           dlString = furl('./observer_grid.html'+buildParameterList(urlState),'<span id="topright">'+CONST_ON+titleString+'</span>');
-      }
+      }*/
 
       let plants  = observerConfig.getSubIconNameByTaxonId(observerConfig, getMenuId(appState)) || CONST_ALL_PLANTS.toLowerCase();
       let on_all1 = CONST_ALL + ' ' + (observerConfig.getSubIconNameByTaxonId(observerConfig, getMenuId(appState)) || 'wildlife');     
@@ -143,7 +143,7 @@ function buildPage(xobj, observerConfig) {
                                             '<tr id="trkey"><td id="tdright2">'  + on_all3 + '</td></tr></table></span>'});
 
       faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">members:</td>  <td id="tdright">'  + fcomnum(total_results) + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">species:</td>  <td id="tdright">'  + fcomnum(total_results) + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">per page:</td> <td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">page:</td>     <td id="tdright">'  + fcomnum(page_curr)     + ' of '+fcomnum(page_max) + '</td></tr></table></span>'});
 
