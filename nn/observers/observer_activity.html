@@ -39,7 +39,7 @@ const CONST_WITHOUT_TAXON_PLANTAE = '47126';
 let path      = window.location.pathname;
 let html_name = path.substring(path.lastIndexOf('/') + 1);
  
-function buildMenu( results, plantsConfig ) {
+function buildMenu( results, observerConfig ) {
 
    let links = '';
    let icons = '';
@@ -52,14 +52,14 @@ function buildMenu( results, plantsConfig ) {
    if( getTaxonDD(appState) ) {
        sub_taxon_arr = getTaxonDD(appState);
    } else {
-       if( plantsConfig.subIcons ) {
+       if( observerConfig.subIcons ) {
            for( let i=0; i<results.length; i++) {
                 if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
-                    for( let j=0; j<plantsConfig.subIcons.length; j++ ) {
+                    for( let j=0; j<observerConfig.subIcons.length; j++ ) {
                          for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
-                              if( results[i].taxon.ancestor_ids[k].toString() === plantsConfig.subIcons[j].taxonId.toString() ){
-                                  if( !sub_taxon_arr.includes( plantsConfig.subIcons[j].taxonId ) ) {
-                                      sub_taxon_arr.push( plantsConfig.subIcons[j].taxonId );
+                              if( results[i].taxon.ancestor_ids[k].toString() === observerConfig.subIcons[j].taxonId.toString() ){
+                                  if( !sub_taxon_arr.includes( observerConfig.subIcons[j].taxonId ) ) {
+                                      sub_taxon_arr.push( observerConfig.subIcons[j].taxonId );
                                   }
                               }
                           }
@@ -72,17 +72,17 @@ function buildMenu( results, plantsConfig ) {
        }
    }
 
-   if( plantsConfig.subIcons ) {
+   if( observerConfig.subIcons ) {
        let urlState = appState;
        urlState = setMenuId(urlState, '');
        urlState = setMenuName(urlState, '');
        urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
 
        links =  (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>'+CONST_ALL ));
-       for( let j=0; j<plantsConfig.subIcons.length; j++ ) {
-            if( sub_taxon_arr.includes( plantsConfig.subIcons[j].taxonId ) ) {
-                urlState  = setMenuId(urlState, plantsConfig.subIcons[j].taxonId);
-                links    += (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+plantsConfig.subIcons[j].icon+'</span>'+plantsConfig.subIcons[j].name ));
+       for( let j=0; j<observerConfig.subIcons.length; j++ ) {
+            if( sub_taxon_arr.includes( observerConfig.subIcons[j].taxonId ) ) {
+                urlState  = setMenuId(urlState, observerConfig.subIcons[j].taxonId);
+                links    += (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+observerConfig.subIcons[j].icon+'</span>'+observerConfig.subIcons[j].name ));
             }
        }
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
@@ -96,10 +96,10 @@ function buildMenu( results, plantsConfig ) {
    faddelem('p',document.body,{innerHTML:(menu_string)});
 }
 
-function buildPage(xobj, plantsConfig) {
+function buildPage(xobj, observerConfig) {
    let results = xobj.results;
 
-   menu_name = plantsConfig.getSubIconNameByTaxonId(plantsConfig, getMenuId(appState)) || CONST_SHOW;
+   menu_name = observerConfig.getSubIconNameByTaxonId(observerConfig, getMenuId(appState)) || CONST_SHOW;
  
    if (results) {
       let total_results = xobj.total_results;
@@ -110,7 +110,7 @@ function buildPage(xobj, plantsConfig) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
       let labels = [];
 
-      buildMenu( results, plantsConfig );
+      buildMenu( results, observerConfig );
 
       if( !getMenuId(appState) ) {
           let titleString = CONST_ON+capitalizeWords(getPlantName(appState));
@@ -194,18 +194,18 @@ function buildPage(xobj, plantsConfig) {
 <script type="text/javascript"   src="../core/js/api_fetch.js"></script>
 
 <script>
-function setupAPIParams(plantsConfig) {
+function setupAPIParams(observerConfig) {
    let api_params = '';
 
-   api_params += ('?project_id='+plantsConfig.insectProject);
+   api_params += ('?project_id='+observerConfig.insectProject);
    //api_params += '&hrank=species';
 
-   api_params += '&field:'+plantsConfig.fieldName+'='+getPlantId(appState);
+   api_params += '&field:'+observerConfig.fieldName+'='+getPlantId(appState);
 
    // default these to what's in the config even though the state sometimes
    // holds the same attributes for other components.
-   if( plantsConfig.userId          ) { api_params += '&user_id='  + plantsConfig.userId; }
-   if( plantsConfig.defaultPlace    ) { api_params += '&place_id=' + plantsConfig.defaultPlace; }  
+   if( observerConfig.userId          ) { api_params += '&user_id='  + observerConfig.userId; }
+   if( observerConfig.defaultPlace    ) { api_params += '&place_id=' + observerConfig.defaultPlace; }  
  
    api_params += getMenuIdParam(appState, '&taxon_id='); 
    api_params += getPageParam(appState, '&page=');
@@ -222,15 +222,15 @@ async function gatherResources() {
   try {
    
       // Await the result of getObservations() and store the actual data
-      const plantsConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
-      console.log('full config title: ' + plantsConfig.getFullTitle());
-      const api_params    = setupAPIParams( plantsConfig );
+      const observerConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
+      console.log('full config title: ' + observerConfig.getFullTitle());
+      const api_params    = setupAPIParams( observerConfig );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
-     // const obs_data      = await apiFetch( api_url ); 
+      const obs_data      = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
-      //buildPage(obs_data, plantsConfig); 
+      buildPage(obs_data, observerConfig); 
 
     } catch (error) {
       console.error("An error occurred:", error);
