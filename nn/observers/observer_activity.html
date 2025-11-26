@@ -137,11 +137,14 @@ function buildPage(xobj, observerConfig) {
       let on_all2 = 'on ' + (getPlantName(appState) || CONST_ALL_PLANTS.toLowerCase());
       let on_all3 = 'by ' + getUser(appState);
 
+      let urlState = appState;
+      urlState = setTaxonId(urlState, getMenuId(appState)); // set taxon id to menu id if a filter was chosen for say, birds.
+
       let url_text = '<span id="statsright"><table id="tablekey">' +
                                             '<tr id="trkey"><td id="tdright2">'  + on_all1 + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdright2">'  + on_all2 + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdright2">'  + on_all3 + '</td></tr></table></span>';
-      let url = furl('./observer_grid.html'+buildParameterList(appState), url_text);
+      let url = furl('./observer_grid.html'+buildParameterList(urlState), url_text);
       faddelem('p',document.body,{innerHTML:url});
 
     
