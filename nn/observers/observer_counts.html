@@ -70,8 +70,9 @@ function buildPage( xobj ) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
       let plants  = getPlantName(appState) || CONST_ALL_PLANTS.toLowerCase();
-      let on_all1 = 'showing counts for';
-      let on_all2 = '<b>' + plants + '</b>';
+      let on_all1 = '';
+      let on_all2 = 'showing counts for';
+      let on_all3 = '<b>' + plants + '</b>';
     
       /*faddelem('p',document.body,{innerHTML:'project members: '+fcomnum(total_results) + '<br />' 
             +'per page: '+fcomnum(per_page)+ on_all + '<br />'
@@ -79,9 +80,9 @@ function buildPage( xobj ) {
             });*/
 
       faddelem('p',document.body,{innerHTML:'<span id="statsright"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdright2">'  +           '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdright2">'  + on_all1 + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdright2">'  + on_all2 + '</td></tr></table></span>'});
+                                            '<tr id="trkey"><td id="tdright2">'  + on_all2 + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdright2">'  + on_all3 + '</td></tr></table></span>'});
 
       faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
                                             '<tr id="trkey"><td id="tdkey">members:</td>  <td id="tdright">'  + fcomnum(total_results) + '</td></tr>' + 
