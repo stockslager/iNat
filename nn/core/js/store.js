@@ -457,7 +457,7 @@ function validateObservers(state) {
   message = validateConfig(state);
   if( message ) { return message; }
 
-  if( getComponent(state) !== COMPONENT_OBSERVER ) {
+  if( getComponent(state) !== COMPONENT_OBSERVERS ) {
       let message = 'Component name required.  Component name is required for displaying data.' +   
                     'Component name should exist in the configuration file identified by the &amp;params=xxxxx';
       return message;
