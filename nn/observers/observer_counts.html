@@ -58,7 +58,7 @@ function buildMenu() {
 }
  
 function buildPage( xobj ) {
-   let results = xobj.recs;
+   let results = xobj.results;
 
    buildMenu();
 
@@ -168,7 +168,7 @@ function setupAPIParams( observerConfig ) {
       api_params += '&field:'+observerConfig.fieldName+'='+getPlantId(appState);
    }
  
-   api_params += getPlantIdParam(appState, '&taxon_id=');          
+   //api_params += getPlantIdParam(appState, '&taxon_id=');          
    api_params += getPageParam(appState, '&page=');
    api_params += '&per_page='+CONST_OBSERVATIONS_OBSERVERS_PER_PAGE;
 
@@ -237,21 +237,11 @@ async function gatherResources() {
       const api_params    = setupAPIParams( observerConfig );
       const api_url       = apibase+api_params;
       console.log('api url: ' + api_url);
-
-      let cache_key = getComponent(appState)+CONST_CACHE_KEY_SUFFIX;
-
-      // check the cache for previously retrieved gardener data
-      if( sessionStorage.getItem(cache_key) ) {
-          console.log('found garden observers cache');
-          //obs_data   =  parseStoredData( sessionStorage.getItem(cache_key) );
-      } else {
-          // fetch and store in session 
-          let obs_data = await apiFetch( api_url );
-          storeData( obs_data, cache_key );
-      }
+      // fetch and store in session 
+      let obs_data = await apiFetch( api_url );
 
       // Pass the data to the buildPage function
-      buildPage( parseStoredData( sessionStorage.getItem(cache_key) ) ); 
+      buildPage( obs_data ); 
 
     } catch (error) {
       console.error("An error occurred:", error);
