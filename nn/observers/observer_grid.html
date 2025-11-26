@@ -47,22 +47,22 @@ var recsmax      = columns * rows - 1;
 
 winurlparams.append('per_page',recsmax);
 
-function getMapParams(plantsConfig) {
+function getMapParams(observersConfig) {
    let map_params = '';
 
-   map_params += '?project_id='+plantsConfig.insectProject;
+   map_params += '?project_id='+observersConfig.insectProject;
 
    map_params += getTaxonIdParam(appState, '&taxon_id='); 
 
-   if( plantsConfig.defaultPlace )    { map_params += '&place_id='+plantsConfig.defaultPlace; } 
-   if( plantsConfig.userId )          { map_params += '&user_id='+plantsConfig.userId; }
+   if( observersConfig.defaultPlace )    { map_params += '&place_id='+observersConfig.defaultPlace; } 
+   if( getUser(appState) )               { map_params += '&user_id='+getUser(appState); }
 
-   map_params += ('&field:'+plantsConfig.fieldName+'=' + getPlantId(appState));  
+   map_params += ('&field:'+observersConfig.fieldName+'=' + getPlantId(appState));  
 
    return map_params;
 }
 
-function buildMenu(plantsConfig) {
+function buildMenu(observersConfig) {
 
    let links = '';
    let menu_string = '';
@@ -74,8 +74,8 @@ function buildMenu(plantsConfig) {
 
    menu_string = '<div class="navbar">';
 
-   menu_string += buildMenuURL( furl('../admin/map.html'+getMapParams(plantsConfig),"Map") );
-   //menu_string += buildMenuURL( furl('../admin/layered_map.html'+buildParameterList(appState)+'&project_id='+plantsConfig.insectProject,"Map") );
+   menu_string += buildMenuURL( furl('../admin/map.html'+getMapParams(observersConfig),"Map") );
+   //menu_string += buildMenuURL( furl('../admin/layered_map.html'+buildParameterList(appState)+'&project_id='+observersConfig.insectProject,"Map") );
    
    let url_state = clearForSpeciesCountsParams( appState );
    
@@ -85,24 +85,24 @@ function buildMenu(plantsConfig) {
    return menu_string;
 }
 
-function buildPage(data, plantsConfig) {  
-   faddelem('p',document.body,{innerHTML:buildMenu(plantsConfig)}); 
+function buildPage(data, observersConfig) {  
+   faddelem('p',document.body,{innerHTML:buildMenu(observersConfig)}); 
    buildGrid(data);    
 };
 
-function setupAPIParams( plantsConfig ) {
+function setupAPIParams( observersConfig ) {
     
     let api_params = '';
 
-    api_params += '?project_id='+plantsConfig.insectProject;
+    api_params += '?project_id='+observersConfig.insectProject;
     api_params += getTaxonIdParam(appState, '&taxon_id='); 
 
     // possibly the place_id will need to come from the session eventually...
     // if there's a garden with multiple places.
-    if( plantsConfig.defaultPlace ) { api_params += '&place_id=' + plantsConfig.defaultPlace; }  
-    if( plantsConfig.userId )       { api_params += '&user_id='  + plantsConfig.userId; }  
+    if( observersConfig.defaultPlace ) { api_params += '&place_id=' + observersConfig.defaultPlace; }  
+    if( getUser(appState) )            { api_params += '&user_id='  + getUser(appState); }  
   
-    api_params += '&field:'+plantsConfig.fieldName+'=' + getPlantId(appState);
+    api_params += '&field:'+observersConfig.fieldName+'=' + getPlantId(appState);
 
     return api_params;
 }
@@ -120,15 +120,15 @@ async function gatherResources() {
   try {
    
       // Await the result of getObservations() and store the actual data
-      const plantsConfig   = await asyncGetConfiguration( json_path, getComponent(appState) );
-      console.log('full config title: ' + plantsConfig.getFullTitle());
-      const api_params     = setupAPIParams( plantsConfig );
+      const observersConfig   = await asyncGetConfiguration( json_path, getComponent(appState) );
+      console.log('full config title: ' + observersConfig.getFullTitle());
+      const api_params     = setupAPIParams( observersConfig );
       const api_url        = api_base+api_params;
       console.log('api url: ' + api_url);
       const obs_data       = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
-      buildPage(obs_data, plantsConfig); 
+      buildPage(obs_data, observersConfig); 
 
     } catch (error) {
       console.error("An error occurred:", error);
