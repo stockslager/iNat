@@ -46,10 +46,12 @@ function furlArrow(url,txt=url) { return '<a href="'+url+'" id="arrow">'+txt+'</
 function buildMenu() {
       let menu_string = '';
       menu_string =  '<div class="navbar">';
-      menu_string += buildDDTitle('');
+
+      
+      menu_string += buildMenuURL(furl('./choose_plant.html'+buildParameterList(appState), 'Choose Plant');
 
       let urlState  = clearForDashParams(appState);
-      menu_string += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),'&#127807;'));
+      menu_string += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState), '&#127807;'));
       menu_string += '</div>';
 
       faddelem('p',document.body,{innerHTML:(menu_string)});  
