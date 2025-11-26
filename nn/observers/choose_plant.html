@@ -49,12 +49,12 @@ function sortWithNull(arr, ascending = true) {
   return arr;
 }
 
-function getPlaceName( observerConfig, place_id ) {
+function getPlaceName( gardenConfig, place_id ) {
    let place_name = 'Place';
 
-   for( let i=0; i<observerConfig.places.length; i++ ) {
-        if( place_id === observerConfig.places[i].placeId ) {
-            place_name = observerConfig.places[i].placeName; 
+   for( let i=0; i<gardenConfig.places.length; i++ ) {
+        if( place_id === gardenConfig.places[i].placeId ) {
+            place_name = gardenConfig.places[i].placeName; 
         }
    }
    return place_name;
@@ -232,26 +232,26 @@ function buildPage(xobj, config) {
 <script type="text/javascript"   src="../core/js/api_fetch.js"></script>
 
 <script>
-function setupAPIParams( observerConfig ) {
+function setupAPIParams( gardenConfig ) {
    let api_params = '';
  
-   api_params += '?project_id='+observerConfig.project;
+   api_params += '?project_id='+gardenConfig.project;
    api_params += '&iconic_taxa=plantae';
 
-   if( observerConfig.plantField )        { api_params += '&field:'    + observerConfig.plantField;  } 
-   if( observerConfig.plantFieldValue )   { api_params += '='          + observerConfig.plantFieldValue; }
-   if( observerConfig.defaultPlace )      { api_params += '&place_id=' + observerConfig.defaultPlace; }
-   if( observerConfig.plantIds )          { api_params += '&id='       + observerConfig.plantIds;  }
-   if( observerConfig.plantListUserId )   { api_params += '&user_id='  + observerConfig.plantListUserId; }
-   if( observerConfig.tagName )           { api_params += '&tag='      + observerConfig.tagName; }
+   if( gardenConfig.plantField )        { api_params += '&field:'    + gardenConfig.plantField;  } 
+   if( gardenConfig.plantFieldValue )   { api_params += '='          + gardenConfig.plantFieldValue; }
+   if( gardenConfig.defaultPlace )      { api_params += '&place_id=' + gardenConfig.defaultPlace; }
+   if( gardenConfig.plantIds )          { api_params += '&id='       + gardenConfig.plantIds;  }
+   if( gardenConfig.plantListUserId )   { api_params += '&user_id='  + gardenConfig.plantListUserId; }
+   if( gardenConfig.tagName )           { api_params += '&tag='      + gardenConfig.tagName; }
 
    // if a taxon_id was chosen in the plant drop-down, use that taxon_id.  if not, 
    // use the taxon_id(s) from the config when present.
    if( getPlantMenuId(appState) ) {
        api_params += '&taxon_id='+getPlantMenuId(appState);
    } else {
-       if( observerConfig.taxonIds ) { 
-           api_params += '&taxon_id=' + observerConfig.taxonIds; 
+       if( gardenConfig.taxonIds ) { 
+           api_params += '&taxon_id=' + gardenConfig.taxonIds; 
        }
    }
 
@@ -267,16 +267,15 @@ async function gatherResources() {
  
   try {
    
-      // Await the result of getObservations() and store the actual data
-      const observerConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
-      console.log('full config title: ' + observerConfig.getFullTitle());
-      const api_params    = setupAPIParams( observerConfig );
+      const gardenConfig  = await asyncGetConfiguration( json_path, COMPONENT_GARDEN );
+      console.log('full config title: ' + gardenConfig.getFullTitle());
+      const api_params    = setupAPIParams( gardenConfig );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
       const obs_data      = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
-      buildPage(obs_data, observerConfig); 
+      buildPage(obs_data, gardenConfig); 
 
     } catch (error) {
       console.error("An error occurred:", error);
