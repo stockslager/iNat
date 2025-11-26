@@ -122,9 +122,20 @@ function buildPage(xobj, observerConfig) {
           dlString = furl('./observer_grid.html'+buildParameterList(urlState),'<span id="topright">'+CONST_ON+titleString+'</span>');
       }
 
-      faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
-             +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+dlString+'<br />'});  
+      let plants  = getPlantName(appState) || CONST_ALL_PLANTS.toLowerCase();
+      let on_all1 = getMenuName(appState) || 'all wildlife';
+      let on_all2 = 'observed on ' + plants;
+      let on_all3 = 'by ' + getUser(appState);
+    
+      faddelem('p',document.body,{innerHTML:'<span id="statsright"><table id="tablekey">' +
+                                            '<tr id="trkey"><td id="tdright2">'  + on_all1 + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdright2">'  + on_all2 + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdright2">'  + on_all3 + '</td></tr></table></span>'});
+
+      faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
+                                            '<tr id="trkey"><td id="tdkey">members:</td>  <td id="tdright">'  + fcomnum(total_results) + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">per page:</td> <td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">page:</td>     <td id="tdright">'  + fcomnum(page_curr)     + ' of '+fcomnum(page_max) + '</td></tr></table></span>'});
 
       labels = [
             {innerText:'#'},
