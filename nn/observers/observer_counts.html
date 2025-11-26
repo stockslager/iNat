@@ -110,7 +110,7 @@ function buildPage( xobj ) {
          let brow = faddelem('tr',tbody);
          let rec = results[i];
          let lists = '';
-         let user_icon = rec.icon || '';
+         let user_icon = rec.user.icon || '';
          
          if( user_icon === '' ){
             user_icon += '<div class="npcicon"></div>';
@@ -124,12 +124,12 @@ function buildPage( xobj ) {
          urlState = setPage(urlState, '');
          urlState = setTaxonId(urlState, '');
          urlState = setTaxonName(urlState, '');
-         urlState = setUser(urlState, rec.user_login);
+         urlState = setUser(urlState, rec.user.login);
 
          let values = [
             {innerText:i+1},
             {innerHTML:user_icon},
-            {innerHTML:furl(root_people+rec.user_login,rec.user_login)},
+            {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
             {innerHTML:furl('./observer_activity.html'+buildParameterList(urlState),rec.obs_count )},
          ];
          faddelems('td',brow,values);
