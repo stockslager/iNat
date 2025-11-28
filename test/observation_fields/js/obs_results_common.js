@@ -347,7 +347,7 @@ function fresults(xobj) {
          }
 
          let obs_photo = '';
-         if( rec.photos && rec.photos[0].url ) {  
+         if( rec.photos && rec.photos[0] && rec.photos[0].url ) {  
              obs_photo = rec.photos[0].url;
          }
        
