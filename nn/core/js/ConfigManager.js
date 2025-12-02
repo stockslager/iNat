@@ -104,10 +104,6 @@ class ConfigManager {
             // All items are processed and kept in the array, even if data is partial
             return new ConfigurationItem(config);
         });
-
-        if( jsonData.default_sub_icons ) {
-            this.defaultSubIcons = jsonData.default_sub_icons.map(iconData => new SubIcon(iconData));
-        }
     }
 
     getConfigByComponent(componentName) {
@@ -178,9 +174,12 @@ async function asyncGetConfiguration( params, component ) {
 
         console.log('ffinal ' + JSON.stringify(managerInstance));
         // if the sub-icons haven't been set, look for the default.
-        /*if( finalConfigInstance.subIcons || finalConfigInstance.subIcons.length === 0 ) {
-            if( managerInstance.defa
-        }*/
+        if( !finalConfigInstance.subIcons || finalConfigInstance.subIcons.length === 0 ) {
+            if( managerInstance.defaultSubIcons ) {
+                finalConfigInstance.subIcons = managerInstance.defaultSubIcons;
+                console.log('fi subs ' + finalConfigInstance.subIcons);
+            }
+        }
       
         return finalConfigInstance; 
 
