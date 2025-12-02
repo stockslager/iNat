@@ -135,7 +135,17 @@ async function asyncGetConfiguration( params, component ) {
                                 ? managerInstance.getConfigByComponent(component) 
                                 : managerInstance;
           
-          if (finalConfigInstance) {
+          if( finalConfigInstance ) {
+              console.log('ffinal ' + JSON.stringify(managerInstance));
+              // if the sub-icons haven't been set, look for the default.
+              if( !finalConfigInstance.subIcons || finalConfigInstance.subIcons.length === 0 ) {
+                  if( managerInstance.defaultSubIcons ) {
+                      // deep copy the default sub-icons.
+                      finalConfigInstance.subIcons = JSON.parse(JSON.stringify(managerInstance.defaultSubIcons));
+                      console.log('fi subs ' + JSON.stringify(finalConfigInstance.subIcons));
+                  }
+              }
+              
               return finalConfigInstance; 
           } else {
               throw new Error(`Requested component "${component}" not found in cache.`);
