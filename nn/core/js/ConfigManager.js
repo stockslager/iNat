@@ -106,7 +106,7 @@ class ConfigManager {
         });
 
         // map the default_sub_icons if they're set
-        this.defaultSubIcons = jsonData.default_sub_icons.map?.map(ds => new SubIcon(ds)) ?? [];
+        this.defaultSubIcons = jsonData.default_sub_icons?.map(ds => new SubIcon(ds)) ?? [];
     }
 
     getConfigByComponent(componentName) {
