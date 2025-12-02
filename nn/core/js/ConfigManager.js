@@ -180,7 +180,7 @@ async function asyncGetConfiguration( params, component ) {
         if( !finalConfigInstance.subIcons || finalConfigInstance.subIcons.length === 0 ) {
             if( managerInstance.defaultSubIcons ) {
                 finalConfigInstance.subIcons = managerInstance.defaultSubIcons;
-                console.log('fi subs ' + finalConfigInstance.subIcons);
+                console.log('fi subs ' + JSON.stringify(finalConfigInstance.subIcons));
             }
         }
       
