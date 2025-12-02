@@ -176,7 +176,7 @@ async function asyncGetConfiguration( params, component ) {
                             ? managerInstance.getConfigByComponent(component) 
                             : managerInstance;
 
-        console.log('final ' + JSON.stringify(managerInstance));
+        console.log('ffinal ' + JSON.stringify(managerInstance));
         // if the sub-icons haven't been set, look for the default.
         /*if( finalConfigInstance.subIcons || finalConfigInstance.subIcons.length === 0 ) {
             if( managerInstance.defa
