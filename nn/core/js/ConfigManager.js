@@ -172,11 +172,17 @@ async function asyncGetConfiguration( params, component ) {
         // Process the raw data using your classes
         managerInstance = new ConfigManager(data);
 
-      finalConfigInstance = component 
+        finalConfigInstance = component 
                             ? managerInstance.getConfigByComponent(component) 
                             : managerInstance;
+
+        console.log('final ' + JSON.stringify(finalConfigInstance));
+        // if the sub-icons haven't been set, look for the default.
+        /*if( finalConfigInstance.subIcons || finalConfigInstance.subIcons.length === 0 ) {
+            if( managerInstance.defa
+        }*/
       
-      return finalConfigInstance; 
+        return finalConfigInstance; 
 
    } catch (error) {
       console.error('Fatal Error during configuration fetch:', error.message);
