@@ -104,6 +104,9 @@ class ConfigManager {
             // All items are processed and kept in the array, even if data is partial
             return new ConfigurationItem(config);
         });
+
+        // map the default_sub_icons if they're set
+        this.defaultSubIcons = jsonData.default_sub_icons.map?.map(ds => new SubIcon(ds)) ?? [];
     }
 
     getConfigByComponent(componentName) {
