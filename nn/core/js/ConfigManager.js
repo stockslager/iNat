@@ -165,6 +165,10 @@ async function asyncGetConfiguration( params, component ) {
           
         // ... error handling for response (e.g. 500 Internal Server Error)...
         if( !response.ok ) {
+            if( response.status === 404 ) {
+                console.error('Resource not found (404):', params + '.json');
+                throw new Error('Resource not found (404): ', params + '.json');
+            }
             console.error(`HTTP error! Status: ${response.status}`);
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
