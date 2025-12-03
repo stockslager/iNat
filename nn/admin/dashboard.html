@@ -145,7 +145,7 @@ async function gatherResources() {
 
     } catch (error) {
       console.error("An error occurred:", error);
-      let e = [ {innerText:'<span id="error">&#9888;<br>'}, {innerHTML:error.message}, {innerText:'</span>'}];
+      let e = [ {innerHTML:'<span id="error">&#9888;<br>'}, {innerText:error.message}, {innerHTML:'</span>'}];
       faddelems('p',document.body,e); 
      // faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
       throw error;
