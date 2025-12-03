@@ -77,7 +77,9 @@ function buildMenu(configuration) {
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
-function displayJson(configuration) {
+function buildPage(configManager) {
+
+    let configuration = configManager.configurations[0];
 
     buildMenu(configuration);
 
@@ -171,16 +173,21 @@ function displayJson(configuration) {
     document.getElementById('json-display').textContent = prettyJson;
 
 }
-  
+
+</script>
+ 
+<script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
+
+<script>
 async function gatherResources() {
   let json_path = json_root + getParams(appState);
  
   try {
-      // Await the result of getObservations() and store the actual data
-      const configs   = await asyncGetConfiguration( json_path );
+      // get the configurations
+      const configManager   = await asyncGetConfiguration( json_path );
      
       // Pass the data to the buildPage function
-      displayJson(configs[0]); 
+      buildPage( configManager ); 
 
     } catch (error) {
       console.error("An error occurred:", error);
@@ -199,5 +206,4 @@ if( message ) {
   
 </script>
 </body>
-
 </html>
