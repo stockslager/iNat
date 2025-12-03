@@ -280,7 +280,8 @@ async function gatherResources() {
 
     } catch (error) {
       console.error("An error occurred:", error);
-      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      faddelem('p',document.body,{innerHTML:error.message}); 
+      //faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
       throw error;
     }
 }
