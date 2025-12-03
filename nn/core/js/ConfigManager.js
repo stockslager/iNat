@@ -136,13 +136,11 @@ async function asyncGetConfiguration( params, component ) {
                                 : managerInstance;
           
           if( finalConfigInstance ) {
-              console.log('ffinal ' + JSON.stringify(managerInstance));
               // if the sub-icons haven't been set, look for the default.
               if( !finalConfigInstance.subIcons || finalConfigInstance.subIcons.length === 0 ) {
                   if( managerInstance.defaultSubIcons ) {
                       // deep copy the default sub-icons.
                       finalConfigInstance.subIcons = JSON.parse(JSON.stringify(managerInstance.defaultSubIcons));
-                      console.log('fi subs ' + JSON.stringify(finalConfigInstance.subIcons));
                   }
               }
               
@@ -185,13 +183,11 @@ async function asyncGetConfiguration( params, component ) {
                             ? managerInstance.getConfigByComponent(component) 
                             : managerInstance;
 
-        console.log('ffinal ' + JSON.stringify(managerInstance));
         // if the sub-icons haven't been set, look for the default.
         if( !finalConfigInstance.subIcons || finalConfigInstance.subIcons.length === 0 ) {
             if( managerInstance.defaultSubIcons ) {
                 // deep copy the default sub-icons.
                 finalConfigInstance.subIcons = JSON.parse(JSON.stringify(managerInstance.defaultSubIcons));
-                console.log('fi subs ' + JSON.stringify(finalConfigInstance.subIcons));
             }
         }
       
