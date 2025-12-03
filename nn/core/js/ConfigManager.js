@@ -167,7 +167,7 @@ async function asyncGetConfiguration( params, component ) {
         if( !response.ok ) {
             if( response.status === 404 ) {
                 console.error('Resource not found (404):', params + '.json');
-                throw new Error('Resource not found (404): ', params + '.json');
+                throw new Error('Resource not found (404): ' + params + '.json');
             }
             console.error(`HTTP error! Status: ${response.status}`);
             throw new Error(`HTTP error! Status: ${response.status}`);
