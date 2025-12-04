@@ -62,7 +62,7 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-var example = winurlparams.get('example')
+var example = winurlparams.get('lsmap')
 example = (example===null?1:example.split(',')[0]); // gets first value passed in the url "example" parameter, or else default to 1
 
 appState       = buildStateFromParams(winurlparams);
@@ -581,7 +581,7 @@ function fexample(eseq,descr,notes=null) {
 };
 
 function fgetexample(seq) {
-  if (seq!=null) { window.location.assign(winurlexsearchstr+buildParameterList(appState)+'&example='+seq); };
+  if (seq!=null) { window.location.assign(winurlexsearchstr+buildParameterList(appState)+'&lsmap='+seq); };
 };
 </script>
 
