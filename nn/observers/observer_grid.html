@@ -88,8 +88,8 @@ function buildMenu(observersConfig) {
 function buildPage(data, observersConfig) {  
    faddelem('p',document.body,{innerHTML:buildMenu(observersConfig)}); 
 
-   // append the plant id for the chosen plant_id to the field_name.
-   if( observersConfig.fieldName ) { inat_url += '&field:'+observersConfig.fieldName+'=' + getPlantId(appState); }
+   // append the params needed by the grid to build the url for outlinks to iNat.
+   inat_url += getMapParams(observersConfig);
                                     
    buildGrid(data, inat_url);    
 };
