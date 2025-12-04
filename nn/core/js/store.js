@@ -336,6 +336,28 @@ function getPerPageParam(state, param_nm)   {
 }
 
 /*
+ * Returns the parameters that might be used on an outlink to iNat.
+ *
+ * @param {state} The current application state object.
+ * @return {string} The parameters to be appended to the outlink.
+ */
+function getInatParams(state) {
+  let url_params = '';
+  
+  if( getProject(state) ) {  
+      url_params += '?project_id=' + getProject(state);
+  } else {
+      return '';  
+  }
+
+  if( getUser(state) )    { url_params += '&user_id='  + getUser(state); }
+  if( getPlace(state) )   { url_params += '&place_id=' + getPlace(state); }
+  if( getTaxonId(state) ) { url_params += '&taxon_id=' + getTaxonId(state); }
+
+  return url_params;
+}
+
+/*
  * component based validation
  *
  * Validates the state for parameters requirements.
