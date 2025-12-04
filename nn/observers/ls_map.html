@@ -588,13 +588,25 @@ function fgetexample(seq) {
 <script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
 
 <script>
-   console.log('hiya');
-function setupAPIParams(observerConfig) {
+function setupWithoutParams(observerConfig) {
    let api_params = '';
 
    api_params += ('?project_id='+observerConfig.insectProject);
-   //api_params += '&hrank=species';
+   api_params += '&field:'+observerConfig.fieldName+'='+getPlantId(appState);
 
+   // default these to what's in the config even though the state sometimes
+   // holds the same attributes for other components.
+   if( observerConfig.defaultPlace    ) { api_params += '&place_id=' + observerConfig.defaultPlace; }  
+ 
+   //api_params += getMenuIdParam(appState, '&taxon_id='); 
+
+   return api_params;
+}
+
+function setupWithParams(observerConfig) {
+   let api_params = '';
+
+   api_params += ('?project_id='+observerConfig.insectProject);
    api_params += '&field:'+observerConfig.fieldName+'='+getPlantId(appState);
 
    // default these to what's in the config even though the state sometimes
@@ -602,10 +614,11 @@ function setupAPIParams(observerConfig) {
    if( getUser(appState) )              { api_params += '&user_id='  + getUser(appState); }
    if( observerConfig.defaultPlace    ) { api_params += '&place_id=' + observerConfig.defaultPlace; }  
  
-   api_params += getMenuIdParam(appState, '&taxon_id='); 
+   //api_params += getMenuIdParam(appState, '&taxon_id='); 
 
    return api_params;
 }
+
 
 async function gatherResources() {
   let json_path = json_root + getParams(appState);
@@ -616,23 +629,24 @@ async function gatherResources() {
       // Await the result of getObservations() and store the actual data
       const observerConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
       console.log('full config title: ' + observerConfig.getFullTitle());
-      const api_params    = setupAPIParams( observerConfig );
+      const without_params    = setupWithoutParams( observerConfig );
+      const with_params       = setupWithParams( observerConfig );
 
-     console.log('hello');
-   if( fexample(1,'Monarchs on Milkweed (In-Network Only)','To make this work, we would need to pass in the insect species along with the plant species from the ui flow.')) {
-      console.log('two');
+   if( fexample(1,'Life-Stages of x on y by All Observers','To make this work, we would need to not pass in a plant/insect species if they select all / all. ')) {
        fmapextent({nelat:39.13652110135628,nelng:-84.3476428020592,swlat:39.12904776433699,swlng:-84.35708417779162}); // Horizon
        fcreatebaselayer(0,bm_s_osm.url,bm_s_osm.description,bm_s_osm.attribution,true,'grayscale(100%) invert(100%) brightness(60%) sepia(100%) hue-rotate(180deg) saturate(150%)','',true);
-       fcreateutflayer(1,utfgridapi.url+api_params+'&verifiable=any&term_id=1&term_value_id=6','Monarch Larva',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[255,0,0]});
-       fcreateutflayer(2,utfgridapi.url+api_params+'&verifiable=any&term_id=1&term_value_id=2','Monarch Adults',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:1,colorRGB:[255,255,0]});
+       fcreateutflayer(1,utfgridapi.url+without_params+'&verifiable=any&term_id=1&term_value_id=7','Egg',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[173,216,230]});
+       fcreateutflayer(2,utfgridapi.url+without_params+'&verifiable=any&term_id=1&term_value_id=4','Pupa',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[144,238,144]});
+       fcreateutflayer(3,utfgridapi.url+without_params+'&verifiable=any&term_id=1&term_value_id=6','Larva',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[255,255,0]});
+       fcreateutflayer(4,utfgridapi.url+without_params+'&verifiable=any&term_id=1&term_value_id=2','Adults',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:1,colorRGB:[255,0,0]});
    };
-   if( fexample(2,'Life-Stages Any Insect on Any Plant (In-Network Only)','To make this work, we would need to not pass in a plant/insect species if they select all / all. ')) {
+   if( fexample(2,'Life-Stages of x on y by '+getUser(appState),'To make this work, we would need to not pass in a plant/insect species if they select all / all. ')) {
        fmapextent({nelat:39.13652110135628,nelng:-84.3476428020592,swlat:39.12904776433699,swlng:-84.35708417779162}); // Horizon
        fcreatebaselayer(0,bm_s_osm.url,bm_s_osm.description,bm_s_osm.attribution,true,'grayscale(100%) invert(100%) brightness(60%) sepia(100%) hue-rotate(180deg) saturate(150%)','',true);
-       fcreateutflayer(1,utfgridapi.url+api_params+'&verifiable=any&term_id=1&term_value_id=7','Egg',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[173,216,230]});
-       fcreateutflayer(2,utfgridapi.url+api_params+'&verifiable=any&term_id=1&term_value_id=4','Pupa',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[144,238,144]});
-       fcreateutflayer(3,utfgridapi.url+api_params+'&verifiable=any&term_id=1&term_value_id=6','Larva',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[255,255,0]});
-       fcreateutflayer(4,utfgridapi.url+api_params+'&verifiable=any&term_id=1&term_value_id=2','Adults',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:1,colorRGB:[255,0,0]});
+       fcreateutflayer(1,utfgridapi.url+with_params+'&verifiable=any&term_id=1&term_value_id=7','Egg',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[173,216,230]});
+       fcreateutflayer(2,utfgridapi.url+with_params+'&verifiable=any&term_id=1&term_value_id=4','Pupa',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[144,238,144]});
+       fcreateutflayer(3,utfgridapi.url+with_params+'&verifiable=any&term_id=1&term_value_id=6','Larva',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[255,255,0]});
+       fcreateutflayer(4,utfgridapi.url+with_params+'&verifiable=any&term_id=1&term_value_id=2','Adults',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:1,colorRGB:[255,0,0]});
    };
    if (elist.value==='nosel') { faddelem('p',mddescr,null,null,'No example found with the requested ID. Please specify another example ID or choose an example from the list above.'); };
      
@@ -647,11 +661,9 @@ async function gatherResources() {
 let message = validateObservers(appState);
  
 if( message ) {
-   console.log('hiya3');
-   console.log('message ' + message);
+    console.log('error message ' + message);
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
 } else {
-   console.log('hiya2');
     gatherResources(); 
 }
 
