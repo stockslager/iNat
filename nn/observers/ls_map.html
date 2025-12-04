@@ -641,18 +641,18 @@ async function gatherResources() {
    if( fexample(1, (getTaxonName(appState)||'All Wildlife')+' on '+(getPlantName(appState)||'Any Plant')+' by All Observers','To make this work, we would need to not pass in a plant/insect species if they select all / all. ')) {
        fmapextent({nelat:39.13652110135628,nelng:-84.3476428020592,swlat:39.12904776433699,swlng:-84.35708417779162}); // Horizon
        fcreatebaselayer(0,bm_s_osm.url,bm_s_osm.description,bm_s_osm.attribution,true,'grayscale(100%) invert(100%) brightness(60%) sepia(100%) hue-rotate(180deg) saturate(150%)','',true);
-       fcreateutflayer(1,utfgridapi.url+without_params+'&verifiable=any&term_id=1&term_value_id=7','Egg',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:3,colorRGB:[173,216,230]});
-       fcreateutflayer(2,utfgridapi.url+without_params+'&verifiable=any&term_id=1&term_value_id=4','Pupa',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:3,colorRGB:[144,238,144]});
-       fcreateutflayer(3,utfgridapi.url+without_params+'&verifiable=any&term_id=1&term_value_id=6','Larva',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:3,colorRGB:[255,255,0]});
-       fcreateutflayer(4,utfgridapi.url+without_params+'&verifiable=any&term_id=1&term_value_id=2','Adults',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:3,colorRGB:[255,0,0]});
+       fcreateutflayer(1,utfgridapi.url+without_params+'&verifiable=any&term_id=1&term_value_id=7','Egg',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[173,216,230]});
+       fcreateutflayer(2,utfgridapi.url+without_params+'&verifiable=any&term_id=1&term_value_id=4','Pupa',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[144,238,144]});
+       fcreateutflayer(3,utfgridapi.url+without_params+'&verifiable=any&term_id=1&term_value_id=6','Larva',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[255,255,0]});
+       fcreateutflayer(4,utfgridapi.url+without_params+'&verifiable=any&term_id=1&term_value_id=2','Adults',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:1,colorRGB:[255,0,0]});
    };
    if( fexample(2, (getTaxonName(appState)||'All Wildlife')+' on '+(getPlantName(appState)||'Any Plant')+' by '+getUser(appState),'To make this work, we would need to not pass in a plant/insect species if they select all / all. ')) {
        fmapextent({nelat:39.13652110135628,nelng:-84.3476428020592,swlat:39.12904776433699,swlng:-84.35708417779162}); // Horizon
        fcreatebaselayer(0,bm_s_osm.url,bm_s_osm.description,bm_s_osm.attribution,true,'grayscale(100%) invert(100%) brightness(60%) sepia(100%) hue-rotate(180deg) saturate(150%)','',true);
-       fcreateutflayer(1,utfgridapi.url+with_params+'&verifiable=any&term_id=1&term_value_id=7','Egg',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:3,colorRGB:[173,216,230]});
-       fcreateutflayer(2,utfgridapi.url+with_params+'&verifiable=any&term_id=1&term_value_id=4','Pupa',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:3,colorRGB:[144,238,144]});
-       fcreateutflayer(3,utfgridapi.url+with_params+'&verifiable=any&term_id=1&term_value_id=6','Larva',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:3,colorRGB:[255,255,0]});
-       fcreateutflayer(4,utfgridapi.url+with_params+'&verifiable=any&term_id=1&term_value_id=2','Adults',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:3,colorRGB:[255,0,0]});
+       fcreateutflayer(1,utfgridapi.url+with_params+'&verifiable=any&term_id=1&term_value_id=7','Egg',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[173,216,230]});
+       fcreateutflayer(2,utfgridapi.url+with_params+'&verifiable=any&term_id=1&term_value_id=4','Pupa',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[144,238,144]});
+       fcreateutflayer(3,utfgridapi.url+with_params+'&verifiable=any&term_id=1&term_value_id=6','Larva',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[255,255,0]});
+       fcreateutflayer(4,utfgridapi.url+with_params+'&verifiable=any&term_id=1&term_value_id=2','Adults',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:1,colorRGB:[255,0,0]});
    };
    if (elist.value==='nosel') { faddelem('p',mddescr,null,null,'No example found with the requested ID. Please specify another example ID or choose an example from the list above.'); };
      
