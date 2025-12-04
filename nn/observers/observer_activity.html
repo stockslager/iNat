@@ -199,6 +199,7 @@ function buildPage(xobj, observerConfig) {
          let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
 
          let urlState = appState;  // creates a copy
+         urlState = setTaxonName(urlState, pref_tax_name.toLowerCase()||tax_name);
          urlState = setTaxonId(urlState, rec.taxon.id);
        
          let values = [
