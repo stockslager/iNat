@@ -601,8 +601,8 @@ function setupWithoutParams(observerConfig) {
    // default these to what's in the config even though the state sometimes
    // holds the same attributes for other components.
    if( observerConfig.defaultPlace    ) { api_params += '&place_id=' + observerConfig.defaultPlace; }  
- 
-   //api_params += getMenuIdParam(appState, '&taxon_id='); 
+
+   api_params += getTaxonIdParam(appState, '&taxon_id=');
 
    return api_params;
 }
@@ -619,7 +619,6 @@ function setupWithParams(observerConfig) {
    if( observerConfig.defaultPlace    ) { api_params += '&place_id=' + observerConfig.defaultPlace; }  
 
    api_params += getTaxonIdParam(appState, '&taxon_id=');
-   //api_params += getMenuIdParam(appState, '&taxon_id='); 
 
    console.log('api params ' + api_params);
 
