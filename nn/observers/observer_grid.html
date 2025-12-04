@@ -74,7 +74,7 @@ function buildMenu(observersConfig) {
    menu_string = '<div class="navbar">';
 
    if( !getTaxonId(appState) ) {
-       menu_string += buildMenuURL( furl('./ls_map.html'+getMapParams(observersConfig),"Map") );
+       menu_string += buildMenuURL( furl('./ls_map.html'+buildParameterList(appState),"Map") );
    } else {
        menu_string += buildMenuURL( furl('../admin/map.html'+getMapParams(observersConfig),"Map") );
    }
