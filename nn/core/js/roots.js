@@ -1,5 +1,5 @@
 // root directory for inat observations
-let root_observations = 'https://www.inaturalist.org/observations/';
+let root_observations = 'https://www.inaturalist.org/observations';
 let root_people       = 'https://www.inaturalist.org/people/';
 let root_obs_fields   = 'https://www.inaturalist.org/observation_fields/';
 let root_projects     = 'https://www.inaturalist.org/projects/';
