@@ -32,7 +32,7 @@ appState       = buildStateFromParams(winurlparams);
 
 var api_base   = 'https://api.inaturalist.org/v1/observations'
 var obsurlbase = root_observations;
-var obsurl     = obsurlbase+'?'+winurlparams.toString();
+var inat_url   = obsurlbase+'?'+getInatParams(appState);
 
 // don't show organsims that have only been id'd to genus and above, otherwise the number's
 // won't match other counts
@@ -87,7 +87,11 @@ function buildMenu(observersConfig) {
 
 function buildPage(data, observersConfig) {  
    faddelem('p',document.body,{innerHTML:buildMenu(observersConfig)}); 
-   buildGrid(data);    
+
+   // append the plant id for the chosen plant_id to the field_name.
+   if( observersConfig.fieldName ) { inat_url += '&field:'+observersConfig.fieldName+'=' + getPlantId(appState));
+                                    
+   buildGrid(data, inat_url);    
 };
 
 function setupAPIParams( observersConfig ) {
