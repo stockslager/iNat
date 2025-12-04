@@ -73,11 +73,16 @@ function buildMenu(observersConfig) {
 
    menu_string = '<div class="navbar">';
 
-   if( !getTaxonId(appState) ) {
+ 
+   links  = buildMenuURL( furl('../admin/map.html'+getMapParams(observersConfig),"Standard Map");
+   links += buildMenuURL( furl('./ls_map.html'+buildParameterList(appState),"Life-Stages Map");
+   menu_string += ( buildDD( 'Maps', links) );
+
+   /*if( !getTaxonId(appState) ) {
        menu_string += buildMenuURL( furl('./ls_map.html'+buildParameterList(appState),"Map") );
    } else {
        menu_string += buildMenuURL( furl('../admin/map.html'+getMapParams(observersConfig),"Map") );
-   }
+   }*/
    //menu_string += buildMenuURL( furl('../admin/layered_map.html'+buildParameterList(appState)+'&project_id='+observersConfig.insectProject,"Map") );
    
    let url_state = clearForSpeciesCountsParams( appState );
