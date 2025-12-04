@@ -344,21 +344,10 @@ function getPerPageParam(state, param_nm)   {
 function getInatParams(state) {
   let url_params = '';
   
-  if( getProject(state) ) {  
-      url_params += '?project_id=' + getProject(state);
-      if( getUser(state) ) { 
-          url_params += '&user_id='  + getUser(state); 
-      }
-  } else {
-      if( getUser(state) ) {
-          url_params += '?user_id=' + getUser(state);
-      } else {
-          return '';  // requires a project or user_id.
-      }
-  }
-
-  if( getPlace(state) )   { url_params += '&place_id=' + getPlace(state); }
-  if( getTaxonId(state) ) { url_params += '&taxon_id=' + getTaxonId(state); }
+  if( getProject(state) ) { url_params += '&project_id=' + getProject(state); }
+  if( getUser(state) )    { url_params += '&user_id='    + getUser(state); }
+  if( getPlace(state) )   { url_params += '&place_id='   + getPlace(state); }
+  if( getTaxonId(state) ) { url_params += '&taxon_id='   + getTaxonId(state); }
 
   return url_params;
 }
