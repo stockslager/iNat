@@ -66,6 +66,8 @@ var example = winurlparams.get('lsmap')
 example = (example===null?1:example.split(',')[0]); // gets first value passed in the url "example" parameter, or else default to 1
 
 appState       = buildStateFromParams(winurlparams);
+
+   console.log('win ' + winurlexsearchstr);
   
 //function to create new elements
 function faddelem(etype,eparent=null,eclass=null,eid=null,ehtml=null) {
@@ -581,7 +583,6 @@ function fexample(eseq,descr,notes=null) {
 };
 
 function fgetexample(seq) {
-   console.log('win ' + winurlexsearchstr);
   if (seq!=null) { window.location.assign(winurlexsearchstr+buildParameterList(appState)+'&lsmap='+seq); };
 };
 </script>
@@ -623,7 +624,6 @@ function setupWithParams(observerConfig) {
 
 async function gatherResources() {
   let json_path = json_root + getParams(appState);
-   console.log('gather');
  
   try {
    
