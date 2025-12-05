@@ -37,13 +37,6 @@
 <script type="text/javascript"   src='../core/js/common_func.js'> </script>
 <script type="text/javascript"   src='../core/js/roots.js'> </script>
 <script type="text/javascript"   src='../core/js/store.js'> </script>
-<div id='nav'>
-   <h3>Application of Custom iNaturalist Observation Density Maps Based on UTFGrids</h3>
-   <select id='examplelist' onchange='fgetexample(this.value);'>
-      <option selected='true' value='nosel' disabled='disabled'>Select a Life-Stages Map:</option>   
-   </select>
-   <h3>Map Details</h3>
-</div>
 <script>
 let map = faddelem('div',document.body,null,'map');
 let nav = document.getElementById('nav');
@@ -68,8 +61,15 @@ example = (example===null?1:example.split(',')[0]); // gets first value passed i
 winurlparams.delete('lsmap');
 appState       = buildStateFromParams(winurlparams);
 
-   console.log('win ' + winurlexsearchstr);
-  
+let header = '<div id='nav'>' + 
+                '<h3>Application of Custom iNaturalist Observation Density Maps Based on UTFGrids</h3>' + 
+                   '<select id="examplelist" onchange="'+fgetexample(this.value)+'">' +
+                        '<option selected="true" value="nosel" disabled="disabled">Select a Life-Stages Map:</option>' +   
+                   '</select>' + 
+                '<h3>Map Details</h3>' + 
+             '</div>';
+faddelem('p',document.body,{innerHTML:header}); 
+
 //function to create new elements
 function faddelem(etype,eparent=null,eclass=null,eid=null,ehtml=null) {
    var eobj = document.createElement(etype);
