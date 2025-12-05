@@ -70,7 +70,7 @@ example = (example===null?1:example.split(',')[0]); // gets first value passed i
 winurlparams.delete('lsmap');
 appState       = buildStateFromParams(winurlparams);
 
-document.getElementById('titlename').value = (getTaxonName(appState)||'Any Insect') + ' on ' + (getPlantName(appState)||'Any Plant');
+document.getElementById('titlename').textContent = (getTaxonName(appState)||'Any Insect') + ' on ' + (getPlantName(appState)||'Any Plant');
    
 //function to create new elements
 function faddelem(etype,eparent=null,eclass=null,eid=null,ehtml=null) {
