@@ -16,6 +16,7 @@
    #nav { width:384px; height:1024px; position:absolute; top:0px; left:0px; }
    h3 { font:600 11pt Sans-Serif; margin:0px; padding:15px 10px 0px 10px; }
    p { font:10pt Sans-Serif; margin:0px; padding:10px 10px 0px 10px; }
+   #titlename { font:600 11pt Sans-Serif; margin:0px; padding:15px 10px 0px 10px; }  
    #examplelist { width:364px; margin:10px 10px 0px 10px; }
    #keytable { display:table; margin:0px 10px; }
    #keybody { display:table-row-group; }
@@ -33,6 +34,14 @@
 </head>
 
 <body>
+<div id='nav'>
+   <h3 id='titlename'> </h3>
+   <p>Note: This is a customized version of a script from the magnificent <a href="https://github.com/jumear/stirfry">iNat stirfry repo</a>.  Provided for our regional nature centers that serve our local community.</p>
+   <select id='examplelist' onchange='fgetexample(this.value);'>
+      <option selected='true' value='nosel' disabled='disabled'>Select a Map:</option>   
+   </select>
+   <h3>Map Details</h3>
+</div>
 <script type="text/javascript"   src='../core/js/global_const.js'> </script>
 <script type="text/javascript"   src='../core/js/common_func.js'> </script>
 <script type="text/javascript"   src='../core/js/roots.js'> </script>
@@ -61,15 +70,8 @@ example = (example===null?1:example.split(',')[0]); // gets first value passed i
 winurlparams.delete('lsmap');
 appState       = buildStateFromParams(winurlparams);
 
-let header = '<div id="nav">' + 
-                '<h3>Application of Custom iNaturalist Observation Density Maps Based on UTFGrids</h3>' + 
-                   '<select id="examplelist" onchange="'+fgetexample(this.value)+'">' +
-                        '<option selected="true" value="nosel" disabled="disabled">Select a Life-Stages Map:</option>' +   
-                   '</select>' + 
-                '<h3>Map Details</h3>' + 
-             '</div>';
-faddelem('p',document.body,{innerHTML:header}); 
-
+document.getElementById('titlename').value = (getTaxonName(appState)||'Any Insect') + ' on ' + (getPlantName(appState)||'Any Plant');
+   
 //function to create new elements
 function faddelem(etype,eparent=null,eclass=null,eid=null,ehtml=null) {
    var eobj = document.createElement(etype);
