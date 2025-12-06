@@ -43,18 +43,17 @@ function buildMenu(configuration) {
       let links = '';
  
       menu_string = '<div class="navbar">';
-      if( configuration.plant_project )      { links += furl('./about.html?params='+getParams(appState)+'&field=plant_project',      "plant_project"); }
-      if( configuration.observers_project )  { links += furl('./about.html?params='+getParams(appState)+'&field=observers_project',  "observers_project"); }
-      if( configuration.insect_project )     { links += furl('./about.html?params='+getParams(appState)+'&field=insect_project',     "insect_project"); }
-      if( configuration.seed_project )       { links += furl('./about.html?params='+getParams(appState)+'&field=seed_project',      "seed_project"); }
-      if( configuration.title )              { links += furl('./about.html?params='+getParams(appState)+'&field=title',              "title"); }
-      if( configuration.plant_filter )       { links += furl('./about.html?params='+getParams(appState)+'&field=plant_filter',       "plant_filter"); }
-      if( configuration.plant_filter_value ) { links += furl('./about.html?params='+getParams(appState)+'&field=plant_filter_value', "plant_filter_value"); }
-      if( configuration.plant_ids )          { links += furl('./about.html?params='+getParams(appState)+'&field=plant_ids',          "plant_ids"); }
-      if( configuration.default_place )      { links += furl('./about.html?params='+getParams(appState)+'&field=default_place',      "default_place"); }
-      if( configuration.show_behavior )      { links += furl('./about.html?params='+getParams(appState)+'&field=show_behavior',      "show_behavior"); }
-      if( configuration.fieldId )           { links += furl('./about.html?params='+getParams(appState)+'&field=fieldId',           "field_id"); }
-      if( configuration.fieldName )         { links += furl('./about.html?params='+getParams(appState)+'&field=fieldName',         "field_name"); }
+      if( configuration.project )          { links += furl('./about.html?params='+getParams(appState)+'&field=project',            "project"); }
+      if( configuration.plantProject )     { links += furl('./about.html?params='+getParams(appState)+'&field=plantProject',       "plant_project"); }
+      if( configuration.insectProject )    { links += furl('./about.html?params='+getParams(appState)+'&field=insectProject',      "insect_project"); }
+      if( configuration.title )            { links += furl('./about.html?params='+getParams(appState)+'&field=title',              "title"); }
+      if( configuration.plantFilter )      { links += furl('./about.html?params='+getParams(appState)+'&field=plantFilter',        "plant_filter"); }
+      if( configuration.plantFilterValue ) { links += furl('./about.html?params='+getParams(appState)+'&field=plantFilterValue',   "plant_filter_value"); }
+      if( configuration.plantIds )         { links += furl('./about.html?params='+getParams(appState)+'&field=plantIds',           "plant_ids"); }
+      if( configuration.defaultPlace )     { links += furl('./about.html?params='+getParams(appState)+'&field=defaultPlace',       "default_place"); }
+      if( configuration.hideOnAny )        { links += furl('./about.html?params='+getParams(appState)+'&field=hideOnAny',          "hide_on_any"); }
+      if( configuration.fieldId )          { links += furl('./about.html?params='+getParams(appState)+'&field=fieldId',            "field_id"); }
+      if( configuration.fieldName )        { links += furl('./about.html?params='+getParams(appState)+'&field=fieldName',          "field_name"); }
 
       if( configuration.taxa ) {
           if( configuration.taxa[0] ) {
@@ -83,7 +82,7 @@ function buildPage(configManager) {
     buildMenu(configuration);
 
     let def_place_no_prj = '';
-    if( !configuration.plant_project ) {
+    if( !configuration.plantProject ) {
         def_place_no_prj = '  Default place is also used (as in this case) when plant_ids are configured but no plant_project is set.';
     }
  
@@ -92,19 +91,19 @@ function buildPage(configManager) {
                                            'from and which observation fields to filter that data with.<span id="seperator"></span>')});
                                            
     if( p_field === 'plant_project' ) {
-        faddelem('p',document.body,{innerHTML:('<b>plant_project: '+furl(root_projects+configuration.plant_project, configuration.plant_project)+'</b>')});
+        faddelem('p',document.body,{innerHTML:('<b>plant_project: '+furl(root_projects+configuration.plantProject, configuration.plantProject)+'</b>')});
         faddelem('p',document.body,{innerHTML:('The unique iNat project id for the project that contains the plant observations. <span id="seperator"></span>')});
-    } else if( p_field === 'observers_project' ) {
-        faddelem('p',document.body,{innerHTML:('<b>observers_project: '+furl(root_projects+configuration.observers_project, configuration.observers_project)+'</b>')});
-        faddelem('p',document.body,{innerHTML:('The unique iNat project id for the project that defines the network of observers contributing ' +
-                                               'wildlife observations for display by the app. <span id="seperator"></span>')});
+    } else if( p_field === 'project' ) {
+        faddelem('p',document.body,{innerHTML:('<b>project: '+furl(root_projects+configuration.project, configuration.project)+'</b>')});
+        faddelem('p',document.body,{innerHTML:('The unique iNat project id for the project that supplies data to this component. ' +
+                                               '<span id="seperator"></span>')});
     } else if( p_field === 'insect_project' ) {
-        faddelem('p',document.body,{innerHTML:('<b>insect_project: '+furl(root_projects+configuration.insect_project, configuration.insect_project)+'</b>')});
+        faddelem('p',document.body,{innerHTML:('<b>insect_project: '+furl(root_projects+configuration.insectProject, configuration.insectProject)+'</b>')});
         faddelem('p',document.body,{innerHTML:('The unique iNat project id for the project that contains the insect and ' +
                                                'other wildlife activity observations. The wildlife activity observations in ' +
                                                'this project are sometimes further filtered by setting the default_place parameter.<span id="seperator"></span>')});
     } else if( p_field === 'seed_project' ) {
-        faddelem('p',document.body,{innerHTML:('<b>seed_project: '+furl(root_projects+configuration.seed_project, configuration.seed_project)+'</b>')});
+        faddelem('p',document.body,{innerHTML:('<b>seed_project: '+furl(root_projects+configuration.seedProject, configuration.seedProject)+'</b>')});
         faddelem('p',document.body,{innerHTML:('The unique iNat project id for the project that contains the observations of plants from which seeds '+
                                                'are being shared. <span id="seperator"></span>')});
     } else if( p_field === 'title' ) {
@@ -120,7 +119,7 @@ function buildPage(configManager) {
         faddelem('p',document.body,{innerHTML:('<b>plant_ids</b>')});
         faddelem('p',document.body,{innerHTML:('A comma delimited list of observation ids corresponding to plant observations to be displayed on the plant list.<span id="seperator"></span>')});
     } else if( p_field === 'default_place' ) {
-        faddelem('p',document.body,{innerHTML:('<b>default_place: '+furl(root_places+configuration.default_place, configuration.default_place)+'</b>')});
+        faddelem('p',document.body,{innerHTML:('<b>default_place: '+furl(root_places+configuration.defaultPlace, configuration.defaultPlace)+'</b>')});
         faddelem('p',document.body,{innerHTML:('The unique iNat place id for the place that contains the insect and ' +
                                                'other wildlife activity observations. The wildlife activity observations in ' +
                                                'this project are sometimes further filtered by setting the default_place parameter.'+def_place_no_prj+'<span id="seperator"></span>')});
@@ -135,11 +134,11 @@ function buildPage(configManager) {
                                                'Triggers a "Behaviors" drop down to appear with the wildlife activity counts for ' +
                                                'each individual plant.</td></tr></table><span id="seperator"></span>')});
     } else if( p_field === 'field_id' ) {
-        faddelem('p',document.body,{innerHTML:('<b>field_id: '+furl(root_obs_fields+configuration.field_id, configuration.field_id)+'</b>')});
+        faddelem('p',document.body,{innerHTML:('<b>field_id: '+furl(root_obs_fields+configuration.fieldId, configuration.fieldId)+'</b>')});
         faddelem('p',document.body,{innerHTML:('The unique iNat field id for the observation field used to associate an ' +
                                                'observation of wildlife to a given plant. <span id="seperator"></span>')});
     } else if( p_field === 'field_name' ) {
-        faddelem('p',document.body,{innerHTML:('<b>field_name: '+furl(root_obs_fields+configuration.field_id, configuration.field_name)+'</b>')});
+        faddelem('p',document.body,{innerHTML:('<b>field_name: '+furl(root_obs_fields+configuration.fieldId, configuration.fieldName)+'</b>')});
         faddelem('p',document.body,{innerHTML:('The unique iNat field name for the observation field used to associate an ' +
                                                'observation of wildlife to a given plant. <span id="seperator"></span>')});
     } else if( p_field === 'taxa' ) {
@@ -147,7 +146,7 @@ function buildPage(configManager) {
         faddelem('p',document.body,{innerHTML:('<table id="tablekey">' +
                                                '<tr id="trkey"><td id="tdkey">taxon_id </td><td id="tdkey">' +
                                                'The unique iNat ID of the taxon to be displayed in the "Plant" drop-down above the Plant List.' +
-                                               '  <br>(e.g. '+furl(root_taxa+configuration.taxa[0].taxon_id,configuration.taxa[0].taxon_id)+')</td></tr>' +
+                                               '  <br>(e.g. '+furl(root_taxa+configuration.taxa[0].taxonId,configuration.taxa[0].taxonId)+')</td></tr>' +
                                                '<tr id="trkey"><td id="tdkey">taxon_name</td><td id="tdkey">' +
                                                'The name of the taxon that will appear in the "Plant" drop-down.' +
                                                '</td></tr></table><span id="seperator"></span>')});
@@ -159,10 +158,10 @@ function buildPage(configManager) {
                                                '</td></tr>' +
                                                '<tr id="trkey"><td id="tdkey">taxon_id </td><td id="tdkey">' +
                                                'The unique iNat ID of the taxon to be displayed in the "Show" drop-down above the Wildlife Activity Counts.' +
-                                               '  <br>(e.g. '+furl(root_taxa+configuration.sub_icons[0].taxon_id,configuration.sub_icons[0].taxon_id)+')</td></tr>' +
+                                               '  <br>(e.g. '+furl(root_taxa+configuration.subIcons[0].taxonId,configuration.subIcons[0].taxonId)+')</td></tr>' +
                                                '<tr id="trkey"><td id="tdkey">icon</td><td id="tdkey">' +
                                                'The utf-8 of the icon that will appear next to the corresponding name in the "Show" drop-down.' +
-                                               '  <br>(e.g. '+configuration.sub_icons[0].icon+')</td></tr>' +
+                                               '  <br>(e.g. '+configuration.subIcons[0].icon+')</td></tr>' +
                                                '</td></tr></table><span id="seperator"></span>')});
     }
  
