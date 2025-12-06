@@ -29,7 +29,6 @@ class SubIcon {
  */
 class ConfigurationItem {
     constructor(configData) {
-        console.log('user id ' + configData.user_id);
         // Use the nullish coalescing operator (??) to ensure properties are never undefined
         this.component = configData.component ?? null;
         this.project = configData.project ?? null;
@@ -39,8 +38,6 @@ class ConfigurationItem {
         this.userId = configData.user_id ?? null; // Should now consistently show the ID or null
         this.title = configData.title ?? null;
 
-        console.log('user 2 ' + this.userId);
-        
         // Ensure hideOnAny results in a boolean or default to false
         this.hideOnAny = (configData.hide_on_any === 'yes') ?? false; 
 
