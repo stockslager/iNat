@@ -44,7 +44,7 @@ function buildMenu(configuration) {
  
       menu_string = '<div class="navbar">';
       if( configuration.project )          { links += furl('./about.html?params='+getParams(appState)+'&field=project',            "project"); }
-      if( configuration.plantProject )     { links += furl('./about.html?params='+getParams(appState)+'&field=plantProject',       "plant_project"); }
+      if( configuration.plantProject !== null )     { links += furl('./about.html?params='+getParams(appState)+'&field=plantProject',       "plant_project"); }
       if( configuration.insectProject )    { links += furl('./about.html?params='+getParams(appState)+'&field=insectProject',      "insect_project"); }
       if( configuration.title )            { links += furl('./about.html?params='+getParams(appState)+'&field=title',              "title"); }
       if( configuration.plantField )       { links += furl('./about.html?params='+getParams(appState)+'&field=plantField',         "plant_field"); }
