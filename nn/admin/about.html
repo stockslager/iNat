@@ -47,8 +47,8 @@ function buildMenu(configuration) {
       if( configuration.plantProject )     { links += furl('./about.html?params='+getParams(appState)+'&field=plantProject',       "plant_project"); }
       if( configuration.insectProject )    { links += furl('./about.html?params='+getParams(appState)+'&field=insectProject',      "insect_project"); }
       if( configuration.title )            { links += furl('./about.html?params='+getParams(appState)+'&field=title',              "title"); }
-      if( configuration.plantFilter )      { links += furl('./about.html?params='+getParams(appState)+'&field=plantFilter',        "plant_filter"); }
-      if( configuration.plantFilterValue ) { links += furl('./about.html?params='+getParams(appState)+'&field=plantFilterValue',   "plant_filter_value"); }
+      if( configuration.plantField )       { links += furl('./about.html?params='+getParams(appState)+'&field=plantField',         "plant_field"); }
+      if( configuration.plantFieldValue )  { links += furl('./about.html?params='+getParams(appState)+'&field=plantFieldValue',    "plant_field_value"); }
       if( configuration.plantIds )         { links += furl('./about.html?params='+getParams(appState)+'&field=plantIds',           "plant_ids"); }
       if( configuration.defaultPlace )     { links += furl('./about.html?params='+getParams(appState)+'&field=defaultPlace',       "default_place"); }
       if( configuration.hideOnAny )        { links += furl('./about.html?params='+getParams(appState)+'&field=hideOnAny',          "hide_on_any"); }
@@ -109,12 +109,12 @@ function buildPage(configManager) {
     } else if( p_field === 'title' ) {
         faddelem('p',document.body,{innerHTML:('<b>title:</b>')}); 
         faddelem('p',document.body,{innerHTML:('The title to be displayed above the plant list in the app.<span id="seperator"></span>')});
-    } else if( p_field === 'plant_filter' ) {
-        faddelem('p',document.body,{innerHTML:('<b>plant_filter:</b>')});
+    } else if( p_field === 'plant_field' ) {
+        faddelem('p',document.body,{innerHTML:('<b>plant_field:</b>')});
         faddelem('p',document.body,{innerHTML:('Used to filter observations stored in the iNat plant_project in the event that the iNat plant_project contains more than just the observations to be displayed in the plant list.<span id="seperator"></span>')});
-    } else if( p_field === 'plant_filter_value' ) {
-        faddelem('p',document.body,{innerHTML:('<b>plant_filter_value</b>')});
-        faddelem('p',document.body,{innerHTML:('The value of the "plant_filter" parameter.<span id="seperator"></span>')});
+    } else if( p_field === 'plant_field_value' ) {
+        faddelem('p',document.body,{innerHTML:('<b>plant_field_value</b>')});
+        faddelem('p',document.body,{innerHTML:('Allows for yes/no values to add and remove plants from plant list." parameter.<span id="seperator"></span>')});
     } else if( p_field === 'plant_ids' ) {
         faddelem('p',document.body,{innerHTML:('<b>plant_ids</b>')});
         faddelem('p',document.body,{innerHTML:('A comma delimited list of observation ids corresponding to plant observations to be displayed on the plant list.<span id="seperator"></span>')});
