@@ -44,7 +44,7 @@ function buildMenu(configuration) {
  
       menu_string = '<div class="navbar">';
       if( configuration.project )          { links += furl('./about.html?params='+getParams(appState)+'&field=project',            "project"); }
-      if( configuration.plantProject !== null )     { links += furl('./about.html?params='+getParams(appState)+'&field=plantProject',       "plant_project"); }
+      if( configuration.plantProject )     { links += furl('./about.html?params='+getParams(appState)+'&field=plantProject',       "plant_project"); }
       if( configuration.insectProject )    { links += furl('./about.html?params='+getParams(appState)+'&field=insectProject',      "insect_project"); }
       if( configuration.title )            { links += furl('./about.html?params='+getParams(appState)+'&field=title',              "title"); }
       if( configuration.plantField )       { links += furl('./about.html?params='+getParams(appState)+'&field=plantField',         "plant_field"); }
@@ -75,6 +75,15 @@ function buildMenu(configuration) {
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
+// Define the replacer function for pretty print
+const replacer = (key, value) => {
+  // If the value is null, return undefined to exclude the property
+  if (value === null) {
+    return undefined;
+  }
+  return value;
+};
+ 
 function buildPage(configManager) {
 
     let configuration = configManager.configurations[0];
@@ -165,7 +174,7 @@ function buildPage(configManager) {
                                                '</td></tr></table><span id="seperator"></span>')});
     }
  
-    const prettyJson = JSON.stringify(configuration, null, 2);
+    const prettyJson = JSON.stringify(configuration, replacer, 2);
     faddelem('p',document.body,{innerHTML:('<b>Entire '+getParams(appState)+'.json:</b>' +
                                            '<pre id="json-display"></pre>')});
     document.getElementById('json-display').textContent = prettyJson;
