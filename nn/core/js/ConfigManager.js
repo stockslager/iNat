@@ -55,6 +55,9 @@ class ConfigurationItem {
         this.taxa = configData.taxa?.map(t => new Taxon(t)) ?? [];
         this.subIcons = configData.sub_icons?.map(s => new SubIcon(s)) ?? [];
 
+        // store the orginial .json with original field names that haven't been mapped to this object.
+        this.originalConfig = configData ?? null;  // used in about.html to pretty print the original .json
+
         // Validation: Change from throwing errors to logging warnings and using defaults
         const isNullOrEmpty = (value) => value === null || typeof value !== 'string' || value.trim().length === 0;
 
