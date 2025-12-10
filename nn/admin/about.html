@@ -38,7 +38,7 @@ winurlparams.delete('field');
   
 appState  =  buildStateFromParams(winurlparams);
 
-function buildMenu(configuration) {
+function buildMenu(configuration, default_sub_icons) {
       let menu_string = '';
       let links = '';
  
@@ -65,6 +65,10 @@ function buildMenu(configuration) {
           if( configuration.sub_icons[0] ) {
               links += furl('./about.html?params='+getParams(appState)+'&field=sub_icons', "sub_icons");
           }
+      } else if( default_sub_icons ) {
+              if( default_sub_icons[0] ) {
+                  links += furl('./about.html?params='+getParams(apptate)+'&field=def_sub_icons', "default_sub_icons");
+              }
       }
  
       menu_string += buildDD('Parameters', links);
@@ -86,9 +90,12 @@ const replacer = (key, value) => {
  
 function buildPage(configManager) {
 
-    let configuration = configManager.configurations[0];
+    let configuration     = configManager.configurations[0];
+    let default_sub_icons = configManager.defaultSubIcons || '';
 
-    buildMenu(configuration);
+    console.log('def sub ' + default_sub_icons);
+
+    buildMenu(configuration, default_sub_icons);
 
     let def_place_no_prj = '';
     if( !configuration.plantProject ) {
