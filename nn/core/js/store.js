@@ -20,6 +20,8 @@ const ATTRIBUTE_MENUID          = 'menuid';
 const ATTRIBUTE_MENUNAME        = 'menuname';
 const ATTRIBUTE_PLANTMENUID     = 'plantmenuid';
 const ATTRIBUTE_PLANTMENUNAME   = 'plantmenuname';
+const ATTRIBUTE_PLACEMENUID     = 'placemenuid';
+const ATTRIBUTE_PLACEMENUNAME   = 'placemenuname';
 const ATTRIBUTE_GARDENLISTVALUE = 'gardenlistvalue';
 const ATTRIBUTE_TAXONDD         = 'taxondd';
 const ATTRIBUTE_PAGE            = 'page';
@@ -41,6 +43,8 @@ let appState = {
   [ATTRIBUTE_MENUNAME]:  '',
   [ATTRIBUTE_PLANTMENUID]:    '',
   [ATTRIBUTE_PLANTMENUNAME]:  '',
+  [ATTRIBUTE_PLACEMENUID]:    '',
+  [ATTRIBUTE_PLACEMENUNAME]:  '',
   [ATTRIBUTE_GARDENLISTVALUE]:  '',
   [ATTRIBUTE_TAXONDD]:   '',
   [ATTRIBUTE_PAGE]:      '',
@@ -71,6 +75,8 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_MENUNAME]:  '',
     [ATTRIBUTE_PLANTMENUID]:    '', 
     [ATTRIBUTE_PLANTMENUNAME]:  '',
+    [ATTRIBUTE_PLACEMENUID]:    '', 
+    [ATTRIBUTE_PLACEMENUNAME]:  '',
     [ATTRIBUTE_GARDENLISTVALUE]: '',
     [ATTRIBUTE_TAXONDD]:   '',
     [ATTRIBUTE_PAGE]:      '',
@@ -174,6 +180,8 @@ function getMenuId(state)          { return (getAttribute(state, ATTRIBUTE_MENUI
 function getMenuName(state)        { return (getAttribute(state, ATTRIBUTE_MENUNAME)); }
 function getPlantMenuId(state)     { return (getAttribute(state, ATTRIBUTE_PLANTMENUID)); }
 function getPlantMenuName(state)   { return (getAttribute(state, ATTRIBUTE_PLANTMENUNAME)); }
+function getPlaceMenuId(state)     { return (getAttribute(state, ATTRIBUTE_PLACEMENUID)); }
+function getPlaceMenuName(state)   { return (getAttribute(state, ATTRIBUTE_PLACEMENUNAME)); }
 function getGardenListValue(state) { return (getAttribute(state, ATTRIBUTE_GARDENLISTVALUE)); }
 function getTaxonDD(state)         { return (getAttribute(state, ATTRIBUTE_TAXONDD)); }
 function getPage(state)            { return (getAttribute(state, ATTRIBUTE_PAGE)); }
@@ -198,6 +206,8 @@ function setMenuId(state, value)          { return (setAttribute(state, ATTRIBUT
 function setMenuName(state, value)        { return (setAttribute(state, ATTRIBUTE_MENUNAME, value)); }
 function setPlantMenuId(state, value)     { return (setAttribute(state, ATTRIBUTE_PLANTMENUID, value)); }
 function setPlantMenuName(state, value)   { return (setAttribute(state, ATTRIBUTE_PLANTMENUNAME, value)); }
+function setPlaceMenuId(state, value)     { return (setAttribute(state, ATTRIBUTE_PLACEMENUID, value)); }
+function setPlaceMenuName(state, value)   { return (setAttribute(state, ATTRIBUTE_PLACEMENUNAME, value)); }
 function setGardenListValue(state, value) { return (setAttribute(state, ATTRIBUTE_GARDENLISTVALUE, value)); }
 function setTaxonDD(state, value)         { return (setAttribute(state, ATTRIBUTE_TAXONDD, value)); }
 function setPage(state, value)            { return (setAttribute(state, ATTRIBUTE_PAGE, value)); }
@@ -291,6 +301,24 @@ function getPlantMenuIdParam(state, param_nm)      {
 }
 
 function getPlantMenuNameParam(state, param_nm)   { 
+  let menu_name = getMenuName(state);
+  if( menu_name ) { 
+      return (param_nm + menu_name);
+  } else {
+      return '';
+  }
+}
+
+function getPlaceMenuIdParam(state, param_nm)      { 
+  let menu_id = getMenuId(state);
+  if( menu_id ) { 
+      return (param_nm + menu_id);
+  } else {
+      return '';
+  }
+}
+
+function getPlaceMenuNameParam(state, param_nm)   { 
   let menu_name = getMenuName(state);
   if( menu_name ) { 
       return (param_nm + menu_name);
@@ -585,6 +613,8 @@ function clearForDashParams(state) {
   urlState = setTaxonName(urlState, '');
   urlState = setPlantMenuId(urlState, '');
   urlState = setPlantMenuName(urlState, '');
+  urlState = setPlaceMenuId(urlState, '');
+  urlState = setPlaceMenuName(urlState, '');
   urlState = setGardenListValue(urlState, '');
   urlState = setMenuId(urlState, '');
   urlState = setMenuName(urlState, '');
