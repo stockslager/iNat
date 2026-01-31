@@ -4,6 +4,16 @@ const CONST_CONFIGS_OBJ_YARD   = 'yard';
 const CONST_CONFIGS_OBJ_ART    = 'art'; 
 
 /**
+ * Represents a single place entry.
+ */
+class Place {
+    constructor(data) {
+        this.placeId = data.place_id;
+        this.placeName = data.place_name;
+    }
+}
+
+/**
  * Represents a single taxon entry (e.g., American Asters).
  */
 class Taxon {
@@ -52,7 +62,8 @@ class ConfigurationItem {
         this.fieldValue = configData.field_value ?? null;
         
         // Map nested arrays, default to empty array if missing
-        this.taxa = configData.taxa?.map(t => new Taxon(t)) ?? [];
+        this.places = configData.places?map(t => new Place(t)) ?? [];
+        this.taxa   = configData.taxa?.map(t => new Taxon(t)) ?? [];
         this.subIcons = configData.sub_icons?.map(s => new SubIcon(s)) ?? [];
 
         // store the orginial .json with original field names that haven't been mapped to this object.
