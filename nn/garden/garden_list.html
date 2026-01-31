@@ -84,7 +84,7 @@ function buildMenu( config, results ) {
       if( links ) { menu_string += buildDD(CONST_CUSTOM_PLACE, links); }
       links = '';
 
-      if( config.taxa && config.taxa.length > 0 && !getPlaceMenuId(appState) ) {
+      if( config.taxa && config.taxa.length > 0 ) {
           let urlState = appState;
           urlState     = setPlantMenuId(urlState, '');
           urlState     = setPlantMenuName(urlState, '');
@@ -261,7 +261,7 @@ function setupAPIParams( plantConfig ) {
 
    // if a taxon_id was chosen in the plant drop-down, use that taxon_id.  if not, 
    // use the taxon_id(s) from the config when present.
-   if( getPlantMenuId(appState) && !getPlaceMenuId(appState) ) {
+   if( getPlantMenuId(appState) ) {
        api_params += '&taxon_id='+getPlantMenuId(appState);
    } else {
        if( plantConfig.taxonIds ) { 
