@@ -246,10 +246,14 @@ function setupAPIParams( plantConfig ) {
 
    if( plantConfig.plantField )        { api_params += '&field:'    + plantConfig.plantField;  } 
    if( plantConfig.plantFieldValue )   { api_params += '='          + plantConfig.plantFieldValue; }
-   if( plantConfig.placeMenuId )       { api_params += '&place_id=' + plantConfig.placeMenuId; }
    if( plantConfig.plantIds )          { api_params += '&id='       + plantConfig.plantIds;  }
    if( plantConfig.plantListUserId )   { api_params += '&user_id='  + plantConfig.plantListUserId; }
    if( plantConfig.tagName )           { api_params += '&tag='      + plantConfig.tagName; }
+
+   // if a place_id was chosen from the place drop-down, use that place_id...
+   if( getPlaceMenuId(appState) ) {
+       api_params += '&place_id=' + getPlaceMenuId(appState);
+   }
 
    // if a taxon_id was chosen in the plant drop-down, use that taxon_id.  if not, 
    // use the taxon_id(s) from the config when present.
