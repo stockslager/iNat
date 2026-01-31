@@ -207,7 +207,11 @@ function setupAPIParams(plantsConfig) {
    // default these to what's in the config even though the state sometimes
    // holds the same attributes for other components.
    if( plantsConfig.userId          ) { api_params += '&user_id='  + plantsConfig.userId; }
-   if( plantsConfig.defaultPlace    ) { api_params += '&place_id=' + plantsConfig.defaultPlace; }  
+
+   // if a place_id was chosen from the place drop-down, use that place_id...
+   if( getPlaceMenuId(appState) ) {
+       api_params += '&place_id=' + getPlaceMenuId(appState);
+   }
  
    api_params += getMenuIdParam(appState, '&taxon_id='); 
    api_params += getPageParam(appState, '&page=');
