@@ -84,7 +84,7 @@ function buildMenu( config, results ) {
       if( links ) { menu_string += buildDD(CONST_CUSTOM_PLACE, links); }
       links = '';
 
-      if( config.taxa && config.taxa.length > 0 ) {
+      if( config.taxa && config.taxa.length > 0 && !getPlaceMenuId(appState) ) {
           let urlState = appState;
           urlState     = setPlantMenuId(urlState, '');
           urlState     = setPlantMenuName(urlState, '');
