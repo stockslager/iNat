@@ -80,8 +80,7 @@ function buildMenu( config, results ) {
           }
       }
 
-      let place_name = getPlaceMenuName(appState) || CONST_CUSTOM_PLACE;  // if no menu filter selected, set to const "Place"
-      if( links ) { menu_string += buildDD(place_name, links); }
+      if( links ) { menu_string += buildDD(CONST_CUSTOM_PLACE, links); }
       links = '';
 
       if( config.taxa && config.taxa.length > 0 ) {
@@ -150,7 +149,11 @@ function buildPage(xobj, config) {
           urlState = setPlantId(urlState, '');                  // scrub plant id since it might have been set previously
           title_3 = furl('./garden_activity.html'+buildParameterList(urlState),'<span id="topright">'+config.title+'</span>');
       } else {
-          title_3 = '<span id="toprightbold">'+config.title+'</span>';
+          if( getPlaceMenuName(appState) ) {
+              title_3 = '<span id="toprightbold">'+getPlaceMenuName(appState)+'</span>';
+          } else {
+              title_3 = '<span id="toprightbold">'+config.title+'</span>';
+          }
       }
 
       faddelem('p',document.body,{innerHTML:CONST_TOTAL_SPECIES+fcomnum(total_results) + title_1 + ' <br/>'
