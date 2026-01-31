@@ -75,8 +75,9 @@ function buildMenu( config, results ) {
                links += furl('./garden_list.html'+buildParameterList(urlState),config.places[i].place_name);
           }
       }
-  
-      if( links ) { menu_string += buildDD(getPlaceName(config, p_place_id), links); }
+
+      let place_name = getPlaceMenuName(appState) || CONST_CUSTOM_PLACE;  // if no menu filter selected, set to const "Place"
+      if( links ) { menu_string += buildDD(place_name, links); }
       links = '';
 
       if( config.taxa && config.taxa.length > 0 ) {
