@@ -68,11 +68,14 @@ function buildMenu( config, results ) {
       menu_string = '<div class="navbar">';
  
       if( config.places && config.places.length > 0 ) {
-          console.log('one');
-          //links += furl('./garden_list.html'+params+menu_params+component_params+'&place_id='+config.default_place+taxon_param,'All');
+          let urlState = appState;
+          urlState     = setPlaceMenuId(urlState, '');
+          urlState     = setPlaceMenuName(urlState, ''); 
+          urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+          links       += furl('./garden_list.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
           for( let i=0; i<config.places.length; i++ ) {
-               let urlState = appState;
-               urlState = setPlace( urlState, config.places[i].place_id );
+               urlState = setPlaceMenuId( urlState, config.places[i].placeId );
+               urlState = setPlaceMenuName( urlState, config.places[i].placeName );
                links += furl('./garden_list.html'+buildParameterList(urlState),config.places[i].place_name);
           }
       }
