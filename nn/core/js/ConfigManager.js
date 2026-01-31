@@ -62,7 +62,7 @@ class ConfigurationItem {
         this.fieldValue = configData.field_value ?? null;
         
         // Map nested arrays, default to empty array if missing
-        this.places = configData.places?map(t => new Place(t)) ?? [];
+        this.places = configData.places?.map(t => new Place(t)) ?? [];
         this.taxa   = configData.taxa?.map(t => new Taxon(t)) ?? [];
         this.subIcons = configData.sub_icons?.map(s => new SubIcon(s)) ?? [];
 
