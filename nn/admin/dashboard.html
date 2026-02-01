@@ -36,11 +36,11 @@ const CONST_COMPONENTS   = 'components: ';
 const CONST_PERPAGE      = 'per page: 20';
 const CONST_PGS          = 'page: 1';
 const CONST_GARDEN_DESC  = 'Wildlife value of individual plants at this location.';
-const CONST_SEED_DESC    = 'Lists the colonies of plants where collection has occurred.  Shows the child colonies established from that parent colony.';
+const CONST_COLONY_DESC    = 'Lists the colonies of plants where collection has occurred.  Shows the child colonies established from that parent colony.';
 const CONST_HIKER_DESC   = 'Species encountered during this trek.';
 const CONST_OBSERVERS_DESC   = 'The network of individual observers collecting plant value data at this location.';
 const CONST_PLANT_VALUE  = 'Plant Value';
-const CONST_SEEDS        = 'Seeds';
+const CONST_COLONIES     = 'Colonies';
 const CONST_BIODIVERSITY = 'Biodiversity';
 const CONST_THRU_HIKES   = 'Thru Hikes';
 const CONST_ART          = 'Art & Journaling';
@@ -128,14 +128,14 @@ function buildPage( configManager ) {
                faddelems('td',brow,values);
            }
 
-           if( config.component === 'seeds' ) {
-               appState = setComponent( appState, 'seeds' );
+           if( config.component === 'colonies' ) {
+               appState = setComponent( appState, 'colonies' );
                let plant_params = buildParameterList(appState);
                brow = faddelem('tr',tbody);
                values = [
-                  {innerHTML:furl('../seeds/seed_list.html'+plant_params, CONST_SEED_UTF8  )},
-                  {innerHTML:furl('../seeds/seed_list.html'+plant_params, CONST_SEEDS )},
-                  {innerText:CONST_SEED_DESC},
+                  {innerHTML:furl('../colonies/colony_list.html'+plant_params, CONST_SEEDLING_UTF8  )},
+                  {innerHTML:furl('../colonies/colony_list.html'+plant_params, CONST_COLONIES )},
+                  {innerText:CONST_COLONY_DESC},
                ];
                faddelems('td',brow,values);
            }
