@@ -1,6 +1,6 @@
 // store.js
 const COMPONENT_GARDEN    = 'plants';
-const COMPONENT_SEEDS     = 'seeds';
+const COMPONENT_COLONY    = 'colony';
 const COMPONENT_OBSERVERS = 'observers';
 const COMPONENT_HIKER     = 'hiker';
 const COMPONENT_YARD      = 'yard';
@@ -471,7 +471,7 @@ function validateGarden(state) {
 /*
  * component based validation
  *
- * Validates the state for Seed-specific requirements.
+ * Validates the state for Colony-specific requirements.
  * Ensures the 'params' attribute has a value.
  * Ensures the 'component' attribute has a value. 
  * Everything else should come from the configuration.
@@ -480,13 +480,13 @@ function validateGarden(state) {
  * @param {object} state The current application state object.
  * @returns {string} An error message if invalid, otherwise an empty string.
  */
-function validateSeeds(state) {
+function validateColony(state) {
   let message = '';
   
   message = validateConfig(state);
   if( message ) { return message; }
 
-  if( getComponent(state) !== COMPONENT_SEEDS ) {
+  if( getComponent(state) !== COMPONENT_COLONY ) {
       let message = 'Component name required.  Component name is required for displaying data.' +   
                     'Component name should exist in the configuration file identified by the &amp;params=xxxxx';
       return message;
