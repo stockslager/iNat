@@ -1,5 +1,5 @@
 const CONST_CONFIGS_OBJ_PLANTS = 'plants';
-const CONST_CONFIGS_OBJ_SEEDS  = 'seeds';
+const CONST_CONFIGS_OBJ_COLONIES  = 'colonies';
 const CONST_CONFIGS_OBJ_HIKER  = 'hiker';
 const CONST_CONFIGS_OBJ_YARD   = 'yard'; 
 const CONST_CONFIGS_OBJ_ART    = 'art'; 
@@ -45,7 +45,7 @@ class ConfigurationItem {
         this.project = configData.project ?? null;
         this.insectProject = configData.insect_project ?? null;
         this.plantProject = configData.plant_project ?? null;
-        this.seedProject = configData.seed_project ?? null;
+        this.colonyProject = configData.colony_project ?? null;
         this.userId = configData.user_id ?? null; // Should now consistently show the ID or null
         this.title = configData.title ?? null;
 
