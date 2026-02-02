@@ -62,8 +62,8 @@ function buildMenu() {
       menu_string = '<div class="navbar">';
       menu_string += buildDDTitle('');
 
-      let urlState  = clearForDashParams(appState);
-      menu_string += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
+      let urlState  = clearForGardenListParams(appState);
+      menu_string += buildHome(furl('./colony_list.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
       menu_string += '</div>';
  
       faddelem('p',document.body,{innerHTML:(menu_string)});  
@@ -123,7 +123,7 @@ function fresults(xobj) {
          let s_thead = faddelem('thead',s_table);
          let s_hrow = faddelem('tr',s_thead);
 
-         let s_labels = [ {innerText:'Seed Info'},
+         let s_labels = [ {innerText:'Colony Info'},
                          { innerText:' '}, ];
 
          faddelems('th',s_hrow,s_labels);
@@ -134,8 +134,7 @@ function fresults(xobj) {
          if(rec.ofvs&&rec.ofvs.length>0){
             for (let j=0; j<rec.ofvs.length; j++){
 
-                   if( rec.ofvs[j].field_id === 18295 ||   // availability
-                       rec.ofvs[j].field_id === 17234 ||   // quantity available
+                   if( rec.ofvs[j].field_id === 17234 ||   // quantity available
                        rec.ofvs[j].field_id === 18298 ||   // seed hub location and pickup info
                        rec.ofvs[j].field_id === 17434 ||   // seed swap
                        rec.ofvs[j].field_id === 19197 ||   // usda symbol
@@ -167,25 +166,11 @@ function fresults(xobj) {
                                    ];
                            }
 
-                           if( rec.ofvs[j].field_id === 17234   ||    // qty avail
-                               rec.ofvs[j].field_id === 18295 ) {     // availability
-                               if( rec.ofvs[j].field_id === 18295 ) {
-
-                                   let dot = '';
-                                   if( value.toLowerCase().startsWith('out') )         { dot = '&#128308;'; }
-                                   if( value.toLowerCase().startsWith('available') )   { dot = '&#128994;'; }
-                                   if( value.toLowerCase().startsWith('coming soon') ) { dot = '&#128993;'; }
-                                 
-                                   avail_field = [
-                                         {innerText:nm},
-                                     {innerHTML:'<div style="display:flex; align-items:center; font-size:16px;">'+dot+'<span style="padding-left:10px; font-size:14px;">'+value.toLowerCase()+'</span></div>'},
-                                   ];
-                               } else {
+                           if( rec.ofvs[j].field_id === 17234   ) {     // qty avail
                                    qty_field = [
                                      {innerText:nm},
                                      {innerHTML:value},
                                    ];
-                               }
                            } 
                        }
                    }
@@ -196,10 +181,7 @@ function fresults(xobj) {
          if( simple_avail_field.length > 0 ) {
              let s_row1 = faddelem('tr',s_tbody);
              faddelems('td',s_row1, simple_avail_field);
-         } else {
-             let s_row1 = faddelem('tr',s_tbody);
-             faddelems('td',s_row1, avail_field);
-         }
+         } 
 
          let s_row2 = faddelem('tr',s_tbody);
          faddelems('td',s_row2, qty_field);
