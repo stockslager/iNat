@@ -28,19 +28,7 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let descendants  = new URLSearchParams(winurlsearchstr.substring(1));
 
-let p_project_id = winurlparams.get('project_id') || '';
-let p_obs_id     = winurlparams.get('obs_id') || '';
-let p_taxon_id   = winurlparams.get('taxon_id') || '';
-let p_state      = winurlparams.get('state') || '';
-
-let prj          = p_state.split('$')[0] || '';
-let place        = p_state.split('$')[1] || '';
-let params       = p_state.split('$')[2] || '';
-let user         = p_state.split('$')[3] || '';
-let garden       = p_state.split('$')[4] || '';
-let mode         = p_state.split('$')[5] || '';
-let obs_id       = p_state.split('$')[6] || '';
-let avail        = p_state.split('$')[7] || '';
+appState       = buildStateFromParams(winurlparams);
 
 let descendants_results = '';
 descendants.delete('id');
@@ -54,21 +42,14 @@ for (const [key, value] of descendants.entries()) {
       descendants.delete(key);
   }
 }  
-descendants.append('field:parent+colony', p_obs_id);
+descendants.append('field:parent+colony', getObsId(appState));
 
-// set id to the obs_id passed in for call to api...
-winurlparams.delete('id');
-winurlparams.append('id', p_obs_id);
-
-winurlparams.delete('per_page');
-winurlparams.append('per_page','30');
-
-let apiurl = ('https://api.inaturalist.org/v1/observations?project_id='+p_project_id+'&id='+p_obs_id+'&taxon_id='+p_taxon_id);
+let apiurl = ('https://api.inaturalist.org/v1/observations?id='+getObsId(appState));
 let apidescendantsurl = '';
 let apidescendantsbase = '';
 
-if( p_obs_id ){
-    apiurl    = ('https://api.inaturalist.org/v1/observations/'+p_obs_id);
+if( getObsId(appState) ){
+    apiurl    = ('https://api.inaturalist.org/v1/observations/'+getObsId(appState));
     apidescendantsbase = 'https://api.inaturalist.org/v1/observations';
     apidescendantsurl = apidescendantsbase+((descendants!='')?('?'+descendants):'');
 }
@@ -81,7 +62,8 @@ function buildMenu() {
       menu_string = '<div class="navbar">';
       menu_string += buildDDTitle('');
 
-      menu_string += buildHome(furl(github_root+'plant_seeds.html?state='+p_state,'&#127807;'));
+      let urlState  = clearForDashParams(appState);
+      menu_string += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
       menu_string += '</div>';
  
       faddelem('p',document.body,{innerHTML:(menu_string)});  
@@ -241,7 +223,7 @@ function fresults(xobj) {
                  let s_row5     = faddelem('tr',s_tbody);
                  let s_five    = [   
                              {innerText:'Propagated Descendants'},
-                             {innerHTML:furl(github_root+'plant_grid.html?'+state_param+'&hide_dds=yes&field:parent+colony='+p_obs_id,"plant babies") },                         
+                             {innerHTML:furl(github_root+'plant_grid.html?'+state_param+'&hide_dds=yes&field:parent+colony='+getObsId(appState),"plant babies") },                         
                              ];        
                  faddelems('td',s_row5, s_five);
              }
@@ -273,19 +255,8 @@ function fresults(xobj) {
 };
 
 async function asyncGetData(){
-   console.log('json ' + json_root+params+'.json');
-   await fetch((json_root+params+'.json'))
-     .then(response => response.json())
-     .then(data => {
-       // Access your data here 
-       console.log(data);
-     })
-     .catch(error => {
-       console.error('Error fetching JSON:', error);
-   });
 
-
-   if (winurlsearchstr==='' || p_obs_id === '' ) {
+   if (winurlsearchstr==='' || !getObsId(appState) ) {
       let instructions = [
          {innerHTML:'Invalid parameter list.  An observation id or taxon_id is required.  Please add &obs_id=xxxxxxxxx or &taxon_id=xxxxxx'},
       ];
