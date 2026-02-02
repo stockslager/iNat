@@ -607,6 +607,7 @@ function clearForGardenListParams(state) {
   urlState = setMenuId(urlState, '');
   urlState = setMenuName(urlState, '');
   urlState = setTaxonDD(urlState, '');
+  urlState = setObsId(urlState, '');
   urlState = setPage(urlState, '');
   urlState = setPerPage(urlState, '');
 
