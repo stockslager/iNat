@@ -219,6 +219,7 @@ function buildPage(xobj, config) {
          // this page uses taxon id/name wrt to flora, the next page, fauna
          // plant id (the selected taxon on this page) is passed to the next to search for in the &field:some+field=value.
          let urlState = appState;
+         urlState = setObsId(urlState, rec.id);
          urlState = setPage(urlState, '');
          urlState = setTaxonId(urlState, '');
          urlState = setTaxonName(urlState, '');
