@@ -168,7 +168,7 @@ function fresults(xobj) {
 
                            if( rec.ofvs[j].field_id === 17234   ) {     // qty avail
                                    qty_field = [
-                                     {innerText:nm},
+                                     {innerText:'Colony Size'},
                                      {innerHTML:value},
                                    ];
                            } 
@@ -187,13 +187,13 @@ function fresults(xobj) {
          faddelems('td',s_row2, qty_field);
         
          let s_row3     = faddelem('tr',s_tbody);
-         let s_three    = [     {innerText:'Quality Grade'},
+         let s_three    = [     {innerText:'Colony Type'},
                                 {innerHTML:wild},];        
          faddelems('td',s_row3, s_three);
 
          let s_row4     = faddelem('tr',s_tbody);
          let s_four    = [   
-                             {innerText:'Collector'},
+                             {innerText:'Observer'},
                              {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
                          ];        
          faddelems('td',s_row4, s_four);
@@ -203,7 +203,7 @@ function fresults(xobj) {
                  let s_row5     = faddelem('tr',s_tbody);
                  let s_five    = [   
                              {innerText:'Propagated Descendants'},
-                             {innerHTML:furl(github_root+'plant_grid.html?hide_dds=yes&field:parent+colony='+getObsId(appState),"plant babies") },                         
+                             {innerHTML:furl(github_root+'plant_grid.html?hide_dds=yes&field:parent+colony='+getObsId(appState),"descendants") },                         
                              ];        
                  faddelems('td',s_row5, s_five);
              }
@@ -217,7 +217,7 @@ function fresults(xobj) {
              let d_thead = faddelem('thead',d_table);
              let d_hrow = faddelem('tr',d_thead);
 
-             let d_labels = [ {innerText:'Parent Colony Notes'}, {innerText:''},];
+             let d_labels = [ {innerText:'Colony Notes'}, {innerText:''},];
 
              faddelems('th',d_hrow,d_labels);
              let d_tbody = faddelem('tbody',d_table);
