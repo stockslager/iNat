@@ -48,6 +48,7 @@ let appState = {
   [ATTRIBUTE_PLACEMENUNAME]:  '',
   [ATTRIBUTE_GARDENLISTVALUE]:  '',
   [ATTRIBUTE_TAXONDD]:   '',
+  [ATTRIBUTE_OBSID]:     '',
   [ATTRIBUTE_PAGE]:      '',
   [ATTRIBUTE_PER_PAGE]:  ''
 
@@ -80,6 +81,7 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_PLACEMENUNAME]:  '',
     [ATTRIBUTE_GARDENLISTVALUE]: '',
     [ATTRIBUTE_TAXONDD]:   '',
+    [ATTRIBUTE_OBSID]:     '',
     [ATTRIBUTE_PAGE]:      '',
     [ATTRIBUTE_PER_PAGE]:  ''
   };
@@ -185,6 +187,7 @@ function getPlaceMenuId(state)     { return (getAttribute(state, ATTRIBUTE_PLACE
 function getPlaceMenuName(state)   { return (getAttribute(state, ATTRIBUTE_PLACEMENUNAME)); }
 function getGardenListValue(state) { return (getAttribute(state, ATTRIBUTE_GARDENLISTVALUE)); }
 function getTaxonDD(state)         { return (getAttribute(state, ATTRIBUTE_TAXONDD)); }
+function getObsId(state)           { return (getAttribute(state, ATTRIBUTE_OBSID)); }
 function getPage(state)            { return (getAttribute(state, ATTRIBUTE_PAGE)); }
 function getPerPage(state)         { return (getAttribute(state, ATTRIBUTE_PER_PAGE)); }
 
@@ -211,6 +214,7 @@ function setPlaceMenuId(state, value)     { return (setAttribute(state, ATTRIBUT
 function setPlaceMenuName(state, value)   { return (setAttribute(state, ATTRIBUTE_PLACEMENUNAME, value)); }
 function setGardenListValue(state, value) { return (setAttribute(state, ATTRIBUTE_GARDENLISTVALUE, value)); }
 function setTaxonDD(state, value)         { return (setAttribute(state, ATTRIBUTE_TAXONDD, value)); }
+function setObsId(state, value)           { return (setAttribute(state, ATTRIBUTE_OBSID, value)); }
 function setPage(state, value)            { return (setAttribute(state, ATTRIBUTE_PAGE, value)); }
 function setPerPage(state, value)         { return (setAttribute(state, ATTRIBUTE_PER_PAGE, value)); }
 
@@ -341,6 +345,15 @@ function getTaxonDDParam(state, param_nm)   {
   let taxon_dd = getTaxonDD(state);
   if( taxon_dd ) { 
       return (param_nm + taxon_dd);
+  } else {
+      return '';
+  }
+}
+
+function getObsIdParam(state, param_nm)   { 
+  let obs_id = getObsId(state);
+  if( obs_id ) { 
+      return (param_nm + obs_id);
   } else {
       return '';
   }
