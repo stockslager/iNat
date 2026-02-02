@@ -111,6 +111,21 @@ function buildMenu( config, results ) {
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
+function getMapParams(config) {
+   let map_params = '';
+
+   map_params += '?project_id='+config.project;
+
+   // if a place_id was chosen from the place drop-down, use that place_id...
+   if( getPlaceMenuId(appState) ) {
+       map_params += '&place_id=' + getPlaceMenuId(appState);
+   }
+
+   map_params += ('&field:'+config.plantField+'=' + config.plantFieldValue);  
+
+   return map_params;
+}
+
 function buildPage(xobj, config) {
    let results = xobj.results;
    let box_array = [];
@@ -141,7 +156,7 @@ function buildPage(xobj, config) {
 
       let show_behavior = config.show_behavior || 'no';
 
-      title_1 = '<span id="toprightbold"><div style="display:flex; align-items:center;">'+furl(github_root+'plant_map.html?centerlat=39.10445934350343&centerlng=-84.5196921535475&defaultzoom=9','<span class="earth">&#127758 Collection Area</span></div></span>');
+      title_1 = '<span id="toprightbold"><div style="display:flex; align-items:center;">'+furl('../admin/map.html'+getMapParams(config)/*+'?centerlat=39.10445934350343&centerlng=-84.5196921535475&defaultzoom=9'*/,'<span class="earth">&#127758 Collection Area</span></div></span>');
     
       if( getPlaceMenuName(appState) ) {
           title_3 = '<span id="toprightbold">'+getPlaceMenuName(appState)+'</span>';
