@@ -25,6 +25,7 @@ const ATTRIBUTE_PLACEMENUID     = 'placemenuid';
 const ATTRIBUTE_PLACEMENUNAME   = 'placemenuname';
 const ATTRIBUTE_GARDENLISTVALUE = 'gardenlistvalue';
 const ATTRIBUTE_TAXONDD         = 'taxondd';
+const ATTRIBUTE_OBSID           = 'obsid';
 const ATTRIBUTE_PAGE            = 'page';
 const ATTRIBUTE_PER_PAGE        = 'per_page';
 
