@@ -49,7 +49,10 @@ winurlparams.append('per_page',recsmax);
 function getMapParams() {
    let map_params = '';
 
-   map_params += '&field:parent+colony=' + getObsId(appState);
+   map_params += '?field:parent+colony=' + getObsId(appState);
+
+   // center over southwest ohio...
+   map_params += '&centerlat=39.10445934350343&centerlng=-84.5196921535475&defaultzoom=9';
       
    return map_params;
 }
