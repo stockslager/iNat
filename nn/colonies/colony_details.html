@@ -215,15 +215,13 @@ function fresults(xobj) {
                              {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
                          ];        
          faddelems('td',s_row4, s_four);
-
-         let state_param = 'state='+''+'$'+place+'$'+params+'$'+user+'$'+garden+'$'+mode+'$'+rec.id+'$'+avail;
         
          if( descendants_results.results ) {
              if( descendants_results.results.length > 0 ) {
                  let s_row5     = faddelem('tr',s_tbody);
                  let s_five    = [   
                              {innerText:'Propagated Descendants'},
-                             {innerHTML:furl(github_root+'plant_grid.html?'+state_param+'&hide_dds=yes&field:parent+colony='+getObsId(appState),"plant babies") },                         
+                             {innerHTML:furl(github_root+'plant_grid.html?hide_dds=yes&field:parent+colony='+getObsId(appState),"plant babies") },                         
                              ];        
                  faddelems('td',s_row5, s_five);
              }
