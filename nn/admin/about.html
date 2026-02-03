@@ -36,6 +36,7 @@ let p_component = winurlparams.get('component' || '');
 let p_field     = winurlparams.get('field' || '');
 
 winurlparams.delete('field');
+winurlparams.delete('component');
   
 appState  =  buildStateFromParams(winurlparams);
 
@@ -214,7 +215,7 @@ function buildPage(configManager) {
  
     const prettyJson     = JSON.stringify(configuration.originalConfig, replacer, 2);
     const prettyJsonSubs = JSON.stringify(default_sub_icons, replacer, 2); 
-    faddelem('p',document.body,{innerHTML:('<b>Entire '+configuration.component+' component in '+getParams(appState)+'.json:</b>' +
+    faddelem('p',document.body,{innerHTML:('Entire<b> '+configuration.component+'</b> component in '+getParams(appState)+'.json:</b>' +
                                            '<pre id="json-display"></pre>')});
     document.getElementById('json-display').textContent = prettyJson + prettyJsonSubs;
 
