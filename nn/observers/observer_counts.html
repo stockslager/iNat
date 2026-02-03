@@ -77,10 +77,12 @@ function buildPage( xobj ) {
       let on_all3 = '';
 
       if( getPlantName(appState) ) {
-          on_all3 = 'show all plants?';
-      } else {
-          on_all3 = 'choose plant?';
-      }   
+          let urlState = appState;
+          urlState = setPage(urlState, '');
+          urlState = setPlantId(urlState, '');
+          urlState = setPlantName(urlState, '');
+          on_all3 = furl('./observer_activity.html'+buildParameterList(urlState), 'show all plants' );
+      } 
     
       faddelem('p',document.body,{innerHTML:'<span id="statsright"><table id="tablekey">' +
                                             '<tr id="trkey"><td id="tdright2">'  + on_all1 + '</td></tr>' + 
