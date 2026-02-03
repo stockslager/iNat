@@ -67,11 +67,11 @@ function buildMenu( config, results ) {
       menu_string = '<div class="navbar">';
  
       /*if( config.places && config.places.length > 0 ) {
-          //links += furl('./garden_list.html'+params+menu_params+component_params+'&place_id='+config.default_place+taxon_param,'All');
+          //links += furl('./choose_plant.html'+params+menu_params+component_params+'&place_id='+config.default_place+taxon_param,'All');
           for( let i=0; i<config.places.length; i++ ) {
                let urlState = appState;
                urlState = setPlace( urlState, config.places[i].place_id );
-               links += furl('./garden_list.html'+buildParameterList(urlState),config.places[i].place_name);
+               links += furl('./choose_plant.html'+buildParameterList(urlState),config.places[i].place_name);
           }
       }
   
@@ -83,11 +83,11 @@ function buildMenu( config, results ) {
           urlState     = setPlantMenuId(urlState, '');
           urlState     = setPlantMenuName(urlState, '');
           urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
-          links       += furl('./garden_list.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
+          links       += furl('./choose_plant.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
           for( let i=0; i<config.taxa.length; i++ ) {
                urlState = setPlantMenuId(   urlState, config.taxa[i].taxonId );
                urlState = setPlantMenuName( urlState, config.taxa[i].taxonName );
-               links += furl('./garden_list.html'+buildParameterList(urlState),config.taxa[i].taxonName);
+               links += furl('./choose_plant.html'+buildParameterList(urlState),config.taxa[i].taxonName);
           }
       }
 
