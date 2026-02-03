@@ -49,8 +49,8 @@ class ConfigurationItem {
         this.userId = configData.user_id ?? null; // Should now consistently show the ID or null
         this.title = configData.title ?? null;
 
-        // Ensure hideOnAny results in a boolean or default to false
-        this.hideOnAny = (configData.hide_on_any === 'yes') ?? false; 
+        // Ensure hideOnAny results in a boolean or default to true
+        this.hideOnAny = (configData.hide_on_any === 'yes') ?? true; 
 
         this.plantIds   = configData.plant_ids ?? null;
         this.plantField = configData.plant_field ?? null;
