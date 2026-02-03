@@ -32,42 +32,65 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
-let p_field   = winurlparams.get('field' || '');
+let p_component = winurlparams.get('component' || '');
+let p_field     = winurlparams.get('field' || '');
 
 winurlparams.delete('field');
   
 appState  =  buildStateFromParams(winurlparams);
 
-function buildMenu(configuration, default_sub_icons) {
+function buildMenu(configManager, default_sub_icons) {
+      let configuration = '';
       let menu_string = '';
       let links = '';
+      let comp = '';
+
+      for( let i=0; i<configManager.configurations.length; i++ ) {
+           // if there's only one component or if no component was chosen, default to first component.
+           if( configManager.configurations.length === 1 || !p_component ) { 
+               configuration = configManager.configurations[0]; 
+           } else if( configManager.configurations[i].component === p_component ) {
+               configuration = configManager.configurations[i];
+           }
+      }
  
       menu_string = '<div class="navbar">';
-      if( configuration.project )          { links += furl('./about.html?params='+getParams(appState)+'&field=project',            "project"); }
-      if( configuration.plantProject )     { links += furl('./about.html?params='+getParams(appState)+'&field=plant_project',      "plant_project"); }
-      if( configuration.insectProject )    { links += furl('./about.html?params='+getParams(appState)+'&field=insect_project',     "insect_project"); }
-      if( configuration.title )            { links += furl('./about.html?params='+getParams(appState)+'&field=title',              "title"); }
-      if( configuration.plantField )       { links += furl('./about.html?params='+getParams(appState)+'&field=plant_field',        "plant_field"); }
-      if( configuration.plantFieldValue )  { links += furl('./about.html?params='+getParams(appState)+'&field=plant_field_value',  "plant_field_value"); }
-      if( configuration.plantIds )         { links += furl('./about.html?params='+getParams(appState)+'&field=plant_ids',          "plant_ids"); }
-      if( configuration.defaultPlace )     { links += furl('./about.html?params='+getParams(appState)+'&field=default_place',      "default_place"); }
-      if( configuration.hideOnAny )        { links += furl('./about.html?params='+getParams(appState)+'&field=hide_on_any',        "hide_on_any"); }
-      if( configuration.fieldId )          { links += furl('./about.html?params='+getParams(appState)+'&field=field_id',           "field_id"); }
-      if( configuration.fieldName )        { links += furl('./about.html?params='+getParams(appState)+'&field=field_name',         "field_name"); }
+
+      for( let i=0; i<configManager.configurations.length; i++ ) {
+           if( configManager.configurations[i].component ) {
+               comp = configManager.configurations[i].component;
+               links += furl('.about.html?params='+getParams(appState)+'&component='+comp, comp);
+           }
+      }
+ 
+      menu_string += buildDD('Parameters', links);
+
+      links = '';
+      if( configuration.project )          { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=project',            "project"); }
+      if( configuration.plantProject )     { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=plant_project',      "plant_project"); }
+      if( configuration.insectProject )    { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=insect_project',     "insect_project"); }
+      if( configuration.title )            { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=title',              "title"); }
+      if( configuration.plantField )       { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=plant_field',        "plant_field"); }
+      if( configuration.plantFieldValue )  { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=plant_field_value',  "plant_field_value"); }
+      if( configuration.plantIds )         { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=plant_ids',          "plant_ids"); }
+      if( configuration.defaultPlace )     { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=default_place',      "default_place"); }
+      if( configuration.hideOnAny )        { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=hide_on_any',        "hide_on_any"); }
+      if( configuration.fieldId )          { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=field_id',           "field_id"); }
+      if( configuration.fieldName )        { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=field_name',         "field_name"); }
 
       if( configuration.taxa ) {
           if( configuration.taxa[0] ) {
-              links += furl('./about.html?params='+getParams(appState)+'&field=taxa', "taxa");
+              links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=taxa', "taxa");
           }
       }
  
       if( configuration.sub_icons ) {
           if( configuration.sub_icons[0] ) {
-              links += furl('./about.html?params='+getParams(appState)+'&field=sub_icons', "sub_icons");
+              links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=sub_icons', "sub_icons");
           }
       } else if( default_sub_icons ) {
               if( default_sub_icons[0] ) {
-                  links += furl('./about.html?params='+getParams(appState)+'&field=def_sub_icons', "default_sub_icons");
+                  links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=def_sub_icons', "default_sub_icons");
               }
       }
  
@@ -90,12 +113,11 @@ const replacer = (key, value) => {
  
 function buildPage(configManager) {
 
-    let configuration     = configManager.configurations[0];
     let default_sub_icons = configManager.defaultSubIcons || '';
 
     console.log('def sub ' + default_sub_icons);
 
-    buildMenu(configuration, default_sub_icons);
+    let configuration = buildMenu(configManager, default_sub_icons);
 
     let def_place_no_prj = '';
     if( !configuration.plantProject ) {
@@ -190,7 +212,7 @@ function buildPage(configManager) {
  
     const prettyJson     = JSON.stringify(configuration.originalConfig, replacer, 2);
     const prettyJsonSubs = JSON.stringify(default_sub_icons, replacer, 2); 
-    faddelem('p',document.body,{innerHTML:('<b>Entire '+getParams(appState)+'.json:</b>' +
+    faddelem('p',document.body,{innerHTML:('<b>Entire '+configuration.component+' component in '+getParams(appState)+'.json:</b>' +
                                            '<pre id="json-display"></pre>')});
     document.getElementById('json-display').textContent = prettyJson + prettyJsonSubs;
 
