@@ -43,7 +43,7 @@ class ConfigurationItem {
         // Use the nullish coalescing operator (??) to ensure properties are never undefined
         this.component = configData.component ?? null;
         this.project = configData.project ?? null;
-        this.insectProject = configData.insect_project ?? configData.plant_project ?? null;  // default to plant project if insect project is null
+        this.insectProject = configData.insect_project ?? null;  
         this.plantProject = configData.plant_project ?? null;
         this.colonyProject = configData.colony_project ?? null;
         this.userId = configData.user_id ?? null; // Should now consistently show the ID or null
