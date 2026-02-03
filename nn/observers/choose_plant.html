@@ -98,6 +98,7 @@ function buildMenu( config, results ) {
       links = '';
   
       let urlState  = clearForDashParams(appState);
+      urlState = setComponent(urlState, COMPONENT_OBSERVERS);                  
       menu_string  += buildHome(furl('./observer_counts.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
 
       menu_string += '</div>';
