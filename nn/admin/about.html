@@ -67,31 +67,31 @@ function buildMenu(configManager, default_sub_icons) {
       menu_string += buildDD('Component', links);
 
       links = '';
-      if( configuration.project )          { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=project',            "project"); }
-      if( configuration.plantProject )     { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=plant_project',      "plant_project"); }
-      if( configuration.insectProject )    { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=insect_project',     "insect_project"); }
-      if( configuration.title )            { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=title',              "title"); }
-      if( configuration.plantField )       { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=plant_field',        "plant_field"); }
-      if( configuration.plantFieldValue )  { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=plant_field_value',  "plant_field_value"); }
-      if( configuration.plantIds )         { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=plant_ids',          "plant_ids"); }
-      if( configuration.defaultPlace )     { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=default_place',      "default_place"); }
-      if( configuration.hideOnAny )        { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=hide_on_any',        "hide_on_any"); }
-      if( configuration.fieldId )          { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=field_id',           "field_id"); }
-      if( configuration.fieldName )        { links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=field_name',         "field_name"); }
+      if( configuration.project )          { links += furl('./about.html?params='+getParams(appState)+'&component='+p_component+'&field=project',            "project"); }
+      if( configuration.plantProject )     { links += furl('./about.html?params='+getParams(appState)+'&component='+p_component+'&field=plant_project',      "plant_project"); }
+      if( configuration.insectProject )    { links += furl('./about.html?params='+getParams(appState)+'&component='+p_component+'&field=insect_project',     "insect_project"); }
+      if( configuration.title )            { links += furl('./about.html?params='+getParams(appState)+'&component='+p_component+'&field=title',              "title"); }
+      if( configuration.plantField )       { links += furl('./about.html?params='+getParams(appState)+'&component='+p_component+'&field=plant_field',        "plant_field"); }
+      if( configuration.plantFieldValue )  { links += furl('./about.html?params='+getParams(appState)+'&component='+p_component+'&field=plant_field_value',  "plant_field_value"); }
+      if( configuration.plantIds )         { links += furl('./about.html?params='+getParams(appState)+'&component='+p_component+'&field=plant_ids',          "plant_ids"); }
+      if( configuration.defaultPlace )     { links += furl('./about.html?params='+getParams(appState)+'&component='+p_component+'&field=default_place',      "default_place"); }
+      if( configuration.hideOnAny )        { links += furl('./about.html?params='+getParams(appState)+'&component='+p_component+'&field=hide_on_any',        "hide_on_any"); }
+      if( configuration.fieldId )          { links += furl('./about.html?params='+getParams(appState)+'&component='+p_component+'&field=field_id',           "field_id"); }
+      if( configuration.fieldName )        { links += furl('./about.html?params='+getParams(appState)+'&component='+p_component+'&field=field_name',         "field_name"); }
 
       if( configuration.taxa ) {
           if( configuration.taxa[0] ) {
-              links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=taxa', "taxa");
+              links += furl('./about.html?params='+getParams(appState)+'&component='+p_component+'&field=taxa', "taxa");
           }
       }
  
       if( configuration.sub_icons ) {
           if( configuration.sub_icons[0] ) {
-              links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=sub_icons', "sub_icons");
+              links += furl('./about.html?params='+getParams(appState)+'&component='+p_component+'&field=sub_icons', "sub_icons");
           }
       } else if( default_sub_icons ) {
               if( default_sub_icons[0] ) {
-                  links += furl('./about.html?params='+getParams(appState)+'&component='+comp+'&field=def_sub_icons', "default_sub_icons");
+                  links += furl('./about.html?params='+getParams(appState)+'&component='+p_component+'&field=def_sub_icons', "default_sub_icons");
               }
       }
  
