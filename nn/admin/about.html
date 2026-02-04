@@ -50,6 +50,7 @@ function buildMenu(configManager, default_sub_icons) {
            // if there's only one component or if no component was chosen, default to first component.
            if( configManager.configurations.length === 1 || !p_component ) { 
                configuration = configManager.configurations[0]; 
+               p_component   = configManager.configurations[0].component;
            } else if( configManager.configurations[i].component === p_component ) {
                configuration = configManager.configurations[i];
            }
