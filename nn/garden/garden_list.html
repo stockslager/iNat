@@ -286,6 +286,11 @@ async function gatherResources() {
    
       // Await the result of getObservations() and store the actual data
       const plantConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
+
+      if( plantConfig.usePlantProjectImages && plantConfig.usePlantProjectImages === 'yes' ) {
+          api_base = 'https://api.inaturalist.org/v1/observations';
+      }
+     
       console.log('full config title: ' + plantConfig.getFullTitle());
       const api_params    = setupAPIParams( plantConfig );
       const api_url       = api_base+api_params;
