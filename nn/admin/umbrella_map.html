@@ -1,0 +1,35 @@
+<!DOCTYPE html>  
+<html lang="en">   
+ 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" /> 
+<meta name="apple-mobile-web-app-title" content="Umbrella Map" />
+<meta name="description" content="Umbrella Map" />
+<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
+<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+<title>Umbrella Map</title>
+</head>
+
+<body>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr    = window.location.search;
+let winurlexsearchstr  = winurlstr.replace(winurlsearchstr,'');
+let winurlparams       = new URLSearchParams(winurlsearchstr.substring(1));
+ 
+appState  =  buildStateFromParams(winurlparams);
+
+function buildPage( configManager ) {
+
+      faddelem('p',document.body,{innerHTML:'<iframe src="https://www.google.com/maps/d/embed?mid=12ambBFWuysj82ZfV4bJXzO7z1ttSxoc&ehbc=2E312F" width="375" height="480"></iframe>'});
+ 
+};
+</script>
+ 
+</body>
+</html>
