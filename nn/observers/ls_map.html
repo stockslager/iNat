@@ -69,8 +69,10 @@ example = (example===null?1:example.split(',')[0]); // gets first value passed i
 winurlparams.delete('lsmap');
 appState       = buildStateFromParams(winurlparams);
 
-let title_name = (getTaxonName(appState)||'Any Insect') + ' on ' + (getPlantName(appState)||'Any Plant');
+let title_name = 'Butterfly Lifestages';
+let title_desc = (getTaxonName(appState)||'Any Butterfly (or Moth)') + ' on ' + (getPlantName(appState)||'Any Plant');
 document.getElementById('titlename').textContent = capitalizeWords(title_name);
+faddelem('p',document.body,{innerText:title_desc});
    
 //function to create new elements
 function faddelem(etype,eparent=null,eclass=null,eid=null,ehtml=null) {
@@ -623,14 +625,14 @@ async function gatherResources() {
 
       let notes = 'This is a customized version of a script from the magnificent <a href="https://github.com/jumear/stirfry">iNat stirfry repo</a>.  Provided for our regional nature centers that serve our local community.';
 
-   if( fexample(1, 'By All Observers',notes)) {
+   //if( fexample(1, 'By All Observers',notes)) {
        fmapextent({nelat:39.13652110135628,nelng:-84.3476428020592,swlat:39.12904776433699,swlng:-84.35708417779162}); // Horizon
        fcreatebaselayer(0,bm_s_osm.url,bm_s_osm.description,bm_s_osm.attribution,true,'grayscale(100%) invert(100%) brightness(60%) sepia(100%) hue-rotate(180deg) saturate(150%)','',true);
        fcreateutflayer(1,utfgridapi.url+map_params+'&verifiable=any&term_id=1&term_value_id=7','Egg',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[173,216,230]});
        fcreateutflayer(2,utfgridapi.url+map_params+'&verifiable=any&term_id=1&term_value_id=4','Pupa',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[144,238,144]});
        fcreateutflayer(3,utfgridapi.url+map_params+'&verifiable=any&term_id=1&term_value_id=6','Larva',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[255,255,0]});
        fcreateutflayer(4,utfgridapi.url+map_params+'&verifiable=any&term_id=1&term_value_id=2','Adults',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:1,colorRGB:[255,0,0]});
-   };
+   /*};
    if( fexample(2, 'By ' + getUser(appState),notes)) {
        fmapextent({nelat:39.13652110135628,nelng:-84.3476428020592,swlat:39.12904776433699,swlng:-84.35708417779162}); // Horizon
        fcreatebaselayer(0,bm_s_osm.url,bm_s_osm.description,bm_s_osm.attribution,true,'grayscale(100%) invert(100%) brightness(60%) sepia(100%) hue-rotate(180deg) saturate(150%)','',true);
@@ -638,7 +640,7 @@ async function gatherResources() {
        fcreateutflayer(2,utfgridapi.url+map_params+'&verifiable=any&term_id=1&term_value_id=4','Pupa',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[144,238,144]});
        fcreateutflayer(3,utfgridapi.url+map_params+'&verifiable=any&term_id=1&term_value_id=6','Larva',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[255,255,0]});
        fcreateutflayer(4,utfgridapi.url+map_params+'&verifiable=any&term_id=1&term_value_id=2','Adults',utfgridapi.attr,true,{type:'square_tr',scaleType:'opacity',scaleFactor:1,colorRGB:[255,0,0]});
-   };
+   };*/
    if (elist.value==='nosel') { faddelem('p',mddescr,null,null,'No example found with the requested ID. Please specify another example ID or choose an example from the list above.'); };
      
 
