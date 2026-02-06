@@ -17,6 +17,7 @@ const ATTRIBUTE_PLANTID         = 'plantid';
 const ATTRIBUTE_PLANTNAME       = 'plantname';
 const ATTRIBUTE_TAXONID         = 'taxonid';
 const ATTRIBUTE_TAXONNAME       = 'taxonname';
+const ATTRIBUTE_LSTAXONID       = 'lstaxonid';
 const ATTRIBUTE_MENUID          = 'menuid';
 const ATTRIBUTE_MENUNAME        = 'menuname';
 const ATTRIBUTE_PLANTMENUID     = 'plantmenuid';
@@ -41,6 +42,7 @@ let appState = {
   [ATTRIBUTE_PLANTNAME]: '',
   [ATTRIBUTE_TAXONID]:   '',
   [ATTRIBUTE_TAXONNAME]: '',
+  [ATTRIBUTE_LSTAXONID]: '',
   [ATTRIBUTE_MENUID]:    '',
   [ATTRIBUTE_MENUNAME]:  '',
   [ATTRIBUTE_PLANTMENUID]:    '',
@@ -74,6 +76,7 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_PLANTNAME]: '',
     [ATTRIBUTE_TAXONID]:   '',
     [ATTRIBUTE_TAXONNAME]: '',
+    [ATTRIBUTE_LSTAXONID]: '',
     [ATTRIBUTE_MENUID]:    '', 
     [ATTRIBUTE_MENUNAME]:  '',
     [ATTRIBUTE_PLANTMENUID]:    '', 
@@ -180,6 +183,7 @@ function getPlantId(state)         { return (getAttribute(state, ATTRIBUTE_PLANT
 function getPlantName(state)       { return (getAttribute(state, ATTRIBUTE_PLANTNAME)); }
 function getTaxonId(state)         { return (getAttribute(state, ATTRIBUTE_TAXONID)); }
 function getTaxonName(state)       { return (getAttribute(state, ATTRIBUTE_TAXONNAME)); }
+function getLSTaxonId(state)       { return (getAttribute(state, ATTRIBUTE_LSTAXONID)); }
 function getMenuId(state)          { return (getAttribute(state, ATTRIBUTE_MENUID)); }
 function getMenuName(state)        { return (getAttribute(state, ATTRIBUTE_MENUNAME)); }
 function getPlantMenuId(state)     { return (getAttribute(state, ATTRIBUTE_PLANTMENUID)); }
@@ -207,6 +211,7 @@ function setPlantId(state, value)         { return (setAttribute(state, ATTRIBUT
 function setPlantName(state, value)       { return (setAttribute(state, ATTRIBUTE_PLANTNAME, value)); }
 function setTaxonId(state, value)         { return (setAttribute(state, ATTRIBUTE_TAXONID, value)); }
 function setTaxonName(state, value)       { return (setAttribute(state, ATTRIBUTE_TAXONNAME, value)); }
+function setLSTaxonId(state, value)       { return (setAttribute(state, ATTRIBUTE_LSTAXONID, value)); }
 function setMenuId(state, value)          { return (setAttribute(state, ATTRIBUTE_MENUID, value)); }
 function setMenuName(state, value)        { return (setAttribute(state, ATTRIBUTE_MENUNAME, value)); }
 function setPlantMenuId(state, value)     { return (setAttribute(state, ATTRIBUTE_PLANTMENUID, value)); }
@@ -274,6 +279,15 @@ function getTaxonNameParam(state, param_nm)   {
   let taxon_name = getTaxonName(state);
   if( taxon_name ) { 
       return (param_nm + taxon_name);
+  } else {
+      return '';
+  }
+}
+
+function getLSTaxonIdParam(state, param_nm)   { 
+  let ls_taxon_id = getLSTaxonId(state);
+  if( ls_taxon_id ) { 
+      return (param_nm + ls_taxon_id);
   } else {
       return '';
   }
@@ -602,6 +616,7 @@ function clearForGardenListParams(state) {
   urlState = setUser(urlState, '');
   urlState = setTaxonId(urlState, ''); 
   urlState = setTaxonName(urlState, '');
+  urlState = setLSTaxonId(urlState, '');
   urlState = setPlantId(urlState, '');
   urlState = setPlantName(urlState, '');
   urlState = setMenuId(urlState, '');
@@ -626,6 +641,7 @@ function clearForObserverCountsParams(state) {
   urlState = setUser(urlState, '');
   urlState = setTaxonId(urlState, ''); 
   urlState = setTaxonName(urlState, '');
+  urlState = setLSTaxonId( urlState, '');
   urlState = setPlantId(urlState, '');
   urlState = setPlantName(urlState, '');
   urlState = setMenuId(urlState, '');
@@ -654,6 +670,7 @@ function clearForDashParams(state) {
   urlState = setPlantName(urlState, '');
   urlState = setTaxonId(urlState, ''); 
   urlState = setTaxonName(urlState, '');
+  urlState = setLSTaxonId( urlState, '');
   urlState = setPlantMenuId(urlState, '');
   urlState = setPlantMenuName(urlState, '');
   urlState = setPlaceMenuId(urlState, '');
@@ -680,6 +697,7 @@ function clearForSpeciesCountsParams(state) {
 
   urlState = setTaxonId( urlState, '' );
   urlState = setTaxonName( urlState, '');
+  urlState = setLSTaxonId( urlState, '');
 
   return urlState;
 }
