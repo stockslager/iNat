@@ -201,7 +201,12 @@ function buildPage(xobj, observerConfig) {
          let urlState = appState;  // creates a copy
          urlState = setTaxonName(urlState, pref_tax_name.toLowerCase()||tax_name);
          urlState = setTaxonId(urlState, rec.taxon.id);
-       
+
+         // if it's a lepidoptera, tell the grid to display the ls_map.
+         if( rec.taxon.ancestor_ids.includes('47157') ) { // lepidoptera
+             urlState = setLSTaxonId(urlState, '47157');
+         }
+            
          let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
