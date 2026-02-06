@@ -68,9 +68,13 @@ example = (example===null?1:example.split(',')[0]); // gets first value passed i
 winurlparams.delete('lsmap');
 appState       = buildStateFromParams(winurlparams);
 
-let title_desc = (getTaxonName(appState)||'Any Butterfly (or Moth)') + ' on ' + (getPlantName(appState)||'Any Plant');
+let tname = '';
+let pname = '';
+if( getTaxonName(appState) ) { tname = capitalizeWords(getTaxonName(appState)) }
+if( getPlantName(appState) ) { pname = capitalizeWords(getPlantName(appState)) }
+
+let title_desc = (tname||'Any Butterfly (or Moth)') + ' on ' + (pname||'Any Plant');
 faddelem('p',mddescr,null,null,title_desc);
-//document.getElementById('titledesc').textContent = title_desc;
    
 //function to create new elements
 function faddelem(etype,eparent=null,eclass=null,eid=null,ehtml=null) {
