@@ -48,6 +48,7 @@ let nav = document.getElementById('nav');
 let mddescr = faddelem('div',nav,null,'mddescr');
 let keytable = faddelem('div',nav,null,'keytable');
 let keybody = faddelem('div',keytable,null,'keybody');
+let enddesc = faddelem('div',nav,null,'enddesc');
 
 var pcc = faddelem('p',nav);
 var pcc1 = faddelem('span',pcc,null,null,'Total Cell Count: ');
@@ -638,7 +639,7 @@ async function gatherResources() {
    //if (elist.value==='nosel') { faddelem('p',mddescr,null,null,'No example found with the requested ID. Please specify another example ID or choose an example from the list above.'); };
 
       let notes = 'This is a customized version of a script from the magnificent <a href="https://github.com/jumear/stirfry">iNat stirfry repo</a>.  Provided for our regional nature centers that serve our local community.';
-      faddelem('p',mddescr,null,null,'Notes: '+notes);
+      faddelem('p',enddesc,null,null,'Notes: '+notes);
 
     } catch (error) {
       console.error("An error occurred:", error);
