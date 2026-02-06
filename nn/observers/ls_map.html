@@ -35,10 +35,8 @@
 
 <body>
 <div id='nav'>
-   <span id='titlename'> </span>
-   <select id='examplelist' onchange='fgetexample(this.value);'>
-      <option selected='true' value='nosel' disabled='disabled'>Select a Map:</option>   
-   </select>
+   <h3>Butterfly Lifestages</h3>
+   <span id='titledesc'> </span>
    <h3>Map Details</h3>
 </div>
 <script type="text/javascript"   src='../core/js/global_const.js'> </script>
@@ -69,10 +67,8 @@ example = (example===null?1:example.split(',')[0]); // gets first value passed i
 winurlparams.delete('lsmap');
 appState       = buildStateFromParams(winurlparams);
 
-let title_name = 'Butterfly Lifestages';
 let title_desc = (getTaxonName(appState)||'Any Butterfly (or Moth)') + ' on ' + (getPlantName(appState)||'Any Plant');
-document.getElementById('titlename').textContent = capitalizeWords(title_name);
-faddelem('p',document.body,{innerText:title_desc});
+document.getElementById('titledesc).textContent = title_desc;
    
 //function to create new elements
 function faddelem(etype,eparent=null,eclass=null,eid=null,ehtml=null) {
