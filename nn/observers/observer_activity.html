@@ -203,9 +203,7 @@ function buildPage(xobj, observerConfig) {
          urlState = setTaxonId(urlState, rec.taxon.id);
 
          // if it's a lepidoptera, tell the grid to display the ls_map.
-         console.log('arr ' + rec.taxon.ancestor_ids);
-         if( rec.taxon.ancestor_ids.includes('47157') ) { // lepidoptera
-             console.log('set******');
+         if( rec.taxon.ancestor_ids.split(',').includes('47157') ) { // lepidoptera
              urlState = setLSTaxonId(urlState, '47157');
          }
             
