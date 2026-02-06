@@ -58,6 +58,7 @@ class ConfigurationItem {
         this.plantListUserId = configData.plant_list_user_id ?? null;
         this.plantTagName    = configData.plant_tag_name ?? null;
         this.usePlantProjectImages = configData.use_plant_project_images ?? null;
+        this.lsMapExtent = configData.ls_mapextent ?? null;
         this.defaultPlace = configData.default_place ?? null;
         this.fieldId = configData.field_id ?? null;
         this.fieldName = configData.field_name ?? null;
