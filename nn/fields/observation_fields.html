@@ -5,18 +5,19 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" /> 
 <meta name="description" content="Observation Field Viewer" />
-<link rel="icon" type="image/png" href="/iNat/plant-icon-96.png" sizes="96x96" />
-<link rel="icon" type="image/svg+xml" href="/iNat/plant-icon-96.svg" />
-<link rel="shortcut icon" href="/iNat/plant-club.ico" />
-<link rel="apple-touch-icon" sizes="180x180" href="/iNat/plant-icon-192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
+<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+ 
 <meta name="apple-mobile-web-app-title" content="Observation Field Viewer" />
-<link rel="manifest" href="/iNat/plant_club.webmanifest" />
-<link rel="stylesheet" type="text/css" href="/iNat/seed_library.css" />
-<script type="text/javascript" src='/iNat/common_func.js'> </script>
-<script type="text/javascript" src='/iNat/observation_fields/js/observations.js'> </script>
-<script type="text/javascript" src='/iNat/observation_fields/js/fetch_obs.js'> </script>
-<script type="text/javascript" src='/iNat/observation_fields/js/obs_results_common.js'> </script>
-<script type="text/javascript" src='/iNat/js/plant_params_v10.js'> </script>
+<script type="text/javascript" src='/iNat/nn/core/js/common_func.js'> </script>
+<script type="text/javascript" src='/iNat/nn/core/js/obs_fields/observations.js'> </script>
+<script type="text/javascript" src='/iNat/nn/core/js/obs_fields/fetch_obs.js'> </script>
+<script type="text/javascript" src='/iNat/nn/core/js/obs_fields/obs_results_common.js'> </script>
+<script type="text/javascript" src='/iNat/nn/core/js/roots.js'> </script>
 <title>Observation Field Viewer</title>
 </head>
 
@@ -166,7 +167,7 @@ function buildTitle( name, content, tooltip ) {
  
 function buildQueryForm() {
   faddelem('p',document.body,{innerHTML:('<br><div>' +
-                                           '<form action='+github_root+'observation_fields/observation_fields.html>' +
+                                           '<form action='./observation_fields.html>' +
                                               '<label for="ofvDropdown">OFV datatype:<br></label>' +
                                               '<select id="ofvDropdown" name="ofv_datatype" required>' + 
                                                       '<option value="">-- Choose OFV Datatype --</option>' + 
@@ -214,7 +215,7 @@ function getObs() {
           console.log('Fetched a total of ' + obs_data.observations.length + ' observations.');
           console.log('First observation:', obs_data.observations[0]);     
           fresults(obs_data);
-          let shareable_link = (github_root+'observation_fields/blog_view.html?'+winurlparams+'&query='+sessionStorage.getItem( cache_name+'query' ));
+          let shareable_link = (./blog_view.html?'+winurlparams+'&query='+sessionStorage.getItem( cache_name+'query' ));
           faddelem('p',document.body,{innerHTML:'<br><br><br>Shareable link: <br>' + shareable_link});
       }
     } catch (error) {
@@ -233,7 +234,7 @@ if( cache_str ) {
         console.log('Fetched a total of ' + obs_data.observations.length + ' observations.');
         console.log('First observation:', obs_data.observations[0]);
         fresults(obs_data);
-        let shareable_link = (github_root+'observation_fields/blog_view.html?'+winurlparams+'&query='+sessionStorage.getItem( cache_name+'query' ));
+        let shareable_link = (./blog_view.html?'+winurlparams+'&query='+sessionStorage.getItem( cache_name+'query' ));
         faddelem('p',document.body,{innerHTML:'<br><br><br>Shareable link: <br>' + shareable_link});
     }
 } else {
@@ -291,7 +292,7 @@ function buildMenu( fields ) {
                    } 
 
                    if( !field_array.includes(fields[i].field_id.toString()) ) {
-                       links += furl(github_root+'observation_fields/observation_fields.html?'+winurlparams, fields[i].field_name);
+                       links += furl(./observation_fields.html?'+winurlparams, fields[i].field_name);
                    }
                }
           }
@@ -321,7 +322,7 @@ function buildMenu( fields ) {
               winurlparams.delete('chosen_taxon_id');
               winurlparams.delete('field_value');
               winurlparams.delete('field');
-              menu_string += buildMenuURL( furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,'Un-Merge') );
+              menu_string += buildMenuURL( furl(./observation_fields.html?'+winurlparams,'Un-Merge') );
               winurlparams.append('operator', p_operator);
               if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
               if( p_field_value )     { winurlparams.append('field_value', p_field_value); }
@@ -329,7 +330,7 @@ function buildMenu( fields ) {
           } else {
               winurlparams.delete('operator');
               winurlparams.append('operator', 'merge');
-              menu_string += buildMenuURL( furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,'Merge') );
+              menu_string += buildMenuURL( furl(./observation_fields.html?'+winurlparams,'Merge') );
               winurlparams.delete('operator');
               if( p_operator ) {
                   winurlparams.append('operator', p_operator);
@@ -337,7 +338,7 @@ function buildMenu( fields ) {
           }
       }
  
-      menu_string += buildHome( furl(github_root+'observation_fields/observation_fields.html?clear_cache=yes','Start Over') );
+      menu_string += buildHome( furl(./observation_fields.html?clear_cache=yes','Start Over') );
  
       menu_string += '</div>';
 
