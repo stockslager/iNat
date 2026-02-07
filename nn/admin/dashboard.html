@@ -44,9 +44,9 @@ const CONST_COLONIES     = 'Colonies';
 const CONST_BIODIVERSITY = 'Biodiversity';
 const CONST_THRU_HIKES   = 'Thru Hikes';
 const CONST_ART          = 'Art & Journaling';
-const CONST_OBSERVERS    = 'Observers Network';
-const CONST_FIELDS       = 'Fields';
-
+const CONST_OBSERVERS    = 'Observers';
+const CONST_ANIMALS      = 'Animals';
+ 
 function buildMenu( configManager ) {
       let menu_string = '';
       let params = '';
@@ -141,11 +141,11 @@ function buildPage( configManager ) {
                faddelems('td',brow,values);
            }
 
-           if( config.component === 'fields' ) {
+           if( config.component === 'animals' ) {
                brow = faddelem('tr',tbody);
                values = [
-                  {innerHTML:furl('../fields/observation_fields.html?query=user_id='+config.userId, CONST_SEEDLING_UTF8  )},
-                  {innerHTML:furl('../fields/observation_fields.html?query=user_id%3D'+config.userId, CONST_FIELDS )},
+                  {innerHTML:furl('../fields/observation_fields.html?query=user_id='+config.userId, CONST_BEETLE_UTF8  )},
+                  {innerHTML:furl('../fields/observation_fields.html?query=user_id%3D'+config.userId, CONST_ANIMALS )},
                   {innerText:CONST_COLONY_DESC},
                ];
                faddelems('td',brow,values);
