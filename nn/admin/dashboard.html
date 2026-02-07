@@ -143,10 +143,10 @@ function buildPage( configManager ) {
 
            if( config.component === 'animals' ) {
                brow = faddelem('tr',tbody);
-               let a_params = 'project_id='+config.project+'&obs_fields='+config.fieldId+'&ofv_datatype=taxon&chosen_datatypes=taxon'+'&field:'+config.fieldName+'=';
+               let a_params = 'project_id='+config.project+'&obs_fields='+config.fieldId+'&field:'+config.fieldName+'=';
                values = [
-                  {innerHTML:furl('../fields/observation_fields.html?query='+a_params/*encodeURIComponent(a_params)*/, CONST_BEETLE_UTF8  )},
-                  {innerHTML:furl('../fields/observation_fields.html?query='+a_params/*encodeURIComponent(a_params)*/, CONST_ANIMALS )},
+                  {innerHTML:furl('../fields/field_viewer.html?'+a_params/*encodeURIComponent(a_params)*/, CONST_BEETLE_UTF8  )},
+                  {innerHTML:furl('../fields/field_viewer.html?'+a_params/*encodeURIComponent(a_params)*/, CONST_ANIMALS )},
                   {innerText:CONST_COLONY_DESC},
                ];
                faddelems('td',brow,values);
