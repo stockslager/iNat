@@ -143,9 +143,10 @@ function buildPage( configManager ) {
 
            if( config.component === 'animals' ) {
                brow = faddelem('tr',tbody);
+               let a_params = 'project_id='+config.projectId+'&field:'+config.field_name+'=';
                values = [
-                  {innerHTML:furl('../fields/observation_fields.html?query=user_id='+config.userId, CONST_BEETLE_UTF8  )},
-                  {innerHTML:furl('../fields/observation_fields.html?query=user_id%3D'+config.userId, CONST_ANIMALS )},
+                  {innerHTML:furl('../fields/observation_fields.html?query='+encodeURIComponent(a_params), CONST_BEETLE_UTF8  )},
+                  {innerHTML:furl('../fields/observation_fields.html?query='+encodeURIComponent(a_params), CONST_ANIMALS )},
                   {innerText:CONST_COLONY_DESC},
                ];
                faddelems('td',brow,values);
