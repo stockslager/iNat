@@ -215,7 +215,7 @@ function getObs() {
           console.log('Fetched a total of ' + obs_data.observations.length + ' observations.');
           console.log('First observation:', obs_data.observations[0]);     
           fresults(obs_data);
-          let shareable_link = (./blog_view.html?'+winurlparams+'&query='+sessionStorage.getItem( cache_name+'query' ));
+          let shareable_link = ('./blog_view.html?'+winurlparams+'&query='+sessionStorage.getItem( cache_name+'query' ));
           faddelem('p',document.body,{innerHTML:'<br><br><br>Shareable link: <br>' + shareable_link});
       }
     } catch (error) {
@@ -234,7 +234,7 @@ if( cache_str ) {
         console.log('Fetched a total of ' + obs_data.observations.length + ' observations.');
         console.log('First observation:', obs_data.observations[0]);
         fresults(obs_data);
-        let shareable_link = (./blog_view.html?'+winurlparams+'&query='+sessionStorage.getItem( cache_name+'query' ));
+        let shareable_link = ('./blog_view.html?'+winurlparams+'&query='+sessionStorage.getItem( cache_name+'query' ));
         faddelem('p',document.body,{innerHTML:'<br><br><br>Shareable link: <br>' + shareable_link});
     }
 } else {
@@ -292,7 +292,7 @@ function buildMenu( fields ) {
                    } 
 
                    if( !field_array.includes(fields[i].field_id.toString()) ) {
-                       links += furl(./observation_fields.html?'+winurlparams, fields[i].field_name);
+                       links += furl('./observation_fields.html?'+winurlparams, fields[i].field_name);
                    }
                }
           }
@@ -322,7 +322,7 @@ function buildMenu( fields ) {
               winurlparams.delete('chosen_taxon_id');
               winurlparams.delete('field_value');
               winurlparams.delete('field');
-              menu_string += buildMenuURL( furl(./observation_fields.html?'+winurlparams,'Un-Merge') );
+              menu_string += buildMenuURL( furl('./observation_fields.html?'+winurlparams,'Un-Merge') );
               winurlparams.append('operator', p_operator);
               if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
               if( p_field_value )     { winurlparams.append('field_value', p_field_value); }
@@ -330,7 +330,7 @@ function buildMenu( fields ) {
           } else {
               winurlparams.delete('operator');
               winurlparams.append('operator', 'merge');
-              menu_string += buildMenuURL( furl(./observation_fields.html?'+winurlparams,'Merge') );
+              menu_string += buildMenuURL( furl('./observation_fields.html?'+winurlparams,'Merge') );
               winurlparams.delete('operator');
               if( p_operator ) {
                   winurlparams.append('operator', p_operator);
@@ -338,7 +338,7 @@ function buildMenu( fields ) {
           }
       }
  
-      menu_string += buildHome( furl(./observation_fields.html?clear_cache=yes','Start Over') );
+      menu_string += buildHome( furl('./observation_fields.html?clear_cache=yes','Start Over') );
  
       menu_string += '</div>';
 
