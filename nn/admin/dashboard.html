@@ -45,6 +45,7 @@ const CONST_BIODIVERSITY = 'Biodiversity';
 const CONST_THRU_HIKES   = 'Thru Hikes';
 const CONST_ART          = 'Art & Journaling';
 const CONST_OBSERVERS    = 'Observers Network';
+const CONST_FIELDS       = 'Fields';
 
 function buildMenu( configManager ) {
       let menu_string = '';
@@ -135,6 +136,16 @@ function buildPage( configManager ) {
                values = [
                   {innerHTML:furl('../colonies/colony_list.html'+plant_params, CONST_SEEDLING_UTF8  )},
                   {innerHTML:furl('../colonies/colony_list.html'+plant_params, CONST_COLONIES )},
+                  {innerText:CONST_COLONY_DESC},
+               ];
+               faddelems('td',brow,values);
+           }
+
+           if( config.component === 'fields' ) {
+               brow = faddelem('tr',tbody);
+               values = [
+                  {innerHTML:furl('../fields/observation_fields.html?query=user_id='+config.userId, CONST_SEEDLING_UTF8  )},
+                  {innerHTML:furl('../fields/observation_fields.html?query=user_id%3D'+config.userId, CONST_FIELDS )},
                   {innerText:CONST_COLONY_DESC},
                ];
                faddelems('td',brow,values);
