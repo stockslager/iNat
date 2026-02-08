@@ -209,7 +209,7 @@ function fresults(xobj) {
 
       let tempBrow = [];
 
-      buildMenu( buildDropDownArray(results, box_array) );
+      buildMenu( /*buildDropDownArray(results, box_array)*/ );
       
       let firstCol = 'yes';
         
