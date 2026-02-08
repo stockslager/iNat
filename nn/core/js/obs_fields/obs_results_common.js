@@ -173,146 +173,126 @@ function buildDropDownArray( results, box_array ) {
    return add_array;
 }
 
-function fresults(xobj) {
-   let box_array = [];
-
-   let total_results = xobj.total_results;
-   let per_page = xobj.per_page;
-   let page_curr = xobj.page;
-   let page_max = Math.ceil(total_results/per_page);
-   let page_prev = ((page_curr>1)?page_curr-1:null);
-   let page_next = ((page_curr<page_max)?page_curr+1:null);
+function fresults( results, box_array ) {
  
-   let results = xobj.results;
-   let url = window.location.origin + window.location.pathname;   
+   let labels = [];
+   let obs_field_box = '';
+   let labelCount = 0;
 
-   for( let f=0; f<field_array.length; f++ ){
-        box_array.push(new boxRow(field_array[f], '') );
-   }
-
-   if (results) {
-
-      let labels = [];
-      let obs_field_box = '';
-      let labelCount = 0;
-
-      let merged = 'observation field';
-      labels = [
-            {innerText:'#'},
-            {innerText:'photo'},
-            {innerText:'observation species name'}, 
-            {innerText:'obs photo'}];
+   let merged = 'observation field';
+   labels = [
+         {innerText:'#'},
+         {innerText:'photo'},
+         {innerText:'observation species name'}, 
+         {innerText:'obs photo'}];
     
-      if( p_operator === 'merge' ){
-          merged = 'merged observation field';
-      } 
+   if( p_operator === 'merge' ){
+       merged = 'merged observation field';
+   } 
 
-      let tempBrow = [];
-
-      //buildMenu( buildDropDownArray(results, box_array) );
-      
-      let firstCol = 'yes';
+   let tempBrow = [];
+   let firstCol = 'yes';
         
-      box_array = box_array.filter(box_array => box_array.field_name !== '');
+   box_array = box_array.filter(box_array => box_array.field_name !== '');
 
-      if( p_obs_fields ) {
-          obs_field_box += '<span id="topright"><span id="mismatch">&#127800; ~ obs field mismatch.</span><span id="dltest"><table id="tablekey">';
-          obs_field_box += '<tr id="trkey">';  
+   if( p_obs_fields ) {
+       obs_field_box += '<span id="topright"><span id="mismatch">&#127800; ~ obs field mismatch.</span><span id="dltest"><table id="tablekey">';
+       obs_field_box += '<tr id="trkey">';  
 
-          if( p_operator ) {
-              obs_field_box += '<td id="key">field id</td>  <td id="key">'+merged+'</td><td id="tdkey"></td><td id="keyx"></td></tr>';
-          } else {
-              obs_field_box += '<td id="key">field id</td>  <td id="key">'+merged+'</td><td id="tdkey"></td><td id="keyx">'+buildEmptyLink()+'</td></tr>';
-          }
+       if( p_operator ) {
+           obs_field_box += '<td id="key">field id</td>  <td id="key">'+merged+'</td><td id="tdkey"></td><td id="keyx"></td></tr>';
+       } else {
+           obs_field_box += '<td id="key">field id</td>  <td id="key">'+merged+'</td><td id="tdkey"></td><td id="keyx">'+buildEmptyLink()+'</td></tr>';
+       }
     
-          for( let e=0; e<box_array.length; e++ ) {
-               labelCount++;
-               if( box_array[e].field_name !== '' ) {
-                   obs_field_box += '<tr id="trkey">';
-                   obs_field_box += '<td id="tdkey">'+buildRemoveObsFieldURL( box_array[e], box_array ) + '</td>';
-                   obs_field_box += ('<td id="tdsecond">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
-                   if( p_operator !== 'merge' ){
-                       labels.push({innerText:box_array[e].field_name});
-                   } else {
-                       if( firstCol === 'yes' ){
-                           firstCol = 'no';
-                           labels.push({innerText:'merged Fields (see upper right)'});
-                       } 
-                   }
-               } else {
-                   obs_field_box += ('<tr id="trkey"><td id="tdkey">' + box_array[e].field_id + '</td>');
-                   obs_field_box += ('<td id="tdsecond">missing from this page</td></tr>');
-                   if( p_operator !== 'merge' ) {
-                       labels.push({innerText:''});
-                   }
-               }
-          }
+       for( let e=0; e<box_array.length; e++ ) {
+            labelCount++;
+            if( box_array[e].field_name !== '' ) 
+                obs_field_box += '<tr id="trkey">';
+                obs_field_box += '<td id="tdkey">'+buildRemoveObsFieldURL( box_array[e], box_array ) + '</td>';
+                obs_field_box += ('<td id="tdsecond">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
+                if( p_operator !== 'merge' ){
+                    labels.push({innerText:box_array[e].field_name});
+                } else {
+                    if( firstCol === 'yes' ){
+                        firstCol = 'no';
+                        labels.push({innerText:'merged Fields (see upper right)'});
+                    } 
+                }
+            } else {
+                obs_field_box += ('<tr id="trkey"><td id="tdkey">' + box_array[e].field_id + '</td>');
+                obs_field_box += ('<td id="tdsecond">missing from this page</td></tr>');
+                if( p_operator !== 'merge' ) {
+                    labels.push({innerText:''});
+                }
+            }
+       }
 
-          obs_field_box += '</table></span></span>';
-          faddelem('p',document.body,{innerHTML:obs_field_box});
+       obs_field_box += '</table></span></span>';
+       faddelem('p',document.body,{innerHTML:obs_field_box});
 
-          // hide the mismatch warning... only display it if there is a mismatch in the table.
-          document.getElementById("mismatch").style.display = "none"; 
-      }
+       // hide the mismatch warning... only display it if there is a mismatch in the table.
+       document.getElementById("mismatch").style.display = "none"; 
+   }
      
-      for (let i=0; i<results.length; i++) {
-         let rec = results[i];
-         let tax_name = '';
-         let pref_tax_name = '';
-         let tax_photo = '<div class="clipart"></div>'; 
-         let tax_id = '';
-         let field1 = ''; 
-         let displayName = '&nbsp;';
-         let displayTaxonName = '';
-         let mismatch = '';
-         let matchedCopy = 'no';
-         let values = [];
-         let dataType = '';
-         let dataType2 = '';
-         let matchValue = '';
-         let matchTaxonId = '';
-         let taxon = '';
+   for( let i=0; i<results.length; i++) {
+      let rec = results[i];
+      let tax_name = '';
+      let pref_tax_name = ''; 
+      let tax_photo = '<div class="clipart"></div>'; 
+      let tax_id = '';
+      let field1 = ''; 
+      let displayName = '&nbsp;';
+      let displayTaxonName = '';
+      let mismatch = '';
+      let matchedCopy = 'no';
+      let values = [];
+      let dataType = '';
+      let dataType2 = '';
+      let matchValue = '';
+      let matchTaxonId = '';
+      let taxon = '';
          
-         if( rec.taxon.id ){
-             tax_id = rec.taxon.id;
-             tax_name = rec.taxon.name || '';
-             pref_tax_name = rec.taxon.preferred_common_name || '';
+      if( rec.taxon.id ){
+          tax_id = rec.taxon.id;
+          tax_name = rec.taxon.name || '';
+          pref_tax_name = rec.taxon.preferred_common_name || '';
 
-             if( rec.taxon.default_photo ) {
-                 if( rec.taxon.default_photo.url ){
-                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
-                 }
-             }
-         }
+          if( rec.taxon.default_photo ) {
+              if( rec.taxon.default_photo.url ){
+                  tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
+              }
+          }
+      }
        
-         if( tax_id !== '' ) {
-             winurlparams.delete('chosen_taxon_id');
-             taxon = furl(url+'?'+winurlparams+'&chosen_taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
-             if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
-         }
+      if( tax_id !== '' ) {
+          winurlparams.delete('chosen_taxon_id');
+          taxon = furl(url+'?'+winurlparams+'&chosen_taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
+          if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
+      }
        
-         values = [
-                  {innerText:i+1},
-                  {innerHTML:tax_photo},
-                  {innerHTML:taxon},
-                  {innerHTML:furl(root_observations+rec.id,'<img class="mini_photo2" src="'+(rec.photos[0].url||'')+'" />')},
-              ];
+      values = [
+               {innerText:i+1},
+               {innerHTML:tax_photo},
+               {innerHTML:taxon},
+               {innerHTML:furl(root_observations+rec.id,'<img class="mini_photo2" src="'+(rec.photos[0].url||'')+'" />')},
+           ];
 
-         let user_icon = rec.user.icon || '';
-         
-         if( user_icon === '' ){
-            user_icon += '<div class="npcicon"></div>';
-         } else {
-            user_icon = '<img class="icon" src="'+user_icon+'" />';
-         }
+      let user_icon = rec.user.icon || '';
+        
+      if( user_icon === '' ){
+         user_icon += '<div class="npcicon"></div>';
+      } else {
+         user_icon = '<img class="icon" src="'+user_icon+'" />';
+      }
 
-         let emojiTitle = 'Merged Observation Fields:&#10;';
+      let emojiTitle = 'Merged Observation Fields:&#10;';
 
-         let merge_field = '';
-         let merge_field_value = '';
-         if(rec.ofvs&&rec.ofvs.length>0){
-              for( let r=0; r<box_array.length; r++ ) {
-                 for( let j=0; j<rec.ofvs.length; j++ ){
+      let merge_field = '';
+      let merge_field_value = '';
+      if(rec.ofvs&&rec.ofvs.length>0){
+           for( let r=0; r<box_array.length; r++ ) {
+                for( let j=0; j<rec.ofvs.length; j++ ){
 
                       if( field_array.includes(rec.ofvs[j].field_id.toString()) ){
                           if( matchValue === '' ){
@@ -406,81 +386,70 @@ function fresults(xobj) {
                  }
                  }
              }
-         }             
+      }             
        
-         if( p_operator === 'merge' ){
-              if( displayTaxonName !== '' ){
-                  if( mismatch === 'yes' ){
-                      document.getElementById("mismatch").style.display = "inline"; 
-                      displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
-                  } else {
-                      displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+')</span>';
-                  }
-              } else {
-                  if( mismatch === 'yes' ){
-                      document.getElementById("mismatch").style.display = "inline"; 
-                      displayName += ' ';
-                      displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
-                  } 
-              }
-              winurlparams.delete('field_value');
-              winurlparams.append('field_value', merge_field_value);
-              winurlparams.delete('field');
-              winurlparams.append('field', merge_field);
-              values.push({innerHTML:furl(url+'?'+winurlparams,displayName)});
-              winurlparams.delete('field_value');
-              winurlparams.delete('field');
-              if( p_field_value ) { 
-                  winurlparams.append('field', p_field);
-                  winurlparams.append('field_value', p_field_value); 
-              }
-         }          
+      if( p_operator === 'merge' ){
+           if( displayTaxonName !== '' ){
+               if( mismatch === 'yes' ){
+                   document.getElementById("mismatch").style.display = "inline"; 
+                   displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
+               } else {
+                   displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+')</span>';
+               }
+           } else {
+               if( mismatch === 'yes' ){
+                   document.getElementById("mismatch").style.display = "inline"; 
+                   displayName += ' ';
+                   displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
+               } 
+           }
+           winurlparams.delete('field_value');
+           winurlparams.append('field_value', merge_field_value);
+           winurlparams.delete('field');
+           winurlparams.append('field', merge_field);
+           values.push({innerHTML:furl(url+'?'+winurlparams,displayName)});
+           winurlparams.delete('field_value');
+           winurlparams.delete('field');
+           if( p_field_value ) { 
+               winurlparams.append('field', p_field);
+               winurlparams.append('field_value', p_field_value); 
+           }
+      }          
 
-         values.push({innerHTML:user_icon});
-         values.push({innerHTML:furl(root_people+rec.user.login,rec.user.login)}); 
+      values.push({innerHTML:user_icon});
+      values.push({innerHTML:furl(root_people+rec.user.login,rec.user.login)}); 
 
-         if( showRow(rec) ) {
-             tempBrow.push(values);
-         } 
+      if( showRow(rec) ) {
+          tempBrow.push(values);
+      } 
        
-      };
+   };
 
-      winurlparams.delete('chosen_taxon_id');
-      winurlparams.delete('field_value');
-      winurlparams.delete('field');
-      faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">'+CONST_TOTAL_OBS + '</td><td id="tdright">' + total_results      + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">'+CONST_PER_PAGE +  '</td><td id="tdright">' + fcomnum(per_page)  + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">'+CONST_PAGE +      '</td><td id="tdright">' + fcomnum(page_curr) + ' of ' + fcomnum(page_max) + '</td></tr></table></span>'});
-      if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
-      if( p_field_value )     { winurlparams.append('field_value', p_field_value); }
-      if( p_field )           { winurlparams.append('field', p_field); }
+   winurlparams.delete('chosen_taxon_id');
+   winurlparams.delete('field_value');
+   winurlparams.delete('field');
+   faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
+                                         '<tr id="trkey"><td id="tdkey">'+CONST_TOTAL_OBS + '</td><td id="tdright">' + total_results      + '</td></tr>' + 
+                                         '<tr id="trkey"><td id="tdkey">'+CONST_PER_PAGE +  '</td><td id="tdright">' + fcomnum(per_page)  + '</td></tr>' + 
+                                         '<tr id="trkey"><td id="tdkey">'+CONST_PAGE +      '</td><td id="tdright">' + fcomnum(page_curr) + ' of ' + fcomnum(page_max) + '</td></tr></table></span>'});
+   if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
+   if( p_field_value )     { winurlparams.append('field_value', p_field_value); }
+   if( p_field )           { winurlparams.append('field', p_field); }
     
-      let table = faddelem('table',document.body,{id:'main'});
-      let thead = faddelem('thead',table);
-      let hrow  = faddelem('tr',thead);
+   let table = faddelem('table',document.body,{id:'main'});
+   let thead = faddelem('thead',table);
+   let hrow  = faddelem('tr',thead);
 
-      labels.push({innerText:'user photo'});
-      labels.push({innerText:'user login'});
+   labels.push({innerText:'user photo'});
+   labels.push({innerText:'user login'});
       
-      faddelems('th',hrow,labels);
+   faddelems('th',hrow,labels);
 
-      let tbody = faddelem('tbody',table);
+   let tbody = faddelem('tbody',table);
     
-      // loop through array of rows stored on object.
-      for( let q=0; q<tempBrow.length; q++ ){
-           let brow = faddelem('tr',tbody);
-           faddelems('td',brow,tempBrow[q]);
-      }
-
-      // buttons to go to prev or next page
-      let nav = faddelem('div',document.body,{id:'nav'});
-      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
-      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
-      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
-      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
-    
-   } else { 
-      faddelem('p',document.body,{innerText:'No results returned.'}); 
-   }; 
+   // loop through array of rows stored on object.
+   for( let q=0; q<tempBrow.length; q++ ){
+        let brow = faddelem('tr',tbody);
+        faddelems('td',brow,tempBrow[q]);
+   }
 };
