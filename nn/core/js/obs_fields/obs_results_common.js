@@ -228,6 +228,7 @@ function fresults( results, box_array ) {
             }
        }
 
+    console.log('box2 ' + obs_field_box);
        obs_field_box += '</table></span></span>';
        faddelem('p',document.body,{innerHTML:obs_field_box});
 
