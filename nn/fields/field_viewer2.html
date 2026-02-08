@@ -52,7 +52,6 @@ let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_field = '';
 let p_field_value = '';
-let opts = '';
 let field_array = [];
 
 appState       = buildStateFromParams(winurlparams);
@@ -90,23 +89,6 @@ winurlparams.delete('taxon_id');
 winurlparams.delete('not_user_id');
 winurlparams.delete('not_id');
 winurlparams.delete('not_in_project');
-
-// build param list for url's used in fresults
-for (const [key, value] of winurlparams.entries()) { 
-  if( opts === '' ){
-      opts += "?";
-  } else {
-      opts += "&";
-  }
-  opts += key;
-  opts += "=";
-
-  if( key === 'page' ){
-      opts += '1';
-  } else {
-      opts += value;
-  }
-}   
 
 // add them back after building options...
 winurlparams.append(p_field, p_field_value);
@@ -350,7 +332,10 @@ function fresults( xobj, config ) {
          }
 
          if( tax_id !== '' ){
-             taxon = furl('./field_viewer.html'+opts+'&taxon_id='+tax_id+'&'+p_field+'='+p_field_value,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             let urlState = appState;
+             urlState = setTaxonId(urlState, tax_id);
+             urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+             taxon = furl('./field_viewer.html'+buildParameterList(urlState),'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
          values = [
@@ -409,7 +394,7 @@ function fresults( xobj, config ) {
                                   field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                               }
                               if( p_field_value === '' ){
-                                  values.push({innerHTML:furl('./field_viewer2.html'+opts+param1+'&taxon_id='+getTaxonId(appState), field1)});
+                                  values.push({innerHTML:furl('./field_viewer2.html'+opts+param1+'&taxonid='+getTaxonId(appState), field1)});
                               } else {
                                   values.push({innerHTML:field1});
                               }
@@ -471,12 +456,14 @@ function fresults( xobj, config ) {
 <script type="text/javascript"   src="../core/js/api_fetch.js"></script>
  
 <script>
-function setupAPIParams( animalsConfig ) {
+function setupAPIParams( config ) {
    let api_params = '';
  
-   api_params += '?project_id='+animalsConfig.project;
+   api_params += '?project_id='+config.project;
 
-   if( animalsConfig.fieldName )        { api_params += '&field:'    + animalsConfig.fieldName;  } 
+   if( config.fieldName )        { api_params += '&field:'    + config.fieldName;  } 
+   if( getFieldValue(appState)   { api_params += '='          + getFieldValue(appState); }
+   if( getUserId(appState)       { api_params += '&user_id:'  + getUserId(appState); }
 
    // if a place_id was chosen from the place drop-down, use that place_id...
    if( getPlaceMenuId(appState) ) {
@@ -504,15 +491,15 @@ async function gatherResources() {
   try {
    
       // Await the result of getObservations() and store the actual data
-      const animalsConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
-      console.log('full config title: ' + animalsConfig.getFullTitle());
-      const api_params    = setupAPIParams( animalsConfig );
+      const config  = await asyncGetConfiguration( json_path, getComponent(appState) );
+      console.log('full config title: ' + config.getFullTitle());
+      const api_params    = setupAPIParams( config );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
       const obs_data      = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
-      fresults(obs_data, animalsConfig); 
+      fresults(obs_data, config); 
 
     } catch (error) {
       console.error("An error occurred:", error);
