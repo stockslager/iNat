@@ -102,9 +102,10 @@ winurlparams.delete('idextra_user_id');
 let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
 winurlparams.delete('photo_curl_filename_prefix');
 
-let apibase = 'https://api.inaturalist.org/v1/observations';
-let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
+let url = window.location.origin + window.location.pathname;   
+//let apibase = 'https://api.inaturalist.org/v1/observations';
+//let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+//let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
 
 function replaceDoubleQuotes(str) {
   return str.replace(/"/g, '%22');
