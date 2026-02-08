@@ -108,7 +108,7 @@ function boxRow(field_id, field_name, ofv_datatype) {
     this.ofv_datatype = ofv_datatype;
 }
 
-function buildMenu( /*fields*/ ) {
+function buildMenu( config ) {
       let menu_string = '';
       let links = '';
       let taxon_param = '';
@@ -201,14 +201,14 @@ function buildMenu( /*fields*/ ) {
    if( getTaxonDD(appState) ) {
        sub_taxon_arr = getTaxonDD(appState);
    } else {
-       if( plantsConfig.subIcons ) {
+       if( config.subIcons ) {
            for( let i=0; i<results.length; i++) {
                 if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
-                    for( let j=0; j<plantsConfig.subIcons.length; j++ ) {
+                    for( let j=0; j<config.subIcons.length; j++ ) {
                          for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
-                              if( results[i].taxon.ancestor_ids[k].toString() === plantsConfig.subIcons[j].taxonId.toString() ){
-                                  if( !sub_taxon_arr.includes( plantsConfig.subIcons[j].taxonId ) ) {
-                                      sub_taxon_arr.push( plantsConfig.subIcons[j].taxonId );
+                              if( results[i].taxon.ancestor_ids[k].toString() === config.subIcons[j].taxonId.toString() ){
+                                  if( !sub_taxon_arr.includes( config.subIcons[j].taxonId ) ) {
+                                      sub_taxon_arr.push( config.subIcons[j].taxonId );
                                   }
                               }
                           }
@@ -221,17 +221,17 @@ function buildMenu( /*fields*/ ) {
        }
    }
 
-   if( plantsConfig.subIcons ) {
+   if( config.subIcons ) {
        let urlState = appState;
        urlState = setMenuId(urlState, '');
        urlState = setMenuName(urlState, '');
        urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
 
        links =  (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>'+CONST_ALL ));
-       for( let j=0; j<plantsConfig.subIcons.length; j++ ) {
-            if( sub_taxon_arr.includes( plantsConfig.subIcons[j].taxonId ) ) {
-                urlState  = setMenuId(urlState, plantsConfig.subIcons[j].taxonId);
-                links    += (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+plantsConfig.subIcons[j].icon+'</span>'+plantsConfig.subIcons[j].name ));
+       for( let j=0; j<config.subIcons.length; j++ ) {
+            if( sub_taxon_arr.includes( config.subIcons[j].taxonId ) ) {
+                urlState  = setMenuId(urlState, config.subIcons[j].taxonId);
+                links    += (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+config.subIcons[j].icon+'</span>'+config.subIcons[j].name ));
             }
        }
        menu_string += ( buildDD( capitalizeWords(menu_name), links) );
