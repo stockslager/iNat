@@ -73,8 +73,8 @@ function showRow( rec ) {
     }
  
     if( p_chosen_taxon_id ) {
-        const ancestry_arr = rec.taxon_min_species_ancestry.split(','); 
-        if( p_chosen_taxon_id.toString() === rec.taxon_id.toString() || ancestry_arr.includes( p_chosen_taxon_id.toString() )  ) {
+        const ancestry_arr = rec.taxon.min_species_ancestry.split(','); 
+        if( p_chosen_taxon_id.toString() === rec.taxon.id.toString() || ancestry_arr.includes( p_chosen_taxon_id.toString() )  ) {
             if( p_field_value ) {
                 return hasMatchingFieldValue(rec);
             } else {
@@ -268,16 +268,16 @@ function fresults(xobj) {
          let matchTaxonId = '';
          let taxon = '';
          
-         if( rec.taxon_id ){
-             tax_id = rec.taxon_id;
-             tax_name = rec.taxon_name || '';
-             pref_tax_name = rec.taxon_preferred_common_name || '';
+         if( rec.taxon.id ){
+             tax_id = rec.taxon.id;
+             tax_name = rec.taxon.name || '';
+             pref_tax_name = rec.taxon.preferred_common_name || '';
            
-             if( rec.taxon_default_photo_url ){
-                 tax_photo = '<img class="icon" src="'+rec.taxon_default_photo_url+'" />';
+             if( rec.taxon.default_photo_url ){
+                 tax_photo = '<img class="icon" src="'+rec.taxon.default_photo_url+'" />';
              }
          }
-
+       
          if( tax_id !== '' ) {
              winurlparams.delete('chosen_taxon_id');
              taxon = furl(url+'?'+winurlparams+'&chosen_taxon_id='+tax_id,'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');   
@@ -288,10 +288,10 @@ function fresults(xobj) {
                   {innerText:i+1},
                   {innerHTML:tax_photo},
                   {innerHTML:taxon},
-                  {innerHTML:furl(root_observations+rec.id,'<img class="mini_photo2" src="'+(rec.photos_url||'')+'" />')},
+                  {innerHTML:furl(root_observations+rec.id,'<img class="mini_photo2" src="'+(rec.photos[0].url||'')+'" />')},
               ];
 
-         let user_icon = rec.user_icon || '';
+         let user_icon = rec.user.icon || '';
          
          if( user_icon === '' ){
             user_icon += '<div class="npcicon"></div>';
@@ -430,7 +430,7 @@ function fresults(xobj) {
          }          
 
          values.push({innerHTML:user_icon});
-         values.push({innerHTML:furl(root_people+rec.user_login,rec.user_login)}); 
+         values.push({innerHTML:furl(root_people+rec.user.login,rec.user.login)}); 
 
          if( showRow(rec) ) {
              display_count++;
