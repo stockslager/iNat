@@ -175,9 +175,15 @@ function buildDropDownArray( results, box_array ) {
 
 function fresults(xobj) {
    let box_array = [];
+
    let total_results = xobj.total_results;
-   let display_count = 0;
-   let filtered_count = 0;
+   let per_page = xobj.per_page;
+   let page_curr = xobj.page;
+   let page_max = Math.ceil(total_results/per_page);
+   let page_prev = ((page_curr>1)?page_curr-1:null);
+   let page_next = ((page_curr<page_max)?page_curr+1:null);
+ 
+   let total_results = xobj.total_results;
    let results = xobj.results;
    let url = window.location.origin + window.location.pathname;   
 
@@ -446,9 +452,9 @@ function fresults(xobj) {
       winurlparams.delete('field_value');
       winurlparams.delete('field');
       faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">cached:</td><td id="tdright">'     + results.length + '</td><td id="tdkey"></td><td id="tdright">' + furl(url+'?'+winurlparams,'reset') + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">displayed:</td><td id="tdright">'  + display_count  + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">hidden:</td><td id="tdright">'     + filtered_count + '</td></tr></table></span>'});
+                                            '<tr id="trkey"><td id="tdkey">'+CONST_TOTAL_OBS+'</td><td id="tdright">'     + results.length     + '</td><td id="tdkey"></td><td id="tdright">' + furl(url+'?'+winurlparams,'reset') + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">'+CONST_PER_PAGE+'</td><td id="tdright">'      + fcomnum(per_page)  + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">'+CONST_PAGE+'</td><td id="tdright">'          + fcomnum(page_curr) + '</td></tr></table></span>'});
       if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
       if( p_field_value )     { winurlparams.append('field_value', p_field_value); }
       if( p_field )           { winurlparams.append('field', p_field); }
