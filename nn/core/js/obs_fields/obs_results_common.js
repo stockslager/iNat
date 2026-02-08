@@ -440,11 +440,9 @@ function fresults(xobj) {
          values.push({innerHTML:furl(root_people+rec.user.login,rec.user.login)}); 
 
          if( showRow(rec) ) {
-             display_count++;
              tempBrow.push(values);
-         } else {
-             filtered_count++;
-         }
+         } 
+       
       };
 
       winurlparams.delete('chosen_taxon_id');
