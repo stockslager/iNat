@@ -2,13 +2,13 @@ function hasFieldValueThatMatchesMergedValue( rec ) {
  
   for( let i=0; i<rec.ofvs.length; i++ ) {
        if( field_array.includes(rec.ofvs[i].field_id.toString() ) ) {
-           if( rec.ofvs[i].datatype === 'taxon' && rec.ofvs[i].taxon_id ) {
+           if( rec.ofvs[i].datatype === 'taxon' && rec.ofvs[i].taxon.id ) {
                if( isNaN(rec.ofvs[i].value) ) {  // needed to handle case where type taxon has plain text value
                    if( p_field_value.toLowerCase().toString() === rec.ofvs[i].value.toLowerCase().toString() ) {
                        return true;
                    }
                } else {
-                   const ofvs_ancestry_arr = rec.ofvs[i].taxon_min_species_ancestry.split(','); 
+                   const ofvs_ancestry_arr = rec.ofvs[i].taxon.min_species_ancestry.split(','); 
                    if( ofvs_ancestry_arr.includes(p_field_value.toString()) ) {
                        return true;
                    }
@@ -32,13 +32,13 @@ function hasMatchingFieldValue( rec ) {
   for( let i=0; i<rec.ofvs.length; i++ ) {
        if( field_array.includes(rec.ofvs[i].field_id.toString() ) ) {
            if( rec.ofvs[i].field_id.toString() === p_field.toString() ) {
-               if( rec.ofvs[i].datatype === 'taxon' && rec.ofvs[i].taxon_id ) {
+               if( rec.ofvs[i].datatype === 'taxon' && rec.ofvs[i].taxon.id ) {
                    if( isNaN(rec.ofvs[i].value) ) {  // needed to handle case where type taxon has plain text value
                        if( p_field_value.toLowerCase().toString() === rec.ofvs[i].value.toLowerCase().toString() ) {
                            return true;
                        }
                    } else {
-                       const ofvs_ancestry_arr = rec.ofvs[i].taxon_min_species_ancestry.split(','); 
+                       const ofvs_ancestry_arr = rec.ofvs[i].taxon.min_species_ancestry.split(','); 
                        if( ofvs_ancestry_arr.includes(p_field_value.toString()) ) {
                            return true;
                        }
@@ -321,11 +321,11 @@ function fresults(xobj) {
                           } else if( dataType !== rec.ofvs[j].datatype ){
                               mismatch = 'yes';
                           }
-                          if( rec.ofvs[j].taxon_id ){
+                          if( rec.ofvs[j].taxon.id ){
                               if( matchTaxonId === '' ){
-                                  matchTaxonId = rec.ofvs[j].taxon_id;
+                                  matchTaxonId = rec.ofvs[j].taxon.id;
                               }
-                              if( rec.ofvs[j].taxon_id !== matchTaxonId ){
+                              if( rec.ofvs[j].taxon.id !== matchTaxonId ){
                                   mismatch = 'yes';
                               }
                           }
@@ -335,10 +335,10 @@ function fresults(xobj) {
                           
                           field1 = rec.ofvs[j].value.toLowerCase();
 
-                          if( rec.ofvs[j].taxon_id ){ 
-                              let name  = rec.ofvs[j].taxon_name || '';
-                              let cname = rec.ofvs[j].taxon_preferred_common_name || '';
-                              if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon_iconic_taxon_id.toString() ){
+                          if( rec.ofvs[j].taxon.id ){ 
+                              let name  = rec.ofvs[j].taxon.name || '';
+                              let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                              if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
                                   field1 = name;
                                   displayCommonName = cname.toLowerCase();
                                   displayTaxonName = name;
@@ -367,9 +367,9 @@ function fresults(xobj) {
                                   field1 = rec.ofvs[j].value.toLowerCase();
                                   displayName = rec.ofvs[j].value.toLowerCase();
                                 
-                                  if( rec.ofvs[j].taxon_id ){
-                                      let name  = rec.ofvs[j].taxon_name || '';
-                                      let cname = rec.ofvs[j].taxon_preferred_common_name || '';
+                                  if( rec.ofvs[j].taxon.id ){
+                                      let name  = rec.ofvs[j].taxon.name || '';
+                                      let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                                       field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                                   }
                                   if( p_field_value === '' ){
