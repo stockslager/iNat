@@ -21,6 +21,6 @@ const CONST_ART_UTF8       = '&#127912;';        // pallete icon for journaling 
 const CONST_BEETLE_UTF8    = '&#x1FAB2;';
 
 // iNat api per_page (number of rows per_page requested from api)...
-const CONST_OBSERVATIONS_PER_PAGE           = '10';
+const CONST_OBSERVATIONS_PER_PAGE           = '100';
 const CONST_SPECIES_COUNTS_PER_PAGE         = '10';
 const CONST_OBSERVATIONS_OBSERVERS_PER_PAGE = '10';
