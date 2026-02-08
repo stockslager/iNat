@@ -142,11 +142,12 @@ function buildPage( configManager ) {
            }
 
            if( config.component === 'animals' ) {
+               appState = setComponent( appState, 'fields' );
+               let fauna_params = buildParameterList(appState);
                brow = faddelem('tr',tbody);
-               let a_params = 'project_id='+config.project+'&obs_fields='+config.fieldId+'&field:'+config.fieldName+'=';
                values = [
-                  {innerHTML:furl('../fields/field_viewer.html?'+a_params/*encodeURIComponent(a_params)*/, CONST_BEETLE_UTF8  )},
-                  {innerHTML:furl('../fields/field_viewer.html?'+a_params/*encodeURIComponent(a_params)*/, CONST_ANIMALS )},
+                  {innerHTML:furl('../fields/field_viewer.html?'+fauna_params, CONST_BEETLE_UTF8  )},
+                  {innerHTML:furl('../fields/field_viewer.html?'+fauna_params, CONST_ANIMALS )},
                   {innerText:CONST_COLONY_DESC},
                ];
                faddelems('td',brow,values);
