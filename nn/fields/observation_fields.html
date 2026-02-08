@@ -258,16 +258,16 @@ function buildPage( xobj, config ) {
    let page_prev = ((page_curr>1)?page_curr-1:null);
    let page_next = ((page_curr<page_max)?page_curr+1:null);
 
+   let results = xobj.results;
+   let url     = window.location.origin + window.location.pathname; 
+
+   buildMenu(results, config);
+
    faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
                                          '<tr id="trkey"><td id="tdkey">'+CONST_TOTAL_OBS + '</td><td id="tdright">' + total_results      + '</td></tr>' + 
                                          '<tr id="trkey"><td id="tdkey">'+CONST_PER_PAGE +  '</td><td id="tdright">' + fcomnum(per_page)  + '</td></tr>' + 
                                          '<tr id="trkey"><td id="tdkey">'+CONST_PAGE +      '</td><td id="tdright">' + fcomnum(page_curr) + ' of ' + fcomnum(page_max) + '</td></tr></table></span>'});
   
-   let results = xobj.results;
-   let url = window.location.origin + window.location.pathname; 
-
-   buildMenu(results, config);
-
    let box_array = [];
    for( let f=0; f<field_array.length; f++ ){
         box_array.push(new boxRow(field_array[f], '') );
