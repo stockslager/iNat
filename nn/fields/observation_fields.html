@@ -108,7 +108,7 @@ function boxRow(field_id, field_name, ofv_datatype) {
     this.ofv_datatype = ofv_datatype;
 }
 
-function buildMenu( fields ) {
+function buildMenu( /*fields*/ ) {
       let menu_string = '';
       let links = '';
       let taxon_param = '';
@@ -120,6 +120,7 @@ function buildMenu( fields ) {
  
       menu_string = '<div class="navbar">';
 
+ /*
       if( fields && fields.length > 0 ) {
           for( let i=0; i<fields.length; i++ ) {
                if( p_obs_fields ) {
@@ -149,6 +150,7 @@ function buildMenu( fields ) {
                    }
                }
           }
+          
 
           // when finished loading the drop-down set the obs_fields and chosen_datatypes back to what was
           // initially passed in, otherwise the last one will show up in the obs_field param for every link.
@@ -156,6 +158,7 @@ function buildMenu( fields ) {
           winurlparams.append('obs_fields', p_obs_fields);
           winurlparams.delete('chosen_datatypes');
           winurlparams.append('chosen_datatypes', p_chosen_datatypes);
+          
 
           // don't add the drop down if a taxon_id or field_value has been chosen.
           if( p_chosen_taxon_id || p_field_value ) {
@@ -164,7 +167,9 @@ function buildMenu( fields ) {
               menu_string += buildDD('Observation Fields', links ); 
           }
       }
+      */
 
+      /*
       // if the comma delimited datatype array only has one datatype
       // and there is more than one observation field specified,
       // the observation fields can be merged since they're of the same type.
@@ -190,6 +195,47 @@ function buildMenu( fields ) {
               }
           }
       }
+      */
+
+   let sub_taxon_arr = [];
+   if( getTaxonDD(appState) ) {
+       sub_taxon_arr = getTaxonDD(appState);
+   } else {
+       if( plantsConfig.subIcons ) {
+           for( let i=0; i<results.length; i++) {
+                if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
+                    for( let j=0; j<plantsConfig.subIcons.length; j++ ) {
+                         for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
+                              if( results[i].taxon.ancestor_ids[k].toString() === plantsConfig.subIcons[j].taxonId.toString() ){
+                                  if( !sub_taxon_arr.includes( plantsConfig.subIcons[j].taxonId ) ) {
+                                      sub_taxon_arr.push( plantsConfig.subIcons[j].taxonId );
+                                  }
+                              }
+                          }
+                     }
+                }
+            }
+            // add the comma delimited list of taxons to the url params
+            // so the full list can still be shown during filtration.
+            appState = setTaxonDD(appState, sub_taxon_arr.join());
+       }
+   }
+
+   if( plantsConfig.subIcons ) {
+       let urlState = appState;
+       urlState = setMenuId(urlState, '');
+       urlState = setMenuName(urlState, '');
+       urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+
+       links =  (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>'+CONST_ALL ));
+       for( let j=0; j<plantsConfig.subIcons.length; j++ ) {
+            if( sub_taxon_arr.includes( plantsConfig.subIcons[j].taxonId ) ) {
+                urlState  = setMenuId(urlState, plantsConfig.subIcons[j].taxonId);
+                links    += (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+plantsConfig.subIcons[j].icon+'</span>'+plantsConfig.subIcons[j].name ));
+            }
+       }
+       menu_string += ( buildDD( capitalizeWords(menu_name), links) );
+   }
 
       let urlState  = clearForDashParams(appState);
       menu_string += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
@@ -245,6 +291,7 @@ async function gatherResources() {
       const obs_data      = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
+      buildMenu();
       fresults(obs_data); 
 
     } catch (error) {
