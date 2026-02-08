@@ -87,13 +87,18 @@ function buildPage(xobj, animalConfig) {
       menu_name = animalConfig.getSubIconNameByTaxonId(animalConfig, getMenuId(appState)) || CONST_SHOW;
 
       buildMenu( results, animalConfig );
+
+      let a_params = '?project_id='+animalConfig.project+'&obs_fields='+animalConfig.fieldId+'&field:'+animalConfig.fieldName+'=';
+      a_params += '&taxon_id='+rec.taxon.id;
    
       if( !getMenuId(appState) ) {
-          dlString = furl('./thru_animal_grid.html'+buildParameterList(appState),'<span id="topright">'+CONST_ANIMAL_ALL_OBS+'</span>');
+          //dlString = furl('./thru_animal_grid.html'+buildParameterList(appState),'<span id="topright">'+CONST_ANIMAL_ALL_OBS+'</span>');
+          dlString = furl('./field_viewer.html'+a_params,'<span id="topright">'+CONST_ANIMAL_ALL_OBS+'</span>');
       } else {
           let urlState = appState;  // creates a copy
           urlState = setTaxonId(urlState, getMenuId(appState));  // set taxon id to menu id if a filter was chosen for say, birds.
-          dlString = furl('./thru_animal_grid.html'+buildParameterList(urlState),'<span id="topright">'+CONST_ANIMAL_ALL+capitalizeWords(menu_name)+'</span>');
+          //dlString = furl('./thru_animal_grid.html'+buildParameterList(urlState),'<span id="topright">'+CONST_ANIMAL_ALL+capitalizeWords(menu_name)+'</span>');
+          dlString = furl('./field_viewer.html'+a_params+'&taxon_id='+getMenuId(appState),'<span id="topright">'+CONST_ANIMAL_ALL_OBS+'</span>');
       }
 
       faddelem('p',document.body,{innerHTML:CONST_TOTAL_SPECIES+fcomnum(total_results)+' <br/>'
