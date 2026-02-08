@@ -183,7 +183,6 @@ function fresults(xobj) {
    let page_prev = ((page_curr>1)?page_curr-1:null);
    let page_next = ((page_curr<page_max)?page_curr+1:null);
  
-   let total_results = xobj.total_results;
    let results = xobj.results;
    let url = window.location.origin + window.location.pathname;   
 
