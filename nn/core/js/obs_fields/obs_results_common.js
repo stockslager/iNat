@@ -176,7 +176,6 @@ function buildDropDownArray( results, box_array ) {
 function fresults( results, box_array ) {
  
    let labels = [];
-   let obs_field_box = '';
    let labelCount = 0;
 
    let merged = 'observation field';
