@@ -272,9 +272,11 @@ function fresults(xobj) {
              tax_id = rec.taxon.id;
              tax_name = rec.taxon.name || '';
              pref_tax_name = rec.taxon.preferred_common_name || '';
-           
-             if( rec.taxon.default_photo_url ){
-                 tax_photo = '<img class="icon" src="'+rec.taxon.default_photo_url+'" />';
+
+             if( rec.taxon.default_photo ) {
+                 if( rec.taxon.default_photo.url ){
+                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo_url+'" />';
+                 }
              }
          }
        
