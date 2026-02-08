@@ -79,6 +79,7 @@ let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observa
 let apirefname = 'iNaturalist Observations';
 let apiref = furl(apirefurl,apirefname);
 let cache_name = window.location.pathname;
+let url = window.location.origin + window.location.pathname;   
 console.log('cache name ~ ' + cache_name);
 
 function buildTitle( name, content, tooltip ) {
@@ -114,9 +115,7 @@ function buildMenu( results, config ) {
       let taxon_param = '';
       let ofv_datatype_array = [];
       let chosen_datatypes_array = [];
-      let url = window.location.origin + window.location.pathname;   
       let menu_name = config.getSubIconNameByTaxonId(config, getMenuId(appState)) || CONST_SHOW;
-
 
       ofv_datatype_array = p_ofv_datatype.split(',');
       chosen_datatypes_array = p_chosen_datatypes.split(',');
