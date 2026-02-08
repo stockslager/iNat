@@ -28,6 +28,8 @@ const ATTRIBUTE_PLACEMENUNAME   = 'placemenuname';
 const ATTRIBUTE_GARDENLISTVALUE = 'gardenlistvalue';
 const ATTRIBUTE_TAXONDD         = 'taxondd';
 const ATTRIBUTE_OBSID           = 'obsid';
+const ATTRIBUTE_FIELDNAME       = 'fieldname';
+const ATTRIBUTE_FIELDVALUE      = 'fieldvalue';
 const ATTRIBUTE_PAGE            = 'page';
 const ATTRIBUTE_PER_PAGE        = 'per_page';
 
@@ -53,6 +55,8 @@ let appState = {
   [ATTRIBUTE_GARDENLISTVALUE]:  '',
   [ATTRIBUTE_TAXONDD]:   '',
   [ATTRIBUTE_OBSID]:     '',
+  [ATTRIBUTE_FIELDNAME]: '',
+  [ATTRIBUTE_FIELDVALUE]: '',
   [ATTRIBUTE_PAGE]:      '',
   [ATTRIBUTE_PER_PAGE]:  ''
 
@@ -87,6 +91,8 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_GARDENLISTVALUE]: '',
     [ATTRIBUTE_TAXONDD]:   '',
     [ATTRIBUTE_OBSID]:     '',
+    [ATTRIBUTE_FIELDNAME]: '',
+    [ATTRIBUTE_FIELDVALUE]: '',
     [ATTRIBUTE_PAGE]:      '',
     [ATTRIBUTE_PER_PAGE]:  ''
   };
@@ -194,6 +200,8 @@ function getPlaceMenuName(state)   { return (getAttribute(state, ATTRIBUTE_PLACE
 function getGardenListValue(state) { return (getAttribute(state, ATTRIBUTE_GARDENLISTVALUE)); }
 function getTaxonDD(state)         { return (getAttribute(state, ATTRIBUTE_TAXONDD)); }
 function getObsId(state)           { return (getAttribute(state, ATTRIBUTE_OBSID)); }
+function getFieldName(state)       { return (getAttribute(state, ATTRIBUTE_FIELDNAME)); }
+function getFieldValue(state)      { return (getAttribute(state, ATTRIBUTE_FIELDVALUE)); }
 function getPage(state)            { return (getAttribute(state, ATTRIBUTE_PAGE)); }
 function getPerPage(state)         { return (getAttribute(state, ATTRIBUTE_PER_PAGE)); }
 
@@ -222,6 +230,8 @@ function setPlaceMenuName(state, value)   { return (setAttribute(state, ATTRIBUT
 function setGardenListValue(state, value) { return (setAttribute(state, ATTRIBUTE_GARDENLISTVALUE, value)); }
 function setTaxonDD(state, value)         { return (setAttribute(state, ATTRIBUTE_TAXONDD, value)); }
 function setObsId(state, value)           { return (setAttribute(state, ATTRIBUTE_OBSID, value)); }
+function setFieldName(state, value)       { return (setAttribute(state, ATTRIBUTE_FIELDNAME, value)); }
+function setFieldValue(state, value)      { return (setAttribute(state, ATTRIBUTE_FIELDVALUE, value)); }
 function setPage(state, value)            { return (setAttribute(state, ATTRIBUTE_PAGE, value)); }
 function setPerPage(state, value)         { return (setAttribute(state, ATTRIBUTE_PER_PAGE, value)); }
 
@@ -370,6 +380,24 @@ function getObsIdParam(state, param_nm)   {
   let obs_id = getObsId(state);
   if( obs_id ) { 
       return (param_nm + obs_id);
+  } else {
+      return '';
+  }
+}
+
+function getFieldNameParam(state, param_nm)   { 
+  let field_name = getFieldName(state);
+  if( field_name ) { 
+      return (param_nm + field_name);
+  } else {
+      return '';
+  }
+}
+
+function getFieldVaueParam(state, param_nm)   { 
+  let field_value = getFieldValue(state);
+  if( field_value ) { 
+      return (param_nm + field_value);
   } else {
       return '';
   }
@@ -726,6 +754,8 @@ function clearForSpeciesCountsParams(state) {
   urlState = setTaxonId( urlState, '' );
   urlState = setTaxonName( urlState, '');
   urlState = setLSTaxonId( urlState, '');
+  urlState = setFieldName( urlState, '');
+  urlState = setFieldValue( urlState, ''); 
 
   return urlState;
 }
