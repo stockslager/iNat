@@ -193,49 +193,6 @@ function fresults( results, box_array ) {
    let tempBrow = [];
    let firstCol = 'yes';
         
-   box_array = box_array.filter(box_array => box_array.field_name !== '');
-
-   if( p_obs_fields ) {
-       obs_field_box += '<span id="topright"><span id="mismatch">&#127800; ~ obs field mismatch.</span><span id="dltest"><table id="tablekey">';
-       obs_field_box += '<tr id="trkey">';  
-
-       if( p_operator ) {
-           obs_field_box += '<td id="key">field id</td>  <td id="key">'+merged+'</td><td id="tdkey"></td><td id="keyx"></td></tr>';
-       } else {
-           obs_field_box += '<td id="key">field id</td>  <td id="key">'+merged+'</td><td id="tdkey"></td><td id="keyx">'+buildEmptyLink()+'</td></tr>';
-       }
-    
-       for( let e=0; e<box_array.length; e++ ) {
-            labelCount++;
-            if( box_array[e].field_name !== '' ) {
-                obs_field_box += '<tr id="trkey">';
-                obs_field_box += '<td id="tdkey">'+buildRemoveObsFieldURL( box_array[e], box_array ) + '</td>';
-                obs_field_box += ('<td id="tdsecond">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
-                if( p_operator !== 'merge' ){
-                    labels.push({innerText:box_array[e].field_name});
-                } else {
-                    if( firstCol === 'yes' ){
-                        firstCol = 'no';
-                        labels.push({innerText:'merged Fields (see upper right)'});
-                    } 
-                }
-            } else {
-                obs_field_box += ('<tr id="trkey"><td id="tdkey">' + box_array[e].field_id + '</td>');
-                obs_field_box += ('<td id="tdsecond">missing from this page</td></tr>');
-                if( p_operator !== 'merge' ) {
-                    labels.push({innerText:''});
-                }
-            }
-       }
-
-    console.log('box2 ' + obs_field_box);
-       obs_field_box += '</table></span></span>';
-       faddelem('p',document.body,{innerHTML:obs_field_box});
-
-       // hide the mismatch warning... only display it if there is a mismatch in the table.
-       document.getElementById("mismatch").style.display = "none"; 
-   }
-     
    for( let i=0; i<results.length; i++) {
       let rec = results[i];
       let tax_name = '';
