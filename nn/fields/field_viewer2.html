@@ -20,7 +20,7 @@
 </head>
 
 <style>
-   #dltest { margin-left:15px; float:right; max-width:900px; display: inline-table; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }
+   #dltest { margin-left:15px; float:right; width:fit-content; display: inline-table; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }
    #itable { float:right; width:fit-content; display: inline-table; justify-content:start; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; white-space:nowrap; }   
    #key { color:var(--color-text); text-decoration:underline; font: 16px Sans-Serif; padding:0; padding-right: 25px; }
    #tablekey { display:inline-table; }
@@ -28,6 +28,7 @@
    #tdkey { padding:0; padding-right: 25px; }
    #main { width:100%; }
    #h2 { font-weight:bold; font-size:20px; }
+   #divhead { max-width: 900px; }
    #cap { align:left; text-decoration:underline; font: 16px Sans-Serif; padding:0; padding-right: 25px; }
    p { width:100%; }
    .npcicon { width:38px; height:38px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 5px; border-radius: 50px; }
@@ -249,7 +250,7 @@ function fresults( xobj, config ) {
       let mismatch = '';
       let field_array_copy = field_array;
       let flower = '';
-      let dlString = '';
+      let dlString = '<div id="divhead">';
       let labelCount = 0;
 
       let merged = 'observation field';
@@ -540,7 +541,7 @@ function fresults( xobj, config ) {
 
       faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br />'});  
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br /></div>'});  
 
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
