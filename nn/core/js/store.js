@@ -5,7 +5,7 @@ const COMPONENT_OBSERVERS = 'observers';
 const COMPONENT_HIKER     = 'hiker';
 const COMPONENT_YARD      = 'yard';
 const COMPONENT_ART       = 'art';
-const COMPONENT_FIELDS    = 'fields';
+const COMPONENT_ANIMALS   = 'animals';
 
 // --- Constants for Attribute Keys ---
 const ATTRIBUTE_PROJECT         = 'project';
@@ -527,7 +527,7 @@ function validateColony(state) {
 /*
  * component based validation
  *
- * Validates the state for fields-specific requirements.
+ * Validates the state for animals-specific requirements.
  * Ensures the 'params' attribute has a value.
  * Ensures the 'component' attribute has a value. 
  * Everything else should come from the configuration.
@@ -536,13 +536,13 @@ function validateColony(state) {
  * @param {object} state The current application state object.
  * @returns {string} An error message if invalid, otherwise an empty string.
  */
-function validateFields(state) {
+function validateAnimals(state) {
   let message = '';
   
   message = validateConfig(state);
   if( message ) { return message; }
 
-  if( getComponent(state) !== COMPONENT_FIELDS ) {
+  if( getComponent(state) !== COMPONENT_ANIMALS ) {
       let message = 'Component name required.  Component name is required for displaying data.' +   
                     'Component name should exist in the configuration file identified by the &amp;params=xxxxx';
       return message;
