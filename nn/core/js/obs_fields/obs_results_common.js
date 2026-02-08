@@ -326,7 +326,7 @@ function fresults(xobj) {
                           } else if( dataType !== rec.ofvs[j].datatype ){
                               mismatch = 'yes';
                           }
-                          if( rec.ofvs[j].taxon.id ){
+                          if( rec.ofvs[j].taxon && rec.ofvs[j].taxon.id ){
                               if( matchTaxonId === '' ){
                                   matchTaxonId = rec.ofvs[j].taxon.id;
                               }
