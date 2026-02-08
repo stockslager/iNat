@@ -1,5 +1,6 @@
 // global constants...
 const CONST_TOTAL_SPECIES  = 'total species: ';  // common api results header
+const CONST_TOTAL_OBS      = 'total observations: ';
 const CONST_PAGE           = 'page: ';           // common api results header 
 const CONST_PER_PAGE       = 'per page: ';       // common api results header
 const CONST_ON             = 'On ';
