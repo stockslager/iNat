@@ -49,11 +49,16 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let p_obs_field_array = winurlparams.get('obs_fields') || '';
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_field = '';
 let p_field_value = '';
 let opts = '';
 let field_array = [];
+
+if( p_obs_field_array !== '' ){
+    field_array = p_obs_field_array.split(",");
+}
 
 appState       = buildStateFromParams(winurlparams);
 
