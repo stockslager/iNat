@@ -207,7 +207,7 @@ function fresults( results, box_array ) {
     
        for( let e=0; e<box_array.length; e++ ) {
             labelCount++;
-            if( box_array[e].field_name !== '' ) 
+            if( box_array[e].field_name !== '' ) {
                 obs_field_box += '<tr id="trkey">';
                 obs_field_box += '<td id="tdkey">'+buildRemoveObsFieldURL( box_array[e], box_array ) + '</td>';
                 obs_field_box += ('<td id="tdsecond">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
