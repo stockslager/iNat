@@ -335,7 +335,7 @@ function fresults( xobj, config ) {
              let urlState = appState;
              urlState = setTaxonId(urlState, tax_id);
              urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
-             taxon = furl('./field_viewer.html'+buildParameterList(urlState),'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl('./field_viewer2.html'+buildParameterList(urlState),'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
          values = [
@@ -394,7 +394,10 @@ function fresults( xobj, config ) {
                                   field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                               }
                               if( p_field_value === '' ){
-                                  values.push({innerHTML:furl('./field_viewer2.html'+opts+param1+'&taxonid='+getTaxonId(appState), field1)});
+                                  let urlState = appState;
+                                  urlState = setTaxonId(urlState, tax_id);
+                                  urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+                                  values.push({innerHTML:furl('./field_viewer2.html'+buildParameterList(urlState), field1)});
                               } else {
                                   values.push({innerHTML:field1});
                               }
