@@ -463,7 +463,7 @@ function setupAPIParams( config ) {
 
    if( config.fieldName )        { api_params += '&field:'    + config.fieldName;  } 
    if( getFieldValue(appState) ) { api_params += '='          + getFieldValue(appState); }
-   if( getUserId(appState) )     { api_params += '&user_id:'  + getUserId(appState); }
+   if( getUser(appState) )       { api_params += '&user_id:'  + getUser(appState); }
 
    // if a place_id was chosen from the place drop-down, use that place_id...
    if( getPlaceMenuId(appState) ) {
