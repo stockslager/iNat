@@ -190,8 +190,9 @@ function buildMenu( fields ) {
               }
           }
       }
- 
-      menu_string += buildHome( furl('./observation_fields.html?clear_cache=yes','Start Over') );
+
+      let urlState  = clearForDashParams(appState);
+      menu_string += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
  
       menu_string += '</div>';
 
