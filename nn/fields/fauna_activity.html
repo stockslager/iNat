@@ -141,10 +141,13 @@ function buildPage(xobj, animalConfig) {
              let urlState = appState;  // creates a copy
              urlState = setTaxonId(urlState, rec.taxon.id);
 
+             let a_params = 'project_id='+config.project+'&obs_fields='+config.fieldId+'&field:'+config.fieldName+'=';
+             a_params += '&taxon_id='+rec.taxon.id;
+
              let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl('./thru_animal_grid.html'+buildParameterList(urlState),displayName)},
+                  {innerHTML:furl('./field_viewer.html'+a_params,displayName)},
                   {innerText:rec.count||''},
                   ];
         
