@@ -340,7 +340,7 @@ function fresults(xobj) {
                           
                           field1 = rec.ofvs[j].value.toLowerCase();
 
-                          if( rec.ofvs[j].taxon.id ){ 
+                          if( rec.ofvs[j].taxon && rec.ofvs[j].taxon.id ){ 
                               let name  = rec.ofvs[j].taxon.name || '';
                               let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                               if( p_ofield_iconic === '' || p_ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
@@ -372,7 +372,7 @@ function fresults(xobj) {
                                   field1 = rec.ofvs[j].value.toLowerCase();
                                   displayName = rec.ofvs[j].value.toLowerCase();
                                 
-                                  if( rec.ofvs[j].taxon.id ){
+                                  if( rec.ofvs[j].taxon && rec.ofvs[j].taxon.id ){
                                       let name  = rec.ofvs[j].taxon.name || '';
                                       let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                                       field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
