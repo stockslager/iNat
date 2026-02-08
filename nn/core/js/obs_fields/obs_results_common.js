@@ -275,7 +275,7 @@ function fresults(xobj) {
 
              if( rec.taxon.default_photo ) {
                  if( rec.taxon.default_photo.url ){
-                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo_url+'" />';
+                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
                  }
              }
          }
