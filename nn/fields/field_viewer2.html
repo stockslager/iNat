@@ -219,11 +219,16 @@ function fresults( xobj, config ) {
       let labelCount = 0;
 
       let merged = 'observation field';
-      labels = [
-            {innerText:'#'},
-            {innerText:'Photo'},
-            {innerText:'Name'}, 
-            {innerText:'Obs Photo'}];
+    
+      labels = [{innerText:'#'}];
+
+      if( config.component !== COMPONENT_ANIMALS ) {
+          labels.push({innerText:'Photo'});
+          labels.push({innerText:'Name'});
+          labels.push({innerText:'Obs Photo'});
+      } else {
+          labels.push({innerText:'Photo'});
+      }
     
       let tempBrow = [];
 
@@ -361,12 +366,14 @@ function fresults( xobj, config ) {
              taxon = furl('./field_viewer2.html'+buildParameterList(urlState),'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
-         values = [
-                  {innerText:i+1},
-                  {innerHTML:tax_photo},
-                  {innerHTML:taxon},
-                  {innerHTML:furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')},
-              ];
+         values = [{innerText:i+1}];
+
+         if( config.component !== COMPONENT_ANIMALS ) {
+             labels.push({innerHTML:tax_photo});
+             labels.push({innerHTML:taxon});
+         }              
+       
+         labels.push({furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')});
 
          let user_icon = rec.user.icon || '';
          
