@@ -104,15 +104,17 @@ function setupAPIParams( config ) {
     
     let api_params = '';
 
-    api_params += '?project_id='+config.insectProject;
-    api_params += getTaxonIdParam(appState, '&taxon_id='); 
+    api_params += '?project_id='+config.project;
+    if( config.fieldName )        { api_params += '&field:'    + config.fieldName;  } 
+    if( getFieldValue(appState) ) { api_params += '='          + getFieldValue(appState); }
 
-    // possibly the place_id will need to come from the session eventually...
-    // if there's a garden with multiple places.
-    if( config.defaultPlace ) { api_params += '&place_id=' + config.defaultPlace; }  
-    if( getUser(appState) )            { api_params += '&user_id='  + getUser(appState); }  
-  
-    api_params += '&field:'+config.fieldName+'=' + getPlantId(appState);
+    // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
+    // use the menu_id if one was passed in.
+    if( getTaxonId(appState) ) {
+        api_params += '&taxon_id='+getTaxonId(appState);
+    } else {
+        if( getMenuId(appState) ) { api_params += '&taxon_id=' + getMenuId(appState); }
+    }
 
     return api_params;
 }
