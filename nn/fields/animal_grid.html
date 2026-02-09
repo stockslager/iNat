@@ -84,6 +84,8 @@ function buildMenu(config) {
    }
 
    let url_state = appState;
+   url_state = setFieldValue(url_state, '');
+   url_state = setPage(url_state, '');
    
    menu_string += buildHome( furl('./animal_activity.html'+buildParameterList(url_state),CONST_LEAF_UTF8) );
    menu_string += '</div>';
