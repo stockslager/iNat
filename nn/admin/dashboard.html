@@ -154,6 +154,39 @@ function buildPage( configManager ) {
                faddelems('td',brow,values);
            }
       }
+ 
+      studies_labels = [];
+
+      studies_labels = [
+            {innerText:CONST_ICON},
+            {innerText:CONST_COMPONENT},
+            {innerText:CONST_DESCRIPTION}, 
+      ];
+ 
+      let studies_table = faddelem('table',document.body,{id:'main'});                    
+      let studies_thead = faddelem('thead',table);
+      let studies_hrow  = faddelem('tr',thead);
+      
+      faddelems('th',studies_hrow,studies_labels);
+      let studies_tbody = faddelem('tbody',studies_table);
+ 
+      for( let i=0; i<configManager.configurations.length; i++ ) {
+           let brow = '';
+           let values = [];
+           let config = configManager.configurations[i];
+
+           if( config.component === 'plants' ) {
+               appState = setComponent( appState, COMPONENT_STUDIES );
+               let plant_params = buildParameterList(appState);
+               brow = faddelem('tr',studies_tbody);
+               values = [
+                  {innerHTML:furl('../studies/field_study.html'+plant_params, CONST_LEAF_UTF8  )},
+                  {innerHTML:furl('../studies/field_study.html'+plant_params, capitalizeWords(COMPONENT_STUDIES) )},
+                  {innerText:CONST_STUDIES_DESC},
+               ];
+               faddelems('td',brow,values);
+           }
+      }
 };
 </script>
  
