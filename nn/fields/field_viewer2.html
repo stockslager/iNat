@@ -369,11 +369,11 @@ function fresults( xobj, config ) {
          values = [{innerText:i+1}];
 
          if( config.component !== COMPONENT_ANIMALS ) {
-             labels.push({innerHTML:tax_photo});
-             labels.push({innerHTML:taxon});
+             values.push({innerHTML:tax_photo});
+             values.push({innerHTML:taxon});
          }              
        
-         labels.push({innerHTML:furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')});
+         values.push({innerHTML:furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')});
 
          let user_icon = rec.user.icon || '';
          
