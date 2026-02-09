@@ -164,6 +164,8 @@ function buildPage( configManager ) {
       ];
   
       for( let i=0; i<configManager.configurations.length; i++ ) {
+       
+           let config = configManager.configurations[i];
 
            if( config.component === COMPONENT_STUDIES ) {
                let studies_table = faddelem('table',document.body,{id:'main'});                    
@@ -175,7 +177,6 @@ function buildPage( configManager ) {
 
                let brow = '';
                let values = [];
-               let config = configManager.configurations[i];
 
                appState = setComponent( appState, COMPONENT_STUDIES );
                let plant_params = buildParameterList(appState);
