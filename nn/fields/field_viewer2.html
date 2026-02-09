@@ -33,6 +33,12 @@
    p { width:100%; }
    .npcicon { width:34px; height:34px; text-align:center; vertical-align:middle; z-index: 9999;  border: 1px solid cornflowerblue; padding: 5px; border-radius: 50px; }
    .smallicon { height:34px; width:34px; border-radius:50%; top:10px; left:20px;}
+   .user {
+       display: flex;
+       flex-direction: column; /* Stacks the spans vertically into rows */
+       align-items: center;    /* Centers items horizontally */
+       justify-content: center; /* Centers items vertically within the container */
+   }
  
    .navbar {
       max-width: 900px;
@@ -365,9 +371,9 @@ function fresults( xobj, config ) {
          let user_icon = rec.user.icon || '';
          
          if( user_icon === '' ){
-            user_icon += '<div class="npcicon"></div>';
+            user_icon += '<div class="user"><div class="npcicon"></div>';
          } else {
-            user_icon = '<img class="smallicon" src="'+user_icon+'" />';
+            user_icon = '<div class="user"><img class="smallicon" src="'+user_icon+'" />';
          }
 
          let emojiTitle = 'Merged Observation Fields:&#10;';
@@ -435,7 +441,7 @@ function fresults( xobj, config ) {
          urlState = setUser(urlState, rec.user.login);
          urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
          //values.push({innerHTML:user_icon});
-         values.push({innerHTML:user_icon + furl('./field_viewer2.html'+buildParameterList(urlState),rec.user.login)});
+         values.push({innerHTML:'<span>' + user_icon + '</span><span>' + furl('./field_viewer2.html'+buildParameterList(urlState),rec.user.login) + '</span></div>'});
 
          tempBrow.push(values);
       };
