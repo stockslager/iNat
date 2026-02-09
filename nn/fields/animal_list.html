@@ -28,7 +28,6 @@ let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
 
 appState       = buildStateFromParams(winurlparams);
 
-let dlString   = '';
 let menu_name  = '';
 
 // page & api specific constants
@@ -88,21 +87,13 @@ function buildPage(xobj, animalConfig) {
 
       buildMenu( results, animalConfig );
 
-      /*let a_params = '?project_id='+animalConfig.project+'&obs_fields='+animalConfig.fieldId+'&field:'+animalConfig.fieldName+'=';
-   
-      if( !getMenuId(appState) ) {
-          //dlString = furl('./thru_animal_grid.html'+buildParameterList(appState),'<span id="topright">'+CONST_ANIMAL_ALL_OBS+'</span>');
-          dlString = furl('./field_viewer.html'+a_params,'<span id="topright">'+CONST_ANIMAL_ALL_OBS+'</span>');
-      } else {
-          let urlState = appState;  // creates a copy
-          urlState = setTaxonId(urlState, getMenuId(appState));  // set taxon id to menu id if a filter was chosen for say, birds.
-          //dlString = furl('./thru_animal_grid.html'+buildParameterList(urlState),'<span id="topright">'+CONST_ANIMAL_ALL+capitalizeWords(menu_name)+'</span>');
-          dlString = furl('./field_viewer.html'+a_params+'&taxon_id='+getMenuId(appState),'<span id="topright">'+CONST_ANIMAL_ALL+capitalizeWords(menu_name)+'</span>');
-      }*/
+      let title_1 = '';
+      let title_2 = '';
+      let title_3 = '';
 
-      faddelem('p',document.body,{innerHTML:CONST_TOTAL_SPECIES+fcomnum(total_results)+' <br/>'
-             +CONST_PER_PAGE+fcomnum(per_page)+'<br />'
-             +CONST_PAGE+fcomnum(page_curr)+' of '+fcomnum(page_max)+dlString+'<br />'});  
+      faddelem('p',document.body,{innerHTML:CONST_TOTAL_SPECIES+fcomnum(total_results)+title_1+' <br/>'
+             +CONST_PER_PAGE+fcomnum(per_page)+title_2+'<br />'
+             +CONST_PAGE+fcomnum(page_curr)+' of '+fcomnum(page_max)+title_3+'<br />'});  
 
       labels = [
             {innerText:'#'},
