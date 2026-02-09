@@ -466,19 +466,19 @@ function setupAPIParams( config ) {
 
    if( config.fieldName )        { api_params += '&field:'    + config.fieldName;  } 
    if( getFieldValue(appState) ) { api_params += '='          + getFieldValue(appState); }
-   if( getUser(appState) )       { api_params += '&user_id:'  + getUser(appState); }
+   if( getUser(appState) )       { api_params += '&user_id='  + getUser(appState); }
 
    // if a place_id was chosen from the place drop-down, use that place_id...
    if( getPlaceMenuId(appState) ) {
        api_params += '&place_id=' + getPlaceMenuId(appState);
    }
 
-   // if a taxon_id was chosen in the plant drop-down, use that taxon_id.  if not, 
-   // use the taxon_id(s) from the config when present.
-   if( getPlantMenuId(appState) ) {
-       api_params += '&taxon_id='+getPlantMenuId(appState);
+   // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
+   // use the menu_id if one was passed in.
+   if( getTaxonId(appState) ) {
+       api_params += '&taxon_id='+getTaxonId(appState);
    } else {
-       api_params += '&taxon_id=' + getTaxonId(appState); 
+       if( getMenuId(appState) ) { api_params += '&taxon_id=' + getMenuId(appState); }
    }
 
    api_params += getPageParam(appState, '&page=');
