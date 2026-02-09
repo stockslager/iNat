@@ -433,8 +433,8 @@ function fresults( xobj, config ) {
          let urlState = appState;
          urlState = setUser(urlState, rec.user.login);
          urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
-         values.push({innerHTML:user_icon});
-         values.push({innerHTML:furl('./field_viewer2.html'+buildParameterList(urlState),rec.user.login)});
+         //values.push({innerHTML:user_icon});
+         values.push({innerHTML:user_icon + furl('./field_viewer2.html'+buildParameterList(urlState),rec.user.login)});
 
          tempBrow.push(values);
       };
@@ -449,8 +449,8 @@ function fresults( xobj, config ) {
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
 
-      labels.push({innerText:'User Photo'});
-      labels.push({innerText:'User Login'});
+      //labels.push({innerText:'User Photo'});
+      labels.push({innerText:'Observer'});
       
       faddelems('th',hrow,labels);
 
