@@ -100,10 +100,10 @@ function buildPage(xobj, config) {
       ];
 
       let title_1 = '';
-      let title_2 = capitalizeWords(getTaxonName(appState));
+      let title_2 = '<span id="topright">'+capitalizeWords(getTaxonName(appState))+'</span>';
       let title_3 = '';
 
-      title_3 = '<span id="toprightbold">'+getPlaceMenuName(appState)+'</span>';
+      title_3 = '<span id="topright">'+'On All Plants'+'</span>';
 
       faddelem('p',document.body,{innerHTML:CONST_TOTAL_OBS+fcomnum(total_results) + title_1 + ' <br/>'
                  + CONST_PER_PAGE+fcomnum(per_page)+ title_2 + '<br />'
