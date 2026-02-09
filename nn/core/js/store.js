@@ -756,10 +756,6 @@ function clearForSpeciesCountsParams(state) {
   urlState = setLSTaxonId( urlState, '');
   urlState = setFieldName( urlState, '');
   urlState = setFieldValue( urlState, ''); 
-  urlState = setMenuId( urlState, '');
-  urlState = setMenuName( urlState, '');
-  urlState = setPage(urlState, '');
-  urlState = setPerPage(urlState, '');
 
   return urlState;
 }
