@@ -171,15 +171,6 @@ function buildPage(xobj, config) {
              target = pref_tax_name.toLowerCase();
          }
 
-         // this page uses taxon id/name wrt to flora, the next page, fauna
-         // plant id (the selected taxon on this page) is passed to the next to search for in the &field:some+field=value.
-         let urlState = appState;
-         urlState = setPage(urlState, '');
-         urlState = setTaxonId(urlState, '');
-         urlState = setTaxonName(urlState, '');
-         urlState = setPlantId(urlState, rec.taxon.id);
-         urlState = setPlantName(urlState, header_name);
-
          let values = [
             {innerText:i+1},
             {innerHTML:image},
