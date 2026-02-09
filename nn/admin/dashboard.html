@@ -162,20 +162,21 @@ function buildPage( configManager ) {
             {innerText:CONST_COMPONENT},
             {innerText:CONST_DESCRIPTION}, 
       ];
- 
-      let studies_table = faddelem('table',document.body,{id:'main'});                    
-      let studies_thead = faddelem('thead',studies_table);
-      let studies_hrow  = faddelem('tr',studies_thead);
-      
-      faddelems('th',studies_hrow,studies_labels);
-      let studies_tbody = faddelem('tbody',studies_table);
- 
+  
       for( let i=0; i<configManager.configurations.length; i++ ) {
-           let brow = '';
-           let values = [];
-           let config = configManager.configurations[i];
 
-           if( config.component === 'plants' ) {
+           if( config.component === COMPONENT_STUDIES ) {
+               let studies_table = faddelem('table',document.body,{id:'main'});                    
+               let studies_thead = faddelem('thead',studies_table);
+               let studies_hrow  = faddelem('tr',studies_thead);
+      
+               faddelems('th',studies_hrow,studies_labels);
+               let studies_tbody = faddelem('tbody',studies_table);
+
+               let brow = '';
+               let values = [];
+               let config = configManager.configurations[i];
+
                appState = setComponent( appState, COMPONENT_STUDIES );
                let plant_params = buildParameterList(appState);
                brow = faddelem('tr',studies_tbody);
