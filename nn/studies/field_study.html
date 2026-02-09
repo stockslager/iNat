@@ -310,8 +310,8 @@ function fresults( xobj, config ) {
                winurlparams_copy.delete('obs_fields');
                winurlparams_copy.append('obs_fields',box_array[e].field_id);
             
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl('./field_viewer.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
-               //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
+               //dlString += ('<tr id="trkey"><td id="tdkey">' + furl('./field_viewer.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
                labels.push({innerText:box_array[e].field_name});
            } else {
