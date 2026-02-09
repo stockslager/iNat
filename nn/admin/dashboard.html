@@ -29,13 +29,14 @@ let winurlparams       = new URLSearchParams(winurlsearchstr.substring(1));
 appState  =  buildStateFromParams(winurlparams);
 
 // page specific constants...
-const CONST_ICON         = 'Icon';
-const CONST_COMPONENT    = 'Component';
-const CONST_DESCRIPTION  = 'Description';
-const CONST_COMPONENTS   = 'components: ';
-const CONST_PERPAGE      = 'per page: 20';
-const CONST_PGS          = 'page: 1';
-const CONST_GARDEN_DESC  = 'Interactions between plants and animals by plant.';
+const CONST_ICON           = 'Icon';
+const CONST_COMPONENT      = 'Component';
+const CONST_DESCRIPTION    = 'Description';
+const CONST_COMPONENTS     = 'components: ';
+const CONST_FIELD_STUDIES  = 'Field Studies';
+const CONST_PERPAGE        = 'per page: 20';
+const CONST_PGS            = 'page: 1';
+const CONST_GARDEN_DESC    = 'Interactions between plants and animals by plant.';
 const CONST_COLONY_DESC    = 'Lists the colonies of plants where collection has occurred.  Shows the child colonies established from each parent colony.';
 const CONST_HIKER_DESC   = 'Species encountered during this trek.';
 const CONST_OBSERVERS_DESC   = 'Interactions between plants and animals by observer.';
@@ -158,8 +159,8 @@ function buildPage( configManager ) {
       studies_labels = [];
 
       studies_labels = [
-            {innerText:CONST_ICON},
-            {innerText:CONST_COMPONENT},
+            {innerText:''},
+            {innerText:CONST_FIELD_STUDIES},
             {innerText:CONST_DESCRIPTION}, 
       ];
 
