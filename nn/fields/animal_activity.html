@@ -124,7 +124,7 @@ function buildPage(xobj, config) {
 
       title_3 = '<span id="toprightbold">'+getPlaceMenuName(appState)+'</span>';
 
-      faddelem('p',document.body,{innerHTML:CONST_TOTAL_SPECIES+fcomnum(total_results) + title_1 + ' <br/>'
+      faddelem('p',document.body,{innerHTML:CONST_TOTAL_OBS+fcomnum(total_results) + title_1 + ' <br/>'
                  + CONST_PER_PAGE+fcomnum(per_page)+ title_2 + '<br />'
                  + CONST_PAGE+fcomnum(page_curr)+' of '+fcomnum(page_max) + title_3 + '<br />'});  
 
@@ -140,28 +140,30 @@ function buildPage(xobj, config) {
     
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
-         let tax_name = '';
-         let pref_tax_name = '';
-         let header_name = '';
-         let tax_photo = '<div class="clipart">&#127807</div>'; 
-         let tax_id = '';
-         let taxon = '';
+         let displayName = '';
 
          let brow = faddelem('tr',tbody);
 
-         if( rec.taxon ){
-             tax_id = rec.taxon.id;
-             tax_name = rec.taxon.name || '';
-             pref_tax_name = rec.taxon.preferred_common_name || '';
-             header_name = pref_tax_name || tax_name || '';
-           
-             if( rec.taxon.default_photo ){
-                 if( rec.taxon.default_photo.url ){
-                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
-                 }
+         // find the matching obs field and display the value.
+         if( rec.ofvs && rec.ofvs.length > 0 ) {
+             for( let j=0; j<rec.ofvs.length; j++ ){
+                  if( rec.ofvs[j].field_id.toString() === config.fieldId ){
+                      let fvalue = rec.ofvs[j].value.toLowerCase();
+                                
+                      if( rec.ofvs[j].taxon ){
+                          let name  = rec.ofvs[j].taxon.name || '';
+                          let pname = rec.ofvs[j].taxon.preferred_common_name || '';
+                          fvalue = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+
+                          let urlState = appState;
+                          urlState = setFieldValue(urlState, replaceDoubleQuotes(rec.ofvs[j].value.toString()));
+                          urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+                          displayName = furl('./field_viewer2.html'+buildParameterList(urlState), fvalue)});
+                      }
+                  }
              }
          }
-
+      
          let displayName  = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
          let image = furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />');
 
