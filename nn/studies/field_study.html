@@ -331,7 +331,6 @@ function fresults( xobj, config ) {
          let tax_photo = '<div class="clipart">&#127807</div>'; 
          let tax_id = '';
          let field1 = ''; 
-         let param1 = ''; 
          let displayName = '';
          let displayTaxonName = '';
          let mismatch = '';
@@ -408,7 +407,6 @@ function fresults( xobj, config ) {
                           matchedCopy = 'yes';
                           if( rec.ofvs[j].value ) {
                               field1 = rec.ofvs[j].value.toLowerCase();
-                              param1 = '&field:' + rec.ofvs[j].name + '=' + replaceDoubleQuotes(rec.ofvs[j].value.toString());
                               displayName = rec.ofvs[j].value.toLowerCase();
                                 
                               if( rec.ofvs[j].taxon ){
@@ -418,8 +416,8 @@ function fresults( xobj, config ) {
                               }
                               if( p_field_value === '' ){
                                   let urlState = appState;
+                                  urlState = setFieldName(urlState, rec.ofvs[j].name);
                                   urlState = setFieldValue(urlState, replaceDoubleQuotes(rec.ofvs[j].value.toString()));
-                                  urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
                                   values.push({innerHTML:furl('./field_study.html'+buildParameterList(urlState), field1)});
                               } else {
                                   values.push({innerHTML:field1});
