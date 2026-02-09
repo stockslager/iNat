@@ -146,13 +146,10 @@ function buildPage(xobj, animalConfig) {
              urlState = setTaxonId(urlState, rec.taxon.id);
              urlState = setTaxonName(urlState, nm);
 
-             let a_params = '?project_id='+animalConfig.project+'&obs_fields='+animalConfig.fieldId+'&field:'+animalConfig.fieldName+'=';
-             a_params += '&taxon_id='+rec.taxon.id;
-
              let values = [
                   {innerText:i+1},
                   {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl('./field_viewer.html'+a_params,displayName)},
+                  {innerHTML:furl('./animal_activity.html'+buildParameterList(urlState),displayName)},
                   {innerText:rec.count||''},
                   ];
         
