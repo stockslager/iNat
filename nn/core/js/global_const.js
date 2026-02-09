@@ -18,7 +18,8 @@ const CONST_SEEDLING_UTF8  = '&#x1F331;';        // seedling icon
 const CONST_BOOT_UTF8      = '<span style="font-size: 18px;">&#x1F97E;</span>';        // back icon for thru hiker
 const CONST_NPC_UTF8       = '&#128100;';        // npc icon for observers
 const CONST_ART_UTF8       = '&#127912;';        // pallete icon for journaling / artwork
-const CONST_ANIMALS_UTF8   = '&#128038;';
+const CONST_ANIMALS_UTF8   = '&#128038;';        // bird
+const CONST_STUDIES_UTF8   = '&#127891;';
 
 // iNat api per_page (number of rows per_page requested from api)...
 const CONST_OBSERVATIONS_PER_PAGE           = '100';
