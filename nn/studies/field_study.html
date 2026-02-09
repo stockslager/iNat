@@ -488,7 +488,14 @@ function setupAPIParams( config ) {
  
    api_params += '?project_id='+config.project;
 
-   if( config.fieldName )        { api_params += '&field:'    + config.fieldName;  } 
+   // url params will include field name when they filter based on a 
+   // obs field value by clicking it in the table.
+   if( getFieldName(appState) )  { 
+       api_params += '&field:' + getFieldName(appState); 
+   } else if( config.fieldName ) { 
+       api_params += '&field:'    + config.fieldName;  
+   }
+ 
    if( getFieldValue(appState) ) { api_params += '='          + getFieldValue(appState); }
    if( getUser(appState) )       { api_params += '&user_id='  + getUser(appState); }
 
