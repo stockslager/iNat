@@ -429,9 +429,12 @@ function fresults( xobj, config ) {
                   }
              }
          }             
- 
+
+         let urlState = appState;
+         urlState = setUser(urlState, rec.user.login);
+         urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
          values.push({innerHTML:user_icon});
-         values.push({innerHTML:furl(root_people+rec.user.login,rec.user.login)});
+         values.push({innerHTML:furl('./field_viewer2.html'+buildParameterList(urlState),rec.user.login)});
 
          tempBrow.push(values);
       };
