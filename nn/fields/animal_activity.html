@@ -164,7 +164,6 @@ function buildPage(xobj, config) {
              }
          }
       
-         let displayName  = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
          let image = furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />');
 
          let target = rec.taxon.id;
@@ -184,7 +183,7 @@ function buildPage(xobj, config) {
          let values = [
             {innerText:i+1},
             {innerHTML:image},
-            {innerHTML:furl('./animal_activity.html'+buildParameterList(urlState),displayName)},
+            {innerHTML:displayName},
          ];
         
          faddelems('td',brow,values);
