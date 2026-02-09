@@ -222,13 +222,9 @@ function fresults( xobj, config ) {
     
       labels = [{innerText:'#'}];
 
-      if( config.component !== COMPONENT_ANIMALS ) {
-          labels.push({innerText:'Photo'});
-          labels.push({innerText:'Name'});
-          labels.push({innerText:'Obs Photo'});
-      } else {
-          labels.push({innerText:'Photo'});
-      }
+      labels.push({innerText:'Photo'});
+      labels.push({innerText:'Name'});
+      labels.push({innerText:'Obs Photo'});
     
       let tempBrow = [];
 
@@ -368,11 +364,8 @@ function fresults( xobj, config ) {
        
          values = [{innerText:i+1}];
 
-         if( config.component !== COMPONENT_ANIMALS ) {
-             values.push({innerHTML:tax_photo});
-             values.push({innerHTML:taxon});
-         }              
-       
+         values.push({innerHTML:tax_photo});
+         values.push({innerHTML:taxon});
          values.push({innerHTML:furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />')});
 
          let user_icon = rec.user.icon || '';
