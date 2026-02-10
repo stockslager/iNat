@@ -81,10 +81,6 @@ function matchTableWidth() {
   }
 }
 
-// Run the function when the page loads and whenever the window resizes
-window.onload = matchTableWidth;
-window.onresize = matchTableWidth;
- 
 function buildPage( configManager ) {
 
       buildMenu( configManager );
@@ -250,6 +246,9 @@ if( message ) {
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
 } else {
     gatherResources(); 
+// Run the function when the page loads and whenever the window resizes
+window.onload = matchTableWidth();
+window.onresize = matchTableWidth();
 }
  
 </script>
