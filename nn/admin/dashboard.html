@@ -65,6 +65,26 @@ function buildMenu( configManager ) {
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
+// Function to set the width of the target table
+function matchTableWidth() {
+  // Get the source table element (the one with the content that dictates the width)
+  const sourceTable = document.getElementById('table');
+  // Get the target table element
+  const targetTable = document.getElementById('stable');
+
+  if (sourceTable && targetTable) {
+    // Get the computed width of the source table in pixels
+    const widthInPixels = sourceTable.offsetWidth; // offsetWidth includes padding and border
+
+    // Apply that width to the target table
+    targetTable.style.width = widthInPixels + 'px';
+  }
+}
+
+// Run the function when the page loads and whenever the window resizes
+window.onload = matchTableWidth;
+window.onresize = matchTableWidth;
+ 
 function buildPage( configManager ) {
 
       buildMenu( configManager );
@@ -177,7 +197,7 @@ function buildPage( configManager ) {
            let config = configManager.configurations[i];
 
            if( config.component === COMPONENT_STUDIES ) {
-               let studies_table = faddelem('table',document.body,{id:'main'});                    
+               let studies_table = faddelem('stable',document.body,{id:'main'});                    
                let studies_thead = faddelem('thead',studies_table);
                let studies_hrow  = faddelem('tr',studies_thead);
       
