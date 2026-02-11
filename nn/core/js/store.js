@@ -342,7 +342,7 @@ function getPlantMenuNameParam(state, param_nm)   {
 }
 
 function getPlaceMenuIdParam(state, param_nm)      { 
-  let menu_id = getMenuId(state);
+  let menu_id = getPlaceMenuId(state);
   if( menu_id ) { 
       return (param_nm + menu_id);
   } else {
