@@ -779,6 +779,11 @@ function clearForDashParams(state) {
 function clearForSpeciesCountsParams(state) {
   let urlState = state; 
 
+  if( getComponent(state) === COMPONENT_ANIMALS ) {
+      urlState = setPlaceMenuId( urlState, '' );
+      urlState = setPlaceMenuName( urlState, '' );
+  }
+
   urlState = setTaxonId( urlState, '' );
   urlState = setTaxonName( urlState, '');
   urlState = setLSTaxonId( urlState, '');
