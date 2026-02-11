@@ -118,11 +118,11 @@ function buildMenu( results, config ) {
           urlState     = setPlaceMenuId(urlState, '');
           urlState     = setPlaceMenuName(urlState, ''); 
           urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
-          links       += furl('./garden_list.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
+          links       += furl('./field_study.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
           for( let i=0; i<config.places.length; i++ ) {
                urlState = setPlaceMenuId( urlState, config.places[i].placeId );
                urlState = setPlaceMenuName( urlState, config.places[i].placeName );
-               links += furl('./garden_list.html'+buildParameterList(urlState),config.places[i].placeName);
+               links += furl('./field_study.html'+buildParameterList(urlState),config.places[i].placeName);
           }
       }
 
