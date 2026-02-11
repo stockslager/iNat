@@ -766,6 +766,8 @@ function clearForDashParams(state) {
   urlState = setObsId(urlState, '');
   urlState = setPage(urlState, '');
   urlState = setPerPage(urlState, '');
+  urlState = setFieldName(urlState, '');
+  urlState = setFieldValue(urlState, '');
 
   return urlState;
 }
