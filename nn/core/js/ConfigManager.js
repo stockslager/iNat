@@ -64,6 +64,9 @@ class ConfigurationItem {
         this.fieldName = configData.field_name ?? null;
         this.fieldValue = configData.field_value ?? null;
 
+        this.studyTitle = configData.study_title ?? null;
+        this.studyDesc  = configData.study_desc ?? null;
+
         this.obsFields = configData.obs_fields ?? configData.field_id ?? null;
         
         // Map nested arrays, default to empty array if missing
