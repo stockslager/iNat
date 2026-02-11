@@ -82,13 +82,15 @@ function buildPage( configManager ) {
             {innerText:CONST_COMPONENT},
             {innerText:CONST_DESCRIPTION}, 
       ];
- 
-      let table = faddelem('table',document.body,{id:'main'});                    
-      let thead = faddelem('thead',table);
-      let hrow  = faddelem('tr',thead);
+
+      if( configManager.configurations.length > 0 ) {
+          let table = faddelem('table',document.body,{id:'main'});                    
+          let thead = faddelem('thead',table);
+          let hrow  = faddelem('tr',thead);
       
-      faddelems('th',hrow,labels);
-      let tbody = faddelem('tbody',table);
+          faddelems('th',hrow,labels);
+          let tbody = faddelem('tbody',table);
+      }
  
       for( let i=0; i<configManager.configurations.length; i++ ) {
            let brow = '';
