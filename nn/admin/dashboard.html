@@ -75,15 +75,14 @@ function buildPage( configManager ) {
                  + CONST_PERPAGE  + '<br />'
                  + CONST_PGS + '<span id="toprightbold">' + configManager.configurations[0].title + '</span><br />'});  
 
-      let labels = [];
-
-      labels = [
-            {innerText:CONST_ICON},
-            {innerText:CONST_COMPONENT},
-            {innerText:CONST_DESCRIPTION}, 
-      ];
-
       if( configManager.configurations.length > 0 ) {
+          let labels = [];
+
+          labels = [
+                {innerText:CONST_ICON},
+                {innerText:CONST_COMPONENT},
+                {innerText:CONST_DESCRIPTION}, 
+          ];
           let table = faddelem('table',document.body,{id:'main'});                    
           let thead = faddelem('thead',table);
           let hrow  = faddelem('tr',thead);
