@@ -9,6 +9,7 @@ const CONST_ALL_PLANTS     = 'All Plants';
 // show menu
 const CONST_ALL            = 'all';              // common show drop down label
 const CONST_SHOW           = 'Show';             // common show drop down title
+const CONST_PLACE          = 'Place';            // common place drop down title
 
 // show menu and home utf 8's
 const CONST_PLUS_UTF8      = '&#10133;'          // plus symbol for show drop down
