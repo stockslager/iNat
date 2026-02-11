@@ -75,90 +75,94 @@ function buildPage( configManager ) {
                  + CONST_PERPAGE  + '<br />'
                  + CONST_PGS + '<span id="toprightbold">' + configManager.configurations[0].title + '</span><br />'});  
 
-      if( configManager.configurations.length > 0 ) {
-          let labels = [];
+      let labels = [];
 
-          labels = [
+      labels = [
                 {innerText:CONST_ICON},
                 {innerText:CONST_COMPONENT},
                 {innerText:CONST_DESCRIPTION}, 
-          ];
-          let table = faddelem('table',document.body,{id:'main'});                    
-          let thead = faddelem('thead',table);
-          let hrow  = faddelem('tr',thead);
+      ];
+
+      if( configManager.configurations.length > 0 ) {
+
+          if( configManager.configurations[0].component !== COMPONENT_STUDIES ) {
+              let table = faddelem('table',document.body,{id:'main'});                    
+              let thead = faddelem('thead',table);
+              let hrow  = faddelem('tr',thead);
       
-          faddelems('th',hrow,labels);
-          let tbody = faddelem('tbody',table);
- 
-          for( let i=0; i<configManager.configurations.length; i++ ) {
-               let brow = '';
-               let values = [];
-               let config = configManager.configurations[i];
+              faddelems('th',hrow,labels);
+              let tbody = faddelem('tbody',table);
+  
+              for( let i=0; i<configManager.configurations.length; i++ ) {
+                   let brow = '';
+                   let values = [];
+                   let config = configManager.configurations[i];
 
-               if( config.component === 'plants' ) {
-                   appState = setComponent( appState, 'plants' );
-                   let plant_params = buildParameterList(appState);
-                   brow = faddelem('tr',tbody);
-                   values = [
-                      {innerHTML:furl('../garden/garden_list.html'+plant_params, CONST_LEAF_UTF8  )},
-                      {innerHTML:furl('../garden/garden_list.html'+plant_params, CONST_PLANT_VALUE )},
-                      {innerText:CONST_GARDEN_DESC},
-                   ];
-                   faddelems('td',brow,values);
-               }
-          }
+                   if( config.component === 'plants' ) {
+                       appState = setComponent( appState, 'plants' );
+                       let plant_params = buildParameterList(appState);
+                       brow = faddelem('tr',tbody);
+                       values = [
+                          {innerHTML:furl('../garden/garden_list.html'+plant_params, CONST_LEAF_UTF8  )},
+                          {innerHTML:furl('../garden/garden_list.html'+plant_params, CONST_PLANT_VALUE )},
+                          {innerText:CONST_GARDEN_DESC},
+                       ];
+                       faddelems('td',brow,values);
+                   }
+              }
  
-          for( let i=0; i<configManager.configurations.length; i++ ) {
-               let brow = '';
-               let values = [];
-               let config = configManager.configurations[i];
+              for( let i=0; i<configManager.configurations.length; i++ ) {
+                   let brow = '';
+                   let values = [];
+                   let config = configManager.configurations[i];
     
-               if( config.component === 'hiker' ) {
-                   appState = setComponent( appState, 'hiker' );
-                   let hiker_params = buildParameterList(appState);
-                   brow = faddelem('tr',tbody);
-                   values = [
-                      {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,CONST_BOOT_UTF8 )},
-                      {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,CONST_THRU_HIKES)},
-                      {innerText:CONST_HIKER_DESC},
-                   ];
-                   faddelems('td',brow,values);
-               }
+                   if( config.component === 'hiker' ) {
+                       appState = setComponent( appState, 'hiker' );
+                       let hiker_params = buildParameterList(appState);
+                       brow = faddelem('tr',tbody);
+                       values = [
+                          {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,CONST_BOOT_UTF8 )},
+                          {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,CONST_THRU_HIKES)},
+                          {innerText:CONST_HIKER_DESC},
+                       ];
+                       faddelems('td',brow,values);
+                   }
 
-               if( config.component === 'observers' ) {
-                   appState = setComponent( appState, 'observers' );
-                   let hiker_params = buildParameterList(appState);
-                   brow = faddelem('tr',tbody);
-                   values = [
-                      {innerHTML:furl('../observers/observer_counts.html'+hiker_params,CONST_NPC_UTF8 )},
-                      {innerHTML:furl('../observers/observer_counts.html'+hiker_params,CONST_OBSERVERS)},
-                      {innerText:CONST_OBSERVERS_DESC},
-                   ];
-                   faddelems('td',brow,values);
-               }
+                   if( config.component === 'observers' ) {
+                       appState = setComponent( appState, 'observers' );
+                       let hiker_params = buildParameterList(appState);
+                       brow = faddelem('tr',tbody);
+                       values = [
+                          {innerHTML:furl('../observers/observer_counts.html'+hiker_params,CONST_NPC_UTF8 )},
+                          {innerHTML:furl('../observers/observer_counts.html'+hiker_params,CONST_OBSERVERS)},
+                          {innerText:CONST_OBSERVERS_DESC},
+                       ];
+                       faddelems('td',brow,values);
+                   }
 
-               if( config.component === 'colonies' ) {
-                   appState = setComponent( appState, 'colonies' );
-                   let plant_params = buildParameterList(appState);
-                   brow = faddelem('tr',tbody);
-                   values = [
-                      {innerHTML:furl('../colonies/colony_list.html'+plant_params, CONST_SEEDLING_UTF8  )},
-                      {innerHTML:furl('../colonies/colony_list.html'+plant_params, CONST_COLONIES )},
-                      {innerText:CONST_COLONY_DESC},
-                   ];
-                   faddelems('td',brow,values);
-               }
+                   if( config.component === 'colonies' ) {
+                       appState = setComponent( appState, 'colonies' );
+                       let plant_params = buildParameterList(appState);
+                       brow = faddelem('tr',tbody);
+                       values = [
+                          {innerHTML:furl('../colonies/colony_list.html'+plant_params, CONST_SEEDLING_UTF8  )},
+                          {innerHTML:furl('../colonies/colony_list.html'+plant_params, CONST_COLONIES )},
+                          {innerText:CONST_COLONY_DESC},
+                       ];
+                       faddelems('td',brow,values);
+                   }
  
-               if( config.component === 'animals' ) {
-                   appState = setComponent( appState, 'animals' );
-                   let fauna_params = buildParameterList(appState);
-                   brow = faddelem('tr',tbody);
-                   values = [
-                      {innerHTML:furl('../animals/animal_list.html'+fauna_params, CONST_ANIMALS_UTF8  )},
-                      {innerHTML:furl('../animals/animal_list.html'+fauna_params, CONST_ANIMALS )},
-                      {innerText:CONST_ANIMALS_DESC},
-                   ];
-                   faddelems('td',brow,values);
+                   if( config.component === 'animals' ) {
+                       appState = setComponent( appState, 'animals' );
+                       let fauna_params = buildParameterList(appState);
+                       brow = faddelem('tr',tbody);
+                       values = [
+                          {innerHTML:furl('../animals/animal_list.html'+fauna_params, CONST_ANIMALS_UTF8  )},
+                          {innerHTML:furl('../animals/animal_list.html'+fauna_params, CONST_ANIMALS )},
+                          {innerText:CONST_ANIMALS_DESC},
+                       ];
+                       faddelems('td',brow,values);
+                   }
                }
           }
       }
