@@ -198,8 +198,8 @@ function setupAPIParams( animalConfig ) {
    // default these to what's in the config even though the state sometimes
    // holds the same attributes for other components.
    if( animalConfig.userId         ) { api_params += '&user_id='  + animalConfig.userId; }
-   if( animalConfig.defaultPlaceId ) { api_params += '&place_id=' + animalConfig.defaultPlaceId; }  
 
+   api_params += getPlaceMenuIdParam(appState, '&place_id=');
    api_params += getMenuIdParam(appState, '&taxon_id='); 
    api_params += getPageParam(appState, '&page=');
    api_params += '&per_page='+CONST_API_PER_PAGE;
