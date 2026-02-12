@@ -177,6 +177,10 @@ function buildPage( configManager ) {
 
       faddelem('p',document.body,{innerHTML:('<div id="vpadding"></div>')}); 
       let headers = 'no';
+      let studies_table = '';
+      let studies_thead = '';
+      let studies_hrow = '';
+      let studies_tbody = '';
  
       for( let i=0; i<configManager.configurations.length; i++ ) {
        
@@ -185,14 +189,13 @@ function buildPage( configManager ) {
            if( config.component === COMPONENT_STUDIES ) {
                if( headers === 'no' ) {
                    headers = 'yes';
-                   let studies_table = faddelem('stable',document.body,{id:'main'});                    
-                   let studies_thead = faddelem('thead',studies_table);
-                   let studies_hrow  = faddelem('tr',studies_thead);
+                   studies_table = faddelem('stable',document.body,{id:'main'});                    
+                   studies_thead = faddelem('thead',studies_table);
+                   studies_hrow  = faddelem('tr',studies_thead);
       
                    faddelems('th',studies_hrow,studies_labels);
+                   studies_tbody = faddelem('tbody',studies_table);
                }
-
-               let studies_tbody = faddelem('tbody',studies_table);
 
                let brow = '';
                let values = [];
