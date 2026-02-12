@@ -468,8 +468,8 @@ function setupAPIParams( config ) {
    // use the menu_id if one was passed in.
    if( getTaxonId(appState) ) {
        api_params += '&taxon_id='+getTaxonId(appState);
-   } else {
-       if( getMenuId(appState) ) { api_params += '&taxon_id=' + getMenuId(appState); }
+   } else if( getMenuId(appState) ) { 
+       api_params += '&taxon_id=' + getMenuId(appState); 
    } else {
        if( config.default_taxon_id ) {
            api_params += '&taxon_id=' + config.default_taxon_id;
