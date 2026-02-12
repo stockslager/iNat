@@ -66,6 +66,7 @@ class ConfigurationItem {
 
         this.studyTitle = configData.study_title ?? null;
         this.studyDesc  = configData.study_desc ?? null;
+        this.utf-8      = configData.utf-8 ?? '&#127891;';
 
         this.obsFields = configData.obs_fields ?? configData.field_id ?? null;
         
