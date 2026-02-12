@@ -460,7 +460,12 @@ function setupAPIParams( config ) {
    }
  
    if( getFieldValue(appState) ) { api_params += '='          + getFieldValue(appState); }
-   if( config.userId )           { api_params += '&user_id='  + config.userId; }
+
+   if( getUser(appState) ) {
+       api_params += '&user_id=' + getUser(appState);
+   } else if( config.userId ) { 
+       api_params += '&user_id='  + config.userId; 
+   }
  
    api_params += getPlaceMenuIdParam(appState, '&place_id=');
 
