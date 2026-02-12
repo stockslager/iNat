@@ -497,8 +497,8 @@ function setupAPIParams( config ) {
    }
  
    if( getFieldValue(appState) ) { api_params += '='          + getFieldValue(appState); }
-
-   api_params += getUserParam(appState, '&user_id=');
+   if( config.userId )           { api_params += '&user_id='  + config.userId; }
+ 
    api_params += getPlaceMenuIdParam(appState, '&place_id=');
 
    // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
