@@ -439,7 +439,7 @@ function fresults( xobj, config ) {
          urlState = setObsId(urlState, rec.id);
          values.push({innerHTML:furl('./colony_descendants_grid.html'+buildParameterList(urlState), 'descendants')});
 
-         let urlState = appState;
+         urlState = appState;
          urlState = setUser(urlState, rec.user.login);
          urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
          //values.push({innerHTML:user_icon});
@@ -547,7 +547,7 @@ async function gatherResources() {
     }
 }
 
-let message = '';//validateColony(appState);
+let message = validateColony(appState);
  
 if( message ) {
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
