@@ -466,6 +466,7 @@ function setupAPIParams( config ) {
 
    // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
    // use the menu_id if one was passed in.
+   console.log('sub ' + config.defaultTaxonId);
    if( getTaxonId(appState) ) {
        api_params += '&taxon_id='+getTaxonId(appState);
    } else if( getMenuId(appState) ) { 
