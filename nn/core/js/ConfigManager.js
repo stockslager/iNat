@@ -137,7 +137,7 @@ class ConfigManager {
         console.log('made it');
         console.log('comp nm ' + componentName);
         console.log('study ' + studyTitle);
-        return this.configurations.find(config => (config.component === componentName && config.study_title === studyTitle));
+        return this.configurations.find(config => (config.component === componentName && config.studyTitle === studyTitle));
     }
 }
 
