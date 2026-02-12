@@ -140,14 +140,14 @@ function buildPage( configManager ) {
                        faddelems('td',brow,values);
                    }
 
-                   if( config.component === 'colonies' ) {
+                   if( config.component === 'studies' ) {
                        appState = setComponent( appState, 'studies' );
                        let plant_params = buildParameterList(appState);
                        brow = faddelem('tr',tbody);
                        values = [
                           {innerHTML:furl('../colonies/colony_table.html'+plant_params, CONST_SEEDLING_UTF8  )},
-                          {innerHTML:furl('../colonies/colony_table.html'+plant_params, CONST_COLONIES )},
-                          {innerText:CONST_COLONY_DESC},
+                          {innerHTML:furl('../colonies/colony_table.html'+plant_params, config.study_title )},
+                          {innerText:config.study_desc},
                        ];
                        faddelems('td',brow,values);
                    }
