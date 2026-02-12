@@ -196,8 +196,10 @@ function buildPage( configManager ) {
                let brow = '';
                let values = [];
 
-               appState = setComponent( appState, COMPONENT_STUDIES );
-               let plant_params = buildParameterList(appState);
+               let urlState = appState;
+               urlState = setComponent( urlState, COMPONENT_STUDIES );
+               urlState = setTitle(urlState, config.studyTitle);
+               let plant_params = buildParameterList(urlState);
                brow = faddelem('tr',studies_tbody);
                values = [
                   {innerHTML:furl('../studies/field_study.html'+plant_params, CONST_STUDIES_UTF8  )},
