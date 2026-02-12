@@ -227,6 +227,7 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
           }
 
         // if the sub-icons haven't been set, look for the default.
+          console.log('fin ' + finalConfigInstance);
         if( !finalConfigInstance.subIcons || finalConfigInstance.subIcons.length === 0 ) {
             if( managerInstance.defaultSubIcons ) {
                 // deep copy the default sub-icons.
