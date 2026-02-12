@@ -779,6 +779,7 @@ function clearForDashParams(state) {
   urlState = setPerPage(urlState, '');
   urlState = setFieldName(urlState, '');
   urlState = setFieldValue(urlState, '');
+  urlState = setStudyTitle(urlState, '');
 
   return urlState;
 }
