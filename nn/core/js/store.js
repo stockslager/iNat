@@ -690,6 +690,11 @@ function validateStudies(state) {
       return message;
   }
 
+  if( !getTitle(state) ) {
+      let message = 'study_title is required for the colonies component.' + 
+                    'study_title should be added for this study in the ' + getParams(state) + '.json file.';
+  }
+
   return;
 }
 
