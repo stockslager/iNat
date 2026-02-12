@@ -160,7 +160,7 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
 
           if( studyTitle ) {
               finalConfigInstance = component 
-                                ? managerInstance.getConfigByComponentAndStudyTitle(component) 
+                                ? managerInstance.getConfigByComponentAndStudyTitle(component, studyTitle) 
                                 : managerInstance;
 
           } else {
@@ -217,7 +217,7 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
 
           if( studyTitle ) {
               finalConfigInstance = component 
-                                ? managerInstance.getConfigByComponentAndStudyTitle(component) 
+                                ? managerInstance.getConfigByComponentAndStudyTitle(component, studyTitle) 
                                 : managerInstance;
 
           } else {
