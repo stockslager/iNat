@@ -102,7 +102,10 @@ function buildMenu(configManager, default_sub_icons) {
       }
  
       menu_string += buildDD('Parameters', links);
-      menu_string += buildHome(furl('./dashboard.html'+buildParameterList(appState),'&#127807;'));
+
+      let urlState = appState;
+      urlState = clearForDashParams(urlState);
+      menu_string += buildHome(furl('./dashboard.html'+buildParameterList(urlState),'&#127807;'));
 
       menu_string += '</div>';
 
