@@ -32,11 +32,13 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
-let p_component = winurlparams.get('component' || '');
-let p_field     = winurlparams.get('field' || '');
+let p_component = winurlparams.get('component') || '';
+let p_field     = winurlparams.get('field') || '';
+let p_study_title = winurlparams.get('studyTitle') || '';
 
 winurlparams.delete('field');
 winurlparams.delete('component');
+winurlparams.delete('studyTitle');
   
 appState  =  buildStateFromParams(winurlparams);
 
@@ -241,7 +243,7 @@ async function gatherResources() {
  
   try {
       // get the configurations
-      const configManager   = await asyncGetConfiguration( json_path, getStudyTitle(appState) );
+      const configManager   = await asyncGetConfiguration( json_path, p_study_title );
      
       // Pass the data to the buildPage function
       buildPage( configManager ); 
