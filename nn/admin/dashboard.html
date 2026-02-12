@@ -176,18 +176,22 @@ function buildPage( configManager ) {
       ];
 
       faddelem('p',document.body,{innerHTML:('<div id="vpadding"></div>')}); 
+      let headers = 'no';
  
       for( let i=0; i<configManager.configurations.length; i++ ) {
        
            let config = configManager.configurations[i];
 
            if( config.component === COMPONENT_STUDIES ) {
-               let studies_table = faddelem('stable',document.body,{id:'main'});                    
-               let studies_thead = faddelem('thead',studies_table);
-               let studies_hrow  = faddelem('tr',studies_thead);
+               if( headers === 'no' ) {
+                   headers = 'yes';
+                   let studies_table = faddelem('stable',document.body,{id:'main'});                    
+                   let studies_thead = faddelem('thead',studies_table);
+                   let studies_hrow  = faddelem('tr',studies_thead);
       
-               faddelems('th',studies_hrow,studies_labels);
-               let studies_tbody = faddelem('tbody',studies_table);
+                   faddelems('th',studies_hrow,studies_labels);
+                   let studies_tbody = faddelem('tbody',studies_table);
+               }
 
                let brow = '';
                let values = [];
