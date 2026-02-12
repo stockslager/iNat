@@ -419,8 +419,14 @@ function fresults( xobj, config ) {
                                   urlState = setFieldName(urlState, rec.ofvs[j].name);
                                   urlState = setFieldValue(urlState, replaceDoubleQuotes(rec.ofvs[j].value.toString()));
                                   values.push({innerHTML:furl('./field_study.html'+buildParameterList(urlState), field1)});
+                                  urlState = appState;
+                                  urlState = setObsId(urlState, field1);
+                                  values.push({innerHTML:furl('./colony_descendants_grid.html'+buildParameterList(urlState), 'descendants')});
                               } else {
                                   values.push({innerHTML:field1});
+                                  let urlState = appState;
+                                  urlState = setObsId(urlState, field1);
+                                  values.push({innerHTML:furl('./colony_descendants_grid.html'+buildParameterList(urlState), 'descendants')});
                               }
                           } else {
                               values.push({innerText:''});
@@ -434,12 +440,8 @@ function fresults( xobj, config ) {
                   }
              }
          }         
-
+       
          let urlState = appState;
-         urlState = setObsId(urlState, rec.id);
-         values.push({innerHTML:furl('./colony_descendants_grid.html'+buildParameterList(urlState), 'descendants')});
-
-         urlState = appState;
          urlState = setUser(urlState, rec.user.login);
          urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
          //values.push({innerHTML:user_icon});
