@@ -433,7 +433,11 @@ function fresults( xobj, config ) {
                       values.push({innerText:''});
                   }
              }
-         }             
+         }         
+
+         let urlState = appState;
+         urlState = setObsId(urlState, rec.id);
+         values.push({innerHTML:furl('./colony_descendants_grid.html'+buildParameterList(urlState), 'descendants')});
 
          let urlState = appState;
          urlState = setUser(urlState, rec.user.login);
@@ -455,6 +459,7 @@ function fresults( xobj, config ) {
       let hrow = faddelem('tr',thead);
 
       //labels.push({innerText:'User Photo'});
+      labels.push({innerText:''});
       labels.push({innerHTML:'<div class="user"><span>Observer</span></div>'});
       
       faddelems('th',hrow,labels);
