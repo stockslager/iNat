@@ -134,9 +134,6 @@ class ConfigManager {
     }
 
     getConfigByComponentAndStudyTitle(componentName, studyTitle) {
-        console.log('made it');
-        console.log('comp nm ' + componentName);
-        console.log('study ' + studyTitle);
         return this.configurations.find(config => (config.component === componentName && config.studyTitle === studyTitle));
     }
 }
@@ -227,7 +224,6 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
           }
 
         // if the sub-icons haven't been set, look for the default.
-          console.log('fin ' + finalConfigInstance);
         if( !finalConfigInstance.subIcons || finalConfigInstance.subIcons.length === 0 ) {
             if( managerInstance.defaultSubIcons ) {
                 // deep copy the default sub-icons.
