@@ -498,12 +498,8 @@ function setupAPIParams( config ) {
  
    if( getFieldValue(appState) ) { api_params += '='          + getFieldValue(appState); }
 
-   getUserParam(appState, '&user_id');
-
-   // if a place_id was chosen from the place drop-down, use that place_id...
-   if( getPlaceMenuId(appState) ) {
-       api_params += '&place_id=' + getPlaceMenuId(appState);
-   }
+   api_params += getUserParam(appState, '&user_id=');
+   api_params += getPlaceMenuIdParam(appState, '&place_id=');
 
    // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
    // use the menu_id if one was passed in.
