@@ -186,7 +186,7 @@ function setAttribute(state, attribute, value) {
  */
 function getPlace(state)           { return (getAttribute(state, ATTRIBUTE_PLACE)); }
 function getProject(state)         { return (getAttribute(state, ATTRIBUTE_PROJECT)); }
-function getTitle(state)           { return (getAttribute(state, ATTRIBUTE_TITLE)); }
+function getStudyTitle(state)           { return (getAttribute(state, ATTRIBUTE_STUDY_TITLE)); }
 function getParams(state)          { return (getAttribute(state, ATTRIBUTE_PARAMS)); }
 function getUser(state)            { return (getAttribute(state, ATTRIBUTE_USER)); }
 function getGarden(state)          { return (getAttribute(state, ATTRIBUTE_GARDEN)); }
@@ -217,7 +217,7 @@ function getPerPage(state)         { return (getAttribute(state, ATTRIBUTE_PER_P
  */
 function setPlace(state, value)           { return (setAttribute(state, ATTRIBUTE_PLACE, value)); }
 function setProject(state, value)         { return (setAttribute(state, ATTRIBUTE_PROJECT, value)); }
-function setTitle(state, value)           { return (setAttribute(state, ATTRIBUTE_TITLE, value)); }
+function setStudyTitle(state, value)           { return (setAttribute(state, ATTRIBUTE_STUDY_TITLE, value)); }
 function setParams(state, value)          { return (setAttribute(state, ATTRIBUTE_PARAMS, value)); }
 function setUser(state, value)            { return (setAttribute(state, ATTRIBUTE_USER, value)); }
 function setGarden(state, value)          { return (setAttribute(state, ATTRIBUTE_GARDEN, value)); }
@@ -690,7 +690,7 @@ function validateStudies(state) {
       return message;
   }
 
-  if( !getTitle(state) ) {
+  if( !getStudyTitle(state) ) {
       let message = 'study_title is required for the colonies component.' + 
                     'study_title should be added for this study in the ' + getParams(state) + '.json file.';
   }
@@ -757,7 +757,7 @@ function clearForDashParams(state) {
 
   urlState = setPlace(urlState, '');
   urlState = setProject(urlState, '');
-  urlState = setTitle(urlState, '');
+  urlState = setStudyTitle(urlState, '');
   urlState = setUser(urlState, '');
   urlState = setGarden(urlState, '');
   urlState = setComponent(urlState, '');
