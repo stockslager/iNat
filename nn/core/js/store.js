@@ -10,6 +10,7 @@ const COMPONENT_STUDIES   = 'studies';
 
 // --- Constants for Attribute Keys ---
 const ATTRIBUTE_PROJECT         = 'project';
+const ATTRIBUTE_TITLE           = 'title';
 const ATTRIBUTE_PLACE           = 'place';
 const ATTRIBUTE_PARAMS          = 'params';
 const ATTRIBUTE_USER            = 'user';
@@ -37,6 +38,7 @@ const ATTRIBUTE_PER_PAGE        = 'per_page';
 // application state
 let appState = {
   [ATTRIBUTE_PROJECT]:   '',
+  [ATTRIBUTE_TITLE]:     '',
   [ATTRIBUTE_PLACE]:     '',
   [ATTRIBUTE_PARAMS]:    '',
   [ATTRIBUTE_USER]:      '',
@@ -73,6 +75,7 @@ function createNewStateInstance(initialValues = {}) {
   // Define the BASE or DEFAULT values for your state properties
   const baseState = {
     [ATTRIBUTE_PROJECT]:   '',
+    [ATTRIBUTE_TITLE]:     '',
     [ATTRIBUTE_PLACE]:     '',
     [ATTRIBUTE_PARAMS]:    '',
     [ATTRIBUTE_USER]:      '',
@@ -183,6 +186,7 @@ function setAttribute(state, attribute, value) {
  */
 function getPlace(state)           { return (getAttribute(state, ATTRIBUTE_PLACE)); }
 function getProject(state)         { return (getAttribute(state, ATTRIBUTE_PROJECT)); }
+function getTitle(state)           { return (getAttribute(state, ATTRIBUTE_TITLE)); }
 function getParams(state)          { return (getAttribute(state, ATTRIBUTE_PARAMS)); }
 function getUser(state)            { return (getAttribute(state, ATTRIBUTE_USER)); }
 function getGarden(state)          { return (getAttribute(state, ATTRIBUTE_GARDEN)); }
@@ -213,6 +217,7 @@ function getPerPage(state)         { return (getAttribute(state, ATTRIBUTE_PER_P
  */
 function setPlace(state, value)           { return (setAttribute(state, ATTRIBUTE_PLACE, value)); }
 function setProject(state, value)         { return (setAttribute(state, ATTRIBUTE_PROJECT, value)); }
+function setTitle(state, value)           { return (setAttribute(state, ATTRIBUTE_TITLE, value)); }
 function setParams(state, value)          { return (setAttribute(state, ATTRIBUTE_PARAMS, value)); }
 function setUser(state, value)            { return (setAttribute(state, ATTRIBUTE_USER, value)); }
 function setGarden(state, value)          { return (setAttribute(state, ATTRIBUTE_GARDEN, value)); }
@@ -747,6 +752,7 @@ function clearForDashParams(state) {
 
   urlState = setPlace(urlState, '');
   urlState = setProject(urlState, '');
+  urlState = setTitle(urlState, '');
   urlState = setUser(urlState, '');
   urlState = setGarden(urlState, '');
   urlState = setComponent(urlState, '');
