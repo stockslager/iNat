@@ -134,7 +134,7 @@ class ConfigManager {
     }
 
     getConfigByComponentAndStudyTitle(componentName, studyTitle) {
-        return this.configurations.find(config => (config.component === componentName && config.study_title === studyTitle);
+        return this.configurations.find(config => (config.component === componentName && config.study_title === studyTitle));
     }
 }
 
