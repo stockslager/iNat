@@ -225,7 +225,7 @@ function buildPage(configManager) {
  
     const prettyJson     = JSON.stringify(configuration.originalConfig, replacer, 2);
 
-    if( defaultSubIcons ) {
+    if( default_sub_icons ) {
         const prettyJsonSubs = JSON.stringify(default_sub_icons, replacer, 2); 
         faddelem('p',document.body,{innerHTML:('Entire<b> '+configuration.component+'</b> component in '+getParams(appState)+'.json:</b>' +
                                            '<pre id="json-display"></pre>' + '"default_sub_icons": [' + 
@@ -236,7 +236,7 @@ function buildPage(configManager) {
     }
     document.getElementById('json-display').textContent = prettyJson;
 
-    if( defaultSubIcons ) {
+    if( default_sub_icons ) {
         document.getElementById('json-default').textContent = prettyJsonSubs;
     }
 
