@@ -63,9 +63,6 @@ let field_array = [];
 
 appState       = buildStateFromParams(winurlparams);
 
-winurlparams.delete('per_page');
-winurlparams.append('per_page','50');
-
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of winurlparams.entries()) {
   if( key.startsWith('field') ){
@@ -74,12 +71,6 @@ for (const [key, value] of winurlparams.entries()) {
   }
 }   
  
-winurlparams.delete('options');
-let p_idextra_user_id = winurlparams.get('idextra_user_id')?.split(',') || [];;
-winurlparams.delete('idextra_user_id');
-let p_photo_curl_filename_prefix = winurlparams.get('photo_curl_filename_prefix')?.split(',') || ['photo_id'];
-winurlparams.delete('photo_curl_filename_prefix');
-
 let url = window.location.origin + window.location.pathname;   
 //let apibase = 'https://api.inaturalist.org/v1/observations';
 //let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
@@ -88,17 +79,6 @@ let url = window.location.origin + window.location.pathname;
 function replaceDoubleQuotes(str) {
   return str.replace(/"/g, '%22');
 }
-
-// remove the field param from the url before building options
-winurlparams.delete(p_field);
-winurlparams.delete('operator');
-winurlparams.delete('taxon_id');
-winurlparams.delete('not_user_id');
-winurlparams.delete('not_id');
-winurlparams.delete('not_in_project');
-
-// add them back after building options...
-winurlparams.append(p_field, p_field_value);
 
 function buildMenu( results, config ) {
       let menu_string = '';
@@ -243,7 +223,6 @@ function fresults( xobj, config ) {
       }
       
       let firstCol = 'yes';
-      let winurlparams_copy ='';
       let nf_box_array = [];
 
       nf_box_array = box_array;
@@ -291,25 +270,6 @@ function fresults( xobj, config ) {
            }
            labelCount++;
            if( box_array[e].field_name !== '' ){
-               // delete the group of obs field and add only the one chosen
-               let winurlparams_copy = new URLSearchParams(winurlsearchstr.substring(1));
-            
-               // find key/value pair for &field: param if one was passed in
-               // delete the &field when found
-               // then, append the single param for the url being displayed
-               for (const [key, value] of winurlparams_copy.entries()) {
-                   if( key.startsWith('field') ){
-                       winurlparams_copy.delete( key );
-                   }
-               }    
-               winurlparams_copy.delete('page');
-               winurlparams_copy.append('page', '1');
-               winurlparams_copy.append(('field:'+box_array[e].field_name),'');
-
-               // delete any existing obs_fields and append the param for the url
-               winurlparams_copy.delete('obs_fields');
-               winurlparams_copy.append('obs_fields',box_array[e].field_id);
-            
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl('./field_viewer.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
                dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + box_array[e].field_name.toLowerCase() + '</td></tr>');
