@@ -132,10 +132,14 @@ class ConfigManager {
     getConfigByComponent(componentName) {
         return this.configurations.find(config => config.component === componentName);
     }
+
+    getConfigByComponentAndStudyTitle(componentName, studyTitle) {
+        return this.configurations.find(config => config.component === componentName);
+    }
 }
 
 // Function handles caching of the RAW data string for consistency
-async function asyncGetConfiguration( params, component ) {
+async function asyncGetConfiguration( params, component, studyTitle=null ) {
 
    const storageKey   = ('nn_configCache_'+params);
    const cachedDataString = sessionStorage.getItem(storageKey); 
@@ -151,9 +155,16 @@ async function asyncGetConfiguration( params, component ) {
           
           managerInstance = new ConfigManager(rawData); // Process raw data into classes
 
-          finalConfigInstance = component 
+          if( studyTitle ) {
+              finalConfigInstance = component 
+                                ? managerInstance.getConfigByComponentAndStudyTitle(component) 
+                                : managerInstance;
+
+          } else {
+              finalConfigInstance = component 
                                 ? managerInstance.getConfigByComponent(component) 
                                 : managerInstance;
+          }
           
           if( finalConfigInstance ) {
               // if the sub-icons haven't been set, look for the default.
@@ -201,9 +212,16 @@ async function asyncGetConfiguration( params, component ) {
         // Process the raw data using your classes
         managerInstance = new ConfigManager(data);
 
-        finalConfigInstance = component 
+          if( studyTitle ) {
+              finalConfigInstance = component 
+                                ? managerInstance.getConfigByComponentAndStudyTitle(component) 
+                                : managerInstance;
+
+          } else {
+            finalConfigInstance = component 
                             ? managerInstance.getConfigByComponent(component) 
                             : managerInstance;
+          }
 
         // if the sub-icons haven't been set, look for the default.
         if( !finalConfigInstance.subIcons || finalConfigInstance.subIcons.length === 0 ) {
