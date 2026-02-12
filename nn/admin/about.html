@@ -239,7 +239,7 @@ async function gatherResources() {
  
   try {
       // get the configurations
-      const configManager   = await asyncGetConfiguration( json_path );
+      const configManager   = await asyncGetConfiguration( json_path, getStudyTitle(appState) );
      
       // Pass the data to the buildPage function
       buildPage( configManager ); 
