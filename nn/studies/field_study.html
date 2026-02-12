@@ -97,6 +97,9 @@ function buildMenu( results, config ) {
           let urlState = appState;
           urlState     = setPlaceMenuId(urlState, '');
           urlState     = setPlaceMenuName(urlState, ''); 
+          urlState     = setTaxonId(urlState, '');
+          urlState     = setFieldValue(urlState, '');
+          urlState     = setFieldName(urlState, '');
           urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
           links       += furl('./field_study.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
           for( let i=0; i<config.places.length; i++ ) {
