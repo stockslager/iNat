@@ -10,7 +10,7 @@ const COMPONENT_STUDIES   = 'studies';
 
 // --- Constants for Attribute Keys ---
 const ATTRIBUTE_PROJECT         = 'project';
-const ATTRIBUTE_TITLE           = 'title';
+const ATTRIBUTE_STUDY_TITLE     = 'studytitle';
 const ATTRIBUTE_PLACE           = 'place';
 const ATTRIBUTE_PARAMS          = 'params';
 const ATTRIBUTE_USER            = 'user';
@@ -38,7 +38,7 @@ const ATTRIBUTE_PER_PAGE        = 'per_page';
 // application state
 let appState = {
   [ATTRIBUTE_PROJECT]:   '',
-  [ATTRIBUTE_TITLE]:     '',
+  [ATTRIBUTE_STUDY_TITLE]:     '',
   [ATTRIBUTE_PLACE]:     '',
   [ATTRIBUTE_PARAMS]:    '',
   [ATTRIBUTE_USER]:      '',
@@ -75,7 +75,7 @@ function createNewStateInstance(initialValues = {}) {
   // Define the BASE or DEFAULT values for your state properties
   const baseState = {
     [ATTRIBUTE_PROJECT]:   '',
-    [ATTRIBUTE_TITLE]:     '',
+    [ATTRIBUTE_STUDY_TITLE]:     '',
     [ATTRIBUTE_PLACE]:     '',
     [ATTRIBUTE_PARAMS]:    '',
     [ATTRIBUTE_USER]:      '',
