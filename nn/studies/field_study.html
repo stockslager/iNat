@@ -379,6 +379,7 @@ function fresults( xobj, config ) {
                               }
                               if( p_field_value === '' ){
                                   let urlState = appState;
+                                  urlState = setPage(urlState, '1');
                                   urlState = setFieldName(urlState, rec.ofvs[j].name);
                                   urlState = setFieldValue(urlState, replaceDoubleQuotes(rec.ofvs[j].value.toString()));
                                   values.push({innerHTML:furl('./field_study.html'+buildParameterList(urlState), field1)});
