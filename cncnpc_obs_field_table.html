@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta http-equiv="refresh" content="0; url=https://stockslager.github.io/iNat/plant_club_viewer.html">
-    <title>Page Moved</title>
-</head>
 <body>
-    <p>This page has moved. If you are not redirected automatically, 
-    <a href="https://stockslager.github.io/iNat/plant_club_viewer.html">click here</a>.</p>
+<script>
+  // Function to get all URL parameters from the current page
+  const urlParams = new URLSearchParams(window.location.search);
+
+  // Define the destination URL
+  const destinationUrl = 'https://stockslager.github.io/iNat/plant_club_viewer.html';
+
+  // Construct the new URL with the parameters from the original URL
+  // The .search property returns the entire query string including the '?'
+  const newUrl = destinationUrl + window.location.search;
+
+  // Perform the redirect
+  // Using window.location.replace() prevents the original page from being in the browser's history
+  // window.location.href can also be used, but the back button won't work as expected
+  window.location.replace(newUrl);
+</script>
+<p>If you are not redirected automatically, please follow this <a href="https://stockslager.github.io/iNat/plant_club_viewer.html">link to the new page</a>.</p>
 </body>
 </html>
