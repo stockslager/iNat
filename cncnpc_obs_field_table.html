@@ -2,25 +2,18 @@
 <html> 
 <body>    
 <script> 
-  // Copy all params from current page to the new URL 
-  const currentParams = new URLSearchParams(window.location.search);
-  currentParams.forEach((value, key) => {
-    destination.searchParams.set(key, value);
-  });
-
   // Define the destination URL
-  const destinationUrl = 'https://stockslager.github.io/iNat/plant_club_viewer.html';
+  const destinationUrl = 'https://stockslager.github.io/iNat/nn/studies/field_study.html?studytitle=Relationships&params=cnc_poll&component=studies';
 
   // Construct the new URL with the parameters from the original URL
   // The .search property returns the entire query string including the '?'
-  const newUrl = destinationUrl + window.location.search;
+  const newUrl = destinationUrl;
 
   // Perform the redirect
   // Using window.location.replace() prevents the original page from being in the browser's history
   // window.location.href can also be used, but the back button won't work as expected
-  console.log('new loc ' + newUrl);
   window.location.href = newUrl;
 </script>
-<p>If you are not redirected automatically, please follow this <a href="https://stockslager.github.io/iNat/plant_club_viewer.html">link to the new page</a>.</p>
+<p>If you are not redirected automatically, please follow this <a href="https://stockslager.github.io/iNat/nn/studies/field_study.html?studytitle=Relationships&params=cnc_poll&component=studies">link to the new page</a>.</p>
 </body>
 </html>
