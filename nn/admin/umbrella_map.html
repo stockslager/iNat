@@ -17,20 +17,6 @@
 
 <style>
   p { width:100%; }
-  .map-container {
-    position: relative;
-    padding-bottom: 60%; /* This is the aspect ratio (e.g., 60% of width for height) */
-    height: 0;
-    overflow: hidden;
-  }
-
-  .map-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 95% !important;
-    height: 100% !important;
-  }
 </style>
 
 <body>
@@ -41,8 +27,7 @@ let winurlsearchstr    = window.location.search;
 let winurlexsearchstr  = winurlstr.replace(winurlsearchstr,'');
 let winurlparams       = new URLSearchParams(winurlsearchstr.substring(1));
 
- //faddelem('p',document.body,{innerHTML:'<iframe src="https://www.google.com/maps/d/embed?mid=12ambBFWuysj82ZfV4bJXzO7z1ttSxoc&ehbc=2E312F" width="640" height="480"></iframe>'});
- faddelem('p',document.body,{innerHTML:'<div class="map-container"><iframe src="https://www.google.com/maps/d/embed?mid=12ambBFWuysj82ZfV4bJXzO7z1ttSxoc&ehbc=2E312F&noprof=1"></iframe></div>'});
+ faddelem('p',document.body,{innerHTML:'<iframe src="https://www.google.com/maps/d/embed?mid=12ambBFWuysj82ZfV4bJXzO7z1ttSxoc&ehbc=2E312F" width="640" height="480"></iframe>'});
  
 </script>
  
