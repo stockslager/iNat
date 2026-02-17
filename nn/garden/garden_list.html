@@ -25,6 +25,7 @@ let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
+let p_hide_dash    = winurlparams.get('hide_dash') || 'no';
 
 appState       = buildStateFromParams(winurlparams);
 
@@ -81,7 +82,7 @@ function buildMenu( config, results ) {
           }
       }
 
-      if( links ) { menu_string += buildDD(CONST_CUSTOM_PLACE, links); }
+      if( links && p_hide_dash === 'no' ) { menu_string += buildDD(CONST_CUSTOM_PLACE, links); }
       links = '';
 
       if( config.taxa && config.taxa.length > 0 ) {
@@ -102,9 +103,11 @@ function buildMenu( config, results ) {
 
       // split list (if they have more than one value in garden-list...
       links = '';
-  
-      let urlState  = clearForDashParams(appState);
-      menu_string  += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
+
+      if( p_hide_dash === 'no' ) {
+          let urlState  = clearForDashParams(appState);
+          menu_string  += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
+      }
 
       menu_string += '</div>';
 
