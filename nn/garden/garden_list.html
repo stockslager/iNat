@@ -108,7 +108,7 @@ function buildMenu( config, results ) {
           let urlState  = clearForDashParams(appState);
           menu_string  += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
       } else {
-          menu_string  += buildDDTitle(''); 
+          menu_string  += buildDDTitle(config.title); 
       }
 
       menu_string += '</div>';
@@ -158,7 +158,7 @@ function buildPage(xobj, config) {
           if( getPlaceMenuName(appState) ) {
               title_3 = '<span id="toprightbold">'+getPlaceMenuName(appState)+'</span>';
           } else {
-              title_3 = '<span id="toprightbold">'+config.title+'</span>';
+              if( p_hide_dash === 'no' ) { title_3 = '<span id="toprightbold">'+config.title+'</span>'; }
           }
       }
 
