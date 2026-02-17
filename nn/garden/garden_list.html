@@ -107,6 +107,8 @@ function buildMenu( config, results ) {
       if( p_hide_dash === 'no' ) {
           let urlState  = clearForDashParams(appState);
           menu_string  += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
+      } else {
+          menu_string  += buildDDTitle(''); 
       }
 
       menu_string += '</div>';
