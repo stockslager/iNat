@@ -108,7 +108,7 @@ function buildMenu( config, results ) {
           let urlState  = clearForDashParams(appState);
           menu_string  += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
       } else {
-          menu_string  += buildDDTitle(config.title); 
+          menu_string  += buildDDTitle(getPlaceMenuName(appState)); 
       }
 
       menu_string += '</div>';
@@ -156,9 +156,9 @@ function buildPage(xobj, config) {
           title_3 = furl('./garden_activity.html'+buildParameterList(urlState),'<span id="topright">'+config.title+'</span>');
       } else {
           if( getPlaceMenuName(appState) ) {
-              title_3 = '<span id="toprightbold">'+getPlaceMenuName(appState)+'</span>';
+              if( p_hide_dash === 'no' ) { title_3 = '<span id="toprightbold">'+getPlaceMenuName(appState)+'</span>'; }
           } else {
-              if( p_hide_dash === 'no' ) { title_3 = '<span id="toprightbold">'+config.title+'</span>'; }
+              title_3 = '<span id="toprightbold">'+config.title+'</span>'; 
           }
       }
 
