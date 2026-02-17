@@ -33,7 +33,6 @@ let menu_name  = '';
 // page & api specific constants
 const CONST_ANIMAL_ALL_OBS = 'All Observations';
 const CONST_ANIMAL_ALL     = 'All ';
-const CONST_API_PER_PAGE  = '10';
 
 // find the html name to pass to other pages for nav
 let path      = window.location.pathname;
@@ -203,7 +202,7 @@ function setupAPIParams( animalConfig ) {
    api_params += getPlaceMenuIdParam(appState, '&place_id=');
    api_params += getMenuIdParam(appState, '&taxon_id='); 
    api_params += getPageParam(appState, '&page=');
-   api_params += '&per_page='+CONST_API_PER_PAGE;
+   api_params += '&per_page='+CONST_SPECIES_COUNTS_PER_PAGE;
    api_params += '&without_taxon_id=47126'; // plantae
 
    return api_params;
