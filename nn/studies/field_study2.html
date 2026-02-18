@@ -58,6 +58,7 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
 let p_ofield_iconic = winurlparams.get('ofield_iconic') || '';
 let p_operator = winurlparams.get('operator') || '';
+let p_ofv_datatype = winurlparams.get('ofv_datatype') || '';
 let p_field = '';
 let p_field_value = '';
 let field_array = [];
@@ -572,6 +573,7 @@ function setupAPIParams( config ) {
        }
    }
 
+   if( p_ofv_datatype ) { api_params += '&ofv_datatype=' + p_ofv_datatype; }
    api_params += getPageParam(appState, '&page=');
    api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
  
