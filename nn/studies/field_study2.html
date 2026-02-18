@@ -269,6 +269,11 @@ function fresults( xobj, config ) {
       }
     
       dlString += '</table></span></div>';
+
+      faddelem('p',document.body,{innerHTML:dlString});
+
+      // hide the mismatch warning... only display it if there is a mismatch in the table.
+      document.getElementById("mismatch").style.display = "none"; 
      
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
@@ -436,12 +441,7 @@ function fresults( xobj, config ) {
 
          tempBrow.push(values);
       };
-
-      // hide the mismatch warning... only display it if there is a mismatch in the table.
-      document.getElementById("mismatch").style.display = "none"; 
-    
-      faddelem('p',document.body,{innerHTML:dlString});
-    
+       
       faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
                                             '<tr id="trkey"><td id="tdkey">total:</td><td id="tdright">'     + fcomnum(total_results) + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">per page:</td><td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
