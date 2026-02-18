@@ -161,10 +161,6 @@ function isMultipleOfFour(num) {
   return num % 4 === 0;
 }
 
-function isMultipleOfThree(num) {
-  return num % 3 === 0;
-}
-
 function boxRow(field_id, field_name, field_value) {
     this.field_id    = field_id;
     this.field_name  = field_name;
@@ -236,7 +232,7 @@ function fresults( xobj, config ) {
                    dlString += ('<caption id="cap">not found on this page</caption>');                      
                } 
             
-               if( labelCount === 0 || isMultipleOfFour(labelCount) ){
+               if( labelCount === 0 /*|| isMultipleOfFour(labelCount)*/ ){
                    if( labelCount > 0 ) {
                        dlString += '</tr>';
                    }
@@ -261,7 +257,7 @@ function fresults( xobj, config ) {
       }
 
       for( let e=0; e<box_array.length; e++ ){
-           if( isMultipleOfFour(labelCount) ){
+           //if( isMultipleOfFour(labelCount) ){
                if( labelCount === 0 ){
                    dlString += '<span id="dltest"><table id="tablekey">';
                    dlString += ('<tr id="trkey">  <td id="key">field id</td>  <td id="key">'+merged+'</td>  </tr>');                      
@@ -269,7 +265,7 @@ function fresults( xobj, config ) {
                    dlString += '</table><span style="padding-right:50px;"></span><table id="tablekey">';
                    dlString += ('<tr id="trkey">  <td id="key">field id</td>  <td id="key">'+merged+'</td>  </tr>');    
                }
-           }
+           //}
            labelCount++;
            if( box_array[e].field_name !== '' ){
             
