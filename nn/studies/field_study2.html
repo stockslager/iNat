@@ -26,7 +26,7 @@
    #stats { margin-bottom: 10px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 3px; padding-bottom: 3px; padding-left: 8px; padding-right: 8px; }
 
 
- 
+   #mismatch { padding-right:25px; padding-bottom:18px; }
    #divhead { max-width: 900px; }
    #key { color:var(--color-text); text-decoration:underline; padding:0; padding-right: 25px;}
    #tablekey { display:inline-table; }
@@ -238,7 +238,7 @@ function fresults( xobj, config ) {
 
       for( let e=0; e<box_array.length; e++ ){
            if( labelCount === 0 ){
-               dlString += '<span id="dltest"><table id="tablekey">';
+               dlString += '<span id="topright"><span id="mismatch">&#127800; ~ obs field mismatch.</span><span id="dltest"><table id="tablekey">';
                dlString += ('<tr id="trkey">  <td id="key">field id</td>  <td id="key">'+merged+'</td>  </tr>');                      
            } 
        
@@ -412,12 +412,14 @@ function fresults( xobj, config ) {
          if( config.merge === 'yes' ){
               if( displayTaxonName !== '' ){
                   if( mismatch === 'yes' ){
+                      document.getElementById("mismatch").style.display = "inline"; 
                       displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
                   } else {
                       displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+')</span>';
                   }
               } else {
                   if( mismatch === 'yes' ){
+                      document.getElementById("mismatch").style.display = "inline"; 
                       displayName += ' ';
                       displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
                   } 
@@ -437,16 +439,13 @@ function fresults( xobj, config ) {
 
       faddelem('p',document.body,{innerHTML:dlString});
 
-      if( mismatch === 'yes' ) {
-          if( config.merge === 'yes' ){       
-              flower = '<span class="flowericon">&#x1F338; merged obs field values do not match.</span>';
-          }
-      }  
-
+      // hide the mismatch warning... only display it if there is a mismatch in the table.
+      document.getElementById("mismatch").style.display = "none"; 
+    
       faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
                                             '<tr id="trkey"><td id="tdkey">total:</td><td id="tdright">'     + fcomnum(total_results) + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">per page:</td><td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">page:</td><td id="tdright">'      + fcomnum(page_curr) + ' of ' + fcomnum(page_max) + flower + '</td></tr></table></span>'});
+                                            '<tr id="trkey"><td id="tdkey">page:</td><td id="tdright">'      + fcomnum(page_curr) + ' of ' + fcomnum(page_max) + '</td></tr></table></span>'});
     
       /*faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
