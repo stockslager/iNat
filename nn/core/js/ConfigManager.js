@@ -67,9 +67,9 @@ class ConfigurationItem {
         this.studyTitle = configData.study_title ?? null;
         this.studyDesc  = configData.study_desc ?? null;
         this.defaultTaxonId = configData.default_taxon_id ?? null;
-        this.utf8       = configData.utf8 ?? null;
-        this.ofvDataType = configData.ofv_datatype ?? null;
-        this.merge       = configData.merge ?? null;
+        this.utf8         = configData.utf8 ?? null;
+        this.obsAPIParams = configData.obs_api_params ?? null;
+        this.merge        = configData.merge ?? null;
 
         this.obsFields = configData.obs_fields ?? configData.field_id ?? null;
         
