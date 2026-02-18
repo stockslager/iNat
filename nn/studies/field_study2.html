@@ -438,9 +438,14 @@ function fresults( xobj, config ) {
           }
       }  
 
-      faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
+      faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
+                                            '<tr id="trkey"><td id="tdkey">total:</td><td id="tdright">'     + fcomnum(total_results) + '</td><td id="tdkey"></td><td id="tdright">' + furl(url+'?'+winurlparams,'reset') + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">per page:</td><td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">page:</td><td id="tdright">'      + fcomnum(page_curr) + ' of ' + fcomnum(page_max) + flower + '</td></tr></table></span>'});
+    
+      /*faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br /></div>'});  
+             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br /></div>'});  */
 
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
