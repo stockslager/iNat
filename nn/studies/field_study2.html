@@ -247,24 +247,6 @@ function fresults( xobj, config ) {
            }
            labelCount++;
            if( box_array[e].field_name !== '' ){
-               // delete the group of obs field and add only the one chosen
-               let winurlparams_copy = new URLSearchParams(winurlsearchstr.substring(1));
-            
-               // find key/value pair for &field: param if one was passed in
-               // delete the &field when found
-               // then, append the single param for the url being displayed
-               for (const [key, value] of winurlparams_copy.entries()) {
-                   if( key.startsWith('field') ){
-                       winurlparams_copy.delete( key );
-                   }
-               }    
-               winurlparams_copy.delete('page');
-               winurlparams_copy.append('page', '1');
-               winurlparams_copy.append(('field:'+box_array[e].field_name),'');
-
-               // delete any existing obs_fields and append the param for the url
-               winurlparams_copy.delete('obs_fields');
-               winurlparams_copy.append('obs_fields',box_array[e].field_id);
             
                dlString += ('<tr id="trkey"><td id="tdkey">' + furl(github_root+'plant_club_viewer.html?'+winurlparams_copy,box_array[e].field_id) + '</td>');
                //dlString += ('<tr id="trkey"><td id="tdkey">' + furl(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
@@ -287,7 +269,7 @@ function fresults( xobj, config ) {
            }
       }
     
-      /*for( let e=0; e<nf_box_array.length; e++ ){
+      for( let e=0; e<nf_box_array.length; e++ ){
            if( nf_box_array[e].field_name === '' ){
                if( labelCount === 0 ){
                    dlString += '<span id="dltest"><table id="tablekey">';
@@ -304,7 +286,7 @@ function fresults( xobj, config ) {
                }
                labelCount++;
            }
-      }*/
+      }
 
       if( labelCount > 0 ){
           dlString += '</table></span>';
@@ -318,7 +300,7 @@ function fresults( xobj, config ) {
           labels.push({innerText:' '});
       }
     
-      for( let e=0; e<box_array.length; e++ ){
+      /*for( let e=0; e<box_array.length; e++ ){
            if( isMultipleOfFour(labelCount) ){
                if( labelCount === 0 ){
                    dlString += '<span id="dltest"><table id="tablekey">';
@@ -340,7 +322,7 @@ function fresults( xobj, config ) {
                dlString += ('<td id="tdkey">missing from this page</td></tr>');
                labels.push({innerText:''});
            }
-      }
+      }*/
 
       dlString += '</table></span>';
      
