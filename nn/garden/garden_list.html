@@ -68,6 +68,22 @@ function buildMenu( config, results ) {
       let links = '';
  
       menu_string = '<div class="navbar">';
+
+      if( config.ddObsFields && config.ddObsFields.length > 0 ) {
+          let urlState = appState;
+          urlState     = setFieldName(urlState, '');
+          urlState     = setFieldValue(urlState, ''); 
+          urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+          links       += furl('./garden_list.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
+          for( let i=0; i<config.ddObsFields.length; i++ ) {
+               urlState = setFieldName(  urlState, config.ddObsFields[i].fieldName );
+               urlState = setFieldValue( urlState, config.ddObsFields[i].fieldValue );
+               links += furl('./garden_list.html'+buildParameterList(urlState),config.ddObsFields[i].ddName);
+          }
+      }
+
+      if( links ) { menu_string += buildDD(, links); }
+      links = '';
  
       if( config.places && config.places.length > 0 ) {
           let urlState = appState;
@@ -258,6 +274,13 @@ function setupAPIParams( plantConfig ) {
    if( plantConfig.plantIds )          { api_params += '&id='       + plantConfig.plantIds;  }
    if( plantConfig.plantListUserId )   { api_params += '&user_id='  + plantConfig.plantListUserId; }
    if( plantConfig.tagName )           { api_params += '&tag='      + plantConfig.tagName; }
+
+   if( getFieldName(appState) ) {
+       api_params += '&field:' + getFieldName(appState);
+       if( getFieldValue(appState) ) {
+           api_params += '=' + getFieldValue(appState);
+       }
+   }
 
    // if a place_id was chosen from the place drop-down, use that place_id...
    if( getPlaceMenuId(appState) ) {
