@@ -106,6 +106,14 @@ class ConfigurationItem {
         }
     }
 
+    getSubTitle() {
+        if( this.studyTitle === null ) {
+            return( '' );
+        } else {
+            return this.studyTitle();
+        }
+    }
+
     getFullTitle() {
         return `${this.title} (${this.component})`;
     }
