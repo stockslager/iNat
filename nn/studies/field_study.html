@@ -335,7 +335,7 @@ function fresults( xobj, config ) {
                           if( rec.ofvs[j].taxon ){ 
                               let name  = rec.ofvs[j].taxon.name || '';
                               let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                              if( config.ofield_iconic === null || config.ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
+                              if( !config.ofield_iconic || config.ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
                                   field1 = name;
                                   displayCommonName = cname.toLowerCase();
                                   displayTaxonName = name;
