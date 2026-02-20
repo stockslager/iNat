@@ -16,7 +16,12 @@
 </head>
 
 <style>
-    p { width: fit-content; min-width: 375px; margin: 0.5em 0; }
+    /* Container & Layout */
+    p { 
+        width: fit-content; 
+        min-width: 375px; 
+        margin: 0.5em 0; 
+    }
 
     .top-bar {
         display: flex;
@@ -26,72 +31,72 @@
         gap: 10px;
     }
 
-#stats {
-    display: inline-flex;
-    white-space: nowrap;
-    
-    /* 1. Add the Border and Rounded Corners */
-    border: 2px solid var(--color-border); /* Uses your core variable */
-    border-radius: 5px;                    /* Standard rounded corner */
-    
-    /* 2. Padding ensures text doesn't touch the new border */
-    padding-top: 3px;
-    padding-bottom: 5px;
-    padding-left: 8px;   /* Small gap on the left inside the border */
-    padding-right: 8px;  /* Small gap on the right inside the border */
-    
-    /* 3. Alignment Fixes */
-    box-sizing: border-box; 
-    margin-left: 0 !important;
-}
-
-/* Ensure the table inside doesn't have its own margins fighting the border */
-#stats .tablekey {
-    margin: 0;
-}
-   
-    #topright {
+    /* Left Stats Box */
+    #stats {
         display: inline-flex;
         white-space: nowrap;
-        padding: 0px 0px;   
-        padding-right: 0 !important;
+        border: 2px solid var(--color-border);
+        border-radius: 5px;
+        padding: 3px 8px 5px 8px; /* top, right, bottom, left */
+        box-sizing: border-box;
+        margin-left: 0 !important;
+    }
+
+    /* Right Box */
+    #topright {
+        display: inline-flex;
+        justify-content: flex-end;
+        white-space: nowrap;
+        padding: 0;
         margin-right: 0 !important;
     }
 
-    /* THE FIX: Collapse borders and kill line-height */
+    #toprightbold { 
+        font-weight: bold; 
+    }
+
+    /* Shared Table Styles */
     .tablekey { 
         display: inline-table; 
-        border-collapse: collapse; /* Removes gap between rows */
-        line-height: 1;            /* Tightens text height */
-        margin-left: 0 !important;
-        margin-right: 0 !important;
         border-collapse: collapse;
+        line-height: 1;
+        margin: 0 !important;
     }
 
-    .trkey { background: var(--color-base); }
+    .trkey { 
+        background: var(--color-base); 
+    }
 
     .tdkey, .tdright, .tdright2 { 
-        padding-top: 0px;    /* Remove top gap */
-        padding-bottom: 0px; /* Remove bottom gap */
+        padding-top: 0;
+        padding-bottom: 0;
         vertical-align: top; 
     }
 
-    .tdkey { padding-right: 20px; text-align: left; }
-    .tdright { padding-right: 0px; text-align: right; }
-    .tdkey:first-child {
-           padding-left: 0 !important;
-    }   
+    /* Left Table Columns */
+    .tdkey { 
+        padding-right: 20px; 
+        text-align: left; 
+    }
 
-.tdright2 { 
-    padding: 0px 0px 0px 0px; 
-    line-height: 1.2; /* Adjust this to control vertical density */
-    height: 1.2em;    /* Keeps empty rows the same height as text rows */
-    text-align: right;
-}            
-    
-    #topright { justify-content: flex-end; }
-    #toprightbold { font-weight: bold; }
-</style>   
+    .tdkey:first-child { 
+        padding-left: 0 !important; 
+    }
+
+    .tdright { 
+        padding-right: 0; 
+        text-align: right; 
+    }
+
+    /* Right Table Columns */
+    .tdright2 { 
+        padding: 0;
+        line-height: 1.2;
+        height: 1.2em;
+        text-align: right;
+    }            
+</style>
+   
 <body>
 <script type="text/javascript"   src='../core/js/global_const.js'> </script>
 <script type="text/javascript"   src='../core/js/common_func.js'> </script>
