@@ -261,7 +261,7 @@ function fresults( xobj, config ) {
     
       dlString += '</table></span></div>';
 
-      faddelem('p',document.body,{innerHTML:dlString});
+      //faddelem('p',document.body,{innerHTML:dlString});
 
       // hide the mismatch warning... only display it if there is a mismatch in the table.
       document.getElementById("mismatch").style.display = "none"; 
@@ -433,12 +433,11 @@ function fresults( xobj, config ) {
          tempBrow.push(values);
       };
        
-      faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
+      faddelem('p',document.body,{innerHTML:dlString+'<span id="stats"><table id="tablekey">' +
                                             '<tr id="trkey"><td id="tdkey">total:</td><td id="tdright">'     + fcomnum(total_results) + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">per page:</td><td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">page:</td><td id="tdright">'      + fcomnum(page_curr) + ' of ' + fcomnum(page_max) + '</td></tr></table></span>'});
 
-      faddelem('p',document.body,{innerText:'asdfasdf'});
       /*faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
              +'per page: '+fcomnum(per_page)+'<br />'
              +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br /></div>'});  */
