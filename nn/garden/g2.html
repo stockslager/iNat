@@ -16,52 +16,31 @@
 </head>
 
 <style>
-   p { width:fit-content; min-width:375px; margin-top:0.5em; margin-bottom:0.5em; }
-   #topright { display:flex; justify-content:flex-end; align-items: flex-end; white-space:nowrap; padding-right:0px; }
-   /*#stats { margin-bottom: 5px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 3px; padding-bottom: 3px; padding-left: 8px; padding-right: 8px; box-sizing: border-box; }*/
-/* 1. THE CONTAINER: Forces equal height and pushes items to opposite sides */
- 
-.top-bar {
-  /*border: 1px solid var(--color-border);
-  border-radius: 5px; */
-  display: flex;
-  justify-content: space-between; /* Pushes Stats Left and dltest Right */
-  align-items: stretch;           /* Forces both boxes to the same height */
-  width: 100%;
-  gap: 10px;                      /* Optional: space between them if they meet */
-  /*margin-bottom: 100px;*/
-}
+        /* CSS Clean-up: Use classes for repeating elements */
+        p { width: fit-content; min-width: 375px; margin: 0.5em 0; }
+        
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            width: 100%;
+            gap: 10px;
+        }
 
-/* 2. STATS (Left Box) */
-#stats {
-  display: inline-flex;
-  flex-direction: column;
-  vertical-align: top;
-  box-sizing: border-box;
-  
-  /* Dimensions & Scroll */
-  /*max-height: 58px;
-  overflow-y: auto;*/
-  white-space: nowrap;
-  width: fit-content;
+        #stats, #topright {
+            display: inline-flex;
+            white-space: nowrap;
+            padding: 3px 8px;
+        }
 
-  /* iPhone Gap Fix: Tighten line-height so padding is the only gap */
-  line-height: 1; 
+        #topright { justify-content: flex-end; }
 
-  /* Visuals: Mirroring dltest */
-  /*border: 2px solid var(--color-border);
-  border-radius: 5px; */
-  padding-top: 3px;
-  padding-bottom: 3px; /* Exact 3px gap you requested */
-  padding-left: 8px;
-  padding-right: 4px;
-}
-
-   #tablekey { display:inline-table; }
-   #trkey { padding:0; background:var(--color-base); border:none; border-collapse:collapse; }
-   #tdkey { padding:0; padding-right: 25px; }
-   #tdright { padding:0; padding-right: 5px; float:right; }
-   #tdright2 { padding:0; padding-right: 5px; padding-top: 2px; text-align:left; } 
+        .tablekey { display: inline-table; border-collapse: collapse; }
+        .trkey { background: var(--color-base); }
+        .tdkey { padding-right: 25px; text-align: left; }
+        .tdright { padding-right: 5px; text-align: right; }
+        .tdright2 { padding: 2px 5px 0 0; text-align: left; }
+        #toprightbold { font-weight: bold; }
 </style>
 
 <body>
