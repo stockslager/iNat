@@ -1,3 +1,6 @@
+const CONST_SPECIES      = 'species';
+const CONST_OBSERVATIONS = 'observations';
+
 function fcomnum(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') }; 
 function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
 function faddelem(etype,eparent=null,eattributes={}) { 
@@ -149,4 +152,75 @@ function removeItemFromCommaDelimitedList(listString, itemToRemove) {
   const updatedListString = updatedArray.join(',');
 
   return updatedListString;
+}
+
+function buildHeader(entity, total, per_page, page_curr, title_1, title_2, title_3) {
+    const container = document.createElement('div');
+    container.className = 'top-bar';
+
+    // Left Side: Stats
+    const statsDiv = document.createElement('div');
+    statsDiv.id = 'stats';
+    const tableLeft = document.createElement('table');
+    tableLeft.className = 'tablekey';
+
+    const rows = [
+        [entity, total],
+        ['per page:', per_page],
+        ['page:', page_curr]
+    ];
+
+    rows.forEach(([label, val]) => {
+        const tr = document.createElement('tr');
+        tr.className = 'trkey';
+        
+        const tdL = document.createElement('td');
+        tdL.className = 'tdkey';
+        tdL.textContent = label; // Safe from injection
+        
+        const tdR = document.createElement('td');
+        tdR.className = 'tdright';
+        tdR.textContent = val;   // Safe from injection
+        
+        tr.append(tdL, tdR);
+        tableLeft.appendChild(tr);
+    });
+    statsDiv.appendChild(tableLeft);
+
+    // Right Side: Titles (Always 3 rows)
+    const rightDiv = document.createElement('div');
+    rightDiv.id = 'topright';
+    const tableRight = document.createElement('table');
+    tableRight.className = 'tablekey';
+
+    // We iterate through all three, even if title_1 or title_2 are null
+    [title_1, title_2, title_3].forEach((content) => {
+        const tr = document.createElement('tr');
+        tr.className = 'trkey';
+        const td = document.createElement('td');
+        td.className = 'tdright2';
+
+        if (!content || content === '') {
+            // Use a non-breaking space to maintain row height
+            td.innerHTML = '&nbsp;'; 
+        } else if (typeof content === 'string') {
+            // If it looks like HTML (contains < >), use innerHTML
+            // Otherwise, use textContent for maximum security
+            if (content.includes('<') && content.includes('>')) {
+                td.innerHTML = content; 
+            } else {
+                td.textContent = content;
+            }
+        } else if (content instanceof HTMLElement) {
+            // If it's already a DOM element object
+            td.appendChild(content);
+        }
+
+        tr.appendChild(td);
+        tableRight.appendChild(tr);
+    });
+    rightDiv.appendChild(tableRight);
+
+    container.append(statsDiv, rightDiv);
+    return container;
 }
