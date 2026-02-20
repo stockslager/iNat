@@ -157,7 +157,7 @@ function removeItemFromCommaDelimitedList(listString, itemToRemove) {
 
 function buildHeader(entity, total, per_page, page_curr, page_max, title_1, title_2, title_3) {
     const container = document.createElement('div');
-    container.className = 'top-bar';
+    container.className = 'rl-box-bar';
 
     // Left Side Box
     const lboxDiv = document.createElement('div');
