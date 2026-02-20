@@ -1,5 +1,6 @@
 const CONST_SPECIES      = 'species:';
 const CONST_OBSERVATIONS = 'observations:';
+const CONST_OF           = ' of ';
 
 function fcomnum(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') }; 
 function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
@@ -154,7 +155,7 @@ function removeItemFromCommaDelimitedList(listString, itemToRemove) {
   return updatedListString;
 }
 
-function buildHeader(entity, total, per_page, page_curr, title_1, title_2, title_3) {
+function buildHeader(entity, total, per_page, page_curr, page_max, title_1, title_2, title_3) {
     const container = document.createElement('div');
     container.className = 'top-bar';
 
@@ -164,10 +165,12 @@ function buildHeader(entity, total, per_page, page_curr, title_1, title_2, title
     const tableLeft = document.createElement('table');
     tableLeft.className = 'tablekey';
 
+    let x_of_y = page_curr + CONST_OF + page_max;
+
     const rows = [
         [entity, total],
         ['per page:', per_page],
-        ['page:', page_curr]
+        ['page:', x_of_y]
     ];
 
     rows.forEach(([label, val]) => {
