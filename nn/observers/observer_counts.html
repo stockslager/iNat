@@ -28,6 +28,7 @@ let winurlparams   = new URLSearchParams(winurlsearchstr.substring(1));
 
 const CONST_WITHOUT_TAXON_PLANTAE = '47126';
 const CONST_CACHE_KEY_SUFFIX      = 'gardeners';
+const CONST_OBSERVERS             = 'observers:';
 
 appState       = buildStateFromParams(winurlparams);
     
@@ -75,7 +76,7 @@ function buildPage( xobj ) {
       } 
 
       // Generate the secure header element
-      const headerElem = buildHeader(CONST_SPECIES, total_results, per_page, page_curr, page_max, on_all1, on_all2, on_all3);
+      const headerElem = buildHeader(CONST_OBSERVERS, total_results, per_page, page_curr, page_max, on_all1, on_all2, on_all3);
 
       // Create the wrapper <p> and append the DOM object directly
       const pWrapper = document.createElement('p');
