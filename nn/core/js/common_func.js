@@ -1,5 +1,5 @@
-const CONST_SPECIES      = 'species';
-const CONST_OBSERVATIONS = 'observations';
+const CONST_SPECIES      = 'species:';
+const CONST_OBSERVATIONS = 'observations:';
 
 function fcomnum(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') }; 
 function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
