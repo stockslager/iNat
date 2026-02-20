@@ -1,5 +1,5 @@
 <!DOCTYPE html>        
-<html lang="en">          
+<html lang="en">       
    
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />      
@@ -16,54 +16,51 @@
 </head>
 
 <style>
-   p { width:fit-content; min-width:375px; margin-top:0.5em; margin-bottom:0.5em; }
-   #topright { display:flex; justify-content:flex-end; align-items: flex-end; white-space:nowrap; padding-right:0px; }
-   /*#stats { margin-bottom: 5px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 3px; padding-bottom: 3px; padding-left: 8px; padding-right: 8px; box-sizing: border-box; }*/
-/* 1. THE CONTAINER: Forces equal height and pushes items to opposite sides */
- 
-.top-bar {
-  /*border: 1px solid var(--color-border);
-  border-radius: 5px; */
-  display: flex;
-  justify-content: space-between; /* Pushes Stats Left and dltest Right */
-  align-items: stretch;           /* Forces both boxes to the same height */
-  width: 100%;
-  gap: 10px;                      /* Optional: space between them if they meet */
-  /*margin-bottom: 100px;*/
-}
+    p { width: fit-content; min-width: 375px; margin: 0.5em 0; }
+    
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        width: 100%;
+        gap: 10px;
+    }
 
-/* 2. STATS (Left Box) */
-#stats {
-  display: inline-flex;
-  flex-direction: column;
-  vertical-align: top;
-  box-sizing: border-box;
-  
-  /* Dimensions & Scroll */
-  /*max-height: 58px;
-  overflow-y: auto;*/
-  white-space: nowrap;
-  width: fit-content;
+    #stats, #topright {
+        display: inline-flex;
+        white-space: nowrap;
+        padding: 3px 8px;
+    }
 
-  /* iPhone Gap Fix: Tighten line-height so padding is the only gap */
-  line-height: 1; 
+    /* THE FIX: Collapse borders and kill line-height */
+    .tablekey { 
+        display: inline-table; 
+        border-collapse: collapse; /* Removes gap between rows */
+        line-height: 1;            /* Tightens text height */
+    }
 
-  /* Visuals: Mirroring dltest */
-  /*border: 2px solid var(--color-border);
-  border-radius: 5px; */
-  padding-top: 3px;
-  padding-bottom: 3px; /* Exact 3px gap you requested */
-  padding-left: 8px;
-  padding-right: 4px;
-}
+    .trkey { background: var(--color-base); }
 
-   #tablekey { display:inline-table; }
-   #trkey { padding:0; background:var(--color-base); border:none; border-collapse:collapse; }
-   #tdkey { padding:0; padding-right: 25px; }
-   #tdright { padding:0; padding-right: 5px; float:right; }
-   #tdright2 { padding:0; padding-right: 5px; padding-top: 2px; text-align:left; } 
+    .tdkey, .tdright, .tdright2 { 
+        padding-top: 0px;    /* Remove top gap */
+        padding-bottom: 0px; /* Remove bottom gap */
+        vertical-align: top; 
+    }
+
+    .tdkey { padding-right: 25px; text-align: left; }
+    .tdright { padding-right: 5px; text-align: right; }
+    /*.tdright2 { padding-right: 5px; text-align: left; }*/
+.tdright2 { 
+    padding: 0px 5px 0px 0px; 
+    line-height: 1.2; /* Adjust this to control vertical density */
+    height: 1.2em;    /* Keeps empty rows the same height as text rows */
+    text-align: left;
+}            
+    
+    #topright { justify-content: flex-end; }
+    #toprightbold { font-weight: bold; }
 </style>
-
+   
 <body>
 <script type="text/javascript"   src='../core/js/global_const.js'> </script>
 <script type="text/javascript"   src='../core/js/common_func.js'> </script>
@@ -182,19 +179,7 @@ function buildMenu( config, results ) {
 
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
-   
-function buildHeader( entity, total, per_page, page_curr, title_1, title_2, title_3 ) {
-   let header = '<div class="top-bar"><div id="stats"><table id="tablekey">' +
-                '<tr id="trkey"><td id="tdkey">'+entity+'</td>  <td id="tdright">'  + total     + '</td></tr>' + 
-                '<tr id="trkey"><td id="tdkey">per page:</td>   <td id="tdright">'  + per_page  + '</td></tr>' + 
-                '<tr id="trkey"><td id="tdkey">page:</td>       <td id="tdright">'  + page_curr + '</td></tr></table></div>' + 
-                '<div id="topright"><table id="tablekey">' +
-                '<tr id="trkey"><td id="tdright2">'  + title_1 + '</td></tr>' + 
-                '<tr id="trkey"><td id="tdright2">'  + title_2 + '</td></tr>' + 
-                '<tr id="trkey"><td id="tdright2">'  + title_3 + '</td></tr></table></div></div>';
-   return( header );
-}
-   
+
 function buildPage(xobj, config) {
    let results = xobj.results;
    let box_array = [];
@@ -219,34 +204,30 @@ function buildPage(xobj, config) {
             {innerText:'Name'}, 
       ];
 
-      let title_1 = '';
-      let title_2 = '';
-      let title_3 = '';
+      let title_1 = '', title_2 = '', title_3 = '';
 
       let show_behavior = config.show_behavior || 'no';
-    
-      if( show_behavior === 'on_all' ) {
-          //title_1 = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
+        
+        // Logic for setting titles (assuming furl and appState are available)
+      if( config.show_behavior === 'on_all' ) {
           let urlState = appState;
           urlState = setPlantMenuId(urlState, '');                  
           urlState = setPlantMenuName(urlState, '');                
           urlState = setPlantName(urlState, CONST_ALL_PLANTS);  // don't include "on" since it'll be added on later.
           urlState = setPlantId(urlState, '');                  // scrub plant id since it might have been set previously
-          title_3 = furl('./garden_activity.html'+buildParameterList(urlState),'<span id="topright">'+config.title+'</span>');
+          title_3 = '<span id="topright">' + config.title + '</span>'; 
       } else {
-          if( getPlaceMenuName(appState) ) {
-              title_3 = '<span id="toprightbold">'+getPlaceMenuName(appState)+'</span>'; 
-          } else {
-              title_3 = '<span id="toprightbold">'+config.getSubTitle()||config.title+'</span>'; 
-          }
+          let label = getPlaceMenuName(appState) || config.getSubTitle() || config.title;
+          title_3 = '<span id="toprightbold">' + label + '</span>';
       }
+    
+      // Generate the secure header element
+      const headerElem = buildHeader(CONST_SPECIES, total_results, per_page, page_curr, title_1, title_2, title_3);
 
-      let header = buildHeader( 'species', fcomnum(total_results), fcomnum(per_page), fcomnum(page_curr), title_1, title_2, title_3 );
-      faddelem('p',document.body,{innerHTML:header});
-
-      /*faddelem('p',document.body,{innerHTML:'<div id="stats">'+CONST_TOTAL_SPECIES+fcomnum(total_results) + title_1 + ' <br/>'
-                 + CONST_PER_PAGE+fcomnum(per_page)+ title_2 + '<br />'
-                 + CONST_PAGE+fcomnum(page_curr)+' of '+fcomnum(page_max) + title_3 + '<br /></div>'});  */
+      // Create the wrapper <p> and append the DOM object directly
+      const pWrapper = document.createElement('p');
+      pWrapper.appendChild(headerElem);
+      document.body.appendChild(pWrapper);
 
       let table = faddelem('table',document.body,{id:'main'});                    
       let thead = faddelem('thead',table);
