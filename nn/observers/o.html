@@ -122,6 +122,9 @@ function buildPage(xobj, observerConfig) {
           dlString = furl('./observer_grid.html'+buildParameterList(urlState),'<span id="topright">'+CONST_ON+titleString+'</span>');
       }*/
 
+      let urlState = appState;
+      urlState = setTaxonId(urlState, getMenuId(appState)); // set taxon id to menu id if a filter was chosen for say, birds.
+
       let plants  = observerConfig.getSubIconNameByTaxonId(observerConfig, getMenuId(appState)) || CONST_ALL_PLANTS.toLowerCase();
       let title_1 = CONST_ALL + ' ' + (observerConfig.getSubIconNameByTaxonId(observerConfig, getMenuId(appState)) || 'wildlife on');     
       let title_2 = furl('./observer_grid.html'+buildParameterList(urlState),(getPlantName(appState) || CONST_ALL_PLANTS.toLowerCase()) + 'by');
