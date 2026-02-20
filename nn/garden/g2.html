@@ -49,7 +49,13 @@
 
     .tdkey { padding-right: 25px; text-align: left; }
     .tdright { padding-right: 5px; text-align: right; }
-    .tdright2 { padding-right: 5px; text-align: left; }
+    /*.tdright2 { padding-right: 5px; text-align: left; }*/
+.tdright2 { 
+    padding: 0px 5px 0px 0px; 
+    line-height: 1.2; /* Adjust this to control vertical density */
+    height: 1.2em;    /* Keeps empty rows the same height as text rows */
+    text-align: left;
+}            
     
     #topright { justify-content: flex-end; }
     #toprightbold { font-weight: bold; }
@@ -148,8 +154,42 @@ function buildHeader2(entity, total, per_page, page_curr, title_1, title_2, titl
     });
     statsDiv.appendChild(tableLeft);
 
-    // Right Side: Titles
+    // Right Side: Titles (Always 3 rows)
     const rightDiv = document.createElement('div');
+    rightDiv.id = 'topright';
+    const tableRight = document.createElement('table');
+    tableRight.className = 'tablekey';
+
+    // We iterate through all three, even if title_1 or title_2 are null
+    [title_1, title_2, title_3].forEach((content) => {
+        const tr = document.createElement('tr');
+        tr.className = 'trkey';
+        const td = document.createElement('td');
+        td.className = 'tdright2';
+
+        if (!content || content === '') {
+            // Use a non-breaking space to maintain row height
+            td.innerHTML = '&nbsp;'; 
+        } else if (typeof content === 'string') {
+            // If it looks like HTML (contains < >), use innerHTML
+            // Otherwise, use textContent for maximum security
+            if (content.includes('<') && content.includes('>')) {
+                td.innerHTML = content; 
+            } else {
+                td.textContent = content;
+            }
+        } else if (content instanceof HTMLElement) {
+            // If it's already a DOM element object
+            td.appendChild(content);
+        }
+
+        tr.appendChild(td);
+        tableRight.appendChild(tr);
+    });
+    rightDiv.appendChild(tableRight);
+   
+    // Right Side: Titles
+    /*const rightDiv = document.createElement('div');
     rightDiv.id = 'topright';
     const tableRight = document.createElement('table');
     tableRight.className = 'tablekey';
@@ -172,7 +212,7 @@ function buildHeader2(entity, total, per_page, page_curr, title_1, title_2, titl
         tr.appendChild(td);
         tableRight.appendChild(tr);
     });
-    rightDiv.appendChild(tableRight);
+    rightDiv.appendChild(tableRight); */
 
     container.append(statsDiv, rightDiv);
     return container;
