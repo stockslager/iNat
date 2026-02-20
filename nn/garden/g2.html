@@ -1,0 +1,254 @@
+<!DOCTYPE html>        
+<html lang="en">          
+   
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />      
+<meta name="apple-mobile-web-app-title" content="Garden List" /> 
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />  
+<meta name="description" content="Garden Viewer" />
+<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
+<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+<title>Garden List</title>
+</head>
+
+<style>
+   p { width:fit-content; min-width:375px; margin-top:0.5em; margin-bottom:0.5em; }
+   #topright { display:flex; justify-content:flex-end; align-items: flex-end; white-space:nowrap; padding-right:0px; }
+   /*#stats { margin-bottom: 5px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 3px; padding-bottom: 3px; padding-left: 8px; padding-right: 8px; box-sizing: border-box; }*/
+/* 1. THE CONTAINER: Forces equal height and pushes items to opposite sides */
+ 
+.top-bar {
+  /*border: 1px solid var(--color-border);
+  border-radius: 5px; */
+  display: flex;
+  justify-content: space-between; /* Pushes Stats Left and dltest Right */
+  align-items: stretch;           /* Forces both boxes to the same height */
+  width: 100%;
+  gap: 10px;                      /* Optional: space between them if they meet */
+  /*margin-bottom: 100px;*/
+}
+
+/* 2. STATS (Left Box) */
+#stats {
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: top;
+  box-sizing: border-box;
+  
+  /* Dimensions & Scroll */
+  /*max-height: 58px;
+  overflow-y: auto;*/
+  white-space: nowrap;
+  width: fit-content;
+
+  /* iPhone Gap Fix: Tighten line-height so padding is the only gap */
+  line-height: 1; 
+
+  /* Visuals: Mirroring dltest */
+  /*border: 2px solid var(--color-border);
+  border-radius: 5px; */
+  padding-top: 3px;
+  padding-bottom: 3px; /* Exact 3px gap you requested */
+  padding-left: 8px;
+  padding-right: 4px;
+}
+
+   #tablekey { display:inline-table; }
+   #trkey { padding:0; background:var(--color-base); border:none; border-collapse:collapse; }
+   #tdkey { padding:0; padding-right: 25px; }
+   #tdright { padding:0; padding-right: 5px; float:right; }
+   #tdright2 { padding:0; padding-right: 5px; padding-top: 2px; text-align:left; } 
+</style>
+
+<body>
+<script type="text/javascript"   src='../core/js/global_const.js'> </script>
+<script type="text/javascript"   src='../core/js/common_func.js'> </script>
+<script type="text/javascript"   src='../core/js/roots.js'> </script>
+<script type="text/javascript"   src='../core/js/store.js'> </script>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
+let p_hide_dash    = winurlparams.get('hide_dash') || 'no';
+
+appState       = buildStateFromParams(winurlparams);
+
+// page / api specific constants 
+const CONST_API_PER_PAGE   = '100';
+const CONST_CUSTOM_PLANT   = 'Plant';
+const CONST_CUSTOM_PLACE   = 'Place';
+const CONST_CUSTOM_UMBRELLA = 'Entire Umbrella';
+  
+function sortWithNull(arr, ascending = true) {
+  for( let i=0; i<arr.length; i++ ) {
+       if( arr[i].taxon.preferred_common_name ){
+           arr[i].taxon.preferred_common_name = arr[i].taxon.preferred_common_name.toLowerCase();
+       }
+  }
+  arr.sort(function(a, b) {
+    if (!a.taxon.preferred_common_name && !b.taxon.preferred_common_name) return 0;
+    if (!a.taxon.preferred_common_name) return ascending ? 1 : -1;
+    if (!b.taxon.preferred_common_name) return ascending ? -1 : 1;
+    if (a.taxon.preferred_common_name < b.taxon.preferred_common_name) return ascending ? -1 : 1;
+    if (a.taxon.preferred_common_name > b.taxon.preferred_common_name) return ascending ? 1 : -1;
+    return 0;
+  });
+  return arr;
+}
+
+function getPlaceName( plantConfig, place_id ) {
+   let place_name = 'Place';
+
+   for( let i=0; i<plantConfig.places.length; i++ ) {
+        if( place_id === plantConfig.places[i].placeId ) {
+            place_name = plantConfig.places[i].placeName; 
+        }
+   }
+   return place_name;
+}
+   
+function buildHeader( entity, total, per_page, page_curr, title_1, title_2, title_3 ) {
+   let header = '<div class="top-bar"><div id="stats"><table id="tablekey">' +
+                '<tr id="trkey"><td id="tdkey">'+entity+'</td>  <td id="tdright">'  + total     + '</td></tr>' + 
+                '<tr id="trkey"><td id="tdkey">per page:</td>   <td id="tdright">'  + per_page  + '</td></tr>' + 
+                '<tr id="trkey"><td id="tdkey">page:</td>       <td id="tdright">'  + page_curr + '</td></tr></table></div>' + 
+                '<div id="topright"><table id="tablekey">' +
+                '<tr id="trkey"><td id="tdright2">'  + title_1 + '</td></tr>' + 
+                '<tr id="trkey"><td id="tdright2">'  + title_2 + '</td></tr>' + 
+                '<tr id="trkey"><td id="tdright2">'  + title_3 + '</td></tr></table></div></div>';
+   return( header );
+}
+   
+function buildPage(xobj, config) {
+   let results = xobj.results;
+   let box_array = [];
+ 
+   if (results) {
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+
+      let title_1 = '';
+      let title_2 = '';
+      let title_3 = '';
+
+      let show_behavior = config.show_behavior || 'no';
+    
+      if( show_behavior === 'on_all' ) {
+          //title_1 = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
+          let urlState = appState;
+          urlState = setPlantMenuId(urlState, '');                  
+          urlState = setPlantMenuName(urlState, '');                
+          urlState = setPlantName(urlState, CONST_ALL_PLANTS);  // don't include "on" since it'll be added on later.
+          urlState = setPlantId(urlState, '');                  // scrub plant id since it might have been set previously
+          title_3 = furl('./garden_activity.html'+buildParameterList(urlState),'<span id="topright">'+config.title+'</span>');
+      } else {
+          if( getPlaceMenuName(appState) ) {
+              title_3 = '<span id="toprightbold">'+getPlaceMenuName(appState)+'</span>'; 
+          } else {
+              title_3 = '<span id="toprightbold">'+config.getSubTitle()||config.title+'</span>'; 
+          }
+      }
+
+      let header = buildHeader( 'species', fcomnum(total_results), fcomnum(per_page), fcomnum(page_curr), title_1, title_2, title_3 );
+      faddelem('p',document.body,{innerHTML:header});
+
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
+}; 
+</script>
+
+<script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
+<script type="text/javascript"   src="../core/js/api_fetch.js"></script>
+
+<script>
+function setupAPIParams( plantConfig ) {
+   let api_params = '';
+ 
+   api_params += '?project_id='+plantConfig.project;
+   api_params += '&iconic_taxa=plantae';
+
+   if( plantConfig.plantField )        { api_params += '&field:'    + plantConfig.plantField;  } 
+   if( plantConfig.plantFieldValue )   { api_params += '='          + plantConfig.plantFieldValue; }
+   if( plantConfig.plantIds )          { api_params += '&id='       + plantConfig.plantIds;  }
+   if( plantConfig.plantListUserId )   { api_params += '&user_id='  + plantConfig.plantListUserId; }
+   if( plantConfig.tagName )           { api_params += '&tag='      + plantConfig.tagName; }
+
+   if( getFieldName(appState) ) {
+       api_params += '&field:' + getFieldName(appState);
+       if( getFieldValue(appState) ) {
+           api_params += '=' + getFieldValue(appState);
+       }
+   }
+
+   // if a place_id was chosen from the place drop-down, use that place_id...
+   if( getPlaceMenuId(appState) ) {
+       api_params += '&place_id=' + getPlaceMenuId(appState);
+   } else if( plantConfig.defaultPlace ) {
+       api_params += '&place_id=' + plantConfig.defaultPlace;
+   }
+
+   // if a taxon_id was chosen in the plant drop-down, use that taxon_id.  if not, 
+   // use the taxon_id(s) from the config when present.
+   if( getPlantMenuId(appState) ) {
+       api_params += '&taxon_id='+getPlantMenuId(appState);
+   } else {
+       if( plantConfig.taxonIds ) { 
+           api_params += '&taxon_id=' + plantConfig.taxonIds; 
+       }
+   }
+
+   api_params += getPageParam(appState, '&page=');
+   api_params += '&per_page='+CONST_API_PER_PAGE;
+ 
+   return api_params;
+}
+   
+async function gatherResources() {
+  let api_base  = 'https://api.inaturalist.org/v1/observations/species_counts';
+  let json_path = json_root + getParams(appState);
+ 
+  try {
+   
+      // Await the result of getObservations() and store the actual data
+      const plantConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
+
+      if( plantConfig.usePlantProjectImages && plantConfig.usePlantProjectImages === 'yes' ) {
+          api_base = 'https://api.inaturalist.org/v1/observations';
+      }
+     
+      console.log('full config title: ' + plantConfig.getFullTitle());
+      const api_params    = setupAPIParams( plantConfig );
+      const api_url       = api_base+api_params;
+      console.log('api url: ' + api_url);
+      const obs_data      = await apiFetch( api_url ); 
+     
+      // Pass the data to the buildPage function
+      buildPage(obs_data, plantConfig); 
+
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+let message = validateGarden(appState);
+ 
+if( message ) {
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
+ 
+</script>
+</body>
+</html>
