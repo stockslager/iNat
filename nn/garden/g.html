@@ -183,6 +183,18 @@ function buildMenu( config, results ) {
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
+function buildHeader( entity, total, per_page, page_curr, title_1, title_2, title_3 ) {
+   let header = '<div class="top-bar"><div id="stats"><table id="tablekey">' +
+                '<tr id="trkey"><td id="tdkey">'+entity+'</td>  <td id="tdright">'  + total     + '</td></tr>' + 
+                '<tr id="trkey"><td id="tdkey">per page:</td>   <td id="tdright">'  + per_page  + '</td></tr>' + 
+                '<tr id="trkey"><td id="tdkey">page:</td>       <td id="tdright">'  + page_curr + '</td></tr></table></div>' + 
+                '<div id="topright"><table id="tablekey">' +
+                '<tr id="trkey"><td id="tdright2">'  + title_1 + '</td></tr>' + 
+                '<tr id="trkey"><td id="tdright2">'  + title_2 + '</td></tr>' + 
+                '<tr id="trkey"><td id="tdright2">'  + title_3 + '</td></tr></table></div></div>';
+   return( header );
+}
+   
 function buildPage(xobj, config) {
    let results = xobj.results;
    let box_array = [];
@@ -229,14 +241,8 @@ function buildPage(xobj, config) {
           }
       }
 
-      faddelem('p',document.body,{innerHTML:'<div class="top-bar"><div id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">species:</td>  <td id="tdright">'    + fcomnum(total_results) + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">per page:</td>   <td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">page:</td>       <td id="tdright">'  + fcomnum(page_curr)     + '</td></tr></table></div>' + 
-                                            '<div id="topright"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdright2">'  + title_1 + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdright2">'  + title_2 + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdright2">'  + title_3 + '</td></tr></table></div></div>'});
+      let header = buildHeader( 'species', fcomnum(total_results), fcomnum(per_page), fcomnum(page_curr), title_1, title_2, title_3 );
+      faddelem('p',document.body,{innerHTML:header});
 
       /*faddelem('p',document.body,{innerHTML:'<div id="stats">'+CONST_TOTAL_SPECIES+fcomnum(total_results) + title_1 + ' <br/>'
                  + CONST_PER_PAGE+fcomnum(per_page)+ title_2 + '<br />'
