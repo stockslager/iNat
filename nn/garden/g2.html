@@ -17,7 +17,7 @@
 
 <style>
     p { width: fit-content; min-width: 375px; margin: 0.5em 0; }
-    
+
     .top-bar {
         display: flex;
         justify-content: space-between;
@@ -26,10 +26,20 @@
         gap: 10px;
     }
 
-    #stats, #topright {
+    #stats {
         display: inline-flex;
         white-space: nowrap;
-        padding: 3px 8px;
+        padding: 0px 0px;       
+        padding-left: 0 !important;
+        margin-left: 0 !important;
+    }
+   
+    #topright {
+        display: inline-flex;
+        white-space: nowrap;
+        padding: 0px 0px;   
+        padding-right: 0 !important;
+        margin-right: 0 !important;
     }
 
     /* THE FIX: Collapse borders and kill line-height */
@@ -37,6 +47,9 @@
         display: inline-table; 
         border-collapse: collapse; /* Removes gap between rows */
         line-height: 1;            /* Tightens text height */
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        border-collapse: collapse;
     }
 
     .trkey { background: var(--color-base); }
@@ -47,9 +60,12 @@
         vertical-align: top; 
     }
 
-    .tdkey { padding-right: 25px; text-align: left; }
-    .tdright { padding-right: 5px; text-align: right; }
-    /*.tdright2 { padding-right: 5px; text-align: left; }*/
+    .tdkey { padding-right: 20px; text-align: left; }
+    .tdright { padding-right: 0px; text-align: right; }
+    .tdkey:first-child {
+           padding-left: 0 !important;
+    }   
+
 .tdright2 { 
     padding: 0px 5px 0px 0px; 
     line-height: 1.2; /* Adjust this to control vertical density */
@@ -59,8 +75,7 @@
     
     #topright { justify-content: flex-end; }
     #toprightbold { font-weight: bold; }
-</style>
-   
+</style>   
 <body>
 <script type="text/javascript"   src='../core/js/global_const.js'> </script>
 <script type="text/javascript"   src='../core/js/common_func.js'> </script>
