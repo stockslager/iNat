@@ -16,7 +16,8 @@
 </head>
 
 <style>
-        /* CSS Clean-up: Use classes for repeating elements */
+
+<style>
         p { width: fit-content; min-width: 375px; margin: 0.5em 0; }
         
         .top-bar {
@@ -35,12 +36,22 @@
 
         #topright { justify-content: flex-end; }
 
-        .tablekey { display: inline-table; border-collapse: collapse; }
-        .trkey { background: var(--color-base); }
+        .tablekey { display: inline-table; border-collapse: collapse; border-spacing: 0; }
+        .trkey { background: var(--color-base); padding: 0; margin: 0; line-height: 1.1;  }
         .tdkey { padding-right: 25px; text-align: left; }
         .tdright { padding-right: 5px; text-align: right; }
         .tdright2 { padding: 2px 5px 0 0; text-align: left; }
-        #toprightbold { font-weight: bold; }
+        #toprightbold { font-weight: bold; 
+
+.tdkey, .tdright { 
+  padding-top: 0px;    /* Force zero top padding */
+  padding-bottom: 0px; /* Force zero bottom padding */
+  vertical-align: top; /* Keeps text aligned to the top of the row */
+}
+
+/* 3. Your existing horizontal padding remains */
+.tdkey { padding-right: 25px; }
+.tdright { padding-right: 5px; text-align: right; }
 </style>
 
 <body>
