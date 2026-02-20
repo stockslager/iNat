@@ -24,47 +24,81 @@
    #dltest { max-height:52px; overflow-y:auto; /* overflow: scroll; */ width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 3px; padding-bottom: 3px; padding-left: 8px; padding-right: 4px; margin-bottom: 10px; white-space:nowrap; }
    #topright { display:flex; justify-content:flex-end; align-items: flex-end; white-space:nowrap; padding-right:0px; }
    /*#stats { margin-bottom: 5px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 3px; padding-bottom: 3px; padding-left: 8px; padding-right: 8px; box-sizing: border-box; }*/
+/* 1. THE CONTAINER: Forces equal height and pushes items to opposite sides */
+ 
+.top-bar {
+  display: flex;
+  justify-content: space-between; /* Pushes Stats Left and dltest Right */
+  align-items: stretch;           /* Forces both boxes to the same height */
+  width: 100%;
+  gap: 10px;                      /* Optional: space between them if they meet */
+  margin-bottom: 10px;
+}
+
+/* 2. STATS (Left Box) */
 #stats {
-  /* Layout: Option 2 (Inline-flex) */
   display: inline-flex;
   flex-direction: column;
   vertical-align: top;
   box-sizing: border-box;
   
-  /* Shared behavior with dltest */
+  /* Dimensions & Scroll */
   max-height: 52px;
   overflow-y: auto;
   white-space: nowrap;
   width: fit-content;
 
-  /* Typography: The "Tightener" for iPhone */
+  /* iPhone Gap Fix: Tighten line-height so padding is the only gap */
   line-height: 1; 
 
-  /* Visual styling & Specific Padding */
+  /* Visuals: Mirroring dltest */
   border: 2px solid var(--color-border);
   border-radius: 5px;
   padding-top: 3px;
-  padding-bottom: 3px; /* Explicit 3px gap at the bottom */
+  padding-bottom: 3px; /* Exact 3px gap you requested */
   padding-left: 8px;
   padding-right: 4px;
-  margin-bottom: 10px;
 }
-/* #stats {
+
+/* 3. DLTEST (Right Box) */
+#dltest {
+  display: block;
+  box-sizing: border-box; /* Crucial for height matching */
+  
+  /* Dimensions & Scroll */
+  max-height: 52px;
+  overflow-y: auto;
+  width: fit-content;
+  white-space: nowrap;
+
+  /* Visuals */
+  border: 2px solid var(--color-border);
+  border-radius: 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 8px;
+  padding-right: 4px;
+} 
+ /*#stats {
   display: inline-flex;
   flex-direction: column;
-  vertical-align: top;     
-  line-height: 1.1;        
+  vertical-align: top;
+  box-sizing: border-box;
   
   max-height: 52px;
   overflow-y: auto;
   white-space: nowrap;
   width: fit-content;
-  
+
+  line-height: 1; 
+
   border: 2px solid var(--color-border);
   border-radius: 5px;
-  padding: 3px 4px 3px 8px; 
+  padding-top: 3px;
+  padding-bottom: 3px; 
+  padding-left: 8px;
+  padding-right: 4px;
   margin-bottom: 10px;
-  box-sizing: border-box;
 }*/
  
    #mismatch { padding-right:25px; padding-bottom:12px; }
@@ -285,7 +319,11 @@ function fresults( xobj, config ) {
     
       dlString += '</table></span></div>';
 
-      faddelem('p',document.body,{innerHTML:dlString});
+      faddelem('p',document.body,{innerHTML:'<div class="top-bar"><div id="stats"><table id="tablekey">' +
+                                            '<tr id="trkey"><td id="tdkey">total:</td><td id="tdright">'     + fcomnum(total_results) + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">per page:</td><td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
+                                            '<tr id="trkey"><td id="tdkey">page:</td><td id="tdright">'      + fcomnum(page_curr) + ' of ' + fcomnum(page_max) + '</td></tr></table></div>'});
+      faddelem('p',document.body,{innerHTML:dlString+'</div>'});
 
       // hide the mismatch warning... only display it if there is a mismatch in the table.
       document.getElementById("mismatch").style.display = "none"; 
@@ -456,15 +494,6 @@ function fresults( xobj, config ) {
 
          tempBrow.push(values);
       };
-
-      faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">total:</td><td id="tdright">'     + fcomnum(total_results) + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">per page:</td><td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">page:</td><td id="tdright">'      + fcomnum(page_curr) + ' of ' + fcomnum(page_max) + '</td></tr></table></span>'});
-
-      /*faddelem('p',document.body,{innerHTML:'total observations: '+fcomnum(total_results)+' <br/>'
-             +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+flower+'<br /></div>'});  */
 
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
