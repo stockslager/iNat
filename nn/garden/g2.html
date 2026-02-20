@@ -26,15 +26,29 @@
         gap: 10px;
     }
 
-    #stats {
-        border: 2px solid var(--color-border);
-        border-radius: 5px;
-        display: inline-flex;
-        white-space: nowrap;
-        padding: 0px 0px;       
-        padding-left: 0 !important;
-        margin-left: 0 !important;
-    }
+#stats {
+    display: inline-flex;
+    white-space: nowrap;
+    
+    /* 1. Add the Border and Rounded Corners */
+    border: 2px solid var(--color-border); /* Uses your core variable */
+    border-radius: 5px;                    /* Standard rounded corner */
+    
+    /* 2. Padding ensures text doesn't touch the new border */
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 8px;   /* Small gap on the left inside the border */
+    padding-right: 8px;  /* Small gap on the right inside the border */
+    
+    /* 3. Alignment Fixes */
+    box-sizing: border-box; 
+    margin-left: 0 !important;
+}
+
+/* Ensure the table inside doesn't have its own margins fighting the border */
+#stats .tablekey {
+    margin: 0;
+}
    
     #topright {
         display: inline-flex;
