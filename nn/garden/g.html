@@ -220,9 +220,9 @@ function buildPage(xobj, config) {
           }
       }
 
-      faddelem('p',document.body,{innerHTML:CONST_TOTAL_SPECIES+fcomnum(total_results) + title_1 + ' <br/>'
+      faddelem('p',document.body,{innerHTML:'<div id="stats">'+CONST_TOTAL_SPECIES+fcomnum(total_results) + title_1 + ' <br/>'
                  + CONST_PER_PAGE+fcomnum(per_page)+ title_2 + '<br />'
-                 + CONST_PAGE+fcomnum(page_curr)+' of '+fcomnum(page_max) + title_3 + '<br />'});  
+                 + CONST_PAGE+fcomnum(page_curr)+' of '+fcomnum(page_max) + title_3 + '<br /></div>'});  
 
       let table = faddelem('table',document.body,{id:'main'});                    
       let thead = faddelem('thead',table);
