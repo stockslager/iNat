@@ -28,7 +28,6 @@ let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
 
 appState       = buildStateFromParams(winurlparams);
  
-let dlString   = '';
 let menu_name  = '';
 
 // constants 
@@ -112,16 +111,6 @@ function buildPage(xobj, observerConfig) {
 
       buildMenu( results, observerConfig );
 
-     /* if( !getMenuId(appState) ) {
-          let titleString = CONST_ON+capitalizeWords(getPlantName(appState));
-          dlString = furl('./observer_grid.html'+buildParameterList(appState),'<span id="topright">'+titleString+'</span>');
-      } else {
-          let urlState = appState;  // creates a copy
-          let titleString = capitalizeWords(getMenuName(appState)+getPlantName(appState));
-          urlState = setTaxonId(urlState, getMenuId(appState));  // set taxon id to menu id if a filter was chosen for say, birds.
-          dlString = furl('./observer_grid.html'+buildParameterList(urlState),'<span id="topright">'+CONST_ON+titleString+'</span>');
-      }*/
-
       let urlState = appState;
       urlState = setTaxonId(urlState, getMenuId(appState)); // set taxon id to menu id if a filter was chosen for say, birds.
 
@@ -136,24 +125,6 @@ function buildPage(xobj, observerConfig) {
       const pWrapper = document.createElement('p');
       pWrapper.appendChild(headerElem);
       document.body.appendChild(pWrapper);
-
-    /*  let url_text = '<span id="statsright"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdright2">'  + on_all1 + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdright2">'  + on_all2 + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdright2">'  + on_all3 + '</td></tr></table></span>';
-      let url = furl('./observer_grid.html'+buildParameterList(urlState), url_text);
-      faddelem('p',document.body,{innerHTML:url}); */
-
-    
-      /*faddelem('p',document.body,{innerHTML:'<span id="statsright"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdright2">'  + on_all1 + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdright2">'  + on_all2 + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdright2">'  + on_all3 + '</td></tr></table></span>'});*/
-
-     /* faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">species:</td>  <td id="tdright">'  + fcomnum(total_results) + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">per page:</td> <td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">page:</td>     <td id="tdright">'  + fcomnum(page_curr)     + ' of '+fcomnum(page_max) + '</td></tr></table></span>'}); */
 
       labels = [
             {innerText:'#'},
