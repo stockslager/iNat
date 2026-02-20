@@ -24,5 +24,5 @@ const CONST_STUDIES_UTF8   = '&#127891;';
 
 // iNat api per_page (number of rows per_page requested from api)...
 const CONST_OBSERVATIONS_PER_PAGE           = '100';
-const CONST_SPECIES_COUNTS_PER_PAGE         = '10';
-const CONST_OBSERVATIONS_OBSERVERS_PER_PAGE = '10';
+const CONST_SPECIES_COUNTS_PER_PAGE         = '100';
+const CONST_OBSERVATIONS_OBSERVERS_PER_PAGE = '100';
