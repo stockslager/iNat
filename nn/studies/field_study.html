@@ -25,25 +25,47 @@
    #topright { display:flex; justify-content:flex-end; align-items: flex-end; white-space:nowrap; padding-right:0px; }
    /*#stats { margin-bottom: 5px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 3px; padding-bottom: 3px; padding-left: 8px; padding-right: 8px; box-sizing: border-box; }*/
 #stats {
-  /* Option 2: Inline-flex layout to snap borders to text */
+  /* Layout: Option 2 (Inline-flex) */
   display: inline-flex;
   flex-direction: column;
-  vertical-align: top;     /* Fixes baseline alignment gaps in Safari */
-  line-height: 1.1;        /* Tightens the text area to prevent bottom drift */
+  vertical-align: top;
+  box-sizing: border-box;
   
   /* Shared behavior with dltest */
   max-height: 52px;
   overflow-y: auto;
   white-space: nowrap;
   width: fit-content;
-  
-  /* Visual styling */
+
+  /* Typography: The "Tightener" for iPhone */
+  line-height: 1; 
+
+  /* Visual styling & Specific Padding */
   border: 2px solid var(--color-border);
   border-radius: 5px;
-  padding: 3px 4px 3px 8px; /* Mirroring dltest's 8px left/4px right */
+  padding-top: 3px;
+  padding-bottom: 3px; /* Explicit 3px gap at the bottom */
+  padding-left: 8px;
+  padding-right: 4px;
+  margin-bottom: 10px;
+}
+/* #stats {
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: top;     
+  line-height: 1.1;        
+  
+  max-height: 52px;
+  overflow-y: auto;
+  white-space: nowrap;
+  width: fit-content;
+  
+  border: 2px solid var(--color-border);
+  border-radius: 5px;
+  padding: 3px 4px 3px 8px; 
   margin-bottom: 10px;
   box-sizing: border-box;
-}
+}*/
  
    #mismatch { padding-right:25px; padding-bottom:12px; }
    #divhead { max-width: 900px; }
