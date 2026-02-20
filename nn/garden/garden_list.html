@@ -287,6 +287,8 @@ function setupAPIParams( plantConfig ) {
    // if a place_id was chosen from the place drop-down, use that place_id...
    if( getPlaceMenuId(appState) ) {
        api_params += '&place_id=' + getPlaceMenuId(appState);
+   } else if( plantConfig.defaultPlace ) {
+       api_params += '&place_id=' + plantConfig.defaultPlace;
    }
 
    // if a taxon_id was chosen in the plant drop-down, use that taxon_id.  if not, 
