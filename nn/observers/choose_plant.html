@@ -97,9 +97,7 @@ function buildMenu( config, results ) {
       // split list (if they have more than one value in garden-list...
       links = '';
   
-      let urlState  = clearForDashParams(appState);
-      urlState = setComponent(urlState, COMPONENT_OBSERVERS);                  
-      menu_string  += buildHome(furl('./observer_counts.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
+      menu_string  += buildHome(furl('./observer_counts.html'+buildParameterList(appState),CONST_LEAF_UTF8));
 
       menu_string += '</div>';
 
