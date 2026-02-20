@@ -130,9 +130,6 @@ function buildPage(xobj, observerConfig) {
       let title_2 = furl('./observer_grid.html'+buildParameterList(urlState),(getPlantName(appState) || CONST_ALL_PLANTS.toLowerCase()) + 'by');
       let title_3 = getUser(appState);
 
-      let urlState = appState;
-      urlState = setTaxonId(urlState, getMenuId(appState)); // set taxon id to menu id if a filter was chosen for say, birds.
-
       // Generate the secure header element
       const headerElem = buildHeader(CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3);
 
