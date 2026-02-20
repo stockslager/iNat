@@ -182,62 +182,6 @@ function buildMenu( config, results ) {
 
       faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
-
-function buildSpeciesHeader( total, per_page, page_curr, title_1, title_2, title_3 ) {
-  // Helper to quickly create rows with text
-  const createRow = (label, value) => {
-    const tr = document.createElement('tr');
-    tr.className = 'trkey';
-    
-    const td1 = document.createElement('td');
-    td1.className = 'tdkey';
-    td1.textContent = label;
-    
-    const td2 = document.createElement('td');
-    td2.className = 'tdright';
-    td2.textContent = value;
-    
-    tr.append(td1, td2);
-    return tr;
-  };
-
-  // Main container
-  const container = document.createElement('div');
-  container.className = 'top-bar';
-
-  // Left Section (Stats)
-  const statsDiv = document.createElement('div');
-  statsDiv.id = 'stats';
-  const tableLeft = document.createElement('table');
-  tableLeft.className = 'tablekey';
-  
-  tableLeft.append(
-    createRow('species:', total),
-    createRow('per page:', per_page),
-    createRow('page:', page_curr)
-  );
-  statsDiv.appendChild(tableLeft);
-
-  // Right Section (Titles)
-  const rightDiv = document.createElement('div');
-  rightDiv.id = 'topright';
-  const tableRight = document.createElement('table');
-  tableRight.className = 'tablekey';
-
-  [title_1, title_2, title_3].forEach(text => {
-    const tr = document.createElement('tr');
-    tr.className = 'trkey';
-    const td = document.createElement('td');
-    td.className = 'tdright2';
-    td.textContent = text;
-    tr.appendChild(td);
-    tableRight.appendChild(tr);
-  });
-  rightDiv.appendChild(tableRight);
-
-  container.append(statsDiv, rightDiv);
-  return container;
-}
    
 function buildHeader( entity, total, per_page, page_curr, title_1, title_2, title_3 ) {
    let header = '<div class="top-bar"><div id="stats"><table id="tablekey">' +
@@ -297,11 +241,8 @@ function buildPage(xobj, config) {
           }
       }
 
-      const header = buildSpeciesHeader( fcomnum(total_results), fcomnum(per_page), fcomnum(page_curr), title_1, title_2, 'birchhill' );
+      let header = buildHeader( 'species', fcomnum(total_results), fcomnum(per_page), fcomnum(page_curr), title_1, title_2, title_3 );
       faddelem('p',document.body,{innerHTML:header});
-      //document.body.appendChild(header);
-      //let header = buildHeader( 'species', fcomnum(total_results), fcomnum(per_page), fcomnum(page_curr), title_1, title_2, title_3 );
-      //faddelem('p',document.body,{innerHTML:header});
 
       /*faddelem('p',document.body,{innerHTML:'<div id="stats">'+CONST_TOTAL_SPECIES+fcomnum(total_results) + title_1 + ' <br/>'
                  + CONST_PER_PAGE+fcomnum(per_page)+ title_2 + '<br />'
