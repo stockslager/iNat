@@ -28,7 +28,6 @@ let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
 
 appState       = buildStateFromParams(winurlparams);
  
-let dlString   = '';
 let menu_name  = '';
 
 // constants 
@@ -112,20 +111,26 @@ function buildPage(xobj, plantsConfig) {
 
       buildMenu( results, plantsConfig );
 
+      let title_1 = '', title_2 = '', title_3 = '';
+
       if( !getMenuId(appState) ) {
           let titleString = CONST_ON+capitalizeWords(getPlantName(appState));
-          dlString = furl('./garden_grid.html'+buildParameterList(appState),'<span id="topright">'+titleString+'</span>');
+          title_3 = furl('./garden_grid.html'+buildParameterList(appState),'<span id="upperright">'+titleString+'</span>');
       } else {
           let urlState = appState;  // creates a copy
           let titleString = capitalizeWords(getMenuName(appState)+getPlantName(appState));
           urlState = setTaxonId(urlState, getMenuId(appState));  // set taxon id to menu id if a filter was chosen for say, birds.
-          dlString = furl('./garden_grid.html'+buildParameterList(urlState),'<span id="topright">'+CONST_ON+titleString+'</span>');
+          title_3 = furl('./garden_grid.html'+buildParameterList(urlState),'<span id="upperright">'+CONST_ON+titleString+'</span>');
       }
 
-      faddelem('p',document.body,{innerHTML:'total species: '+fcomnum(total_results)+' <br/>'
-             +'per page: '+fcomnum(per_page)+'<br />'
-             +'page: '+fcomnum(page_curr)+' of '+fcomnum(page_max)+dlString+'<br />'});  
+      // Generate the secure header element
+      const headerElem = buildHeader(CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3);
 
+      // Create the wrapper <p> and append the DOM object directly
+      const pWrapper = document.createElement('p');
+      pWrapper.appendChild(headerElem);
+      document.body.appendChild(pWrapper);
+    
       labels = [
             {innerText:'#'},
             {innerText:'Photo'},
