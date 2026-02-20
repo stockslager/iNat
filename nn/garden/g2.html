@@ -123,6 +123,69 @@ function buildHeader( entity, total, per_page, page_curr, title_1, title_2, titl
                 '<tr id="trkey"><td id="tdright2">'  + title_3 + '</td></tr></table></div></div>';
    return( header );
 }
+
+function buildHeader2(entity, total, per_page, page_curr, title_1, title_2, title_3) {
+    const container = document.createElement('div');
+    container.className = 'top-bar';
+
+    // Left Side: Stats
+    const statsDiv = document.createElement('div');
+    statsDiv.id = 'stats';
+    const tableLeft = document.createElement('table');
+    tableLeft.className = 'tablekey';
+
+    const rows = [
+        [entity, total],
+        ['per page:', per_page],
+        ['page:', page_curr]
+    ];
+
+    rows.forEach(([label, val]) => {
+        const tr = document.createElement('tr');
+        tr.className = 'trkey';
+        
+        const tdL = document.createElement('td');
+        tdL.className = 'tdkey';
+        tdL.textContent = label; // Safe from injection
+        
+        const tdR = document.createElement('td');
+        tdR.className = 'tdright';
+        tdR.textContent = val;   // Safe from injection
+        
+        tr.append(tdL, tdR);
+        tableLeft.appendChild(tr);
+    });
+    statsDiv.appendChild(tableLeft);
+
+    // Right Side: Titles
+    const rightDiv = document.createElement('div');
+    rightDiv.id = 'topright';
+    const tableRight = document.createElement('table');
+    tableRight.className = 'tablekey';
+
+    [title_1, title_2, title_3].forEach(content => {
+        if (!content) return;
+        const tr = document.createElement('tr');
+        tr.className = 'trkey';
+        const td = document.createElement('td');
+        td.className = 'tdright2';
+        
+        // title_3 often contains HTML links from furl(), so we use innerHTML 
+        // ONLY on trusted internal function returns.
+        if (typeof content === 'string') {
+            td.innerHTML = content; 
+        } else {
+            td.appendChild(content);
+        }
+        
+        tr.appendChild(td);
+        tableRight.appendChild(tr);
+    });
+    rightDiv.appendChild(tableRight);
+
+    container.append(statsDiv, rightDiv);
+    return container;
+}
    
 function buildPage(xobj, config) {
    let results = xobj.results;
@@ -158,8 +221,16 @@ function buildPage(xobj, config) {
           }
       }
 
-      let header = buildHeader( 'species', fcomnum(total_results), fcomnum(per_page), fcomnum(page_curr), title_1, title_2, title_3 );
-      faddelem('p',document.body,{innerHTML:header});
+        // Generate the secure header element
+        const headerElem = buildHeader2('species', total_results, per_page, page_curr, title_1, title_2, title_3);
+        
+        // Create the wrapper <p> and append the DOM object directly
+        const pWrapper = document.createElement('p');
+        pWrapper.appendChild(headerElem);
+        document.body.appendChild(pWrapper);
+   
+      //let header = buildHeader( 'species', fcomnum(total_results), fcomnum(per_page), fcomnum(page_curr), title_1, title_2, title_3 );
+      //faddelem('p',document.body,{innerHTML:header});
 
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
