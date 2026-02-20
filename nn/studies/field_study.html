@@ -322,8 +322,9 @@ function fresults( xobj, config ) {
       faddelem('p',document.body,{innerHTML:'<div class="top-bar"><div id="stats"><table id="tablekey">' +
                                             '<tr id="trkey"><td id="tdkey">total:</td><td id="tdright">'     + fcomnum(total_results) + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">per page:</td><td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">page:</td><td id="tdright">'      + fcomnum(page_curr) + ' of ' + fcomnum(page_max) + '</td></tr></table></div>'});
-      faddelem('p',document.body,{innerHTML:dlString+'</div>'});
+                                            '<tr id="trkey"><td id="tdkey">page:</td><td id="tdright">'      + fcomnum(page_curr) + ' of ' + fcomnum(page_max) + '</td></tr></table></div>' + 
+                                            dlString + '</div>'});
+      //faddelem('p',document.body,{innerHTML:dlString+'</div>'});
 
       // hide the mismatch warning... only display it if there is a mismatch in the table.
       document.getElementById("mismatch").style.display = "none"; 
