@@ -159,11 +159,11 @@ function buildHeader(entity, total, per_page, page_curr, page_max, title_1, titl
     const container = document.createElement('div');
     container.className = 'top-bar';
 
-    // Left Side: Stats
-    const statsDiv = document.createElement('div');
-    statsDiv.id = 'stats';
+    // Left Side Box
+    const lboxDiv = document.createElement('div');
+    lboxDiv.id = 'lbox';
     const tableLeft = document.createElement('table');
-    tableLeft.className = 'tablekey';
+    tableLeft.className = 'tableboxkey';
 
     let x_of_y = page_curr + CONST_OF + page_max;
 
@@ -175,33 +175,33 @@ function buildHeader(entity, total, per_page, page_curr, page_max, title_1, titl
 
     rows.forEach(([label, val]) => {
         const tr = document.createElement('tr');
-        tr.className = 'trkey';
+        tr.className = 'trboxes';
         
         const tdL = document.createElement('td');
-        tdL.className = 'tdkey';
+        tdL.className = 'tdleft';
         tdL.textContent = label; // Safe from injection
         
         const tdR = document.createElement('td');
-        tdR.className = 'tdright';
+        tdR.className = 'tdrightbox';
         tdR.textContent = val;   // Safe from injection
         
         tr.append(tdL, tdR);
         tableLeft.appendChild(tr);
     });
-    statsDiv.appendChild(tableLeft);
+    lboxDiv.appendChild(tableLeft);
 
     // Right Side: Titles (Always 3 rows)
     const rightDiv = document.createElement('div');
-    rightDiv.id = 'topright';
+    rightDiv.id = 'upperright';
     const tableRight = document.createElement('table');
-    tableRight.className = 'tablekey';
+    tableRight.className = 'tableboxkey';
 
     // We iterate through all three, even if title_1 or title_2 are null
     [title_1, title_2, title_3].forEach((content) => {
         const tr = document.createElement('tr');
-        tr.className = 'trkey';
+        tr.className = 'trboxes';
         const td = document.createElement('td');
-        td.className = 'tdright2';
+        td.className = 'tdrightbox2';
 
         if (!content || content === '') {
             // Use a non-breaking space to maintain row height
@@ -224,6 +224,6 @@ function buildHeader(entity, total, per_page, page_curr, page_max, title_1, titl
     });
     rightDiv.appendChild(tableRight);
 
-    container.append(statsDiv, rightDiv);
+    container.append(lboxDiv, rightDiv);
     return container;
 }
