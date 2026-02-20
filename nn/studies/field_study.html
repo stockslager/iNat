@@ -25,24 +25,26 @@
    #topright { display:flex; justify-content:flex-end; align-items: flex-end; white-space:nowrap; padding-right:0px; }
    /*#stats { margin-bottom: 5px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 3px; padding-bottom: 3px; padding-left: 8px; padding-right: 8px; box-sizing: border-box; }*/
 #stats {
-    width: fit-content;              /* Size to content */
-    height: fit-content;
-    display: block;                  /* Use block for standard positioning */
-    margin-bottom: 5px;              /* Adjusted margin */
-    border-width: 2px 2px;
-    border-style: solid;
-    border-color: var(--color-border);
-    border-radius: 5px;
-    padding-top: 3px;
-    padding-left: 8px;               /* Consistent padding */
-    padding-right: 4px;              /* Consistent padding */
-    white-space: nowrap;             /* Prevent wrapping */
-    box-sizing: border-box;
-    margin-left: 0;                  /* Ensure it stays left */
-    margin-right: auto;              /* Pushes remaining space to the right */
-    padding-bottom: 3px; /* Reduces space below text */
+  /* Option 2: Inline-flex layout to snap borders to text */
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: top;     /* Fixes baseline alignment gaps in Safari */
+  line-height: 1.1;        /* Tightens the text area to prevent bottom drift */
+  
+  /* Shared behavior with dltest */
+  max-height: 52px;
+  overflow-y: auto;
+  white-space: nowrap;
+  width: fit-content;
+  
+  /* Visual styling */
+  border: 2px solid var(--color-border);
+  border-radius: 5px;
+  padding: 3px 4px 3px 8px; /* Mirroring dltest's 8px left/4px right */
+  margin-bottom: 10px;
+  box-sizing: border-box;
 }
-
+ 
    #mismatch { padding-right:25px; padding-bottom:12px; }
    #divhead { max-width: 900px; }
    #key { color:var(--color-text); text-decoration:underline; padding:0; padding-right: 25px;}
@@ -261,10 +263,10 @@ function fresults( xobj, config ) {
     
       dlString += '</table></span></div>';
 
-      //faddelem('p',document.body,{innerHTML:dlString});
+      faddelem('p',document.body,{innerHTML:dlString});
 
       // hide the mismatch warning... only display it if there is a mismatch in the table.
-      //document.getElementById("mismatch").style.display = "none"; 
+      document.getElementById("mismatch").style.display = "none"; 
      
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
@@ -415,7 +417,7 @@ function fresults( xobj, config ) {
                   }
               } else {
                   if( mismatch === 'yes' ){
-                      //document.getElementById("mismatch").style.display = "inline"; 
+                      document.getElementById("mismatch").style.display = "inline"; 
                       displayName += ' ';
                       displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
                   } 
@@ -432,8 +434,8 @@ function fresults( xobj, config ) {
 
          tempBrow.push(values);
       };
-      //faddelem('p',document.body,{innerHTML:dlString});
-      faddelem('p',document.body,{innerHTML:dlString+'<span id="stats"><table id="tablekey">' +
+
+      faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
                                             '<tr id="trkey"><td id="tdkey">total:</td><td id="tdright">'     + fcomnum(total_results) + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">per page:</td><td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
                                             '<tr id="trkey"><td id="tdkey">page:</td><td id="tdright">'      + fcomnum(page_curr) + ' of ' + fcomnum(page_max) + '</td></tr></table></span>'});
