@@ -15,16 +15,6 @@
 <title>Observer Activity</title>
 </head>
 
-<style>
-   #stats { margin-bottom: 5px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 2px; padding-bottom: 4px; padding-left: 8px; padding-right: 8px; }
-   #statsright { float:right; margin-bottom: 5px; width:fit-content; display: block; justify-content:start; padding-top: 4px; padding-bottom: 4px; padding-left: 8px; padding-right: 8px; }
-   #tablekey { display:inline-table; }
-   #trkey { padding:0; background:var(--color-base); border:none; border-collapse:collapse; }
-   #tdkey { padding:0; padding-right: 25px; }
-   #tdright {  padding:0; padding-right: 5px; padding-top: 2px; float:right; }
-   #tdright2 { padding:0; padding-right: 5px; padding-top: 2px; text-align:left; } 
-</style>
-
 <body>
 <script type="text/javascript"   src='../core/js/global_const.js'> </script>
 <script type="text/javascript"   src='../core/js/common_func.js'> </script>
@@ -38,7 +28,6 @@ let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
 
 appState       = buildStateFromParams(winurlparams);
  
-let dlString   = '';
 let menu_name  = '';
 
 // constants 
@@ -122,41 +111,20 @@ function buildPage(xobj, observerConfig) {
 
       buildMenu( results, observerConfig );
 
-     /* if( !getMenuId(appState) ) {
-          let titleString = CONST_ON+capitalizeWords(getPlantName(appState));
-          dlString = furl('./observer_grid.html'+buildParameterList(appState),'<span id="topright">'+titleString+'</span>');
-      } else {
-          let urlState = appState;  // creates a copy
-          let titleString = capitalizeWords(getMenuName(appState)+getPlantName(appState));
-          urlState = setTaxonId(urlState, getMenuId(appState));  // set taxon id to menu id if a filter was chosen for say, birds.
-          dlString = furl('./observer_grid.html'+buildParameterList(urlState),'<span id="topright">'+CONST_ON+titleString+'</span>');
-      }*/
-
-      let plants  = observerConfig.getSubIconNameByTaxonId(observerConfig, getMenuId(appState)) || CONST_ALL_PLANTS.toLowerCase();
-      let on_all1 = CONST_ALL + ' ' + (observerConfig.getSubIconNameByTaxonId(observerConfig, getMenuId(appState)) || 'wildlife');     
-      let on_all2 = 'on ' + (getPlantName(appState) || CONST_ALL_PLANTS.toLowerCase());
-      let on_all3 = 'by ' + getUser(appState);
-
       let urlState = appState;
       urlState = setTaxonId(urlState, getMenuId(appState)); // set taxon id to menu id if a filter was chosen for say, birds.
 
-      let url_text = '<span id="statsright"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdright2">'  + on_all1 + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdright2">'  + on_all2 + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdright2">'  + on_all3 + '</td></tr></table></span>';
-      let url = furl('./observer_grid.html'+buildParameterList(urlState), url_text);
-      faddelem('p',document.body,{innerHTML:url});
+      let title_1 = (observerConfig.getSubIconNameByTaxonId(observerConfig, getMenuId(appState)) || 'wildlife');
+      let title_2 = ' by ' + getUser(appState);     
+      let title_3 = furl('./observer_grid.html'+buildParameterList(urlState),'on ' + (getPlantName(appState) || CONST_ALL_PLANTS.toLowerCase()));
 
-    
-      /*faddelem('p',document.body,{innerHTML:'<span id="statsright"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdright2">'  + on_all1 + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdright2">'  + on_all2 + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdright2">'  + on_all3 + '</td></tr></table></span>'});*/
+      // Generate the secure header element
+      const headerElem = buildHeader(CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3);
 
-      faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">species:</td>  <td id="tdright">'  + fcomnum(total_results) + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">per page:</td> <td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">page:</td>     <td id="tdright">'  + fcomnum(page_curr)     + ' of '+fcomnum(page_max) + '</td></tr></table></span>'});
+      // Create the wrapper <p> and append the DOM object directly
+      const pWrapper = document.createElement('p');
+      pWrapper.appendChild(headerElem);
+      document.body.appendChild(pWrapper);
 
       labels = [
             {innerText:'#'},
