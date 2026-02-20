@@ -187,32 +187,6 @@ function buildHeader2(entity, total, per_page, page_curr, title_1, title_2, titl
         tableRight.appendChild(tr);
     });
     rightDiv.appendChild(tableRight);
-   
-    // Right Side: Titles
-    /*const rightDiv = document.createElement('div');
-    rightDiv.id = 'topright';
-    const tableRight = document.createElement('table');
-    tableRight.className = 'tablekey';
-
-    [title_1, title_2, title_3].forEach(content => {
-        if (!content) return;
-        const tr = document.createElement('tr');
-        tr.className = 'trkey';
-        const td = document.createElement('td');
-        td.className = 'tdright2';
-        
-        // title_3 often contains HTML links from furl(), so we use innerHTML 
-        // ONLY on trusted internal function returns.
-        if (typeof content === 'string') {
-            td.innerHTML = content; 
-        } else {
-            td.appendChild(content);
-        }
-        
-        tr.appendChild(td);
-        tableRight.appendChild(tr);
-    });
-    rightDiv.appendChild(tableRight); */
 
     container.append(statsDiv, rightDiv);
     return container;
