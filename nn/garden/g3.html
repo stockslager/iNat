@@ -1,0 +1,234 @@
+<!DOCTYPE html>        
+<html lang="en">          
+   
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />      
+<meta name="apple-mobile-web-app-title" content="Garden List" /> 
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />  
+<meta name="description" content="Garden Viewer" />
+<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
+<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+<title>Garden List</title>
+</head>
+    <style>
+        /* CSS Clean-up: Use classes for repeating elements */
+        p { width: fit-content; min-width: 375px; margin: 0.5em 0; }
+        
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            width: 100%;
+            gap: 10px;
+        }
+
+        #stats, #topright {
+            display: inline-flex;
+            white-space: nowrap;
+            padding: 3px 8px;
+        }
+
+        #topright { justify-content: flex-end; }
+
+        .tablekey { display: inline-table; border-collapse: collapse; }
+        .trkey { background: var(--color-base); }
+        .tdkey { padding-right: 25px; text-align: left; }
+        .tdright { padding-right: 5px; text-align: right; }
+        .tdright2 { padding: 2px 5px 0 0; text-align: left; }
+        #toprightbold { font-weight: bold; }
+    </style>
+</head>
+
+<body>
+<script>
+/**
+ * REWRITTEN buildHeader: SECURE & ERROR-FREE
+ * Returns a DOM element instead of a string to prevent XSS.
+ */
+function buildHeader(entity, total, per_page, page_curr, title_1, title_2, title_3) {
+    const container = document.createElement('div');
+    container.className = 'top-bar';
+
+    // Left Side: Stats
+    const statsDiv = document.createElement('div');
+    statsDiv.id = 'stats';
+    const tableLeft = document.createElement('table');
+    tableLeft.className = 'tablekey';
+
+    const rows = [
+        [entity, total],
+        ['per page:', per_page],
+        ['page:', page_curr]
+    ];
+
+    rows.forEach(([label, val]) => {
+        const tr = document.createElement('tr');
+        tr.className = 'trkey';
+        
+        const tdL = document.createElement('td');
+        tdL.className = 'tdkey';
+        tdL.textContent = label; // Safe from injection
+        
+        const tdR = document.createElement('td');
+        tdR.className = 'tdright';
+        tdR.textContent = val;   // Safe from injection
+        
+        tr.append(tdL, tdR);
+        tableLeft.appendChild(tr);
+    });
+    statsDiv.appendChild(tableLeft);
+
+    // Right Side: Titles
+    const rightDiv = document.createElement('div');
+    rightDiv.id = 'topright';
+    const tableRight = document.createElement('table');
+    tableRight.className = 'tablekey';
+
+    [title_1, title_2, title_3].forEach(content => {
+        if (!content) return;
+        const tr = document.createElement('tr');
+        tr.className = 'trkey';
+        const td = document.createElement('td');
+        td.className = 'tdright2';
+        
+        // title_3 often contains HTML links from furl(), so we use innerHTML 
+        // ONLY on trusted internal function returns.
+        if (typeof content === 'string') {
+            td.innerHTML = content; 
+        } else {
+            td.appendChild(content);
+        }
+        
+        tr.appendChild(td);
+        tableRight.appendChild(tr);
+    });
+    rightDiv.appendChild(tableRight);
+
+    container.append(statsDiv, rightDiv);
+    return container;
+}
+
+function buildPage(xobj, config) {
+    let results = xobj.results;
+    if (results) {
+        // ... (existing logic for pagination variables) ...
+        let total_results = xobj.total_results;
+        let per_page = xobj.per_page;
+        let page_curr = xobj.page;
+
+        let title_1 = '', title_2 = '', title_3 = '';
+        
+        // Logic for setting titles (assuming furl and appState are available)
+        if (config.show_behavior === 'on_all') {
+            title_3 = `<span id="topright">${config.title}</span>`; 
+        } else {
+            let label = getPlaceMenuName(appState) || config.getSubTitle() || config.title;
+            title_3 = `<span id="toprightbold">${label}</span>`;
+        }
+
+        // Generate the secure header element
+        const headerElem = buildHeader('species', total_results, per_page, page_curr, title_1, title_2, title_3);
+        
+        // Create the wrapper <p> and append the DOM object directly
+        const pWrapper = document.createElement('p');
+        pWrapper.appendChild(headerElem);
+        document.body.appendChild(pWrapper);
+
+    } else {
+        const errorP = document.createElement('p');
+        errorP.textContent = 'No results returned.';
+        document.body.appendChild(errorP);
+    }
+}
+</script>
+
+<script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
+<script type="text/javascript"   src="../core/js/api_fetch.js"></script>
+
+<script>
+function setupAPIParams( plantConfig ) {
+   let api_params = '';
+ 
+   api_params += '?project_id='+plantConfig.project;
+   api_params += '&iconic_taxa=plantae';
+
+   if( plantConfig.plantField )        { api_params += '&field:'    + plantConfig.plantField;  } 
+   if( plantConfig.plantFieldValue )   { api_params += '='          + plantConfig.plantFieldValue; }
+   if( plantConfig.plantIds )          { api_params += '&id='       + plantConfig.plantIds;  }
+   if( plantConfig.plantListUserId )   { api_params += '&user_id='  + plantConfig.plantListUserId; }
+   if( plantConfig.tagName )           { api_params += '&tag='      + plantConfig.tagName; }
+
+   if( getFieldName(appState) ) {
+       api_params += '&field:' + getFieldName(appState);
+       if( getFieldValue(appState) ) {
+           api_params += '=' + getFieldValue(appState);
+       }
+   }
+
+   // if a place_id was chosen from the place drop-down, use that place_id...
+   if( getPlaceMenuId(appState) ) {
+       api_params += '&place_id=' + getPlaceMenuId(appState);
+   } else if( plantConfig.defaultPlace ) {
+       api_params += '&place_id=' + plantConfig.defaultPlace;
+   }
+
+   // if a taxon_id was chosen in the plant drop-down, use that taxon_id.  if not, 
+   // use the taxon_id(s) from the config when present.
+   if( getPlantMenuId(appState) ) {
+       api_params += '&taxon_id='+getPlantMenuId(appState);
+   } else {
+       if( plantConfig.taxonIds ) { 
+           api_params += '&taxon_id=' + plantConfig.taxonIds; 
+       }
+   }
+
+   api_params += getPageParam(appState, '&page=');
+   api_params += '&per_page='+CONST_API_PER_PAGE;
+ 
+   return api_params;
+}
+   
+async function gatherResources() {
+  let api_base  = 'https://api.inaturalist.org/v1/observations/species_counts';
+  let json_path = json_root + getParams(appState);
+ 
+  try {
+   
+      // Await the result of getObservations() and store the actual data
+      const plantConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
+
+      if( plantConfig.usePlantProjectImages && plantConfig.usePlantProjectImages === 'yes' ) {
+          api_base = 'https://api.inaturalist.org/v1/observations';
+      }
+     
+      console.log('full config title: ' + plantConfig.getFullTitle());
+      const api_params    = setupAPIParams( plantConfig );
+      const api_url       = api_base+api_params;
+      console.log('api url: ' + api_url);
+      const obs_data      = await apiFetch( api_url ); 
+     
+      // Pass the data to the buildPage function
+      buildPage(obs_data, plantConfig); 
+
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+let message = validateGarden(appState);
+ 
+if( message ) {
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
+ 
+</script>
+</body>
+</html>
