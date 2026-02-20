@@ -26,10 +26,18 @@
         gap: 10px;
     }
 
-    #stats, #topright {
+    #stats {
         display: inline-flex;
         white-space: nowrap;
-        padding: 0px 0px;
+        padding: 0px 0px;       
+        padding-left: 0 !important;
+        margin-left: 0 !important;
+    }
+   
+    #topright {
+        display: inline-flex;
+        white-space: nowrap;
+        padding: 0px 0px;       
     }
 
     /* THE FIX: Collapse borders and kill line-height */
@@ -37,6 +45,9 @@
         display: inline-table; 
         border-collapse: collapse; /* Removes gap between rows */
         line-height: 1;            /* Tightens text height */
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        border-collapse: collapse;
     }
 
     .trkey { background: var(--color-base); }
@@ -49,7 +60,10 @@
 
     .tdkey { padding-right: 25px; text-align: left; }
     .tdright { padding-right: 5px; text-align: right; }
-    /*.tdright2 { padding-right: 5px; text-align: left; }*/
+    .tdkey:first-child {
+           padding-left: 0 !important;
+    }   
+
 .tdright2 { 
     padding: 0px 5px 0px 0px; 
     line-height: 1.2; /* Adjust this to control vertical density */
