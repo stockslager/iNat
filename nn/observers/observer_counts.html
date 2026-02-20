@@ -1,5 +1,5 @@
 <!DOCTYPE html> 
-<html lang="en">  
+<html lang="en">    
  
 <head> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
@@ -15,16 +15,6 @@
 <title>Garden Observers</title>
 </head>
 
-<style>
-   #stats { margin-bottom: 5px; width:fit-content; display: block; justify-content:start; border-width:2px 2px; border-style:solid; border-color:var(--color-border); border-radius: 5px; padding-top: 2px; padding-bottom: 4px; padding-left: 8px; padding-right: 8px; }
-   #statsright { float:right; margin-bottom: 5px; width:fit-content; display: block; justify-content:start; padding-top: 4px; padding-bottom: 4px; padding-left: 8px; padding-right: 8px; }
-   #tablekey { display:inline-table; }
-   #trkey { padding:0; background:var(--color-base); border:none; border-collapse:collapse; }
-   #tdkey { padding:0; padding-right: 25px; }
-   #tdright {  padding:0; padding-right: 5px; padding-top: 2px; float:right; }
-   #tdright2 { padding:0; padding-right: 5px; padding-top: 2px; text-align:left; } 
-</style>
- 
 <body>
 <script type="text/javascript"   src='../core/js/global_const.js'> </script>
 <script type="text/javascript"   src='../core/js/common_func.js'> </script>
@@ -72,9 +62,9 @@ function buildPage( xobj ) {
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
       let plants  = getPlantName(appState) || CONST_ALL_PLANTS.toLowerCase();
-      let on_all1 = 'showing counts for';
-      let on_all2 = '<b>' + plants + '</b>';
-      let on_all3 = '';
+      let on_all1 = '';
+      let on_all2 = 'showing counts for';
+      let on_all3 = '<b>' + plants + '</b>';
 
       if( getPlantName(appState) ) {
           let urlState = appState;
@@ -83,17 +73,15 @@ function buildPage( xobj ) {
           urlState = setPlantName(urlState, '');
           on_all3 = 'show ' + furl('./observer_counts.html'+buildParameterList(urlState), 'all plants?' );
       } 
-    
-      faddelem('p',document.body,{innerHTML:'<span id="statsright"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdright2">'  + on_all1 + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdright2">'  + on_all2 + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdright2">'  + on_all3 + '</td></tr></table></span>'});
 
-      faddelem('p',document.body,{innerHTML:'<span id="stats"><table id="tablekey">' +
-                                            '<tr id="trkey"><td id="tdkey">observers:</td>  <td id="tdright">'  + fcomnum(total_results) + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">per page:</td>   <td id="tdright">'  + fcomnum(per_page)      + '</td></tr>' + 
-                                            '<tr id="trkey"><td id="tdkey">page:</td>       <td id="tdright">'  + fcomnum(page_curr)     + '</td></tr></table></span>'});
- 
+      // Generate the secure header element
+      const headerElem = buildHeader(CONST_SPECIES, total_results, per_page, page_curr, page_max, on_all1, on_all2, on_all3);
+
+      // Create the wrapper <p> and append the DOM object directly
+      const pWrapper = document.createElement('p');
+      pWrapper.appendChild(headerElem);
+      document.body.appendChild(pWrapper);
+    
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
       let hrow = faddelem('tr',thead);
