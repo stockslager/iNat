@@ -130,27 +130,19 @@ function buildPage(xobj, config) {
             {innerText:'Name'}, 
       ];
 
-      let title_1 = '';
-      let title_2 = '';
-      let title_3 = '';
+      let title_1 = '', title_2 = '', title_3 = '';
 
       let show_behavior = config.show_behavior || 'no';
     
-      if( show_behavior === 'on_all' ) {
-          //title_1 = '<span id="topright">'+prefix+'<br> <b>'+suffix+'</b></span>';
-          let urlState = appState;
-          urlState = setPlantMenuId(urlState, '');                  
-          urlState = setPlantMenuName(urlState, '');                
-          urlState = setPlantName(urlState, CONST_ALL_PLANTS);  // don't include "on" since it'll be added on later.
-          urlState = setPlantId(urlState, '');                  // scrub plant id since it might have been set previously
-          title_3 = furl('./garden_activity.html'+buildParameterList(urlState),'<span id="topright">'+config.title+'</span>');
-      } else {
-          title_3 = '<span id="toprightbold">'+config.getSubTitle()||config.title+'</span>';
-      }
+      title_3 = '<span id="upperrightbold">'+config.getSubTitle()||config.title+'</span>';
 
-      faddelem('p',document.body,{innerHTML:CONST_TOTAL_SPECIES+fcomnum(total_results) + title_1 + ' <br/>'
-                 + CONST_PER_PAGE+fcomnum(per_page)+ title_2 + '<br />'
-                 + CONST_PAGE+fcomnum(page_curr)+' of '+fcomnum(page_max) + title_3 + '<br />'});  
+      // Generate the secure header element
+      const headerElem = buildHeader(CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3);
+
+      // Create the wrapper <p> and append the DOM object directly
+      const pWrapper = document.createElement('p');
+      pWrapper.appendChild(headerElem);
+      document.body.appendChild(pWrapper);
 
       let table = faddelem('table',document.body,{id:'main'});                    
       let thead = faddelem('thead',table);
