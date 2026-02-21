@@ -100,12 +100,9 @@ function buildPage( configManager ) {
                        let brow = faddelem('tr', tbody);
 
                        let td1 = faddelem('td', brow);
-                       let iconLink = furl(gardenUrl, config.utf8 || CONST_LEAF_UTF8);
-                       td1.appendChild(iconLink);
-
+                       faddelem('a', td1, { href: gardenUrl, innerHTML: config.utf8 || CONST_LEAF_UTF8 }); 
                        let td2 = faddelem('td', brow);
-                       let titleLink = furl(gardenUrl, config.studyTitle || CONST_PLANT_VALUE);
-                       td2.appendChild(titleLink);
+                       faddelem('a', td2, { href: gardenUrl, textContent: config.studyTitle || CONST_PLANT_VALUE });
 
                        faddelem('td', brow, { textContent: config.studyDesc || CONST_GARDEN_DESC });
                    }
