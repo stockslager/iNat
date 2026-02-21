@@ -71,14 +71,11 @@ function buildPage(xobj, plantsConfig) {
 
       let title_1 = '', title_2 = '', title_3 = '';
 
-      let titleText = '';
+      let titleText = CONST_ON + capitalizeWords(getPlantName(appState));
       let urlState = appState; 
       if( getMenuId(appState) ) {
           urlState = setTaxonId(appState, getMenuId(appState));
-          titleText = capitalizeWords(getMenuName(appState) + getPlantName(appState));
-      } else {
-          titleText = CONST_ON + capitalizeWords(getPlantName(appState));
-      }
+      } 
 
       let titleUrl = './garden_grid.html' + buildParameterList(urlState);
       let title_3_element = faddelem('a', null, { href: titleUrl });
