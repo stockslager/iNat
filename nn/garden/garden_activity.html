@@ -102,34 +102,21 @@ function buildPage(xobj, plantsConfig) {
       faddelems('th',hrow,labels);
       let tbody = faddelem('tbody',table);
 
-
       for( let i = 0; i < results.length; i++ ) {
            let rec = results[i];
            let brow = faddelem('tr', tbody);
-
+       
            // Column: Index
            faddelem('td', brow, { textContent: i + 1 });
 
            // Column: Photo
-           let tdPhoto = faddelem('td', brow);
-           if( rec.taxon && rec.taxon.default_photo ) {
-               faddelem('img', tdPhoto, { className: 'icon', src: rec.taxon.default_photo.square_url });
-           } else {
-               faddelem('div', tdPhoto, { className: 'clipart', html: '&#127807;' });
-           }
+           buildSpeciesPhoto( brow, rec );
 
-           // Column: Name (The Link with nested spans)
-           let tdName = faddelem('td', brow);
+           // Column: Name 
            let urlState = setTaxonId(appState, rec.taxon.id);
-           let a = faddelem('a', tdName, { href: './garden_grid.html' + buildParameterList(urlState) });
-    
-           // Common Name 
-           faddelem('span', a, { style: { fontSize: 'larger' }, textContent: (rec.taxon.preferred_common_name || '').toLowerCase() });
-    
-           // Scientific Name 
-           let br = faddelem('br', a);
-           faddelem('span', a, { style: { fontStyle: 'italic' }, textContent: '(' + (rec.taxon.name || '') + ')' });
-
+           let url      = './garden_grid.html' + buildParameterList(urlState);
+           buildSpeciesName( brow, rec, url );
+       
            // Column: Count
            faddelem('td', brow, { textContent: rec.count || '' });
       }
