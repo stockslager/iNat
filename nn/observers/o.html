@@ -123,47 +123,21 @@ function buildPage(xobj, observerConfig) {
 
       for (let i=0; i<results.length; i++) {
          let rec = results[i];
-         let tax_name = '';
-         let pref_tax_name = '';
-         let nm = '';
-         let tax_photo = '<div class="clipart">&#127807</div>'; 
-         let tax_id = '';
-         let taxon = '';
-
          let brow = faddelem('tr',tbody);
 
-         if( rec.taxon ){
-             tax_id = rec.taxon.id;
-             tax_name = rec.taxon.name || '';
-             pref_tax_name = rec.taxon.preferred_common_name || '';
-             nm = pref_tax_name || tax_name;
-           
-             if( rec.taxon.default_photo ){
-                 if( rec.taxon.default_photo.url ){
-                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
-                 }
-             }
-         }
+           // Column: Index
+           faddelem('td', brow, { textContent: i + 1 });
 
-         let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
+           // Column: Photo
+           buildSpeciesPhoto( brow, rec );
 
-         let urlState = appState;  // creates a copy
-         urlState = setTaxonName(urlState, pref_tax_name.toLowerCase()||tax_name);
-         urlState = setTaxonId(urlState, rec.taxon.id);
-
-         // if it's a lepidoptera, tell the grid to display the ls_map.
-         if( rec.taxon.ancestor_ids.includes(47157) ) { // lepidoptera
-             urlState = setLSTaxonId(urlState, '47157');
-         }
-            
-         let values = [
-                  {innerText:i+1},
-                  {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl('./observer_grid.html'+buildParameterList(urlState),displayName)},
-                  {innerText:rec.count||''},
-                  ];
-        
-         faddelems('td',brow,values);
+           // Column: Name 
+           let urlState = setTaxonId(appState, rec.taxon.id);
+           let url      = './observer_grid.html' + buildParameterList(urlState);
+           buildSpeciesName( brow, rec, url );
+       
+           // Column: Count
+           faddelem('td', brow, { textContent: rec.count || '' });
       };
 
       // buttons to go to prev or next page
