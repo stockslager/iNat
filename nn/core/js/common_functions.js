@@ -257,3 +257,12 @@ function buildHeader(entity, total, per_page, page_curr, page_max, title_1, titl
     container.append(lboxDiv, rightDiv);
     return container;
 }
+
+// wrapper around buildHeader
+function renderHeader(entity, total, per_page, page_curr, page_max, title_1, title_2, title_3) {
+    buildHeader( entity, total, per_page, page_curr, page_max, title_1, title_2, title_3 );
+    // Create the wrapper <p> and append the DOM object directly
+    const pWrapper = document.createElement('p');
+    pWrapper.appendChild(headerElem);
+    document.body.appendChild(pWrapper);
+}
