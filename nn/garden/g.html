@@ -81,37 +81,11 @@ function buildPage(xobj, plantsConfig) {
       let title_3_element = faddelem('a', null, { href: titleUrl });
 
       // CSS needs text inside span
-      faddelem('span', title_3_element, { textContent: titleText });
+      //faddelem('span', title_3_element, { textContent: titleText });
 
       let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, '', '', title_3_element ); 
     
       faddelem('p', document.body).appendChild(header);
-    
-/*
-// 1. Prepare your dynamic data
-let urlParams = !getMenuId(appState) ? appState : setTaxonId(appState, getMenuId(appState));
-let titleText = !getMenuId(appState) 
-    ? CONST_ON + capitalizeWords(getPlantName(appState))
-    : capitalizeWords(getMenuName(appState) + getPlantName(appState));
-
-// 2. Create the Link as a DOM Element (NOT a string)
-// This is 100% XSS-safe because it uses textContent internally
-let title_1_element = faddelem('a', null, { 
-    href: './garden_grid.html' + buildParameterList(urlParams),
-    textContent: titleText 
-});
-
-// 3. Call your existing buildHeader function
-// Your function will see this is an HTMLElement and use appendChild()
-let header = buildHeader(
-    'Plants', '42', '10', '1', '5', 
-    title_1_element,  // Pass the element here
-    '',               // title_2
-    ''                // title_3
-);
-
-faddelem('p', document.body).appendChild(header);
-    */
     
       labels = [
             {innerText:'#'},
