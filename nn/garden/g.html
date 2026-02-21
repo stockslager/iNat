@@ -73,14 +73,16 @@ function buildPage(xobj, plantsConfig) {
 
       if( !getMenuId(appState) ) {
           let titleString = CONST_ON+capitalizeWords(getPlantName(appState));
-          let url         = faddelem('a', document.body, { href: './garden_grid.html'+buildParameterList(appState), id: 'upperright' });
+          let p   = faddelem('p', document.body);
+          let url = faddelem('a', 'p', { href: './garden_grid.html'+buildParameterList(appState), id: 'upperright' });
           faddelem('span', url, { textContent: titleString });
           //title_3 = furl('./garden_grid.html'+buildParameterList(appState),'<span id="upperright">'+titleString+'</span>');
       } else {
           let urlState = appState;  // creates a copy
           let titleString = capitalizeWords(getMenuName(appState)+getPlantName(appState));
           urlState = setTaxonId(urlState, getMenuId(appState));  // set taxon id to menu id if a filter was chosen for say, birds.
-          let url         = faddelem('a', document.body, { href: './garden_grid.html'+buildParameterList(urlState), id: 'upperright' });
+          let p    = faddelem('p', document.body);
+          let url  = faddelem('a', 'p', { href: './garden_grid.html'+buildParameterList(urlState), id: 'upperright' });
           faddelem('span', url, { textContent: titleString });
           //title_3 = furl('./garden_grid.html'+buildParameterList(urlState),'<span id="upperright">'+CONST_ON+titleString+'</span>');
       }
