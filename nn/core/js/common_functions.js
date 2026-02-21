@@ -275,3 +275,14 @@ function renderHeader(entity, total, per_page, page_curr, page_max, title_1, tit
     pWrapper.appendChild(headerElem);
     document.body.appendChild(pWrapper);
 }
+
+// Species Counts Table Column Helpers
+function buildSpeciesPhoto( brow, rec ) {
+    let tdPhoto = faddelem('td', brow);
+    
+    if( rec.taxon && rec.taxon.default_photo ) {
+        faddelem('img', tdPhoto, { className: 'icon', src: rec.taxon.default_photo.square_url });
+    } else {
+        faddelem('div', tdPhoto, { className: 'clipart', html: '&#127807;' });
+    }
+}
