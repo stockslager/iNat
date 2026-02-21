@@ -176,3 +176,79 @@ function buildNavDDFilteredShow( navbar, dd_name, results, config, baseUrl ) {
         }
     }
 }
+
+//***************************************************************
+// renders the buildHeader section immediately below the navbar *
+//***************************************************************
+function buildHeader(entity, total, per_page, page_curr, page_max, title_1, title_2, title_3) {
+    const container = document.createElement('div');
+    container.className = 'rl-box-bar';
+
+    // Left Side Box
+    const lboxDiv = document.createElement('div');
+    lboxDiv.id = 'lbox';
+    const tableLeft = document.createElement('table');
+    tableLeft.className = 'tableboxkey';
+
+    let x_of_y = page_curr + CONST_OF + page_max;
+
+    const rows = [
+        [entity, total],
+        ['per page:', per_page],
+        ['page:', x_of_y]
+    ];
+
+    rows.forEach(([label, val]) => {
+        const tr = document.createElement('tr');
+        tr.className = 'trboxes';
+        
+        const tdL = document.createElement('td');
+        tdL.className = 'tdleft';
+        tdL.textContent = label; // Safe from injection
+        
+        const tdR = document.createElement('td');
+        tdR.className = 'tdrightbox';
+        tdR.textContent = val;   // Safe from injection
+        
+        tr.append(tdL, tdR);
+        tableLeft.appendChild(tr);
+    });
+    lboxDiv.appendChild(tableLeft);
+
+    // Right Side: Titles (Always 3 rows)
+    const rightDiv = document.createElement('div');
+    rightDiv.id = 'upperright';
+    const tableRight = document.createElement('table');
+    tableRight.className = 'tableboxkey';
+
+    // We iterate through all three, even if title_1 or title_2 are null
+    [title_1, title_2, title_3].forEach((content) => {
+        const tr = document.createElement('tr');
+        tr.className = 'trboxes';
+        const td = document.createElement('td');
+        td.className = 'tdrightbox2';
+
+        if (!content || content === '') {
+            // Use a non-breaking space to maintain row height
+            td.innerHTML = '&nbsp;'; 
+        } else if (typeof content === 'string') {
+            // If it looks like HTML (contains < >), use innerHTML
+            // Otherwise, use textContent for maximum security
+            if (content.includes('<') && content.includes('>')) {
+                td.innerHTML = content; 
+            } else {
+                td.textContent = content;
+            }
+        } else if (content instanceof HTMLElement) {
+            // If it's already a DOM element object
+            td.appendChild(content);
+        }
+
+        tr.appendChild(td);
+        tableRight.appendChild(tr);
+    });
+    rightDiv.appendChild(tableRight);
+
+    container.append(lboxDiv, rightDiv);
+    return container;
+}
