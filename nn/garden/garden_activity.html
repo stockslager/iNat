@@ -1,4 +1,4 @@
-<!DOCTYPE html>     
+<!DOCTYPE html>      
 <html lang="en">     
  
 <head>
@@ -16,9 +16,7 @@
 </head>
 
 <body>
-<script type="text/javascript"   src='../core/js/global_const.js'> </script>
-<script type="text/javascript"   src='../core/js/common_func.js'> </script>
-<script type="text/javascript"   src='../core/js/roots.js'> </script>
+<script type="text/javascript"   src='../core/js/common_functions.js'> </script>
 <script type="text/javascript"   src='../core/js/store.js'> </script>
 <script>
 let winurlstr         = window.location.href;
@@ -37,61 +35,23 @@ const CONST_WITHOUT_TAXON_PLANTAE = '47126';
 let path      = window.location.pathname;
 let html_name = path.substring(path.lastIndexOf('/') + 1);
  
-function buildMenu( results, plantsConfig ) {
-
-   let links = '';
-   let icons = '';
-   let menu_string = '';
-   let url = window.location.origin + window.location.pathname;   
+function buildMenu( results, config ) {
  
-   menu_string = '<div class="navbar">';
+    // Create the main navbar container
+    let navbar = document.createElement('div');
+    navbar.className = 'navbar v2-menu';
 
-   let sub_taxon_arr = [];
-   if( getTaxonDD(appState) ) {
-       sub_taxon_arr = getTaxonDD(appState);
-   } else {
-       if( plantsConfig.subIcons ) {
-           for( let i=0; i<results.length; i++) {
-                if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
-                    for( let j=0; j<plantsConfig.subIcons.length; j++ ) {
-                         for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
-                              if( results[i].taxon.ancestor_ids[k].toString() === plantsConfig.subIcons[j].taxonId.toString() ){
-                                  if( !sub_taxon_arr.includes( plantsConfig.subIcons[j].taxonId ) ) {
-                                      sub_taxon_arr.push( plantsConfig.subIcons[j].taxonId );
-                                  }
-                              }
-                          }
-                     }
-                }
-            }
-            // add the comma delimited list of taxons to the url params
-            // so the full list can still be shown during filtration.
-            appState = setTaxonDD(appState, sub_taxon_arr.join());
-       }
-   }
+    let baseUrl = window.location.origin + window.location.pathname;
 
-   if( plantsConfig.subIcons ) {
-       let urlState = appState;
-       urlState = setMenuId(urlState, '');
-       urlState = setMenuName(urlState, '');
-       urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+    buildNavDDFilteredShow( navbar, menu_name, results, config, baseUrl );
 
-       links =  (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>'+CONST_ALL ));
-       for( let j=0; j<plantsConfig.subIcons.length; j++ ) {
-            if( sub_taxon_arr.includes( plantsConfig.subIcons[j].taxonId ) ) {
-                urlState  = setMenuId(urlState, plantsConfig.subIcons[j].taxonId);
-                links    += (furl(url+buildParameterList(urlState),'<span style="padding-right:20px;">'+plantsConfig.subIcons[j].icon+'</span>'+plantsConfig.subIcons[j].name ));
-            }
-       }
-       menu_string += ( buildDD( capitalizeWords(menu_name), links) );
-   }
+    // Build the Home Link
+    let homeState = clearForGardenListParams(appState);
+    let homeUrl = './garden_list.html' + buildParameterList(homeState);
+    buildNavHome( navbar, homeUrl, homeState );
 
-   let urlState = clearForGardenListParams(appState);
-   menu_string += buildHome( furl('./garden_list.html'+buildParameterList(urlState), CONST_LEAF_UTF8) );
-
-   menu_string += '</div>';
- 
-   faddelem('p',document.body,{innerHTML:(menu_string)});
+    // Append the DOM nodes to the body
+    faddelem('p', document.body).appendChild(navbar);
 }
 
 function buildPage(xobj, plantsConfig) {
@@ -112,23 +72,21 @@ function buildPage(xobj, plantsConfig) {
 
       let title_1 = '', title_2 = '', title_3 = '';
 
-      if( !getMenuId(appState) ) {
-          let titleString = CONST_ON+capitalizeWords(getPlantName(appState));
-          title_3 = furl('./garden_grid.html'+buildParameterList(appState),'<span id="upperright">'+titleString+'</span>');
-      } else {
-          let urlState = appState;  // creates a copy
-          let titleString = capitalizeWords(getMenuName(appState)+getPlantName(appState));
-          urlState = setTaxonId(urlState, getMenuId(appState));  // set taxon id to menu id if a filter was chosen for say, birds.
-          title_3 = furl('./garden_grid.html'+buildParameterList(urlState),'<span id="upperright">'+CONST_ON+titleString+'</span>');
-      }
+      let titleText = CONST_ON + capitalizeWords(getPlantName(appState));
+      let urlState = appState; 
+      if( getMenuId(appState) ) {
+          urlState = setTaxonId(appState, getMenuId(appState));
+      } 
 
-      // Generate the secure header element
-      const headerElem = buildHeader(CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3);
+      let titleUrl = './garden_grid.html' + buildParameterList(urlState);
+      let title_3_element = faddelem('a', null, { href: titleUrl });
 
-      // Create the wrapper <p> and append the DOM object directly
-      const pWrapper = document.createElement('p');
-      pWrapper.appendChild(headerElem);
-      document.body.appendChild(pWrapper);
+      // CSS needs text inside span
+      faddelem('span', title_3_element, { textContent: titleText });
+
+      let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, '', '', title_3_element ); 
+    
+      faddelem('p', document.body).appendChild(header);
     
       labels = [
             {innerText:'#'},
@@ -144,44 +102,37 @@ function buildPage(xobj, plantsConfig) {
       faddelems('th',hrow,labels);
       let tbody = faddelem('tbody',table);
 
-      for (let i=0; i<results.length; i++) {
-         let rec = results[i];
-         let tax_name = '';
-         let pref_tax_name = '';
-         let nm = '';
-         let tax_photo = '<div class="clipart">&#127807</div>'; 
-         let tax_id = '';
-         let taxon = '';
 
-         let brow = faddelem('tr',tbody);
+      for( let i = 0; i < results.length; i++ ) {
+           let rec = results[i];
+           let brow = faddelem('tr', tbody);
 
-         if( rec.taxon ){
-             tax_id = rec.taxon.id;
-             tax_name = rec.taxon.name || '';
-             pref_tax_name = rec.taxon.preferred_common_name || '';
-             nm = pref_tax_name || tax_name;
-           
-             if( rec.taxon.default_photo ){
-                 if( rec.taxon.default_photo.url ){
-                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
-                 }
-             }
-         }
+           // Column: Index
+           faddelem('td', brow, { textContent: i + 1 });
 
-         let displayName = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
+           // Column: Photo
+           let tdPhoto = faddelem('td', brow);
+           if( rec.taxon && rec.taxon.default_photo ) {
+               faddelem('img', tdPhoto, { className: 'icon', src: rec.taxon.default_photo.square_url });
+           } else {
+               faddelem('div', tdPhoto, { className: 'clipart', html: '&#127807;' });
+           }
 
-         let urlState = appState;  // creates a copy
-         urlState = setTaxonId(urlState, rec.taxon.id);
-       
-         let values = [
-                  {innerText:i+1},
-                  {innerHTML:'<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />'},
-                  {innerHTML:furl('./garden_grid.html'+buildParameterList(urlState),displayName)},
-                  {innerText:rec.count||''},
-                  ];
-        
-         faddelems('td',brow,values);
-      };
+           // Column: Name (The Link with nested spans)
+           let tdName = faddelem('td', brow);
+           let urlState = setTaxonId(appState, rec.taxon.id);
+           let a = faddelem('a', tdName, { href: './garden_grid.html' + buildParameterList(urlState) });
+    
+           // Common Name 
+           faddelem('span', a, { style: { fontSize: 'larger' }, textContent: (rec.taxon.preferred_common_name || '').toLowerCase() });
+    
+           // Scientific Name 
+           let br = faddelem('br', a);
+           faddelem('span', a, { style: { fontStyle: 'italic' }, textContent: '(' + (rec.taxon.name || '') + ')' });
+
+           // Column: Count
+           faddelem('td', brow, { textContent: rec.count || '' });
+      }
 
       // buttons to go to prev or next page
       let nav = faddelem('div',document.body,{id:'nav'});
