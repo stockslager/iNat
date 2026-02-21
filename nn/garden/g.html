@@ -112,18 +112,11 @@ function buildPage(xobj, plantsConfig) {
            // Column: Photo
            buildSpeciesPhoto( brow, rec );
 
-           // Column: Name (The Link with nested spans)
-           let tdName = faddelem('td', brow);
+           // Column: Name 
            let urlState = setTaxonId(appState, rec.taxon.id);
-           let a = faddelem('a', tdName, { href: './garden_grid.html' + buildParameterList(urlState) });
-    
-           // Common Name 
-           faddelem('span', a, { style: { fontSize: 'larger' }, textContent: (rec.taxon.preferred_common_name || '').toLowerCase() });
-    
-           // Scientific Name 
-           let br = faddelem('br', a);
-           faddelem('span', a, { style: { fontStyle: 'italic' }, textContent: '(' + (rec.taxon.name || '') + ')' });
-
+           let url      = './garden_grid.html' + buildParameterList(urlState);
+           buildSpeciesName( brow, rec, url );
+       
            // Column: Count
            faddelem('td', brow, { textContent: rec.count || '' });
       }
