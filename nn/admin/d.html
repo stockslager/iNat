@@ -94,7 +94,23 @@ function buildPage( configManager ) {
                    let values = [];
                    let config = configManager.configurations[i];
 
-                   if( config.component === 'plants' ) {
+                   if( config.component === 'plants') {
+                       appState = setComponent(appState, 'plants');
+                       let gardenUrl = '../garden/garden_list.html' + buildParameterList(appState);
+                       let brow = faddelem('tr', tbody);
+
+                       let td1 = faddelem('td', brow);
+                       let iconLink = furl(gardenUrl, config.utf8 || CONST_LEAF_UTF8);
+                       td1.appendChild(iconLink);
+
+                       let td2 = faddelem('td', brow);
+                       let titleLink = furl(gardenUrl, config.studyTitle || CONST_PLANT_VALUE);
+                       td2.appendChild(titleLink);
+
+                       faddelem('td', brow, { textContent: config.studyDesc || CONST_GARDEN_DESC });
+                   }
+               
+               /*    if( config.component === 'plants' ) {
                        appState = setComponent( appState, 'plants' );
                        let plant_params = buildParameterList(appState);
                        brow = faddelem('tr',tbody);
@@ -104,7 +120,7 @@ function buildPage( configManager ) {
                           {innerText:config.studyDesc || CONST_GARDEN_DESC},
                        ];
                        faddelems('td',brow,values);
-                   }
+                   }*/
               }
  
               for( let i=0; i<configManager.configurations.length; i++ ) {
