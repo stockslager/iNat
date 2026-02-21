@@ -71,7 +71,27 @@ function buildPage(xobj, plantsConfig) {
 
       let title_1 = '', title_2 = '', title_3 = '';
 
+      let titleText = '';
+      let urlState = appState; 
+      if( getMenuId(appState) ) {
+          urlState = setTaxonId(appState, getMenuId(appState));
+          titleText = capitalizeWords(getMenuName(appState) + getPlantName(appState));
+      } else {
+          titleText = CONST_ON + capitalizeWords(getPlantName(appState));
+      }
 
+      let titleUrl = './garden_grid.html' + buildParameterList(urlState);
+      let title_3_element = faddelem('a', null, { href: titleUrl });
+
+      // CSS needs text inside span
+      faddelem('span', title_3_element, { textContent: titleText });
+
+      let header = buildHeader( entity, total, per_page, page_curr, page_max, '', '', title_3_element ); 
+    
+      document.body.appendChild(header);
+
+    
+/*
 // 1. Prepare your dynamic data
 let urlParams = !getMenuId(appState) ? appState : setTaxonId(appState, getMenuId(appState));
 let titleText = !getMenuId(appState) 
@@ -95,32 +115,7 @@ let header = buildHeader(
 );
 
 faddelem('p', document.body).appendChild(header);
-    
-/*
-      let divRow = faddelem('div', document.body, { style: { width: '100%', overflow: 'hidden' } });
-    
-      if( !getMenuId(appState) ) {
-          let titleString = CONST_ON+capitalizeWords(getPlantName(appState));
-          let url = faddelem('a', divRow, { href: './garden_grid.html'+buildParameterList(appState), id: 'upperright', style: 'float: right !important; display: block;'});
-          faddelem('span', url, { textContent: titleString });
-          //title_3 = furl('./garden_grid.html'+buildParameterList(appState),'<span id="upperright">'+titleString+'</span>');
-      } else {
-          let urlState = appState;  // creates a copy
-          let titleString = capitalizeWords(getMenuName(appState)+getPlantName(appState));
-          urlState = setTaxonId(urlState, getMenuId(appState));  // set taxon id to menu id if a filter was chosen for say, birds.
-          let url  = faddelem('a', divRow, { href: './garden_grid.html'+buildParameterList(urlState), id: 'upperright', style: 'float: right !important; display: block;'});
-          faddelem('span', url, { textContent: titleString });
-          //title_3 = furl('./garden_grid.html'+buildParameterList(urlState),'<span id="upperright">'+CONST_ON+titleString+'</span>');
-      }
-
-      // Generate the secure header element
-      const headerElem = buildHeader(CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3);
-
-      // Create the wrapper <p> and append the DOM object directly
-      const pWrapper = document.createElement('p');
-      pWrapper.appendChild(headerElem);
-      document.body.appendChild(pWrapper); 
-      */
+    */
     
       labels = [
             {innerText:'#'},
