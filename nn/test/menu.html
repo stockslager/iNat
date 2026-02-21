@@ -147,7 +147,7 @@ function buildMenuURL( url ) {
 
 function buildHome( url ) { return ('<div id="home">'+url+'</div>'); }
 
-function buildFilteredShow( results, config ) {
+function buildFilteredShow( navbar, results, config ) {
  
     let sub_taxon_arr = getTaxonDD(appState) || [];
  
@@ -227,7 +227,7 @@ function buildMenu( results, config ) {
     let navbar = document.createElement('div');
     navbar.className = 'navbar';
 
-    buildFilteredShow( results, config );
+    buildFilteredShow( navbar, results, config );
 
     // Build the Home Link
     let homeState = clearForGardenListParams(appState);
