@@ -147,24 +147,21 @@ function buildMenuURL( url ) {
 
 function buildHome( url ) { return ('<div id="home">'+url+'</div>'); }
 
-function buildMenu(results, plantsConfig) {
-    // Create the main navbar container
-    let navbar = document.createElement('div');
-    navbar.className = 'navbar';
-
+function buildFilteredShow( results, config ) {
+ 
     let sub_taxon_arr = getTaxonDD(appState) || [];
  
     if( getTaxonDD(appState) ) {
         sub_taxon_arr = getTaxonDD(appState);
     } else {
-        if( plantsConfig.subIcons ) {
+        if( config.subIcons ) {
             for( let i=0; i<results.length; i++) {
                  if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
-                     for( let j=0; j<plantsConfig.subIcons.length; j++ ) {
+                     for( let j=0; j<config.subIcons.length; j++ ) {
                           for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
-                               if( results[i].taxon.ancestor_ids[k].toString() === plantsConfig.subIcons[j].taxonId.toString() ){
-                                   if( !sub_taxon_arr.includes( plantsConfig.subIcons[j].taxonId ) ) {
-                                       sub_taxon_arr.push( plantsConfig.subIcons[j].taxonId );
+                               if( results[i].taxon.ancestor_ids[k].toString() === config.subIcons[j].taxonId.toString() ){
+                                   if( !sub_taxon_arr.includes( config.subIcons[j].taxonId ) ) {
+                                       sub_taxon_arr.push( config.subIcons[j].taxonId );
                                    }
                                }
                            }
@@ -178,7 +175,7 @@ function buildMenu(results, plantsConfig) {
     } 
 
     // Build the Show Dropdown
-    if( plantsConfig.subIcons ) {
+    if( config.subIcons ) {
         let urlState = appState;
         urlState = setMenuId(urlState, '');
         urlState = setMenuName(urlState, '');
@@ -205,23 +202,32 @@ function buildMenu(results, plantsConfig) {
         faddelem('span', allLink, { textContent: CONST_ALL }); 
 
         // Taxon Links Loop
-        for( let j = 0; j < plantsConfig.subIcons.length; j++ ) {
-             if( sub_taxon_arr.includes(plantsConfig.subIcons[j].taxonId) ) {
-                 urlState = setMenuId(urlState, plantsConfig.subIcons[j].taxonId);
+        for( let j = 0; j < config.subIcons.length; j++ ) {
+             if( sub_taxon_arr.includes(config.subIcons[j].taxonId) ) {
+                 urlState = setMenuId(urlState, config.subIcons[j].taxonId);
                  let iconUrl = window.location.origin + window.location.pathname + buildParameterList(urlState);
                  
                  let tLink = faddelem('a', ddContent, { href: iconUrl });
 
                  // Taxon Icon if present
-                 if( plantsConfig.subIcons[j].icon ) {
-                     faddelem('span', tLink, { innerHTML: plantsConfig.subIcons[j].icon });
+                 if( config.subIcons[j].icon ) {
+                     faddelem('span', tLink, { innerHTML: config.subIcons[j].icon });
                  }
              
                  // Taxon Name 
-                 faddelem('span', tLink, { textContent: plantsConfig.subIcons[j].name });
+                 faddelem('span', tLink, { textContent: config.subIcons[j].name });
              }
         }
     }
+}
+
+function buildMenu( results, config ) {
+ 
+    // Create the main navbar container
+    let navbar = document.createElement('div');
+    navbar.className = 'navbar';
+
+    buildFilteredShow( results, config ) {
 
     // Build the Home Link
     let homeState = clearForGardenListParams(appState);
