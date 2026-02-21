@@ -79,6 +79,8 @@ function faddelem(etype, eparent = null, eattributes = {}) {
     return eobj;
 }
 
+function faddelems(etype,eparent=null,eattributes=[]) { for (let e of eattributes) { faddelem(etype,eparent,e); }; };
+
 function replaceDoubleQuotes(str) { return str.replace(/"/g, '%22'); }
 
 function capitalizeWords(str) {
