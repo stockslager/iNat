@@ -63,6 +63,20 @@ function buildMenu( config ) {
     // Append the DOM nodes to the body
     faddelem('p', document.body).appendChild(navbar);
 }
+
+function buildRow( component, icon, name, desc ) {
+ 
+  appState = setComponent(appState, component);
+  let gardenUrl = '../garden/garden_list.html' + buildParameterList(appState);
+  let brow = faddelem('tr', tbody);
+
+  let td1 = faddelem('td', brow);
+  faddelem('a', td1, { href: gardenUrl, innerHTML: icon }); 
+  let td2 = faddelem('td', brow);
+  faddelem('a', td2, { href: gardenUrl, textContent: name });
+
+  faddelem('td', brow, { textContent: desc });
+}
  
 function buildPage( configManager ) {
 
@@ -95,16 +109,10 @@ function buildPage( configManager ) {
                    let config = configManager.configurations[i];
 
                    if( config.component === 'plants') {
-                       appState = setComponent(appState, 'plants');
-                       let gardenUrl = '../garden/garden_list.html' + buildParameterList(appState);
-                       let brow = faddelem('tr', tbody);
-
-                       let td1 = faddelem('td', brow);
-                       faddelem('a', td1, { href: gardenUrl, innerHTML: config.utf8 || CONST_LEAF_UTF8 }); 
-                       let td2 = faddelem('td', brow);
-                       faddelem('a', td2, { href: gardenUrl, textContent: config.studyTitle || CONST_PLANT_VALUE });
-
-                       faddelem('td', brow, { textContent: config.studyDesc || CONST_GARDEN_DESC });
+                       let icon = config.utf8 || CONST_LEAF_UTF8;
+                       let name = config.studyTitle || CONST_PLANT_VALUE;
+                       let desc = config.studyDesc || CONST_GARDEN_DESC;
+                       buildRow( 'plants', icon, name, desc );
                    }
                
                /*    if( config.component === 'plants' ) {
