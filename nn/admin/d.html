@@ -1,0 +1,247 @@
+<!DOCTYPE html>  
+<html lang="en">   
+ 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" /> 
+<meta name="apple-mobile-web-app-title" content="iNat Dashboard" />
+<meta name="description" content="iNat Custom Dashboard" />
+<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
+<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+<title>iNat Custom Dashboard</title>
+</head>
+
+<style>
+   #divhead { max-width: 700px; width:fit-content; }
+</style>
+
+<body>
+<script type="text/javascript"   src='../core/js/common_functions.js'> </script>
+<script type="text/javascript"   src='../core/js/store.js'> </script>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr    = window.location.search;
+let winurlexsearchstr  = winurlstr.replace(winurlsearchstr,'');
+let winurlparams       = new URLSearchParams(winurlsearchstr.substring(1));
+ 
+appState  =  buildStateFromParams(winurlparams);
+
+// page specific constants...
+const CONST_ICON           = 'Icon';
+const CONST_COMPONENT      = 'Component';
+const CONST_DESCRIPTION    = 'Description';
+const CONST_COMPONENTS     = 'components: ';
+const CONST_FIELD_STUDIES  = 'Field Studies';
+const CONST_PERPAGE        = 'per page: 20';
+const CONST_PGS            = 'page: 1';
+const CONST_GARDEN_DESC    = 'Interactions between plants and animals by plant.';
+const CONST_COLONY_DESC    = 'Lists the colonies of plants where collection has occurred.  Shows the child colonies established from each parent colony.';
+const CONST_HIKER_DESC   = 'Species encountered during this trek.';
+const CONST_OBSERVERS_DESC   = 'Interactions between plants and animals by observer.';
+const CONST_ANIMALS_DESC = 'Interactions between plants and animals by animal.';
+const CONST_PLANT_VALUE  = 'Plants';
+const CONST_COLONIES     = 'Colonies';
+const CONST_BIODIVERSITY = 'Biodiversity';
+const CONST_THRU_HIKES   = 'Thru Hikes';
+const CONST_ART          = 'Art & Journaling';
+const CONST_OBSERVERS    = 'Observers';
+const CONST_ANIMALS      = 'Animals';
+ 
+function buildMenu( configManager ) {
+      let menu_string = '';
+      let params = '';
+
+      menu_string = '<div class="navbar">';
+
+      menu_string += buildHome(furl('./about.html'+buildParameterList(appState),'<span style="font_size: 16px;">About</span>'));
+      menu_string += '</div>';
+ 
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+
+function buildPage( configManager ) {
+
+      buildMenu( configManager );
+
+      // Generate the header element
+      const headerElem = buildHeader(CONST_COMPONENTS, configManager.configurations.length, CONST_PERPAGE, CONST_PGS, CONST_PGS, title_1, title_2, configManager.configurations[0].title);
+
+      let labels = [];
+
+      labels = [
+                {innerText:CONST_ICON},
+                {innerText:CONST_COMPONENT},
+                {innerText:CONST_DESCRIPTION}, 
+      ];
+
+      if( configManager.configurations.length > 0 ) {
+
+          if( configManager.configurations[0].component !== COMPONENT_STUDIES ) {
+              let table = faddelem('table',document.body,{id:'main'});                    
+              let thead = faddelem('thead',table);
+              let hrow  = faddelem('tr',thead);
+      
+              faddelems('th',hrow,labels);
+              let tbody = faddelem('tbody',table);
+  
+              for( let i=0; i<configManager.configurations.length; i++ ) {
+                   let brow = '';
+                   let values = [];
+                   let config = configManager.configurations[i];
+
+                   if( config.component === 'plants' ) {
+                       appState = setComponent( appState, 'plants' );
+                       let plant_params = buildParameterList(appState);
+                       brow = faddelem('tr',tbody);
+                       values = [
+                          {innerHTML:furl('../garden/garden_list.html'+plant_params, config.utf8 || CONST_LEAF_UTF8  )},
+                          {innerHTML:furl('../garden/garden_list.html'+plant_params, config.studyTitle || CONST_PLANT_VALUE )},
+                          {innerText:config.studyDesc || CONST_GARDEN_DESC},
+                       ];
+                       faddelems('td',brow,values);
+                   }
+              }
+ 
+              for( let i=0; i<configManager.configurations.length; i++ ) {
+                   let brow = '';
+                   let values = [];
+                   let config = configManager.configurations[i];
+    
+                   if( config.component === 'hiker' ) {
+                       appState = setComponent( appState, 'hiker' );
+                       let hiker_params = buildParameterList(appState);
+                       brow = faddelem('tr',tbody);
+                       values = [
+                          {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,config.utf8 || CONST_BOOT_UTF8 )},
+                          {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,config.studyTitle || CONST_THRU_HIKES)},
+                          {innerText:config.studyDesc || CONST_HIKER_DESC},
+                       ];
+                       faddelems('td',brow,values);
+                   }
+
+                   if( config.component === 'observers' ) {
+                       appState = setComponent( appState, 'observers' );
+                       let hiker_params = buildParameterList(appState);
+                       brow = faddelem('tr',tbody);
+                       values = [
+                          {innerHTML:furl('../observers/observer_counts.html'+hiker_params,config.utf8 || CONST_NPC_UTF8 )},
+                          {innerHTML:furl('../observers/observer_counts.html'+hiker_params,config.studyTitle || CONST_OBSERVERS)},
+                          {innerText:config.studyDesc || CONST_OBSERVERS_DESC},
+                       ];
+                       faddelems('td',brow,values);
+                   }
+
+                   if( config.component === 'colonies' ) {
+                       appState = setComponent( appState, 'colonies' );
+                       let plant_params = buildParameterList(appState);
+                       brow = faddelem('tr',tbody);
+                       values = [
+                          {innerHTML:furl('../colonies/colony_list.html'+plant_params, config.utf8 || CONST_SEEDLING_UTF8  )},
+                          {innerHTML:furl('../colonies/colony_list.html'+plant_params, config.studyTitle || CONST_COLONIES )},
+                          {innerText:config.studyDesc || CONST_COLONY_DESC},
+                       ];
+                       faddelems('td',brow,values);
+                   }
+ 
+                   if( config.component === 'animals' ) {
+                       appState = setComponent( appState, 'animals' );
+                       let fauna_params = buildParameterList(appState);
+                       brow = faddelem('tr',tbody);
+                       values = [
+                          {innerHTML:furl('../animals/animal_list.html'+fauna_params, config.utf8 || CONST_ANIMALS_UTF8  )},
+                          {innerHTML:furl('../animals/animal_list.html'+fauna_params, config.studyTitle || CONST_ANIMALS )},
+                          {innerText:config.studyDesc || CONST_ANIMALS_DESC},
+                       ];
+                       faddelems('td',brow,values);
+                   }
+               }
+          }
+      }
+ 
+      studies_labels = [];
+
+      studies_labels = [
+            {innerText:CONST_ICON},
+            {innerText:CONST_FIELD_STUDIES},
+            {innerText:CONST_DESCRIPTION}, 
+      ];
+
+      faddelem('p',document.body,{innerHTML:('<div id="vpadding"></div>')}); 
+      let headers = 'no';
+      let studies_table = '';
+      let studies_thead = '';
+      let studies_hrow = '';
+      let studies_tbody = '';
+ 
+      for( let i=0; i<configManager.configurations.length; i++ ) {
+       
+           let config = configManager.configurations[i];
+
+           if( config.component === COMPONENT_STUDIES ) {
+               if( headers === 'no' ) {
+                   headers = 'yes';
+                   studies_table = faddelem('stable',document.body,{id:'main'});                    
+                   studies_thead = faddelem('thead',studies_table);
+                   studies_hrow  = faddelem('tr',studies_thead);
+      
+                   faddelems('th',studies_hrow,studies_labels);
+                   studies_tbody = faddelem('tbody',studies_table);
+               }
+
+               let brow = '';
+               let values = [];
+
+               let urlState = appState;
+               urlState = setComponent( urlState, COMPONENT_STUDIES );
+               urlState = setStudyTitle(urlState, config.studyTitle);
+               let plant_params = buildParameterList(urlState);
+               brow = faddelem('tr',studies_tbody);
+               values = [
+                  {innerHTML:furl('../studies/field_study.html'+plant_params, config.utf8 || CONST_STUDIES_UTF8 )},
+                  {innerHTML:furl('../studies/field_study.html'+plant_params, config.studyTitle )},
+                  {innerText:config.studyDesc },
+               ];
+               faddelems('td',brow,values);
+           }
+      }
+
+      faddelem('p', document.body,{innerHTML:'</div>'});
+};
+</script>
+ 
+<script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
+<script type="text/javascript"   src="../core/js/api_fetch.js"></script>
+
+<script>
+async function gatherResources() {
+  let json_path = json_root + getParams(appState);
+ 
+  try {
+      // get the configurations
+      const configManager   = await asyncGetConfiguration( json_path );
+     
+      // Pass the data to the buildPage function
+      buildPage( configManager ); 
+
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+let message = validateConfig(appState);
+ 
+if( message ) {
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
+ 
+</script>
+</body>
+</html>
