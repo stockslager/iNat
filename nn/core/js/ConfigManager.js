@@ -21,6 +21,7 @@ class Taxon {
     constructor(data) {
         this.taxonId = data.taxon_id;
         this.taxonName = data.taxon_name;
+        this.icon = data.icon;
     }
 }
 
