@@ -50,19 +50,22 @@ const CONST_THRU_HIKES   = 'Thru Hikes';
 const CONST_ART          = 'Art & Journaling';
 const CONST_OBSERVERS    = 'Observers';
 const CONST_ANIMALS      = 'Animals';
- 
-function buildMenu( configManager ) {
-      let menu_string = '';
-      let params = '';
 
-      menu_string = '<div class="navbar">';
-
-      menu_string += buildHome(furl('./about.html'+buildParameterList(appState),'<span style="font_size: 16px;">About</span>'));
-      menu_string += '</div>';
+function buildMenu( config ) {
  
-      faddelem('p',document.body,{innerHTML:(menu_string)});  
+    // Create the main navbar container
+    let navbar = document.createElement('div');
+    navbar.className = 'navbar v2-menu';
+
+    let baseUrl = window.location.origin + window.location.pathname;
+
+    // Build the Home Link
+    buildNavHome( navbar, baseUrl, appState );
+
+    // Append the DOM nodes to the body
+    faddelem('p', document.body).appendChild(navbar);
 }
-
+ 
 function buildPage( configManager ) {
 
       buildMenu( configManager );
