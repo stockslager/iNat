@@ -64,7 +64,7 @@ function buildMenu( config ) {
     faddelem('p', document.body).appendChild(navbar);
 }
 
-function buildRow( component, icon, name, desc ) {
+function buildRow( component, icon, name, desc, tbody ) {
  
   appState = setComponent(appState, component);
   let gardenUrl = '../garden/garden_list.html' + buildParameterList(appState);
@@ -112,7 +112,7 @@ function buildPage( configManager ) {
                        let icon = config.utf8 || CONST_LEAF_UTF8;
                        let name = config.studyTitle || CONST_PLANT_VALUE;
                        let desc = config.studyDesc || CONST_GARDEN_DESC;
-                       buildRow( 'plants', icon, name, desc );
+                       buildRow( 'plants', icon, name, desc, tbody );
                    }
                
                /*    if( config.component === 'plants' ) {
