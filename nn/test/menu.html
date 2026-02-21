@@ -217,8 +217,12 @@ function buildMenu(results, plantsConfig) {
                 let iconUrl = window.location.origin + window.location.pathname + buildParameterList(urlState);
                 
                 let tLink = faddelem('a', ddContent, { href: iconUrl });
-                // Taxon Icon
-                faddelem('span', tLink, { innerHTML: plantsConfig.subIcons[j].icon, style: { paddingRight: '20px' } });
+
+                // Taxon Icon if present
+                if (plantsConfig.subIcons[j].icon) {
+                   faddelem('span', tLink, { innerHTML: plantsConfig.subIcons[j].icon });
+                }
+             
                 // Taxon Name 
                 faddelem('span', tLink, { textContent: plantsConfig.subIcons[j].name });
             }
