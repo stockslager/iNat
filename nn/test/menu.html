@@ -147,14 +147,14 @@ function buildMenuURL( url ) {
 
 function buildHome( url ) { return ('<div id="home">'+url+'</div>'); }
 
-function buildHome( navbar, baseUrl, homeState ) {
+function buildNavHome( navbar, baseUrl, homeState ) {
     let homeUrl = './garden_list.html' + buildParameterList(homeState);
     let homeDiv = faddelem('div', navbar, { id: 'home' });
     let hLink = faddelem('a', homeDiv, { href: homeUrl });
     faddelem('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
 }
 
-function buildFilteredShow( navbar, dd_name, results, config, baseUrl ) {
+function buildNavDDFilteredShow( navbar, dd_name, results, config, baseUrl ) {
 
     // Get the raw string from the URL
     let raw_taxon_str = getTaxonDD(appState) || ""; 
@@ -248,11 +248,11 @@ function buildMenu( results, config ) {
 
     let baseUrl = window.location.origin + window.location.pathname;
 
-    buildFilteredShow( navbar, menu_name, results, config, baseUrl );
+    buildNavDDFilteredShow( navbar, menu_name, results, config, baseUrl );
 
     // Build the Home Link
     let homeState = clearForGardenListParams(appState);
-    buildHome( navbar, baseUrl, homeState );
+    buildNavHome( navbar, baseUrl, homeState );
 
     // Append the DOM nodes to the body
     faddelem('p', document.body).appendChild(navbar);
