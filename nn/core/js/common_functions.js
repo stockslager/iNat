@@ -85,7 +85,7 @@ function capitalizeWords(str) {
 }
 
 function buildNavHome( navbar, baseUrl, homeState ) {
-    let homeUrl = './garden_list.html' + buildParameterList(homeState);
+    let homeUrl = baseUrl + buildParameterList(homeState);
     let homeDiv = faddelem('div', navbar, { id: 'home' });
     let hLink = faddelem('a', homeDiv, { href: homeUrl });
     faddelem('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
