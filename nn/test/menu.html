@@ -99,6 +99,12 @@ function fdate(str,dateonly=false) {
    return str;
 }
 
+function decodeHTMLEntities(text) {
+    const textArea = document.createElement('textarea');
+    textArea.innerHTML = text;
+    return textArea.value;
+}
+ 
 function replaceDoubleQuotes(str) { return str.replace(/"/g, '%22'); }
 
 function capitalizeWords(str) {
@@ -192,7 +198,8 @@ function buildMenu(results, plantsConfig) {
                 let iconUrl = window.location.origin + window.location.pathname + buildParameterList(iconUrlState);
                 
                 // Use the icon + name 
-                const linkTxt = plantsConfig.subIcons[j].icon + ' ' + plantsConfig.subIcons[j].name;
+                const safeIcon = decodeHTMLEntities(plantsConfig.subIcons[j].icon));
+                const linkTxt  = safeIcon + ' ' + plantsConfig.subIcons[j].name;
                 ddContent.appendChild(furl(iconUrl, linkTxt));
             }
         }
@@ -201,7 +208,8 @@ function buildMenu(results, plantsConfig) {
     // Add Home Link
     const gardenUrl = './garden_list.html' + buildParameterList(clearForGardenListParams(appState));
     const homeDiv = faddelem('div', navbar, { id: 'home' });
-    homeDiv.appendChild(furl(gardenUrl, CONST_LEAF_UTF8));
+    const safeIcon = decodeHTMLEntities(CONST_LEAF_UTF8);
+    homeDiv.appendChild(furl(gardenUrl, safeIcon)); 
 
     // Append the DOM nodes
     document.body.appendChild(navbar);
