@@ -181,7 +181,7 @@ function buildMenu( results, config ) {
           }
       }
 
-      let taxon_name = getMenuName(appState) || 'Taxon';  
+      let taxon_name = capitalizeWords(getMenuName(appState) || CONST_SHOW);  
       if( links ) { menu_string += buildDD( taxon_name, links); }
 
       let urlState  = clearForDashParams(appState);
