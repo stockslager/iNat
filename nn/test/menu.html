@@ -155,6 +155,18 @@ function buildHome( navbar, baseUrl, homeState ) {
 }
 
 function buildFilteredShow( navbar, dd_name, results, config, baseUrl ) {
+
+    // Get the raw string from the URL
+    let raw_taxon_str = getTaxonDD(appState) || ""; 
+    
+    // CLEANER: Split by comma and keep ONLY items that are in your config.json
+    // This deletes anything injected into the dd url param by the user.
+    let sub_taxon_arr = raw_taxon_str.split(',').filter(id => {
+        return config.subIcons.some(iconObj => iconObj.taxonId.toString() === id.trim());
+    });
+
+    // Force the appState to only have the clean IDs
+    appState = setTaxonDD(appState, sub_taxon_arr.join(','));
  
     let sub_taxon_arr = getTaxonDD(appState) || [];
  
