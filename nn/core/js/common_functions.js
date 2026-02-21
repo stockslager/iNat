@@ -31,6 +31,7 @@ const CONST_ALL_PLANTS     = 'All Plants';
 const CONST_SPECIES        = 'species:';
 const CONST_OBSERVATIONS   = 'observations:';
 const CONST_OF             = ' of ';
+const CONST_ABOUT          = 'About';
 
 // show menu
 const CONST_ALL            = 'all';              // common show drop down label
@@ -94,6 +95,13 @@ function buildNavHome( navbar, baseUrl, homeState ) {
     let homeDiv = faddelem('div', navbar, { id: 'home' });
     let hLink = faddelem('a', homeDiv, { href: homeUrl });
     faddelem('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
+}
+
+function buildNavAbout( navbar, baseUrl, homeState ) {
+    let homeUrl = baseUrl + buildParameterList(homeState);
+    let homeDiv = faddelem('div', navbar, { id: 'home' });
+    let hLink = faddelem('a', homeDiv, { href: homeUrl });
+    faddelem('span', hLink, { textContent: CONST_ABOUT });
 }
 
 function buildNavDDFilteredShow( navbar, dd_name, results, config, baseUrl ) {
