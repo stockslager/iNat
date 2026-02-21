@@ -276,7 +276,10 @@ function renderHeader(entity, total, per_page, page_curr, page_max, title_1, tit
     document.body.appendChild(pWrapper);
 }
 
-// Species Counts Table Column Helpers
+//**************************************
+// Species Counts Table Column Helpers *
+//**************************************
+// Species Counts Table Column - Photo
 function buildSpeciesPhoto( brow, rec ) {
     let tdPhoto = faddelem('td', brow);
     
@@ -285,4 +288,17 @@ function buildSpeciesPhoto( brow, rec ) {
     } else {
         faddelem('div', tdPhoto, { className: 'clipart', html: '&#127807;' });
     }
+}
+
+// Species Counts Table Column - Name
+function buildSpeciesName( brow, rec, url ) {
+    let tdName = faddelem('td', brow);
+    let a = faddelem('a', tdName, { href: url });
+    
+    // Common Name 
+    faddelem('span', a, { style: { fontSize: 'larger' }, textContent: (rec.taxon.preferred_common_name || '').toLowerCase() });
+    
+    // Scientific Name 
+    let br = faddelem('br', a);
+    faddelem('span', a, { style: { fontStyle: 'italic' }, textContent: '(' + (rec.taxon.name || '') + ')' });
 }
