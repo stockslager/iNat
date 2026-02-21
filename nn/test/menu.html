@@ -32,29 +32,41 @@ let menu_name  = '';
 // constants 
 const CONST_API_PER_PAGE  = '10';
 const CONST_WITHOUT_TAXON_PLANTAE = '47126';
+const CONST_SPECIES      = 'species:';
+const CONST_OBSERVATIONS = 'observations:';
+const CONST_OF           = ' of ';
  
 // find the html name to pass to other pages for nav
 let path      = window.location.pathname;
 let html_name = path.substring(path.lastIndexOf('/') + 1);
 
-const CONST_SPECIES      = 'species:';
-const CONST_OBSERVATIONS = 'observations:';
-const CONST_OF           = ' of ';
-
 function fcomnum(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') }; 
-function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
-function faddelem(etype,eparent=null,eattributes={}) { 
-   let eobj = document.createElement(etype);
-   for (let [key,value] of Object.entries(eattributes)) {
-      if ( typeof value === 'object' && value !== null ) {
-         for (let [subkey,subvalue] of Object.entries(value)) { eobj[key][subkey] = subvalue; };
-      }
-      else { eobj[key] = value; };
-    };
-   if (eparent) { eparent.appendChild(eobj); };
-   return eobj;
+
+// SECURE: Uses textContent to prevent script injection in link text
+function furl(url, txt = url) {
+    const a = document.createElement('a');
+    const safeUrl = (url.trim().toLowerCase().startsWith('javascript:')) ? '#' : url;
+    a.href = safeUrl;
+    a.textContent = txt; 
+    return a;
 }
 
+function faddelem(etype, eparent = null, eattributes = {}) {
+    const eobj = document.createElement(etype);
+    for (let [key, value] of Object.entries(eattributes)) {
+        if (key === 'innerHTML') {
+            console.warn("innerHTML used; ensure content is sanitized.");
+            eobj.innerHTML = value;
+        } else if (key === 'textContent') {
+            eobj.textContent = value;
+        } else {
+            eobj[key] = value;
+        }
+    }
+    if (eparent) eparent.appendChild(eobj);
+    return eobj;
+}
+ 
 function faddelems(etype,eparent=null,eattributes=[]) { for (let e of eattributes) { faddelem(etype,eparent,e); }; };
 function fpageurl(urlbase,urlparams,per_page,page) {
    let params = new URLSearchParams(urlparams);
@@ -87,9 +99,7 @@ function fdate(str,dateonly=false) {
    return str;
 }
 
-function replaceDoubleQuotes(str) {
-  return str.replace(/"/g, '%22');
-}
+function replaceDoubleQuotes(str) { return str.replace(/"/g, '%22'); }
 
 function capitalizeWords(str) {
   return str.toLowerCase().split(' ').map(function(word) {
@@ -125,11 +135,79 @@ function buildMenuURL( url ) {
   return( dd );
 }
 
-function buildHome( url ) {
-   return ('<div id="home">'+url+'</div>');
+function buildHome( url ) { return ('<div id="home">'+url+'</div>'); }
+
+function buildMenu(results, plantsConfig) {
+    const navbar = document.createElement('div');
+    navbar.className = 'navbar';
+
+    let sub_taxon_arr = getTaxonDD(appState) || [];
+ 
+    if( getTaxonDD(appState) ) {
+        sub_taxon_arr = getTaxonDD(appState);
+    } else {
+        if( plantsConfig.subIcons ) {
+            for( let i=0; i<results.length; i++) {
+                 if( !sub_taxon_arr.includes(results[i].taxon.id.toString()) ) {
+                     for( let j=0; j<plantsConfig.subIcons.length; j++ ) {
+                          for( let k=0; k<results[i].taxon.ancestor_ids.length; k++ ) {
+                               if( results[i].taxon.ancestor_ids[k].toString() === plantsConfig.subIcons[j].taxonId.toString() ){
+                                   if( !sub_taxon_arr.includes( plantsConfig.subIcons[j].taxonId ) ) {
+                                       sub_taxon_arr.push( plantsConfig.subIcons[j].taxonId );
+                                   }
+                               }
+                           }
+                      }
+                 }
+             }
+             // add the comma delimited list of taxons to the url params
+             // so the full list can still be shown during filtration.
+             appState = setTaxonDD(appState, sub_taxon_arr.join());
+        }
+    } 
+
+    if (plantsConfig.subIcons) {
+        let urlState = appState;
+        urlState = setMenuId(urlState, '');
+        urlState = setPage(urlState, '1');
+
+        // Create Dropdown Container
+        const dropdown = faddelem('div', navbar, { className: 'dropdown' });
+        
+        faddelem('button', dropdown, { 
+            className: 'dropbtn', 
+            textContent: capitalizeWords(menu_name) 
+        });
+
+        const ddContent = faddelem('div', dropdown, { className: 'dropdown-content' });
+
+        // Add "All" link
+        const allUrl = window.location.origin + window.location.pathname + buildParameterList(urlState);
+        ddContent.appendChild(furl(allUrl, CONST_ALL));
+
+        // Add Specific Taxon links
+        for (let j = 0; j < plantsConfig.subIcons.length; j++) {
+            if (sub_taxon_arr.includes(plantsConfig.subIcons[j].taxonId)) {
+                let iconUrlState = setMenuId(urlState, plantsConfig.subIcons[j].taxonId);
+                let iconUrl = window.location.origin + window.location.pathname + buildParameterList(iconUrlState);
+                
+                // Use the icon + name 
+                const linkTxt = plantsConfig.subIcons[j].icon + ' ' + plantsConfig.subIcons[j].name;
+                ddContent.appendChild(furl(iconUrl, linkTxt));
+            }
+        }
+    }
+
+    // Add Home Link
+    const gardenUrl = './garden_list.html' + buildParameterList(clearForGardenListParams(appState));
+    const homeDiv = faddelem('div', navbar, { id: 'home' });
+    homeDiv.appendChild(furl(gardenUrl, CONST_LEAF_UTF8));
+
+    // Append the DOM nodes
+    document.body.appendChild(navbar);
 }
  
-function buildMenu( results, plantsConfig ) {
+/*function buildMenu( results, plantsConfig ) {
 
    let links = '', icons = '', menu_string = '';
    let url = window.location.origin + window.location.pathname;   
@@ -182,7 +260,7 @@ function buildMenu( results, plantsConfig ) {
    menu_string += '</div>';
  
    faddelem('p',document.body,{innerHTML:(menu_string)});
-}
+}*/
 
 function buildPage(xobj, plantsConfig) {
    let results = xobj.results;
@@ -191,22 +269,18 @@ function buildPage(xobj, plantsConfig) {
  
    if (results) {
       let total_results = xobj.total_results;
-
       buildMenu( results, plantsConfig );
    }
 
 };
 </script>
- 
 <script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
 <script type="text/javascript"   src="../core/js/api_fetch.js"></script>
-
 <script>
 function setupAPIParams(plantsConfig) {
    let api_params = '';
 
    api_params += ('?project_id='+plantsConfig.insectProject);
-   //api_params += '&hrank=species';
 
    // filter by field... uses the plant_id (the taxon_id) for the plant
    // chosen from the garden list.
@@ -217,9 +291,7 @@ function setupAPIParams(plantsConfig) {
    if( plantsConfig.userId          ) { api_params += '&user_id='  + plantsConfig.userId; }
 
    // if a place_id was chosen from the place drop-down, use that place_id...
-   if( getPlaceMenuId(appState) ) {
-       api_params += '&place_id=' + getPlaceMenuId(appState);
-   }
+   if( getPlaceMenuId(appState) ) { api_params += '&place_id=' + getPlaceMenuId(appState); }
  
    api_params += getMenuIdParam(appState, '&taxon_id='); 
    api_params += getPageParam(appState, '&page=');
@@ -234,10 +306,8 @@ async function gatherResources() {
   let json_path = json_root + getParams(appState);
  
   try {
-   
       // Await the result of getObservations() and store the actual data
       const plantsConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
-      console.log('full config title: ' + plantsConfig.getFullTitle());
       const api_params    = setupAPIParams( plantsConfig );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
@@ -245,7 +315,6 @@ async function gatherResources() {
      
       // Pass the data to the buildPage function
       buildPage(obs_data, plantsConfig); 
-
     } catch (error) {
       console.error("An error occurred:", error);
       faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
@@ -263,5 +332,4 @@ if( message ) {
  
 </script>
 </body>
-
 </html>
