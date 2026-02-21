@@ -25,8 +25,6 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
 
 appState       = buildStateFromParams(winurlparams);
- 
-let menu_name  = '';
 
 // constants 
 const CONST_WITHOUT_TAXON_PLANTAE = '47126';
@@ -43,6 +41,8 @@ function buildMenu( results, config ) {
 
     let baseUrl = window.location.origin + window.location.pathname;
 
+    let menu_name = plantsConfig.getSubIconNameByTaxonId(plantsConfig, getMenuId(appState)) || CONST_SHOW;
+
     buildNavDDFilteredShow( navbar, menu_name, results, config, baseUrl );
 
     // Build the Home Link
@@ -56,8 +56,6 @@ function buildMenu( results, config ) {
 
 function buildPage(xobj, plantsConfig) {
    let results = xobj.results;
-
-   menu_name = plantsConfig.getSubIconNameByTaxonId(plantsConfig, getMenuId(appState)) || CONST_SHOW;
  
    if (results) {
       let total_results = xobj.total_results;
