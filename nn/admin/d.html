@@ -64,16 +64,15 @@ function buildMenu( config ) {
     faddelem('p', document.body).appendChild(navbar);
 }
 
-function buildRow( component, icon, name, desc, tbody ) {
+function buildRow( component, icon, name, desc, tbody, url ) {
  
   appState = setComponent(appState, component);
-  let gardenUrl = '../garden/garden_list.html' + buildParameterList(appState);
   let brow = faddelem('tr', tbody);
 
   let td1 = faddelem('td', brow);
-  faddelem('a', td1, { href: gardenUrl, innerHTML: icon }); 
+  faddelem('a', td1, { href: url+buildParameterList(appState), innerHTML: icon }); 
   let td2 = faddelem('td', brow);
-  faddelem('a', td2, { href: gardenUrl, textContent: name });
+  faddelem('a', td2, { href: url+buildParameterList(appState), textContent: name });
 
   faddelem('td', brow, { textContent: desc });
 }
@@ -109,76 +108,49 @@ function buildPage( configManager ) {
                    let config = configManager.configurations[i];
 
                    if( config.component === 'plants') {
+                       let url  = '../garden/garden_list.html';
                        let icon = config.utf8 || CONST_LEAF_UTF8;
                        let name = config.studyTitle || CONST_PLANT_VALUE;
                        let desc = config.studyDesc || CONST_GARDEN_DESC;
-                       buildRow( 'plants', icon, name, desc, tbody );
+                       buildRow( 'plants', icon, name, desc, tbody, url );
                    }
-               
-               /*    if( config.component === 'plants' ) {
-                       appState = setComponent( appState, 'plants' );
-                       let plant_params = buildParameterList(appState);
-                       brow = faddelem('tr',tbody);
-                       values = [
-                          {innerHTML:furl('../garden/garden_list.html'+plant_params, config.utf8 || CONST_LEAF_UTF8  )},
-                          {innerHTML:furl('../garden/garden_list.html'+plant_params, config.studyTitle || CONST_PLANT_VALUE )},
-                          {innerText:config.studyDesc || CONST_GARDEN_DESC},
-                       ];
-                       faddelems('td',brow,values);
-                   }*/
               }
  
               for( let i=0; i<configManager.configurations.length; i++ ) {
                    let brow = '';
                    let values = [];
                    let config = configManager.configurations[i];
-    
-                   if( config.component === 'hiker' ) {
-                       appState = setComponent( appState, 'hiker' );
-                       let hiker_params = buildParameterList(appState);
-                       brow = faddelem('tr',tbody);
-                       values = [
-                          {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,config.utf8 || CONST_BOOT_UTF8 )},
-                          {innerHTML:furl('../trails/thru_hiker.html'+hiker_params,config.studyTitle || CONST_THRU_HIKES)},
-                          {innerText:config.studyDesc || CONST_HIKER_DESC},
-                       ];
-                       faddelems('td',brow,values);
+
+                   if( config.component === 'hiker') {
+                       let url  = '../trails/thru_hiker.html';
+                       let icon = config.utf8 || CONST_BOOT_UTF8;
+                       let name = config.studyTitle || CONST_THRU_HIKES;
+                       let desc = config.studyDesc || CONST_HIKER_DESC;
+                       buildRow( 'hiker', icon, name, desc, tbody, url );
                    }
 
                    if( config.component === 'observers' ) {
-                       appState = setComponent( appState, 'observers' );
-                       let hiker_params = buildParameterList(appState);
-                       brow = faddelem('tr',tbody);
-                       values = [
-                          {innerHTML:furl('../observers/observer_counts.html'+hiker_params,config.utf8 || CONST_NPC_UTF8 )},
-                          {innerHTML:furl('../observers/observer_counts.html'+hiker_params,config.studyTitle || CONST_OBSERVERS)},
-                          {innerText:config.studyDesc || CONST_OBSERVERS_DESC},
-                       ];
-                       faddelems('td',brow,values);
+                       let url  = '../observers/observer_counts.html';
+                       let icon = config.utf8 || CONST_NPC_UTF8;
+                       let name = config.studyTitle || CONST_OBSERVERS;
+                       let desc = config.studyDesc || CONST_OBSERVERS_DESC;
+                       buildRow( 'observers', icon, name, desc, tbody, url );
                    }
 
                    if( config.component === 'colonies' ) {
-                       appState = setComponent( appState, 'colonies' );
-                       let plant_params = buildParameterList(appState);
-                       brow = faddelem('tr',tbody);
-                       values = [
-                          {innerHTML:furl('../colonies/colony_list.html'+plant_params, config.utf8 || CONST_SEEDLING_UTF8  )},
-                          {innerHTML:furl('../colonies/colony_list.html'+plant_params, config.studyTitle || CONST_COLONIES )},
-                          {innerText:config.studyDesc || CONST_COLONY_DESC},
-                       ];
-                       faddelems('td',brow,values);
+                       let url  = '../colonies/colony_list.html';
+                       let icon = config.utf8 || CONST_SEEDLING_UTF8;
+                       let name = config.studyTitle || CONST_COLONIES;
+                       let desc = config.studyDesc || CONST_COLONY_DESC;
+                       buildRow( 'colonies', icon, name, desc, tbody, url );
                    }
  
                    if( config.component === 'animals' ) {
-                       appState = setComponent( appState, 'animals' );
-                       let fauna_params = buildParameterList(appState);
-                       brow = faddelem('tr',tbody);
-                       values = [
-                          {innerHTML:furl('../animals/animal_list.html'+fauna_params, config.utf8 || CONST_ANIMALS_UTF8  )},
-                          {innerHTML:furl('../animals/animal_list.html'+fauna_params, config.studyTitle || CONST_ANIMALS )},
-                          {innerText:config.studyDesc || CONST_ANIMALS_DESC},
-                       ];
-                       faddelems('td',brow,values);
+                       let url  = '../animals/animal_list.html';
+                       let icon = config.utf8 || CONST_ANIMALS_UTF8;
+                       let name = config.studyTitle || CONST_ANIMALS;
+                       let desc = config.studyDesc || CONST_ANIMALS_DESC;
+                       buildRow( 'animals', icon, name, desc, tbody, url );
                    }
                }
           }
@@ -221,13 +193,18 @@ function buildPage( configManager ) {
                urlState = setComponent( urlState, COMPONENT_STUDIES );
                urlState = setStudyTitle(urlState, config.studyTitle);
                let plant_params = buildParameterList(urlState);
-               brow = faddelem('tr',studies_tbody);
-               values = [
-                  {innerHTML:furl('../studies/field_study.html'+plant_params, config.utf8 || CONST_STUDIES_UTF8 )},
-                  {innerHTML:furl('../studies/field_study.html'+plant_params, config.studyTitle )},
-                  {innerText:config.studyDesc },
-               ];
-               faddelems('td',brow,values);
+
+               let url  = '../studies/field_study.html' + buildParameterList(urlState);
+               let icon = config.utf8 || CONST_STUDIES_UTF8;
+               let name = config.studyTitle;
+               let desc = config.studyDesc;
+               let brow = faddelem('tr', tbody);
+
+               let td1 = faddelem('td', brow);
+               faddelem('a', td1, { href: url+buildParameterList(urlState), innerHTML: icon }); 
+               let td2 = faddelem('td', brow);
+               faddelem('a', td2, { href: url+buildParameterList(urlState), textContent: name });
+               faddelem('td', brow, { textContent: desc });
            }
       }
 
