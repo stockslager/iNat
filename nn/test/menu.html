@@ -65,12 +65,6 @@ function fpageurl(urlbase,urlparams,per_page,page) {
    return urlbase+'?'+params;
 }
 
-function fpageurlplusorderbyid(urlbase,urlparams,per_page,page) {
-   let params = new URLSearchParams(urlparams);
-   params.get('order_by') ? params.set('order_by','id') : params.append('order_by','id');
-   return fpageurl(urlbase,params,per_page,page);
-}
-
 function ffetch(url) {
    return fetch(url)
    .then((response) => {
@@ -93,26 +87,6 @@ function fdate(str,dateonly=false) {
    return str;
 }
 
-function truncate(str, maxLength) {
-  if (str.length <= maxLength) {
-    return str;
-  } else {
-     return (str.substring(0, maxLength) + '...');
-  }
-}
-
-function stripHtml(html) {
-  return html.replace(/<[^>]*>/g, '');
-}
-
-function isMultipleOfFour(num) {
-  return num % 4 === 0;
-}
-
-function isMultipleOfThree(num) {
-  return num % 3 === 0;
-}
-
 function replaceDoubleQuotes(str) {
   return str.replace(/"/g, '%22');
 }
@@ -121,11 +95,6 @@ function capitalizeWords(str) {
   return str.toLowerCase().split(' ').map(function(word) {
     return word.charAt(0).toUpperCase() + word.slice(1);
   }).join(' ');
-}
-
-function boxRow(field_id, field_name, field_value) {
-    this.field_id    = field_id;
-    this.field_name  = field_name;
 }
 
 // functions for menu bar
@@ -159,25 +128,10 @@ function buildMenuURL( url ) {
 function buildHome( url ) {
    return ('<div id="home">'+url+'</div>');
 }
-
-function removeItemFromCommaDelimitedList(listString, itemToRemove) {
-  // 1. Split the string into an array
-  const listArray = listString.split(',').map(item => item.trim()).filter(item => item !== '');
-
-  // 2. Remove the desired item from the array
-  const updatedArray = listArray.filter(item => item !== itemToRemove);
-
-  // 3. Join the array back into a comma-delimited string
-  const updatedListString = updatedArray.join(',');
-
-  return updatedListString;
-}
  
 function buildMenu( results, plantsConfig ) {
 
-   let links = '';
-   let icons = '';
-   let menu_string = '';
+   let links = '', icons = '', menu_string = '';
    let url = window.location.origin + window.location.pathname;   
  
    menu_string = '<div class="navbar">';
@@ -237,12 +191,6 @@ function buildPage(xobj, plantsConfig) {
  
    if (results) {
       let total_results = xobj.total_results;
-      let per_page = xobj.per_page;
-      let page_curr = xobj.page;
-      let page_max = Math.ceil(total_results/per_page);
-      let page_prev = ((page_curr>1)?page_curr-1:null);
-      let page_next = ((page_curr<page_max)?page_curr+1:null);
-      let labels = [];
 
       buildMenu( results, plantsConfig );
    }
