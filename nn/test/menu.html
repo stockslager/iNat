@@ -65,7 +65,7 @@ function faddelem(etype, eparent = null, eattributes = {}) {
     const eobj = document.createElement(etype);
     for (let [key, value] of Object.entries(eattributes)) {
         if (key === 'innerHTML') {
-            console.warn("innerHTML used; ensure content is sanitized.");
+            //console.warn("innerHTML used; ensure content is sanitized.");
             eobj.innerHTML = value;
         } else if (key === 'textContent') {
             eobj.textContent = value;
@@ -147,7 +147,7 @@ function buildMenuURL( url ) {
 
 function buildHome( url ) { return ('<div id="home">'+url+'</div>'); }
 
-function buildFilteredShow( navbar, results, config ) {
+function buildFilteredShow( navbar, dd_name, results, config, baseUrl ) {
  
     let sub_taxon_arr = getTaxonDD(appState) || [];
  
@@ -187,14 +187,14 @@ function buildFilteredShow( navbar, results, config ) {
         // Dropdown Button
         faddelem('button', dropdown, { 
             className: 'dropbtn', 
-            textContent: capitalizeWords(menu_name) 
+            textContent: capitalizeWords(dd_name) 
         });
 
         // Dropdown Content (the links)
         let ddContent = faddelem('div', dropdown, { className: 'dropdown-content' }); 
 
         // ALL Link
-        let allUrl = window.location.origin + window.location.pathname + buildParameterList(urlState);
+        let allUrl = baseUrl + buildParameterList(urlState);
         let allLink = faddelem('a', ddContent, { href: allUrl });
         // Icon for ALL
         faddelem('span', allLink, { innerHTML: CONST_PLUS_UTF8 });
@@ -205,7 +205,7 @@ function buildFilteredShow( navbar, results, config ) {
         for( let j = 0; j < config.subIcons.length; j++ ) {
              if( sub_taxon_arr.includes(config.subIcons[j].taxonId) ) {
                  urlState = setMenuId(urlState, config.subIcons[j].taxonId);
-                 let iconUrl = window.location.origin + window.location.pathname + buildParameterList(urlState);
+                 let iconUrl = baseUrl + buildParameterList(urlState);
                  
                  let tLink = faddelem('a', ddContent, { href: iconUrl });
 
@@ -227,7 +227,9 @@ function buildMenu( results, config ) {
     let navbar = document.createElement('div');
     navbar.className = 'navbar';
 
-    buildFilteredShow( navbar, results, config );
+    let baseUrl = window.location.origin + window.location.pathname;
+
+    buildFilteredShow( navbar, menu_name, results, config, baseUrl );
 
     // Build the Home Link
     let homeState = clearForGardenListParams(appState);
