@@ -67,13 +67,14 @@ function furl(url, txt = url) {
 function faddelem(etype, eparent = null, eattributes = {}) {
     const eobj = document.createElement(etype);
     for (let [key, value] of Object.entries(eattributes)) {
-        if (key === 'innerHTML') {
-            //console.warn("innerHTML used; ensure content is sanitized.");
-            eobj.innerHTML = value;
+        if (key === 'style' && typeof value === 'object') {
+           Object.assign(eobj.style, value); 
+        } else if (key === 'innerHTML' || key === 'html') {
+           eobj.innerHTML = value;
         } else if (key === 'textContent') {
-            eobj.textContent = value;
+           eobj.textContent = value;
         } else {
-            eobj[key] = value;
+           eobj[key] = value;
         }
     }
     if (eparent) eparent.appendChild(eobj);
