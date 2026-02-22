@@ -147,7 +147,12 @@ async function gatherResources() {
     }
 }
 
-let message = validateHiker(appState);
+let message = '';
+if( getComponent(appState) === COMPONENT_HIKER ) {
+    validateHiker(appState);
+} else {
+    validateAnimals(appState);
+}
  
 if( message ) {
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
