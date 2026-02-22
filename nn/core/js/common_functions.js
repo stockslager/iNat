@@ -144,10 +144,10 @@ function buildNavDDFilteredShow( navbar, dd_name, results, config, baseUrl ) {
         }
     } 
 
-    buildNavDDShow( navbar, dd_name, results, config, baseUrl );
+    buildNavDDShow( navbar, dd_name, results, config, baseUrl, sub_taxon_arr );
 }
 
-function buildNavDDShow( navbar, dd_name, results, config, baseUrl ) {
+function buildNavDDShow( navbar, dd_name, results, config, baseUrl, sub_taxon_arr ) {
 
     // Build the Show Dropdown
     if( config.subIcons ) {
