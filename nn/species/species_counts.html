@@ -47,7 +47,8 @@ function buildMenu( results, config ) {
     buildNavDDShow( navbar, menu_name, results, config, baseUrl );
 
     // Build the Home Link
-    let homeUrl = '../admin/dashboard.html';
+    let homeState = clearForDashParams(appState);
+    let homeUrl   = '../admin/dashboard.html';
     buildNavHome( navbar, homeUrl, homeState );
 
     // Append the DOM nodes to the body
