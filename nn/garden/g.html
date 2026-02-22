@@ -1,0 +1,413 @@
+<!DOCTYPE html>           
+<html lang="en">       
+   
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />      
+<meta name="apple-mobile-web-app-title" content="Garden List" /> 
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />  
+<meta name="description" content="Garden Viewer" />
+<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
+<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+<title>Garden List</title>
+</head>
+   
+<body>
+<script type="text/javascript"   src='../core/js/global_const.js'> </script>
+<script type="text/javascript"   src='../core/js/common_func.js'> </script>
+<script type="text/javascript"   src='../core/js/roots.js'> </script>
+<script type="text/javascript"   src='../core/js/store.js'> </script>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
+let p_hide_dash    = winurlparams.get('hide_dash') || 'no';
+
+appState       = buildStateFromParams(winurlparams);
+
+// page / api specific constants 
+const CONST_API_PER_PAGE   = '100';
+const CONST_CUSTOM_PLANT   = 'Plant';
+const CONST_CUSTOM_PLACE   = 'Place';
+const CONST_CUSTOM_UMBRELLA = 'Entire Umbrella';
+  
+function sortWithNull(arr, ascending = true) {
+  for( let i=0; i<arr.length; i++ ) {
+       if( arr[i].taxon.preferred_common_name ){
+           arr[i].taxon.preferred_common_name = arr[i].taxon.preferred_common_name.toLowerCase();
+       }
+  }
+  arr.sort(function(a, b) {
+    if (!a.taxon.preferred_common_name && !b.taxon.preferred_common_name) return 0;
+    if (!a.taxon.preferred_common_name) return ascending ? 1 : -1;
+    if (!b.taxon.preferred_common_name) return ascending ? -1 : 1;
+    if (a.taxon.preferred_common_name < b.taxon.preferred_common_name) return ascending ? -1 : 1;
+    if (a.taxon.preferred_common_name > b.taxon.preferred_common_name) return ascending ? 1 : -1;
+    return 0;
+  });
+  return arr;
+}
+
+function getPlaceName( plantConfig, place_id ) {
+   let place_name = 'Place';
+
+   for( let i=0; i<plantConfig.places.length; i++ ) {
+        if( place_id === plantConfig.places[i].placeId ) {
+            place_name = plantConfig.places[i].placeName; 
+        }
+   }
+   return place_name;
+}
+
+function buildNavDDObsFields( navbar, dd_name, results, config, baseUrl, sub_taxon_arr ) {
+
+    // Build the Show Dropdown
+    if( config.ddObsFields ) {
+        let urlState = appState;
+        urlState     = setFieldName(urlState, '');
+        urlState     = setFieldValue(urlState, ''); 
+        urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+
+        // Create the Dropdown container
+        let dropdown = faddelem('div', navbar, { className: 'dropdown' });
+       
+        // Dropdown Button
+        faddelem('button', dropdown, { className: 'dropbtn', textContent: capitalizeWords(dd_name) });
+
+        // Dropdown Content (the links)
+        let ddContent = faddelem('div', dropdown, { className: 'dropdown-content' }); 
+
+        // ALL Link
+        let allUrl = baseUrl + buildParameterList(urlState);
+        let allLink = faddelem('a', ddContent, { href: allUrl });
+        // Icon for ALL
+        faddelem('span', allLink, { innerHTML: CONST_PLUS_UTF8 });
+        // Text for ALL 
+        faddelem('span', allLink, { textContent: CONST_ALL }); 
+
+        // Obs Fields Links Loop
+        for( let j = 0; j < config.ddObsFields.length; j++ ) {
+             urlState = setFieldName(  urlState, config.ddObsFields[j].fieldName );
+             urlState = setFieldValue( urlState, config.ddObsFields[j].fieldValue );
+             let iconUrl = baseUrl + buildParameterList(urlState);
+                 
+             let tLink = faddelem('a', ddContent, { href: iconUrl });
+
+             // The name will always be the value of the field 
+             // (if the field name is "trail name" the value will be "some trail") 
+             faddelem('span', tLink, { textContent: config.ddObsFields[j].fieldValue });
+        }
+    }
+}
+
+function buildMenu( config, results ) {
+
+    // Create the main navbar container
+    let navbar = document.createElement('div');
+    navbar.className = 'navbar v2-menu';
+
+    let baseUrl = window.location.origin + window.location.pathname;
+
+    if( config.ddObsFields && config.ddObsFields.length > 0 ) {
+        let dd_name   = config.ddObsFields[0].ddName;  // just take the first one. 
+        let menu_name = getFieldValue(appState)||dd_name;
+
+        buildNavDDObsFields( navbar, menu_name, results, config, baseUrl );
+    }
+
+    // Build the Home Link
+    let homeState = clearForDashParams(appState);
+    let homeUrl = '../admin/dashboard.html';
+    buildNavHome( navbar, homeUrl, homeState );
+
+    // Append the DOM nodes to the body
+    faddelem('p', document.body).appendChild(navbar);
+
+
+   
+      let menu_string = '';
+      let links = '';
+      let dd_name = '';
+ 
+      menu_string = '<div class="navbar">';
+
+      if( config.ddObsFields && config.ddObsFields.length > 0 ) {
+          let urlState = appState;
+          urlState     = setFieldName(urlState, '');
+          urlState     = setFieldValue(urlState, ''); 
+          urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+          links       += furl('./garden_list.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
+          for( let i=0; i<config.ddObsFields.length; i++ ) {
+               dd_name  = config.ddObsFields[i].ddName;
+               urlState = setFieldName(  urlState, config.ddObsFields[i].fieldName );
+               urlState = setFieldValue( urlState, config.ddObsFields[i].fieldValue );
+               links += furl('./garden_list.html'+buildParameterList(urlState),config.ddObsFields[i].fieldValue);
+          }
+      }
+
+      if( links ) { menu_string += buildDD(getFieldValue(appState)||dd_name, links); }
+      links = '';
+ 
+      if( config.places && config.places.length > 0 ) {
+          let urlState = appState;
+          urlState     = setPlaceMenuId(urlState, '');
+          urlState     = setPlaceMenuName(urlState, ''); 
+          urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+          links       += furl('./garden_list.html'+buildParameterList(urlState),capitalizeWords(CONST_CUSTOM_UMBRELLA));
+          for( let i=0; i<config.places.length; i++ ) {
+               urlState = setPlaceMenuId( urlState, config.places[i].placeId );
+               urlState = setPlaceMenuName( urlState, config.places[i].placeName );
+               links += furl('./garden_list.html'+buildParameterList(urlState),config.places[i].placeName);
+          }
+      }
+
+      if( links && p_hide_dash === 'no' ) { menu_string += buildDD(CONST_CUSTOM_PLACE, links); }
+      links = '';
+
+      if( config.taxa && config.taxa.length > 0 ) {
+          let urlState = appState;
+          urlState     = setPlantMenuId(urlState, '');
+          urlState     = setPlantMenuName(urlState, '');
+          urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+          links       += furl('./garden_list.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
+          for( let i=0; i<config.taxa.length; i++ ) {
+               urlState = setPlantMenuId(   urlState, config.taxa[i].taxonId );
+               urlState = setPlantMenuName( urlState, config.taxa[i].taxonName );
+               links += furl('./garden_list.html'+buildParameterList(urlState),config.taxa[i].taxonName);
+          }
+      }
+
+      let plant_name = getPlantMenuName(appState) || CONST_CUSTOM_PLANT;  // if no menu filter selected, set to const "Plant"
+      if( links ) { menu_string += buildDD( plant_name, links); }
+
+      // split list (if they have more than one value in garden-list...
+      links = '';
+
+      if( p_hide_dash === 'no' ) {
+          let urlState  = clearForDashParams(appState);
+          menu_string  += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
+      } else {
+          menu_string  += buildDDTitle('&nbsp;'); 
+      }
+
+      menu_string += '</div>';
+
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+
+function buildPage(xobj, config) {
+   let results = xobj.results;
+   let box_array = [];
+
+   buildMenu( config, results );
+ 
+   if (results) {
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+      let labels = [];
+
+      let field_id = '';
+      let field_name = '';
+
+      labels = [
+            {innerText:'#'},
+            {innerText:'Photo'},
+            {innerText:'Name'}, 
+      ];
+
+      let title_1 = '', title_2 = '', title_3 = '';
+
+      let show_behavior = config.show_behavior || 'no';
+        
+        // Logic for setting titles (assuming furl and appState are available)
+      if( config.show_behavior === 'on_all' ) {
+          let urlState = appState;
+          urlState = setPlantMenuId(urlState, '');                  
+          urlState = setPlantMenuName(urlState, '');                
+          urlState = setPlantName(urlState, CONST_ALL_PLANTS);  // don't include "on" since it'll be added on later.
+          urlState = setPlantId(urlState, '');                  // scrub plant id since it might have been set previously
+          title_3 = '<span id="upperright">' + config.title + '</span>'; 
+      } else {
+          let label = getPlaceMenuName(appState) || config.getSubTitle() || config.title;
+          title_3 = '<span id="upperrightbold">' + label + '</span>';
+      }
+    
+      // Generate the secure header element
+      const headerElem = buildHeader(CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3);
+
+      // Create the wrapper <p> and append the DOM object directly
+      const pWrapper = document.createElement('p');
+      pWrapper.appendChild(headerElem);
+      document.body.appendChild(pWrapper);
+
+      let table = faddelem('table',document.body,{id:'main'});                    
+      let thead = faddelem('thead',table);
+      let hrow  = faddelem('tr',thead);
+      
+      faddelems('th',hrow,labels);
+      let tbody = faddelem('tbody',table);
+
+      // may need to revisit this if species_guess is ever null
+      results = sortWithNull(results);
+    
+      for (let i=0; i<results.length; i++) {
+         let rec = results[i];
+         let tax_name = '';
+         let pref_tax_name = '';
+         let header_name = '';
+         let tax_photo = '<div class="clipart">&#127807</div>'; 
+         let tax_id = '';
+         let taxon = '';
+
+         let brow = faddelem('tr',tbody);
+
+         if( rec.taxon ){
+             tax_id = rec.taxon.id;
+             tax_name = rec.taxon.name || '';
+             pref_tax_name = rec.taxon.preferred_common_name || '';
+             header_name = pref_tax_name || tax_name || '';
+           
+             if( rec.taxon.default_photo ){
+                 if( rec.taxon.default_photo.url ){
+                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
+                 }
+             }
+         }
+
+         let displayName  = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
+         let image        = '<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />';
+
+         let use_plant_project_images = config.usePlantProjectImages || 'no';
+
+         if( use_plant_project_images === 'yes' ) {
+             image = furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />');
+         }
+
+         let target = rec.taxon.id;
+         if( config.use_names_lookup === 'no' && rec.taxon.preferred_common_name ) {
+             target = pref_tax_name.toLowerCase();
+         }
+
+         // this page uses taxon id/name wrt to flora, the next page, fauna
+         // plant id (the selected taxon on this page) is passed to the next to search for in the &field:some+field=value.
+         let urlState = appState;
+         urlState = setPage(urlState, '');
+         urlState = setTaxonId(urlState, '');
+         urlState = setTaxonName(urlState, '');
+         urlState = setPlantId(urlState, rec.taxon.id);
+         urlState = setPlantName(urlState, header_name);
+
+         let values = [
+            {innerText:i+1},
+            {innerHTML:image},
+            {innerHTML:furl('./garden_activity.html'+buildParameterList(urlState),displayName)},
+         ];
+        
+         faddelems('td',brow,values);
+      };
+
+      // buttons to go to prev or next page
+      let nav = faddelem('div',document.body,{id:'nav'});
+      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
+}; 
+</script>
+
+<script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
+<script type="text/javascript"   src="../core/js/api_fetch.js"></script>
+
+<script>
+function setupAPIParams( plantConfig ) {
+   let api_params = '';
+ 
+   api_params += '?project_id='+plantConfig.project;
+   api_params += '&iconic_taxa=plantae';
+
+   if( plantConfig.plantField )        { api_params += '&field:'    + plantConfig.plantField;  } 
+   if( plantConfig.plantFieldValue )   { api_params += '='          + plantConfig.plantFieldValue; }
+   if( plantConfig.plantIds )          { api_params += '&id='       + plantConfig.plantIds;  }
+   if( plantConfig.plantListUserId )   { api_params += '&user_id='  + plantConfig.plantListUserId; }
+   if( plantConfig.tagName )           { api_params += '&tag='      + plantConfig.tagName; }
+
+   if( getFieldName(appState) ) {
+       api_params += '&field:' + getFieldName(appState);
+       if( getFieldValue(appState) ) {
+           api_params += '=' + getFieldValue(appState);
+       }
+   }
+
+   // if a place_id was chosen from the place drop-down, use that place_id...
+   if( getPlaceMenuId(appState) ) {
+       api_params += '&place_id=' + getPlaceMenuId(appState);
+   } else if( plantConfig.defaultPlace ) {
+       api_params += '&place_id=' + plantConfig.defaultPlace;
+   }
+
+   // if a taxon_id was chosen in the plant drop-down, use that taxon_id.  if not, 
+   // use the taxon_id(s) from the config when present.
+   if( getPlantMenuId(appState) ) {
+       api_params += '&taxon_id='+getPlantMenuId(appState);
+   } else {
+       if( plantConfig.taxonIds ) { 
+           api_params += '&taxon_id=' + plantConfig.taxonIds; 
+       }
+   }
+
+   api_params += getPageParam(appState, '&page=');
+   api_params += '&per_page='+CONST_API_PER_PAGE;
+ 
+   return api_params;
+}
+   
+async function gatherResources() {
+  let api_base  = 'https://api.inaturalist.org/v1/observations/species_counts';
+  let json_path = json_root + getParams(appState);
+ 
+  try {
+   
+      // Await the result of getObservations() and store the actual data
+      const plantConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
+
+      if( plantConfig.usePlantProjectImages && plantConfig.usePlantProjectImages === 'yes' ) {
+          api_base = 'https://api.inaturalist.org/v1/observations';
+      }
+     
+      console.log('full config title: ' + plantConfig.getFullTitle());
+      const api_params    = setupAPIParams( plantConfig );
+      const api_url       = api_base+api_params;
+      console.log('api url: ' + api_url);
+      const obs_data      = await apiFetch( api_url ); 
+     
+      // Pass the data to the buildPage function
+      buildPage(obs_data, plantConfig); 
+
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+let message = validateGarden(appState);
+ 
+if( message ) {
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
+ 
+</script>
+</body>
+</html>
