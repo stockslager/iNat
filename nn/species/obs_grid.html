@@ -114,10 +114,6 @@ function setupAPIParams( config ) {
     if( config.defaultPlaceId  ) { api_params += '&place_id=' + config.defaultPlaceId; }  
     api_params += '&field:'+config.fieldName+'='+(config.fieldValue||'');  // should change to generic filter?
 
-    if( getComponent(appState) === COMPONENT_ANIMALS ) {
-        api_params += '&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Actinopterygii,Mollusca,Arachnida,Insecta';
-    }
-
     return api_params;
 }
 
