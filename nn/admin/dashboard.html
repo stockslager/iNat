@@ -40,14 +40,12 @@ const CONST_GARDEN_DESC    = 'Interactions between plants and animals by plant.'
 const CONST_COLONY_DESC    = 'Lists the colonies of plants where collection has occurred.  Shows the child colonies established from each parent colony.';
 const CONST_HIKER_DESC   = 'Species encountered during this trek.';
 const CONST_OBSERVERS_DESC   = 'Interactions between plants and animals by observer.';
-const CONST_ANIMALS_DESC = 'Interactions between plants and animals by animal.';
 const CONST_PLANT_VALUE  = 'Plants';
 const CONST_COLONIES     = 'Colonies';
 const CONST_BIODIVERSITY = 'Biodiversity';
 const CONST_THRU_HIKES   = 'Thru Hikes';
 const CONST_ART          = 'Art & Journaling';
 const CONST_OBSERVERS    = 'Observers';
-const CONST_ANIMALS      = 'Animals';
 
 function buildMenu( config ) {
   
@@ -139,14 +137,6 @@ function buildPage( configManager ) {
                        let name = config.studyTitle || CONST_COLONIES;
                        let desc = config.studyDesc || CONST_COLONY_DESC;
                        buildRow( 'colonies', icon, name, desc, tbody, url );
-                   }
- 
-                   if( config.component === 'animals' ) {
-                       let url  = '../species/species_counts.html';
-                       let icon = config.utf8 || CONST_ANIMALS_UTF8;
-                       let name = config.studyTitle || CONST_ANIMALS;
-                       let desc = config.studyDesc || CONST_ANIMALS_DESC;
-                       buildRow( 'animals', icon, name, desc, tbody, url );
                    }
                }
           }
