@@ -424,15 +424,15 @@ function fresults( xobj, config ) {
                                   let cname = rec.ofvs[j].taxon.preferred_common_name || '';
                                   field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
                               }
-                              if( p_field_value === '' ){
+                              //if( p_field_value === '' ){
                                   let urlState = appState;
                                   urlState = setPage(urlState, '1');
                                   urlState = setFieldName(urlState, rec.ofvs[j].name);
                                   urlState = setFieldValue(urlState, replaceDoubleQuotes(rec.ofvs[j].value.toString()));
                                   values.push({innerHTML:furl('./field_study.html'+buildParameterList(urlState), field1)});
-                              } else {
+                              /*} else {
                                   values.push({innerHTML:field1});
-                              }
+                              }*/
                           } else {
                               values.push({innerText:''});
                           }
