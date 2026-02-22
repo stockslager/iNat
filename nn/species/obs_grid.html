@@ -1,0 +1,161 @@
+<!DOCTYPE html>    
+<html lang="en">  
+   
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="apple-mobile-web-app-title" content="Observations Grid" />
+<meta name="description" content="Observations Grid" />
+<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
+<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+<title>Observations Grid</title>
+</head>
+
+<body>
+<script type="text/javascript"   src='../core/js/global_const.js'> </script>
+<script type="text/javascript"   src='../core/js/common_func.js'>  </script>
+<script type="text/javascript"   src='../core/js/roots.js'>        </script>
+<script type="text/javascript"   src='../core/js/store.js'>        </script>
+<script>
+//get parameters from the url
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams   = new URLSearchParams(winurlsearchstr);
+
+appState       = buildStateFromParams(winurlparams);
+
+var api_base   = 'https://api.inaturalist.org/v1/observations'
+var obsurlbase = 'https://www.inaturalist.org/observations';
+
+// don't show organsims that have only been id'd to genus and above, otherwise the number's
+// won't match other counts
+//winurlparams.append('lrank', 'subspecies');
+
+// defaults for grid
+var cellpx       = 122;
+var spacerpx     =   4;
+var rows         =  30;
+var columns      =   3;
+var recsmax      = columns * rows - 1;
+
+winurlparams.append('per_page',recsmax);
+
+function getMapParams(config) {
+   let map_params = '';
+
+   map_params += '?project_id='+config.project;
+
+   map_params += getTaxonIdParam(appState, '&taxon_id='); 
+
+   if( config.defaultPlaceId ) { map_params += '&place_id='+config.defaultPlaceId; } 
+   
+   map_params += '&user_id='+config.userId; 
+   map_params += '&field:'+config.fieldName+'='+(config.fieldValue||'');  // should change to generic filter?
+
+   return map_params;
+}
+
+function buildMenu( config ) {
+
+   let links = '';
+   let menu_string = '';
+   let menu_params = '';
+
+   let id = getMenuId(appState);
+
+   if( id ) { menu_params += '&taxon_id=' + id + '&menu_id=' + id; }
+
+   menu_string = '<div class="navbar">';
+
+   // if all observations was selected... show the time series
+   // if a taxon is in focus, just show the regular map
+   if( !getMenuId(appState) && !getTaxonId(appState) ) {
+       links  +=  furl('../admin/map.html'+getMapParams(config),"Map");
+       links  +=  furl(root_observations+'torquemap'+getMapParams(config)+'&interval=monthly', "Time Series");
+       menu_string += ( buildDD( 'Maps', links) );
+   } else {
+       menu_string += buildMenuURL( furl('../admin/map.html'+getMapParams(config),"Map") );
+   }
+   
+   let url_state = clearForSpeciesCountsParams( appState );
+   
+   menu_string += buildHome( furl('./species_counts.html'+buildParameterList(url_state),CONST_BOOT_UTF8) );
+   menu_string += '</div>';
+   
+   return menu_string;
+}
+    
+function buildPage( data, config ) {  
+   faddelem('p',document.body,{innerHTML:buildMenu( config )}); 
+   
+   // append the params needed by the grid to build the url for outlinks to iNat.
+   let inat_url = obsurlbase + getMapParams(config);
+                                    
+   buildGrid(data, inat_url);    
+};
+
+function setupAPIParams( config ) {
+    
+    let api_params = '';
+
+    api_params += '?project_id='+config.project;
+    
+    api_params += getTaxonIdParam(appState, '&taxon_id='); 
+
+    // default these to what's in the config even though the state sometimes
+    // holds the same attributes for other components.
+    if( config.userId          ) { api_params += '&user_id='  + config.userId; }
+    if( config.defaultPlaceId  ) { api_params += '&place_id=' + config.defaultPlaceId; }  
+    api_params += '&field:'+config.fieldName+'='+(config.fieldValue||'');  // should change to generic filter?
+
+    return api_params;
+}
+
+</script>
+
+<script type="text/javascript"   src="../core/js/grid.js">          </script>
+<script type="text/javascript"   src="../core/js/ConfigManager.js"> </script>
+<script type="text/javascript"   src="../core/js/api_fetch.js">     </script>
+
+<script>
+async function gatherResources() {
+  let json_path = json_root + getParams(appState);
+ 
+  try {
+   
+      // Await the result of getObservations() and store the actual data
+      const config  = await asyncGetConfiguration( json_path, getComponent(appState) );
+      console.log('full config title: ' + config.getFullTitle());
+      const api_params    = setupAPIParams( config );
+      const api_url       = api_base+api_params;
+      console.log('api url: ' + api_url);
+      const obs_data      = await apiFetch( api_url ); 
+     
+      // Pass the data to the buildPage function
+      buildPage(obs_data, config); 
+
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+let message = validateHiker(appState);
+ 
+if( message ) {
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
+ 
+</script>
+</body>
+
+</html>
