@@ -114,6 +114,10 @@ function setupAPIParams( config ) {
     if( config.defaultPlaceId  ) { api_params += '&place_id=' + config.defaultPlaceId; }  
     api_params += '&field:'+config.fieldName+'='+(config.fieldValue||'');  // should change to generic filter?
 
+    if( !getTaxonId(appState) && getComponent(appState) === COMPONENT_ANIMALS ) {
+        api_params += '&taxon_id=1';
+    }
+
     return api_params;
 }
 
