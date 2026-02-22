@@ -155,6 +155,11 @@ function setupAPIParams( hikerConfig ) {
    if( hikerConfig.defaultPlaceId ) { api_params += '&place_id=' + hikerConfig.defaultPlaceId; }  
 
    api_params += getMenuIdParam(appState, '&taxon_id='); 
+
+   if( !getMenuId(appState) && getComponent(appState) === COMPONENT_ANIMALS ) {
+       api_params += '&taxon_id=1';
+   }
+ 
    api_params += getPageParam(appState, '&page=');
    api_params += '&per_page='+CONST_SPECIES_COUNTS_PER_PAGE;
 
