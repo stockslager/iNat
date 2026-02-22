@@ -156,8 +156,8 @@ function setupAPIParams( hikerConfig ) {
 
    api_params += getMenuIdParam(appState, '&taxon_id='); 
 
-   if( !getMenuId(appState) && getComponent(appState) === COMPONENT_ANIMALS ) {
-       api_params += '&taxon_id=1';
+   if( getComponent(appState) === COMPONENT_ANIMALS ) {
+       api_params += '&iconic_taxa=Aves,Amphibia,Reptilia,Mammalia,Actinopterygii,Mollusca,Arachnida,Insecta';
    }
  
    api_params += getPageParam(appState, '&page=');
