@@ -44,7 +44,8 @@ const CONST_SUNFLOWER_UTF8 = '&#127803;'         // sunflower icon for garden li
 const CONST_LEAF_UTF8      = '&#127807;';        // leaf icon for yard list
 const CONST_SEEDLING_UTF8  = '&#x1F331;';        // seedling icon
 const CONST_BOOT_UTF8      = '<span style="font-size: 18px;">&#x1F97E;</span>';        // back icon for thru hiker
-const CONST_NPC_UTF8       = '&#128100;';        // npc icon for observers
+const CONST_NPC_UTF8       = '&#128101;';
+//const CONST_NPC_UTF8       = '&#128100;';        // npc icon for observers
 const CONST_ART_UTF8       = '&#127912;';        // pallete icon for journaling / artwork
 const CONST_ANIMALS_UTF8   = '&#128038;';        // bird
 const CONST_STUDIES_UTF8   = '&#127891;';
