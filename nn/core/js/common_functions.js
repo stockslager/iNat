@@ -1,4 +1,4 @@
-// root directory for inat observations 
+// root directory for inat observations  
 const root_observations = 'https://www.inaturalist.org/observations/'; 
 const root_people       = 'https://www.inaturalist.org/people/';
 const root_obs_fields   = 'https://www.inaturalist.org/observation_fields/';
