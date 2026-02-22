@@ -67,7 +67,6 @@ function buildPage(xobj, observerConfig) {
 
       buildMenu( results, observerConfig );
 
-
       let urlState = appState;
       if( getMenuId(appState) ) {
           urlState = setTaxonId(urlState, getMenuId(appState)); // set taxon id to menu id if a filter was chosen for say, birds.
@@ -88,24 +87,6 @@ function buildPage(xobj, observerConfig) {
       let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3_element ); 
     
       faddelem('p', document.body).appendChild(header);
-
-
-     
-
-     /* let urlState = appState;
-      urlState = setTaxonId(urlState, getMenuId(appState)); // set taxon id to menu id if a filter was chosen for say, birds.
-
-      let title_1 = (observerConfig.getSubIconNameByTaxonId(observerConfig, getMenuId(appState)) || 'wildlife');
-      let title_2 = ' by ' + getUser(appState);     
-      let title_3 = furl('./observer_grid.html'+buildParameterList(urlState),'on ' + (getPlantName(appState) || CONST_ALL_PLANTS.toLowerCase()));
-
-      // Generate the secure header element
-      const headerElem = buildHeader(CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3);
-
-      // Create the wrapper <p> and append the DOM object directly
-      const pWrapper = document.createElement('p');
-      pWrapper.appendChild(headerElem);
-      document.body.appendChild(pWrapper);*/
 
       let labels = [
             {innerText:'#'},
