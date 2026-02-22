@@ -1,0 +1,222 @@
+<!DOCTYPE html>      
+<html lang="en"> 
+   
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />      
+<meta name="apple-mobile-web-app-title" content="Animal Activity" /> 
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />  
+<meta name="description" content="Animal Activity" />
+<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
+<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+<title>Animal Activity</title>
+</head>
+
+<body>
+<script type="text/javascript"   src='../core/js/global_const.js'> </script>
+<script type="text/javascript"   src='../core/js/common_func.js'> </script>
+<script type="text/javascript"   src='../core/js/roots.js'> </script>
+<script type="text/javascript"   src='../core/js/store.js'> </script>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
+
+appState       = buildStateFromParams(winurlparams);
+
+// page / api specific constants 
+const CONST_CUSTOM_PLACE   = 'Place';
+const CONST_CUSTOM_UMBRELLA = 'Entire Umbrella';
+  
+function getPlaceName( config, place_id ) {
+   let place_name = 'Place';
+
+   for( let i=0; i<config.places.length; i++ ) {
+        if( place_id === config.places[i].placeId ) {
+            place_name = config.places[i].placeName; 
+        }
+   }
+   return place_name;
+}
+
+function buildMenu( config, results ) {
+      let menu_string = '';
+      let links = '';
+      let taxon_param = '';
+      let menu_name = config.getSubIconNameByTaxonId(config, getMenuId(appState)) || CONST_SHOW;
+
+      menu_string = '<div class="navbar">';
+
+      let urlState  = clearForSpeciesCountsParams(appState);
+      menu_string += buildHome(furl('./animal_list.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
+ 
+      menu_string += '</div>';
+
+      faddelem('p',document.body,{innerHTML:(menu_string)});  
+}
+
+function buildPage(xobj, config) {
+   let results = xobj.results;
+   let box_array = [];
+
+   buildMenu( config, results );
+ 
+   if (results) {
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+      let labels = [];
+
+      let field_id = '';
+      let field_name = '';
+
+      labels = [
+            {innerText:'#'},
+            {innerText:'Photo'},
+            {innerText:'Name'}, 
+      ];
+
+      let title_1 = '';
+      let title_2 = '<span id="topright">'+capitalizeWords(getTaxonName(appState))+'</span>';
+      let title_3 = '';
+
+      title_3 = '<span id="topright">'+furl('./animal_grid.html'+buildParameterList(appState),'On All Plants')+'</span>';
+
+      faddelem('p',document.body,{innerHTML:CONST_TOTAL_OBS+fcomnum(total_results) + title_1 + ' <br/>'
+                 + CONST_PER_PAGE+fcomnum(per_page)+ title_2 + '<br />'
+                 + CONST_PAGE+fcomnum(page_curr)+' of '+fcomnum(page_max) + title_3 + '<br />'});  
+
+      let table = faddelem('table',document.body,{id:'main'});                    
+      let thead = faddelem('thead',table);
+      let hrow  = faddelem('tr',thead);
+      
+      faddelems('th',hrow,labels);
+      let tbody = faddelem('tbody',table);
+
+      for (let i=0; i<results.length; i++) {
+         let rec = results[i];
+         let displayName = '';
+
+         let brow = faddelem('tr',tbody);
+
+         // find the matching obs field and display the value.
+         if( rec.ofvs && rec.ofvs.length > 0 ) {
+             for( let j=0; j<rec.ofvs.length; j++ ){
+                  if( rec.ofvs[j].field_id.toString() === config.fieldId ){
+                      let fvalue = rec.ofvs[j].value.toLowerCase();
+                                
+                      if( rec.ofvs[j].taxon ){
+                          let name  = rec.ofvs[j].taxon.name || '';
+                          let pname = rec.ofvs[j].taxon.preferred_common_name || '';
+                          fvalue = '<span style="font-size:larger">'+pname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+
+                          let urlState = appState;
+                          urlState = setFieldValue(urlState, replaceDoubleQuotes(rec.ofvs[j].value.toString()));
+                          urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+                          displayName = furl('./animal_grid.html'+buildParameterList(urlState), fvalue);
+                      }
+                  }
+             }
+         }
+      
+         let image = furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />');
+
+         let target = rec.taxon.id;
+         if( config.use_names_lookup === 'no' && rec.taxon.preferred_common_name ) {
+             target = pref_tax_name.toLowerCase();
+         }
+
+         let values = [
+            {innerText:i+1},
+            {innerHTML:image},
+            {innerHTML:displayName},
+         ];
+        
+         faddelems('td',brow,values);
+      };
+
+      // buttons to go to prev or next page
+      let nav = faddelem('div',document.body,{id:'nav'});
+      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
+}; 
+</script>
+
+<script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
+<script type="text/javascript"   src="../core/js/api_fetch.js"></script>
+
+<script>
+function setupAPIParams( config ) {
+   let api_params = '';
+ 
+   api_params += '?project_id='+config.project;
+
+   if( config.fieldName )        { api_params += '&field:'    + config.fieldName;  } 
+   if( getFieldValue(appState) ) { api_params += '='          + getFieldValue(appState); }
+   if( getUser(appState) )       { api_params += '&user_id='  + getUser(appState); }
+
+   // if a place_id was chosen from the place drop-down, use that place_id...
+   if( getPlaceMenuId(appState) ) {
+       api_params += '&place_id=' + getPlaceMenuId(appState);
+   }
+
+   // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
+   // use the menu_id if one was passed in.
+   if( getTaxonId(appState) ) {
+       api_params += '&taxon_id='+getTaxonId(appState);
+   } else {
+       if( getMenuId(appState) ) { api_params += '&taxon_id=' + getMenuId(appState); }
+   }
+
+   api_params += getPageParam(appState, '&page=');
+   api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
+ 
+   return api_params;
+}
+   
+async function gatherResources() {
+  let api_base  = 'https://api.inaturalist.org/v1/observations';
+  let json_path = json_root + getParams(appState);
+ 
+  try {
+   
+      // Await the result of getObservations() and store the actual data
+      const config  = await asyncGetConfiguration( json_path, getComponent(appState) );
+
+      const api_params    = setupAPIParams( config );
+      const api_url       = api_base+api_params;
+      console.log('api url: ' + api_url);
+      const obs_data      = await apiFetch( api_url ); 
+     
+      // Pass the data to the buildPage function
+      buildPage(obs_data, config); 
+
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+let message = validateAnimals(appState);
+ 
+if( message ) {
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
+ 
+</script>
+</body>
+</html>
