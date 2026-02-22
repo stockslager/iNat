@@ -72,9 +72,9 @@ function buildPage(xobj, hikerConfig) {
 
       let titleText = CONST_SPECIES_ALL+capitalizeWords(name);
       let urlState  = appState; 
+      urlState  = setTaxonId(urlState, getMenuId(appState));
       if( !getMenuId(appState) ) {
           titleText = CONST_SPECIES_ALL_OBS;          
-          urlState  = setTaxonId(urlState, getMenuId(appState));
       } 
 
       titleUrl = './obs_grid.html' + buildParameterList(urlState);
