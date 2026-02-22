@@ -178,7 +178,10 @@ function buildNavDDShow( navbar, dd_name, results, config, baseUrl, sub_taxon_ar
 
         // Taxon Links Loop
         for( let j = 0; j < config.subIcons.length; j++ ) {
-             if( sub_taxon_arr && sub_taxon_arr.includes(config.subIcons[j].taxonId) ) {
+             // there will be no sub_taxon_arr if we aren't filtering
+             // if sub_taxon_arr is null build the show link since we aren't filtering
+             // if we ARE filtering, make sure the filtered array includes the taxonId from the config
+             if( !sub_taxon_arr || sub_taxon_arr.includes(config.subIcons[j].taxonId) ) {
                  urlState = setMenuId(urlState, config.subIcons[j].taxonId);
                  let iconUrl = baseUrl + buildParameterList(urlState);
                  
