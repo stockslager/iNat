@@ -47,6 +47,15 @@ function buildMenu( config, results ) {
     let navbar = document.createElement('div');
     navbar.className = 'navbar v2-menu';
 
+    if( getComponent(appState) === COMPONENT_OBSERVERS ) {
+        let homeState = clearForDashParams(appState);
+        let homeUrl = '../admin/dashboard.html';
+        buildNavHome( navbar, homeUrl, homeState );
+        // Append the DOM nodes to the body
+        faddelem('p', document.body).appendChild(navbar);
+        return;
+    }
+
     let baseUrl = window.location.origin + window.location.pathname;
 
     // if place filters were set in the configuration
@@ -238,7 +247,7 @@ async function gatherResources() {
     }
 }
 
-let message = validateGarden(appState);
+let message = validateGardenListParams(appState);
  
 if( message ) {
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
