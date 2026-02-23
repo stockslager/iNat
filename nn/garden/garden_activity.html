@@ -146,7 +146,8 @@ function setupAPIParams(plantsConfig) {
 
    // default these to what's in the config even though the state sometimes
    // holds the same attributes for other components.
-   if( plantsConfig.userId          ) { api_params += '&user_id='  + plantsConfig.userId; }
+   if( plantsConfig.userId         ) { api_params += '&user_id='  + plantsConfig.userId; }
+   if( plantsConfig.faunaAPIParams ) { api_params += plantsConfig.faunaAPIParams; }
 
    // if a place_id was chosen from the place drop-down, use that place_id...
    if( getPlaceMenuId(appState) ) {
