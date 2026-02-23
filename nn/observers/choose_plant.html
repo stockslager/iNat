@@ -132,7 +132,7 @@ function buildPage(xobj, config) {
 function setupAPIParams( config ) {
    let api_params = '';
  
-   api_params += '?project_id='+config.plantProject || config.project;
+   api_params += '?project_id='+?config.plantProject:config.plantProject || config.project;
    api_params += '&iconic_taxa=plantae';
 
    if( config.plantField )        { api_params += '&field:'    + config.plantField;  } 
