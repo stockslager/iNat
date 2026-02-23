@@ -6,14 +6,11 @@ let root_projects     = 'https://www.inaturalist.org/projects/';
 let root_taxa         = 'https://www.inaturalist.org/taxa/';
 let root_places       = 'https://www.inaturalist.org/places/';
 
-// repo root directory
-let github_root = 'https://stockslager.github.io/iNat/';
-
 // json root dir
-let json_root = 'https://stockslager.github.io/iNat/nn/core/json/';
+const json_root = '../core/json/';
 
 // JavaScript root dir 
-let js_root = 'https://stockslager.github.io/iNat/nn/core/js/';
+const js_root = '../core/js/';
 
 // outlinks used in cncnpc_seeds_fields.html
 // usda outlink 
