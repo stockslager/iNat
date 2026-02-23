@@ -156,6 +156,7 @@ class ConfigManager {
         console.log('pf1 ' + jsonData.plant_field);
         this.plantField      = jsonData.plant_field;
         this.plantFieldValue = jsonData.plant_field_value;
+        this.plantIds        = jsonData.plant_ids;
     }
 
     getConfigByComponent(componentName) {
@@ -209,6 +210,9 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
               }
               if( !finalConfigInstance.plantFieldValue ) {
                   if( managerInstance.plantFieldValue ) { finalConfigInstance.plantFieldValue = managerInstance.plantFieldValue; }
+              }
+              if( !finalConfigInstance.plantIds ) {
+                  if( managerInstance.plantIds ) { finalConfigInstance.plantIds = managerInstance.plantIds; }
               }
               
               return finalConfigInstance; 
@@ -272,6 +276,9 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
         }
         if( !finalConfigInstance.plantFieldValue ) {
             if( managerInstance.plantFieldValue ) { finalConfigInstance.plantFieldValue = managerInstance.plantFieldValue; }
+        }
+        if( !finalConfigInstance.plantIds ) {
+            if( managerInstance.plantIds ) { finalConfigInstance.plantIds = managerInstance.plantIds; }
         }
       
         return finalConfigInstance; 
