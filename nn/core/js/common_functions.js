@@ -104,8 +104,7 @@ function buildNavHome( navbar, baseUrl, homeState ) {
 function buildNavTitle( navbar, title ) {
   let titleDiv = faddelem('div', navbar, { id: 'nav_title' });
 
-  // Inject the custom HTML string using innerHTML
-  faddelem('div', titleDiv, { className: 'dd_title', innerHTML: title });
+  faddelem('div', titleDiv, { className: 'dd_title', textContent: title });
 }
 
 function buildNavAbout( navbar, baseUrl, homeState ) {
