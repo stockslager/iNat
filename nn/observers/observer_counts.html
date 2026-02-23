@@ -150,7 +150,7 @@ function setupAPIParams( observerConfig ) {
 
    // default these to what's in the config even though the state sometimes
    // holds the same attributes for other components.
-   api_params += ('?project_id='+observerConfig.project);
+   api_params += ('?project_id='+observerConfig.insectProject || observerConfig.project);
    if( observerConfig.userId          ) { api_params += '&user_id='  + observerConfig.userId; }
    if( observerConfig.defaultPlace    ) { api_params += '&place_id=' + observerConfig.defaultPlace; } 
    if( observerConfig.faunaAPIParams  ) { api_params += observerConfig.faunaAPIParams; }
