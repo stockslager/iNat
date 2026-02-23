@@ -81,6 +81,7 @@ class ConfigurationItem {
         this.defaultTaxonId = configData.default_taxon_id ?? null;
         this.utf8         = configData.utf8 ?? null;
         this.obsAPIParams = configData.obs_api_params ?? null;
+        this.faunaAPIParams = configData.fauna_api_params ?? null;
         this.ofieldIconic = configData.ofield_iconic ?? null;
         this.merge        = configData.merge ?? null;
 
