@@ -1,107 +1,46 @@
-<!DOCTYPE html>   
-<html lang="en">     
-   
+<!DOCTYPE html>           
+<html lang="en">        
+    
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
-<meta name="apple-mobile-web-app-title" content="Garden List" />
-<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
-<meta name="description" content="Garden Viewer" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />      
+<meta name="apple-mobile-web-app-title" content="Choose Plant" /> 
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />  
+<meta name="description" content="Choose Plant" />
 <link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
 <link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
 <link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
 <link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
 <link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
 <link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
-<title>Garden List</title>
+<title>Choose Plant</title>
 </head>
-
+   
 <body>
-<script type="text/javascript"   src='../core/js/global_const.js'> </script>
-<script type="text/javascript"   src='../core/js/common_func.js'> </script>
-<script type="text/javascript"   src='../core/js/roots.js'> </script>
+<script type="text/javascript"   src='../core/js/common_functions.js'> </script>
 <script type="text/javascript"   src='../core/js/store.js'> </script>
 <script>
 let winurlstr = window.location.href;
 let winurlsearchstr = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams  = new URLSearchParams(winurlsearchstr.substring(1));
+let p_hide_dash    = winurlparams.get('hide_dash') || 'no';
 
 appState       = buildStateFromParams(winurlparams);
 
 // page / api specific constants 
-const CONST_API_PER_PAGE   = '10';
 const CONST_CUSTOM_PLANT   = 'Plant';
   
-function sortWithNull(arr, ascending = true) {
-  for( let i=0; i<arr.length; i++ ) {
-       if( arr[i].taxon.preferred_common_name ){
-           arr[i].taxon.preferred_common_name = arr[i].taxon.preferred_common_name.toLowerCase();
-       }
-  }
-  arr.sort(function(a, b) {
-    if (!a.taxon.preferred_common_name && !b.taxon.preferred_common_name) return 0;
-    if (!a.taxon.preferred_common_name) return ascending ? 1 : -1;
-    if (!b.taxon.preferred_common_name) return ascending ? -1 : 1;
-    if (a.taxon.preferred_common_name < b.taxon.preferred_common_name) return ascending ? -1 : 1;
-    if (a.taxon.preferred_common_name > b.taxon.preferred_common_name) return ascending ? 1 : -1;
-    return 0;
-  });
-  return arr;
-}
-
-function getPlaceName( gardenConfig, place_id ) {
-   let place_name = 'Place';
-
-   for( let i=0; i<gardenConfig.places.length; i++ ) {
-        if( place_id === gardenConfig.places[i].placeId ) {
-            place_name = gardenConfig.places[i].placeName; 
-        }
-   }
-   return place_name;
-}
-
 function buildMenu( config, results ) {
-      let menu_string = '';
-      let links = '';
- 
-      menu_string = '<div class="navbar">';
- 
-      /*if( config.places && config.places.length > 0 ) {
-          //links += furl('./choose_plant.html'+params+menu_params+component_params+'&place_id='+config.default_place+taxon_param,'All');
-          for( let i=0; i<config.places.length; i++ ) {
-               let urlState = appState;
-               urlState = setPlace( urlState, config.places[i].place_id );
-               links += furl('./choose_plant.html'+buildParameterList(urlState),config.places[i].place_name);
-          }
-      }
-  
-      if( links ) { menu_string += buildDD(getPlaceName(config, p_place_id), links); }*/
-      links = '';
 
-      if( config.taxa && config.taxa.length > 0 ) {
-          let urlState = appState;
-          urlState     = setPlantMenuId(urlState, '');
-          urlState     = setPlantMenuName(urlState, '');
-          urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
-          links       += furl('./choose_plant.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
-          for( let i=0; i<config.taxa.length; i++ ) {
-               urlState = setPlantMenuId(   urlState, config.taxa[i].taxonId );
-               urlState = setPlantMenuName( urlState, config.taxa[i].taxonName );
-               links += furl('./choose_plant.html'+buildParameterList(urlState),config.taxa[i].taxonName);
-          }
-      }
+    // Create the main navbar container
+    let navbar = document.createElement('div');
+    navbar.className = 'navbar v2-menu';
 
-      let plant_name = getPlantMenuName(appState) || CONST_CUSTOM_PLANT;  // if no menu filter selected, set to const "Plant"
-      if( links ) { menu_string += buildDD( plant_name, links); }
-
-      // split list (if they have more than one value in garden-list...
-      links = '';
-  
-      menu_string  += buildHome(furl('./observer_counts.html'+buildParameterList(appState),CONST_LEAF_UTF8));
-
-      menu_string += '</div>';
-
-      faddelem('p',document.body,{innerHTML:(menu_string)});  
+    let homeUrl = '../observers/observer_counts.html';
+    buildNavHome( navbar, homeUrl, appState );
+    
+    // Append the DOM nodes to the body
+    faddelem('p', document.body).appendChild(navbar);
 }
 
 function buildPage(xobj, config) {
@@ -109,7 +48,7 @@ function buildPage(xobj, config) {
    let box_array = [];
 
    buildMenu( config, results );
- 
+
    if (results) {
       let total_results = xobj.total_results;
       let per_page = xobj.per_page;
@@ -117,30 +56,20 @@ function buildPage(xobj, config) {
       let page_max = Math.ceil(total_results/per_page);
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
-      let labels = [];
 
-      let field_id = '';
-      let field_name = '';
-
-      labels = [
+      let labels = [
             {innerText:'#'},
             {innerText:'Photo'},
             {innerText:'Name'}, 
       ];
 
-      let title_1 = '', title_2 = '', title_3 = '';
+      let title_1 = '', title_2 = '';
 
-      let show_behavior = config.show_behavior || 'no';
+      let title_3 = CONST_CHOOSE_PLANT;
+            
+      let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3 ); 
     
-      title_3 = '<span id="upperrightbold">'+config.getSubTitle()||config.title+'</span>';
-
-      // Generate the secure header element
-      const headerElem = buildHeader(CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3);
-
-      // Create the wrapper <p> and append the DOM object directly
-      const pWrapper = document.createElement('p');
-      pWrapper.appendChild(headerElem);
-      document.body.appendChild(pWrapper);
+      faddelem('p', document.body).appendChild(header);
 
       let table = faddelem('table',document.body,{id:'main'});                    
       let thead = faddelem('thead',table);
@@ -153,61 +82,36 @@ function buildPage(xobj, config) {
       results = sortWithNull(results);
     
       for (let i=0; i<results.length; i++) {
-         let rec = results[i];
-         let tax_name = '';
-         let pref_tax_name = '';
-         let header_name = '';
-         let tax_photo = '<div class="clipart">&#127807</div>'; 
-         let tax_id = '';
-         let taxon = '';
-
+         let rec  = results[i];
          let brow = faddelem('tr',tbody);
+         let header_name = '';
 
-         if( rec.taxon ){
-             tax_id = rec.taxon.id;
-             tax_name = rec.taxon.name || '';
-             pref_tax_name = rec.taxon.preferred_common_name || '';
+         // Column: Index
+         faddelem('td', brow, { textContent: i + 1 });
+
+         if( rec.taxon ) {
+             let tax_name = rec.taxon.name || '';
+             let pref_tax_name = rec.taxon.preferred_common_name || '';
              header_name = pref_tax_name || tax_name || '';
-           
-             if( rec.taxon.default_photo ){
-                 if( rec.taxon.default_photo.url ){
-                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
-                 }
+             // Column: Species or Observation Pic
+             if( config.usePlantProjectImages && config.usePlantProjectImages === 'yes' ) {
+                 buildObsPhoto( brow, rec );
+             } else {
+                 buildSpeciesPhoto( brow, rec );
              }
+            
+             // Column: Name 
+             let urlState = appState;
+             urlState = setPage(urlState, '');
+             urlState = setTaxonId(urlState, '');
+             urlState = setTaxonName(urlState, '');
+             urlState = setPlantId(urlState, rec.taxon.id);
+             urlState = setPlantName(urlState, header_name||'?');
+             urlState = setPlantMenuId(urlState, '');
+             urlState = setPlantMenuName(urlState, '');
+             let url = '../observers/observer_counts.html' + buildParameterList(urlState);
+             buildSpeciesName( brow, rec, url );
          }
-
-         let displayName  = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
-         let image        = '<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />';
-
-         let use_plant_project_images = config.use_plant_project_images || 'no';
-
-         if( use_plant_project_images === 'yes' ) {
-             image = furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />');
-         }
-
-         let target = rec.taxon.id;
-         if( config.use_names_lookup === 'no' && rec.taxon.preferred_common_name ) {
-             target = pref_tax_name.toLowerCase();
-         }
-
-         // this page uses taxon id/name wrt to flora, the next page, fauna
-         // plant id (the selected taxon on this page) is passed to the next to search for in the &field:some+field=value.
-         let urlState = appState;
-         urlState = setPage(urlState, '');
-         urlState = setTaxonId(urlState, '');
-         urlState = setTaxonName(urlState, '');
-         urlState = setPlantMenuId(urlState, '');
-         urlState = setPlantMenuName(urlState, '');
-         urlState = setPlantId(urlState, rec.taxon.id);
-         urlState = setPlantName(urlState, header_name);
-
-         let values = [
-            {innerText:i+1},
-            {innerHTML:image},
-            {innerHTML:furl('./observer_counts.html'+buildParameterList(urlState),displayName)},
-         ];
-        
-         faddelems('td',brow,values);
       };
 
       // buttons to go to prev or next page
@@ -225,31 +129,49 @@ function buildPage(xobj, config) {
 <script type="text/javascript"   src="../core/js/api_fetch.js"></script>
 
 <script>
-function setupAPIParams( gardenConfig ) {
+function setupAPIParams( config ) {
    let api_params = '';
  
-   api_params += '?project_id='+gardenConfig.project;
+   api_params += '?project_id='+config.project;
    api_params += '&iconic_taxa=plantae';
 
-   if( gardenConfig.plantField )        { api_params += '&field:'    + gardenConfig.plantField;  } 
-   if( gardenConfig.plantFieldValue )   { api_params += '='          + gardenConfig.plantFieldValue; }
-   if( gardenConfig.defaultPlace )      { api_params += '&place_id=' + gardenConfig.defaultPlace; }
-   if( gardenConfig.plantIds )          { api_params += '&id='       + gardenConfig.plantIds;  }
-   if( gardenConfig.plantListUserId )   { api_params += '&user_id='  + gardenConfig.plantListUserId; }
-   if( gardenConfig.tagName )           { api_params += '&tag='      + gardenConfig.tagName; }
+   if( config.plantField )        { api_params += '&field:'    + config.plantField;  } 
+   if( config.plantFieldValue )   { api_params += '='          + config.plantFieldValue; }
+   if( config.plantIds )          { api_params += '&id='       + config.plantIds;  }
+   if( config.plantListUserId )   { api_params += '&user_id='  + config.plantListUserId; }
+   if( config.tagName )           { api_params += '&tag='      + config.tagName; }
+
+   if( getFieldName(appState) ) {
+       api_params += '&field:' + getFieldName(appState);
+       if( getFieldValue(appState) ) {
+           api_params += '=' + getFieldValue(appState);
+       }
+   }
+
+   // if a place_id was chosen from the place drop-down, use that place_id...
+   if( getPlaceMenuId(appState) ) {
+       api_params += '&place_id=' + getPlaceMenuId(appState);
+   } else if( config.defaultPlace ) {
+       api_params += '&place_id=' + config.defaultPlace;
+   }
 
    // if a taxon_id was chosen in the plant drop-down, use that taxon_id.  if not, 
    // use the taxon_id(s) from the config when present.
    if( getPlantMenuId(appState) ) {
        api_params += '&taxon_id='+getPlantMenuId(appState);
    } else {
-       if( gardenConfig.taxonIds ) { 
-           api_params += '&taxon_id=' + gardenConfig.taxonIds; 
+       if( config.taxonIds ) { 
+           api_params += '&taxon_id=' + config.taxonIds; 
        }
    }
 
    api_params += getPageParam(appState, '&page=');
-   api_params += '&per_page='+CONST_API_PER_PAGE;
+
+   if( config.usePlantProjectImages && config.usePlantProjectImages === 'yes' ) {
+       api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
+   } else {
+       api_params += '&per_page='+CONST_SPECIES_COUNTS_PER_PAGE;
+   }
  
    return api_params;
 }
@@ -260,15 +182,21 @@ async function gatherResources() {
  
   try {
    
-      const gardenConfig  = await asyncGetConfiguration( json_path, COMPONENT_GARDEN );
-      console.log('full config title: ' + gardenConfig.getFullTitle());
-      const api_params    = setupAPIParams( gardenConfig );
+      // Await the result of getObservations() and store the actual data
+      const config  = await asyncGetConfiguration( json_path, getComponent(appState) );
+
+      if( config.usePlantProjectImages && config.usePlantProjectImages === 'yes' ) {
+          api_base = 'https://api.inaturalist.org/v1/observations';
+      }
+     
+      console.log('full config title: ' + config.getFullTitle());
+      const api_params    = setupAPIParams( config );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
       const obs_data      = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
-      buildPage(obs_data, gardenConfig); 
+      buildPage(obs_data, config); 
 
     } catch (error) {
       console.error("An error occurred:", error);
