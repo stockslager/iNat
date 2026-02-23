@@ -48,9 +48,8 @@ function buildMenu( config, results ) {
     navbar.className = 'navbar v2-menu';
 
     if( getComponent(appState) === COMPONENT_OBSERVERS ) {
-        let homeState = clearForDashParams(appState);
-        let homeUrl = '../admin/dashboard.html';
-        buildNavHome( navbar, homeUrl, homeState );
+        let homeUrl = '../observers/observer_counts.html';
+        buildNavHome( navbar, homeUrl, appState );
         // Append the DOM nodes to the body
         faddelem('p', document.body).appendChild(navbar);
         return;
