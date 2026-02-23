@@ -153,6 +153,8 @@ class ConfigManager {
 
         // map the default_sub_icons if they're set
         this.defaultSubIcons = jsonData.default_sub_icons?.map(ds => new SubIcon(ds)) ?? [];
+        this.plantField      = jsonData.plant_field;
+        this.plantFieldValue = jsonData.plant_field_value;
     }
 
     getConfigByComponent(componentName) {
@@ -199,6 +201,12 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
                       // deep copy the default sub-icons.
                       finalConfigInstance.subIcons = JSON.parse(JSON.stringify(managerInstance.defaultSubIcons));
                   }
+              }
+              if( !finalConfigInstance.plantField ) {
+                  if( managerInstance.plantField ) { finalConfigInstance.plantField = managerInstance.plantField; }
+              }
+              if( !finalConfigInstance.plantFieldValue ) {
+                  if( managerInstance.plantFieldValue ) { finalConfigInstance.plantFieldValue = managerInstance.plantFieldValue; }
               }
               
               return finalConfigInstance; 
@@ -255,6 +263,12 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
                 // deep copy the default sub-icons.
                 finalConfigInstance.subIcons = JSON.parse(JSON.stringify(managerInstance.defaultSubIcons));
             }
+        }
+        if( !finalConfigInstance.plantField ) {
+            if( managerInstance.plantField ) { finalConfigInstance.plantField = managerInstance.plantField; }
+        }
+        if( !finalConfigInstance.plantFieldValue ) {
+            if( managerInstance.plantFieldValue ) { finalConfigInstance.plantFieldValue = managerInstance.plantFieldValue; }
         }
       
         return finalConfigInstance; 
