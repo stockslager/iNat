@@ -92,38 +92,19 @@ function buildPage(xobj, config) {
       let page_max = Math.ceil(total_results/per_page);
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
-      let labels = [];
 
-      let field_id = '';
-      let field_name = '';
-
-      labels = [
+      let labels = [
             {innerText:'#'},
             {innerText:'Photo'},
             {innerText:'Name'}, 
       ];
 
-
-     
+      let title_1 = '', title_2 = '';
       let title_3 = getPlaceMenuName(appState) || config.getSubTitle() || config.title;
       
-      let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, '', '', title_3 ); 
+      let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3 ); 
     
       faddelem('p', document.body).appendChild(header);
-    
-
-
-
-      
-/*
-      // Generate the secure header element
-      const headerElem = buildHeader(CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3);
-
-      // Create the wrapper <p> and append the DOM object directly
-      const pWrapper = document.createElement('p');
-      pWrapper.appendChild(headerElem);
-      document.body.appendChild(pWrapper);
-      */
 
       let table = faddelem('table',document.body,{id:'main'});                    
       let thead = faddelem('thead',table);
@@ -136,59 +117,25 @@ function buildPage(xobj, config) {
       results = sortWithNull(results);
     
       for (let i=0; i<results.length; i++) {
-         let rec = results[i];
-         let tax_name = '';
-         let pref_tax_name = '';
-         let header_name = '';
-         let tax_photo = '<div class="clipart">&#127807</div>'; 
-         let tax_id = '';
-         let taxon = '';
-
+         let rec  = results[i];
          let brow = faddelem('tr',tbody);
 
-         if( rec.taxon ){
-             tax_id = rec.taxon.id;
-             tax_name = rec.taxon.name || '';
-             pref_tax_name = rec.taxon.preferred_common_name || '';
-             header_name = pref_tax_name || tax_name || '';
-           
-             if( rec.taxon.default_photo ){
-                 if( rec.taxon.default_photo.url ){
-                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
-                 }
+         // Column: Index
+         faddelem('td', brow, { textContent: i + 1 });
+
+         if( rec.taxon ) {
+             // Column: Species or Observation Pic
+             if( config.usePlantProjectImages && config.usePlantProjectImages === 'yes' ) {
+                 buildObsPhoto( brow, rec );
+             } else {
+                 buildSpeciesPhoto( brow, rec );
              }
+            
+             // Column: Name 
+             let urlState = setTaxonId(appState, rec.taxon.id);
+             let url      = './garden_grid.html' + buildParameterList(urlState);
+             buildSpeciesName( brow, rec, url );
          }
-
-         let displayName  = '<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>';
-         let image        = '<img class="icon" src="'+(rec.taxon.default_photo?rec.taxon.default_photo.square_url:'')+'" />';
-
-         let use_plant_project_images = config.usePlantProjectImages || 'no';
-
-         if( use_plant_project_images === 'yes' ) {
-             image = furl(root_observations+rec.id,'<img class="mini_photo2" src="'+((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'')+'" />');
-         }
-
-         let target = rec.taxon.id;
-         if( config.use_names_lookup === 'no' && rec.taxon.preferred_common_name ) {
-             target = pref_tax_name.toLowerCase();
-         }
-
-         // this page uses taxon id/name wrt to flora, the next page, fauna
-         // plant id (the selected taxon on this page) is passed to the next to search for in the &field:some+field=value.
-         let urlState = appState;
-         urlState = setPage(urlState, '');
-         urlState = setTaxonId(urlState, '');
-         urlState = setTaxonName(urlState, '');
-         urlState = setPlantId(urlState, rec.taxon.id);
-         urlState = setPlantName(urlState, header_name);
-
-         let values = [
-            {innerText:i+1},
-            {innerHTML:image},
-            {innerHTML:furl('./garden_activity.html'+buildParameterList(urlState),displayName)},
-         ];
-        
-         faddelems('td',brow,values);
       };
 
       // buttons to go to prev or next page
