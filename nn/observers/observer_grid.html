@@ -116,9 +116,9 @@ function setupAPIParams( observersConfig ) {
 
     // possibly the place_id will need to come from the session eventually...
     // if there's a garden with multiple places.
-    if( observersConfig.defaultPlace   ) { api_params += '&place_id=' + observersConfig.defaultPlace; }  
-    if( getUser(appState)              ) { api_params += '&user_id='  + getUser(appState); }  
-    if( observerConfig.faunaAPIParams  ) { api_params += observerConfig.faunaAPIParams; }
+    if( observersConfig.defaultPlace    ) { api_params += '&place_id=' + observersConfig.defaultPlace; }  
+    if( getUser(appState)               ) { api_params += '&user_id='  + getUser(appState); }  
+    if( observersConfig.faunaAPIParams  ) { api_params += observersConfig.faunaAPIParams; }
   
     api_params += '&field:'+observersConfig.fieldName+'=' + getPlantId(appState);
 
