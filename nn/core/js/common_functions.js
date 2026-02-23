@@ -437,9 +437,9 @@ function buildSpeciesPhoto( brow, rec ) {
 }
 
 // Garden List (Observations List) Table Column - Obs Photo
-function buildObsPhoto( brow, rec, url ) {
+function buildObsPhoto( brow, rec ) {
     let tdPhoto = faddelem('td', brow);
-    let a = faddelem('a', tdPhoto, { href: url });
+    let a = faddelem('a', tdPhoto, { href: root_observations+rec.id });
 
     faddelem('img', tdPhoto, { className: 'mini_photo2', src: ((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'') });
 }
