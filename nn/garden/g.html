@@ -125,6 +125,8 @@ function buildPage(xobj, config) {
          faddelem('td', brow, { textContent: i + 1 });
 
          if( rec.taxon ) {
+             let tax_name = rec.taxon.name || '';
+             let pref_tax_name = rec.taxon.preferred_common_name || '';
              header_name = pref_tax_name || tax_name || '';
              // Column: Species or Observation Pic
              if( config.usePlantProjectImages && config.usePlantProjectImages === 'yes' ) {
