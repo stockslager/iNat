@@ -46,26 +46,6 @@ var recsmax      = columns * rows - 1;
 
 winurlparams.append('per_page',recsmax);
 
-function getMapParams(plantsConfig) {
-   let map_params = '';
-
-   map_params += '?project_id='+plantsConfig.insectProject;
-
-   map_params += getTaxonIdParam(appState, '&taxon_id='); 
-
-   // if a place_id was chosen from the place drop-down, use that place_id...
-   if( getPlaceMenuId(appState) ) {
-       map_params += '&place_id=' + getPlaceMenuId(appState);
-   }
-
-   if( plantsConfig.defaultPlace )    { map_params += '&place_id='+plantsConfig.defaultPlace; } 
-   if( plantsConfig.userId )          { map_params += '&user_id='+plantsConfig.userId; }
-
-   map_params += ('&field:'+plantsConfig.fieldName+'=' + getPlantId(appState));  
-
-   return map_params;
-}
-
 function buildMenu(plantsConfig) {
 
    let links = '';
@@ -78,7 +58,7 @@ function buildMenu(plantsConfig) {
 
    menu_string = '<div class="navbar">';
 
-   menu_string += buildMenuURL( furl('../admin/map.html'+getMapParams(plantsConfig),"Map") );
+   menu_string += buildMenuURL( furl('../admin/map.html'+setupAPIParams(plantsConfig),"Map") );
    //menu_string += buildMenuURL( furl('../admin/layered_map.html'+buildParameterList(appState)+'&project_id='+plantsConfig.insectProject,"Map") );
    
    let url_state = clearForSpeciesCountsParams( appState );
@@ -93,7 +73,7 @@ function buildPage(data, plantsConfig) {
    faddelem('p',document.body,{innerHTML:buildMenu(plantsConfig)}); 
    
    // append the params needed by the grid to build the url for outlinks to iNat.
-   let inat_url = obsurlbase + getMapParams(plantsConfig);
+   let inat_url = obsurlbase + setupAPIParams(plantsConfig);
                                     
    buildGrid(data, inat_url);    
 };
