@@ -120,7 +120,7 @@ function buildNavDDTaxa( navbar, dd_name, results, config, baseUrl, sub_taxon_ar
         let allUrl = baseUrl + buildParameterList(urlState);
         let allLink = faddelem('a', ddContent, { href: allUrl });
         // Text for ALL 
-        faddelem('span', allLink, { textContent: CONST_ALL }); 
+        faddelem('span', allLink, { textContent: capitalizeWords(CONST_ALL) }); 
 
         // Place Links Loop
         for( let j = 0; j < config.taxa.length; j++ ) {
@@ -157,10 +157,8 @@ function buildNavDDObsFields( navbar, dd_name, results, config, baseUrl, sub_tax
         // ALL Link
         let allUrl = baseUrl + buildParameterList(urlState);
         let allLink = faddelem('a', ddContent, { href: allUrl });
-        // Icon for ALL
-        faddelem('span', allLink, { innerHTML: CONST_PLUS_UTF8 });
         // Text for ALL 
-        faddelem('span', allLink, { textContent: CONST_ALL }); 
+        faddelem('span', allLink, { textContent: capitalizeWords(CONST_ALL) }); 
 
         // Obs Fields Links Loop
         for( let j = 0; j < config.ddObsFields.length; j++ ) {
@@ -220,6 +218,7 @@ function buildPage(xobj, config) {
    let box_array = [];
 
    buildMenu( config, results );
+
  /*
    if (results) {
       let total_results = xobj.total_results;
