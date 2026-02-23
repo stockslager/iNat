@@ -52,6 +52,7 @@ function buildMenu( config, results ) {
     if( p_hide_dash === 'yes' ) {
         let title = getPlaceMenuName(appState) || config.getSubTitle() || config.title;        
         buildNavTitle( navbar, title );
+        faddelem('p', document.body).appendChild(navbar);
         return;
     }
 
