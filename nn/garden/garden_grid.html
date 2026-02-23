@@ -105,7 +105,8 @@ function setupAPIParams( plantsConfig ) {
     api_params += '?project_id='+plantsConfig.insectProject;
     api_params += getTaxonIdParam(appState, '&taxon_id='); 
 
-    if( plantsConfig.userId )       { api_params += '&user_id='  + plantsConfig.userId; }  
+    if( plantsConfig.userId )         { api_params += '&user_id='  + plantsConfig.userId; }  
+    if( plantsConfig.faunaAPIParams ) { api_params += plantsConfig.faunaAPIParams; }
 
     // if a place_id was chosen from the place drop-down, use that place_id...
     if( getPlaceMenuId(appState) ) {
