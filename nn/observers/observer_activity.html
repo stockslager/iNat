@@ -113,7 +113,9 @@ function buildPage(xobj, observerConfig) {
            buildSpeciesPhoto( brow, rec );
 
            // Column: Name 
-           let urlState = setTaxonId(appState, rec.taxon.id);
+           let urlState = appState;
+           if( rec.taxon.ancestor_ids.some(id => id == 47157) ) { urlState = setLSTaxonId(appState, '47157'); }  // lepidoptera*/
+           urlState = setTaxonId(urlState, rec.taxon.id);
            let url      = './observer_grid.html' + buildParameterList(urlState);
            buildSpeciesName( brow, rec, url );
        
