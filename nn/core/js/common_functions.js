@@ -91,6 +91,9 @@ function capitalizeWords(str) {
   }).join(' ');
 }
 
+//****************************************
+// navbar title, url, drop-down helpers **
+//****************************************
 function buildNavHome( navbar, baseUrl, homeState ) {
     let homeUrl = baseUrl + buildParameterList(homeState);
     let homeDiv = faddelem('div', navbar, { id: 'home' });
@@ -397,6 +400,26 @@ function renderHeader(entity, total, per_page, page_curr, page_max, title_1, tit
     const pWrapper = document.createElement('p');
     pWrapper.appendChild(headerElem);
     document.body.appendChild(pWrapper);
+}
+
+//********************
+// obs list helpers **
+//********************
+function sortWithNull(arr, ascending = true) {
+  for( let i=0; i<arr.length; i++ ) {
+       if( arr[i].taxon.preferred_common_name ){
+           arr[i].taxon.preferred_common_name = arr[i].taxon.preferred_common_name.toLowerCase();
+       }
+  }
+  arr.sort(function(a, b) {
+    if (!a.taxon.preferred_common_name && !b.taxon.preferred_common_name) return 0;
+    if (!a.taxon.preferred_common_name) return ascending ? 1 : -1;
+    if (!b.taxon.preferred_common_name) return ascending ? -1 : 1;
+    if (a.taxon.preferred_common_name < b.taxon.preferred_common_name) return ascending ? -1 : 1;
+    if (a.taxon.preferred_common_name > b.taxon.preferred_common_name) return ascending ? 1 : -1;
+    return 0;
+  });
+  return arr;
 }
 
 //**************************************
