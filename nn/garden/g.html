@@ -103,23 +103,22 @@ function buildPage(xobj, config) {
             {innerText:'Name'}, 
       ];
 
-      let title_1 = '', title_2 = '', title_3 = '';
 
-      let show_behavior = config.show_behavior || 'no';
-        
-        // Logic for setting titles (assuming furl and appState are available)
-      if( config.show_behavior === 'on_all' ) {
-          let urlState = appState;
-          urlState = setPlantMenuId(urlState, '');                  
-          urlState = setPlantMenuName(urlState, '');                
-          urlState = setPlantName(urlState, CONST_ALL_PLANTS);  // don't include "on" since it'll be added on later.
-          urlState = setPlantId(urlState, '');                  // scrub plant id since it might have been set previously
-          title_3 = '<span id="upperright">' + config.title + '</span>'; 
-      } else {
-          let label = getPlaceMenuName(appState) || config.getSubTitle() || config.title;
-          title_3 = '<span id="upperrightbold">' + label + '</span>';
-      }
+     
+      let title_3 = getPlaceMenuName(appState) || config.getSubTitle() || config.title;
+      
+      // CSS needs text inside span
+      faddelem('span', title_3_element, { textContent: titleText });
+
+      let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, '', '', title_3 ); 
     
+      faddelem('p', document.body).appendChild(header);
+    
+
+
+
+      
+/*
       // Generate the secure header element
       const headerElem = buildHeader(CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3);
 
@@ -127,6 +126,7 @@ function buildPage(xobj, config) {
       const pWrapper = document.createElement('p');
       pWrapper.appendChild(headerElem);
       document.body.appendChild(pWrapper);
+      */
 
       let table = faddelem('table',document.body,{id:'main'});                    
       let thead = faddelem('thead',table);
