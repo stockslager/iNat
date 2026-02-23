@@ -221,8 +221,8 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
               if( !finalConfigInstance.plantListUserId ) {
                   if( managerInstance.plantListUserId ) { finalConfigInstance.plantListUserId = managerInstance.plantListUserId; }
               }
-              if( !finalConfigInstance.userPlantProjectImages ) {
-                  if( managerInstance.userPlantProjectImages ) { finalConfigInstance.userPlantProjectImages = managerInstance.userPlantProjectImages; }
+              if( !finalConfigInstance.usePlantProjectImages ) {
+                  if( managerInstance.usePlantProjectImages ) { finalConfigInstance.usePlantProjectImages = managerInstance.usePlantProjectImages; }
               }
               
               return finalConfigInstance; 
@@ -295,8 +295,8 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
         if( !finalConfigInstance.plantListUserId ) {
             if( managerInstance.plantListUserId ) { finalConfigInstance.plantListUserId = managerInstance.plantListUserId; }
         }
-        if( !finalConfigInstance.userPlantProjectImages ) {
-            if( managerInstance.userPlantProjectImages ) { finalConfigInstance.userPlantProjectImages = managerInstance.userPlantProjectImages; }
+        if( !finalConfigInstance.usePlantProjectImages ) {
+            if( managerInstance.usePlantProjectImages ) { finalConfigInstance.usePlantProjectImages = managerInstance.usePlantProjectImages; }
         }
       
         return finalConfigInstance; 
