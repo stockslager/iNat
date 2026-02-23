@@ -119,11 +119,13 @@ function buildPage(xobj, config) {
       for (let i=0; i<results.length; i++) {
          let rec  = results[i];
          let brow = faddelem('tr',tbody);
+         let header_name = '';
 
          // Column: Index
          faddelem('td', brow, { textContent: i + 1 });
 
          if( rec.taxon ) {
+             header_name = pref_tax_name || tax_name || '';
              // Column: Species or Observation Pic
              if( config.usePlantProjectImages && config.usePlantProjectImages === 'yes' ) {
                  buildObsPhoto( brow, rec );
@@ -132,8 +134,13 @@ function buildPage(xobj, config) {
              }
             
              // Column: Name 
-             let urlState = setTaxonId(appState, rec.taxon.id);
-             let url      = './garden_grid.html' + buildParameterList(urlState);
+             let urlState = appState;
+             urlState = setPage(urlState, '');
+             urlState = setTaxonId(urlState, '');
+             urlState = setTaxonName(urlState, '');
+             urlState = setPlantId(urlState, rec.taxon.id);
+             urlState = setPlantName(urlState, header_name||'?');
+             let url      = './garden_activity.html' + buildParameterList(urlState);
              buildSpeciesName( brow, rec, url );
          }
       };
