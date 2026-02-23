@@ -16,9 +16,7 @@
 </head>
    
 <body>
-<script type="text/javascript"   src='../core/js/global_const.js'> </script>
-<script type="text/javascript"   src='../core/js/common_func.js'> </script>
-<script type="text/javascript"   src='../core/js/roots.js'> </script>
+<script type="text/javascript"   src='../core/js/common_functions.js'> </script>
 <script type="text/javascript"   src='../core/js/store.js'> </script>
 <script>
 let winurlstr = window.location.href;
@@ -32,7 +30,6 @@ appState       = buildStateFromParams(winurlparams);
 // page / api specific constants 
 const CONST_API_PER_PAGE   = '100';
 const CONST_CUSTOM_PLANT   = 'Plant';
-const CONST_CUSTOM_PLACE   = 'Place';
 const CONST_CUSTOM_UMBRELLA = 'Entire Umbrella';
   
 function sortWithNull(arr, ascending = true) {
@@ -61,6 +58,82 @@ function getPlaceName( plantConfig, place_id ) {
         }
    }
    return place_name;
+}
+
+function buildNavDDPlace( navbar, dd_name, results, config, baseUrl, sub_taxon_arr ) {
+
+    // Build the Place Dropdown
+    if( config.places ) {
+        let urlState = appState;
+        urlState     = setPlaceMenuId(urlState, '');
+        urlState     = setPlaceMenuName(urlState, ''); 
+        urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+
+        // Create the Dropdown container
+        let dropdown = faddelem('div', navbar, { className: 'dropdown' });
+       
+        // Dropdown Button
+        faddelem('button', dropdown, { className: 'dropbtn', textContent: capitalizeWords(dd_name) });
+
+        // Dropdown Content (the links)
+        let ddContent = faddelem('div', dropdown, { className: 'dropdown-content' }); 
+
+        // ALL Link
+        let allUrl = baseUrl + buildParameterList(urlState);
+        let allLink = faddelem('a', ddContent, { href: allUrl });
+        // Text for ALL 
+        faddelem('span', allLink, { textContent: CONST_CUSTOM_UMBRELLA }); 
+
+        // Place Links Loop
+        for( let j = 0; j < config.places.length; j++ ) {
+             urlState = setPlaceMenuId( urlState, config.places[j].placeId );
+             urlState = setPlaceMenuName( urlState, config.places[j].placeName );
+             let iconUrl = baseUrl + buildParameterList(urlState);
+                 
+             let tLink = faddelem('a', ddContent, { href: iconUrl });
+
+             // name to appear as an item in drop-down
+             faddelem('span', tLink, { textContent: config.places[j].placeName });
+        }
+    }
+}
+
+function buildNavDDTaxa( navbar, dd_name, results, config, baseUrl, sub_taxon_arr ) {
+
+    // Build the Taxa Dropdown
+    if( config.taxa ) {
+        let urlState = appState;
+        urlState     = setPlantMenuId(urlState, '');
+        urlState     = setPlantMenuName(urlState, '');
+        urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+
+        // Create the Dropdown container
+        let dropdown = faddelem('div', navbar, { className: 'dropdown' });
+       
+        // Dropdown Button
+        faddelem('button', dropdown, { className: 'dropbtn', textContent: capitalizeWords(dd_name) });
+
+        // Dropdown Content (the links)
+        let ddContent = faddelem('div', dropdown, { className: 'dropdown-content' }); 
+
+        // ALL Link
+        let allUrl = baseUrl + buildParameterList(urlState);
+        let allLink = faddelem('a', ddContent, { href: allUrl });
+        // Text for ALL 
+        faddelem('span', allLink, { textContent: CONST_ALL }); 
+
+        // Place Links Loop
+        for( let j = 0; j < config.taxa.length; j++ ) {
+             urlState = setPlantMenuId(   urlState, config.taxa[j].taxonId );
+             urlState = setPlantMenuName( urlState, config.taxa[j].taxonName );
+             let iconUrl = baseUrl + buildParameterList(urlState);
+                 
+             let tLink = faddelem('a', ddContent, { href: iconUrl });
+
+             // name to appear as an item in drop-down
+             faddelem('span', tLink, { textContent: config.taxa[j].taxonName });
+        }
+    }
 }
 
 function buildNavDDObsFields( navbar, dd_name, results, config, baseUrl, sub_taxon_arr ) {
@@ -112,6 +185,18 @@ function buildMenu( config, results ) {
 
     let baseUrl = window.location.origin + window.location.pathname;
 
+    // if place filters were set in the configuration
+    if( config.places && config.places.length > 0 ) {
+        buildNavDDPlace( navbar, CONST_PLACE, results, config, baseUrl );
+    }
+
+    // if taxon filters were set in the configuration
+    if( config.taxa && config.taxa.length > 0 ) {
+        let dd_name   = getPlantMenuName(appState) || CONST_CUSTOM_PLANT;  
+        buildNavDDTaxa( navbar, dd_name, results, config, baseUrl );
+    }
+   
+    // if observation field filters were set in the configuration
     if( config.ddObsFields && config.ddObsFields.length > 0 ) {
         let dd_name   = config.ddObsFields[0].ddName;  // just take the first one. 
         let menu_name = getFieldValue(appState)||dd_name;
@@ -120,83 +205,14 @@ function buildMenu( config, results ) {
     }
 
     // Build the Home Link
-    let homeState = clearForDashParams(appState);
-    let homeUrl = '../admin/dashboard.html';
-    buildNavHome( navbar, homeUrl, homeState );
+    if( p_hide_dash === 'no' ) {
+        let homeState = clearForDashParams(appState);
+        let homeUrl = '../admin/dashboard.html';
+        buildNavHome( navbar, homeUrl, homeState );
+    }
 
     // Append the DOM nodes to the body
     faddelem('p', document.body).appendChild(navbar);
-
-
-   
-      let menu_string = '';
-      let links = '';
-      let dd_name = '';
- 
-      menu_string = '<div class="navbar">';
-
-      if( config.ddObsFields && config.ddObsFields.length > 0 ) {
-          let urlState = appState;
-          urlState     = setFieldName(urlState, '');
-          urlState     = setFieldValue(urlState, ''); 
-          urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
-          links       += furl('./garden_list.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
-          for( let i=0; i<config.ddObsFields.length; i++ ) {
-               dd_name  = config.ddObsFields[i].ddName;
-               urlState = setFieldName(  urlState, config.ddObsFields[i].fieldName );
-               urlState = setFieldValue( urlState, config.ddObsFields[i].fieldValue );
-               links += furl('./garden_list.html'+buildParameterList(urlState),config.ddObsFields[i].fieldValue);
-          }
-      }
-
-      if( links ) { menu_string += buildDD(getFieldValue(appState)||dd_name, links); }
-      links = '';
- 
-      if( config.places && config.places.length > 0 ) {
-          let urlState = appState;
-          urlState     = setPlaceMenuId(urlState, '');
-          urlState     = setPlaceMenuName(urlState, ''); 
-          urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
-          links       += furl('./garden_list.html'+buildParameterList(urlState),capitalizeWords(CONST_CUSTOM_UMBRELLA));
-          for( let i=0; i<config.places.length; i++ ) {
-               urlState = setPlaceMenuId( urlState, config.places[i].placeId );
-               urlState = setPlaceMenuName( urlState, config.places[i].placeName );
-               links += furl('./garden_list.html'+buildParameterList(urlState),config.places[i].placeName);
-          }
-      }
-
-      if( links && p_hide_dash === 'no' ) { menu_string += buildDD(CONST_CUSTOM_PLACE, links); }
-      links = '';
-
-      if( config.taxa && config.taxa.length > 0 ) {
-          let urlState = appState;
-          urlState     = setPlantMenuId(urlState, '');
-          urlState     = setPlantMenuName(urlState, '');
-          urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
-          links       += furl('./garden_list.html'+buildParameterList(urlState),capitalizeWords(CONST_ALL));
-          for( let i=0; i<config.taxa.length; i++ ) {
-               urlState = setPlantMenuId(   urlState, config.taxa[i].taxonId );
-               urlState = setPlantMenuName( urlState, config.taxa[i].taxonName );
-               links += furl('./garden_list.html'+buildParameterList(urlState),config.taxa[i].taxonName);
-          }
-      }
-
-      let plant_name = getPlantMenuName(appState) || CONST_CUSTOM_PLANT;  // if no menu filter selected, set to const "Plant"
-      if( links ) { menu_string += buildDD( plant_name, links); }
-
-      // split list (if they have more than one value in garden-list...
-      links = '';
-
-      if( p_hide_dash === 'no' ) {
-          let urlState  = clearForDashParams(appState);
-          menu_string  += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
-      } else {
-          menu_string  += buildDDTitle('&nbsp;'); 
-      }
-
-      menu_string += '</div>';
-
-      faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
 
 function buildPage(xobj, config) {
@@ -204,7 +220,7 @@ function buildPage(xobj, config) {
    let box_array = [];
 
    buildMenu( config, results );
- 
+ /*
    if (results) {
       let total_results = xobj.total_results;
       let per_page = xobj.per_page;
@@ -321,7 +337,7 @@ function buildPage(xobj, config) {
       (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
       (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
    }
-   else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); }; */
 }; 
 </script>
 
