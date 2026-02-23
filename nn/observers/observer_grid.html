@@ -46,21 +46,6 @@ var recsmax      = columns * rows - 1;
 
 winurlparams.append('per_page',recsmax);
 
-function getMapParams(observersConfig) {
-   let map_params = '';
-
-   map_params += '?project_id='+observersConfig.insectProject;
-
-   map_params += getTaxonIdParam(appState, '&taxon_id='); 
-
-   if( observersConfig.defaultPlace )    { map_params += '&place_id='+observersConfig.defaultPlace; } 
-   if( getUser(appState) )               { map_params += '&user_id='+getUser(appState); }
-
-   map_params += ('&field:'+observersConfig.fieldName+'=' + getPlantId(appState));  
-
-   return map_params;
-}
-
 function buildMenu(observersConfig) {
 
    let links = '';
@@ -76,20 +61,13 @@ function buildMenu(observersConfig) {
    // if geocoodinates are specified for a life stages map and 
    // life stages taxon id is set to lepidoptera (or null... meaning all)
    if( observersConfig.lsMapExtent && ( getLSTaxonId(appState) === '47157' || !getTaxonId(appState) ) ) {  
-       links  = buildMenuURL( furl('../admin/map.html'+getMapParams(observersConfig),"Standard Map") );
+       links  = buildMenuURL( furl('../admin/map.html'+setupAPIParams(observersConfig),"Standard Map") );
        links += buildMenuURL( furl('./ls_map.html'+buildParameterList(appState),"Life-Stages Map") );
        menu_string += ( buildDD( 'Maps', links) );
    } else {
-       menu_string += buildMenuURL( furl('../admin/map.html'+getMapParams(observersConfig),"Map") );
+       menu_string += buildMenuURL( furl('../admin/map.html'+setupAPIParams(observersConfig),"Map") );
    }
 
-   /*if( !getTaxonId(appState) ) {
-       menu_string += buildMenuURL( furl('./ls_map.html'+buildParameterList(appState),"Map") );
-   } else {
-       menu_string += buildMenuURL( furl('../admin/map.html'+getMapParams(observersConfig),"Map") );
-   }*/
-   //menu_string += buildMenuURL( furl('../admin/layered_map.html'+buildParameterList(appState)+'&project_id='+observersConfig.insectProject,"Map") );
-   
    let url_state = clearForSpeciesCountsParams( appState );
    
    menu_string += buildHome( furl('./observer_activity.html'+buildParameterList(url_state),CONST_LEAF_UTF8) );
