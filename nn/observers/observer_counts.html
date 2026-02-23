@@ -153,6 +153,7 @@ function setupAPIParams( observerConfig ) {
    api_params += ('?project_id='+observerConfig.project);
    if( observerConfig.userId          ) { api_params += '&user_id='  + observerConfig.userId; }
    if( observerConfig.defaultPlace    ) { api_params += '&place_id=' + observerConfig.defaultPlace; } 
+   if( observerConfig.faunaAPIParams  ) { api_params += observerConfig.faunaAPIParams; }
 
    // filter by field... uses the plant_id (the taxon_id) for the plant
    // chosen from the garden list.
