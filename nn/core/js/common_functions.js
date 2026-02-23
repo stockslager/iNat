@@ -101,6 +101,11 @@ function buildNavHome( navbar, baseUrl, homeState ) {
     faddelem('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
 }
 
+function buildNavTitle( navbar, title ) {
+    let titleDiv = faddelem('div', navbar, { id: 'home' });
+    faddelem('span', titleDiv, { textContent: title });
+}
+
 function buildNavAbout( navbar, baseUrl, homeState ) {
     let homeUrl = baseUrl + buildParameterList(homeState);
     let homeDiv = faddelem('div', navbar, { id: 'home' });
