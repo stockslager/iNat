@@ -105,6 +105,121 @@ function buildNavAbout( navbar, baseUrl, homeState ) {
     faddelem('span', hLink, { textContent: CONST_ABOUT });
 }
 
+function buildNavDDPlace( navbar, dd_name, results, config, baseUrl, sub_taxon_arr ) {
+
+    // Build the Place Dropdown
+    if( config.places ) {
+        let urlState = appState;
+        urlState     = setPlaceMenuId(urlState, '');
+        urlState     = setPlaceMenuName(urlState, ''); 
+        urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+
+        // Create the Dropdown container
+        let dropdown = faddelem('div', navbar, { className: 'dropdown' });
+       
+        // Dropdown Button
+        faddelem('button', dropdown, { className: 'dropbtn', textContent: capitalizeWords(dd_name) });
+
+        // Dropdown Content (the links)
+        let ddContent = faddelem('div', dropdown, { className: 'dropdown-content' }); 
+
+        // ALL Link
+        let allUrl = baseUrl + buildParameterList(urlState);
+        let allLink = faddelem('a', ddContent, { href: allUrl });
+        // Text for ALL 
+        faddelem('span', allLink, { textContent: CONST_CUSTOM_UMBRELLA }); 
+
+        // Place Links Loop
+        for( let j = 0; j < config.places.length; j++ ) {
+             urlState = setPlaceMenuId( urlState, config.places[j].placeId );
+             urlState = setPlaceMenuName( urlState, config.places[j].placeName );
+             let iconUrl = baseUrl + buildParameterList(urlState);
+                 
+             let tLink = faddelem('a', ddContent, { href: iconUrl });
+
+             // name to appear as an item in drop-down
+             faddelem('span', tLink, { textContent: config.places[j].placeName });
+        }
+    }
+}
+
+function buildNavDDTaxa( navbar, dd_name, results, config, baseUrl, sub_taxon_arr ) {
+
+    // Build the Taxa Dropdown
+    if( config.taxa ) {
+        let urlState = appState;
+        urlState     = setPlantMenuId(urlState, '');
+        urlState     = setPlantMenuName(urlState, '');
+        urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+
+        // Create the Dropdown container
+        let dropdown = faddelem('div', navbar, { className: 'dropdown' });
+       
+        // Dropdown Button
+        faddelem('button', dropdown, { className: 'dropbtn', textContent: capitalizeWords(dd_name) });
+
+        // Dropdown Content (the links)
+        let ddContent = faddelem('div', dropdown, { className: 'dropdown-content' }); 
+
+        // ALL Link
+        let allUrl = baseUrl + buildParameterList(urlState);
+        let allLink = faddelem('a', ddContent, { href: allUrl });
+        // Text for ALL 
+        faddelem('span', allLink, { textContent: capitalizeWords(CONST_ALL) }); 
+
+        // Place Links Loop
+        for( let j = 0; j < config.taxa.length; j++ ) {
+             urlState = setPlantMenuId(   urlState, config.taxa[j].taxonId );
+             urlState = setPlantMenuName( urlState, config.taxa[j].taxonName );
+             let iconUrl = baseUrl + buildParameterList(urlState);
+                 
+             let tLink = faddelem('a', ddContent, { href: iconUrl });
+
+             // name to appear as an item in drop-down
+             faddelem('span', tLink, { textContent: config.taxa[j].taxonName });
+        }
+    }
+}
+
+function buildNavDDObsFields( navbar, dd_name, results, config, baseUrl, sub_taxon_arr ) {
+
+    // Build the Show Dropdown
+    if( config.ddObsFields ) {
+        let urlState = appState;
+        urlState     = setFieldName(urlState, '');
+        urlState     = setFieldValue(urlState, ''); 
+        urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+
+        // Create the Dropdown container
+        let dropdown = faddelem('div', navbar, { className: 'dropdown' });
+       
+        // Dropdown Button
+        faddelem('button', dropdown, { className: 'dropbtn', textContent: capitalizeWords(dd_name) });
+
+        // Dropdown Content (the links)
+        let ddContent = faddelem('div', dropdown, { className: 'dropdown-content' }); 
+
+        // ALL Link
+        let allUrl = baseUrl + buildParameterList(urlState);
+        let allLink = faddelem('a', ddContent, { href: allUrl });
+        // Text for ALL 
+        faddelem('span', allLink, { textContent: capitalizeWords(CONST_ALL) }); 
+
+        // Obs Fields Links Loop
+        for( let j = 0; j < config.ddObsFields.length; j++ ) {
+             urlState = setFieldName(  urlState, config.ddObsFields[j].fieldName );
+             urlState = setFieldValue( urlState, config.ddObsFields[j].fieldValue );
+             let iconUrl = baseUrl + buildParameterList(urlState);
+                 
+             let tLink = faddelem('a', ddContent, { href: iconUrl });
+
+             // The name will always be the value of the field 
+             // (if the field name is "trail name" the value will be "some trail") 
+             faddelem('span', tLink, { textContent: config.ddObsFields[j].fieldValue });
+        }
+    }
+}
+
 function buildNavDDFilteredShow( navbar, dd_name, results, config, baseUrl ) {
 
     // Get the raw string from the URL
