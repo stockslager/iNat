@@ -153,7 +153,6 @@ class ConfigManager {
 
         // map the default_sub_icons if they're set
         this.defaultSubIcons = jsonData.default_sub_icons?.map(ds => new SubIcon(ds)) ?? [];
-        console.log('pf1 ' + jsonData.plant_field);
         this.plantField      = jsonData.plant_field;
         this.plantFieldValue = jsonData.plant_field_value;
         this.plantIds        = jsonData.plant_ids;
@@ -205,7 +204,6 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
                   }
               }
               if( !finalConfigInstance.plantField ) {
-                 console.log('pf ' + managerInstance.plantField);
                   if( managerInstance.plantField ) { finalConfigInstance.plantField = managerInstance.plantField; }
               }
               if( !finalConfigInstance.plantFieldValue ) {
@@ -271,7 +269,6 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
             }
         }
         if( !finalConfigInstance.plantField ) {
-            console.log('pf ' + managerInstance.plantField);
             if( managerInstance.plantField ) { finalConfigInstance.plantField = managerInstance.plantField; }
         }
         if( !finalConfigInstance.plantFieldValue ) {
