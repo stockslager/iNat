@@ -202,12 +202,12 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
                       finalConfigInstance.subIcons = JSON.parse(JSON.stringify(managerInstance.defaultSubIcons));
                   }
               }
-              if( !finalConfigInstance.plantField ) {
+              /*if( !finalConfigInstance.plantField ) {
                   if( managerInstance.plantField ) { finalConfigInstance.plantField = managerInstance.plantField; }
               }
               if( !finalConfigInstance.plantFieldValue ) {
                   if( managerInstance.plantFieldValue ) { finalConfigInstance.plantFieldValue = managerInstance.plantFieldValue; }
-              }
+              }*/
               
               return finalConfigInstance; 
           } else {
@@ -264,12 +264,12 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
                 finalConfigInstance.subIcons = JSON.parse(JSON.stringify(managerInstance.defaultSubIcons));
             }
         }
-        if( !finalConfigInstance.plantField ) {
+        /*if( !finalConfigInstance.plantField ) {
             if( managerInstance.plantField ) { finalConfigInstance.plantField = managerInstance.plantField; }
         }
         if( !finalConfigInstance.plantFieldValue ) {
             if( managerInstance.plantFieldValue ) { finalConfigInstance.plantFieldValue = managerInstance.plantFieldValue; }
-        }
+        }*/
       
         return finalConfigInstance; 
 
