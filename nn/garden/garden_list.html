@@ -49,6 +49,12 @@ function buildMenu( config, results ) {
 
     let baseUrl = window.location.origin + window.location.pathname;
 
+    if( p_hide_dash === 'no' ) {
+        let title = getPlaceMenuName(appState) || config.getSubTitle() || config.title;        
+        buildNavTitle( navbar, title );
+        return;
+    }
+
     // if place filters were set in the configuration
     if( config.places && config.places.length > 0 ) {
         buildNavDDPlace( navbar, CONST_PLACE, results, config, baseUrl );
@@ -69,11 +75,9 @@ function buildMenu( config, results ) {
     }
 
     // Build the Home Link
-    if( p_hide_dash === 'no' ) {
-        let homeState = clearForDashParams(appState);
-        let homeUrl = '../admin/dashboard.html';
-        buildNavHome( navbar, homeUrl, homeState );
-    }
+    let homeState = clearForDashParams(appState);
+    let homeUrl = '../admin/dashboard.html';
+    buildNavHome( navbar, homeUrl, homeState );
 
     // Append the DOM nodes to the body
     faddelem('p', document.body).appendChild(navbar);
@@ -99,8 +103,11 @@ function buildPage(xobj, config) {
             {innerText:'Name'}, 
       ];
 
-      let title_1 = '', title_2 = '';
-      let title_3 = getPlaceMenuName(appState) || config.getSubTitle() || config.title;
+      let title_1 = '', title_2 = '', title_3 = '';
+
+      if( p_hide_dash === 'no' ) {
+          title_3 = getPlaceMenuName(appState) || config.getSubTitle() || config.title;
+      }
       
       let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3 ); 
     
