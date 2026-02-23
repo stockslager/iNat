@@ -148,6 +148,7 @@ function setupAPIParams(observerConfig) {
    // holds the same attributes for other components.
    if( getUser(appState) )              { api_params += '&user_id='  + getUser(appState); }
    if( observerConfig.defaultPlace    ) { api_params += '&place_id=' + observerConfig.defaultPlace; }  
+   if( observerConfig.faunaAPIParams  ) { api_params += observerConfig.faunaAPIParams; }
  
    api_params += getMenuIdParam(appState, '&taxon_id='); 
    api_params += getPageParam(appState, '&page=');
