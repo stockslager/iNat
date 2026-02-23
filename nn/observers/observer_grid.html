@@ -60,7 +60,7 @@ function buildMenu(observersConfig) {
 
    // if geocoodinates are specified for a life stages map and 
    // life stages taxon id is set to lepidoptera (or null... meaning all)
-   if( observersConfig.lsMapExtent && ( getLSTaxonId(appState) === '47157' || !getTaxonId(appState) ) ) {  
+   if( observersConfig.mapType === 'ls' && ( getLSTaxonId(appState) === '47157' || getTaxonId(appState) === '47157' ) ) {  
        links  = buildMenuURL( furl('../admin/map.html'+setupAPIParams(observersConfig),"Standard Map") );
        links += buildMenuURL( furl('./ls_map.html'+buildParameterList(appState),"Life-Stages Map") );
        menu_string += ( buildDD( 'Maps', links) );
