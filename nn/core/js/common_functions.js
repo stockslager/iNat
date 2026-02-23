@@ -102,7 +102,7 @@ function buildNavHome( navbar, baseUrl, homeState ) {
 }
 
 function buildNavTitle( navbar, title ) {
-    let titleDiv = faddelem('div', navbar, { id: 'home' });
+    let titleDiv = faddelem('div', navbar, { id: 'dd_title' });
     faddelem('span', titleDiv, { textContent: title });
 }
 
