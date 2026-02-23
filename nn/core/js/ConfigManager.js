@@ -157,6 +157,8 @@ class ConfigManager {
         this.plantField      = jsonData.plant_field;
         this.plantFieldValue = jsonData.plant_field_value;
         this.plantIds        = jsonData.plant_ids;
+        this.plantListUserId = jsonData.plant_list_user_id;
+        this.usePlantProjectImages = jsonData.use_plant_project_images;
     }
 
     getConfigByComponent(componentName) {
@@ -215,6 +217,12 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
               }
               if( !finalConfigInstance.plantIds ) {
                   if( managerInstance.plantIds ) { finalConfigInstance.plantIds = managerInstance.plantIds; }
+              }
+              if( !finalConfigInstance.plantListUserId ) {
+                  if( managerInstance.plantListUserId ) { finalConfigInstance.plantListUserId = managerInstance.plantListUserId; }
+              }
+              if( !finalConfigInstance.userPlantProjectImages ) {
+                  if( managerInstance.userPlantProjectImages ) { finalConfigInstance.userPlantProjectImages = managerInstance.userPlantProjectImages; }
               }
               
               return finalConfigInstance; 
@@ -283,6 +291,12 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
         }
         if( !finalConfigInstance.plantIds ) {
             if( managerInstance.plantIds ) { finalConfigInstance.plantIds = managerInstance.plantIds; }
+        }
+        if( !finalConfigInstance.plantListUserId ) {
+            if( managerInstance.plantListUserId ) { finalConfigInstance.plantListUserId = managerInstance.plantListUserId; }
+        }
+        if( !finalConfigInstance.userPlantProjectImages ) {
+            if( managerInstance.userPlantProjectImages ) { finalConfigInstance.userPlantProjectImages = managerInstance.userPlantProjectImages; }
         }
       
         return finalConfigInstance; 
