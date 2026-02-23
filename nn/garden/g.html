@@ -107,9 +107,6 @@ function buildPage(xobj, config) {
      
       let title_3 = getPlaceMenuName(appState) || config.getSubTitle() || config.title;
       
-      // CSS needs text inside span
-      faddelem('span', title_3_element, { textContent: titleText });
-
       let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, '', '', title_3 ); 
     
       faddelem('p', document.body).appendChild(header);
