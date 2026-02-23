@@ -30,6 +30,7 @@ const CONST_OBSERVATIONS    = 'observations:';
 const CONST_ENTIRE_UMBRELLA = 'Entire Umbrella';
 const CONST_OF              = ' of ';
 const CONST_ABOUT           = 'About';
+const CONST_LS_MAP_EXTENT   = { nelat:39.13652110135628,nelng:-84.3476428020592,swlat:39.12904776433699,swlng:-84.35708417779162 }; 
 
 // show menu
 const CONST_ALL            = 'all';              // common show drop down label
