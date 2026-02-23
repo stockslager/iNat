@@ -156,8 +156,16 @@ function buildPage(xobj, config) {
              urlState = setTaxonName(urlState, '');
              urlState = setPlantId(urlState, rec.taxon.id);
              urlState = setPlantName(urlState, header_name||'?');
-             let url      = './garden_activity.html' + buildParameterList(urlState);
-             buildSpeciesName( brow, rec, url );
+
+             if( getComponent(appState) === COMPONENT_OBSERVERS ) {  // if choosing a plant from observers flow, return to obs counts
+                 urlState = setPlantMenuId(urlState, '');
+                 urlState = setPlantMenuName(urlState, '');
+                 let url = './observer_counts.html' + buildParameterList(urlState);
+                 buildSpeciesName( brow, rec, url );
+             } else {
+                 let url      = './garden_activity.html' + buildParameterList(urlState);
+                 buildSpeciesName( brow, rec, url );
+             }
          }
       };
 
