@@ -437,6 +437,12 @@ function buildSpeciesPhoto( brow, rec ) {
     }
 }
 
+// Garden List (Observations List) Table Column - Obs Photo
+function buildObsPhoto( brow, rec ) {
+    let tdPhoto = faddelem('td', brow);
+    faddelem('img', tdPhoto, { className: 'mini_photo2', src: ((rec.photos&&rec.photos.length>0)?rec.photos[0].url:'') });
+}
+
 // Species Counts Table Column - Name
 function buildSpeciesName( brow, rec, url ) {
     let tdName = faddelem('td', brow);
