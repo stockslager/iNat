@@ -22,16 +22,17 @@ const root_usda = 'https://plants.usda.gov/plant-profile/';
 const root_missouri = 'https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?kempercode=';
 
 // global constants...
-const CONST_TOTAL_SPECIES  = 'total species: ';  // common api results header
-const CONST_TOTAL_OBS      = 'total observations: ';
-const CONST_PAGE           = 'page: ';           // common api results header 
-const CONST_PER_PAGE       = 'per page: ';       // common api results header
-const CONST_ON             = 'On ';
-const CONST_ALL_PLANTS     = 'All Plants';
-const CONST_SPECIES        = 'species:';
-const CONST_OBSERVATIONS   = 'observations:';
-const CONST_OF             = ' of ';
-const CONST_ABOUT          = 'About';
+const CONST_TOTAL_SPECIES   = 'total species: ';  // common api results header
+const CONST_TOTAL_OBS       = 'total observations: ';
+const CONST_PAGE            = 'page: ';           // common api results header 
+const CONST_PER_PAGE        = 'per page: ';       // common api results header
+const CONST_ON              = 'On ';
+const CONST_ALL_PLANTS      = 'All Plants';
+const CONST_SPECIES         = 'species:';
+const CONST_OBSERVATIONS    = 'observations:';
+const CONST_ENTIRE_UMBRELLA = 'Entire Umbrella';
+const CONST_OF              = ' of ';
+const CONST_ABOUT           = 'About';
 
 // show menu
 const CONST_ALL            = 'all';              // common show drop down label
@@ -130,7 +131,7 @@ function buildNavDDPlace( navbar, dd_name, results, config, baseUrl, sub_taxon_a
         let allUrl = baseUrl + buildParameterList(urlState);
         let allLink = faddelem('a', ddContent, { href: allUrl });
         // Text for ALL 
-        faddelem('span', allLink, { textContent: CONST_CUSTOM_UMBRELLA }); 
+        faddelem('span', allLink, { textContent: CONST_ENTIRE_UMBRELLA }); 
 
         // Place Links Loop
         for( let j = 0; j < config.places.length; j++ ) {
