@@ -449,7 +449,6 @@ function fcreatelayer(lseq,ltype,lurl,marker=null) {
 function fcreatebaselayer(lseq,lurl,ldescr=null,lattr=null,visible=true,stylefilter=null,bgcolor=null,disabled=true) {
    var layer = fcreatelayer(lseq,'basemap',lurl);
    var isDisabled = (disabled === true) ? ' disabled' : ''; 
-   console.log('isdis ' + isDisabled);
    if (stylefilter!==null) { layer.style.filter = stylefilter; };
    if (bgcolor!==null) { layer.style.bgcolor = bgcolor; };
    var entry = faddelem('div',keybody,'keyentry');
@@ -625,9 +624,7 @@ async function gatherResources() {
       console.log('full config title: ' + observerConfig.getFullTitle());
       const map_params    = setupMapParams( observerConfig );
 
-      const bbObj = Object.fromEntries(observerConfig.lsMapExtent.split(',').map(s => s.split(':'))); // convert from string to object.
-     
-       fmapextent({nelat:39.13652110135628,nelng:-84.3476428020592,swlat:39.12904776433699,swlng:-84.35708417779162}); // Horizon
+       fmapextent(CONST_LS_MAP_EXTENT); 
        fcreatebaselayer(0,bm_s_osm.url,bm_s_osm.description,bm_s_osm.attribution,true,'grayscale(100%) invert(100%) brightness(60%) sepia(100%) hue-rotate(180deg) saturate(150%)','',true);
        fcreateutflayer(1,utfgridapi.url+map_params+'&verifiable=any&term_id=1&term_value_id=7','Egg',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[173,216,230]});
        fcreateutflayer(2,utfgridapi.url+map_params+'&verifiable=any&term_id=1&term_value_id=4','Pupa',utfgridapi.attr,true,{type:'square_tl',scaleType:'opacity',scaleFactor:1,colorRGB:[144,238,144]});
