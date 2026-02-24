@@ -112,18 +112,21 @@ function buildNavTitle( navbar, title ) {
   faddelem('div', titleDiv, { className: 'dd_title', textContent: title });
 }
 
-function buildNavLink( navbar, baseUrl, homeState, label ) {
-    let homeUrl = baseUrl + buildParameterList(homeState);
+function buildNavURL( navbar, url, homeState, label ) {
     let homeDiv = faddelem('div', navbar, { id: 'navlink' });
-    let hLink = faddelem('a', homeDiv, { href: homeUrl });
+    let hLink = faddelem('a', homeDiv, { href: url });
     faddelem('span', hLink, { textContent: label });
 }
 
-function buildNavAbout( navbar, baseUrl, homeState ) {
+// probably should be removed.  just use buildNavURL.
+function buildNavLink( navbar, baseUrl, homeState, label ) {
     let homeUrl = baseUrl + buildParameterList(homeState);
-    let homeDiv = faddelem('div', navbar, { id: 'home' });
-    let hLink = faddelem('a', homeDiv, { href: homeUrl });
-    faddelem('span', hLink, { textContent: CONST_ABOUT });
+    buildNavURL( navbar, homeUrl, homeState, label );
+}
+
+// wrapper for about... needs to be removed.
+function buildNavAbout( navbar, baseUrl, homeState ) {
+    buildNavLink( navbar, baseUrl, homeState, CONST_ABOUT );
 }
 
 function buildNavDDPlace( navbar, dd_name, results, config, baseUrl, sub_taxon_arr ) {
