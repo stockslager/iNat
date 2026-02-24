@@ -122,6 +122,14 @@ class ConfigurationItem {
         return `${this.title} (${this.component})`;
     }
 
+    getMapZoom() {
+        if( this.defaultMapZoom ) {
+            return( '&defaultzoom='+this.defaultMapZoom );
+        } else {
+            return '';
+        }
+    }
+
     // find the taxon name given the taxon_id in the list of sub_icons in the configuration
     getSubIconNameByTaxonId( plantsConfig, taxon_id ) {
         let sub_icon_name = '';
