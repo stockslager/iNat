@@ -122,9 +122,9 @@ class ConfigurationItem {
         return `${this.title} (${this.component})`;
     }
 
-    getMapZoom() {
-        if( this.defaultMapZoom ) {
-            return( '&defaultzoom='+this.defaultMapZoom );
+    getMapZoom( config ) {
+        if( config.defaultMapZoom ) {
+            return( '&defaultzoom='+config.defaultMapZoom );
         } else {
             return '';
         }
