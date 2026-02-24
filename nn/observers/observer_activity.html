@@ -72,8 +72,8 @@ function buildPage(xobj, observerConfig) {
           urlState = setTaxonId(urlState, getMenuId(appState)); // set taxon id to menu id if a filter was chosen for say, birds.
       }
 
-      let title_1 = (observerConfig.getSubIconNameByTaxonId(observerConfig, getMenuId(appState)) || 'wildlife');
-      let title_2 = ' by ' + getUser(appState);     
+      let title_1 = '', title_2 = '';
+      if( getUser(appState) ) { title_2 = ' by ' + getUser(appState);     
       let title_3 = furl('./observer_grid.html'+buildParameterList(urlState),'on ' + (getPlantName(appState) || CONST_ALL_PLANTS.toLowerCase()));
      
 
