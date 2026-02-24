@@ -71,6 +71,7 @@ class ConfigurationItem {
         this.plantTagName    = configData.plant_tag_name ?? null;
         this.usePlantProjectImages = configData.use_plant_project_images ?? null;
         this.mapType         = configData.map_type ?? null;
+        this.defaultMapZoom  = configData.default_map_zoom ?? null;
         this.defaultPlace = configData.default_place ?? null;
         this.fieldId = configData.field_id ?? null;
         this.fieldName = configData.field_name ?? null;
