@@ -126,7 +126,10 @@ function buildNavLink( navbar, baseUrl, homeState, label ) {
 
 // wrapper for about... needs to be removed.
 function buildNavAbout( navbar, baseUrl, homeState ) {
-    buildNavLink( navbar, baseUrl, homeState, CONST_ABOUT );
+    let homeUrl = baseUrl + buildParameterList(homeState);
+    let homeDiv = faddelem('div', navbar, { id: 'home' });
+    let hLink = faddelem('a', homeDiv, { href: url });
+    faddelem('span', hLink, { textContent: label });
 }
 
 function buildNavDDPlace( navbar, dd_name, results, config, baseUrl, sub_taxon_arr ) {
