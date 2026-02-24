@@ -15,7 +15,6 @@ function buildGrid(data, url=null) {
             left:((c-1)*cellpx+(c<=1?0:c-1)*spacerpx)+'px'
             }});
          if (recsfound===0&&data.total_results===0) { 
-            var gcell = faddelem('div', grid, { className: 'gridcell' });
             gcell.innerHTML = furlCell(famp(url || obsurl), '<span>no<br />data</span>');
             break;
             }
@@ -23,7 +22,6 @@ function buildGrid(data, url=null) {
             if( (fshorten(data.total_results-obsseq)) === 0 ){
                gcell.innerHTML = '<span>+0<br />more</span>';
             } else {
-               var gcell = faddelem('div', grid, { className: 'gridcell' });
                gcell.innerHTML = furlCell(famp(url || obsurl),'<span>+'+(fshorten(data.total_results-obsseq))+'<br />more</span>');
             }
             obsseq = 0;
