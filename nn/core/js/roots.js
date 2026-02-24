@@ -5,6 +5,7 @@ let root_obs_fields   = 'https://www.inaturalist.org/observation_fields/';
 let root_projects     = 'https://www.inaturalist.org/projects/';
 let root_taxa         = 'https://www.inaturalist.org/taxa/';
 let root_places       = 'https://www.inaturalist.org/places/';
+const root_grid_cell    = 'https://www.inaturalist.org/observations';
 
 // json root dir
 const json_root = '../core/json/';
