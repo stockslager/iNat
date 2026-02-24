@@ -71,17 +71,15 @@ function buildMenu( config ) {
   // if all observations was selected... show the time series
   // if a taxon is in focus, just show the regular map
   if( !getMenuId(appState) && !getTaxonId(appState) ) {
-      let map1Url  = '../admin/map.html' + setupAPIParams(config) + CONST_MAP_CENTER + '&defaultzoom=6';
-      let map2Url  = 'root_observations'+'torquemap'+setupAPIParams(config)+'&interval=monthly';
-      let map1     = faddelem('a', null, { href: map1Url });
-      let map2     = faddelem('a', null, { href: map2Url });
+    let links = [];
+    
+    let mapLink  = faddelem('a', null, { href: '../admin/map.html' + setupAPIParams(config) + CONST_MAP_CENTER + '&defaultzoom=6', textContent: 'Map' });
+    let timeLink = faddelem('a', null, { href: 'root_observations' + 'torquemap' + setupAPIParams(config) + '&interval=monthly', textContent: 'Time Series' });
 
-      // CSS needs text inside span
-      let links = [];
-      links.push(faddelem('span', map1, { textContent: 'Map' }));
-      links.push(faddelem('span', map2, { textContent: 'Time Series' }));
+    links.push(mapLink);
+    links.push(timeLink);
 
-      buildNavDD( navbar, 'Maps', links );
+    buildNavDD( navbar, 'Maps', links );
      
   } else {   
       let url = '../admin/map.html' + setupAPIParams(config) + CONST_MAP_CENTER + '&defaultzoom=6';
