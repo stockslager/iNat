@@ -94,7 +94,10 @@ function capitalizeWords(str) {
 //****************************************
 // navbar title, url, drop-down helpers **
 //****************************************
-function buildNavHome( navbar, baseUrl, homeState ) {
+function buildNavHome( navbar, baseUrl=null, homeState=null ) {
+    if( !baseUrl ) { homeState = clearForDashParams(appState); }
+    if( !homeUrl ) { homeUrl = '../admin/dashboard.html'; }
+    
     let homeUrl = baseUrl + buildParameterList(homeState);
     let homeDiv = faddelem('div', navbar, { id: 'home' });
     let hLink = faddelem('a', homeDiv, { href: homeUrl });
