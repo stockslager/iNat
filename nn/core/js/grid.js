@@ -34,7 +34,7 @@ function buildGrid(data, url=null) {
             let taxon = obs.taxon?(obs.taxon.preferred_common_name?(obs.taxon.preferred_common_name):obs.taxon.name):'(Unknown Taxon)';
             let user = obs.user.login+((obs.user.name&&obs.user.name!='')?(' ('+obs.user.name+')'):'');
             let obsdt = obs.time_observed_at?fdate(obs.time_observed_at,true):(obs.observed_on||'(Unknown Date)');
-            let anchor = faddelem('a',gcell,{href:famp(obsurlbase+'/'+obs.id)});
+            let anchor = faddelem('a',gcell,{href:famp(root_grid_cell+'/'+obs.id)});
             let photo = (photourl===null) ? faddelem('span',anchor,{innerText:'❎'})
                : faddelem('img',anchor,{style:{width:cellpx+'px',height:cellpx+'px'},
                   title: taxon + ' observed by ' + user + ' on ' + obsdt,
