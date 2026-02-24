@@ -113,7 +113,7 @@ function buildNavTitle( navbar, title ) {
   faddelem('div', titleDiv, { className: 'dd_title', textContent: title });
 }
 
-function buildNavURL( navbar, url, homeState, label ) {
+function buildNavURL( navbar, url, label ) {
     let homeDiv = faddelem('div', navbar, { id: 'navlink' });
     let hLink = faddelem('a', homeDiv, { href: url });
     faddelem('span', hLink, { textContent: label });
@@ -122,7 +122,7 @@ function buildNavURL( navbar, url, homeState, label ) {
 // probably should be removed.  just use buildNavURL.
 function buildNavLink( navbar, baseUrl, homeState, label ) {
     let homeUrl = baseUrl + buildParameterList(homeState);
-    buildNavURL( navbar, homeUrl, homeState, label );
+    buildNavURL( navbar, homeUrl, label );
 }
 
 // wrapper for about... needs to be removed.
