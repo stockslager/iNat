@@ -56,6 +56,7 @@ const CONST_STUDIES_UTF8   = '&#127891;';
 const CONST_OBSERVATIONS_PER_PAGE           = '100';
 const CONST_SPECIES_COUNTS_PER_PAGE         = '100';
 const CONST_OBSERVATIONS_OBSERVERS_PER_PAGE = '100';
+
 function fcomnum(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') }; 
 
 // SECURE: Uses textContent to prevent script injection in link text
@@ -100,7 +101,20 @@ function fdate(str,dateonly=false) {
    };
    return str;
 }
+function fpageurl(urlbase,urlparams,per_page,page) {
+   let params = new URLSearchParams(urlparams);
+   let url_per_page = params.get('per_page');
+   let url_page = params.get('page');
+   (url_per_page===null) ? params.append('per_page',per_page) : params.set('per_page',per_page);
+   (url_page===null) ? params.append('page',page) : params.set('page',page);
+   return urlbase+'?'+params;
+}
 
+function fpageurlplusorderbyid(urlbase,urlparams,per_page,page) {
+   let params = new URLSearchParams(urlparams);
+   params.get('order_by') ? params.set('order_by','id') : params.append('order_by','id');
+   return fpageurl(urlbase,params,per_page,page);
+}
 function capitalizeWords(str) {
   return str.toLowerCase().split(' ').map(function(word) {
     return word.charAt(0).toUpperCase() + word.slice(1);
