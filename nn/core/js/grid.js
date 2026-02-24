@@ -1,4 +1,4 @@
-function furlCell(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
+function furlCell(params,txt=url) { return '<a href="'+root_grid_cell+params+'">'+txt+'</a>'; };
  
 function buildGrid(data, url=null) {
 
