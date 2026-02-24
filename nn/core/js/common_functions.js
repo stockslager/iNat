@@ -496,3 +496,12 @@ function buildObserver( brow, rec ) {
     // user login 
     faddelem('span', a, { textContent: rec.user.login });    
 }
+
+// Observers Table Column - Observation Counts
+function buildObservationCounts( brow, rec, url ) {
+    let tdName = faddelem('td', brow);
+    let a = faddelem('a', tdName, { href: url });
+    
+    // Observation Count 
+    faddelem('span', a, { textContent: rec.observation_count });    
+}
