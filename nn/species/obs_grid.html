@@ -17,9 +17,7 @@
 </head>
 
 <body>
-<script type="text/javascript"   src='../core/js/global_const.js'> </script>
-<script type="text/javascript"   src='../core/js/common_func.js'>  </script>
-<script type="text/javascript"   src='../core/js/roots.js'>        </script>
+<script type="text/javascript"   src='../core/js/common_functions.js'>  </script>
 <script type="text/javascript"   src='../core/js/store.js'>        </script>
 <script>
 //get parameters from the url
@@ -46,35 +44,58 @@ var recsmax      = columns * rows - 1;
 
 winurlparams.append('per_page',recsmax);
 
+function buildNavDD( navbar, dd_name, links ) {
+
+        // Create the Dropdown container
+        let dropdown = faddelem('div', navbar, { className: 'dropdown' });
+       
+        // Dropdown Button
+        faddelem('button', dropdown, { className: 'dropbtn', textContent: capitalizeWords(dd_name) });
+
+        // Dropdown Content (the links)
+        let ddContent = faddelem('div', dropdown, { className: 'dropdown-content' }); 
+
+        // Place Links Loop
+        for( let j = 0; j < links.length; j++ ) {
+             // name to appear as an item in drop-down
+             faddelem('span', links[j]);
+        }
+    }
+}
+
 function buildMenu( config ) {
 
-   let links = '';
-   let menu_string = '';
-   let menu_params = '';
+  // Create the main navbar container
+  let navbar = document.createElement('div');    
+  navbar.className = 'navbar v2-menu';
 
-   let id = getMenuId(appState);
+  // if all observations was selected... show the time series
+  // if a taxon is in focus, just show the regular map
+  if( !getMenuId(appState) && !getTaxonId(appState) ) {
+      let map1Url  = '../admin/map.html' + getMapParams(config);
+      let map2Url  = 'root_observations+'torquemap'+setupAPIParams(config)+'&interval=monthly';
+      let map1     = faddelem('a', null, { href: map1Url });
+      let map2     = faddelem('a', null, { href: map2Url });
 
-   if( id ) { menu_params += '&taxon_id=' + id + '&menu_id=' + id; }
+      // CSS needs text inside span
+      let links = [];
+      links.push(faddelem('span', map1, { textContent: 'Map' }));
+      links.push(faddelem('span', map2, { textContent: 'Time Series' }));
 
-   menu_string = '<div class="navbar">';
+      buildNavDD( navbar, CONST_MAPS, links );
+     
+  } else {   
+      let url = './admin/map.html' + setupAPIParams(config) + getMapParams(config);
+      buildNavURL( navbar, url, CONST_MAP );
+  }
 
-   // if all observations was selected... show the time series
-   // if a taxon is in focus, just show the regular map
-   if( !getMenuId(appState) && !getTaxonId(appState) ) {
-       links  +=  furl('../admin/map.html'+getMapParams(config),"Map");
-       links  +=  furl(root_observations+'torquemap'+setupAPIParams(config)+'&interval=monthly', "Time Series");
-       menu_string += ( buildDD( 'Maps', links) );
-   } else {
-       let map_params = CONST_MAP_CENTER + config.defaultMapCenter;
-       menu_string += buildMenuURL( furl('../admin/map.html'+setupAPIParams(config)+getMapParams(config),"Map") );
-   }
-   
-   let url_state = clearForSpeciesCountsParams( appState );
-   
-   menu_string += buildHome( furl('./species_counts.html'+buildParameterList(url_state),CONST_LEAF_UTF8) );
-   menu_string += '</div>';
-   
-   return menu_string;
+  // Build the Home Link
+  let homeState = clearForSpeciesCountsParams(appState);
+  let homeUrl = './species_counts.html';
+  buildNavHome( navbar, homeUrl, homeState );
+  
+  faddelem('p', document.body).appendChild(navbar);
+
 }
     
 function buildPage( data, config ) {  
@@ -83,7 +104,7 @@ function buildPage( data, config ) {
    // append the params needed by the grid to build the url for outlinks to iNat.
    let inat_url = obsurlbase + getMapParams(config);
                                     
-   buildGrid(data, inat_url);    
+   //buildGrid(data, inat_url);    
 };
 
 function setupAPIParams( config ) {
