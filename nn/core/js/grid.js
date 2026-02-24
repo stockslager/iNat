@@ -1,3 +1,11 @@
+function furlCell(url, txt = url) {
+    const a = document.createElement('a');
+    const safeUrl = (url.trim().toLowerCase().startsWith('javascript:')) ? '#' : url;
+    a.href = safeUrl;
+    a.innerHTML = txt; 
+    return a.outerHTML; // Return STRING for innerHTML assignment
+}
+
 function buildGrid(data, url=null) {
 
    var results = data.results;
@@ -14,7 +22,7 @@ function buildGrid(data, url=null) {
             }});
          if (recsfound===0&&data.total_results===0) { 
             var gcell = faddelem('div', grid, { className: 'gridcell' });
-            gcell.innerHTML = furl(famp(url || obsurl), '<span>no<br />data</span>');
+            gcell.innerHTML = furlCell(famp(url || obsurl), '<span>no<br />data</span>');
             break;
             }
          else if (recsfound===obsseq) {
@@ -22,7 +30,7 @@ function buildGrid(data, url=null) {
                gcell.innerHTML = '<span>+0<br />more</span>';
             } else {
                var gcell = faddelem('div', grid, { className: 'gridcell' });
-               gcell.innerHTML = furl(famp(url || obsurl),'<span>+'+(fshorten(data.total_results-obsseq))+'<br />more</span>');
+               gcell.innerHTML = furlCell(famp(url || obsurl),'<span>+'+(fshorten(data.total_results-obsseq))+'<br />more</span>');
             }
             obsseq = 0;
             if (r===1&&c>1) { grid.style.width = (c*cellpx+(c-1)*spacerpx)+'px'; };
