@@ -64,19 +64,16 @@ function buildPage( xobj ) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let plants  = getPlantName(appState) || CONST_ALL_PLANTS.toLowerCase();
       let title_1 = ''; 
-      let title_2 = CONST_SHOWING_COUNTS_FOR;
-      let title_3 = plants;
+      let title_2 = '';
+      let title_3 = '';
 
       if( getPlantName(appState) ) {
-          title_1 = title_2;
-          title_2 = title_3;
           let urlState = appState;
           urlState = setPage(urlState, '');
           urlState = setPlantId(urlState, '');
           urlState = setPlantName(urlState, '');
-          let title3Text = 'show ' + CONST_ALL_PLANTS.toLowerCase();
+          let title3Text = capitalizeWords(getPlantName(appState));
           let titleUrl   = './observer_counts.html' + buildParameterList(urlState);
           title_3 = faddelem('a', null, { href: titleUrl });
 
