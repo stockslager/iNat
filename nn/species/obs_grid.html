@@ -46,21 +46,20 @@ winurlparams.append('per_page',recsmax);
 
 function buildNavDD( navbar, dd_name, links ) {
 
-        // Create the Dropdown container
-        let dropdown = faddelem('div', navbar, { className: 'dropdown' });
+  // Create the Dropdown container
+  let dropdown = faddelem('div', navbar, { className: 'dropdown' });
        
-        // Dropdown Button
-        faddelem('button', dropdown, { className: 'dropbtn', textContent: capitalizeWords(dd_name) });
+  // Dropdown Button
+  faddelem('button', dropdown, { className: 'dropbtn', textContent: capitalizeWords(dd_name) });
 
-        // Dropdown Content (the links)
-        let ddContent = faddelem('div', dropdown, { className: 'dropdown-content' }); 
+  // Dropdown Content (the links)
+  let ddContent = faddelem('div', dropdown, { className: 'dropdown-content' }); 
 
-        // Place Links Loop
-        for( let j = 0; j < links.length; j++ ) {
-             // name to appear as an item in drop-down
-             faddelem('span', links[j]);
-        }
-    }
+  // Place Links Loop
+  for( let j = 0; j < links.length; j++ ) {
+       // name to appear as an item in drop-down
+       faddelem('span', links[j]);
+  }
 }
 
 function buildMenu( config ) {
