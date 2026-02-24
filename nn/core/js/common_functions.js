@@ -88,6 +88,17 @@ function faddelems(etype,eparent=null,eattributes=[]) { for (let e of eattribute
 
 function replaceDoubleQuotes(str) { return str.replace(/"/g, '%22'); }
 
+function fdate(str,dateonly=false) {
+   str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
+   if (dateonly) { str = str.split(' ')[0]; }
+   else {
+      str = str.replace(/([+-]\d{2}\:?\d{2})/,' ($1)'); //puts parenthesis around time zone offset
+      str = str.replace(/z/i,' (+00:00)'); //replaces Z (case insensitve) with UTC
+      str = str.replace('+00:00','±00:00');
+   };
+   return str;
+}
+
 function capitalizeWords(str) {
   return str.toLowerCase().split(' ').map(function(word) {
     return word.charAt(0).toUpperCase() + word.slice(1);
