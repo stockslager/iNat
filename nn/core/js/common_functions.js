@@ -476,3 +476,14 @@ function buildSpeciesName( brow, rec, url ) {
     let br = faddelem('br', a);
     faddelem('span', a, { style: { fontStyle: 'italic' }, textContent: '(' + (rec.taxon.name || '') + ')' });
 }
+
+// Observers Table Column - Photo
+function buildObserverPhoto( brow, rec ) {
+    let tdPhoto = faddelem('td', brow);
+         
+    if( rec.user.icon ){
+        faddelem('img', tdPhoto, { className: 'exp_icon', src: rec.user.icon });
+    } else {
+        faddelem('div', tdPhoto, { className: 'npcicon', html: '' });
+    }
+}
