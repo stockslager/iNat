@@ -1,5 +1,5 @@
 <!DOCTYPE html> 
-<html lang="en">     
+<html lang="en">       
  
 <head> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
@@ -16,9 +16,7 @@
 </head>
 
 <body>
-<script type="text/javascript"   src='../core/js/global_const.js'> </script>
-<script type="text/javascript"   src='../core/js/common_func.js'> </script>
-<script type="text/javascript"   src='../core/js/roots.js'> </script>
+<script type="text/javascript"   src='../core/js/common_functions.js'> </script>
 <script type="text/javascript"   src='../core/js/store.js'> </script>
 <script>
 let winurlstr         = window.location.href;
@@ -35,17 +33,20 @@ appState       = buildStateFromParams(winurlparams);
 function furlArrow(url,txt=url) { return '<a href="'+url+'" id="arrow">'+txt+'</a>'; };
 
 function buildMenu() {
-      let menu_string = '';
-      menu_string =  '<div class="navbar">';
+  
+  // Create the main navbar container
+  let navbar = document.createElement('div');    
+  navbar.className = 'navbar v2-menu';
 
-      
-      menu_string += buildMenuURL(furl('./choose_plant.html'+buildParameterList(appState), 'Choose Plant') );
+  // build the choose plant link
+  let baseUrl = './choose_plant.html';
+  buildNavLink( navbar, baseUrl, appState, CONST_CHOOSE_PLANT );
 
-      let urlState  = clearForDashParams(appState);
-      menu_string += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState), '&#127807;'));
-      menu_string += '</div>';
+  // Build the Home Link
+  buildNavHome( navbar );
+  
+  faddelem('p', document.body).appendChild(navbar);
 
-      faddelem('p',document.body,{innerHTML:(menu_string)});  
 }
  
 function buildPage( xobj ) {
@@ -53,6 +54,7 @@ function buildPage( xobj ) {
 
    buildMenu();
 
+  
    if( results ) {
 
       let total_results = xobj.total_results;
@@ -62,28 +64,20 @@ function buildPage( xobj ) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let plants  = getPlantName(appState) || CONST_ALL_PLANTS.toLowerCase();
-      let on_all1 = '';
-      let on_all2 = 'showing counts for';
-      let on_all3 = '<b>' + plants + '</b>';
+      let title_1 = '', title_2 = '', title_3 = '';
 
       if( getPlantName(appState) ) {
-          let urlState = appState;
-          urlState = setPage(urlState, '');
-          urlState = setPlantId(urlState, '');
-          urlState = setPlantName(urlState, '');
-          on_all1 = 'showing counts for';
-          on_all2 = getPlantName(appState);
-          on_all3 = 'show ' + furl('./observer_counts.html'+buildParameterList(urlState), 'all plants?' );
+          let title3Text = capitalizeWords(getPlantName(appState));
+          let titleUrl   = './observer_activity.html' + buildParameterList(appState);
+          title_3 = faddelem('a', null, { href: titleUrl });
+
+          // CSS needs text inside span
+          faddelem('span', title_3, { textContent: title3Text });
       } 
 
-      // Generate the secure header element
-      const headerElem = buildHeader(CONST_OBSERVERS, total_results, per_page, page_curr, page_max, on_all1, on_all2, on_all3);
+      let header = buildHeader( CONST_OBSERVERS, total_results, per_page, page_curr, page_max, title_1, title_2, title_3 ); 
 
-      // Create the wrapper <p> and append the DOM object directly
-      const pWrapper = document.createElement('p');
-      pWrapper.appendChild(headerElem);
-      document.body.appendChild(pWrapper);
+      faddelem('p', document.body).appendChild(header);
     
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
@@ -102,14 +96,15 @@ function buildPage( xobj ) {
          let target_url = '';     
          let brow = faddelem('tr',tbody);
          let rec = results[i];
-         let lists = '';
-         let user_icon = rec.user.icon || '';
-         
-         if( user_icon === '' ){
-            user_icon += '<div class="npcicon"></div>';
-         } else {
-            user_icon = '<img class="exp_icon" src="'+user_icon+'" />';
-         }
+
+         // Column: Index
+         faddelem('td', brow, { textContent: i + 1 });
+
+         // Column: Icon
+         buildObserverPhoto( brow, rec );
+
+         // Column: Observer
+         buildObserver( brow, rec );
 
          // this page uses taxon id/name wrt to flora, the next page, fauna
          // plant id (the selected taxon on this page) is passed to the next to search for in the &field:some+field=value.
@@ -118,14 +113,10 @@ function buildPage( xobj ) {
          urlState = setTaxonId(urlState, '');
          urlState = setTaxonName(urlState, '');
          urlState = setUser(urlState, rec.user.login);
-
-         let values = [
-            {innerText:i+1},
-            {innerHTML:user_icon},
-            {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
-            {innerHTML:furl('./observer_activity.html'+buildParameterList(urlState),rec.observation_count )},
-         ];
-         faddelems('td',brow,values);
+         let url = './observer_activity.html'+buildParameterList(urlState);
+       
+         // Column: Counts
+         buildObservationCounts( brow, rec, url );
       };
 
       // buttons to go to prev or next page
@@ -136,6 +127,7 @@ function buildPage( xobj ) {
       (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); };
+   
 };
 
 </script>
