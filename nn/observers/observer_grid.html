@@ -31,7 +31,6 @@ let winurlparams      = new URLSearchParams(winurlsearchstr);
 appState       = buildStateFromParams(winurlparams);
 
 var api_base   = 'https://api.inaturalist.org/v1/observations'
-var obsurlbase = 'https://www.inaturalist.org/observations';
 
 // don't show organsims that have only been id'd to genus and above, otherwise the number's
 // won't match other counts
@@ -80,7 +79,7 @@ function buildPage(data, observersConfig) {
    faddelem('p',document.body,{innerHTML:buildMenu(observersConfig)}); 
 
    // append the params needed by the grid to build the url for outlinks to iNat.
-   let inat_url = obsurlbase + setupAPIParams(observersConfig);
+   let inat_url = setupAPIParams(observersConfig);
                                     
    buildGrid(data, inat_url);    
 };
