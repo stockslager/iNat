@@ -55,10 +55,10 @@ function buildNavDD( navbar, dd_name, links ) {
   // Dropdown Content (the links)
   let ddContent = faddelem('div', dropdown, { className: 'dropdown-content' }); 
 
-  // Place Links Loop
+  // Place Links in Drop Down
   for( let j = 0; j < links.length; j++ ) {
-       // name to appear as an item in drop-down
-       faddelem('span', links[j]);
+       let item = faddelem('div', ddContent, { className: 'dd-item' });
+       item.appendChild(links[j]); 
   }
 }
 
