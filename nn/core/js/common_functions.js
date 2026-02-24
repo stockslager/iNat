@@ -107,6 +107,13 @@ function buildNavTitle( navbar, title ) {
   faddelem('div', titleDiv, { className: 'dd_title', textContent: title });
 }
 
+function buildNavLink( navbar, baseUrl, homeState, label ) {
+    let homeUrl = baseUrl + buildParameterList(homeState);
+    let homeDiv = faddelem('div', navbar, { id: 'navlink' });
+    let hLink = faddelem('a', homeDiv, { href: homeUrl });
+    faddelem('span', hLink, { textContent: label });
+}
+
 function buildNavAbout( navbar, baseUrl, homeState ) {
     let homeUrl = baseUrl + buildParameterList(homeState);
     let homeDiv = faddelem('div', navbar, { id: 'home' });
