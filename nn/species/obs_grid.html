@@ -46,21 +46,6 @@ var recsmax      = columns * rows - 1;
 
 winurlparams.append('per_page',recsmax);
 
-function getMapParams(config) {
-   let map_params = '';
-
-   map_params += '?project_id='+config.project;
-
-   map_params += getTaxonIdParam(appState, '&taxon_id='); 
-
-   if( config.defaultPlaceId ) { map_params += '&place_id='+config.defaultPlaceId; } 
-   
-   map_params += '&user_id='+config.userId; 
-   map_params += '&field:'+config.fieldName+'='+(config.fieldValue||'');  // should change to generic filter?
-
-   return map_params;
-}
-
 function buildMenu( config ) {
 
    let links = '';
@@ -77,10 +62,11 @@ function buildMenu( config ) {
    // if a taxon is in focus, just show the regular map
    if( !getMenuId(appState) && !getTaxonId(appState) ) {
        links  +=  furl('../admin/map.html'+getMapParams(config),"Map");
-       links  +=  furl(root_observations+'torquemap'+getMapParams(config)+'&interval=monthly', "Time Series");
+       links  +=  furl(root_observations+'torquemap'+setupAPIParams(config)+'&interval=monthly', "Time Series");
        menu_string += ( buildDD( 'Maps', links) );
    } else {
-       menu_string += buildMenuURL( furl('../admin/map.html'+getMapParams(config),"Map") );
+       let map_params = CONST_MAP_CENTER + config.defaultMapCenter;
+       menu_string += buildMenuURL( furl('../admin/map.html'+setupAPIParams(config)+getMapParams(config),"Map") );
    }
    
    let url_state = clearForSpeciesCountsParams( appState );
