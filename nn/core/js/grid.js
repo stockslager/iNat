@@ -1,10 +1,4 @@
-function furlCell(url, txt = url) {
-    const a = document.createElement('a');
-    const safeUrl = (url.trim().toLowerCase().startsWith('javascript:')) ? '#' : url;
-    a.href = safeUrl;
-    a.innerHTML = txt; 
-    return a.outerHTML; // Return STRING for innerHTML assignment
-}
+function furlCell(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
 
 function buildGrid(data, url=null) {
 
