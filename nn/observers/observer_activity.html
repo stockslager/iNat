@@ -73,18 +73,16 @@ function buildPage(xobj, observerConfig) {
       }
 
       let title_1 = '', title_2 = '';
-      if( getUser(appState) ) { title_2 = ' By ' + getUser(appState); }   
-      let title_3 = furl('./observer_grid.html'+buildParameterList(urlState),'On ' + capitalizeWords( (getPlantName(appState) || CONST_ALL_PLANTS) ));
-     
+      if( getUser(appState) ) { title_2 = ' By ' + getUser(appState); }        
 
-      let title3Text = 'on ' + (getPlantName(appState) || CONST_ALL_PLANTS.toLowerCase());
+      let title3Text = 'On ' + capitalizeWords( (getPlantName(appState) || CONST_ALL_PLANTS) );
       let titleUrl   = './observer_grid.html' + buildParameterList(urlState);
-      let title_3_element = faddelem('a', null, { href: titleUrl });
+      let title_3 = faddelem('a', null, { href: titleUrl });
 
       // CSS needs text inside span
       faddelem('span', title_3_element, { textContent: title3Text });
 
-      let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3_element ); 
+      let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3 ); 
     
       faddelem('p', document.body).appendChild(header);
 
