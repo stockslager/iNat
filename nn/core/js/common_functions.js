@@ -129,7 +129,7 @@ function buildNavAbout( navbar, baseUrl, homeState ) {
     let homeUrl = baseUrl + buildParameterList(homeState);
     let homeDiv = faddelem('div', navbar, { id: 'home' });
     let hLink = faddelem('a', homeDiv, { href: homeUrl });
-    faddelem('span', hLink, { textContent: label });
+    faddelem('span', hLink, { textContent: CONST_ABOUT });
 }
 
 function buildNavDDPlace( navbar, dd_name, results, config, baseUrl, sub_taxon_arr ) {
