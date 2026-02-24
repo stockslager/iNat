@@ -69,12 +69,8 @@ function buildPage( xobj ) {
       let title_3 = '';
 
       if( getPlantName(appState) ) {
-          let urlState = appState;
-          urlState = setPage(urlState, '');
-          urlState = setPlantId(urlState, '');
-          urlState = setPlantName(urlState, '');
           let title3Text = capitalizeWords(getPlantName(appState));
-          let titleUrl   = './observer_counts.html' + buildParameterList(urlState);
+          let titleUrl   = './observer_activity.html' + buildParameterList(appState);
           title_3 = faddelem('a', null, { href: titleUrl });
 
           // CSS needs text inside span
