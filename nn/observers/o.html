@@ -64,9 +64,7 @@ function buildPage( xobj ) {
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      let title_1 = ''; 
-      let title_2 = '';
-      let title_3 = '';
+      let title_1 = '', title_2 = '', title_3 = '';
 
       if( getPlantName(appState) ) {
           let title3Text = capitalizeWords(getPlantName(appState));
@@ -98,14 +96,15 @@ function buildPage( xobj ) {
          let target_url = '';     
          let brow = faddelem('tr',tbody);
          let rec = results[i];
-         let lists = '';
-         let user_icon = rec.user.icon || '';
-         
-         if( user_icon === '' ){
-            user_icon += '<div class="npcicon"></div>';
-         } else {
-            user_icon = '<img class="exp_icon" src="'+user_icon+'" />';
-         }
+
+         // Column: Index
+         faddelem('td', brow, { textContent: i + 1 });
+
+         // Column: Icon
+         buildObserverPhoto( brow, rec );
+
+         // Column: Observer
+         buildObserver( brow, rec );
 
          // this page uses taxon id/name wrt to flora, the next page, fauna
          // plant id (the selected taxon on this page) is passed to the next to search for in the &field:some+field=value.
@@ -114,14 +113,10 @@ function buildPage( xobj ) {
          urlState = setTaxonId(urlState, '');
          urlState = setTaxonName(urlState, '');
          urlState = setUser(urlState, rec.user.login);
-
-         let values = [
-            {innerText:i+1},
-            {innerHTML:user_icon},
-            {innerHTML:furl(root_people+rec.user.login,rec.user.login)},
-            {innerHTML:furl('./observer_activity.html'+buildParameterList(urlState),rec.observation_count )},
-         ];
-         faddelems('td',brow,values);
+         let url = './observer_activity.html'+buildParameterList(urlState);
+       
+         // Column: Counts
+         buildObservationCounts( brow, rec, url );
       };
 
       // buttons to go to prev or next page
