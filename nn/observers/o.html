@@ -85,8 +85,15 @@ function buildPage( xobj ) {
       } 
 
       let header = buildHeader( CONST_OBSERVERS, total_results, per_page, page_curr, page_max, title_1, title_2, title_3 ); 
-    
-      faddelem('p', document.body).appendChild(header);
+// 1. Create the paragraph element (don't append to body yet)
+let pContainer = faddelem('p'); 
+
+// 2. Append the header to that paragraph
+pContainer.appendChild(header);
+
+// 3. Append the finished paragraph to the body
+document.body.appendChild(pContainer);    
+    //  faddelem('p', document.body).appendChild(header);
     
       let table = faddelem('table',document.body,{id:'main'});
       let thead = faddelem('thead',table);
