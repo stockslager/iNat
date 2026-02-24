@@ -487,3 +487,12 @@ function buildObserverPhoto( brow, rec ) {
         faddelem('div', tdPhoto, { className: 'npcicon', html: '' });
     }
 }
+
+// Observers Table Column - Observer 
+function buildObserver( brow, rec ) {
+    let tdName = faddelem('td', brow);
+    let a = faddelem('a', tdName, { href: root_people + rec.user.login });
+    
+    // user login 
+    faddelem('span', a, { textContent: rec.user.login });    
+}
