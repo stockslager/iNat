@@ -88,6 +88,7 @@ function faddelems(etype,eparent=null,eattributes=[]) { for (let e of eattribute
 
 function replaceDoubleQuotes(str) { return str.replace(/"/g, '%22'); }
 
+function famp(str) { return str.replace(/&/g,'&amp;'); };
 function fdate(str,dateonly=false) {
    str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
    if (dateonly) { str = str.split(' ')[0]; }
