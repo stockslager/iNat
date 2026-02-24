@@ -128,7 +128,7 @@ function buildNavLink( navbar, baseUrl, homeState, label ) {
 function buildNavAbout( navbar, baseUrl, homeState ) {
     let homeUrl = baseUrl + buildParameterList(homeState);
     let homeDiv = faddelem('div', navbar, { id: 'home' });
-    let hLink = faddelem('a', homeDiv, { href: url });
+    let hLink = faddelem('a', homeDiv, { href: homeUrl });
     faddelem('span', hLink, { textContent: label });
 }
 
