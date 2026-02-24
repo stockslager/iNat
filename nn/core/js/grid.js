@@ -1,5 +1,5 @@
 function furlCell(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
-
+ 
 function buildGrid(data, url=null) {
 
    var results = data.results;
