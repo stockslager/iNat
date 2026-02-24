@@ -60,11 +60,25 @@ const CONST_OBSERVATIONS_OBSERVERS_PER_PAGE = '100';
 function fcomnum(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') }; 
 
 // SECURE: Uses textContent to prevent script injection in link text
-function furl(url, txt = url) {
+/*function furl(url, txt = url) {
     const a = document.createElement('a');
     const safeUrl = (url.trim().toLowerCase().startsWith('javascript:')) ? '#' : url;
     a.href = safeUrl;
     a.textContent = txt; 
+    return a;
+}*/
+
+function furl(url, txt = url) {
+    const a = document.createElement('a');
+    const safeUrl = (url.trim().toLowerCase().startsWith('javascript:')) ? '#' : url;
+    a.href = safeUrl;
+    
+    // Check if the text looks like HTML, if so, use innerHTML
+    if (txt.includes('<')) {
+        a.innerHTML = txt;
+    } else {
+        a.textContent = txt;
+    }
     return a;
 }
 
