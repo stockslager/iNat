@@ -70,8 +70,8 @@ function buildPage( xobj, config ) {
           let tc = capitalizeWords(getPlantName(appState));
           title_3  = faddelem('a', null, { href: './observer_activity.html' + buildParameterList(appState), textContent: tc });
       } else {
-          let tc   = getPlaceMenuName(appState) || config.title;
-          title_3  = faddelem('a', null, { href: './observer_activity.html' + buildParameterList(appState), textContent: tc });
+          title_3  = getPlaceMenuName(appState) || config.title;
+          //title_3  = faddelem('a', null, { href: './observer_activity.html' + buildParameterList(appState), textContent: tc });
       }
 
       let header = buildHeader( CONST_OBSERVERS, total_results, per_page, page_curr, page_max, title_1, title_2, title_3 ); 
