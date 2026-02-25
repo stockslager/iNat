@@ -53,21 +53,22 @@ function buildMenu( config ) {
 
    // if life stages (ls) option was chosen for map type was set in the config and 
    // they've chosen Butterflies from the drop-down or have chosen a butterfly from the list
-   if( config.mapType === 'ls' && ( getLSTaxonId(appState) === '47157' || getTaxonId(appState) === '47157' ) ) {  
-    let links = [];
+   if( config.mapType !== 'hide' ) {
+       if( config.mapType === 'ls' && ( getLSTaxonId(appState) === '47157' || getTaxonId(appState) === '47157' ) ) {  
+           let links = [];
     
-    let mapLink  = faddelem('a', null, { href: '../admin/map.html' + setupAPIParams(config)  + getMapZoom(config), textContent: 'Standard Map' });
-    let lsLink   = faddelem('a', null, { href: './ls_map.html'     + buildParameterList(appState), textContent: 'Life-Stages' });
+           let mapLink  = faddelem('a', null, { href: '../admin/map.html' + setupAPIParams(config)  + getMapZoom(config), textContent: 'Standard Map' });
+           let lsLink   = faddelem('a', null, { href: './ls_map.html'     + buildParameterList(appState), textContent: 'Life-Stages' });
 
-    links.push(mapLink);
-    links.push(lsLink);
+           links.push(mapLink);
+           links.push(lsLink);
 
-    buildNavDD( navbar, 'Maps', links );
-     
-  } else {   
-      let url = '../admin/map.html' + setupAPIParams(config) + getMapZoom(config);
-      buildNavURL( navbar, url, CONST_MAP );
-  }
+           buildNavDD( navbar, 'Maps', links );
+       } else {   
+           let url = '../admin/map.html' + setupAPIParams(config) + getMapZoom(config);
+           buildNavURL( navbar, url, CONST_MAP );
+       }
+   }
 
   // Build the Home Link
   let homeState = clearForSpeciesCountsParams(appState);
