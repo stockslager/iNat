@@ -67,14 +67,11 @@ function buildPage( xobj, config ) {
       let title_1 = '', title_2 = '', title_3 = '';
 
       if( getPlantName(appState) ) {
-          let title3Text = capitalizeWords(getPlantName(appState));
-          let titleUrl   = './observer_activity.html' + buildParameterList(appState);
-          title_3 = faddelem('a', null, { href: titleUrl });
-
-          // CSS needs text inside span
-          faddelem('span', title_3, { textContent: title3Text });
+          let tc = capitalizeWords(getPlantName(appState));
+          title_3  = faddelem('a', null, { href: './observer_activity.html' + buildParameterList(appState), textContent: tc });
       } else {
-          title_3  = faddelem('a', null, { href: './observer_activity.html' + buildParameterList(appState), textContent: getPlaceMenuName(appState) || config.getSubTitle() || config.title });
+          let tc   = getPlaceMenuName(appState) || config.getSubTitle() || config.title;
+          title_3  = faddelem('a', null, { href: './observer_activity.html' + buildParameterList(appState), textContent: tc });
       }
 
       let header = buildHeader( CONST_OBSERVERS, total_results, per_page, page_curr, page_max, title_1, title_2, title_3 ); 
