@@ -160,6 +160,24 @@ function buildNavAbout( navbar, baseUrl, homeState ) {
     faddelem('span', hLink, { textContent: CONST_ABOUT });
 }
 
+function buildNavDD( navbar, dd_name, links ) {
+
+  // Create the Dropdown container
+  let dropdown = faddelem('div', navbar, { className: 'dropdown' });
+       
+  // Dropdown Button
+  faddelem('button', dropdown, { className: 'dropbtn', textContent: capitalizeWords(dd_name) });
+
+  // Dropdown Content (the links)
+  let ddContent = faddelem('div', dropdown, { className: 'dropdown-content' }); 
+
+  // Place Links in Drop Down
+  for( let j = 0; j < links.length; j++ ) {
+       let item = faddelem('div', ddContent, { className: 'dd-item' });
+       item.appendChild(links[j]); 
+  }
+}
+
 function buildNavDDPlace( navbar, dd_name, results, config, baseUrl, sub_taxon_arr ) {
 
     // Build the Place Dropdown
