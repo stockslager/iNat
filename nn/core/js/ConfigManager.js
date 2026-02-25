@@ -162,6 +162,7 @@ class ConfigManager {
         this.plantListUserId = jsonData.plant_list_user_id;
         this.usePlantProjectImages = jsonData.use_plant_project_images;
         this.defaultMapZoom  = jsonData.default_map_zoom;
+        this.mapType         = jsonData.map_type;
     }
 
     getConfigByComponent(componentName) {
