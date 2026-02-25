@@ -17,10 +17,11 @@
 </head>
 
 <body>
-<script type="text/javascript"   src='../core/js/global_const.js'> </script>
-<script type="text/javascript"   src='../core/js/common_func.js'> </script>
-<script type="text/javascript"   src='../core/js/roots.js'> </script>
-<script type="text/javascript"   src='../core/js/store.js'> </script>
+<script type="text/javascript"   src='../core/js/common_functions.js'> </script>
+<script type="text/javascript"   src='../core/js/store.js'>            </script>
+<script type="text/javascript"   src="../core/js/grid.js">             </script>
+<script type="text/javascript"   src="../core/js/ConfigManager.js">    </script>
+<script type="text/javascript"   src="../core/js/api_fetch.js">        </script>
 <script>
 //get parameters from the url
 let winurlstr         = window.location.href;
@@ -45,69 +46,63 @@ var recsmax      = columns * rows - 1;
 
 winurlparams.append('per_page',recsmax);
 
-function buildMenu(observersConfig) {
+function buildMenu( config ) {
+  // Create the main navbar container
+  let navbar = document.createElement('div');    
+  navbar.className = 'navbar v2-menu';
 
-   let links = '';
-   let menu_string = '';
-   let menu_params = '';
+   // if life stages (ls) option was chosen for map type was set in the config and 
+   // they've chosen Butterflies from the drop-down or have chosen a butterfly from the list
+   if( config.mapType === 'ls' && ( getLSTaxonId(appState) === '47157' || getTaxonId(appState) === '47157' ) ) {  
+    let links = [];
+    
+    let mapLink  = faddelem('a', null, { href: '../admin/map.html' + setupAPIParams(config)  + getMapZoom(config), textContent: 'Standard Map' });
+    let lsLink   = faddelem('a', null, { href: './ls_map.html'     + buildParameterList(appState), textContent: 'Life-Stages' });
 
-   let id = getMenuId(appState);
+    links.push(mapLink);
+    links.push(lsLink);
 
-   if( id ) { menu_params += '&taxon_id=' + id + '&menu_id=' + id; }
+    buildNavDD( navbar, 'Maps', links );
+     
+  } else {   
+      let url = '../admin/map.html' + setupAPIParams(config) + CONST_MAP_CENTER + getMapZoom(config);
+      buildNavURL( navbar, url, CONST_MAP );
+  }
 
-   menu_string = '<div class="navbar">';
-
-   // if geocoodinates are specified for a life stages map and 
-   // life stages taxon id is set to lepidoptera (or null... meaning all)
-   if( observersConfig.mapType === 'ls' && ( getLSTaxonId(appState) === '47157' || getTaxonId(appState) === '47157' ) ) {  
-       links  = buildMenuURL( furl('../admin/map.html'+setupAPIParams(observersConfig),"Standard Map") );
-       links += buildMenuURL( furl('./ls_map.html'+buildParameterList(appState),"Life-Stages Map") );
-       menu_string += ( buildDD( 'Maps', links) );
-   } else {
-       menu_string += buildMenuURL( furl('../admin/map.html'+setupAPIParams(observersConfig),"Map") );
-   }
-
-   let url_state = clearForSpeciesCountsParams( appState );
-   
-   menu_string += buildHome( furl('./observer_activity.html'+buildParameterList(url_state),CONST_LEAF_UTF8) );
-   menu_string += '</div>';
-   
-   return menu_string;
+  // Build the Home Link
+  let homeState = clearForSpeciesCountsParams(appState);
+  let homeUrl = './observer_activity.html';
+  buildNavHome( navbar, homeUrl, homeState );
+  
+  faddelem('p', document.body).appendChild(navbar);
 }
 
-function buildPage(data, observersConfig) {  
-   faddelem('p',document.body,{innerHTML:buildMenu(observersConfig)}); 
+function buildPage(data, config) {  
+   buildMenu(config); 
 
    // append the params needed by the grid to build the url for outlinks to iNat.
-   let inat_url = setupAPIParams(observersConfig);
+   let inat_params = setupAPIParams(config);
                                     
-   buildGrid(data, inat_url);    
+   buildGrid(data, inat_params);    
 };
 
-function setupAPIParams( observersConfig ) {
+function setupAPIParams( config ) {
     
     let api_params = '';
 
-    api_params += '?project_id='+observersConfig.insectProject;
+    api_params += '?project_id='+config.insectProject;
     api_params += getTaxonIdParam(appState, '&taxon_id='); 
 
     // possibly the place_id will need to come from the session eventually...
     // if there's a garden with multiple places.
-    if( observersConfig.defaultPlace    ) { api_params += '&place_id=' + observersConfig.defaultPlace; }  
+    if( config.defaultPlace    ) { api_params += '&place_id=' + config.defaultPlace; }  
     if( getUser(appState)               ) { api_params += '&user_id='  + getUser(appState); }  
-    if( observersConfig.faunaAPIParams  ) { api_params += observersConfig.faunaAPIParams; }
+    if( config.faunaAPIParams  ) { api_params += config.faunaAPIParams; }
   
-    api_params += '&field:'+observersConfig.fieldName+'=' + getPlantId(appState);
+    api_params += '&field:'+config.fieldName+'=' + getPlantId(appState);
 
     return api_params;
 }
-</script>
-    
-<script type="text/javascript"   src="../core/js/grid.js">          </script>
-<script type="text/javascript"   src="../core/js/ConfigManager.js"> </script>
-<script type="text/javascript"   src="../core/js/api_fetch.js">     </script>
-
-<script>
    
 async function gatherResources() {
   let json_path = json_root + getParams(appState);
@@ -115,15 +110,15 @@ async function gatherResources() {
   try {
    
       // Await the result of getObservations() and store the actual data
-      const observersConfig   = await asyncGetConfiguration( json_path, getComponent(appState) );
-      console.log('full config title: ' + observersConfig.getFullTitle());
-      const api_params     = setupAPIParams( observersConfig );
+      const config   = await asyncGetConfiguration( json_path, getComponent(appState) );
+      console.log('full config title: ' + config.getFullTitle());
+      const api_params     = setupAPIParams( config );
       const api_url        = api_base+api_params;
       console.log('api url: ' + api_url);
       const obs_data       = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
-      buildPage(obs_data, observersConfig); 
+      buildPage(obs_data, config); 
 
     } catch (error) {
       console.error("An error occurred:", error);
