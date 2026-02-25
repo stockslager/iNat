@@ -73,7 +73,9 @@ function buildPage( xobj ) {
 
           // CSS needs text inside span
           faddelem('span', title_3, { textContent: title3Text });
-      } 
+      } else {
+          title_3  = faddelem('a', null, { href: './observer_activity.html' + buildParameterList(appState), textContent: getPlaceMenuName(appState) || config.getSubTitle() || config.title });
+      }
 
       let header = buildHeader( CONST_OBSERVERS, total_results, per_page, page_curr, page_max, title_1, title_2, title_3 ); 
 
