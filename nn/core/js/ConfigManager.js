@@ -230,6 +230,9 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
               if( !finalConfigInstance.defaultMapZoom ) {
                   if( managerInstance.defaultMapZoom ) { finalConfigInstance.defaultMapZoom = managerInstance.defaultMapZoom; }
               }
+              if( !finalConfigInstance.mapType ) {
+                  if( managerInstance.mapType ) { finalConfigInstance.mapType = managerInstance.mapType; }
+              }
               
               return finalConfigInstance; 
           } else {
@@ -306,6 +309,9 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
         }
         if( !finalConfigInstance.defaultMapZoom ) {
             if( managerInstance.defaultMapZoom ) { finalConfigInstance.defaultMapZoom = managerInstance.defaultMapZoom; }
+        }
+        if( !finalConfigInstance.mapType ) {
+            if( managerInstance.mapType ) { finalConfigInstance.mapType = managerInstance.mapType; }
         }
       
         return finalConfigInstance; 
