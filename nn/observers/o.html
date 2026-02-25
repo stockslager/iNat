@@ -17,10 +17,11 @@
 </head>
 
 <body>
-<script type="text/javascript"   src='../core/js/global_const.js'> </script>
-<script type="text/javascript"   src='../core/js/common_func.js'> </script>
-<script type="text/javascript"   src='../core/js/roots.js'> </script>
-<script type="text/javascript"   src='../core/js/store.js'> </script>
+<script type="text/javascript"   src='../core/js/common_functions.js'> </script>
+<script type="text/javascript"   src='../core/js/store.js'>            </script>
+<script type="text/javascript"   src="../core/js/grid.js">             </script>
+<script type="text/javascript"   src="../core/js/ConfigManager.js">    </script>
+<script type="text/javascript"   src="../core/js/api_fetch.js">        </script>
 <script>
 //get parameters from the url
 let winurlstr         = window.location.href;
@@ -45,43 +46,44 @@ var recsmax      = columns * rows - 1;
 
 winurlparams.append('per_page',recsmax);
 
-function buildMenu(observersConfig) {
+function buildMenu( config ) {
+  // Create the main navbar container
+  let navbar = document.createElement('div');    
+  navbar.className = 'navbar v2-menu';
 
-   let links = '';
-   let menu_string = '';
-   let menu_params = '';
-
-   let id = getMenuId(appState);
-
-   if( id ) { menu_params += '&taxon_id=' + id + '&menu_id=' + id; }
-
-   menu_string = '<div class="navbar">';
-
-   // if geocoodinates are specified for a life stages map and 
-   // life stages taxon id is set to lepidoptera (or null... meaning all)
+   // if life stages (ls) option was chosen for map type was set in the config and 
+   // they've chosen Butterflies from the drop-down or have chosen a butterfly from the list
    if( observersConfig.mapType === 'ls' && ( getLSTaxonId(appState) === '47157' || getTaxonId(appState) === '47157' ) ) {  
-       links  = buildMenuURL( furl('../admin/map.html'+setupAPIParams(observersConfig),"Standard Map") );
-       links += buildMenuURL( furl('./ls_map.html'+buildParameterList(appState),"Life-Stages Map") );
-       menu_string += ( buildDD( 'Maps', links) );
-   } else {
-       menu_string += buildMenuURL( furl('../admin/map.html'+setupAPIParams(observersConfig),"Map") );
-   }
+    let links = [];
+    
+    let mapLink  = faddelem('a', null, { href: '../admin/map.html' + setupAPIParams(config) + CONST_MAP_CENTER + getMapZoom(config), textContent: 'Standard Map' });
+    let lsLink   = faddelem('a', null, { href: './ls_map.html'     + buildParameterList(appState) + '&interval=monthly', textContent: 'Time Series' });
 
-   let url_state = clearForSpeciesCountsParams( appState );
-   
-   menu_string += buildHome( furl('./observer_activity.html'+buildParameterList(url_state),CONST_LEAF_UTF8) );
-   menu_string += '</div>';
-   
-   return menu_string;
+    links.push(mapLink);
+    links.push(lsLink);
+
+    buildNavDD( navbar, 'Maps', links );
+     
+  } else {   
+      let url = '../admin/map.html' + setupAPIParams(config) + CONST_MAP_CENTER + getMapZoom(config);
+      buildNavURL( navbar, url, CONST_MAP );
+  }
+
+  // Build the Home Link
+  let homeState = clearForSpeciesCountsParams(appState);
+  let homeUrl = './observer_activity.html';
+  buildNavHome( navbar, homeUrl, homeState );
+  
+  faddelem('p', document.body).appendChild(navbar);
 }
 
 function buildPage(data, observersConfig) {  
    faddelem('p',document.body,{innerHTML:buildMenu(observersConfig)}); 
 
    // append the params needed by the grid to build the url for outlinks to iNat.
-   let inat_url = setupAPIParams(observersConfig);
+   let inat_params = setupAPIParams(observersConfig);
                                     
-   buildGrid(data, inat_url);    
+   buildGrid(data, inat_params);    
 };
 
 function setupAPIParams( observersConfig ) {
@@ -101,13 +103,6 @@ function setupAPIParams( observersConfig ) {
 
     return api_params;
 }
-</script>
-    
-<script type="text/javascript"   src="../core/js/grid.js">          </script>
-<script type="text/javascript"   src="../core/js/ConfigManager.js"> </script>
-<script type="text/javascript"   src="../core/js/api_fetch.js">     </script>
-
-<script>
    
 async function gatherResources() {
   let json_path = json_root + getParams(appState);
