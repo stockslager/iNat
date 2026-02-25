@@ -1,233 +1,129 @@
-<!DOCTYPE html> 
-<html lang="en">       
- 
-<head> 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<!DOCTYPE html>    
+<html lang="en">  
+   
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
-<meta name="apple-mobile-web-app-title" content="Garden Observers" />
-<meta name="description" content="Garden Observers" />
+<meta name="apple-mobile-web-app-title" content="Observer Grid" />
+<meta name="description" content="Observer Grid" />
 <link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
 <link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
 <link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
 <link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
 <link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
 <link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
-<title>Garden Observers</title>
+<title>Observer Grid</title>
 </head>
 
 <body>
-<script type="text/javascript"   src='../core/js/terse.js'> </script>
+<script type="text/javascript"   src='../core/js/global_const.js'> </script>
+<script type="text/javascript"   src='../core/js/common_func.js'> </script>
+<script type="text/javascript"   src='../core/js/roots.js'> </script>
 <script type="text/javascript"   src='../core/js/store.js'> </script>
 <script>
+//get parameters from the url
 let winurlstr         = window.location.href;
 let winurlsearchstr   = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
-let winurlparams   = new URLSearchParams(winurlsearchstr.substring(1));
-
-const CONST_WITHOUT_TAXON_PLANTAE = '47126';
-const CONST_CACHE_KEY_SUFFIX      = 'gardeners';
-const CONST_OBSERVERS             = 'observers:';
+let winurlparams      = new URLSearchParams(winurlsearchstr);
 
 appState       = buildStateFromParams(winurlparams);
-    
-function furlArrow(url,txt=url) { return '<a href="'+url+'" id="arrow">'+txt+'</a>'; };
 
-function buildMenu() {
-  
-  // Create the main navbar container
-  let navbar = document.createElement('div');    
-  navbar.className = 'navbar v2-menu';
+var api_base   = 'https://api.inaturalist.org/v1/observations'
 
-  // build the choose plant link
-  let baseUrl = './choose_plant.html';
-  buildNavLink( navbar, baseUrl, appState, CONST_CHOOSE_PLANT );
+// don't show organsims that have only been id'd to genus and above, otherwise the number's
+// won't match other counts
+//winurlparams.append('lrank', 'subspecies');
 
-  // Build the Home Link
-  buildNavHome( navbar );
-  
-  faddelem('p', document.body).appendChild(navbar);
+// defaults for grid
+var cellpx       = 122;
+var spacerpx     =   4;
+var rows         =  30;
+var columns      =   3;
+var recsmax      = columns * rows - 1;
 
-}
- 
-function buildPage( xobj ) {
-   let results = xobj.results;
+winurlparams.append('per_page',recsmax);
 
-   buildMenu();
+function buildMenu(observersConfig) {
 
-  
-   if( results ) {
+   let links = '';
+   let menu_string = '';
+   let menu_params = '';
 
-      let total_results = xobj.total_results;
-      let per_page  = xobj.per_page;
-      let page_curr = xobj.page;
-      let page_max  = Math.ceil(total_results/per_page);
-      let page_prev = ((page_curr>1)?page_curr-1:null);
-      let page_next = ((page_curr<page_max)?page_curr+1:null);
+   let id = getMenuId(appState);
 
-      let title_1 = '', title_2 = '', title_3 = '';
+   if( id ) { menu_params += '&taxon_id=' + id + '&menu_id=' + id; }
 
-      if( getPlantName(appState) ) {
-          let title3Text = capitalizeWords(getPlantName(appState));
-          let titleUrl   = './observer_activity.html' + buildParameterList(appState);
-          title_3 = faddelem('a', null, { href: titleUrl });
+   menu_string = '<div class="navbar">';
 
-          // CSS needs text inside span
-          faddelem('span', title_3, { textContent: title3Text });
-      } 
-
-      let header = buildHeader( CONST_OBSERVERS, total_results, per_page, page_curr, page_max, title_1, title_2, title_3 ); 
-
-      faddelem('p', document.body).appendChild(header);
-    
-      let table = faddelem('table',document.body,{id:'main'});
-      let thead = faddelem('thead',table);
-      let hrow = faddelem('tr',thead);
-
-      let labels = [
-         {innerText:'#'},
-         {innerText:'Icon '},
-         {innerText:'Observer' },
-         {innerText:'Observations'  },
-      ];
-      faddelems('th',hrow,labels);
-      
-      let tbody = faddelem('tbody',table);
-      for (let i=0; i<results.length; i++) {
-         let target_url = '';     
-         let brow = faddelem('tr',tbody);
-         let rec = results[i];
-
-         // Column: Index
-         faddelem('td', brow, { textContent: i + 1 });
-
-         // Column: Icon
-         buildObserverPhoto( brow, rec );
-
-         // Column: Observer
-         buildObserver( brow, rec );
-
-         // this page uses taxon id/name wrt to flora, the next page, fauna
-         // plant id (the selected taxon on this page) is passed to the next to search for in the &field:some+field=value.
-         let urlState = appState;
-         urlState = setPage(urlState, '');
-         urlState = setTaxonId(urlState, '');
-         urlState = setTaxonName(urlState, '');
-         urlState = setUser(urlState, rec.user.login);
-         let url = './observer_activity.html'+buildParameterList(urlState);
-       
-         // Column: Counts
-         buildObservationCounts( brow, rec, url );
-      };
-
-      // buttons to go to prev or next page
-      let nav = faddelem('div',document.body,{id:'nav'});
-      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
-      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
-      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
-      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+   // if geocoodinates are specified for a life stages map and 
+   // life stages taxon id is set to lepidoptera (or null... meaning all)
+   if( observersConfig.mapType === 'ls' && ( getLSTaxonId(appState) === '47157' || getTaxonId(appState) === '47157' ) ) {  
+       links  = buildMenuURL( furl('../admin/map.html'+setupAPIParams(observersConfig),"Standard Map") );
+       links += buildMenuURL( furl('./ls_map.html'+buildParameterList(appState),"Life-Stages Map") );
+       menu_string += ( buildDD( 'Maps', links) );
+   } else {
+       menu_string += buildMenuURL( furl('../admin/map.html'+setupAPIParams(observersConfig),"Map") );
    }
-   else { faddelem('p',document.body,{innerText:'No results returned.'}); };
+
+   let url_state = clearForSpeciesCountsParams( appState );
    
+   menu_string += buildHome( furl('./observer_activity.html'+buildParameterList(url_state),CONST_LEAF_UTF8) );
+   menu_string += '</div>';
+   
+   return menu_string;
+}
+
+function buildPage(data, observersConfig) {  
+   faddelem('p',document.body,{innerHTML:buildMenu(observersConfig)}); 
+
+   // append the params needed by the grid to build the url for outlinks to iNat.
+   let inat_url = setupAPIParams(observersConfig);
+                                    
+   buildGrid(data, inat_url);    
 };
 
+function setupAPIParams( observersConfig ) {
+    
+    let api_params = '';
+
+    api_params += '?project_id='+observersConfig.insectProject;
+    api_params += getTaxonIdParam(appState, '&taxon_id='); 
+
+    // possibly the place_id will need to come from the session eventually...
+    // if there's a garden with multiple places.
+    if( observersConfig.defaultPlace    ) { api_params += '&place_id=' + observersConfig.defaultPlace; }  
+    if( getUser(appState)               ) { api_params += '&user_id='  + getUser(appState); }  
+    if( observersConfig.faunaAPIParams  ) { api_params += observersConfig.faunaAPIParams; }
+  
+    api_params += '&field:'+observersConfig.fieldName+'=' + getPlantId(appState);
+
+    return api_params;
+}
 </script>
- 
-<script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
-<script type="text/javascript"   src="../core/js/api_fetch.js"></script>
+    
+<script type="text/javascript"   src="../core/js/grid.js">          </script>
+<script type="text/javascript"   src="../core/js/ConfigManager.js"> </script>
+<script type="text/javascript"   src="../core/js/api_fetch.js">     </script>
 
 <script>
-function setupAPIParams( observerConfig ) {
-
-   let api_params = '';
-
-   // default these to what's in the config even though the state sometimes
-   // holds the same attributes for other components.
-   api_params += ('?project_id='+observerConfig.insectProject || observerConfig.project);
-   if( observerConfig.userId          ) { api_params += '&user_id='  + observerConfig.userId; }
-   if( observerConfig.defaultPlace    ) { api_params += '&place_id=' + observerConfig.defaultPlace; } 
-   if( observerConfig.faunaAPIParams  ) { api_params += observerConfig.faunaAPIParams; }
-
-   // filter by field... uses the plant_id (the taxon_id) for the plant
-   // chosen from the garden list.
-   if( observerConfig.fieldName ) {
-      api_params += '&without_taxon_id='+CONST_WITHOUT_TAXON_PLANTAE; // only interested in visitors to plants here
-      api_params += '&field:'+observerConfig.fieldName+'='+getPlantId(appState);
-   }
- 
-   //api_params += getPlantIdParam(appState, '&taxon_id=');          
-   api_params += getPageParam(appState, '&page=');
-   api_params += '&per_page='+CONST_OBSERVATIONS_OBSERVERS_PER_PAGE;
-
-   return api_params;
-}
-
-class Result {
-  constructor(total_results, per_page, page, recs) {
-    this.total_results = total_results;
-    this.per_page = per_page;
-    this.page = page;
-    this.recs = recs;
-  }
-}
-
-class Record {
-  constructor(count, icon, user_login, species_count, obs_count) {
-    this.count = count;
-    this.icon = icon;
-    this.user_login = user_login;
-    this.species_count = species_count;
-    this.obs_count = obs_count;
-  }
-}
-  
-function storeData( xobj, cache_key ) {
-   let results = xobj.results;
-
-   if (results) {
-      let record_array = [];
-      for( let i=0; i<results.length; i++ ) {
-           const record = new Record((i+1), results[i].user.icon, results[i].user.login, results[i].species_count, results[i].observation_count);
-           record_array.push(record);
-      }
-      const result = new Result( xobj.total_results, xobj.per_page, xobj.page, JSON.stringify(record_array) );
-
-      // Serialize the object to JSON string so it can be stored in session
-      const result_string = JSON.stringify(result);
-      sessionStorage.setItem( cache_key, result_string );
-   }
-   else { faddelem('p',document.body,{innerText:'No results returned.'}); };
-}
-
-function parseStoredData(gardeners) {
-   // Check if value exists before parsing
-   if( gardeners ) {
-       // Parse the string back to an object
-       const retrievedRec = JSON.parse(gardeners);
-       retrievedRec.recs = JSON.parse(retrievedRec.recs);
-       return retrievedRec;
-   } else {
-       console.log("No object found in session storage for key 'myObject'");
-       throw new Error("No object found in session storage.");
-   }
-}
-
+   
 async function gatherResources() {
-  let apibase   = 'https://api.inaturalist.org/v1/observations/observers';
   let json_path = json_root + getParams(appState);
  
   try {
    
       // Await the result of getObservations() and store the actual data
-      const observerConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
-      console.log('full config title: ' + observerConfig.getFullTitle());
-      const api_params    = setupAPIParams( observerConfig );
-      const api_url       = apibase+api_params;
+      const observersConfig   = await asyncGetConfiguration( json_path, getComponent(appState) );
+      console.log('full config title: ' + observersConfig.getFullTitle());
+      const api_params     = setupAPIParams( observersConfig );
+      const api_url        = api_base+api_params;
       console.log('api url: ' + api_url);
-      // fetch and store in session 
-      const obs_data = await apiFetch( api_url );
-
+      const obs_data       = await apiFetch( api_url ); 
+     
       // Pass the data to the buildPage function
-      buildPage( obs_data ); 
+      buildPage(obs_data, observersConfig); 
 
     } catch (error) {
       console.error("An error occurred:", error);
@@ -243,7 +139,7 @@ if( message ) {
 } else {
     gatherResources(); 
 }
- 
+   
 </script>
 </body>
 </html>
