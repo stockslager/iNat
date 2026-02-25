@@ -53,7 +53,7 @@ function buildMenu( config ) {
 
    // if life stages (ls) option was chosen for map type was set in the config and 
    // they've chosen Butterflies from the drop-down or have chosen a butterfly from the list
-   if( observersConfig.mapType === 'ls' && ( getLSTaxonId(appState) === '47157' || getTaxonId(appState) === '47157' ) ) {  
+   if( config.mapType === 'ls' && ( getLSTaxonId(appState) === '47157' || getTaxonId(appState) === '47157' ) ) {  
     let links = [];
     
     let mapLink  = faddelem('a', null, { href: '../admin/map.html' + setupAPIParams(config) + CONST_MAP_CENTER + getMapZoom(config), textContent: 'Standard Map' });
