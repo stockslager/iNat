@@ -77,29 +77,29 @@ function buildMenu( config ) {
   faddelem('p', document.body).appendChild(navbar);
 }
 
-function buildPage(data, observersConfig) {  
-   faddelem('p',document.body,{innerHTML:buildMenu(observersConfig)}); 
+function buildPage(data, config) {  
+   buildMenu(config); 
 
    // append the params needed by the grid to build the url for outlinks to iNat.
-   let inat_params = setupAPIParams(observersConfig);
+   let inat_params = setupAPIParams(config);
                                     
-   //buildGrid(data, inat_params);    
+   buildGrid(data, inat_params);    
 };
 
-function setupAPIParams( observersConfig ) {
+function setupAPIParams( config ) {
     
     let api_params = '';
 
-    api_params += '?project_id='+observersConfig.insectProject;
+    api_params += '?project_id='+config.insectProject;
     api_params += getTaxonIdParam(appState, '&taxon_id='); 
 
     // possibly the place_id will need to come from the session eventually...
     // if there's a garden with multiple places.
-    if( observersConfig.defaultPlace    ) { api_params += '&place_id=' + observersConfig.defaultPlace; }  
+    if( config.defaultPlace    ) { api_params += '&place_id=' + config.defaultPlace; }  
     if( getUser(appState)               ) { api_params += '&user_id='  + getUser(appState); }  
-    if( observersConfig.faunaAPIParams  ) { api_params += observersConfig.faunaAPIParams; }
+    if( config.faunaAPIParams  ) { api_params += config.faunaAPIParams; }
   
-    api_params += '&field:'+observersConfig.fieldName+'=' + getPlantId(appState);
+    api_params += '&field:'+config.fieldName+'=' + getPlantId(appState);
 
     return api_params;
 }
@@ -110,15 +110,15 @@ async function gatherResources() {
   try {
    
       // Await the result of getObservations() and store the actual data
-      const observersConfig   = await asyncGetConfiguration( json_path, getComponent(appState) );
-      console.log('full config title: ' + observersConfig.getFullTitle());
-      const api_params     = setupAPIParams( observersConfig );
+      const config   = await asyncGetConfiguration( json_path, getComponent(appState) );
+      console.log('full config title: ' + config.getFullTitle());
+      const api_params     = setupAPIParams( config );
       const api_url        = api_base+api_params;
       console.log('api url: ' + api_url);
       const obs_data       = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
-      buildPage(obs_data, observersConfig); 
+      buildPage(obs_data, config); 
 
     } catch (error) {
       console.error("An error occurred:", error);
