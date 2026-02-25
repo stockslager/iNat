@@ -159,6 +159,7 @@ class ConfigManager {
         this.plantIds        = jsonData.plant_ids;
         this.plantListUserId = jsonData.plant_list_user_id;
         this.usePlantProjectImages = jsonData.use_plant_project_images;
+        this.defaultMapZoom  = jsonData.default_map_zoom;
     }
 
     getConfigByComponent(componentName) {
@@ -223,6 +224,9 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
               }
               if( !finalConfigInstance.usePlantProjectImages ) {
                   if( managerInstance.usePlantProjectImages ) { finalConfigInstance.usePlantProjectImages = managerInstance.usePlantProjectImages; }
+              }
+              if( !finalConfigInstance.defaultMapZoom ) {
+                  if( managerInstance.defaultMapZoom ) { finalConfigInstance.defaultMapZoom = managerInstance.defaultMapZoom; }
               }
               
               return finalConfigInstance; 
@@ -297,6 +301,9 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
         }
         if( !finalConfigInstance.usePlantProjectImages ) {
             if( managerInstance.usePlantProjectImages ) { finalConfigInstance.usePlantProjectImages = managerInstance.usePlantProjectImages; }
+        }
+        if( !finalConfigInstance.defaultMapZoom ) {
+            if( managerInstance.defaultMapZoom ) { finalConfigInstance.defaultMapZoom = managerInstance.defaultMapZoom; }
         }
       
         return finalConfigInstance; 
