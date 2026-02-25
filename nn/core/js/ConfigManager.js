@@ -1,9 +1,3 @@
-const CONST_CONFIGS_OBJ_PLANTS = 'plants';
-const CONST_CONFIGS_OBJ_COLONIES  = 'colonies'; 
-const CONST_CONFIGS_OBJ_HIKER  = 'hiker'; 
-const CONST_CONFIGS_OBJ_YARD   = 'yard'; 
-const CONST_CONFIGS_OBJ_ART    = 'art';  
-
 /**
  * Represents a single place entry.
  */
@@ -103,10 +97,6 @@ class ConfigurationItem {
         if (isNullOrEmpty(this.component)) {
             console.warn('Component is missing for an entry. Defaulting.');
             this.component = 'default-component'; // Provide a safe default
-        }
-        
-        if (this.component === CONST_CONFIGS_OBJ_HIKER && isNullOrEmpty(this.project)) {
-            console.warn('Hiker component is missing required "project" attribute. Setting default.');
         }
     }
 
