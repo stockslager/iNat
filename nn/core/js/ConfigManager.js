@@ -122,14 +122,6 @@ class ConfigurationItem {
         return `${this.title} (${this.component})`;
     }
 
-    getMapZoom( config ) {
-        if( config.defaultMapZoom ) {
-            return( '&defaultzoom='+config.defaultMapZoom );
-        } else {
-            return '';
-        }
-    }
-
     // find the taxon name given the taxon_id in the list of sub_icons in the configuration
     getSubIconNameByTaxonId( plantsConfig, taxon_id ) {
         let sub_icon_name = '';
@@ -147,6 +139,15 @@ class ConfigurationItem {
     
         return sub_icon_name;
     }
+}
+
+// helpers for ConfigurationItem()
+function getMapZoom( config ) {
+  if( config.defaultMapZoom ) {
+      return( '&defaultzoom='+config.defaultMapZoom );
+  } else {
+      return '';
+  }
 }
 
 /**
