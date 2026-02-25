@@ -133,8 +133,10 @@ class ConfigurationItem {
 
 // helpers for ConfigurationItem()
 function getMapZoom( config ) {
+  // the geocoodinates to center the map should only be used when a default zoom is set.
+  // if the coordinates are used without a default zoom it defaults to zoom all the way out.
   if( config.defaultMapZoom ) {
-      return( '&defaultzoom='+config.defaultMapZoom );
+      return( CONST_MAP_CENTER + '&defaultzoom=' + config.defaultMapZoom );
   } else {
       return '';
   }
