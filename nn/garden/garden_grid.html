@@ -45,7 +45,7 @@ var recsmax      = columns * rows - 1;
 
 winurlparams.append('per_page',recsmax);
 
-function buildMenu(plantsConfig) {
+function buildMenu(config) {
 
    let links = '';
    let menu_string = '';
@@ -58,9 +58,9 @@ function buildMenu(plantsConfig) {
    menu_string = '<div class="navbar">';
 
    if( config.mapType !== 'hide' ) {
-       menu_string += buildMenuURL( furl('../admin/map.html'+setupAPIParams(plantsConfig),"Map") );
+       menu_string += buildMenuURL( furl('../admin/map.html'+setupAPIParams(config),"Map") );
    }
-   //menu_string += buildMenuURL( furl('../admin/layered_map.html'+buildParameterList(appState)+'&project_id='+plantsConfig.insectProject,"Map") );
+   //menu_string += buildMenuURL( furl('../admin/layered_map.html'+buildParameterList(appState)+'&project_id='+config.insectProject,"Map") );
    
    let url_state = clearForSpeciesCountsParams( appState );
    
@@ -70,31 +70,31 @@ function buildMenu(plantsConfig) {
    return menu_string;
 }
 
-function buildPage(data, plantsConfig) {  
-   faddelem('p',document.body,{innerHTML:buildMenu(plantsConfig)}); 
+function buildPage(data, config) {  
+   faddelem('p',document.body,{innerHTML:buildMenu(config)}); 
    
    // append the params needed by the grid to build the url for outlinks to iNat.
-   let inat_url = setupAPIParams(plantsConfig);
+   let inat_url = setupAPIParams(config);
                                     
    buildGrid(data, inat_url);    
 };
 
-function setupAPIParams( plantsConfig ) {
+function setupAPIParams( config ) {
     
     let api_params = '';
 
-    api_params += '?project_id='+plantsConfig.insectProject;
+    api_params += '?project_id='+config.insectProject;
     api_params += getTaxonIdParam(appState, '&taxon_id='); 
 
-    if( plantsConfig.userId )         { api_params += '&user_id='  + plantsConfig.userId; }  
-    if( plantsConfig.faunaAPIParams ) { api_params += plantsConfig.faunaAPIParams; }
+    if( config.userId )         { api_params += '&user_id='  + config.userId; }  
+    if( config.faunaAPIParams ) { api_params += config.faunaAPIParams; }
 
     // if a place_id was chosen from the place drop-down, use that place_id...
     if( getPlaceMenuId(appState) ) {
         api_params += '&place_id=' + getPlaceMenuId(appState);
     }
   
-    api_params += '&field:'+plantsConfig.fieldName+'=' + getPlantId(appState);
+    api_params += '&field:'+config.fieldName+'=' + getPlantId(appState);
 
     return api_params;
 }
@@ -112,15 +112,15 @@ async function gatherResources() {
   try {
    
       // Await the result of getObservations() and store the actual data
-      const plantsConfig   = await asyncGetConfiguration( json_path, getComponent(appState) );
-      console.log('full config title: ' + plantsConfig.getFullTitle());
-      const api_params     = setupAPIParams( plantsConfig );
+      const config   = await asyncGetConfiguration( json_path, getComponent(appState) );
+      console.log('full config title: ' + config.getFullTitle());
+      const api_params     = setupAPIParams( config );
       const api_url        = api_base+api_params;
       console.log('api url: ' + api_url);
       const obs_data       = await apiFetch( api_url ); 
      
       // Pass the data to the buildPage function
-      buildPage(obs_data, plantsConfig); 
+      buildPage(obs_data, config); 
 
     } catch (error) {
       console.error("An error occurred:", error);
