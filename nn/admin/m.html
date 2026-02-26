@@ -785,6 +785,16 @@ winurlparams.delete('thresholded');
 let compareurlparams = new URLSearchParams(winurlparams);
 if (compexclparam) { for (p of compexclparam.split(',')) { compareurlparams.delete(p); }; };
 
+/*function buildNavHome( navbar, baseUrl=null, homeState=null ) {
+    if( !baseUrl )   { baseUrl = '../admin/dashboard.html'; }
+    if( !homeState ) { homeState = clearForDashParams(appState); }
+    
+    let homeUrl = baseUrl + buildParameterList(homeState);
+    let homeDiv = faddelem('div', navbar, { id: 'home' });
+    let hLink = faddelem('a', homeDiv, { href: homeUrl });
+    faddelem('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
+}*/
+
   // Create the main navbar container
   appState       = buildStateFromParams(winurlparams);
   let navbar = document.createElement('div');    
@@ -804,8 +814,9 @@ if (compexclparam) { for (p of compexclparam.split(',')) { compareurlparams.dele
   }
 	  
   buildNavHome( navbar, homeUrl, appState );
-  
-  faddelem('p', document.body).appendChild(navbar);
+
+  document.body.prepend(navbar);
+  //faddelem('p', document.body).appendChild(navbar);
 
 function fdate(str) {
    str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
