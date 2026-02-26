@@ -59,7 +59,7 @@ function buildMenu(config) {
 
    console.log('mt ' + config.mapType);
    if( config.mapType !== 'hide' ) {
-       menu_string += buildMenuURL( furl('../admin/map.html' + setupAPIParams(config)  + getMapZoom(config), "Map") );
+       menu_string += buildMenuURL( furl('../admin/map.html' + setupAPIParams(config)  + getMapZoom(config) + '&params=' + getParams(appState), "Map") );
    }
    //menu_string += buildMenuURL( furl('../admin/layered_map.html'+buildParameterList(appState)+'&project_id='+config.insectProject,"Map") );
    
