@@ -1,24 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html> 
+<html lang="en">  
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="apple-mobile-web-app-title" content="Observations Map" />
 <meta name="description" content="Observations Map" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
 <link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
 <link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
 <link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
 <link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
 <title>Observations Map</title>
 <style>
-   body { height:100vh; width:100vw; margin:0px; font:10pt Sans-Serif;}
-   #mapid { height:100vh; width:100vw; position:absolute; top:0vh; left:0vw; background:darkgray; }
-   #info { padding:15px; }
-   h1 { margin-top:0px; }
-   a { text-decoration:none; }
+/* New Header Bar - Replaces .navbar.v2-menu */
+.header-bar {
+   height: 44px;
+   max-width: 700px;
+   /* Match width and alignment exactly to the map */
+   width: calc(95vw - 8px); 
+   margin-left: 8px;           /* Anchors to the left edge */
+   margin-right: auto;         /* Prevents right-side pushing */
+   margin-top: 10px;
+   
+   background-color: var(--color-brand);  
+   border-radius: 5px;         
+   display: flex;              
+   justify-content: flex-end;  /* Icon to the right */
+   align-items: center;        
+   position: relative;
+   z-index: 2000;
+   box-sizing: border-box;
+   overflow: hidden;           
+}
+.header-bar {
+   height: 44px;
+   max-width: 700px;
+   /*width: 95vw;*/
+   width: calc(95vw - 18px); 
+   margin-left: 8px;           /* Anchors to the left edge */
+   margin-right: auto;         /* Prevents right-side pushing */
+   margin: 10px 0 0 8px;       
+   background-color: var(--color-brand);  
+   border-radius: 5px;         
+   display: flex;              
+   justify-content: flex-end;  
+   align-items: center;        
+   position: relative;
+   z-index: 2000;
+   box-sizing: border-box;
+   /*border: 1px solid #ddd; */    
+   overflow: hidden;           /* Essential: Clips hover shading to rounded corners */
+}
+
+#home-link { 
+   padding: 0 25px;            
+   height: 100%;               /* Fills the full height of the bar */
+   display: flex;
+   align-items: center;        /* Centers icon vertically */
+   text-decoration: none;
+   cursor: pointer;
+   color: inherit;             
+   transition: background 0.2s;/* Smoothly fades the hover effect */
+}
+
+#home-link:hover {
+   background-color: black;  /* Subtle darker grey shading */
+}
+
+#mapid { 
+   max-width: 700px;
+   /*width: 95vw;*/
+   width: calc(95vw - 18px);    /* Match the header bar width exactly */
+   top: 60px;                  /* Header(44) + Margin(10) + Gap(6) */
+   left: 8px;
+   height: calc(100vh - 70px); 
+   position: absolute;
+   z-index: 1;
+   border-radius: 5px; 
+}
+body {
+   margin: 0;
+   padding: 0;
+}
 </style>
 
+<script type="text/javascript"   src='../core/js/common_functions.js'> </script>
+<script type="text/javascript"   src='../core/js/store.js'> </script>
+	
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
@@ -92,6 +162,7 @@ L.TileLayer.USGS = L.TileLayer.extend({
       this._container.style.filter = this.styleFilter();
    },
 });
+	
 L.tileLayer.usgs = function (url, options) {
    return new L.TileLayer.USGS(url, options);
 };
@@ -760,6 +831,7 @@ var showplace = winurlparams.get('showplace') || 'false';
 var view = winurlparams.get('view') || 'default';
 var compexclparam = winurlparams.get('compare_exclude_param');
 var thresholded = winurlparams.get('thresholded') || 'true'; // even though the default in the API is false, set the default to true, since we're going to usually want to see Expected Nearby rather than Unthresholded
+var appParams = winurlparams.get('params') || '';	
 
 winurlparams.delete('centerlat');
 winurlparams.delete('centerlng');
@@ -775,6 +847,42 @@ winurlparams.delete('thresholded');
 let compareurlparams = new URLSearchParams(winurlparams);
 if (compexclparam) { for (p of compexclparam.split(',')) { compareurlparams.delete(p); }; };
 
+// Local helper to ensure innerHTML works for icons
+function faddelemLocal(type, parent, props) {
+    let el = document.createElement(type);
+    if (props.innerHTML) el.innerHTML = props.innerHTML;
+    if (props.id) el.id = props.id;
+    if (props.href) el.href = props.href;
+    if (props.className) el.className = props.className;
+    parent.appendChild(el);
+    return el;
+}
+
+// Create the main header bar
+let headerBar = document.createElement('div');    
+headerBar.className = 'header-bar'; 
+
+// add a fallback in case they entered this page directly thereby bypassing the ui flow.
+function goBackWithFallback(fallbackUrl) {
+    // If history length is 1 or 2, they likely just arrived or have no previous page in this session
+    if (window.history.length <= 1) {
+        window.location.href = fallbackUrl;
+    } else {
+        window.history.back();
+    }
+}
+
+// Create the home link inside the header bar
+// add a fallback in case they entered this page directly thereby bypassing the ui flow.
+let dashboardUrl = '../admin/dashboard.html?params='+appParams; 
+let hLink = faddelemLocal('a', headerBar, { href: `javascript:goBackWithFallback('${dashboardUrl}');`, id: 'home-link' });	
+	
+// Add the leaf icon
+faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
+
+// Add to the top of the page
+document.body.prepend(headerBar);
+	
 function fdate(str) {
    str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
    str = str.replace(/([+-]\d{2}\:?\d{2})/,' ($1)'); //puts parenthesis around time zone offset
