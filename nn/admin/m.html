@@ -867,8 +867,7 @@ function faddelemLocal(type, parent, props) {
 let headerBar = document.createElement('div');    
 headerBar.className = 'header-bar'; // Use the new class
 
-
-// Add this helper to your script
+// add a fallback in case they entered this page directly thereby bypassing the ui flow.
 function goBackWithFallback(fallbackUrl) {
     // If history length is 1 or 2, they likely just arrived or have no previous page in this session
     if (window.history.length <= 1) {
@@ -878,20 +877,12 @@ function goBackWithFallback(fallbackUrl) {
     }
 }
 	
-// Update your link creation line:
-let dashboardUrl = '../admin/dashboard.html?params='+appParams; // Set your default fallback here
+// add a fallback in case they entered this page directly thereby bypassing the ui flow.
+let dashboardUrl = '../admin/dashboard.html?params='+appParams; 
 let hLink = faddelemLocal('a', headerBar, { href: `javascript:goBackWithFallback('${dashboardUrl}');`, id: 'home-link' });	
 	
-
-// Logic for URL selection (Kept your existing logic)
-let homeUrl = 'javascript:history.back();'; 
-
-// Create the link directly inside the header bar
-// No 'homeDiv' wrapper used here to keep it lean
-let hLink = faddelemLocal('a', headerBar, { 
-    href: homeUrl, 
-    id: 'home-link' 
-});
+// Create the home link inside the header bar
+let hLink = faddelemLocal('a', headerBar, { href: homeUrl, id: 'home-link' });
 
 // Add the leaf icon
 faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
