@@ -13,39 +13,47 @@
 <link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
 <title>Observations Map</title>
 <style>
-/* This makes the navbar and map stack correctly on mobile and desktop */
+/* 1. Force the Navbar height and fix the right-side shading */
 .navbar.v2-menu {
-   flex: 0 0 40px !important; /* Forces 40px height, no matter what */
+   height: 40px !important;    /* Forces the slim look */
+   min-height: 40px !important;
    max-width: 700px;
-   width: 100%;
-   margin-bottom: 10px;       /* Gap between bar and map */
-   background: #eee;
-   display: flex !important;  /* Flex makes centering easy */
-   justify-content: flex-end;
-   padding: 0 !important;
-   overflow: hidden;
+   width: 95vw;
+   margin: 0 0 0 8px;          /* Left-justified */
+   position: relative;
+   z-index: 2000;
+   display: block;             /* Essential for the float below */
+   overflow: hidden;           /* Clips any global padding leaks */
 }
 
-#home a {
-   display: flex;
-   align-items: center;
-   height: 40px;
-   padding: 0 25px !important; /* Wide black hover box */
+/* 2. Position the container on the far right edge */
+#home { 
+   float: right; 
+   margin-right: 0 !important; /* Removes the gap so shading hits the edge */
+}
+
+/* 3. Fix the "Skinny" and "Off-Center" hover box */
+#home a { 
+   padding: 0 25px !important; /* THE FIX: 0 top/bottom shrinks it, 25px width makes it wide */
+   height: 40px;               /* Matches navbar */
+   line-height: 40px;          /* Vertically centers the leaf icon */
    cursor: pointer !important;
+   display: inline-block;
    text-decoration: none;
 }
 
-#home a:hover {
-   background-color: black; /* Your global hover style */
-}
-
-#mapid {
-   flex: 1;                   /* Tells map to take up ALL remaining space */
+/* 4. Match the Map to the new 40px height */
+#mapid { 
    max-width: 700px;
-   width: 100%;
-   border-radius: 5px;
-   position: relative;        /* Leaflet requires relative, not absolute here */
-}</style>
+   width: 95vw;
+   top: 55px;                  /* Body padding(10) + Navbar(40) + Small Gap(5) */
+   left: 8px;
+   height: calc(100vh - 65px); /* Subtracts top(55) + 10px bottom room */
+   position: absolute;
+   z-index: 1;
+   border-radius: 5px; 
+}
+</style>
 
 <script type="text/javascript"   src='../core/js/common_functions.js'> </script>
 <script type="text/javascript"   src='../core/js/store.js'> </script>
@@ -769,14 +777,8 @@ L.gridLayer.utfGridCompare = function (options) {
 
 </script>
 </head>
-<body style="display: flex; flex-direction: column; height: 100vh; margin: 0; padding: 10px; box-sizing: border-box;">
+<body>
 
-   <nav id="nav-container" class="navbar v2-menu">
-      <!-- Your JavaScript buildNavHomeLocal() will put the leaf here -->
-   </nav>
-
-   <div id="mapid"></div>
-	
 <script>
 //get parameters from the url
 let winurlstr = window.location.href;
