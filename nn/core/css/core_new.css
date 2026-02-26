@@ -27,24 +27,16 @@
    }
 }
 
-/* --- UPDATED RESPONSIVE CORE --- */
-/* Changed width logic so navbar stretches to match wide tables */
+/* --- THE ULTIMATE STRETCH FIX --- */
+/* Forces everything to grow with the widest element (the table) */
 #main, .rl-box-bar, .navbar, #grid, dl, p {
-  display: block;               /* Changed from flex/inline to block for container logic */
-  width: fit-content !important; /* Allows bar to grow with table content */
-  min-width: 100% !important;    /* Ensures it is at least screen-width */
-  max-width: 700px !important;   /* Limits width on PC */
-  margin-inline: auto !important; /* Centers the whole stack on PC */
+  display: table !important;     /* KEY: Elements now grow to match the widest sibling */
+  width: 100% !important;        /* At least full screen */
+  min-width: 100% !important; 
+  max-width: 700px !important;   /* Centers at 700px on large PC monitors */
+  margin-inline: auto !important; 
   box-sizing: border-box;
-}
-
-/* Force Table to stay wide and not squish */
-table {
-  width: 100%;
-  min-width: max-content;        /* This "pushes" the containers wide if needed */
-  border-collapse: collapse;
-  margin: 0;
-  padding: 10px;
+  border-spacing: 0;             /* Prevents 'table' display gaps */
 }
 
 /* Mobile Breathing Room */
@@ -56,6 +48,7 @@ table {
 }
 
 /* --- HEADER & BOXES --- */
+/* Use flex !important to override the 'display: table' set above */
 .rl-box-bar { display: flex !important; justify-content: space-between; align-items: stretch; gap: 10px; }
 #lbox { display: inline-flex; white-space: nowrap; border: 2px solid var(--color-border); border-radius: 5px; padding: 3px 8px 5px 8px; box-sizing: border-box; }
 #upperright { display: inline-flex; justify-content: flex-end; white-space: nowrap; padding: 0; }
@@ -64,24 +57,33 @@ table {
 #key { color:var(--color-text-link); }
 #home { font-size:16px; margin-left:auto; }
 #error { margin-top:50px; border: 2px solid var(--color-border); border-radius: 5px; padding: 8px; display: block; width: fit-content; }
-#tableheaderright { vertical-align:middle; float:right; padding: 32px 15px 0 5px; }
 
 dl { background:var(--color-alt); display: grid; grid-template-columns: max-content; border: 1px solid var(--color-border); border-width: 1px 0; padding: 10px; }
 dd { margin: 0; grid-column-start: 2;} 
 
-th { position:sticky; top:0; font-weight:400; font-size:14px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; z-index: 10; }
+/* TABLE: The 'Master' of the page width */
+table {
+  display: table;
+  width: 100%;
+  min-width: max-content;        /* Forces the table to stay wide and push the navbar */
+  border-collapse: collapse;
+  margin: 0;
+}
+
+th { position:sticky; top:0; font-weight:400; font-size:14px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; z-index: 10; padding: 10px; }
 th:first-child{ border-radius: 5px 0 0 0; }
 th:last-child{ border-radius: 0 5px 0 0; }
 tbody>tr { border: 1px solid var(--color-border); border-width: 1px 0; background:var(--color-alt); }
+td { padding: 10px; }
 
 /* --- NAVIGATION --- */
 .navbar {
-  display: flex !important;      /* Forces flex inside the block container */
+  display: flex !important;      /* Forces flex for internal links */
   align-items: stretch;
   height: 44px;
   background-color: var(--color-brand);
   border-radius: 5px;
-  overflow: visible;             /* Essential for dropdown visibility */
+  overflow: visible;             /* So dropdowns show */
 }
 
 .navbar a, .dd_title, .dropbtn {
@@ -103,7 +105,7 @@ tbody>tr { border: 1px solid var(--color-border); border-width: 1px 0; backgroun
 .dropdown-content {
   display: none;
   position: absolute;
-  top: 44px;                     /* Sticks menu to bottom of bar */
+  top: 44px;
   background-color: var(--color-base);
   min-width: 160px;
   box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
@@ -120,4 +122,5 @@ tbody>tr { border: 1px solid var(--color-border); border-width: 1px 0; backgroun
 
 a { text-decoration:none; color:var(--color-text-link); }
 a:hover { background:var(--color-hover); }
+
 
