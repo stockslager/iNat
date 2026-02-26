@@ -29,14 +29,14 @@
 }
 
 /* --- 2. THE FINAL ALIGNMENT CORE --- */
-/* Every major container uses the exact same width rules for perfect alignment */
+/* Everything uses the exact same width rules for perfect alignment */
 #main, .rl-box-bar, .navbar, #grid, dl, p, table {
-  display: block;
+  display: block;               /* Changed to block for consistent width calculation */
   width: 100%;                  /* Fills screen on mobile */
-  max-width: 700px;             /* Desktop limit for "decent" PC look */
-  margin-left: auto;            /* Standard centering logic */
+  max-width: 700px;             /* Desktop limit */
+  margin-left: auto;            /* Centering */
   margin-right: auto;
-  box-sizing: border-box;       /* Essential for padding math */
+  box-sizing: border-box;       
 }
 
 /* Mobile Breathing Room */
@@ -69,7 +69,14 @@
 dl { background:var(--color-alt); display: grid; grid-template-columns: max-content; border: 1px solid var(--color-border); border-width: 1px 0; padding: 10px; }
 dd { margin: 0; grid-column-start: 2;} 
 
-table { display: table; border-collapse: collapse; margin: 0; }
+/* TABLE FIX: Explicitly set display: table and width: 100% to fill the 700px max-width */
+table { 
+  display: table; 
+  width: 100%; 
+  border-collapse: collapse; 
+  margin-left: auto; 
+  margin-right: auto; 
+}
 th { position:sticky; top:0; font-weight:400; font-size:14px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; z-index: 10; padding: 10px; }
 th:first-child{ border-radius: 5px 0 0 0; }
 th:last-child{ border-radius: 0 5px 0 0; }
@@ -78,17 +85,17 @@ td { padding: 10px; }
 
 /* --- 5. NAVIGATION --- */
 .navbar {
-  display: flex !important;     /* Restores links in a row inside the container */
+  display: flex !important;     
   align-items: stretch;
-  height: 44px;                 /* Fixed height for accessibility */
+  height: 44px;                 
   background-color: var(--color-brand);
   border-radius: 5px;
-  overflow: visible;             /* Essential for dropdown menus */
+  overflow: visible;             
 }
 
 .navbar a, .dd_title, .dropbtn {
   display: flex;
-  align-items: center;          /* Centers text vertically in the 44px height */
+  align-items: center;          
   height: 100%;
   padding: 0 14px;
   font-size: 15px;
@@ -106,7 +113,7 @@ td { padding: 10px; }
 .dropdown-content {
   display: none;
   position: absolute;
-  top: 44px;                     /* Anchors menu exactly below the bar */
+  top: 44px;                     
   background-color: var(--color-base);
   min-width: 160px;
   box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
@@ -122,4 +129,5 @@ td { padding: 10px; }
 
 a { text-decoration:none; color:var(--color-text-link); }
 a:hover { background:var(--color-hover); }
+
 
