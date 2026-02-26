@@ -10,6 +10,7 @@
 <link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
 <link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
 <link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
 <title>Observations Map</title>
 <style>
    body { height:100vh; width:100vw; margin:0px; font:10pt Sans-Serif;}
@@ -739,7 +740,9 @@ L.gridLayer.utfGridCompare = function (options) {
 </script>
 </head>
 <body>
-
+<script type="text/javascript"   src='../core/js/common_functions.js'> </script>
+<script type="text/javascript"   src='../core/js/store.js'> </script>
+	
 <script>
 //get parameters from the url
 let winurlstr = window.location.href;
@@ -774,6 +777,27 @@ winurlparams.delete('thresholded');
 
 let compareurlparams = new URLSearchParams(winurlparams);
 if (compexclparam) { for (p of compexclparam.split(',')) { compareurlparams.delete(p); }; };
+
+  // Create the main navbar container
+  appState       = buildStateFromParams(winurlparams);
+  let navbar = document.createElement('div');    
+  navbar.className = 'navbar v2-menu';
+
+  // Build the Home Link
+  let homeUrl = '';
+  if( getComponent(appState) === COMPONENT_OBSERVERS ) {
+	  homeUrl = './observer_grid.html';
+  } else if( getComponent(appState) === COMPONENT_GARDEN ) {
+	  homeUrl = './garden_grid.html';
+  } else if( getComponent(appState) === COMPONENT_ANIMALS || getComponent(appState) === COMPONENT_HIKER ) {
+	  homeUrl = './obs_grid.html';
+  } else {
+	  homeUrl = './colony_descendants_grid.html';
+  }
+	  
+  buildNavHome( navbar, homeUrl, appState );
+  
+  faddelem('p', document.body).appendChild(navbar);
 
 function fdate(str) {
    str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
