@@ -5,7 +5,14 @@ const CONST_PAGE           = 'page: ';           // common api results header
 const CONST_PER_PAGE       = 'per page: ';       // common api results header
 const CONST_ON             = 'On ';
 const CONST_ALL_PLANTS     = 'All Plants';
-const CONST_LS_MAP_EXTENT = { nelat:39.13652110135628,nelng:-84.3476428020592,swlat:39.12904776433699,swlng:-84.35708417779162 }; 
+
+// over cnc
+const CONST_MAP_CENTER      = '&centerlat=39.125110765542274&centerlng=-84.2456670686007';   
+const CONST_LS_MAP_EXTENT   = { nelat:39.13893773451089,nelng:-84.2301281663201,swlat:39.112503771727305,swlng:-84.26446044171072 };
+
+// over horizon
+//const CONST_MAP_CENTER      = '&centerlat=39.133784221824364&centerlng=-84.352573347849';   
+//const CONST_LS_MAP_EXTENT   = { nelat:39.13652110135628,nelng:-84.3476428020592,swlat:39.12904776433699,swlng:-84.35708417779162 }; 
 
 // show menu
 const CONST_ALL            = 'all';              // common show drop down label
