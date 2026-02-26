@@ -27,29 +27,42 @@
    }
 }
 
-/* --- THE ULTIMATE STRETCH FIX --- */
-/* Forces everything to grow with the widest element (the table) */
+/* --- CLEAN RESPONSIVE CORE --- */
+/* This centers the 'app' on PC but allows stretching on mobile */
 #main, .rl-box-bar, .navbar, #grid, dl, p {
-  display: table !important;     /* KEY: Elements now grow to match the widest sibling */
-  width: 100% !important;        /* At least full screen */
-  min-width: 100% !important; 
-  max-width: 700px !important;   /* Centers at 700px on large PC monitors */
+  display: flex !important;      /* Use Flex to keep things in a row */
+  flex-direction: column;        /* Stacks internal content vertically if needed */
+  width: min-content !important; /* THE FIX: Allows bar to grow if table is wide */
+  min-width: 100% !important;    /* At least full screen width */
+  max-width: 700px !important;   /* Centers at 700px on PC */
   margin-inline: auto !important; 
   box-sizing: border-box;
-  border-spacing: 0;             /* Prevents 'table' display gaps */
+}
+
+/* TABLE: The Master Width */
+table {
+  width: 100%;
+  min-width: max-content;        /* This forces the table to stay wide and push the navbar */
+  border-collapse: collapse;
+  margin: 0;
 }
 
 /* Mobile Breathing Room */
 @media (max-width: 700px) {
   #main, .navbar, .rl-box-bar, p {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }
 
 /* --- HEADER & BOXES --- */
-/* Use flex !important to override the 'display: table' set above */
-.rl-box-bar { display: flex !important; justify-content: space-between; align-items: stretch; gap: 10px; }
+.rl-box-bar { 
+  display: flex !important; 
+  flex-direction: row !important; /* Overrides the column above */
+  justify-content: space-between; 
+  align-items: stretch; 
+  gap: 10px; 
+}
 #lbox { display: inline-flex; white-space: nowrap; border: 2px solid var(--color-border); border-radius: 5px; padding: 3px 8px 5px 8px; box-sizing: border-box; }
 #upperright { display: inline-flex; justify-content: flex-end; white-space: nowrap; padding: 0; }
 
@@ -61,15 +74,6 @@
 dl { background:var(--color-alt); display: grid; grid-template-columns: max-content; border: 1px solid var(--color-border); border-width: 1px 0; padding: 10px; }
 dd { margin: 0; grid-column-start: 2;} 
 
-/* TABLE: The 'Master' of the page width */
-table {
-  display: table;
-  width: 100%;
-  min-width: max-content;        /* Forces the table to stay wide and push the navbar */
-  border-collapse: collapse;
-  margin: 0;
-}
-
 th { position:sticky; top:0; font-weight:400; font-size:14px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; z-index: 10; padding: 10px; }
 th:first-child{ border-radius: 5px 0 0 0; }
 th:last-child{ border-radius: 0 5px 0 0; }
@@ -78,12 +82,14 @@ td { padding: 10px; }
 
 /* --- NAVIGATION --- */
 .navbar {
-  display: flex !important;      /* Forces flex for internal links */
+  display: flex !important;      /* Inner flex for links */
+  flex-direction: row !important; /* Links in a row */
   align-items: stretch;
   height: 44px;
   background-color: var(--color-brand);
   border-radius: 5px;
-  overflow: visible;             /* So dropdowns show */
+  overflow: visible;             /* Dropdowns work now */
+  flex-shrink: 0;                /* Prevents navbar from squishing */
 }
 
 .navbar a, .dd_title, .dropbtn {
@@ -97,6 +103,7 @@ td { padding: 10px; }
   cursor: pointer;
   background: transparent;
   border: none;
+  white-space: nowrap;           /* Prevents text wrapping */
 }
 
 .dropdown { display: flex; height: 100%; }
@@ -117,7 +124,7 @@ td { padding: 10px; }
 .dropdown-content a { color: var(--color-text) !important; display: block; text-align: left; padding: 10px 14px; }
 
 /* --- GRID SYSTEM --- */
-#grid { position:relative; padding:0; border:0; }
+#grid { position:relative; padding:0; border:0; width: 100%; }
 .gridcell { position:absolute; background:#cccccc; display:flex; justify-content:center; align-items:center; }
 
 a { text-decoration:none; color:var(--color-text-link); }
