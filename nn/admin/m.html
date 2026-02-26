@@ -797,6 +797,26 @@ if (compexclparam) { for (p of compexclparam.split(',')) { compareurlparams.dele
     faddelem('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
 }*/
 
+// Local helper to ensure innerHTML works for icons
+function faddelemLocal(type, parent, props) {
+    let el = document.createElement(type);
+    if (props.innerHTML) el.innerHTML = props.innerHTML;
+    if (props.id) el.id = props.id;
+    if (props.href) el.href = props.href;
+    parent.appendChild(el);
+    return el;
+}
+
+function buildNavHomeLocal( navbar, baseUrl=null, homeState=null ) {
+    if( !baseUrl )   { baseUrl = '../admin/dashboard.html'; }
+    if( !homeState ) { homeState = clearForDashParams(appState); }
+    
+    let homeUrl = baseUrl + buildParameterList(homeState);
+    let homeDiv = faddelem('div', navbar, { id: 'home' });
+    let hLink = faddelem('a', homeDiv, { href: homeUrl });
+    faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
+}
+	
   // Create the main navbar container
   appState       = buildStateFromParams(winurlparams);
   let navbar = document.createElement('div');    
@@ -815,7 +835,7 @@ if (compexclparam) { for (p of compexclparam.split(',')) { compareurlparams.dele
 	  homeUrl = './colony_descendants_grid.html';
   }
 	  
-  buildNavHome( navbar, homeUrl, appState );
+  buildNavHomeLocal( navbar, homeUrl, appState );
 
   document.body.prepend(navbar);
   //faddelem('p', document.body).appendChild(navbar);
