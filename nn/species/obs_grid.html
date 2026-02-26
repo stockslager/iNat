@@ -57,7 +57,7 @@ function buildMenu( config ) {
   if( !getMenuId(appState) && !getTaxonId(appState) ) {
     let links = [];
     
-    let mapLink  = faddelem('a', null, { href: '../admin/map.html' + setupAPIParams(config) + getMapZoom(config), textContent: 'Map' });
+    let mapLink  = faddelem('a', null, { href: '../admin/map.html' + setupAPIParams(config) + getMapZoom(config) + '&params=' + getParams(appState), textContent: 'Map' });
     let timeLink = faddelem('a', null, { href: root_observations + 'torquemap' + setupAPIParams(config) + '&interval=monthly', textContent: 'Time Series' });
 
     links.push(mapLink);
