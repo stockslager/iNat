@@ -834,9 +834,12 @@ function buildNavHomeLocal( navbar, baseUrl=null, homeState=null ) {
   } else {
 	  homeUrl = '../colonies/colony_descendants_grid.html';
   }
-	  
-  buildNavHomeLocal( navbar, homeUrl, appState );
 
+  // just do a history.back() here since we aren't paging through data, it's just a map.
+  let homeDiv = faddelemLocal('div', navbar, { id: 'home' });
+  let hLink   = faddelemLocal('a', homeDiv, { href: 'javascript:history.back();' });
+  faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
+	
   document.body.prepend(navbar);
 
 function fdate(str) {
