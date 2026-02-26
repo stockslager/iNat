@@ -36,23 +36,23 @@ body {
    overflow: hidden;        /* Clips any 'leaking' padding */
 }
 
-/* 3. Vertically Centered Home Icon */
 #home { 
    float: right; 
-   margin-right: 15px; 
-   height: 40px;            /* Matches navbar height */
+   margin-right: 0 !important; /* THE FIX: Remove the margin so the link can touch the edge */
+   height: 40px;
 }
 
 #home a { 
-   padding: 0 25px !important;
-   /*padding: 0 !important;   /* THE FIX: Removes global 12px padding */
-   height: 40px;            /* Container height */
-   line-height: 40px;       /* THE FIX: Vertically centers the icon */
+   /* Top/Bottom: 0 | Left: 20px | Right: 15px (Adjust these for the leaf's position) */
+   padding: 0 15px 0 20px !important; 
+   
+   height: 40px;               /* Matches navbar height */
+   display: flex;              /* Ensures the link fills the full height */
+   align-items: center;        
+   justify-content: center;    
    cursor: pointer !important;
-   display: inline-block;
    text-decoration: none;
 }
-
 /* 4. Responsive Leaflet Map */
 #mapid { 
    max-width: 700px;
