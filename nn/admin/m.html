@@ -15,12 +15,33 @@
 <style>
    body { height:100vh; width:100vw; margin:0px; font:10pt Sans-Serif;}
    /*#mapid { height:100vh; width:100vw; position:absolute; top:0vh; left:0vw; background:darkgray; }*/
+
 #mapid { 
-   height: calc(100vh - 60px); /* Subtract the navbar height */
+   height: calc(100vh - 50px); /* Match the top value */
    position: absolute;
-   top: 50px; /* Push the map down by the navbar height */
+   top: 50px;                 /* Starts below navbar */
    width: 100vw; 
-   z-index: 1; /* Keep it below the navbar */
+   z-index: 1;                /* Lower than navbar */
+}
+
+.navbar.v2-menu {
+   height: 50px;
+   display: flex;             /* Modern layout */
+   justify-content: flex-end; /* Pushes content to the RIGHT */
+   align-items: center;
+   padding: 0 20px;
+   position: relative;        /* Required for z-index */
+   z-index: 2000;             /* Higher than Leaflet's 1000 */
+   background: white;
+}
+
+#home a {
+   cursor: pointer;           /* Forces the "hand" cursor */
+   display: inline-block;
+}
+
+#home {
+    margin-left: auto; /* Pushes just this div to the far right */
 }
 	
    #info { padding:15px; }
