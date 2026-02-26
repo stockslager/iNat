@@ -876,14 +876,12 @@ function goBackWithFallback(fallbackUrl) {
         window.history.back();
     }
 }
-	
+
+// Create the home link inside the header bar
 // add a fallback in case they entered this page directly thereby bypassing the ui flow.
 let dashboardUrl = '../admin/dashboard.html?params='+appParams; 
 let hLink = faddelemLocal('a', headerBar, { href: `javascript:goBackWithFallback('${dashboardUrl}');`, id: 'home-link' });	
 	
-// Create the home link inside the header bar
-let hLink = faddelemLocal('a', headerBar, { href: homeUrl, id: 'home-link' });
-
 // Add the leaf icon
 faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
 
