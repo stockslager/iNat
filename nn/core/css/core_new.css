@@ -27,20 +27,28 @@
    }
 }
 
-/* --- NEW RESPONSIVE CORE (Fixes PC & Mobile) --- */
-#main, .rl-box-bar, .navbar, #grid, table, dl, p {
-  width: 100% !important;
-  min-width: 0 !important;      /* Removed 375px floor */
-  max-width: 700px !important;  /* Your new desktop ceiling */
-  margin-inline: auto !important; /* Centers the 'app' on PC */
+/* --- THE SIMPLIFIED RESPONSIVE CORE --- */
+#main, .rl-box-bar, .navbar, #grid, dl, p {
+  display: block;               /* Back to standard stacking */
+  width: fit-content;           /* KEY: Allows the bar to grow if the table is wide */
+  min-width: 100%;              /* Ensures it's at least full screen on mobile */
+  max-width: 700px;             /* Centers at 700px on PC */
+  margin: 10px auto;            /* Centers the stack on PC */
   box-sizing: border-box;
+}
+
+/* Forces the table to stay wide and not squish */
+table {
+  width: 100%;
+  min-width: max-content;        
+  border-collapse: collapse;
 }
 
 /* Mobile Breathing Room */
 @media (max-width: 700px) {
   #main, .navbar, .rl-box-bar, p {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }
 
@@ -50,77 +58,56 @@
 #upperright { display: inline-flex; justify-content: flex-end; white-space: nowrap; padding: 0; }
 #upperrightbold { font-weight: bold; }
 
-.tableboxkey { display: inline-table; border-collapse: collapse; line-height: 1; margin: 0 !important; }
-.trboxes { background: var(--color-base); }
-.tdleft, .tdrightbox, .tdrightbox2 { padding-top: 0; padding-bottom: 0; vertical-align: top; }
-.tdleft { padding-right: 0px; text-align: left; }
-.tdrightbox { padding-right: 0; text-align: right; }
-.tdrightbox2 { padding: 0; line-height: 1.2; height: 1.2em; text-align: right; padding-right: 10px; }  
-
 /* --- CONTENT ELEMENTS --- */
 #key { color:var(--color-text-link); }
 #home { font-size:16px; margin-left:auto; }
 #error { margin-top:50px; border: 2px solid var(--color-border); border-radius: 5px; padding: 8px; display: block; width: fit-content; }
-#tableheaderright { vertical-align:middle; float:right; padding: 32px 15px 0 5px; }
 
 dl { background:var(--color-alt); display: grid; grid-template-columns: max-content; border: 1px solid var(--color-border); border-width: 1px 0; padding: 10px; }
 dd { margin: 0; grid-column-start: 2;} 
 
-table, td, th { border-collapse:collapse; margin:0; padding:10px; }
-th { position:sticky; top:0; font-weight:400; font-size:14px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; z-index: 10; }
+th { position:sticky; top:0; font-weight:400; font-size:14px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; z-index: 10; padding: 10px; }
 th:first-child{ border-radius: 5px 0 0 0; }
 th:last-child{ border-radius: 0 5px 0 0; }
 tbody>tr { border: 1px solid var(--color-border); border-width: 1px 0; background:var(--color-alt); }
-
-/* --- IMAGES & ICONS --- */
-img { margin:0; padding:0; border:0; display:block; object-fit:cover; }
-.icon { height:48px; width:48px; border-radius:50%; }
-.smallicon { height:24px; width:24px; border-radius:50%; }
-.photo { height:64px; width:64px; border-radius: 5px; }
+td { padding: 10px; }
 
 /* --- NAVIGATION --- */
-/* 1. THE BAR: Set a hard height so it never shrinks */
 .navbar {
-  display: flex;
-  align-items: stretch;    /* Forces children to fill the 44px */
-  height: 44px;            /* FIXED HEIGHT: Prevents shrinking */
+  display: flex;                /* Keep links in a row */
+  align-items: stretch;
+  height: 44px;                 /* Fixed height prevents shrinking */
   background-color: var(--color-brand);
   border-radius: 5px;
-  width: 100%;
-@@ -93,43 +93,43 @@
-  box-sizing: border-box;
+  overflow: visible;             /* So dropdowns show */
 }
 
-/* 2. THE LINKS: Center the text inside the 44px height */
 .navbar a, .dd_title, .dropbtn {
-  display: flex;           /* Required for vertical centering */
-  align-items: center;     /* Centers text vertically */
-  height: 100%;            /* Fills the 44px bar height */
-  padding: 0 14px;         /* Side padding only */
+  display: flex;
+  align-items: center;          /* Vertically centers text */
+  height: 100%;
+  padding: 0 14px;
   font-size: 15px;
   color: white;
   text-decoration: none;
   cursor: pointer;
-  background: transparent; /* Kills the white button background */
-  border: none;            /* Removes default button borders */
-  box-sizing: border-box;
+  background: transparent;
+  border: none;
+  white-space: nowrap;
 }
 
-/* 3. THE DROPDOWN CONTAINER: Must also stretch */
-.dropdown {
-  display: flex;
-  height: 100%;
-}
-
+.dropdown { display: flex; height: 100%; }
 .navbar a:hover, .dropdown:hover .dropbtn { background-color: black; }
 
 .dropdown-content {
   display: none;
   position: absolute;
+  top: 44px;                     /* Positions menu exactly below the bar */
   background-color: var(--color-base);
   min-width: 160px;
   box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-  z-index: 20;
+  z-index: 100;
+  border: 1px solid var(--color-border);
 }
 .dropdown:hover .dropdown-content { display: block; }
 .dropdown-content a { color: var(--color-text); display: block; text-align: left; padding: 10px 14px; }
@@ -131,4 +118,3 @@ img { margin:0; padding:0; border:0; display:block; object-fit:cover; }
 
 a { text-decoration:none; color:var(--color-text-link); }
 a:hover { background:var(--color-hover); }
-
