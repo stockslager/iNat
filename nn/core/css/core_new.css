@@ -79,30 +79,41 @@ img { margin:0; padding:0; border:0; display:block; object-fit:cover; }
 .photo { height:64px; width:64px; border-radius: 5px; }
 
 /* --- NAVIGATION --- */
+/* 1. THE BAR: Set a hard height so it never shrinks */
 .navbar {
-  overflow: hidden;
+  display: flex;
+  align-items: stretch;    /* Forces children to fill the 46px */
+  height: 46px;            /* FIXED HEIGHT: Prevents shrinking */
   background-color: var(--color-brand);
   border-radius: 5px;
-  font-family: Arial, sans-serif;
-  display: flex;
-  align-items: center;
+  width: 100%;
+  max-width: 700px;
+  margin-inline: auto;
+  overflow: visible;       /* Crucial for dropdowns to show up */
+  box-sizing: border-box;
 }
+
+/* 2. THE LINKS: Center the text inside the 46px height */
 .navbar a, .dd_title, .dropbtn {
+  display: flex;           /* Required for vertical centering */
+  align-items: center;     /* Centers text vertically */
+  height: 100%;            /* Fills the 46px bar height */
+  padding: 0 14px;         /* Side padding only */
   font-size: 15px;
   color: white;
-  padding: 0 14px;
   text-decoration: none;
   cursor: pointer;
-  /* ADD THESE: This forces them to center perfectly */
-  display: flex;
-  align-items: center;
-  height: 100%;
-  
-  /* ADD THIS: This kills the white background on buttons */
-  background: transparent;
-  border: none;
-  outline: none;
+  background: transparent; /* Kills the white button background */
+  border: none;            /* Removes default button borders */
+  box-sizing: border-box;
 }
+
+/* 3. THE DROPDOWN CONTAINER: Must also stretch */
+.dropdown {
+  display: flex;
+  height: 100%;
+}
+
 .navbar a:hover, .dropdown:hover .dropbtn { background-color: black; }
 
 .dropdown-content {
