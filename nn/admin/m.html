@@ -14,42 +14,41 @@
 <link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
 <title>Observations Map</title>
 <style>
-/* 1. Force the Navbar height and fix the right-side shading */
-.navbar.v2-menu {
-   height: 44px !important;    /* Forces the slim look */
-   min-height: 44px !important;
+/* New Header Bar - Replaces .navbar.v2-menu */
+.header-bar {
+   height: 44px;
    max-width: 700px;
    width: 95vw;
-   margin: 0 0 0 8px;          /* Left-justified */
+   margin: 10px 0 0 8px;       /* Top margin for breathing room, left-aligned */
+   background-color: #f2f2f2;  /* Classic grey bar */
+   border-radius: 8px;         /* Rounded corners */
+   display: flex;              /* Flexbox for alignment */
+   justify-content: flex-end;  /* Pushes content (the icon) to the right */
+   align-items: center;        /* Vertically centers the icon */
    position: relative;
    z-index: 2000;
-   display: block;             /* Essential for the float below */
-   overflow: hidden;           /* Clips any global padding leaks */
+   box-sizing: border-box;
+   border: 1px solid #ddd;     /* Optional: subtle border to define shape */
 }
 
-/* 2. Position the container on the far right edge */
-#home { 
-   float: right; 
-   margin-right: 0 !important; /* Removes the gap so shading hits the edge */
-}
-
-/* 3. Fix the "Skinny" and "Off-Center" hover box */
-#home a { 
-   padding: 0 25px !important; /* THE FIX: 0 top/bottom shrinks it, 25px width makes it wide */
-   height: 44px;               /* Matches navbar */
-   line-height: 44px;          /* Vertically centers the leaf icon */
-   cursor: pointer !important;
-   display: inline-block;
+/* Style for the link and icon */
+#home-link { 
+   padding: 0 20px;            /* Clickable area width */
+   height: 100%;               /* Matches header height */
+   display: flex;
+   align-items: center;
    text-decoration: none;
+   cursor: pointer;
+   color: inherit;             /* Keeps the icon color standard */
 }
 
-/* 4. Match the Map to the new 40px height */
+/* Adjust Map position to account for the new bar */
 #mapid { 
    max-width: 700px;
    width: 95vw;
-   top: 55px;                  /* Body padding(10) + Navbar(40) + Small Gap(5) */
+   top: 60px;                  /* Bar(44) + Margin(10) + Gap(6) */
    left: 8px;
-   height: calc(100vh - 65px); /* Subtracts top(55) + 10px bottom room */
+   height: calc(100vh - 70px); 
    position: absolute;
    z-index: 1;
    border-radius: 5px; 
@@ -130,8 +129,37 @@ L.TileLayer.USGS = L.TileLayer.extend({
    _initContainer: function () {
       var tile = L.TileLayer.prototype._initContainer.call(this);
       this._container.style.filter = this.styleFilter();
-   },
+   },// Local helper to ensure innerHTML works for icons
+function faddelemLocal(type, parent, props) {
+    let el = document.createElement(type);
+    if (props.innerHTML) el.innerHTML = props.innerHTML;
+    if (props.id) el.id = props.id;
+    if (props.href) el.href = props.href;
+    if (props.className) el.className = props.className;
+    parent.appendChild(el);
+    return el;
+}
+
+// Create the main header bar
+appState = buildStateFromParams(winurlparams);
+let headerBar = document.createElement('div');    
+headerBar.className = 'header-bar'; // Use the new class
+
+// Logic for URL selection (Kept your existing logic)
+let homeUrl = 'javascript:history.back();'; 
+
+// Create the link directly inside the header bar
+// No 'homeDiv' wrapper used here to keep it lean
+let hLink = faddelemLocal('a', headerBar, { 
+    href: homeUrl, 
+    id: 'home-link' 
 });
+
+// Add the leaf icon
+faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
+
+// Add to the top of the page
+document.body.prepend(headerBar);});
 L.tileLayer.usgs = function (url, options) {
    return new L.TileLayer.USGS(url, options);
 };
@@ -821,45 +849,32 @@ function faddelemLocal(type, parent, props) {
     if (props.innerHTML) el.innerHTML = props.innerHTML;
     if (props.id) el.id = props.id;
     if (props.href) el.href = props.href;
+    if (props.className) el.className = props.className;
     parent.appendChild(el);
     return el;
 }
 
-function buildNavHomeLocal( navbar, baseUrl=null, homeState=null ) {
-    if( !baseUrl )   { baseUrl = '../admin/dashboard.html'; }
-    if( !homeState ) { homeState = clearForDashParams(appState); }
-    
-    let homeUrl = baseUrl + buildParameterList(homeState);
-    let homeDiv = faddelemLocal('div', navbar, { id: 'home' });
-    let hLink = faddelemLocal('a', homeDiv, { href: homeUrl });
-    faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
-}
+// Create the main header bar
+appState = buildStateFromParams(winurlparams);
+let headerBar = document.createElement('div');    
+headerBar.className = 'header-bar'; // Use the new class
+
+// Logic for URL selection (Kept your existing logic)
+let homeUrl = 'javascript:history.back();'; 
+
+// Create the link directly inside the header bar
+// No 'homeDiv' wrapper used here to keep it lean
+let hLink = faddelemLocal('a', headerBar, { 
+    href: homeUrl, 
+    id: 'home-link' 
+});
+
+// Add the leaf icon
+faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
+
+// Add to the top of the page
+document.body.prepend(headerBar);
 	
-  // Create the main navbar container
-  appState       = buildStateFromParams(winurlparams);
-  let navbar = document.createElement('div');    
-  navbar.className = 'navbar v2-menu';
-
-  // Build the Home Link
-  console.log('app ' + JSON.stringify(appState));
-  let homeUrl = '';
-  if( getComponent(appState) === COMPONENT_OBSERVERS ) {
-	  homeUrl = '../observers/observer_grid.html';
-  } else if( getComponent(appState) === COMPONENT_GARDEN ) {
-	  homeUrl = '../garden/garden_grid.html';
-  } else if( getComponent(appState) === COMPONENT_ANIMALS || getComponent(appState) === COMPONENT_HIKER ) {
-	  homeUrl = '../species/obs_grid.html';
-  } else {
-	  homeUrl = '../colonies/colony_descendants_grid.html';
-  }
-
-  // just do a history.back() here since we aren't paging through data, it's just a map.
-  let homeDiv = faddelemLocal('div', navbar, { id: 'home' });
-  let hLink   = faddelemLocal('a', homeDiv, { href: 'javascript:history.back();' });
-  faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
-	
-  document.body.prepend(navbar);
-
 function fdate(str) {
    str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
    str = str.replace(/([+-]\d{2}\:?\d{2})/,' ($1)'); //puts parenthesis around time zone offset
