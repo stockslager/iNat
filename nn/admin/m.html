@@ -13,57 +13,57 @@
 <link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
 <title>Observations Map</title>
 <style>
-   body { height:100vh; width:100vw; margin:0px; font:10pt Sans-Serif; padding-top:10px; }
-
-.navbar.v2-menu {
-   max-width: 700px;         /* Caps it at 700px */
-   width: 95vw;              /* Shrinks to fit mobile screens */
-   margin: 0 8px 0 8px;    /* 20px Top, 15px Left (Gutter) */
-   position: relative;
-   z-index: 2000;
-   height: 50px;
-   display: block;           /* Ensures it stays a block for the float */
-}
-
-#mapid { 
-   max-width: 700px;         /* Caps map width */
-   width: 95vw;              /* Shrinks to fit mobile */
-   height: calc(100vh - 100px); 
-   position: absolute;
-   top: 62px;                /* Space (20) + Navbar (50) + Gap (15) */
-   left: 8px;               /* Aligns with Navbar gutter */
-   z-index: 1;
-   border-radius: 5px; 
-}
-/*	
-.navbar.v2-menu {
-   margin: 0px 8px 0 8px; 
-   position: relative;
-   z-index: 2000;
-}
-
-#mapid {
-   top: 62px;                
-   left: 8px;               
    
-   width: calc(100vw - 16px); 
-   height: calc(100vh - 50px); 
-   
-   position: absolute;
-   z-index: 1;
-   border-radius: 5px;        
+/* 1. Global Page Spacing */
+body { 
+   height: 100vh; 
+   width: 100vw; 
+   margin: 0; 
+   padding-top: 10px; /* Space above the navbar */
+   font: 10pt Sans-Serif; 
 }
-*/
+
+/* 2. Responsive, Left-Justified Navbar */
+.navbar.v2-menu {
+   max-width: 700px;
+   width: 95vw;             /* Shrinks for mobile */
+   margin: 0 0 0 8px;       /* Left-justified with 8px gutter */
+   position: relative;
+   z-index: 2000;           /* Above the map */
+   height: 40px !important; /* Forces slim height */
+   min-height: 40px !important;
+   display: block;          /* Allows float:right on children */
+   overflow: hidden;        /* Clips any 'leaking' padding */
+}
+
+/* 3. Vertically Centered Home Icon */
 #home { 
    float: right; 
-   margin-right: 20px; 
-   line-height: 40px;  
+   margin-right: 15px; 
+   height: 40px;            /* Matches navbar height */
 }
 
 #home a { 
-   cursor: pointer !important; /* Forces the hand icon */
+   padding: 0 !important;   /* THE FIX: Removes global 12px padding */
+   height: 40px;            /* Container height */
+   line-height: 40px;       /* THE FIX: Vertically centers the icon */
+   cursor: pointer !important;
    display: inline-block;
-}	
+   text-decoration: none;
+}
+
+/* 4. Responsive Leaflet Map */
+#mapid { 
+   max-width: 700px;
+   width: 95vw;             /* Matches Navbar width */
+   left: 8px;               /* Matches Navbar gutter */
+   top: 60px;               /* Body padding(10) + Navbar(40) + Gap(10) */
+   height: calc(100vh - 75px); 
+   position: absolute;
+   z-index: 1;
+   border-radius: 5px; 
+   background: darkgray;
+}
 
    #info { padding:15px; }
    /*h1 { margin-top:0px; }*/
