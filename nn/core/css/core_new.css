@@ -27,22 +27,23 @@
    }
 }
 
-/* --- CLEAN RESPONSIVE CORE --- */
-/* This centers the 'app' on PC but allows stretching on mobile */
+/* --- THE STRETCH-WRAP CORE --- */
+/* Changed to 'table' width logic: Centers at 700px on PC, 
+   but grows to fit wide tables on mobile */
 #main, .rl-box-bar, .navbar, #grid, dl, p {
-  display: flex !important;      /* Use Flex to keep things in a row */
-  flex-direction: column;        /* Stacks internal content vertically if needed */
-  width: min-content !important; /* THE FIX: Allows bar to grow if table is wide */
-  min-width: 100% !important;    /* At least full screen width */
-  max-width: 700px !important;   /* Centers at 700px on PC */
-  margin-inline: auto !important; 
+  display: block;                /* Restores vertical stacking for PC */
+  width: table !important;       /* KEY: Shrink-wraps content but allows expansion */
+  min-width: 100% !important;    /* Starts at full screen width */
+  max-width: 700px !important;   /* Limits width on large PC monitors */
+  margin-left: auto !important;  /* Centers the 'app' on PC */
+  margin-right: auto !important; /* Centers the 'app' on PC */
   box-sizing: border-box;
 }
 
-/* TABLE: The Master Width */
+/* Forces the table to stay wide and push the navbar above it */
 table {
   width: 100%;
-  min-width: max-content;        /* This forces the table to stay wide and push the navbar */
+  min-width: max-content;        
   border-collapse: collapse;
   margin: 0;
 }
@@ -57,8 +58,7 @@ table {
 
 /* --- HEADER & BOXES --- */
 .rl-box-bar { 
-  display: flex !important; 
-  flex-direction: row !important; /* Overrides the column above */
+  display: flex !important;      /* Inner content stays horizontal */
   justify-content: space-between; 
   align-items: stretch; 
   gap: 10px; 
@@ -82,14 +82,13 @@ td { padding: 10px; }
 
 /* --- NAVIGATION --- */
 .navbar {
-  display: flex !important;      /* Inner flex for links */
-  flex-direction: row !important; /* Links in a row */
+  display: flex !important;      /* Restores links in a row */
   align-items: stretch;
   height: 44px;
   background-color: var(--color-brand);
   border-radius: 5px;
-  overflow: visible;             /* Dropdowns work now */
-  flex-shrink: 0;                /* Prevents navbar from squishing */
+  overflow: visible;
+  flex-shrink: 0;
 }
 
 .navbar a, .dd_title, .dropbtn {
@@ -103,7 +102,7 @@ td { padding: 10px; }
   cursor: pointer;
   background: transparent;
   border: none;
-  white-space: nowrap;           /* Prevents text wrapping */
+  white-space: nowrap;
 }
 
 .dropdown { display: flex; height: 100%; }
@@ -129,5 +128,6 @@ td { padding: 10px; }
 
 a { text-decoration:none; color:var(--color-text-link); }
 a:hover { background:var(--color-hover); }
+
 
 
