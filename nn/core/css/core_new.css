@@ -1,62 +1,64 @@
-
-/* --- 1. THE SHARED TRACK (The Winner) --- */
-/* Everything follows this single rule. No exceptions. */
-.navbar, .rl-box-bar, #main, #grid, dl, p, table {
-  display: block;               /* Forces a standard vertical stack */
-  width: 100%;                  /* Fills screen on mobile */
-  max-width: 700px;             /* The fixed PC ceiling */
-  margin: 10px auto;            /* Centers the entire 'app' on PC */
-  box-sizing: border-box;       /* Keeps padding from breaking the width */
+/* 1. THE THEME (Your Original Colors) */
+:root {  
+   background: var(--color-base); color: var(--color-text); font: 14px Sans-Serif;
+   --color-base: white; --color-alt: whitesmoke; --color-brand: #333;
+   --color-text: black; --color-text-invert: white; --color-text-link: royalblue;
+   --color-border: lightgray;
+}
+@media (prefers-color-scheme: dark) {
+   :root { --color-base: black; --color-alt: #171717; --color-text: #bababa; --color-border: #444; }
 }
 
-/* --- 2. THE TABLE (Simplified) --- */
-table {
-  display: table;               /* Resets to standard table behavior */
-  width: 100% !important;       /* Forces it to match the Navbar exactly */
-  table-layout: auto;           /* Let columns stay natural */
-  border-collapse: collapse;
+/* 2. THE FIX: THE WRAPPER */
+/* This centers the 'app' on PC but lets it grow on mobile */
+body {
+  margin: 0; padding: 0;
+  text-align: center; /* This centers the 'inline-block' below on PC */
 }
 
-/* --- 3. THE NAVBAR (Consistent 44px) --- */
+/* Apply this class to a <div> that wraps your Navbar AND your Table together */
+.page-wrapper {
+  display: inline-block;    /* KEY: Shrink-wraps to the widest item (the table) */
+  text-align: left;         /* Resets text to left inside the box */
+  max-width: 700px;         /* Your PC ceiling */
+  width: 95%;               /* Mobile width */
+  box-sizing: border-box;
+  vertical-align: top;
+}
+
+/* 3. THE NAVBAR (Stretches to match the Table) */
 .navbar {
-  display: flex !important;     /* Restores horizontal links inside the bar */
-  align-items: stretch;
-  height: 44px;
   background-color: var(--color-brand);
   border-radius: 5px;
-  overflow: visible;             
-  margin-bottom: 15px;          /* Clean gap between bar and table */
+  display: flex;            /* Keeps links in a row */
+  align-items: stretch;
+  height: 44px;
+  width: 100%;              /* Fills the 'page-wrapper' exactly */
+  margin-bottom: 10px;
+  overflow: visible;
+}
+
+/* 4. THE TABLE (Natural Columns) */
+table {
+  width: 100%;              /* Fills the 'page-wrapper' exactly */
+  border-collapse: collapse;
+  margin: 0;
 }
 
 /* Navbar Links & Buttons */
-.navbar a, .dd_title, .dropbtn {
-  display: flex;
-  align-items: center;
-  height: 100%;
-  padding: 0 14px;
-  font-size: 15px;
-  color: white;
-  text-decoration: none;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  white-space: nowrap;          /* Prevents link text from wrapping */
+.navbar a, .dropbtn {
+  display: flex; align-items: center;
+  padding: 0 15px; color: white; text-decoration: none; font-size: 15px;
+  background: transparent; border: none; cursor: pointer;
 }
 
-/* --- 4. THE DROPDOWN (Anchored) --- */
+/* Dropdown Fix */
 .dropdown-content {
-  display: none;
-  position: absolute;
-  top: 44px;                     /* Sits exactly below the bar */
-  background-color: var(--color-base);
-  min-width: 160px;
-  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-  z-index: 100;
+  display: none; position: absolute; top: 44px;
+  background-color: var(--color-base); min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2); z-index: 100;
   border: 1px solid var(--color-border);
 }
 .dropdown:hover .dropdown-content { display: block; }
 .dropdown-content a { color: var(--color-text); display: block; padding: 10px; }
 
-/* --- 5. DATA DETAILS --- */
-th { position: sticky; top: 0; background: var(--color-brand); color: white; padding: 10px; text-align: left; z-index: 10; }
-td { padding: 10px; border-bottom: 1px solid var(--color-border); }
