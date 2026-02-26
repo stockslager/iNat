@@ -1,4 +1,4 @@
-/* --- 1. THEME & COLORS (Unchanged) --- */
+/* 1. THE THEME */
 :root {  
    background: var(--color-base);
    color: var(--color-text);
@@ -6,105 +6,81 @@
    --color-base: white; --color-alt: whitesmoke; --color-brand: #333;
    --color-text: black; --color-text-invert: white; --color-text-link: royalblue;
    --color-border: lightgray; --color-hover: lightgray;
-   --color-base-translucent: rgba(255,255,255,0.85);
 }
 
 @media (prefers-color-scheme: dark) {
    :root {
       --color-base: black; --color-alt: #171717; --color-brand: #333;
       --color-text: #bababa; --color-text-invert: white; --color-text-link: cornflowerblue;
-      --color-border: #444; --color-hover: #444; --color-base-translucent: rgba(0,0,0,0.85);
+      --color-border: #444; --color-hover: #444;
    }
 }
 
-/* --- 2. THE ALIGNMENT TRACK (The Fix) --- */
-/* This forces every block to share the exact same width boundaries */
-#main, .rl-box-bar, .navbar, #grid, dl, p {
-  display: block;               /* Back to block for stable PC stacking */
-  width: 100%;                  /* Fills screen on mobile */
-  max-width: 700px;             /* Your PC limit */
-  margin-left: auto !important; /* Centers the whole stack */
-  margin-right: auto !important;
+/* 2. THE PAGE WRAPPER (The Alignment Track) */
+/* These elements now share the exact same 700px track on PC */
+.navbar, #main, .rl-box-bar, #grid, dl, p {
+  width: 95%;           /* Gap on phone edges */
+  max-width: 700px;     /* PC limit */
+  margin: 10px auto;    /* CENTERS the whole stack on PC */
   box-sizing: border-box;
 }
 
-/* 3. THE TABLE (Natural Column Behavior) */
-table { 
-  display: table;               /* Standard table behavior - protects columns */
-  width: 100%;                  /* Fills the 700px track on PC */
-  max-width: 700px;             /* Matches the navbar exactly */
-  margin: 0 auto;               /* Centers itself inside #main */
-  border-collapse: collapse; 
+/* 3. THE TABLE (The Final Alignment Fix) */
+table {
+  width: 100%;             /* Fills the 700px container on PC */
+  display: table;          /* Forces standard table behavior */
+  border-collapse: collapse;
+  margin: 0;               /* Resets margins inside #main */
+  table-layout: auto;      /* Columns stay natural */
 }
 
-/* Mobile Breathing Room */
-@media (max-width: 700px) {
-  #main, .navbar, .rl-box-bar, p {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-}
-
-/* --- 4. HEADER & BOXES --- */
-.rl-box-bar { display: flex !important; justify-content: space-between; align-items: stretch; gap: 10px; }
-#lbox { display: inline-flex; white-space: nowrap; border: 2px solid var(--color-border); border-radius: 5px; padding: 3px 8px 5px 8px; box-sizing: border-box; }
-#upperright { display: inline-flex; justify-content: flex-end; white-space: nowrap; padding: 0; }
-
-/* --- 5. CONTENT ELEMENTS --- */
-#key { color:var(--color-text-link); }
-#home { font-size:16px; margin-left:auto; }
-
-dl { background:var(--color-alt); display: grid; grid-template-columns: max-content; border: 1px solid var(--color-border); border-width: 1px 0; padding: 10px; }
-dd { margin: 0; grid-column-start: 2;} 
-
-th { position:sticky; top:0; font-weight:400; font-size:14px; background:var(--color-brand); color:var(--color-text-invert); text-align:left; vertical-align:bottom; z-index: 10; padding: 10px; }
-tbody>tr { border: 1px solid var(--color-border); border-width: 1px 0; background:var(--color-alt); }
-td { padding: 10px; }
-
-/* --- 6. NAVIGATION --- */
+/* 4. THE NAVBAR (Consistent Height) */
 .navbar {
-  display: flex !important;     /* Restores horizontal links */
+  display: flex;
   align-items: stretch;
-  height: 44px;                 
+  height: 44px;
   background-color: var(--color-brand);
   border-radius: 5px;
-  overflow: visible;             
+  overflow: visible; 
+  padding: 0;
 }
 
-.navbar a, .dd_title, .dropbtn {
+.navbar a, .dropbtn {
   display: flex;
-  align-items: center;          
-  height: 100%;
-  padding: 0 14px;
-  font-size: 15px;
+  align-items: center;
+  padding: 0 15px;
   color: white;
   text-decoration: none;
-  cursor: pointer;
+  font-size: 15px;
   background: transparent;
   border: none;
-  white-space: nowrap;
+  cursor: pointer;
 }
 
-.dropdown { display: flex; height: 100%; }
-.navbar a:hover, .dropdown:hover .dropbtn { background-color: black; }
+/* 5. DROPDOWN (Fixed Position) */
+.dropdown {
+  position: relative;
+  display: flex;
+}
 
 .dropdown-content {
   display: none;
   position: absolute;
-  top: 44px;                     
+  top: 44px;            
   background-color: var(--color-base);
   min-width: 160px;
-  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
   z-index: 100;
   border: 1px solid var(--color-border);
 }
+
 .dropdown:hover .dropdown-content { display: block; }
-.dropdown-content a { color: var(--color-text); display: block; text-align: left; padding: 10px 14px; }
+.dropdown-content a { color: var(--color-text); display: block; padding: 10px; }
 
-/* --- 7. GRID SYSTEM --- */
-#grid { position:relative; padding:0; border:0; }
-.gridcell { position:absolute; background:#cccccc; display:flex; justify-content:center; align-items:center; }
+/* 6. TABLE DETAILS */
+th { position:sticky; top:0; background:var(--color-brand); color:white; padding:10px; text-align:left; z-index: 10; }
+td { padding:10px; border-bottom: 1px solid var(--color-border); }
 
-a { text-decoration:none; color:var(--color-text-link); }
-a:hover { background:var(--color-hover); }
+/* Grid fix */
+#grid { margin: 10px auto; }
 
