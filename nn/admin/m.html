@@ -17,11 +17,28 @@
    /*#mapid { height:100vh; width:100vw; position:absolute; top:0vh; left:0vw; background:darkgray; }*/
 #mapid { 
    height: calc(100vh - 60px); /* Subtract the navbar height */
-   position: absolute; 
+   /*position: absolute;*/ 
    top: 50px; /* Push the map down by the navbar height */
    width: 100vw; 
-   z-index: 1; /* Keep it below the navbar */
+   /*z-index: 1; /* Keep it below the navbar */
 }
+
+.navbar.v2-menu {
+    position: relative !important;
+    z-index: 1001 !important; 
+    background: white; /* Or your preferred color */
+    display: flex;
+    align-items: center;
+}
+
+/* Ensure the icon span is visible and takes up space */
+#home a span {
+    display: inline-block !important;
+    visibility: visible !important;
+    font-family: serif; /* Ensure it can render the UTF8 character */
+    padding: 5px;
+}
+	
    #info { padding:15px; }
    h1 { margin-top:0px; }
    a { text-decoration:none; }
