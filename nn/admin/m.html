@@ -129,37 +129,8 @@ L.TileLayer.USGS = L.TileLayer.extend({
    _initContainer: function () {
       var tile = L.TileLayer.prototype._initContainer.call(this);
       this._container.style.filter = this.styleFilter();
-   },// Local helper to ensure innerHTML works for icons
-function faddelemLocal(type, parent, props) {
-    let el = document.createElement(type);
-    if (props.innerHTML) el.innerHTML = props.innerHTML;
-    if (props.id) el.id = props.id;
-    if (props.href) el.href = props.href;
-    if (props.className) el.className = props.className;
-    parent.appendChild(el);
-    return el;
-}
-
-// Create the main header bar
-appState = buildStateFromParams(winurlparams);
-let headerBar = document.createElement('div');    
-headerBar.className = 'header-bar'; // Use the new class
-
-// Logic for URL selection (Kept your existing logic)
-let homeUrl = 'javascript:history.back();'; 
-
-// Create the link directly inside the header bar
-// No 'homeDiv' wrapper used here to keep it lean
-let hLink = faddelemLocal('a', headerBar, { 
-    href: homeUrl, 
-    id: 'home-link' 
-});
-
-// Add the leaf icon
-faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
-
-// Add to the top of the page
-document.body.prepend(headerBar);});
+   },
+	
 L.tileLayer.usgs = function (url, options) {
    return new L.TileLayer.USGS(url, options);
 };
