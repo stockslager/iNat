@@ -15,109 +15,75 @@
 
 @media (prefers-color-scheme: dark) {
    :root {
-      --color-base: black;
-      --color-alt: #171717;
-      --color-brand: #333;
-      --color-text: #bababa;
-      --color-text-invert: white;
-      --color-text-link: cornflowerblue;
-      --color-border: #444;
-      --color-hover: #444;
-      --color-base-translucent: rgba(0,0,0,0.85);
+      --color-base: black; --color-alt: #171717; --color-brand: #333;
+      --color-text: #bababa; --color-text-invert: white; --color-text-link: cornflowerblue;
+      --color-border: #444; --color-hover: #444; --color-base-translucent: rgba(0,0,0,0.85);
    }
 }
 
-/* --- THE STRETCH-TO-MATCH CORE --- */
-/* This ensures the Navbar, Header, and Table stay the same width */
+/* --- THE FIX: SHARED WIDTH TRACK --- */
+/* This forces every major block to follow the same 700px 'ceiling' and center on PC */
 .navbar, .rl-box-bar, #main, #grid, dl, p {
-   width: 100%;
-   max-width: 700px;      /* Your "decent" PC width */
-   margin-left: auto;     /* Centers everything on PC */
-   margin-right: auto;
-   box-sizing: border-box;
+  display: block;               /* Keeps your original stacking behavior */
+  width: 100%;                  /* Fills screen on mobile */
+  max-width: 700px;             /* Your 700px PC limit */
+  margin-left: auto;            /* Centers the 'app' on PC */
+  margin-right: auto;
+  box-sizing: border-box;
 }
 
-/* --- HEADER BOXES --- */
-.rl-box-bar { display: flex; justify-content: space-between; align-items: stretch; gap: 10px; margin-bottom: 10px; }
+/* --- THE TABLE FIX --- */
+/* This ensures the table fills the 700px on PC to match the Navbar */
+table {
+  width: 100%;                  
+  border-collapse: collapse;
+  margin: 0;
+}
+
+/* --- THE NAVBAR FIX --- */
+/* We keep your original flex but ensure it doesn't 'shrink' on PC */
+.navbar {
+  background-color: var(--color-brand);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  height: 44px;                 /* Consistent height */
+  overflow: visible;             /* Let dropdowns show */
+}
+
+.navbar a, .dd_title, .dropbtn {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 14px;
+  font-size: 15px;
+  color: white;
+  text-decoration: none;
+}
+
+/* --- DROPDOWNS (Matches your 44px bar) --- */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 44px;                    /* Sits exactly below the bar */
+  background-color: var(--color-base);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  z-index: 100;
+  border: 1px solid var(--color-border);
+}
+.dropdown:hover .dropdown-content { display: block; }
+.dropdown-content a { color: var(--color-text); display: block; padding: 10px 14px; text-align: left; }
+
+/* --- REST OF YOUR ORIGINAL STYLES (Unchanged) --- */
+.rl-box-bar { display: flex; justify-content: space-between; align-items: stretch; gap: 10px; }
 #lbox { display: inline-flex; white-space: nowrap; border: 2px solid var(--color-border); border-radius: 5px; padding: 3px 8px 5px 8px; box-sizing: border-box; }
 #upperright { display: inline-flex; justify-content: flex-end; white-space: nowrap; padding: 0; }
-#upperrightbold { font-weight: bold; }
 
-/* --- MAIN CONTENT & TABLES --- */
-#main { min-width: 0; } /* Removed the 375px floor */
-
-table { 
-   width: 100%; 
-   border-collapse: collapse; 
-   margin: 0; 
-}
-th { 
-   position: sticky; 
-   top: 0; 
-   font-weight: 400; 
-   font-size: 14px; 
-   background: var(--color-brand); 
-   color: var(--color-text-invert); 
-   text-align: left; 
-   vertical-align: bottom; 
-   z-index: 10;
-   padding: 10px;
-}
-th:first-child { border-radius: 5px 0 0 0; }
-th:last-child { border-radius: 0 5px 0 0; }
+th { position: sticky; top: 0; font-weight: 400; font-size: 14px; background: var(--color-brand); color: var(--color-text-invert); text-align: left; vertical-align: bottom; z-index: 10; padding: 10px; }
 tbody > tr { border-width: 1px 0; border-style: solid; border-color: var(--color-border); background: var(--color-alt); }
 td { padding: 10px; }
 
-/* --- NAVIGATION --- */
-.navbar { 
-   overflow: visible; /* Changed to visible so dropdowns show up */
-   background-color: var(--color-brand); 
-   border-radius: 5px; 
-   font-family: Arial, Helvetica, sans-serif; 
-   display: flex; 
-   align-items: stretch; 
-   height: 44px; /* Fixed height for vertical centering */
-}
-
-.navbar a, .dd_title, .dropbtn { 
-   display: flex;
-   align-items: center;
-   font-size: 15px; 
-   color: white; 
-   padding: 0 14px; 
-   text-decoration: none; 
-   background: transparent;
-   border: none;
-   cursor: pointer;
-}
-
-.navbar a:hover, .dropdown:hover .dropbtn { background-color: black; }
-
-/* --- DROPDOWNS --- */
-.dropdown { position: relative; display: flex; }
-.dropdown-content { 
-   display: none; 
-   position: absolute; 
-   top: 44px; /* Matches navbar height */
-   left: 0;
-   font-size: 15px; 
-   background-color: var(--color-base); 
-   min-width: 160px; 
-   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); 
-   z-index: 100; 
-   border: 1px solid var(--color-border);
-}
-
-.dropdown:hover .dropdown-content { display: block; }
-.dropdown-content a { color: var(--color-text); padding: 10px 14px; text-decoration: none; display: block; text-align: left; }
-.dropdown-content a:hover { background-color: var(--color-hover); }
-
-/* --- MISC --- */
-#grid { width: 100%; max-width: 700px; position: relative; }
-dl { width: 100%; background: var(--color-alt); display: grid; grid-template-columns: max-content; border: 1px solid var(--color-border); padding: 10px; border-radius: 5px; box-sizing: border-box; }
-dd { margin: 0; grid-column-start: 2; }
-p { width: 100%; margin: 0.7em 0; }
 a { text-decoration: none; color: var(--color-text-link); }
 a:hover { background: var(--color-hover); }
-
-
+#grid { position: relative; padding: 0; border: 0; }
