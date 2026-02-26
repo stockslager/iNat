@@ -836,6 +836,7 @@ var showplace = winurlparams.get('showplace') || 'false';
 var view = winurlparams.get('view') || 'default';
 var compexclparam = winurlparams.get('compare_exclude_param');
 var thresholded = winurlparams.get('thresholded') || 'true'; // even though the default in the API is false, set the default to true, since we're going to usually want to see Expected Nearby rather than Unthresholded
+var appParams = winurlparams.get('params') || '';	
 
 winurlparams.delete('centerlat');
 winurlparams.delete('centerlng');
@@ -863,10 +864,18 @@ function faddelemLocal(type, parent, props) {
 }
 
 // Create the main header bar
-appState = buildStateFromParams(winurlparams);
 let headerBar = document.createElement('div');    
 headerBar.className = 'header-bar'; // Use the new class
 
+
+
+// If history length is 1 or 2, they likely just arrived or have no previous page in this session
+if( window.history.length <= 1 ) {
+    window.location.href = './dashboard.html?params='+appParams;
+} else {
+    window.history.back();
+}	
+	
 // Logic for URL selection (Kept your existing logic)
 let homeUrl = 'javascript:history.back();'; 
 
