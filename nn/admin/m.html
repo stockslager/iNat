@@ -19,8 +19,29 @@
 .header-bar {
    height: 44px;
    max-width: 700px;
+   /* Match width and alignment exactly to the map */
+   width: calc(95vw - 8px); 
+   margin-left: 8px;           /* Anchors to the left edge */
+   margin-right: auto;         /* Prevents right-side pushing */
+   margin-top: 10px;
+   
+   background-color: var(--color-brand);  
+   border-radius: 5px;         
+   display: flex;              
+   justify-content: flex-end;  /* Icon to the right */
+   align-items: center;        
+   position: relative;
+   z-index: 2000;
+   box-sizing: border-box;
+   overflow: hidden;           
+}
+.header-bar {
+   height: 44px;
+   max-width: 700px;
    /*width: 95vw;*/
    width: calc(95vw - 18px); 
+   margin-left: 8px;           /* Anchors to the left edge */
+   margin-right: auto;         /* Prevents right-side pushing */
    margin: 10px 0 0 8px;       
    background-color: var(--color-brand);  
    border-radius: 5px;         
@@ -62,6 +83,11 @@
    position: absolute;
    z-index: 1;
    border-radius: 5px; 
+}
+/* 5. Essential Body Reset */
+body {
+   margin: 0;
+   padding: 0;
 }
 </style>
 
