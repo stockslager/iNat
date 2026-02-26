@@ -14,29 +14,45 @@
 <title>Observations Map</title>
 <style>
    body { height:100vh; width:100vw; margin:0px; font:10pt Sans-Serif; padding-top:10px; }
-   /*#mapid { height:100vh; width:100vw; position:absolute; top:0vh; left:0vw; background:darkgray; }*/
 
 .navbar.v2-menu {
-   margin: 0px 8px 0 8px; /* Top: 10px, Right: 15px, Bottom: 0, Left: 15px */
+   max-width: 700px;         /* Caps it at 700px */
+   width: 95vw;              /* Shrinks to fit mobile screens */
+   margin: 20px 0 0 15px;    /* 20px Top, 15px Left (Gutter) */
    position: relative;
    z-index: 2000;
-   /* Remove width: 100vw if you had it; it will break margins */
+   height: 50px;
+   display: block;           /* Ensures it stays a block for the float */
+}
+
+#mapid { 
+   max-width: 700px;         /* Caps map width */
+   width: 95vw;              /* Shrinks to fit mobile */
+   height: calc(100vh - 100px); 
+   position: absolute;
+   top: 85px;                /* Space (20) + Navbar (50) + Gap (15) */
+   left: 15px;               /* Aligns with Navbar gutter */
+   z-index: 1;
+}
+/*	
+.navbar.v2-menu {
+   margin: 0px 8px 0 8px; 
+   position: relative;
+   z-index: 2000;
 }
 
 #mapid {
-   /* 1. Positioning */
-   top: 62px;                /* Navbar height + your top margin */
-   left: 8px;               /* Matches navbar left margin */
+   top: 62px;                
+   left: 8px;               
    
-   /* 2. Sizing */
-   width: calc(100vw - 16px); /* Subtract Left (15) + Right (15) */
-   height: calc(100vh - 50px); /* Subtract Top (60) + Bottom gap (15) */
+   width: calc(100vw - 16px); 
+   height: calc(100vh - 50px); 
    
    position: absolute;
    z-index: 1;
-   border-radius: 5px;        /* Optional: Makes the map corners soft to match a "floating" look */
+   border-radius: 5px;        
 }
-
+*/
 #home { 
    float: right; 
 }
@@ -45,14 +61,6 @@
    cursor: pointer !important; /* Forces the hand icon */
    display: inline-block;
 }	
-
-/*#mapid { 
-   height: calc(100vh - 50px); /* Match the top value */
- /*  position: absolute;
-   top: 58px;                 /* Starts below navbar */
-/*   width: 100vw; 
-   z-index: 1;                /* Lower than navbar */
-/*}*/
 
    #info { padding:15px; }
    /*h1 { margin-top:0px; }*/
