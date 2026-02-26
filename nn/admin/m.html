@@ -13,63 +13,39 @@
 <link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
 <title>Observations Map</title>
 <style>
-   
-/* 1. Global Page Spacing */
-body { 
-   height: 100vh; 
-   width: 100vw; 
-   margin: 0; 
-   padding-top: 10px; /* Space above the navbar */
-   font: 10pt Sans-Serif; 
-}
-
-/* 2. Responsive, Left-Justified Navbar */
+/* This makes the navbar and map stack correctly on mobile and desktop */
 .navbar.v2-menu {
+   flex: 0 0 40px !important; /* Forces 40px height, no matter what */
    max-width: 700px;
-   width: 95vw;             /* Shrinks for mobile */
-   margin: 0 0 0 8px;       /* Left-justified with 8px gutter */
-   position: relative;
-   z-index: 2000;           /* Above the map */
-   height: 40px !important; /* Forces slim height */
-   min-height: 40px !important;
-   display: block;          /* Allows float:right on children */
-   overflow: hidden;        /* Clips any 'leaking' padding */
+   width: 100%;
+   margin-bottom: 10px;       /* Gap between bar and map */
+   background: #eee;
+   display: flex !important;  /* Flex makes centering easy */
+   justify-content: flex-end;
+   padding: 0 !important;
+   overflow: hidden;
 }
 
-#home { 
-   float: right; 
-   margin-right: 0 !important; /* THE FIX: Remove the margin so the link can touch the edge */
+#home a {
+   display: flex;
+   align-items: center;
    height: 40px;
-}
-
-#home a { 
-   /* Top/Bottom: 0 | Left: 20px | Right: 15px (Adjust these for the leaf's position) */
-   padding: 0 15px 0 20px !important; 
-   
-   height: 40px;               /* Matches navbar height */
-   display: flex;              /* Ensures the link fills the full height */
-   align-items: center;        
-   justify-content: center;    
+   padding: 0 25px !important; /* Wide black hover box */
    cursor: pointer !important;
    text-decoration: none;
 }
-/* 4. Responsive Leaflet Map */
-#mapid { 
-   max-width: 700px;
-   width: 95vw;             /* Matches Navbar width */
-   left: 8px;               /* Matches Navbar gutter */
-   top: 60px;               /* Body padding(10) + Navbar(40) + Gap(10) */
-   height: calc(100vh - 75px); 
-   position: absolute;
-   z-index: 1;
-   border-radius: 5px; 
-   background: darkgray;
+
+#home a:hover {
+   background-color: black; /* Your global hover style */
 }
 
-   #info { padding:15px; }
-   /*h1 { margin-top:0px; }*/
-   a { text-decoration:none; }
-</style>
+#mapid {
+   flex: 1;                   /* Tells map to take up ALL remaining space */
+   max-width: 700px;
+   width: 100%;
+   border-radius: 5px;
+   position: relative;        /* Leaflet requires relative, not absolute here */
+}</style>
 
 <script type="text/javascript"   src='../core/js/common_functions.js'> </script>
 <script type="text/javascript"   src='../core/js/store.js'> </script>
@@ -793,7 +769,13 @@ L.gridLayer.utfGridCompare = function (options) {
 
 </script>
 </head>
-<body>
+<body style="display: flex; flex-direction: column; height: 100vh; margin: 0; padding: 10px; box-sizing: border-box;">
+
+   <nav id="nav-container" class="navbar v2-menu">
+      <!-- Your JavaScript buildNavHomeLocal() will put the leaf here -->
+   </nav>
+
+   <div id="mapid"></div>
 	
 <script>
 //get parameters from the url
