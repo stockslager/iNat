@@ -13,7 +13,7 @@
 <link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
 <title>Observations Map</title>
 <style>
-   body { height:100vh; width:100vw; margin:0px; font:10pt Sans-Serif; padding-top:10px; }
+   body { height:100vh; width:100vw; margin:0px; font:10pt Sans-Serif; padding-top:8px; }
    /*#mapid { height:100vh; width:100vw; position:absolute; top:0vh; left:0vw; background:darkgray; }*/
 
 #home { 
@@ -28,7 +28,7 @@
 #mapid { 
    height: calc(100vh - 50px); /* Match the top value */
    position: absolute;
-   top: 60px;                 /* Starts below navbar */
+   top: 58px;                 /* Starts below navbar */
    width: 100vw; 
    z-index: 1;                /* Lower than navbar */
 }
@@ -826,13 +826,13 @@ function buildNavHomeLocal( navbar, baseUrl=null, homeState=null ) {
   console.log('app ' + JSON.stringify(appState));
   let homeUrl = '';
   if( getComponent(appState) === COMPONENT_OBSERVERS ) {
-	  homeUrl = './observer_grid.html';
+	  homeUrl = '../observers/observer_grid.html';
   } else if( getComponent(appState) === COMPONENT_GARDEN ) {
-	  homeUrl = './garden_grid.html';
+	  homeUrl = '../garden/garden_grid.html';
   } else if( getComponent(appState) === COMPONENT_ANIMALS || getComponent(appState) === COMPONENT_HIKER ) {
-	  homeUrl = './obs_grid.html';
+	  homeUrl = '../species/obs_grid.html';
   } else {
-	  homeUrl = './colony_descendants_grid.html';
+	  homeUrl = '../colonies/colony_descendants_grid.html';
   }
 	  
   buildNavHomeLocal( navbar, homeUrl, appState );
