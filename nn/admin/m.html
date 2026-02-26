@@ -34,7 +34,7 @@
 }
 
    #info { padding:15px; }
-   h1 { margin-top:0px; }
+   /*h1 { margin-top:0px; }*/
    a { text-decoration:none; }
 </style>
 
@@ -797,16 +797,6 @@ winurlparams.delete('thresholded');
 let compareurlparams = new URLSearchParams(winurlparams);
 if (compexclparam) { for (p of compexclparam.split(',')) { compareurlparams.delete(p); }; };
 
-/*function buildNavHome( navbar, baseUrl=null, homeState=null ) {
-    if( !baseUrl )   { baseUrl = '../admin/dashboard.html'; }
-    if( !homeState ) { homeState = clearForDashParams(appState); }
-    
-    let homeUrl = baseUrl + buildParameterList(homeState);
-    let homeDiv = faddelem('div', navbar, { id: 'home' });
-    let hLink = faddelem('a', homeDiv, { href: homeUrl });
-    faddelem('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
-}*/
-
 // Local helper to ensure innerHTML works for icons
 function faddelemLocal(type, parent, props) {
     let el = document.createElement(type);
@@ -848,7 +838,6 @@ function buildNavHomeLocal( navbar, baseUrl=null, homeState=null ) {
   buildNavHomeLocal( navbar, homeUrl, appState );
 
   document.body.prepend(navbar);
-  //faddelem('p', document.body).appendChild(navbar);
 
 function fdate(str) {
    str = str.replace(/t/i,' '); //replaces T (case insensitive) with a space
