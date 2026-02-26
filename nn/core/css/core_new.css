@@ -29,12 +29,12 @@
 }
 
 /* --- 2. THE FINAL ALIGNMENT CORE --- */
-/* Everything uses the exact same width rules for perfect alignment */
-#main, .rl-box-bar, .navbar, #grid, dl, p, table {
-  display: block;               /* Changed to block for consistent width calculation */
-  width: 100%;                  /* Fills screen on mobile */
-  max-width: 700px;             /* Desktop limit */
-  margin-left: auto;            /* Centering */
+/* Forced block display on containers ensures they all respect the 700px max */
+#main, .rl-box-bar, .navbar, #grid, dl, p {
+  display: block;               
+  width: 100%;                  
+  max-width: 700px;             
+  margin-left: auto;            
   margin-right: auto;
   box-sizing: border-box;       
 }
@@ -69,10 +69,12 @@
 dl { background:var(--color-alt); display: grid; grid-template-columns: max-content; border: 1px solid var(--color-border); border-width: 1px 0; padding: 10px; }
 dd { margin: 0; grid-column-start: 2;} 
 
-/* TABLE FIX: Explicitly set display: table and width: 100% to fill the 700px max-width */
+/* TABLE FIX: Forced width and layout to match Navbar exactly */
 table { 
-  display: table; 
-  width: 100%; 
+  display: table !important; 
+  width: 100% !important; 
+  max-width: 700px; 
+  table-layout: fixed;      /* KEY: Forces columns to expand to fill the 700px */
   border-collapse: collapse; 
   margin-left: auto; 
   margin-right: auto; 
@@ -81,7 +83,7 @@ th { position:sticky; top:0; font-weight:400; font-size:14px; background:var(--c
 th:first-child{ border-radius: 5px 0 0 0; }
 th:last-child{ border-radius: 0 5px 0 0; }
 tbody>tr { border: 1px solid var(--color-border); border-width: 1px 0; background:var(--color-alt); }
-td { padding: 10px; }
+td { padding: 10px; word-wrap: break-word; }
 
 /* --- 5. NAVIGATION --- */
 .navbar {
@@ -129,5 +131,4 @@ td { padding: 10px; }
 
 a { text-decoration:none; color:var(--color-text-link); }
 a:hover { background:var(--color-hover); }
-
 
