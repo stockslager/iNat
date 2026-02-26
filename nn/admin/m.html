@@ -15,38 +15,46 @@
 <title>Observations Map</title>
 <style>
 /* New Header Bar - Replaces .navbar.v2-menu */
+/* 1. Header Bar Container (The Grey Bar) */
 .header-bar {
    height: 44px;
    max-width: 700px;
    width: 95vw;
-   margin: 10px 0 0 8px;       /* Top margin for breathing room, left-aligned */
-   background-color: #f2f2f2;  /* Classic grey bar */
-   border-radius: 8px;         /* Rounded corners */
-   display: flex;              /* Flexbox for alignment */
-   justify-content: flex-end;  /* Pushes content (the icon) to the right */
-   align-items: center;        /* Vertically centers the icon */
+   margin: 10px 0 0 8px;       
+   background-color: #f2f2f2;  
+   border-radius: 8px;         
+   display: flex;              
+   justify-content: flex-end;  
+   align-items: center;        
    position: relative;
    z-index: 2000;
    box-sizing: border-box;
-   border: 1px solid #ddd;     /* Optional: subtle border to define shape */
+   border: 1px solid #ddd;     
+   overflow: hidden;           /* Essential: Clips hover shading to rounded corners */
 }
 
-/* Style for the link and icon */
+/* 2. Link & Icon Area (The Hoverable Zone) */
 #home-link { 
-   padding: 0 20px;            /* Clickable area width */
-   height: 100%;               /* Matches header height */
+   padding: 0 25px;            
+   height: 100%;               /* Fills the full height of the bar */
    display: flex;
-   align-items: center;
+   align-items: center;        /* Centers icon vertically */
    text-decoration: none;
    cursor: pointer;
-   color: inherit;             /* Keeps the icon color standard */
+   color: inherit;             
+   transition: background 0.2s;/* Smoothly fades the hover effect */
 }
 
-/* Adjust Map position to account for the new bar */
+/* 3. Hover State */
+#home-link:hover {
+   background-color: #e0e0e0;  /* Subtle darker grey shading */
+}
+
+/* 4. Map Adjustment */
 #mapid { 
    max-width: 700px;
    width: 95vw;
-   top: 60px;                  /* Bar(44) + Margin(10) + Gap(6) */
+   top: 60px;                  /* Header(44) + Margin(10) + Gap(6) */
    left: 8px;
    height: calc(100vh - 70px); 
    position: absolute;
