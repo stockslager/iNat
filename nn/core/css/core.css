@@ -94,31 +94,23 @@
    #grid { position:relative; /*padding-top:50px;*/ width:375px; padding:0px; border:0px; }
    .gridcell { position:absolute; background:#cccccc; text-align:center; display:flex; justify-content:center; align-items:center; }
 
-/* ... [Keeping your existing root and header styles the same] ... */
-
 .navbar {
   overflow: hidden;
   background-color: var(--color-brand);
-  border-radius: 5px;
+  border-radius: 5px 5px 5px 5px;
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
   align-items: center;
 }
 
 .navbar a {
-  display: block; 
-  /* CHANGE: Fixes the 2px vertical shift on iPhone by standardizing alignment */
-  vertical-align: middle; 
-  /* CHANGE: Removes the default gray tap box on iOS that overlaps your black hover */
-  -webkit-tap-highlight-color: transparent; 
+  display: inline-block; /* Add this */
   float: left;
   font-size: 15px;
   color: white;
   text-align: center;
   padding: 12px 14px;
   text-decoration: none;
-  line-height: 1.2; /* CHANGE: Fixes the 2px "jump" on iPhone tap */
-  -webkit-tap-highlight-color: transparent; /* CHANGE: Removes Safari's default gray tap box */
 }
 
 .dd_title {
@@ -128,22 +120,26 @@
   text-align: center;
   padding: 12px 14px;
   text-decoration: none;
-  line-height: 1.2; /* CHANGE: Keeps text aligned with the other nav links */
 }
 
 .dropdown {
   float: left;
   overflow: hidden;
-  /* CHANGE: Remove tap highlight here too */
-  -webkit-tap-highlight-color: transparent;
+}
+
+.dropdown {
+  cursor: pointer;
+  font-size: 15px;  
+  border: none;
+  outline: none;
+  color: white;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
 }
 
 .dropbtn {
-  float: left;    /* CHANGE: Floats the button like your links */
-  display: block; /* CHANGE: Allows the black background to fill the full padding area */
-  /* CHANGE: Standardizes height to prevent the 2px "jump" on tap */
-  vertical-align: middle;
-  line-height: normal; 
+  display: inline-block; /* Add this */
   cursor: pointer;
   font-size: 15px;  
   border: none;
@@ -153,14 +149,10 @@
   background-color: inherit;
   font-family: inherit;
   margin: 0;
-  line-height: 1.2; /* CHANGE: Critical fix for the 2px vertical shift on iOS */
-  -webkit-tap-highlight-color: transparent;
 }
 
 .navbar a:hover, .dropdown:hover .dropbtn, .dropbtn:focus {
   background-color: black;
-  /* Ensure text color remains white against black background */
-  color: white; 
 }
 
 .dropdown-content {
@@ -176,16 +168,17 @@
 .dropdown-content a {
   float: none;
   color: black;
-  padding: 10px 14px;
+  padding: 10px 14px 10px 14px;
+  /*padding: 10px 14px;*/
   text-decoration: none;
   display: block;
   text-align: left;
 }
 
 .v2-menu .dropdown-content a {
-    display: flex;       
-    align-items: center; 
-    gap: 15px;           
+    display: flex;       /* Aligns icon and text in a row */
+    align-items: center; /* Centers them vertically */
+    gap: 15px;           /* THE FIX: Adds exactly 15px between icon and text */
     text-decoration: none;
     padding: 8px 12px;
 }
