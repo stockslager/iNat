@@ -94,17 +94,24 @@
    #grid { position:relative; /*padding-top:50px;*/ width:375px; padding:0px; border:0px; }
    .gridcell { position:absolute; background:#cccccc; text-align:center; display:flex; justify-content:center; align-items:center; }
 
+/* ... [Keeping your existing root and header styles the same] ... */
+
 .navbar {
   overflow: hidden;
   background-color: var(--color-brand);
-  border-radius: 5px 5px 5px 5px;
+  border-radius: 5px;
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
   align-items: center;
 }
 
 .navbar a {
-  display: inline-block; /* Add this */
+  /* CHANGE: Use inline-block so background fills the padding area */
+  display: inline-block; 
+  /* CHANGE: Fixes the 2px vertical shift on iPhone by standardizing alignment */
+  vertical-align: middle; 
+  /* CHANGE: Removes the default gray tap box on iOS that overlaps your black hover */
+  -webkit-tap-highlight-color: transparent; 
   float: left;
   font-size: 15px;
   color: white;
@@ -125,21 +132,16 @@
 .dropdown {
   float: left;
   overflow: hidden;
-}
-
-.dropdown {
-  cursor: pointer;
-  font-size: 15px;  
-  border: none;
-  outline: none;
-  color: white;
-  background-color: inherit;
-  font-family: inherit;
-  margin: 0;
+  /* CHANGE: Remove tap highlight here too */
+  -webkit-tap-highlight-color: transparent;
 }
 
 .dropbtn {
-  display: inline-block; /* Add this */
+  /* CHANGE: inline-block ensures the background covers the full 12px 14px padding */
+  display: inline-block;
+  /* CHANGE: Standardizes height to prevent the 2px "jump" on tap */
+  vertical-align: middle;
+  line-height: normal; 
   cursor: pointer;
   font-size: 15px;  
   border: none;
@@ -153,6 +155,8 @@
 
 .navbar a:hover, .dropdown:hover .dropbtn, .dropbtn:focus {
   background-color: black;
+  /* Ensure text color remains white against black background */
+  color: white; 
 }
 
 .dropdown-content {
@@ -168,17 +172,16 @@
 .dropdown-content a {
   float: none;
   color: black;
-  padding: 10px 14px 10px 14px;
-  /*padding: 10px 14px;*/
+  padding: 10px 14px;
   text-decoration: none;
   display: block;
   text-align: left;
 }
 
 .v2-menu .dropdown-content a {
-    display: flex;       /* Aligns icon and text in a row */
-    align-items: center; /* Centers them vertically */
-    gap: 15px;           /* THE FIX: Adds exactly 15px between icon and text */
+    display: flex;       
+    align-items: center; 
+    gap: 15px;           
     text-decoration: none;
     padding: 8px 12px;
 }
