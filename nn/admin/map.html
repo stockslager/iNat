@@ -64,14 +64,19 @@
    align-items: center;
    padding: 0 15px;
 
-   /* THE 1PX MAP SHIFT FIX */
-   transform: translateZ(0); /* Forces GPU rendering to stop sub-pixel rounding */
-   backface-visibility: hidden; /* Prevents "jitter" during page transitions */
-
    /* THE IPHONE FIXES: Keeps the icon from jumping 2px on tap */
    -webkit-tap-highlight-color: transparent;
    line-height: 1;
 }
+	
+/* ONLY apply the hardware-acceleration fix to iPhone/Safari */
+@supports (-webkit-touch-callout: none) {
+  #home-link {
+    transform: translateZ(0); 
+    perspective: 1000px; /* Extra stabilization for WebKit */
+    backface-visibility: hidden;
+  }
+}	
 	
 /*#home-link { 
    font-size: 14px;   
