@@ -55,16 +55,31 @@
 }
 
 #home-link { 
+   font-size: 16px; 
+   margin-left: auto; 
+   
+   /* THE TRICK: This ensures the black hover fill covers the full 44px bar height */
+   height: 100%;
+   display: flex;
+   align-items: center;
+   padding: 0 15px;
+
+   /* THE IPHONE FIXES: Keeps the icon from jumping 2px on tap */
+   -webkit-tap-highlight-color: transparent;
+   line-height: 1;
+}
+	
+/*#home-link { 
    font-size: 14px;   
    padding: 0 15px;            
-   height: 100%;               /* Fills the full height of the bar */
+   height: 100%;               
    display: flex;
-   align-items: center;        /* Centers icon vertically */
+   align-items: center;       
    text-decoration: none;
    cursor: pointer;
    color: inherit;             
-   transition: background 0.2s;/* Smoothly fades the hover effect */
-}
+   transition: background 0.2s;
+}*/
 
 #home-link:hover {
    background-color: black;  /* Subtle darker grey shading */
