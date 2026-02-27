@@ -106,8 +106,7 @@
 }
 
 .navbar a {
-  /* CHANGE: Use inline-block so background fills the padding area */
-  display: inline-block; 
+  display: block; 
   /* CHANGE: Fixes the 2px vertical shift on iPhone by standardizing alignment */
   vertical-align: middle; 
   /* CHANGE: Removes the default gray tap box on iOS that overlaps your black hover */
@@ -118,6 +117,8 @@
   text-align: center;
   padding: 12px 14px;
   text-decoration: none;
+  line-height: 1.2; /* CHANGE: Fixes the 2px "jump" on iPhone tap */
+  -webkit-tap-highlight-color: transparent; /* CHANGE: Removes Safari's default gray tap box */
 }
 
 .dd_title {
@@ -127,6 +128,7 @@
   text-align: center;
   padding: 12px 14px;
   text-decoration: none;
+  line-height: 1.2; /* CHANGE: Keeps text aligned with the other nav links */
 }
 
 .dropdown {
@@ -137,8 +139,8 @@
 }
 
 .dropbtn {
-  /* CHANGE: inline-block ensures the background covers the full 12px 14px padding */
-  display: inline-block;
+  float: left;    /* CHANGE: Floats the button like your links */
+  display: block; /* CHANGE: Allows the black background to fill the full padding area */
   /* CHANGE: Standardizes height to prevent the 2px "jump" on tap */
   vertical-align: middle;
   line-height: normal; 
@@ -151,6 +153,8 @@
   background-color: inherit;
   font-family: inherit;
   margin: 0;
+  line-height: 1.2; /* CHANGE: Critical fix for the 2px vertical shift on iOS */
+  -webkit-tap-highlight-color: transparent;
 }
 
 .navbar a:hover, .dropdown:hover .dropbtn, .dropbtn:focus {
