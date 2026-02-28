@@ -270,6 +270,8 @@ function buildMenu( fields ) {
       menu_string = '<div class="navbar">';
 
       if( fields && fields.length > 0 ) {
+          // 1. Find the longest character count for numbers in the array (to add padding to numbers in drop down)
+          const maxChars = Math.max(...fields.map(f => f.count.toString().length));
           for( let i=0; i<fields.length; i++ ) {
                if( p_obs_fields ) {
                    winurlparams.delete('obs_fields');
@@ -294,7 +296,7 @@ function buildMenu( fields ) {
                    } 
 
                    if( !field_array.includes(fields[i].field_id.toString()) ) {
-                       let padded_count = fields[i].count.toString().padStart(4, '\u2007');
+                       let padded_count = fields[i].count.toString().padStart(maxChars, '\u2007');
                        links += furl(github_root+'observation_fields/o2.html?'+winurlparams, padded_count + ' ~ ' + fields[i].field_name);
                    }
                }
