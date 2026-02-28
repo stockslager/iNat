@@ -270,7 +270,8 @@ function buildMenu( fields ) {
       menu_string = '<div class="navbar">';
 
       if( fields && fields.length > 0 ) {
-          // 1. Find the longest character count for numbers in the array (to add padding to numbers in drop down)
+          // Sort & then find the longest character count for numbers in the array (to add padding to numbers in drop down)
+          fields.sort((a, b) => b.count - a.count);
           const maxChars = Math.max(...fields.map(f => f.count.toString().length));
           for( let i=0; i<fields.length; i++ ) {
                if( p_obs_fields ) {
