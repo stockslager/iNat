@@ -86,11 +86,6 @@ input[type=text], select {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
-  /* Forces numbers to align vertically even in standard fonts */
-  font-variant-numeric: tabular-nums;
-  
-  /* Fallback: many mobile browsers require a generic monospace declaration */
-  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
 }
 
 input[type=submit] {
@@ -107,6 +102,11 @@ input[type=submit] {
 input[type=submit]:hover {
   background-color: #171717;
 }
+ 
+select, option {
+  font-family: 'Courier New', Courier, monospace !important;
+  font-variant-numeric: tabular-nums; /* Forces numbers to equal widths */
+} 
 </style>
 <body>
 <script>
@@ -298,7 +298,7 @@ function buildMenu( fields ) {
                    } 
 
                    if( !field_array.includes(fields[i].field_id.toString()) ) {
-                       let padded_count = fields[i].count.toString().padStart(4, '\u00A0');
+                       let padded_count = fields[i].count.toString().padStart(4, '\xa0');
                        links += furl(github_root+'observation_fields/o2.html?'+winurlparams, padded_count + ' ~ ' + fields[i].field_name);
                    }
                }
