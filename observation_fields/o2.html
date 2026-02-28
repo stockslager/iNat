@@ -293,7 +293,8 @@ function buildMenu( fields ) {
                    } 
 
                    if( !field_array.includes(fields[i].field_id.toString()) ) {
-                       links += furl(github_root+'observation_fields/o2.html?'+winurlparams, fields[i].count + ' ~ ' + fields[i].field_name);
+                       let padded_count = fields[i].count.toString().padStart(4, ' ');
+                       links += furl(github_root+'observation_fields/o2.html?'+winurlparams, padded_count + ' ~ ' + fields[i].field_name);
                    }
                }
           }
