@@ -103,10 +103,6 @@ input[type=submit]:hover {
   background-color: #171717;
 }
  
-select, option {
-  font-family: 'Courier New', Courier, monospace !important;
-  font-variant-numeric: tabular-nums; /* Forces numbers to equal widths */
-} 
 </style>
 <body>
 <script>
@@ -298,7 +294,7 @@ function buildMenu( fields ) {
                    } 
 
                    if( !field_array.includes(fields[i].field_id.toString()) ) {
-                       let padded_count = fields[i].count.toString().padStart(4, '\xa0');
+                       let padded_count = fields[i].count.toString().padStart(4, '\u2007');
                        links += furl(github_root+'observation_fields/o2.html?'+winurlparams, padded_count + ' ~ ' + fields[i].field_name);
                    }
                }
