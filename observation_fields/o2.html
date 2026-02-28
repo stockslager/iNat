@@ -86,7 +86,11 @@ input[type=text], select {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
-  font-family: 'Courier New', Courier, monospace;  /* needs fixed width font for numeric padding */
+  /* Forces numbers to align vertically even in standard fonts */
+  font-variant-numeric: tabular-nums;
+  
+  /* Fallback: many mobile browsers require a generic monospace declaration */
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
 }
 
 input[type=submit] {
