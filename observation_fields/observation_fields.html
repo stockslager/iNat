@@ -15,7 +15,7 @@
 <script type="text/javascript" src='/iNat/common_func.js'> </script>
 <script type="text/javascript" src='/iNat/observation_fields/js/observations.js'> </script>
 <script type="text/javascript" src='/iNat/observation_fields/js/fetch_obs.js'> </script>
-<script type="text/javascript" src='/iNat/observation_fields/js/obs_results_common.js'> </script>
+<script type="text/javascript" src='/iNat/observation_fields/js/obs2.js'> </script>
 <script type="text/javascript" src='/iNat/js/plant_params_v10.js'> </script>
 <title>Observation Field Viewer</title>
 </head>
@@ -102,6 +102,7 @@ input[type=submit] {
 input[type=submit]:hover {
   background-color: #171717;
 }
+ 
 </style>
 <body>
 <script>
@@ -166,7 +167,7 @@ function buildTitle( name, content, tooltip ) {
  
 function buildQueryForm() {
   faddelem('p',document.body,{innerHTML:('<br><div>' +
-                                           '<form action='+github_root+'observation_fields/observation_fields.html>' +
+                                           '<form action='+github_root+'observation_fields/o2.html>' +
                                               '<label for="ofvDropdown">OFV datatype:<br></label>' +
                                               '<select id="ofvDropdown" name="ofv_datatype" required>' + 
                                                       '<option value="">-- Choose OFV Datatype --</option>' + 
@@ -269,6 +270,9 @@ function buildMenu( fields ) {
       menu_string = '<div class="navbar">';
 
       if( fields && fields.length > 0 ) {
+          // Sort & then find the longest character count for numbers in the array (to add padding to numbers in drop down)
+          fields.sort((a, b) => b.count - a.count);
+          const maxChars = Math.max(...fields.map(f => f.count.toString().length));
           for( let i=0; i<fields.length; i++ ) {
                if( p_obs_fields ) {
                    winurlparams.delete('obs_fields');
@@ -293,8 +297,8 @@ function buildMenu( fields ) {
                    } 
 
                    if( !field_array.includes(fields[i].field_id.toString()) ) {
-                       let padded_count = fields[i].count.toString().padStart(4, '\xa0');
-                       links += furl(github_root+'observation_fields/observation_fields.html?'+winurlparams, padded_count + ' ~ ' + fields[i].field_name);
+                       let padded_count = fields[i].count.toString().padStart(maxChars, '\u2007');
+                       links += furl(github_root+'observation_fields/o2.html?'+winurlparams, padded_count + ' ~ ' + fields[i].field_name);
                    }
                }
           }
@@ -324,7 +328,7 @@ function buildMenu( fields ) {
               winurlparams.delete('chosen_taxon_id');
               winurlparams.delete('field_value');
               winurlparams.delete('field');
-              menu_string += buildMenuURL( furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,'Un-Merge') );
+              menu_string += buildMenuURL( furl(github_root+'observation_fields/o2.html?'+winurlparams,'Un-Merge') );
               winurlparams.append('operator', p_operator);
               if( p_chosen_taxon_id ) { winurlparams.append('chosen_taxon_id', p_chosen_taxon_id); }
               if( p_field_value )     { winurlparams.append('field_value', p_field_value); }
@@ -332,7 +336,7 @@ function buildMenu( fields ) {
           } else {
               winurlparams.delete('operator');
               winurlparams.append('operator', 'merge');
-              menu_string += buildMenuURL( furl(github_root+'observation_fields/observation_fields.html?'+winurlparams,'Merge') );
+              menu_string += buildMenuURL( furl(github_root+'observation_fields/o2.html?'+winurlparams,'Merge') );
               winurlparams.delete('operator');
               if( p_operator ) {
                   winurlparams.append('operator', p_operator);
@@ -340,7 +344,7 @@ function buildMenu( fields ) {
           }
       }
  
-      menu_string += buildHome( furl(github_root+'observation_fields/observation_fields.html?clear_cache=yes','Start Over') );
+      menu_string += buildHome( furl(github_root+'observation_fields/o2.html?clear_cache=yes','Start Over') );
  
       menu_string += '</div>';
 
