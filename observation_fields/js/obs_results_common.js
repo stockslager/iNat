@@ -156,8 +156,10 @@ function buildDropDownArray( results, box_array ) {
             for( let j=0; j<rec.ofvs.length; j++ ){
                  const matchingRow = add_array.find(item => item.field_id.toString() === rec.ofvs[j].field_id.toString() );
                  if( !matchingRow ) {
-                     add_array.push(new ddRow(rec.ofvs[j].field_id.toString(), rec.ofvs[j].name.toLowerCase(), rec.ofvs[j].datatype ) );
-                  }
+                     add_array.push(new ddRow(rec.ofvs[j].field_id.toString(), rec.ofvs[j].name.toLowerCase(), rec.ofvs[j].datatype, 1 ) );
+                 } else {
+                     matchingRow.count++;
+                 }
                
                   for( let r=0; r<field_array_copy.length; r++ ) {
                        if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){
