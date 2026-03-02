@@ -59,24 +59,18 @@ function faddelemLocal(etype,eparent=null,eattributes={}) {
    if (eparent) { eparent.appendChild(eobj); };
    return eobj;
 }
- 
-function buildPage(config) {
- 
-   buildMenu( config );
 
-   // 1. Create a wrapper paragraph
-   let p = faddelemLocal('p', document.body);
-
-   // 2. Create the Toggle Button
-   let btn = faddelemLocal('button', p, {
-      innerText: 'Show Observations ↓',
+function addLink( p, project_title, project_id ) {
+ 
+   // Create the Toggle Link (styled as a URL)
+   let toggleLink = faddelemLocal('a', p, {
+      href: '#',
+      innerText: 'View Observations ↓',
       style: {
-         padding: '10px 20px',
+         color: '#007bff',      
+         textDecoration: 'underline',
          cursor: 'pointer',
-         backgroundColor: '#2c3e50',
-         color: 'white',
-         border: 'none',
-         borderRadius: '4px'
+         fontSize: '16px'
       }
    });
 
@@ -85,10 +79,10 @@ function buildPage(config) {
       id: 'inat-wrapper',
       style: { display: 'none', marginTop: '20px' },
       innerHTML: '<div data-inat-widget ' +
-                 'data-inat-source="casual-woodland-garden" ' +
+                 'data-inat-source=' + project_id + ' ' +
                  'data-inat-source-type="project" ' + 
                  'data-inat-theme="transparent-dark" ' + 
-                 'data-inat-title="Casual Woodland Garden" ' + 
+                 'data-inat-title=' + project_title + ' ' + 
                  'data-inat-layout="grid" ' + 
                  'data-inat-limit="9" ' + 
                  'data-inat-compact="true" ' + 
@@ -97,23 +91,37 @@ function buildPage(config) {
 
    // 4. Add the Toggle & Lazy Load Logic
    let isLoaded = false;
-   btn.onclick = function() {
+   toggleLink.onclick = function(e) {
+      e.preventDefault(); // Prevent page from jumping to top
+      
       if (widgetContainer.style.display === 'none') {
          widgetContainer.style.display = 'block';
-         btn.innerText = 'Hide Observations ↑';
+         toggleLink.innerText = 'Hide Observations ↑';
 
          if (!isLoaded) {
             let script = document.createElement('script');
-            script.src = "https://glauberramos.github.io/inat/inat-widget.js";
+            script.src = "https://glauberramos.github.io";
             document.body.appendChild(script);
             isLoaded = true;
          }
       } else {
          widgetContainer.style.display = 'none';
-         btn.innerText = 'Show Observations ↓';
+         toggleLink.innerText = 'View Observations ↓';
       }
    };
+}
+ 
+function buildPage(config) {
+ 
+   buildMenu( config );
 
+   // 1. Create a wrapper paragraph
+   let p = faddelemLocal('p', document.body);
+
+   addLink(p, 'Casual Woodland Garden', 'casual-woodland-garden');
+   addLink(p, 'Britton Woods', 'britton-woods');
+
+ 
 };
  
 </script>
