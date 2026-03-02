@@ -75,19 +75,18 @@ function addLink( p, project_title, project_id ) {
          if (!isLoaded) {
             toggleLink.innerText = 'Loading ' + project_title + '...';
 
-            // Execute the API call using the current delay offset
             setTimeout(() => {
                if (window.iNaturalist && window.iNaturalist.Widgets) {
-                   window.iNaturalist.Widgets.create();
+                   // TARGETED LOAD: Only create the widget inside THIS container
+                   let target = widgetContainer.querySelector('[data-inat-widget]');
+                   window.iNaturalist.Widgets.create(target); 
+                   
                    toggleLink.innerText = 'Hide ' + project_title + ' ↑';
                    isLoaded = true;
                }
             }, globalDelayOffset);
 
-            // Bump the delay for the NEXT click by 1 second
             globalDelayOffset += 1000; 
-
-            // Reset the stagger "cooldown" after 2 seconds of inactivity
             setTimeout(() => { globalDelayOffset = 0; }, 2000);
          } else {
             toggleLink.innerText = 'Hide ' + project_title + ' ↑';
