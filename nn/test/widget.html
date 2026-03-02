@@ -60,69 +60,62 @@ function faddelemLocal(etype,eparent=null,eattributes={}) {
    return eobj;
 }
 
+let script = document.createElement('script');
+script.src = "https://glauberramos.github.io/inat/inat-widget.js"; 
+document.body.appendChild(script);
+
 function addLink( p, project_title, project_id ) {
- 
-   // Create the Toggle Link (styled as a URL)
    let toggleLink = faddelemLocal('a', p, {
       href: '#',
-      innerText: 'View Observations ↓',
-      style: {
-         color: '#007bff',      
-         textDecoration: 'underline',
-         cursor: 'pointer',
-         fontSize: '16px'
+      innerText: 'View ' + project_title + ' ↓',
+      style: { 
+         color: '#007bff', 
+         textDecoration: 'underline', 
+         cursor: 'pointer', 
+         display: 'block', 
+         margin: '10px 0',
+         fontWeight: 'bold' // Added for better visibility
       }
    });
 
-   // 3. Create the Hidden Container
    let widgetContainer = faddelemLocal('div', p, {
-      id: 'inat-wrapper',
-      style: { display: 'none', marginTop: '20px' },
+      style: { display: 'none', marginTop: '10px', border: '1px solid #eee', padding: '10px' },
       innerHTML: '<div data-inat-widget ' +
-                 'data-inat-source=' + project_id + ' ' +
+                 'data-inat-source="' + project_id + '" ' +
                  'data-inat-source-type="project" ' + 
                  'data-inat-theme="transparent-dark" ' + 
-                 'data-inat-title=' + project_title + ' ' + 
+                 'data-inat-title="' + project_title + '" ' + 
                  'data-inat-layout="grid" ' + 
                  'data-inat-limit="9" ' + 
                  'data-inat-compact="true" ' + 
                  'data-inat-order-by="observed_on"></div>'
    });
 
-   // 4. Add the Toggle & Lazy Load Logic
-   let isLoaded = false;
    toggleLink.onclick = function(e) {
-      e.preventDefault(); // Prevent page from jumping to top
-      
+      e.preventDefault();
       if (widgetContainer.style.display === 'none') {
          widgetContainer.style.display = 'block';
-         toggleLink.innerText = 'Hide Observations ↑';
-
-         if (!isLoaded) {
-            let script = document.createElement('script');
-            script.src = "https://glauberramos.github.io";
-            document.body.appendChild(script);
-            isLoaded = true;
+         toggleLink.innerText = 'Hide ' + project_title + ' ↑';
+         
+         // Trigger iNat rendering
+         if (window.iNaturalist && window.iNaturalist.Widgets) {
+             window.iNaturalist.Widgets.create();
          }
       } else {
          widgetContainer.style.display = 'none';
-         toggleLink.innerText = 'View Observations ↓';
+         toggleLink.innerText = 'View ' + project_title + ' ↓';
       }
    };
 }
  
 function buildPage(config) {
- 
-   buildMenu( config );
-
-   // 1. Create a wrapper paragraph
+   buildMenu(config);
    let p = faddelemLocal('p', document.body);
 
+   // Now you can add as many as you want!
    addLink(p, 'Casual Woodland Garden', 'casual-woodland-garden');
    addLink(p, 'Britton Woods', 'britton-woods');
-
- 
-};
+}
  
 </script>
 <script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
