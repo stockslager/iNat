@@ -206,6 +206,7 @@ function ensureQuestionMark(str) {
 
 function getObs() {
   let api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype );
+  console.log('api params ' + api_params);
   obs_data = new ObservationsData( '', '', api_params );
 
   (async () => {
