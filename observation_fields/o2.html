@@ -209,9 +209,9 @@ function getObs() {
   let api_params = '';
   
   if( p_ofv_datatype ) {
-      ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype );
+      api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype );
   } else {
-      ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype_dd );
+      api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype_dd );
   }
   
   obs_data = new ObservationsData( '', '', api_params );
