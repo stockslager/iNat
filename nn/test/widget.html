@@ -26,12 +26,79 @@ let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
 
 appState       = buildStateFromParams(winurlparams);
  
-let menu_name  = '';
- 
-// find the html name to pass to other pages for nav
-let path      = window.location.pathname;
-let html_name = path.substring(path.lastIndexOf('/') + 1);
+// --- GLOBAL SETTINGS ---
+let globalDelayOffset = 0; // Tracks the 1-second stagger for rapid clicks
 
+// 1. Load the iNaturalist script once at the start
+let script = document.createElement('script');
+script.src = "https://glauberramos.github.io/inat/inat-widget.js"; 
+document.body.appendChild(script);
+
+function addLink( p, project_title, project_id ) {
+   let isLoaded = false; // Prevents re-fetching data if they hide/show the same link
+
+   // Create the Toggle Link (styled as a URL)
+   let toggleLink = faddelemLocal('a', p, {
+      href: '#',
+      innerText: 'View ' + project_title + ' ↓',
+      style: { 
+         color: '#007bff', 
+         textDecoration: 'underline', 
+         cursor: 'pointer', 
+         display: 'block', 
+         margin: '10px 0',
+         fontWeight: 'bold' 
+      }
+   });
+
+   // Create the Hidden Container for the iNat Widget
+   let widgetContainer = faddelemLocal('div', p, {
+      style: { display: 'none', marginTop: '10px', border: '1px solid #eee', padding: '10px' },
+      innerHTML: '<div data-inat-widget ' +
+                 'data-inat-source="' + project_id + '" ' +
+                 'data-inat-source-type="project" ' + 
+                 'data-inat-theme="transparent-dark" ' + 
+                 'data-inat-title="' + project_title + '" ' + 
+                 'data-inat-layout="grid" ' + 
+                 'data-inat-limit="9" ' + 
+                 'data-inat-compact="true" ' + 
+                 'data-inat-order-by="observed_on"></div>'
+   });
+
+   // Handle Click Logic (Lazy Loading + Staggered Delay)
+   toggleLink.onclick = function(e) {
+      e.preventDefault();
+      
+      if (widgetContainer.style.display === 'none') {
+         widgetContainer.style.display = 'block';
+
+         if (!isLoaded) {
+            toggleLink.innerText = 'Loading ' + project_title + '...';
+
+            // Execute the API call using the current delay offset
+            setTimeout(() => {
+               if (window.iNaturalist && window.iNaturalist.Widgets) {
+                   window.iNaturalist.Widgets.create();
+                   toggleLink.innerText = 'Hide ' + project_title + ' ↑';
+                   isLoaded = true;
+               }
+            }, globalDelayOffset);
+
+            // Bump the delay for the NEXT click by 1 second
+            globalDelayOffset += 1000; 
+
+            // Reset the stagger "cooldown" after 2 seconds of inactivity
+            setTimeout(() => { globalDelayOffset = 0; }, 2000);
+         } else {
+            toggleLink.innerText = 'Hide ' + project_title + ' ↑';
+         }
+      } else {
+         widgetContainer.style.display = 'none';
+         toggleLink.innerText = 'View ' + project_title + ' ↓';
+      }
+   };
+}
+ 
 function buildMenu( config ) {
  
     // Create the main navbar container
@@ -59,60 +126,13 @@ function faddelemLocal(etype,eparent=null,eattributes={}) {
    if (eparent) { eparent.appendChild(eobj); };
    return eobj;
 }
-
-let script = document.createElement('script');
-script.src = "https://glauberramos.github.io/inat/inat-widget.js"; 
-document.body.appendChild(script);
-
-function addLink( p, project_title, project_id ) {
-   let toggleLink = faddelemLocal('a', p, {
-      href: '#',
-      innerText: 'View ' + project_title + ' ↓',
-      style: { 
-         color: '#007bff', 
-         textDecoration: 'underline', 
-         cursor: 'pointer', 
-         display: 'block', 
-         margin: '10px 0',
-         fontWeight: 'bold' // Added for better visibility
-      }
-   });
-
-   let widgetContainer = faddelemLocal('div', p, {
-      style: { display: 'none', marginTop: '10px', border: '1px solid #eee', padding: '10px' },
-      innerHTML: '<div data-inat-widget ' +
-                 'data-inat-source="' + project_id + '" ' +
-                 'data-inat-source-type="project" ' + 
-                 'data-inat-theme="transparent-dark" ' + 
-                 'data-inat-title="' + project_title + '" ' + 
-                 'data-inat-layout="grid" ' + 
-                 'data-inat-limit="9" ' + 
-                 'data-inat-compact="true" ' + 
-                 'data-inat-order-by="observed_on"></div>'
-   });
-
-   toggleLink.onclick = function(e) {
-      e.preventDefault();
-      if (widgetContainer.style.display === 'none') {
-         widgetContainer.style.display = 'block';
-         toggleLink.innerText = 'Hide ' + project_title + ' ↑';
-         
-         // Trigger iNat rendering
-         if (window.iNaturalist && window.iNaturalist.Widgets) {
-             window.iNaturalist.Widgets.create();
-         }
-      } else {
-         widgetContainer.style.display = 'none';
-         toggleLink.innerText = 'View ' + project_title + ' ↓';
-      }
-   };
-}
  
 function buildPage(config) {
    buildMenu(config);
    let p = faddelemLocal('p', document.body);
 
-   // Now you can add as many as you want!
+   // a one second delay is added between clicks so it's ok to add as 
+   // many as we want.
    addLink(p, 'Casual Woodland Garden', 'casual-woodland-garden');
    addLink(p, 'Britton Woods', 'britton-woods');
 }
