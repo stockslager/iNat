@@ -207,11 +207,19 @@ function ensureQuestionMark(str) {
 
 function getObs() {
   let api_params = '';
-  
-  if( p_ofv_datatype ) {
-      api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype );
+
+  const query = new URLSearchParams(decodeURIComponent(p_query));
+  const value = query.get('ofv_datatype');
+ 
+  if( value === null ) {
+      // Parameter not in string
+      api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype_dd );        
+  } else if (value.trim() === "") {
+      // Parameter exists but is ""
+      api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype_dd );          
   } else {
-      api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype_dd );
+      // Parameter has a value
+      api_params = ensureQuestionMark( decodeURIComponent(p_query);          
   }
 
   console.log('api params ' + api_params);
