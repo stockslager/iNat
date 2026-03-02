@@ -27,12 +27,7 @@ let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
 appState       = buildStateFromParams(winurlparams);
  
 // --- GLOBAL SETTINGS ---
-let globalDelayOffset = 0; // Tracks the 1-second stagger for rapid clicks
-
-// 1. Load the iNaturalist script once at the start
-let script = document.createElement('script');
-script.src = "https://glauberramos.github.io/inat/inat-widget.js"; 
-document.body.appendChild(script);
+let globalDelayOffset = 0; 
 
 function addLink( p, project_title, project_id ) {
    let isLoaded = false;
@@ -43,7 +38,6 @@ function addLink( p, project_title, project_id ) {
       style: { color: '#007bff', textDecoration: 'underline', cursor: 'pointer', display: 'block', margin: '10px 0', fontWeight: 'bold' }
    });
 
-   // Create an EMPTY container first
    let widgetContainer = faddelemLocal('div', p, {
       style: { display: 'none', marginTop: '10px', border: '1px solid #eee', padding: '10px' }
    });
@@ -58,7 +52,7 @@ function addLink( p, project_title, project_id ) {
             toggleLink.innerText = 'Loading ' + project_title + '...';
 
             setTimeout(() => {
-               // 1. NOW we inject the HTML inside the container
+               // 1. Inject the HTML first
                widgetContainer.innerHTML = '<div data-inat-widget ' +
                  'data-inat-source="' + project_id + '" ' +
                  'data-inat-source-type="project" ' + 
@@ -69,16 +63,20 @@ function addLink( p, project_title, project_id ) {
                  'data-inat-compact="true" ' + 
                  'data-inat-order-by="observed_on"></div>';
 
-               // 2. Trigger the global scan to find the newly added HTML
-               if (window.iNaturalist && window.iNaturalist.Widgets) {
-                   window.iNaturalist.Widgets.create();
-                   toggleLink.innerText = 'Hide ' + project_title + ' ↑';
-                   isLoaded = true;
-               }
+               // 2. NOW load the script. This forces it to scan the new HTML immediately.
+               let s = document.createElement('script');
+               // Adding a timestamp (?t=...) ensures the browser treats it as a fresh execution
+               s.src = "https://glauberramos.github.io/inat/inat-widget.js?t=" + Date.now();
+               document.body.appendChild(s);
+
+               s.onload = function() {
+                  toggleLink.innerText = 'Hide ' + project_title + ' ↑';
+                  isLoaded = true;
+               };
             }, globalDelayOffset);
 
             globalDelayOffset += 1000; 
-            setTimeout(() => { globalDelayOffset = 0; }, 2000);
+            setTimeout(() => { globalDelayOffset = 0; }, 2500);
          } else {
             toggleLink.innerText = 'Hide ' + project_title + ' ↑';
          }
