@@ -18,6 +18,7 @@
 <body>
 <script type="text/javascript"   src='../core/js/common_functions.js'> </script>
 <script type="text/javascript"   src='../core/js/store.js'> </script>
+<script src="https://glauberramos.github.io/inat/inat-widget.js"></script>
 <script>
 let winurlstr         = window.location.href;
 let winurlsearchstr   = window.location.search;
@@ -47,12 +48,47 @@ function buildMenu( config ) {
     // Append the DOM nodes to the body
     faddelem('p', document.body).appendChild(navbar);
 }
+
+// Local helper to ensure innerHTML works 
+function faddelemLocal(type, parent, props) {
+    let el = document.createElement(type);
+    if (props.innerHTML) el.innerHTML = props.innerHTML;
+    if (props.id) el.id = props.id;
+    if (props.href) el.href = props.href;
+    if (props.className) el.className = props.className;
+    parent.appendChild(el);
+    return el;
+}
  
 function buildPage(config) {
  
    buildMenu( config );
 
+
+   let widget = '<div ' + 
+                 'data-inat-widget ' +
+                 'data-inat-source="casual-woodland-garden" ' +
+                 'data-inat-source-type="project" ' + 
+                 'data-inat-theme="light" ' + 
+                 'data-inat-title="Casual Woodland Garden" ' + 
+                 'data-inat-layout="grid" ' + 
+                 'data-inat-limit="10" ' + 
+                 'data-inat-order-by="observed_on"></div>';
+   console.log('widget ' + widget);
+
+
+   let bold = '<b> bold </b>';
+   faddelemLocal('body', bold);
+//let hLink = faddelemLocal('body', widget);	
+
 };
+ 
+// Create the home link inside the header bar
+// add a fallback in case they entered this page directly thereby bypassing the ui flow.
+let dashboardUrl = '../admin/dashboard.html?params='+appParams; 
+	
+
+ 
 </script>
 <script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
 <script>
