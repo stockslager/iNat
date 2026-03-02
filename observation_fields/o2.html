@@ -213,7 +213,8 @@ function getObs() {
   } else {
       api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype_dd );
   }
-  
+
+  console.log('api params ' + api_params);
   obs_data = new ObservationsData( '', '', api_params );
 
   (async () => {
