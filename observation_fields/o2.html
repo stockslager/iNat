@@ -212,16 +212,18 @@ function getObs() {
   const value = query.get('ofv_datatype');
  
   if( value === null ) {
-      p_ofv_datatype    = p_ofv_datatype_dd;
+      //p_ofv_datatype    = p_ofv_datatype_dd;
       // Parameter not in string
       api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype_dd );        
   } else if (value.trim() === "") {
-      p_ofv_datatype    = p_ofv_datatype_dd;
+      //p_ofv_datatype    = p_ofv_datatype_dd;
       // Parameter exists but is ""
       api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype_dd );          
   } else {
       // Parameter has a value
       console.log('query ' + p_query);
+      winurlparams.delete('ofv_datatype_dd');
+      winurlparams.append('ofv_datatype_dd', value);
       p_ofv_datatype    = value;
       p_ofv_datatype_dd = value;
       api_params = ensureQuestionMark( decodeURIComponent(p_query) );          
