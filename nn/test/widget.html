@@ -35,37 +35,19 @@ script.src = "https://glauberramos.github.io/inat/inat-widget.js";
 document.body.appendChild(script);
 
 function addLink( p, project_title, project_id ) {
-   let isLoaded = false; // Prevents re-fetching data if they hide/show the same link
+   let isLoaded = false;
 
-   // Create the Toggle Link (styled as a URL)
    let toggleLink = faddelemLocal('a', p, {
       href: '#',
       innerText: 'View ' + project_title + ' ↓',
-      style: { 
-         color: '#007bff', 
-         textDecoration: 'underline', 
-         cursor: 'pointer', 
-         display: 'block', 
-         margin: '10px 0',
-         fontWeight: 'bold' 
-      }
+      style: { color: '#007bff', textDecoration: 'underline', cursor: 'pointer', display: 'block', margin: '10px 0', fontWeight: 'bold' }
    });
 
-   // Create the Hidden Container for the iNat Widget
+   // Create an EMPTY container first
    let widgetContainer = faddelemLocal('div', p, {
-      style: { display: 'none', marginTop: '10px', border: '1px solid #eee', padding: '10px' },
-      innerHTML: '<div data-inat-widget ' +
-                 'data-inat-source="' + project_id + '" ' +
-                 'data-inat-source-type="project" ' + 
-                 'data-inat-theme="transparent-dark" ' + 
-                 'data-inat-title="' + project_title + '" ' + 
-                 'data-inat-layout="grid" ' + 
-                 'data-inat-limit="9" ' + 
-                 'data-inat-compact="true" ' + 
-                 'data-inat-order-by="observed_on"></div>'
+      style: { display: 'none', marginTop: '10px', border: '1px solid #eee', padding: '10px' }
    });
 
-   // Handle Click Logic (Lazy Loading + Staggered Delay)
    toggleLink.onclick = function(e) {
       e.preventDefault();
       
@@ -76,11 +58,20 @@ function addLink( p, project_title, project_id ) {
             toggleLink.innerText = 'Loading ' + project_title + '...';
 
             setTimeout(() => {
+               // 1. NOW we inject the HTML inside the container
+               widgetContainer.innerHTML = '<div data-inat-widget ' +
+                 'data-inat-source="' + project_id + '" ' +
+                 'data-inat-source-type="project" ' + 
+                 'data-inat-theme="transparent-dark" ' + 
+                 'data-inat-title="' + project_title + '" ' + 
+                 'data-inat-layout="grid" ' + 
+                 'data-inat-limit="9" ' + 
+                 'data-inat-compact="true" ' + 
+                 'data-inat-order-by="observed_on"></div>';
+
+               // 2. Trigger the global scan to find the newly added HTML
                if (window.iNaturalist && window.iNaturalist.Widgets) {
-                   // TARGETED LOAD: Only create the widget inside THIS container
-                   let target = widgetContainer.querySelector('[data-inat-widget]');
-                   window.iNaturalist.Widgets.create(target); 
-                   
+                   window.iNaturalist.Widgets.create();
                    toggleLink.innerText = 'Hide ' + project_title + ' ↑';
                    isLoaded = true;
                }
