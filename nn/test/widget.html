@@ -49,15 +49,16 @@ function buildMenu( config ) {
     faddelem('p', document.body).appendChild(navbar);
 }
 
-// Local helper to ensure innerHTML works 
-function faddelemLocal(type, parent, props) {
-    let el = document.createElement(type);
-    if (props.innerHTML) el.innerHTML = props.innerHTML;
-    if (props.id) el.id = props.id;
-    if (props.href) el.href = props.href;
-    if (props.className) el.className = props.className;
-    parent.appendChild(el);
-    return el;
+function faddelemLocal(etype,eparent=null,eattributes={}) { 
+   let eobj = document.createElement(etype);
+   for (let [key,value] of Object.entries(eattributes)) {
+      if ( typeof value === 'object' && value !== null ) {
+         for (let [subkey,subvalue] of Object.entries(value)) { eobj[key][subkey] = subvalue; };
+      }
+      else { eobj[key] = value; };
+    };
+   if (eparent) { eparent.appendChild(eobj); };
+   return eobj;
 }
  
 function buildPage(config) {
