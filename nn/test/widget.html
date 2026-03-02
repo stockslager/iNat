@@ -1,0 +1,94 @@
+<!DOCTYPE html>      
+<html lang="en">        
+ 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="apple-mobile-web-app-title" content="Test Widget" />
+<meta name="description" content="Test Widget" />
+<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
+<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+<title>Test Widget</title>
+</head>
+
+<body>
+<script type="text/javascript"   src='../core/js/global_const.js'> </script>
+<script type="text/javascript"   src='../core/js/roots.js'> </script>
+<script type="text/javascript"   src='../core/js/store.js'> </script>
+<script>
+let winurlstr         = window.location.href;
+let winurlsearchstr   = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
+
+appState       = buildStateFromParams(winurlparams);
+ 
+let menu_name  = '';
+
+// constants 
+const CONST_API_PER_PAGE  = '10';
+const CONST_WITHOUT_TAXON_PLANTAE = '47126';
+const CONST_SPECIES      = 'species:';
+const CONST_OBSERVATIONS = 'observations:';
+const CONST_OF           = ' of ';
+ 
+// find the html name to pass to other pages for nav
+let path      = window.location.pathname;
+let html_name = path.substring(path.lastIndexOf('/') + 1);
+
+function buildMenu( results, config ) {
+ 
+    // Create the main navbar container
+    let navbar = document.createElement('div');
+    navbar.className = 'navbar v2-menu';
+
+    let baseUrl = window.location.origin + window.location.pathname;
+
+    // Build the Home Link
+    let homeState = clearForGardenListParams(appState);
+    buildNavHome( navbar, baseUrl, homeState );
+
+    // Append the DOM nodes to the body
+    faddelem('p', document.body).appendChild(navbar);
+}
+ 
+function buildPage(xobj, config) {
+ 
+   buildMenu( results, config );
+
+};
+</script>
+<script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
+<script>
+ 
+async function gatherResources() {
+  let json_path = json_root + getParams(appState);
+ 
+  try {
+      // Await the result of getObservations() and store the actual data
+      const config  = await asyncGetConfiguration( json_path, getComponent(appState) );
+     
+      // Pass the data to the buildPage function
+      buildPage(config); 
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+let message = validateGarden(appState);
+ 
+if( message ) {
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
+ 
+</script>
+</body>
+</html>
