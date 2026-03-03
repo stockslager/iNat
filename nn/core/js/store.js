@@ -830,6 +830,7 @@ function clearForDashParams(state) {
   urlState = setFieldName(urlState, '');
   urlState = setFieldValue(urlState, '');
   urlState = setStudyTitle(urlState, '');
+  urlState = setActivityFilter(urlState, '');
 
   return urlState;
 }
