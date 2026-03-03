@@ -36,6 +36,9 @@ let html_name = path.substring(path.lastIndexOf('/') + 1);
 function buildNavActivityFiltersDD( navbar, dd_name, config ) {
     if( config.ddFilters ) {
         let filters = [];
+        let urlState = appState;
+        urlState = setActivityFilter(urlState, '');
+        filters.push(faddelem('a', null, { href: './g.html' + buildParameterList(urlState), textContent: CONST_ALL }));
         for( let i = 0; i<config.ddFilters.length; i++ ) {
              let urlState = appState;
              urlState     = setActivityFilter(urlState, config.ddFilters[i].ddLabel);
@@ -149,6 +152,17 @@ function buildPage(xobj, plantsConfig) {
 <script type="text/javascript"   src="../core/js/api_fetch.js"></script>
 
 <script>
+funtion getFilterAPIParams(config) {
+    if( config.ddFilters ) {
+        for( let i = 0; i<config.ddFilters.length; i++ ) {
+             if( config.ddFilters[i].ddLabel === getActivityFilter(appState) ) {
+                 return( config.ddFilters[i].apiParams );
+             }
+        }
+    }
+    return( '' );
+}
+ 
 function setupAPIParams(plantsConfig) {
    let api_params = '';
 
@@ -166,7 +180,12 @@ function setupAPIParams(plantsConfig) {
 
    // if a place_id was chosen from the place drop-down, use that place_id...
    if( getPlaceMenuId(appState) ) {
-       api_params += '&place_id=' + getPlaceMenuId(appState);
+       api_params += getFilterAPIParams(config);
+   }
+
+   // if a filter has been chosen, get the filter api params
+   if( getActivityFilter(appState) ) {
+       api_params += getFilterAPIParams(config);
    }
  
    api_params += getMenuIdParam(appState, '&taxon_id='); 
