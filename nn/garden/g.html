@@ -38,8 +38,8 @@ function buildNavActivityFiltersDD( navbar, dd_name, config ) {
         let filters = [];
         for( let i = 0; i<config.ddFilters.length; i++ ) {
              let urlState = appState;
-             urlState     = setActivityFilter(urlState, config.ddFilters[i].dd_label);
-             let filter  = faddelem('a', null, { href: './g.html' + getParams(urlState), textContent: config.ddFilters[i].dd_label });
+             urlState     = setActivityFilter(urlState, config.ddFilters[i].ddLabel);
+             let filter  = faddelem('a', null, { href: './g.html' + getParams(urlState), textContent: config.ddFilters[i].ddLabel });
              filters.push(filter);
         }
         buildNavDD( navbar, dd_name, filters );
