@@ -90,6 +90,11 @@ function setupAPIParams( config ) {
     if( config.userId )         { api_params += '&user_id='  + config.userId; }  
     if( config.faunaAPIParams ) { api_params += config.faunaAPIParams; }
 
+    // if a filter has been chosen, get the filter api params
+    if( getActivityFilter(appState) ) {
+        api_params += getFilterAPIParams(config);
+    }
+
     // if a place_id was chosen from the place drop-down, use that place_id...
     if( getPlaceMenuId(appState) ) {
         api_params += '&place_id=' + getPlaceMenuId(appState);
