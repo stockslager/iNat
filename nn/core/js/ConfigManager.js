@@ -143,6 +143,18 @@ class ConfigurationItem {
     }
 }
 
+// find the api params for the filter from the label
+function getFilterAPIParams(config) {
+    if( config.ddFilters ) {
+        for( let i = 0; i<config.ddFilters.length; i++ ) {
+             if( config.ddFilters[i].ddLabel === getActivityFilter(appState) ) {
+                 return( config.ddFilters[i].apiParams );
+             }
+        }
+    }
+    return( '' );
+}
+ 
 // helpers for ConfigurationItem()
 function getMapZoom( config ) {
   // the geocoodinates to center the map should only be used when a default zoom is set.
