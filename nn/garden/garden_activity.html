@@ -34,7 +34,7 @@ let path      = window.location.pathname;
 let html_name = path.substring(path.lastIndexOf('/') + 1);
 
 function buildNavActivityFiltersDD( navbar, dd_name, config ) {
-    if( config.ddFilters ) {
+    if( config.ddFilters && config.ddFilters.length > 0 ) {
         let dd_name = config.ddFilters[0].ddName;
         let filters = [];
         let urlState = appState;
