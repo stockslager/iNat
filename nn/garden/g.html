@@ -34,10 +34,12 @@ let path      = window.location.pathname;
 let html_name = path.substring(path.lastIndexOf('/') + 1);
 
 function buildNavActivityFiltersDD( navbar, dd_name, config ) {
-
+console.log('fasfdsad');
     if( config.dd_filters ) {
+     console.log('two');
         let filters = [];
         for( let i = 0; i<config.dd_filters.length; i++ ) {
+         console.log('three');
              let urlState = appState;
              urlState     = setActivityFilter(urlState, config.dd_filters[i].dd_label);
              let filter  = faddelem('a', null, { href: './g.html' + getParams(urlState), textContent: config.dd_filters[i].dd_label });
