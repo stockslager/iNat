@@ -32,6 +32,20 @@ const CONST_WITHOUT_TAXON_PLANTAE = '47126';
 // find the html name to pass to other pages for nav
 let path      = window.location.pathname;
 let html_name = path.substring(path.lastIndexOf('/') + 1);
+
+function buildNavActivityFiltersDD( navbar, dd_name, config ) {
+
+    if( config.dd_filters ) {
+        let filters = [];
+        for( let i = 0; i<config.dd_filters.length; i++ ) {
+             let urlState = appState;
+             urlState     = setActivityFilter(urlState, config.dd_filters[i].dd_label);
+             let filter  = faddelem('a', null, { href: './g.html' + getParams(urlState), textContent: config.dd_filters[i].dd_label });
+             filters.push(filter);
+        }
+        buildNavDD( navbar, dd_name, filters );
+    }
+}
  
 function buildMenu( results, config ) {
  
@@ -44,6 +58,8 @@ function buildMenu( results, config ) {
     let menu_name = config.getSubIconNameByTaxonId(config, getMenuId(appState)) || CONST_SHOW;
 
     buildNavDDFilteredShow( navbar, menu_name, results, config, baseUrl );
+
+    buildNavActivityFiltersDD( navbar, 'Filters', links ) {
 
     // Build the Home Link
     let homeState = clearForGardenListParams(appState);
