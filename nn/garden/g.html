@@ -66,7 +66,11 @@ function buildMenu( results, config ) {
 
     buildNavDDFilteredShow( navbar, menu_name, results, config, baseUrl );
 
-    buildNavActivityFiltersDD( navbar, 'Filters', config );
+    // only show the additional filters if they haven't made a seleciton from the taxa menu.
+    // otherwise there's too much risk of queries with no results.
+    if( !getMenuId(appState) ) {
+        buildNavActivityFiltersDD( navbar, 'Filters', config );
+    }
 
     // Build the Home Link
     let homeState = clearForGardenListParams(appState);
