@@ -768,6 +768,7 @@ function clearForGardenListParams(state) {
   urlState = setObsId(urlState, '');
   urlState = setPage(urlState, '');
   urlState = setPerPage(urlState, '');
+  urlState = setActivityFilter(urlState, '');
 
   return urlState;
 }
