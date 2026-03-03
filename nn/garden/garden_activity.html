@@ -32,27 +32,6 @@ const CONST_WITHOUT_TAXON_PLANTAE = '47126';
 // find the html name to pass to other pages for nav
 let path      = window.location.pathname;
 let html_name = path.substring(path.lastIndexOf('/') + 1);
-
-function buildNavActivityFiltersDD( navbar, dd_name, config ) {
-    if( config.ddFilters && config.ddFilters.length > 0 ) {
-        let dd_name = config.ddFilters[0].ddName;
-        let filters = [];
-        let urlState = appState;
-        urlState = setActivityFilter(urlState, '');
-        filters.push(faddelem('a', null, { href: './g.html' + buildParameterList(urlState), textContent: CONST_ALL }));
-        for( let i = 0; i<config.ddFilters.length; i++ ) {
-             if( dd_name !== config.ddFilters[i].ddName ) {
-                 buildNavDD( navbar, getActivityFilter(appState) || dd_name, filters );
-                 dd_name = config.ddFilters[0].ddName;
-             }
-             let urlState = appState;
-             urlState     = setActivityFilter(urlState, config.ddFilters[i].ddLabel);
-             let filter  = faddelem('a', null, { href: './g.html' + buildParameterList(urlState), textContent: config.ddFilters[i].ddLabel });
-             filters.push(filter);
-        }
-        buildNavDD( navbar, getActivityFilter(appState) || dd_name, filters );
-    }
-}
  
 function buildMenu( results, config ) {
  
