@@ -221,6 +221,13 @@ function getObs() {
       api_params = ensureQuestionMark( decodeURIComponent(p_query)+'&ofv_datatype='+p_ofv_datatype_dd );          
   } else {
       // Parameter has a value
+        const dropdown = document.getElementById('ofvDropdown');
+        if (dropdown) {
+            dropdown.value = value;
+            // Trigger a 'change' event 
+            //dropdown.dispatchEvent(new Event('change'));
+        }
+   
       console.log('query ' + p_query);
       winurlparams.delete('ofv_datatype_dd');
       winurlparams.append('ofv_datatype_dd', value);
