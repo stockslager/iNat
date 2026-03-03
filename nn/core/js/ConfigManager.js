@@ -1,4 +1,4 @@
-/**
+/** 
  * Represents a single place entry.
  */
 class Place {
