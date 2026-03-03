@@ -39,7 +39,7 @@ function buildNavActivityFiltersDD( navbar, dd_name, config ) {
         let filters = [];
         let urlState = appState;
         urlState = setActivityFilter(urlState, '');
-        filters.push(faddelem('a', null, { href: './g.html' + buildParameterList(urlState), textContent: CONST_ALL }));
+        filters.push(faddelem('a', null, { href: './g.html' + buildParameterList(urlState), textContent: capitalizeWords(CONST_ALL) }));
         for( let i = 0; i<config.ddFilters.length; i++ ) {
              if( dd_name !== config.ddFilters[i].ddName ) {
                  buildNavDD( navbar, getActivityFilter(appState) || dd_name, filters );
