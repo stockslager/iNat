@@ -199,7 +199,8 @@ function buildMenu( results, config ) {
           links       += furl('./f.html'+buildParameterList(urlState),all_icon+CONST_ALL);
           for( let i=0; i<config.ddFilters.length; i++ ) {
                urlState = setActivityFilter(   urlState, config.ddFilters[i].ddLabel );
-               links += furl('./f.html'+buildParameterList(urlState),'<span style="padding-right:20px;">'+config.ddFilters[i].icon+'</span>'+config.ddFilters[i].ddLabel);
+               let icon = config.ddFilters[i].icon ? ('<span style="padding-right:20px;">'+config.ddFilters[i].icon+'</span>') : '';
+               links += furl('./f.html'+buildParameterList(urlState),'<span style="padding-right:20px;">'+icon+config.ddFilters[i].ddLabel);
           }
           activityDDName = capitalizeWords(getActivityFilter(appState) || dd_name);  
       }
