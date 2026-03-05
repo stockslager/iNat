@@ -562,6 +562,11 @@ function setupAPIParams( config ) {
        }
    }
 
+   // if a filter has been chosen, get the filter api params
+   if( getActivityFilter(appState) ) {
+       api_params += getFilterAPIParams(config);
+   }
+
    if( config.obsAPIParams ) { api_params += config.obsAPIParams; }
    api_params += getPageParam(appState, '&page=');
    api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
