@@ -189,7 +189,7 @@ function buildMenu( results, config ) {
       
       if( config.ddFilters && config.ddFilters.length > 0 ) {
           let dd_name  = config.ddFilters[0].ddName;
-          let all_icon = config.ddFilters[0].icon ? ('<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>') || '';
+          let all_icon = config.ddFilters[0].icon ? ('<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>') : '';
           let urlState = appState;
           urlState = setActivityFilter(urlState, '');
           links       += furl('./field_study.html'+buildParameterList(urlState),all_icon+CONST_ALL);
