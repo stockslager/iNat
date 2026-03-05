@@ -191,6 +191,11 @@ function buildMenu( results, config ) {
           let dd_name  = config.ddFilters[0].ddName;
           let all_icon = config.ddFilters[0].icon ? ('<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>') : '';
           let urlState = appState;
+          urlState     = setMenuId(urlState, '');
+          urlState     = setMenuName(urlState, '');
+          urlState     = setTaxonId(urlState, '');
+          urlState     = setFieldValue(urlState, '');
+          urlState     = setFieldName(urlState, '');
           urlState     = setActivityFilter(urlState, '');
           urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
           links       += furl('./f.html'+buildParameterList(urlState),all_icon+CONST_ALL);
