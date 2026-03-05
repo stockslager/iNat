@@ -186,7 +186,7 @@ function buildMenu( results, config ) {
       if( links ) { menu_string += buildDD( taxon_name, links); }
       links = '';
 
-      
+      let activityDDName = '';
       if( config.ddFilters && config.ddFilters.length > 0 ) {
           let dd_name  = config.ddFilters[0].ddName;
           let all_icon = config.ddFilters[0].icon ? ('<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>') : '';
@@ -197,7 +197,10 @@ function buildMenu( results, config ) {
                urlState = setActivityFilter(   urlState, config.ddFilters[i].ddLabel );
                links += furl('./field_study.html'+buildParameterList(urlState),'<span style="padding-right:20px;">'+config.ddFilters[i].icon+'</span>'+config.ddFilters[i].ddLabel);
           }
+          activityDDName = capitalizeWords(getActivityFilter(appState) || dd_name);  
       }
+      if( links ) { menu_string += buildDD( activityDDName, links); }
+      links = '';
 
       let urlState  = clearForDashParams(appState);
       menu_string += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
