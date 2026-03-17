@@ -70,6 +70,8 @@ function buildPage(xobj, observerConfig) {
       let urlState = appState;
       if( getMenuId(appState) ) {
           urlState = setTaxonId(urlState, getMenuId(appState)); // set taxon id to menu id if a filter was chosen for say, birds.
+      } else if( observerConfig.defaultTaxonId ) {
+          urlState = setTaxonId(urlState, observerConfig.defaultTaxonId);
       }
 
       let title_1 = '', title_2 = '';
