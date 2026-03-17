@@ -94,7 +94,7 @@ function setupAPIParams( config ) {
     if( getMenuId(appState) ) {
         api_params += getMenuIdParam(appState, '&taxon_id='); 
     } else {
-        if( hikerConfig.defaultTaxonId ) { api_params += '&taxon_id=' + hikerConfig.defaultTaxonId; }
+        if( config.defaultTaxonId ) { api_params += '&taxon_id=' + config.defaultTaxonId; }
     }
 
     // default these to what's in the config even though the state sometimes
