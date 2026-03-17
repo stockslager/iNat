@@ -85,7 +85,14 @@ function setupAPIParams( config ) {
     let api_params = '';
 
     api_params += '?project_id='+config.insectProject;
-    api_params += getTaxonIdParam(appState, '&taxon_id='); 
+
+    // if a taxon was chosen from the "Show" drop-down filter with that taxon_id.
+    // otherwise, filter with the default from the config file if there is one.
+    if( getTaxonId(appState) ) {
+        api_params += getTaxonIdParam(appState, '&taxon_id='); 
+    } else {
+        if( config.defaultTaxonId ) { api_params += '&taxon_id=' + config.defaultTaxonId; }
+    }
 
     if( config.userId )         { api_params += '&user_id='  + config.userId; }  
     if( config.faunaAPIParams ) { api_params += config.faunaAPIParams; }
