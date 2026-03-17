@@ -92,7 +92,12 @@ function setupAPIParams( config ) {
     let api_params = '';
 
     api_params += '?project_id='+config.insectProject;
-    api_params += getTaxonIdParam(appState, '&taxon_id='); 
+
+    if( getTaxonId(appState) ) {
+        api_params += getTaxonIdParam(appState, '&taxon_id='); 
+    } else {
+        if( config.defaultTaxonId ) { api_params += '&taxon_id=' + config.defaultTaxonId; }
+    }
 
     // possibly the place_id will need to come from the session eventually...
     // if there's a garden with multiple places.
