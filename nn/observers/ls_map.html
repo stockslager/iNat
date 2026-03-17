@@ -594,16 +594,15 @@ function fgetexample(seq) {
 <script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
 
 <script>
-function setupMapParams(observerConfig) {
+function setupMapParams(config) {
    let api_params = '';
 
-
    // component hiker will just be looking at all the butterflies without filtering by an obs field.
-   if( getComponent(appState) !== COMPONENT_HIKER ) {
-       api_params += ('?project_id='+observerConfig.project);
-       api_params += '&field:'+observerConfig.fieldName+'='+getPlantId(appState);
+   if( getComponent(appState) === COMPONENT_HIKER ) {
+       api_params += ('?project_id='+config.project);
    } else {
-       api_params += ('?project_id='+observerConfig.insectProject);
+       api_params += ('?project_id='+config.insectProject);
+       api_params += '&field:'+config.fieldName+'='+getPlantId(appState);
    }
 
    // default these to what's in the config even though the state sometimes
@@ -624,9 +623,9 @@ async function gatherResources() {
   try {
    
       // Await the result of getObservations() and store the actual data
-      const observerConfig  = await asyncGetConfiguration( json_path, getComponent(appState) );
-      console.log('full config title: ' + observerConfig.getFullTitle());
-      const map_params    = setupMapParams( observerConfig );
+      const config  = await asyncGetConfiguration( json_path, getComponent(appState) );
+      console.log('full config title: ' + config.getFullTitle());
+      const map_params    = setupMapParams( config );
 
        fmapextent(CONST_LS_MAP_EXTENT); 
        fcreatebaselayer(0,bm_s_osm.url,bm_s_osm.description,bm_s_osm.attribution,true,'grayscale(100%) invert(100%) brightness(60%) sepia(100%) hue-rotate(180deg) saturate(150%)','',true);
