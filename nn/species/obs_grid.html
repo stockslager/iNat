@@ -90,8 +90,12 @@ function setupAPIParams( config ) {
     let api_params = '';
 
     api_params += '?project_id='+config.project;
-    
-    api_params += getTaxonIdParam(appState, '&taxon_id='); 
+
+    if( getMenuId(appState) ) {
+        api_params += getMenuIdParam(appState, '&taxon_id='); 
+    } else {
+        if( hikerConfig.defaultTaxonId ) { api_params += '&taxon_id=' + hikerConfig.defaultTaxonId; }
+    }
 
     // default these to what's in the config even though the state sometimes
     // holds the same attributes for other components.
