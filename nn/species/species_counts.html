@@ -147,14 +147,18 @@ function setupAPIParams( hikerConfig ) {
    if( hikerConfig.fieldValue ) { field_val_param = hikerConfig.fieldValue; }
  
    // filter by field (usually trail name)... should change to generic filter
-   api_params += '&field:'+hikerConfig.fieldName+'='+field_val_param;
+   if( hikerConfig.fieldName ) { api_params += '&field:'+hikerConfig.fieldName+'='+field_val_param; }
 
    // default these to what's in the config even though the state sometimes
    // holds the same attributes for other components.
    if( hikerConfig.userId         ) { api_params += '&user_id='  + hikerConfig.userId; }
    if( hikerConfig.defaultPlaceId ) { api_params += '&place_id=' + hikerConfig.defaultPlaceId; }  
 
-   api_params += getMenuIdParam(appState, '&taxon_id='); 
+   if( getMenuId(appState) ) {
+       api_params += getMenuIdParam(appState, '&taxon_id='); 
+   } else {
+       if( hikerConfig.defaultTaxonId ) { api_params += '&taxon_id=' + hikerConfig.defaultTaxonId; }
+   }
 
    api_params += getPageParam(appState, '&page=');
    api_params += '&per_page='+CONST_SPECIES_COUNTS_PER_PAGE;
