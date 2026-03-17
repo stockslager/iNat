@@ -54,20 +54,34 @@ function buildMenu( config ) {
 
   // if all observations was selected... show the time series
   // if a taxon is in focus, just show the regular map
-  if( !getMenuId(appState) && !getTaxonId(appState) ) {
-    let links = [];
+  // if life stages (ls) option was chosen for map type was set in the config and 
+  // they've chosen Butterflies from the drop-down or have chosen a butterfly from the list
+  if( config.mapType !== 'hide' ) {
+      if( config.mapType === 'ls' && ( getLSTaxonId(appState) === '47157' || getTaxonId(appState) === '47157' ) ) {  
+          let links = [];
     
-    let mapLink  = faddelem('a', null, { href: '../admin/map.html' + setupAPIParams(config) + getMapZoom(config) + '&params=' + getParams(appState), textContent: 'Map' });
-    let timeLink = faddelem('a', null, { href: root_observations + 'torquemap' + setupAPIParams(config) + '&interval=monthly', textContent: 'Time Series' });
+          let mapLink  = faddelem('a', null, { href: '../admin/map.html' + setupAPIParams(config)  + getMapZoom(config) + '&params=' + getParams(appState), textContent: 'Standard Map' });
+          let lsLink   = faddelem('a', null, { href: './ls_map.html'     + buildParameterList(appState), textContent: 'Life-Stages' });
 
-    links.push(mapLink);
-    links.push(timeLink);
+          links.push(mapLink);
+          links.push(lsLink);
 
-    buildNavDD( navbar, 'Maps', links );
+          buildNavDD( navbar, 'Maps', links );
+      } else if( !getMenuId(appState) && !getTaxonId(appState) ) {
+          let links = [];
+    
+          let mapLink  = faddelem('a', null, { href: '../admin/map.html' + setupAPIParams(config) + getMapZoom(config) + '&params=' + getParams(appState), textContent: 'Map' });
+          let timeLink = faddelem('a', null, { href: root_observations + 'torquemap' + setupAPIParams(config) + '&interval=monthly', textContent: 'Time Series' });
+
+          links.push(mapLink);
+          links.push(timeLink);
+
+          buildNavDD( navbar, 'Maps', links );
      
-  } else {   
-      let url = '../admin/map.html' + setupAPIParams(config) + getMapZoom(config);
-      buildNavURL( navbar, url, CONST_MAP );
+      } else {   
+          let url = '../admin/map.html' + setupAPIParams(config) + getMapZoom(config);
+          buildNavURL( navbar, url, CONST_MAP );
+      }
   }
 
   // Build the Home Link
