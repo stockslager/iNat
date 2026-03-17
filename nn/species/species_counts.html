@@ -72,10 +72,12 @@ function buildPage(xobj, hikerConfig) {
 
       let titleText = CONST_SPECIES_ALL+capitalizeWords(name);
       let urlState  = appState; 
-      urlState  = setTaxonId(urlState, getMenuId(appState));
-      if( !getMenuId(appState) ) {
+      if( getMenuId(appState) ) {
+          urlState = setTaxonId(urlState, getMenuId(appState)); // set taxon id to menu id if a filter was chosen for say, birds.
+      } else if( observerConfig.defaultTaxonId ) {
           titleText = CONST_SPECIES_ALL_OBS;          
-      } 
+          urlState = setTaxonId(urlState, observerConfig.defaultTaxonId);
+      }
 
       titleUrl = './obs_grid.html' + buildParameterList(urlState);
 
