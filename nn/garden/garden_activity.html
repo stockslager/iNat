@@ -118,7 +118,7 @@ function buildPage(xobj, config) {
 
            // Column: Name 
            let urlState = setTaxonId(appState, rec.taxon.id);
-           if( rec.taxon.ancestor_ids.some(id => id == 47157) ) { urlState = setLSTaxonId(appState, '47157'); }  // lepidoptera*/
+           if( rec.taxon.ancestor_ids.some(id => id == 47157) ) { urlState = setLSTaxonId(urlState, '47157'); }  // lepidoptera*/
            let url      = './garden_grid.html' + buildParameterList(urlState);
            buildSpeciesName( brow, rec, url );
        
