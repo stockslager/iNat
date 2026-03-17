@@ -97,7 +97,10 @@ function setupAPIParams( config ) {
     // holds the same attributes for other components.
     if( config.userId          ) { api_params += '&user_id='  + config.userId; }
     if( config.defaultPlaceId  ) { api_params += '&place_id=' + config.defaultPlaceId; }  
-    api_params += '&field:'+config.fieldName+'='+(config.fieldValue||'');  // should change to generic filter?
+
+    if( config.fieldName ) {
+        api_params += '&field:'+config.fieldName+'='+(config.fieldValue||'');  // should change to generic filter?
+    }
 
     return api_params;
 }
