@@ -149,8 +149,13 @@ function setupAPIParams(observerConfig) {
    if( getUser(appState) )              { api_params += '&user_id='  + getUser(appState); }
    if( observerConfig.defaultPlace    ) { api_params += '&place_id=' + observerConfig.defaultPlace; }  
    if( observerConfig.faunaAPIParams  ) { api_params += observerConfig.faunaAPIParams; }
+
+   if( getMenuId(appState) ) {
+       api_params += getMenuIdParam(appState, '&taxon_id='); 
+   } else {
+       if( observerConfig.defaultTaxonId ) { api_params += '&taxon_id=' + observerConfig.defaultTaxonId; }
+   }
  
-   api_params += getMenuIdParam(appState, '&taxon_id='); 
    api_params += getPageParam(appState, '&page=');
    api_params += '&without_taxon_id='+CONST_WITHOUT_TAXON_PLANTAE; // only interested in visitors to plants here
    api_params += '&per_page='+CONST_SPECIES_COUNTS_PER_PAGE;
