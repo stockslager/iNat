@@ -117,8 +117,8 @@ function buildPage(xobj, config) {
            buildSpeciesPhoto( brow, rec );
 
            // Column: Name 
-           if( rec.taxon.ancestor_ids.some(id => id == 47157) ) { urlState = setLSTaxonId(appState, '47157'); }  // lepidoptera*/
            let urlState = setTaxonId(appState, rec.taxon.id);
+           if( rec.taxon.ancestor_ids.some(id => id == 47157) ) { urlState = setLSTaxonId(appState, '47157'); }  // lepidoptera*/
            let url      = './garden_grid.html' + buildParameterList(urlState);
            buildSpeciesName( brow, rec, url );
        
