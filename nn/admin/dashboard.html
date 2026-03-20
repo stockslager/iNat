@@ -10,13 +10,15 @@
 <link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
 <link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
 <link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
-<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
-<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+<link rel="manifest"                         href="/hcc/core/assets/plant_club.webmanifest" />
+<meta name="apple-mobile-web-app-capable"    content="no">  
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+ <link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
 <title>iNat Custom Dashboard</title>
 </head>
+
 <style>
-   #main { width: 100%; max-width:700px; }
-   p { width: 100%; max-width: 700px; margin: 0.7em 0; }
+   #divhead { max-width: 700px; width:fit-content; }
 </style>
 
 <body>
@@ -161,10 +163,10 @@ function buildPage( configManager ) {
        
            let config = configManager.configurations[i];
 
-           if( config.component === COMPONENT_STUDIES ) {
+           if( config.component === COMPONENT_STUDIES || config.component === COMPONENT_VISITS ) {
                if( headers === 'no' ) {
                    headers = 'yes';
-                   studies_table = faddelem('table',document.body,{id:'main'});                    
+                   studies_table = faddelem('stable',document.body,{id:'main'});                    
                    studies_thead = faddelem('thead',studies_table);
                    studies_hrow  = faddelem('tr',studies_thead);
       
@@ -216,7 +218,7 @@ async function gatherResources() {
     }
 }
 
-let message = validateDashboardParams(appState);
+let message = validateConfig(appState);
  
 if( message ) {
     faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
