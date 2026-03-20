@@ -18,7 +18,8 @@
 </head>
 
 <style>
-   #divhead { max-width: 700px; width:fit-content; }
+   #main { width: 100%; max-width:700px; }
+   p { width: 100%; max-width: 700px; margin: 0.7em 0; }
 </style>
 
 <body>
@@ -166,7 +167,7 @@ function buildPage( configManager ) {
            if( config.component === COMPONENT_STUDIES || config.component === COMPONENT_VISITS ) {
                if( headers === 'no' ) {
                    headers = 'yes';
-                   studies_table = faddelem('stable',document.body,{id:'main'});                    
+                   studies_table = faddelem('table',document.body,{id:'main'});                    
                    studies_thead = faddelem('thead',studies_table);
                    studies_hrow  = faddelem('tr',studies_thead);
       
