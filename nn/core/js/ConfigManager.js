@@ -160,7 +160,11 @@ function getMapZoom( config ) {
   // the geocoodinates to center the map should only be used when a default zoom is set.
   // if the coordinates are used without a default zoom it defaults to zoom all the way out.
   if( config.defaultMapZoom ) {
-      return( CONST_MAP_CENTER + '&defaultzoom=' + config.defaultMapZoom );
+      if( config.project === '94373' ) {    // western wildlife corridor
+          return( '&centerlat=39.10515368820593&centerlng=-84.64924319973807' + '&defaultzoom=' + config.defaultMapZoom;
+      } else {
+          return( CONST_MAP_CENTER + '&defaultzoom=' + config.defaultMapZoom );
+      }
   } else {
       return '';
   }
