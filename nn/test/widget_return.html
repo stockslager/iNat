@@ -1,0 +1,159 @@
+<!DOCTYPE html>      
+<html lang="en">        
+ 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="apple-mobile-web-app-title" content="Test Widget" />
+<meta name="description" content="Test Widget" />
+<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
+<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+<title>Test Widget</title>
+</head>
+
+<body>
+<script type="text/javascript"   src='../core/js/common_functions.js'> </script>
+<script type="text/javascript"   src='../core/js/store.js'> </script>
+<script>
+let winurlstr         = window.location.href;
+let winurlsearchstr   = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
+
+appState       = buildStateFromParams(winurlparams);
+ 
+// --- GLOBAL SETTINGS ---
+let globalDelayOffset = 0; 
+ 
+window.onload = function() {
+    if (window.location.hash === '#openModal') {
+        // Trigger your modal (Vanilla JS example)
+        document.getElementById('myModal').style.display = 'block';        
+    }
+};
+
+function addLink( p, project_title, project_id ) {
+   // 1. Create a simple header instead of a toggle link
+   faddelemLocal('div', p, {
+      innerText: project_title,
+      style: { margin: '10px 0', fontWeight: 'bold', fontSize: '1.2em' }
+   });
+
+   // 2. Create the container and make it visible immediately
+   let widgetContainer = faddelemLocal('div', p, {
+      style: { display: 'block', marginTop: '10px', border: '1px solid #eee', padding: '10px', minHeight: '100px' }
+   });
+
+   // 3. Start the loading process immediately
+   setTimeout(() => {
+      widgetContainer.innerHTML = '<div>Loading ' + project_title + '...</div>' + 
+        '<div data-inat-widget ' +
+        'data-inat-source="' + project_id + '" ' +
+        'data-inat-source-type="project" ' + 
+        'data-inat-theme="transparent-dark" ' + 
+        'data-inat-title="' + project_title + '" ' + 
+        'data-inat-layout="grid" ' + 
+        'data-inat-limit="9" ' + 
+        'data-inat-compact="true" ' + 
+        'data-inat-order-by="observed_on"></div>';
+
+      let s = document.createElement('script');
+      s.src = "https://glauberramos.github.io/inat/inat-widget.js?t=" + Date.now();
+      document.body.appendChild(s);
+   }, globalDelayOffset);
+
+   // Maintain your delay offset logic in case you call addLink multiple times
+   globalDelayOffset += 1000; 
+   setTimeout(() => { globalDelayOffset = 0; }, 2500);
+}
+
+function buildMenu( config ) {
+    // Create the main navbar container
+    let navbar = document.createElement('div');
+    navbar.className = 'navbar v2-menu';
+
+    // 1. Capture where the user came from
+    // If there is no referrer (e.g. they typed the URL directly), fall back to a default
+    let returnUrl = document.referrer || (window.location.origin + window.location.pathname);
+
+    // 2. Build the Home Link
+    // Instead of letting buildNavHome create a new URL, we can manually 
+    // adjust the link after it's created or pass the returnUrl.
+    buildNavHome( navbar, returnUrl, {} ); 
+
+    // Append the DOM nodes to the body
+    faddelem('p', document.body).appendChild(navbar);
+}
+ 
+/*function buildMenu( config ) {
+ 
+    // Create the main navbar container
+    let navbar = document.createElement('div');
+    navbar.className = 'navbar v2-menu';
+
+    let baseUrl = window.location.origin + window.location.pathname;
+
+    // Build the Home Link
+    let homeState = clearForGardenListParams(appState);
+    buildNavHome( navbar, baseUrl, homeState );
+
+    // Append the DOM nodes to the body
+    faddelem('p', document.body).appendChild(navbar);
+}*/
+
+function faddelemLocal(etype,eparent=null,eattributes={}) { 
+   let eobj = document.createElement(etype);
+   for (let [key,value] of Object.entries(eattributes)) {
+      if ( typeof value === 'object' && value !== null ) {
+         for (let [subkey,subvalue] of Object.entries(value)) { eobj[key][subkey] = subvalue; };
+      }
+      else { eobj[key] = value; };
+    };
+   if (eparent) { eparent.appendChild(eobj); };
+   return eobj;
+}
+ 
+function buildPage(config) {
+   buildMenu(config);
+   let p = faddelemLocal('p', document.body);
+
+   // a one second delay is added between clicks so it's ok to add as 
+   // many as we want.
+   addLink(p, 'Britton Woods', 'britton-woods');
+}
+ 
+</script>
+<script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
+<script>
+ 
+async function gatherResources() {
+  let json_path = json_root + getParams(appState);
+ 
+  try {
+      // Await the result of getObservations() and store the actual data
+      const config  = await asyncGetConfiguration( json_path, getComponent(appState) );
+     
+      // Pass the data to the buildPage function
+      buildPage(config); 
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+let message = validateGarden(appState);
+ 
+if( message ) {
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
+ 
+</script>
+</body>
+</html>
