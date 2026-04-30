@@ -13,103 +13,6 @@
 <link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
 <link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
 <title>Test Widget</title>
-<style>
-/* New Header Bar - Replaces .navbar.v2-menu */
-.header-bar {
-   height: 44px;
-   max-width: 700px;
-   /* Match width and alignment exactly to the map */
-   width: calc(95vw - 8px); 
-   margin-left: 8px;           /* Anchors to the left edge */
-   margin-right: auto;         /* Prevents right-side pushing */
-   margin-top: 10px;
-   
-   background-color: var(--color-brand);  
-   border-radius: 5px;         
-   display: flex;              
-   justify-content: flex-end;  /* Icon to the right */
-   align-items: center;        
-   position: relative;
-   z-index: 2000;
-   box-sizing: border-box;
-   overflow: hidden;           
-}
-.header-bar {
-   height: 44px;
-   max-width: 700px;
-   /*width: 95vw;*/
-   width: calc(100% - 16px); 
-   margin-left: 8px;           /* Anchors to the left edge */
-   margin-right: auto;         /* Prevents right-side pushing */
-   margin: 10px 0 0 8px;       
-   background-color: var(--color-brand);  
-   border-radius: 5px;         
-   display: flex;              
-   justify-content: flex-end;  
-   align-items: center;        
-   position: relative;
-   z-index: 2000;
-   box-sizing: border-box;
-   /*border: 1px solid #ddd; */    
-   overflow: hidden;           /* Essential: Clips hover shading to rounded corners */
-}
-
-#home-link { 
-   font-size: 15px; 
-   margin-left: auto; 
-   
-   /* THE TRICK: This ensures the black hover fill covers the full 44px bar height */
-   height: 100%;
-   display: flex;
-   align-items: center;
-   padding: 0 15px;
-
-   /* THE IPHONE FIXES: Keeps the icon from jumping 2px on tap */
-   -webkit-tap-highlight-color: transparent;
-   line-height: 1;
-}
-	
-/* ONLY apply the hardware-acceleration fix to iPhone/Safari */
-@supports (-webkit-touch-callout: none) {
-  #home-link {
-    transform: translateZ(0); 
-    perspective: 1000px; /* Extra stabilization for WebKit */
-    backface-visibility: hidden;
-  }
-}	
-	
-/*#home-link { 
-   font-size: 14px;   
-   padding: 0 15px;            
-   height: 100%;               
-   display: flex;
-   align-items: center;       
-   text-decoration: none;
-   cursor: pointer;
-   color: inherit;             
-   transition: background 0.2s;
-}*/
-
-#home-link:hover {
-   background-color: black;  /* Subtle darker grey shading */
-}
-
-#mapid { 
-   max-width: 700px;
-   /*width: 95vw;*/
-   width: calc(100% - 16px);    /* Match the header bar width exactly */
-   top: 60px;                  /* Header(44) + Margin(10) + Gap(6) */
-   left: 8px;
-   height: calc(100vh - 70px); 
-   position: absolute;
-   z-index: 1;
-   border-radius: 5px; 
-}
-body {
-   margin: 0;
-   padding: 0;
-}
-</style>
 </head>
 
 <body>
@@ -126,10 +29,6 @@ appState       = buildStateFromParams(winurlparams);
 // --- GLOBAL SETTINGS ---
 let globalDelayOffset = 0; 
 
-// Create the main header bar
-let headerBar = document.createElement('div');    
-headerBar.className = 'header-bar'; 
- 
 //****************************************
 // navbar title, url, drop-down helpers **
 //****************************************
@@ -192,18 +91,7 @@ function addLink( p, project_title, project_id ) {
 }
 
 function buildMenu( config ) {
-    // 1. Capture where the user came from
-    // If there is no referrer (e.g. they typed the URL directly), fall back to a default
-    let returnUrl = document.referrer || (window.location.origin + window.location.pathname);
-    let hLink = faddelemLocal('a', headerBar, { href: `javascript:goBackWithFallback('${returnUrl}');`, id: 'home-link' });	
-	
-    // Add the leaf icon
-    faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
-
-    // Add to the top of the page
-    document.body.prepend(headerBar);
-						   
-    /*// Create the main navbar container
+    // Create the main navbar container
     let navbar = document.createElement('div');
     navbar.className = 'navbar v2-menu';
 
@@ -217,7 +105,7 @@ function buildMenu( config ) {
     buildNavHomeCustom( navbar, returnUrl, {} ); 
 
     // Append the DOM nodes to the body
-    faddelem('p', document.body).appendChild(navbar);*/
+    faddelem('p', document.body).appendChild(navbar);
 }
  
 /*function buildMenu( config ) {
