@@ -28,6 +28,13 @@ appState       = buildStateFromParams(winurlparams);
  
 // --- GLOBAL SETTINGS ---
 let globalDelayOffset = 0; 
+ 
+window.onload = function() {
+    if (window.location.hash === '#openModal') {
+        // Trigger your modal (Vanilla JS example)
+        document.getElementById('myModal').style.display = 'block';        
+    }
+};
 
 function addLink( p, project_title, project_id ) {
    // 1. Create a simple header instead of a toggle link
