@@ -29,12 +29,31 @@ appState       = buildStateFromParams(winurlparams);
 // --- GLOBAL SETTINGS ---
 let globalDelayOffset = 0; 
  
-window.onload = function() {
-    if (window.location.hash === '#openModal') {
-        // Trigger your modal (Vanilla JS example)
-        document.getElementById('myModal').style.display = 'block';        
-    }
-};
+//****************************************
+// navbar title, url, drop-down helpers **
+//****************************************
+function buildNavHomeCustom( navbar, baseUrl=null, homeState=null ) {
+    if( !baseUrl )   { baseUrl = '../admin/dashboard.html'; }
+    if( !homeState ) { homeState = clearForDashParams(appState); }
+    
+    let homeUrl = baseUrl + buildParameterList(homeState);
+    let homeDiv = faddelem('div', navbar, { id: 'home' });
+    
+    // Create the link
+    let hLink = faddelem('a', homeDiv, { 
+        href: homeUrl,
+        onclick: function(e) {
+            // If there is history to go back to, use it
+            if (document.referrer) {
+                e.preventDefault();
+                window.history.back();
+            }
+            // Otherwise, it just follows the href normally as a fallback
+        }
+    });
+    
+    faddelem('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
+}
 
 function addLink( p, project_title, project_id ) {
    // 1. Create a simple header instead of a toggle link
@@ -83,7 +102,7 @@ function buildMenu( config ) {
     // 2. Build the Home Link
     // Instead of letting buildNavHome create a new URL, we can manually 
     // adjust the link after it's created or pass the returnUrl.
-    buildNavHome( navbar, returnUrl, {} ); 
+    buildNavHomeCustom( navbar, returnUrl, {} ); 
 
     // Append the DOM nodes to the body
     faddelem('p', document.body).appendChild(navbar);
