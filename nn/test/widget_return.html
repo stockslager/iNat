@@ -188,7 +188,18 @@ function addLink( p, project_title, project_id ) {
 }
 
 function buildMenu( config ) {
-    // Create the main navbar container
+    // 1. Capture where the user came from
+    // If there is no referrer (e.g. they typed the URL directly), fall back to a default
+    let returnUrl = document.referrer || (window.location.origin + window.location.pathname);
+    let hLink = faddelemLocal('a', headerBar, { href: `javascript:goBackWithFallback('${returnUrl}');`, id: 'home-link' });	
+	
+    // Add the leaf icon
+    faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
+
+    // Add to the top of the page
+    document.body.prepend(headerBar);
+						   
+    /*// Create the main navbar container
     let navbar = document.createElement('div');
     navbar.className = 'navbar v2-menu';
 
@@ -202,7 +213,7 @@ function buildMenu( config ) {
     buildNavHomeCustom( navbar, returnUrl, {} ); 
 
     // Append the DOM nodes to the body
-    faddelem('p', document.body).appendChild(navbar);
+    faddelem('p', document.body).appendChild(navbar);*/
 }
  
 /*function buildMenu( config ) {
