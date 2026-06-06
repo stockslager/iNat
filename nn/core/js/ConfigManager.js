@@ -77,6 +77,8 @@ class ConfigurationItem {
         this.usePlantProjectImages = configData.use_plant_project_images ?? null;
         this.mapType         = configData.map_type ?? null;
         this.defaultMapZoom  = configData.default_map_zoom ?? null;
+        this.mapCenter       = configData.map_center ?? null;
+        this.mapExtent       = configData.map_extent ?? null;
         this.defaultPlace = configData.default_place ?? null;
         this.fieldId = configData.field_id ?? null;
         this.fieldName = configData.field_name ?? null;
@@ -163,7 +165,7 @@ function getMapZoom( config ) {
       if( config.project === '94373' ) {    // western wildlife corridor
           return( '&centerlat=39.10515368820593&centerlng=-84.64924319973807' + '&defaultzoom=' + config.defaultMapZoom );
       } else {
-          return( CONST_MAP_CENTER + '&defaultzoom=' + config.defaultMapZoom );
+          return( (config.mapCenter || CONST_MAP_CENTER) + '&defaultzoom=' + config.defaultMapZoom );
       }
   } else {
       return '';
@@ -190,6 +192,8 @@ class ConfigManager {
         this.plantListUserId = jsonData.plant_list_user_id;
         this.usePlantProjectImages = jsonData.use_plant_project_images;
         this.defaultMapZoom  = jsonData.default_map_zoom;
+        this.mapCenter       = jsonData.map_center;
+        this.mapExtent       = jsonData.map_extent;        
         this.mapType         = jsonData.map_type;
     }
 
@@ -258,6 +262,12 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
               }
               if( !finalConfigInstance.defaultMapZoom ) {
                   if( managerInstance.defaultMapZoom ) { finalConfigInstance.defaultMapZoom = managerInstance.defaultMapZoom; }
+              }
+              if( !finalConfigInstance.mapCenter ) {
+                  if( managerInstance.mapCenter ) { finalConfigInstance.mapCenter = managerInstance.mapCenter; }
+              }
+              if( !finalConfigInstance.mapExtent ) {
+                  if( managerInstance.mapExtent ) { finalConfigInstance.mapExtent = managerInstance.mapExtent; }
               }
               if( !finalConfigInstance.mapType ) {
                   if( managerInstance.mapType ) { finalConfigInstance.mapType = managerInstance.mapType; }
@@ -338,6 +348,12 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
         }
         if( !finalConfigInstance.defaultMapZoom ) {
             if( managerInstance.defaultMapZoom ) { finalConfigInstance.defaultMapZoom = managerInstance.defaultMapZoom; }
+        }
+        if( !finalConfigInstance.mapCenter ) {
+            if( managerInstance.mapCenter ) { finalConfigInstance.mapCenter = managerInstance.mapCenter; }
+        }
+        if( !finalConfigInstance.mapExtent ) {
+            if( managerInstance.mapExtent ) { finalConfigInstance.mapExtent = managerInstance.mapExtent; }
         }
         if( !finalConfigInstance.mapType ) {
             if( managerInstance.mapType ) { finalConfigInstance.mapType = managerInstance.mapType; }
