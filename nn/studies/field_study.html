@@ -185,6 +185,27 @@ function buildMenu( results, config ) {
       let taxon_name = capitalizeWords(getMenuName(appState) || CONST_SHOW);  
       if( links ) { menu_string += buildDD( taxon_name, links); }
 
+      links = '';
+
+      let activityDDName = '';
+      if( config.ddFilters && config.ddFilters.length > 0 ) {
+          let dd_name  = config.ddFilters[0].ddName;
+          let all_icon = config.ddFilters[0].icon ? ('<span style="padding-right:20px;">'+CONST_PLUS_UTF8+'</span>') : '';
+          let urlState = appState;
+          urlState     = setFieldValue(urlState, '');
+          urlState     = setFieldName(urlState, '');
+          urlState     = setActivityFilter(urlState, '');
+          urlState     = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+          links       += furl('./field_study.html'+buildParameterList(urlState),all_icon+CONST_ALL);
+          for( let i=0; i<config.ddFilters.length; i++ ) {
+               urlState = setActivityFilter(   urlState, config.ddFilters[i].ddLabel );
+               let icon = config.ddFilters[i].icon ? ('<span style="padding-right:20px;">'+config.ddFilters[i].icon+'</span>') : '';
+               links += furl('./field_study.html'+buildParameterList(urlState),'<span style="padding-right:20px;">'+icon+config.ddFilters[i].ddLabel);
+          }
+          activityDDName = capitalizeWords(getActivityFilter(appState) || dd_name);  
+      }
+      if( links ) { menu_string += buildDD( activityDDName, links); }
+
       let urlState  = clearForDashParams(appState);
       menu_string += buildHome(furl('../admin/dashboard.html'+buildParameterList(urlState),CONST_LEAF_UTF8));
  
