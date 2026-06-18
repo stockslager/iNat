@@ -137,6 +137,18 @@ function sortWithNull(arr, ascending = true) {
   });
   return arr;
 }
+
+function buildSpeciesName( brow, rec, url ) {
+    let tdName = faddelem('td', brow);
+    let a = faddelem('a', tdName, { href: url });
+    
+    // Common Name 
+    faddelem('span', a, { style: { fontSize: 'larger' }, textContent: (rec.preferred_common_name || '').toLowerCase() });
+    
+    // Scientific Name 
+    let br = faddelem('br', a);
+    faddelem('span', a, { style: { fontStyle: 'italic' }, textContent: '(' + (rec.name || '') + ')' });
+}
     
 function getPlaceName( config, place_id ) {
    let place_name = 'Place';
