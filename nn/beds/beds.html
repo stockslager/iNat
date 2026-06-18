@@ -304,34 +304,29 @@ function buildPage(xobj, config) {
 function setupAPIParams( config ) {
    let api_params = '';
  
-   api_params += '?project_id='+config.project;
+   //api_params += '?project_id='+config.project;
 
-   if( config.plantIds )          { api_params += '&id='       + config.plantIds;  }
-   if( config.userId )            { api_params += '&user_id='  + config.userId; }
+   if( config.plantIds )          { api_params += '?id='       + config.plantIds;  }
+   //if( config.userId )            { api_params += '&user_id='  + config.userId; }
 
    // use the taxon_id(s) from the config when present.
    if( config.beds ) { 
        for( let i=0; i<config.beds.length; i++ ) {
             if( config.beds[i].bedName === (getGarden(appState)||'lake') ) {
-                api_params += '&taxon_id=' + config.beds[i].taxonIds; 
+                //api_params += '&taxon_id=' + config.beds[i].taxonIds; 
                 image_name = config.beds[i].image;
             }
        }
    }
 
    api_params += getPageParam(appState, '&page=');
-
-   if( config.usePlantProjectImages && config.usePlantProjectImages === 'yes' ) {
-       api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
-   } else {
-       api_params += '&per_page='+CONST_SPECIES_COUNTS_PER_PAGE;
-   }
+   api_params += '&per_page=30';
  
    return api_params;
 }
    
 async function gatherResources() {
-  let api_base  = 'https://api.inaturalist.org/v1/observations/species_counts';
+  let api_base  = 'https://api.inaturalist.org/v1/taxa';
   let json_path = json_root + getParams(appState);
  
   try {
