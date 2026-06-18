@@ -247,6 +247,8 @@ function buildPage(xobj, config) {
 
       if( p_mode === 'activity' ) {
           labels.push({innerText:'Activity', style: 'text-align: center;'});
+      } else if( p_mode === 'observers' ) {
+          labels.push({innerText:'Observers', style: 'text-align: center;'});
       }
 
       /*let title_1 = '', title_2 = '', title_3 = '';
@@ -297,6 +299,30 @@ function buildPage(xobj, config) {
              urlState = setPlantName(urlState, header_name||'?');
              let url      = './beds_grid.html' + buildParameterList(urlState);
              buildSpeciesName( brow, rec, url );
+
+             if( p_mode === 'observers' ) {
+                 // Split the string into an array and trim any accidental whitespace
+                 let taxonIdArray = (config.activityTaxonIds || '').split(',').map(id => id.trim());
+                 if( rec?.id && taxonIdArray.includes(String(rec.id)) ) {
+                     // Column: observers
+                     urlState = appState;
+                     urlState = setPage(urlState, '');
+                     urlState = setTaxonId(urlState, '');
+                     urlState = setTaxonName(urlState, '');
+                     urlState = setComponent(urlState, COMPONENT_OBSERVERS);
+                     urlState = setPlantId(urlState, rec.id);
+                     urlState = setPlantName(urlState, header_name||'?');
+                     let activity_url      = '../observers/observer_counts.html' + buildParameterList(urlState);
+                     let tdPhoto = faddelem('td', brow, { style: 'text-align: center;' });
+
+                     // Create the anchor link pointing to the wildlife activity url
+                     let aLink = faddelem('a', tdPhoto, { href: activity_url, style: 'text-decoration: none;' });
+                     faddelem('div', aLink, { textContent: '\u{1F465}', style: 'font-size: 1.5rem; display: inline-block; vertical-align: middle;' });                     
+                     //faddelem('div', aLink, { textContent: '\u{1FAB2}', style: 'font-size: 1.5rem; text-align: center;' });
+                 } else {
+                     faddelem('td', brow, { textContent: '', style: 'text-align: center;' });
+                 }
+             }            
 
              if( p_mode === 'activity' ) {
                  // Split the string into an array and trim any accidental whitespace
