@@ -54,6 +54,7 @@ function buildMenu( results, config ) {
     // Build the Home Link
     let homeState = clearForGardenListParams(appState);
     let homeUrl = './garden_list.html';
+    if( getParams(appState) === 'beds' ) { homeUrl = '../beds/beds.html'; }  // may need to change to use component instead of hard code json name
     buildNavHome( navbar, homeUrl, homeState );
 
     // Append the DOM nodes to the body
