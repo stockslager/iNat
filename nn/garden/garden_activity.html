@@ -23,6 +23,7 @@ let winurlstr         = window.location.href;
 let winurlsearchstr   = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
+let p_mode         = winurlparams.get('mode') || '';
 
 appState       = buildStateFromParams(winurlparams);
 
@@ -54,7 +55,7 @@ function buildMenu( results, config ) {
     // Build the Home Link
     let homeState = clearForGardenListParams(appState);
     let homeUrl = './garden_list.html';
-    if( getParams(appState) === 'beds' ) { homeUrl = '../beds/beds.html'; }  // may need to change to use component instead of hard code json name
+    if( p_mode === 'activity' ) { homeUrl = '../beds/beds.html'; }  // may need to change to use component instead of mode param
     buildNavHome( navbar, homeUrl, homeState );
 
     // Append the DOM nodes to the body
