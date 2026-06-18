@@ -301,7 +301,7 @@ function buildPage(xobj, config) {
              if( p_mode === 'activity' ) {
                  // Split the string into an array and trim any accidental whitespace
                  let taxonIdArray = (config.activityTaxonIds || '').split(',').map(id => id.trim());
-                 if( rec?.taxon?.id && taxonIdArray.includes(String(rec.id)) ) {
+                 if( rec?.id && taxonIdArray.includes(String(rec.id)) ) {
                      // Column: wildlife activity
                      urlState = appState;
                      urlState = setPage(urlState, '');
