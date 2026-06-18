@@ -345,14 +345,14 @@ function setupAPIParams( config ) {
  
    //api_params += '?project_id='+config.project;
     
-   if( config.plantIds )          { api_params += '?id='       + config.plantIds;  }
+   //if( config.plantIds )          { api_params += '?id='       + config.plantIds;  }
    //if( config.userId )            { api_params += '&user_id='  + config.userId; }
 
    // use the taxon_id(s) from the config when present.
    if( config.beds ) { 
        for( let i=0; i<config.beds.length; i++ ) {
             if( config.beds[i].bedName === (getGarden(appState)||'lake') ) {
-                //api_params += '&taxon_id=' + config.beds[i].taxonIds; 
+                api_params += '?id=' + config.beds[i].taxonIds; 
                 image_name = config.beds[i].image;
             }
        }
