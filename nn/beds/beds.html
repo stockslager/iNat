@@ -120,7 +120,24 @@ let image_name = '';
 
 // page / api specific constants 
 const CONST_CUSTOM_PLANT   = 'Plant';
-  
+
+function sortWithNull(arr, ascending = true) {
+  for( let i=0; i<arr.length; i++ ) {
+       if( arr[i].preferred_common_name ){
+           arr[i].preferred_common_name = arr[i].taxon.preferred_common_name.toLowerCase();
+       }
+  }
+  arr.sort(function(a, b) {
+    if (!a.preferred_common_name && !b.taxon.preferred_common_name) return 0;
+    if (!a.preferred_common_name) return ascending ? 1 : -1;
+    if (!b.preferred_common_name) return ascending ? -1 : 1;
+    if (a.preferred_common_name < b.taxon.preferred_common_name) return ascending ? -1 : 1;
+    if (a.preferred_common_name > b.taxon.preferred_common_name) return ascending ? 1 : -1;
+    return 0;
+  });
+  return arr;
+}
+    
 function getPlaceName( config, place_id ) {
    let place_name = 'Place';
 
@@ -238,9 +255,9 @@ function buildPage(xobj, config) {
          // Column: Index
          faddelem('td', brow, { textContent: i + 1 });
 
-         if( rec.taxon ) {
-             let tax_name = rec.taxon.name || '';
-             let pref_tax_name = rec.taxon.preferred_common_name || '';
+         if( rec ) {
+             let tax_name = rec.name || '';
+             let pref_tax_name = rec.preferred_common_name || '';
              header_name = pref_tax_name || tax_name || '';
              // Column: Species or Observation Pic
              if( config.usePlantProjectImages && config.usePlantProjectImages === 'yes' ) {
@@ -252,9 +269,9 @@ function buildPage(xobj, config) {
              // Column: Name 
              let urlState = appState;
              urlState = setPage(urlState, '');
-             urlState = setTaxonId(urlState, rec.taxon.id);
+             urlState = setTaxonId(urlState, rec.id);
              urlState = setTaxonName(urlState, '');
-             urlState = setPlantId(urlState, rec.taxon.id);
+             urlState = setPlantId(urlState, rec.id);
              urlState = setPlantName(urlState, header_name||'?');
              let url      = './beds_grid.html' + buildParameterList(urlState);
              buildSpeciesName( brow, rec, url );
@@ -262,14 +279,14 @@ function buildPage(xobj, config) {
              if( p_mode === 'activity' ) {
                  // Split the string into an array and trim any accidental whitespace
                  let taxonIdArray = (config.activityTaxonIds || '').split(',').map(id => id.trim());
-                 if( rec?.taxon?.id && taxonIdArray.includes(String(rec.taxon.id)) ) {
+                 if( rec?.taxon?.id && taxonIdArray.includes(String(rec.id)) ) {
                      // Column: wildlife activity
                      urlState = appState;
                      urlState = setPage(urlState, '');
                      urlState = setTaxonId(urlState, '');
                      urlState = setTaxonName(urlState, '');
                      urlState = setComponent(urlState, COMPONENT_GARDEN);
-                     urlState = setPlantId(urlState, rec.taxon.id);
+                     urlState = setPlantId(urlState, rec.id);
                      urlState = setPlantName(urlState, header_name||'?');
                      let activity_url      = '../garden/garden_activity.html' + buildParameterList(urlState);
                      let tdPhoto = faddelem('td', brow, { style: 'text-align: center;' });
