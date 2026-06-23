@@ -38,9 +38,8 @@ function buildMenu() {
   let navbar = document.createElement('div');    
   navbar.className = 'navbar v2-menu';
 
-  // build the choose plant link
-  let baseUrl = './choose_plant.html';
-  buildNavLink( navbar, baseUrl, appState, CONST_CHOOSE_PLANT );
+  // build the title
+  buildNavTitle( navbar, config.studyTitle );
 
   // Build the Home Link
   buildNavHome( navbar );
@@ -52,7 +51,7 @@ function buildMenu() {
 function buildPage( xobj, config ) {
    let results = xobj.results;
 
-   buildMenu();
+   buildMenu( config );
 
   
    if( results ) {
