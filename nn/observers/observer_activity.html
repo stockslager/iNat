@@ -144,7 +144,7 @@ function setupAPIParams(observerConfig) {
    api_params += ('?project_id='+observerConfig.insectProject);
    //api_params += '&hrank=species';
 
-   api_params += '&field:'+observerConfig.fieldName+'='+getPlantId(appState);
+   if( observerConfig.fieldName ) { api_params += '&field:'+observerConfig.fieldName+'='+getPlantId(appState); }
 
    // default these to what's in the config even though the state sometimes
    // holds the same attributes for other components.
