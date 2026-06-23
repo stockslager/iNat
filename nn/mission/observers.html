@@ -216,7 +216,8 @@ async function gatherResources() {
   try {
    
       // Await the result of getObservations() and store the actual data
-      const config  = await asyncGetConfiguration( json_path, getComponent(appState) );
+      const config  = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
+      //const config  = await asyncGetConfiguration( json_path, getComponent(appState) );
       console.log('full config title: ' + config.getFullTitle());
       const api_params    = setupAPIParams( config );
       const api_url       = apibase+api_params;
