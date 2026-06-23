@@ -49,6 +49,7 @@ const CONST_BIODIVERSITY = 'Biodiversity';
 const CONST_THRU_HIKES   = 'Thru Hikes';
 const CONST_ART          = 'Art & Journaling';
 const CONST_OBSERVERS    = 'Observers';
+const CONST_MISSIONS     = 'Missions';
 
 function buildMenu( config ) {
   
@@ -130,6 +131,14 @@ function buildPage( configManager ) {
                        let url  = '../observers/observer_counts.html';
                        let icon = config.utf8 || CONST_NPC_UTF8;
                        let name = config.studyTitle || CONST_OBSERVERS;
+                       let desc = config.studyDesc || CONST_OBSERVERS_DESC;
+                       buildRow( 'observers', icon, name, desc, tbody, url );
+                   }
+
+                   if( config.component === 'missions' ) {
+                       let url  = '../missions/observers.html';
+                       let icon = config.utf8 || CONST_NPC_UTF8;
+                       let name = config.studyTitle || CONST_MISSIONS;
                        let desc = config.studyDesc || CONST_OBSERVERS_DESC;
                        buildRow( 'observers', icon, name, desc, tbody, url );
                    }
