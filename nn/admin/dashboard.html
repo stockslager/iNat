@@ -88,11 +88,19 @@ function buildPage( configManager ) {
 
       let labels = [];
 
-      labels = [
+      if( getParams(appState) === 'missions' ) {
+          labels = [
+                {innerText:CONST_ICON},
+                {innerText:CONST_MISSIONS},
+                {innerText:CONST_DESCRIPTION}, 
+          ];
+      } else {
+          labels = [
                 {innerText:CONST_ICON},
                 {innerText:CONST_COMPONENT},
                 {innerText:CONST_DESCRIPTION}, 
-      ];
+          ];
+      }
 
       if( configManager.configurations.length > 0 ) {
 
