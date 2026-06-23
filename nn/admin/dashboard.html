@@ -148,7 +148,11 @@ function buildPage( configManager ) {
                    }
 
                    if( config.component === 'missions' ) {
-                       let url  = '../mission/observers.html';
+                       let urlState = appState;
+                       urlState = setComponent( urlState, config.component );
+                       urlState = setStudyTitle(urlState, config.studyTitle);
+
+                       let url  = '../mission/observers.html' + buildParameterList(urlState);
                        let icon = config.utf8 || CONST_NPC_UTF8;
                        let name = config.studyTitle || CONST_MISSIONS;
                        let desc = config.studyDesc || CONST_OBSERVERS_DESC;
