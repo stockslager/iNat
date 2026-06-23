@@ -4,15 +4,15 @@
 <head> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
-<meta name="apple-mobile-web-app-title" content="Garden Observers" />
-<meta name="description" content="Garden Observers" />
+<meta name="apple-mobile-web-app-title" content="Mission Observers" />
+<meta name="description" content="Mission Observers" />
 <link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
 <link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
 <link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
 <link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
 <link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
 <link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
-<title>Garden Observers</title>
+<title>Mission Observers</title>
 </head>
 
 <body>
@@ -66,13 +66,8 @@ function buildPage( xobj, config ) {
 
       let title_1 = '', title_2 = '', title_3 = '';
 
-      if( getPlantName(appState) ) {
-          let tc = capitalizeWords(getPlantName(appState));
-          title_3  = faddelem('a', null, { href: './observer_activity.html' + buildParameterList(appState), textContent: tc });
-      } else {
-          title_3  = getPlaceMenuName(appState) || config.title;
-          //title_3  = faddelem('a', null, { href: './observer_activity.html' + buildParameterList(appState), textContent: tc });
-      }
+      let tc = capitalizeWords('show all');
+      title_3  = faddelem('a', null, { href: './observer_grid.html' + buildParameterList(appState), textContent: tc });
 
       let header = buildHeader( CONST_OBSERVERS, total_results, per_page, page_curr, page_max, title_1, title_2, title_3 ); 
 
@@ -112,7 +107,7 @@ function buildPage( xobj, config ) {
          urlState = setTaxonId(urlState, '');
          urlState = setTaxonName(urlState, '');
          urlState = setUser(urlState, rec.user.login);
-         let url = './observer_activity.html'+buildParameterList(urlState);
+         let url = './observer_grid.html'+buildParameterList(urlState);
        
          // Column: Counts
          buildObservationCounts( brow, rec, url );
