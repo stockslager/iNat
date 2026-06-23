@@ -84,7 +84,11 @@ function buildPage( configManager ) {
       buildMenu( configManager );
 
       // Generate the header element
-      renderHeader(CONST_COMPONENTS, configManager.configurations.length, '20', '1', '1', '', '', configManager.configurations[0].title);
+      if( getParams(appState) === 'missions' ) {
+          renderHeader(CONST_MISSIONS, configManager.configurations.length, '20', '1', '1', '', '', configManager.configurations[0].title);
+      } else {
+          renderHeader(CONST_COMPONENTS, configManager.configurations.length, '20', '1', '1', '', '', configManager.configurations[0].title);
+      }
 
       let labels = [];
 
