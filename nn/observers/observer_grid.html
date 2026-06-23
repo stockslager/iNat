@@ -104,8 +104,8 @@ function setupAPIParams( config ) {
     if( config.defaultPlace    ) { api_params += '&place_id=' + config.defaultPlace; }  
     if( getUser(appState)               ) { api_params += '&user_id='  + getUser(appState); }  
     if( config.faunaAPIParams  ) { api_params += config.faunaAPIParams; }
-  
-    api_params += '&field:'+config.fieldName+'=' + getPlantId(appState);
+
+    if( config.fieldName ) { api_params += '&field:'+config.fieldName+'='+getPlantId(appState); }
 
     return api_params;
 }
