@@ -65,12 +65,18 @@ function buildPage(xobj, hikerConfig) {
       let page_max = Math.ceil(total_results/per_page);
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
+      let name = '';
+      let titleText = '';
 
-      let name = hikerConfig.getSubIconNameByTaxonId(hikerConfig, getMenuId(appState)) || CONST_SHOW;
+      if( getMenuId(appState) ) {
+          name      = hikerConfig.getSubIconNameByTaxonId(hikerConfig, getMenuId(appState)) || CONST_SHOW;
+          titleText = CONST_SPECIES_ALL+capitalizeWords(name);
+      } else {
+          titleText = CONST_SHOW + ' ' + CONST_ALL;
+      }
 
       buildMenu( results, hikerConfig );
 
-      let titleText = CONST_SPECIES_ALL+capitalizeWords(name);
       let urlState  = appState; 
       if( getMenuId(appState) ) {
           urlState = setTaxonId(urlState, getMenuId(appState)); // set taxon id to menu id if a filter was chosen for say, birds.
