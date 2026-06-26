@@ -64,6 +64,15 @@ function buildPage(xobj, observerConfig) {
       let page_max = Math.ceil(total_results/per_page);
       let page_prev = ((page_curr>1)?page_curr-1:null);
       let page_next = ((page_curr<page_max)?page_curr+1:null);
+      let name = '';
+      let titleText = '';
+
+      if( getMenuId(appState) ) {
+          name      = observerConfig.getSubIconNameByTaxonId(observerConfig, getMenuId(appState)) || CONST_SHOW;
+          titleText = CONST_SPECIES_ALL+capitalizeWords(name);
+      } else {
+          titleText = CONST_SHOW + ' ' + CONST_ALL;
+      }
 
       buildMenu( results, observerConfig );
 
@@ -78,7 +87,7 @@ function buildPage(xobj, observerConfig) {
       if( getUser(appState) ) { title_2 = ' By ' + getUser(appState); }        
 
       //let title3Text = 'On ' + capitalizeWords( (getPlantName(appState) || CONST_ALL_PLANTS) );
-      let title3Text = 'Show All';
+      let title3Text = titleText;
       let titleUrl   = './observer_grid.html' + buildParameterList(urlState);
       let title_3 = faddelem('a', null, { href: titleUrl });
 
