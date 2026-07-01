@@ -184,6 +184,13 @@ function buildNavDD( navbar, dd_name, links ) {
   }
 }
 
+function buildMenuURL( url ) {
+  let dd = '<div id="menu_title">' + url +     
+           '</div>';
+
+  return( dd );
+}
+
 function buildNavActivityFiltersDD( navbar, dd_name, config ) {
     if( config.ddFilters && config.ddFilters.length > 0 ) {
         let dd_name = config.ddFilters[0].ddName;
