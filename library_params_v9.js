@@ -14,6 +14,7 @@ let github_root = 'https://stockslager.github.io/iNat/';
 // missour botanical garden outlink 
 let root_usda = 'https://plants.usda.gov/plant-profile/';
 let root_missouri = 'https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?kempercode=';
+let root_florida_dnr = 'https://myfwc.com/fishing/saltwater/recreational/';
 
 // iconic taxa id defaults
 let iPlants = '47126';
