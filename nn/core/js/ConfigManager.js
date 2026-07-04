@@ -82,9 +82,10 @@ class ConfigurationItem {
         this.mapCenter       = configData.map_center ?? null;
         this.mapExtent       = configData.map_extent ?? null;
         this.defaultPlace = configData.default_place ?? null;
-        this.fieldId = configData.field_id ?? null;
-        this.fieldName = configData.field_name ?? null;
-        this.fieldValue = configData.field_value ?? null;
+        this.fieldId      = configData.field_id ?? null;
+        this.fieldName    = configData.field_name ?? null;
+        this.fieldValue   = configData.field_value ?? null;
+        this.fieldOutlink = configData.field_outlink ?? null; 
 
         this.studyTitle = configData.study_title ?? null;
         this.studyDesc  = configData.study_desc ?? null;
