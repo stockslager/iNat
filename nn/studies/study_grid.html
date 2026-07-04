@@ -82,7 +82,7 @@ function buildMenu(config) {
    //menu_string += buildMenuURL( furl('../admin/layered_map.html'+buildParameterList(appState)+'&project_id='+config.insectProject,"Map") );
 
    let urlState = setTaxonId(appState, '');
-   menu_string += buildHome( furl('./field_study.html'+buildParameterList(urlState),CONST_LEAF_UTF8) );
+   menu_string += buildHome( furl('./field_study.html'+buildParameterList(urlState), config.homeUTF8 || CONST_LEAF_UTF8) );
    menu_string += '</div>';
    
    return menu_string;
