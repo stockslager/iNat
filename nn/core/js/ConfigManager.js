@@ -198,6 +198,7 @@ class ConfigManager {
         this.mapCenter       = jsonData.map_center;
         this.mapExtent       = jsonData.map_extent;
         this.mapType         = jsonData.map_type;
+        this.homeUTF8        = jsonData.home_utf8;
     }
 
     getConfigByComponent(componentName) {
@@ -274,6 +275,9 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
               }
               if( !finalConfigInstance.mapType ) {
                   if( managerInstance.mapType ) { finalConfigInstance.mapType = managerInstance.mapType; }
+              }
+              if( !finalConfigInstance.homeUTF8 ) {
+                  if( managerInstance.homeUTF8 ) { finalConfigInstance.homeUTF8 = managerInstance.homeUTF8; }
               }
               
               return finalConfigInstance; 
@@ -361,6 +365,10 @@ async function asyncGetConfiguration( params, component, studyTitle=null ) {
         if( !finalConfigInstance.mapType ) {
             if( managerInstance.mapType ) { finalConfigInstance.mapType = managerInstance.mapType; }
         }
+        if( !finalConfigInstance.homeUTF8 ) {
+            if( managerInstance.homeUTF8 ) { finalConfigInstance.homeUTF8 = managerInstance.homeUTF8; }
+        }
+
       
         return finalConfigInstance; 
 
