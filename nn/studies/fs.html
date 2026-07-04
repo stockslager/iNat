@@ -686,10 +686,8 @@ function setupAPIParams( config ) {
    if( getFieldValue(appState) ) { api_params += '='          + config.fieldValue || getFieldValue(appState); }
 
    // secondary field names and values are stored in state
-   if( getFieldName2(appState) )  { api_params += '&field:' + getFieldName(appState); } 
-   if( getFieldName3(appState) )  { api_params += '&field:' + getFieldName2(appState); }
+   if( getFieldName2(appState) )  { api_params += '&field:' + getFieldName2(appState); } 
    if( getFieldValue2(appState) ) { api_params += '='       + getFieldValue2(appState); }
-   if( getFieldValue3(appState) ) { api_params += '='       + getFieldValue3(appState); }
   
    if( getObsDate(appState)    ) { api_params += '&on='       + getObsDate(appState); }
 
