@@ -35,6 +35,8 @@ const ATTRIBUTE_OBSDATE         = 'obsdate';
 const ATTRIBUTE_ACTIVITYFILTER  = 'activityfilter';
 const ATTRIBUTE_FIELDNAME       = 'fieldname';
 const ATTRIBUTE_FIELDVALUE      = 'fieldvalue';
+const ATTRIBUTE_LIFESTAGE       = 'lifestage';
+const ATTRIBUTE_EVIDENCE        = 'evidence';
 const ATTRIBUTE_PAGE            = 'page';
 const ATTRIBUTE_PER_PAGE        = 'per_page';
 
@@ -65,6 +67,8 @@ let appState = {
   [ATTRIBUTE_ACTIVITYFILTER]: '',
   [ATTRIBUTE_FIELDNAME]: '',
   [ATTRIBUTE_FIELDVALUE]: '',
+  [ATTRIBUTE_LIFESTAGE]: '',
+  [ATTRIBUTE_EVIDENCE]: '',
   [ATTRIBUTE_PAGE]:      '',
   [ATTRIBUTE_PER_PAGE]:  ''
 
@@ -104,6 +108,8 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_ACTIVITYFILTER]:  '',
     [ATTRIBUTE_FIELDNAME]: '',
     [ATTRIBUTE_FIELDVALUE]: '',
+    [ATTRIBUTE_LIFESTAGE]: '',
+    [ATTRIBUTE_EVIDENCE]: '',
     [ATTRIBUTE_PAGE]:      '',
     [ATTRIBUTE_PER_PAGE]:  ''
   };
@@ -216,6 +222,8 @@ function getObsDate(state)         { return (getAttribute(state, ATTRIBUTE_OBSDA
 function getActivityFilter(state)  { return (getAttribute(state, ATTRIBUTE_ACTIVITYFILTER)); }
 function getFieldName(state)       { return (getAttribute(state, ATTRIBUTE_FIELDNAME)); }
 function getFieldValue(state)      { return (getAttribute(state, ATTRIBUTE_FIELDVALUE)); }
+function getLifeStage(state)       { return (getAttribute(state, ATTRIBUTE_LIFESTAGE)); }
+function getEvidence(state)        { return (getAttribute(state, ATTRIBUTE_EVIDENCE)); }
 function getPage(state)            { return (getAttribute(state, ATTRIBUTE_PAGE)); }
 function getPerPage(state)         { return (getAttribute(state, ATTRIBUTE_PER_PAGE)); }
 
@@ -249,6 +257,8 @@ function setObsDate(state, value)         { return (setAttribute(state, ATTRIBUT
 function setActivityFilter(state, value)  { return (setAttribute(state, ATTRIBUTE_ACTIVITYFILTER, value)); }
 function setFieldName(state, value)       { return (setAttribute(state, ATTRIBUTE_FIELDNAME, value)); }
 function setFieldValue(state, value)      { return (setAttribute(state, ATTRIBUTE_FIELDVALUE, value)); }
+function setLifeStage(state, value)       { return (setAttribute(state, ATTRIBUTE_LIFESTAGE, value)); }
+function setEvidence(state, value)        { return (setAttribute(state, ATTRIBUTE_EVIDENCE, value)); }
 function setPage(state, value)            { return (setAttribute(state, ATTRIBUTE_PAGE, value)); }
 function setPerPage(state, value)         { return (setAttribute(state, ATTRIBUTE_PER_PAGE, value)); }
 
@@ -847,6 +857,8 @@ function clearForDashParams(state) {
   urlState = setActivityFilter(urlState, '');
   urlState = setFieldName(urlState, '');
   urlState = setFieldValue(urlState, '');
+  urlState = setLifeStage(urlState, '');
+  urlState = setEvidence(urlState, '');
   urlState = setStudyTitle(urlState, '');
   urlState = setActivityFilter(urlState, '');
 
