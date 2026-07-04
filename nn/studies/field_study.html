@@ -568,7 +568,7 @@ function fresults( xobj, config ) {
                                   let url  = furl2('./field_study.html'+buildParameterList(urlState), field1);
                                   let outlink = ''; 
                                   if( config.fieldOutlink ) { outlink = furl2(config.fieldOutlink+rec.ofvs[j].value.toString(), '<span style="font-size: 1.5rem; padding-left: 10px;">&#128712;</span>'); }
-                                  values.push({innerHTML:url+outlink});
+                                  values.push({ innerHTML:'<span class="user">' + outlink + url + '</span>' });
                               }
                           } else {
                               values.push({innerText:''});
