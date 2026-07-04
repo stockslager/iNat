@@ -603,10 +603,18 @@ function setupMapParams(config) {
    } else if( getComponent(appState) === COMPONENT_STUDIES ) {
        api_params += '?project_id=' + (config.insectProject||config.project);
        console.log('field val ' + getFieldValue(appState));
-       api_params += '&field:'+config.fieldName+'='+getFieldValue(appState);
+       if( config.merge && config.merge === 'yes' ) { 
+           api_params += '&ofv_datatype=taxon';
+       } else {
+           api_params += '&field:'+config.fieldName+'='+getFieldValue(appState);
+       }
    } else {
        api_params += '?project_id=' + (config.insectProject||config.project);
-       api_params += '&field:'+config.fieldName+'='+getPlantId(appState);
+       if( config.merge && config.merge === 'yes' ) { 
+           api_params += '&ofv_datatype=taxon';
+       } else {
+           api_params += '&field:'+config.fieldName+'='+getPlantId(appState);
+       }
    }
 
    // default these to what's in the config even though the state sometimes
