@@ -35,6 +35,17 @@ const CONST_MAP             = 'Map';
 const CONST_CHOOSE_PLANT    = 'Choose Plant';
 const CONST_SHOWING_COUNTS_FOR = 'showing counts for';
 
+const LIFE_STAGE_MAP = {
+  '2': 'adult',
+  '3': 'teneral',
+  '4': 'pupa',
+  '5': 'nymph',
+  '6': 'larva',
+  '7': 'egg',
+  '8': 'juvenile',
+  '16': 'submiago'
+};
+
 // over cnc
 const CONST_MAP_CENTER      = '&centerlat=39.125110765542274&centerlng=-84.2456670686007';   
 const CONST_LS_MAP_EXTENT   = { nelat:39.13893773451089,nelng:-84.2301281663201,swlat:39.112503771727305,swlng:-84.26446044171072 };
