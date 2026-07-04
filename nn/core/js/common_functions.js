@@ -16,8 +16,9 @@ const js_root = '../core/js/';
 // outlinks used in cncnpc_seeds_fields.html
 // usda outlink 
 // missour botanical garden outlink 
-const root_usda = 'https://plants.usda.gov/plant-profile/';
-const root_missouri = 'https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?kempercode=';
+const root_usda        = 'https://plants.usda.gov/plant-profile/';
+const root_missouri    = 'https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?kempercode=';
+const root_florida_dnr = 'https://myfwc.com/fishing/saltwater/recreational/';
 
 // global constants...
 const CONST_TOTAL_SPECIES   = 'total species: ';  // common api results header
