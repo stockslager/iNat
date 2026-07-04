@@ -565,7 +565,10 @@ function fresults( xobj, config ) {
                                   urlState = setPlantName(urlState, cname||name);
                                   urlState = setFieldName(urlState, rec.ofvs[j].name);
                                   urlState = setFieldValue(urlState, replaceDoubleQuotes(rec.ofvs[j].value.toString()));
-                                  values.push({innerHTML:furl2('./field_study.html'+buildParameterList(urlState), field1)});
+                                  let url  = furl2('./field_study.html'+buildParameterList(urlState), field1);
+                                  let outlink = ''; 
+                                  if( config.fieldOutlink ) { outlink = furl2(config.fieldOutlink+rec.ofvs[j].value.toString(), '&#128712;'); }
+                                  values.push({innerHTML:url+outlink});
                               }
                           } else {
                               values.push({innerText:''});
