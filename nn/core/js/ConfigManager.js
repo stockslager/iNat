@@ -63,8 +63,9 @@ class ConfigurationItem {
         this.insectProject = configData.insect_project ?? null;  
         this.plantProject = configData.plant_project ?? null;
         this.colonyProject = configData.colony_project ?? null;
-        this.userId = configData.user_id ?? null; // Should now consistently show the ID or null
-        this.title = configData.title ?? null;
+        this.userId   = configData.user_id ?? null; // Should now consistently show the ID or null
+        this.title    = configData.title ?? null;
+        this.homeUTF8 = configData.home_utf8 ?? null;
 
         // Ensure hideOnAny results in a boolean or default to true
         this.hideOnAny  = (configData.hide_on_any === 'yes') ?? true; 
