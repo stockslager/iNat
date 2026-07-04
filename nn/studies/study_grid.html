@@ -1,0 +1,281 @@
+<!DOCTYPE html>     
+<html lang="en">  
+   
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="apple-mobile-web-app-title" content="Study Grid" />
+<meta name="description" content="Study Grid" />
+<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
+<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+<title>Study Grid</title>
+<style>
+   #main { width:fit-content; min-width:754px; }
+   p { width: fit-content; min-width: 754px; margin: 0.7em 0; }
+</style>
+</head>
+
+<body>
+<script type="text/javascript"   src='../core/js/common_functions.js'> </script>
+<script type="text/javascript"   src='../core/js/store.js'> </script>
+<script>
+//get parameters from the url
+let winurlstr         = window.location.href;
+let winurlsearchstr   = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams      = new URLSearchParams(winurlsearchstr);
+
+appState       = buildStateFromParams(winurlparams);
+
+var api_base   = 'https://api.inaturalist.org/v1/observations'
+
+// don't show organsims that have only been id'd to genus and above, otherwise the number's
+// won't match other counts
+//winurlparams.append('lrank', 'subspecies');
+
+// defaults for grid
+var cellpx       = 122;
+var spacerpx     =   4;
+var rows         =   6;
+var columns      =   6;
+var recsmax      = columns * rows - 1;
+
+winurlparams.append('per_page',recsmax);
+
+function escapeHtmlUrl(urlString) {
+    return urlString.replace(/&/g, '&amp;');
+}
+
+function buildMenu(config) {
+
+   let links = '';
+   let menu_string = '';
+   let menu_params = '';
+
+   let id = getMenuId(appState);
+
+   if( id ) { menu_params += '&taxon_id=' + id + '&menu_id=' + id; }
+
+   // if a filter has been chosen, get the filter api params
+   if( getActivityFilter(appState) ) {
+       menu_params += getFilterAPIParams(config);
+   }
+
+   menu_string = '<div class="navbar">';
+
+   if( config.mapType !== 'hide' ) {
+       let api_params = new URL('./hcc/admin/map.html', window.location.origin);
+
+       setupMapAPIParams(config, api_params);
+
+       // Escape the raw ampersands before passing it to furl or buildMenuURL
+       let urlString = api_params.toString() + '&params=' + getParams(appState);
+       let safeHtmlUrl = escapeHtmlUrl(urlString);
+
+       menu_string += buildMenuURL(furl(safeHtmlUrl, "Collection Area Map"));      
+   }
+   //menu_string += buildMenuURL( furl('../admin/layered_map.html'+buildParameterList(appState)+'&project_id='+config.insectProject,"Map") );
+
+   let urlState = setTaxonId(appState, '');
+   menu_string += buildHome( furl('./field_study.html'+buildParameterList(urlState),CONST_LEAF_UTF8) );
+   menu_string += '</div>';
+   
+   return menu_string;
+}
+
+function buildMenu2( config ) {
+
+  // Create the main navbar container
+  let navbar = document.createElement('div');    
+  navbar.className = 'navbar v2-menu';
+
+   // if life stages (ls) option was chosen for map type was set in the config and 
+   // they've chosen Butterflies from the drop-down or have chosen a butterfly from the list
+   if( config.mapType !== 'hide' ) {
+       if( config.mapType === 'ls' && ( getLSTaxonId(appState) === '47157' || getTaxonId(appState) === '47157' || getMenuId(appState) === '47157' ) ) {  
+           let links = [];
+    
+           let mapLink  = faddelem('a', null, { href: '../admin/map.html' + setupAPIParams(config)  + getMapZoom(config) + '&params=' + getParams(appState), textContent: 'Standard Map' });
+           let lsLink   = faddelem('a', null, { href: '../admin/density_map.html'     + buildParameterList(appState), textContent: 'Life-Stages' });
+
+           links.push(mapLink);
+           links.push(lsLink);
+
+           buildNavDD( navbar, 'Maps', links );
+       } else {   
+           let url = '../admin/map.html' + setupAPIParams(config) + getMapZoom(config);
+           buildNavURL( navbar, url, CONST_MAP );
+       }
+   }
+
+  // Build the Home Link
+  let homeUrl = './field_study.html';
+  buildNavHome( navbar, homeUrl, appState );
+  
+  faddelem('p', document.body).appendChild(navbar);
+}
+
+function buildPage(data, config) {  
+
+   //if( getComponent(appState) === 'plantings' || getComponent(appState) === 'visits' ) {
+       //faddelem('p',document.body,{innerHTML:buildMenu(config)}); 
+   //} else {
+       buildMenu2(config); 
+  // }
+   
+   // append the params needed by the grid to build the url for outlinks to iNat.
+   let inat_url = setupAPIParams(config);
+                                    
+   buildGrid(data, inat_url);    
+};
+
+function setupMapAPIParams( config, api_params ) {
+    
+    api_params.searchParams.append('project_id', config.project);
+    api_params.searchParams.append('not_in_project', '157918');
+
+    if( getObsDate(appState)    ) { api_params.searchParams.append('on', getObsDate(appState)); } 
+
+    if( getUser(appState) ) {
+        api_params.searchParams.append('user_id', getUser(appState));
+    } else if( config.userId ) { 
+        api_params.searchParams.append('user_id', config.userId);
+    }
+
+    if( getPlaceMenuId(appState) ) { api_params.searchParams.append('place_id', getPlaceMenuId(appState)); }
+
+    // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
+    // use the menu_id if one was passed in.
+    if( getTaxonId(appState) ) {
+        api_params.searchParams.append('taxon_id', getTaxonId(appState));
+    } else if( getMenuId(appState) ) { 
+        api_params.searchParams.append('taxon_id', getMenuId(appState));
+    } else {
+        if( config.defaultTaxonId ) {
+            api_params.searchParams.append('taxon_id', config.defaultTaxonId);
+        }
+    }
+
+    /*if( getActivityFilter(appState) ) {
+        api_params.searchParams.append('field:plant+interaction', getActivityFilter(appState));
+    } */
+
+    if (config.obsAPIParams) {
+        const extraParams = new URLSearchParams(config.obsAPIParams);
+        extraParams.forEach((value, key) => {
+            api_params.searchParams.append(key, value);
+        });
+    }
+
+    if( getMapZoom(config) ) { 
+        const extraParams = new URLSearchParams(getMapZoom(config));
+        extraParams.forEach((value, key) => {
+            api_params.searchParams.append(key, value);
+        });
+    }
+   
+    if( getPage(appState) ) { api_params.searchParams.set('page', getPage(appState)); }
+    if( getPage(appState) ) { api_params.searchParams.set('per_page', CONST_OBSERVATIONS_PER_PAGE); }
+
+    return api_params;
+}
+
+function setupAPIParams( config ) {
+    
+    let api_params = '';
+
+    api_params += '?project_id='+config.project;
+
+    // url params will include field name when they filter based on a 
+    // obs field value by clicking it in the table.
+    if( getFieldName(appState) )  { 
+        api_params += '&field:' + getFieldName(appState); 
+    } else if( config.fieldName ) { 
+        api_params += '&field:'    + config.fieldName;  
+    }
+ 
+    if( getFieldValue(appState) ) { api_params += '='          + getFieldValue(appState); }
+    if( getObsDate(appState)    ) { api_params += '&on='       + getObsDate(appState); } 
+
+    if( getUser(appState) ) {
+        api_params += '&user_id=' + getUser(appState);
+    } else if( config.userId ) { 
+        api_params += '&user_id='  + config.userId; 
+    }
+ 
+    api_params += getPlaceMenuIdParam(appState, '&place_id=');
+
+    // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
+    // use the menu_id if one was passed in.
+    console.log('sub ' + config.defaultTaxonId);
+    if( getTaxonId(appState) ) {
+        api_params += '&taxon_id='+getTaxonId(appState);
+    } else if( getMenuId(appState) ) { 
+        api_params += '&taxon_id=' + getMenuId(appState); 
+    } else {
+        if( config.defaultTaxonId ) {
+            api_params += '&taxon_id=' + config.defaultTaxonId;
+        }
+    }
+
+    // if a filter has been chosen, get the filter api params
+    if( getActivityFilter(appState) ) {
+        api_params += getFilterAPIParams(config);
+    }
+    /*if( getActivityFilter(appState) ) {
+        api_params += '&field:plant+interaction='+getActivityFilter(appState);
+    } */
+
+    if( config.obsAPIParams ) { api_params += config.obsAPIParams; }
+    api_params += getPageParam(appState, '&page=');
+    api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
+
+    return api_params;
+}
+</script>
+    
+<script type="text/javascript"   src="../core/js/grid.js">          </script>
+<script type="text/javascript"   src="../core/js/ConfigManager.js"> </script>
+<script type="text/javascript"   src="../core/js/api_fetch.js">     </script>
+
+<script>
+   
+async function gatherResources() {
+  let json_path = json_root + getParams(appState);
+ 
+  try {
+   
+      // Await the result of getObservations() and store the actual data
+      const config   = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
+      console.log('full config title: ' + config.getFullTitle());
+      const api_params     = setupAPIParams( config );
+      const api_url        = api_base+api_params;
+      console.log('api url: ' + api_url);
+      const obs_data       = await apiFetch( api_url ); 
+     
+      // Pass the data to the buildPage function
+      buildPage(obs_data, config); 
+
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+let message = validateConfig(appState);
+ 
+if( message ) {
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
+   
+</script>
+</body>
+</html>
