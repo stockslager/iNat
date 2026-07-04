@@ -576,6 +576,7 @@ function fresults( xobj, config ) {
                                   values.push({innerHTML:furl2(root_observations+field1, field1)});
                               } else {
                                   if( config.fieldName.toString() === box_array[r].field_name.toString() ) {
+                                        console.log('here ' );
                                       let urlState = appState;
                                       urlState = setPage(urlState, '1');
                                       urlState = setPlantName(urlState, cname||name);
@@ -586,6 +587,7 @@ function fresults( xobj, config ) {
                                       if( config.fieldOutlink ) { outlink = furl2(config.fieldOutlink+rec.ofvs[j].value.toString(), '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">&#128712;</span>'); }
                                       values.push({ innerHTML:'<span class="filterable-header">' + outlink + '</span>' + url });
                                   } else {
+                                      console.log('not here' );
                                       let urlState = appState;
                                       urlState = setPage(urlState, '1');
                                       urlState = setFieldName2(urlState, rec.ofvs[j].name);
