@@ -350,7 +350,7 @@ function fresults( xobj, config ) {
                dlString += ('<tr id="trkey"><td id="tdkey">' + furl2(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + truncate(box_array[e].field_name.toLowerCase(), 25) + '</td></tr>');
                if( config.merge !== 'yes' ){
-                   if( box_array[e].field_name === getFieldName(appState) ) {
+                   if( box_array[e].field_name === config.fieldName ) {
                        let urlState = appState;
                        urlState = setPage(urlState, '1');
                        urlState = setPlantName(urlState, '');
