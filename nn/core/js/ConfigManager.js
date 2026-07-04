@@ -1,5 +1,5 @@
 /** 
- * Represents a single place entry.
+ * Represents a single place entry. 
  */
 class Place {
     constructor(data) {
