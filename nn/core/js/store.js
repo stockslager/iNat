@@ -31,6 +31,7 @@ const ATTRIBUTE_PLACEMENUNAME   = 'placemenuname';
 const ATTRIBUTE_GARDENLISTVALUE = 'gardenlistvalue';
 const ATTRIBUTE_TAXONDD         = 'taxondd';
 const ATTRIBUTE_OBSID           = 'obsid';
+const ATTRIBUTE_OBSDATE         = 'obsdate';
 const ATTRIBUTE_ACTIVITYFILTER  = 'activityfilter';
 const ATTRIBUTE_FIELDNAME       = 'fieldname';
 const ATTRIBUTE_FIELDVALUE      = 'fieldvalue';
@@ -60,6 +61,7 @@ let appState = {
   [ATTRIBUTE_GARDENLISTVALUE]:  '',
   [ATTRIBUTE_TAXONDD]:   '',
   [ATTRIBUTE_OBSID]:     '',
+  [ATTRIBUTE_OBSDATE]:   '',
   [ATTRIBUTE_ACTIVITYFILTER]: '',
   [ATTRIBUTE_FIELDNAME]: '',
   [ATTRIBUTE_FIELDVALUE]: '',
@@ -98,6 +100,7 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_GARDENLISTVALUE]: '',
     [ATTRIBUTE_TAXONDD]:   '',
     [ATTRIBUTE_OBSID]:     '',
+    [ATTRIBUTE_OBSDATE]:   '',
     [ATTRIBUTE_ACTIVITYFILTER]:  '',
     [ATTRIBUTE_FIELDNAME]: '',
     [ATTRIBUTE_FIELDVALUE]: '',
@@ -209,6 +212,7 @@ function getPlaceMenuName(state)   { return (getAttribute(state, ATTRIBUTE_PLACE
 function getGardenListValue(state) { return (getAttribute(state, ATTRIBUTE_GARDENLISTVALUE)); }
 function getTaxonDD(state)         { return (getAttribute(state, ATTRIBUTE_TAXONDD)); }
 function getObsId(state)           { return (getAttribute(state, ATTRIBUTE_OBSID)); }
+function getObsDate(state)         { return (getAttribute(state, ATTRIBUTE_OBSDATE)); }
 function getActivityFilter(state)  { return (getAttribute(state, ATTRIBUTE_ACTIVITYFILTER)); }
 function getFieldName(state)       { return (getAttribute(state, ATTRIBUTE_FIELDNAME)); }
 function getFieldValue(state)      { return (getAttribute(state, ATTRIBUTE_FIELDVALUE)); }
@@ -241,6 +245,7 @@ function setPlaceMenuName(state, value)   { return (setAttribute(state, ATTRIBUT
 function setGardenListValue(state, value) { return (setAttribute(state, ATTRIBUTE_GARDENLISTVALUE, value)); }
 function setTaxonDD(state, value)         { return (setAttribute(state, ATTRIBUTE_TAXONDD, value)); }
 function setObsId(state, value)           { return (setAttribute(state, ATTRIBUTE_OBSID, value)); }
+function setObsDate(state, value)         { return (setAttribute(state, ATTRIBUTE_OBSDATE, value)); }
 function setActivityFilter(state, value)  { return (setAttribute(state, ATTRIBUTE_ACTIVITYFILTER, value)); }
 function setFieldName(state, value)       { return (setAttribute(state, ATTRIBUTE_FIELDNAME, value)); }
 function setFieldValue(state, value)      { return (setAttribute(state, ATTRIBUTE_FIELDVALUE, value)); }
@@ -396,6 +401,16 @@ function getObsIdParam(state, param_nm)   {
       return '';
   }
 }
+
+function getObsDateParam(state, param_nm)   { 
+  let obs_date = getObsDate(state);
+  if( obs_date ) { 
+      return (param_nm + obs_date);
+  } else {
+      return '';
+  }
+}
+
 
 function getActivityFilterParam(state, param_nm)   { 
   let activity_filter = getActivityFilter(state);
@@ -826,6 +841,7 @@ function clearForDashParams(state) {
   urlState = setMenuName(urlState, '');
   urlState = setTaxonDD(urlState, '');
   urlState = setObsId(urlState, '');
+  urlState = setObsDate(urlState, '');
   urlState = setPage(urlState, '');
   urlState = setPerPage(urlState, '');
   urlState = setActivityFilter(urlState, '');
