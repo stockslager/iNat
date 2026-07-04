@@ -34,7 +34,9 @@ const ATTRIBUTE_OBSID           = 'obsid';
 const ATTRIBUTE_OBSDATE         = 'obsdate';
 const ATTRIBUTE_ACTIVITYFILTER  = 'activityfilter';
 const ATTRIBUTE_FIELDNAME       = 'fieldname';
+const ATTRIBUTE_FIELDNAME2      = 'fieldname2';
 const ATTRIBUTE_FIELDVALUE      = 'fieldvalue';
+const ATTRIBUTE_FIELDVALUE2     = 'fieldvalue2';
 const ATTRIBUTE_LIFESTAGE       = 'lifestage';
 const ATTRIBUTE_EVIDENCE        = 'evidence';
 const ATTRIBUTE_PAGE            = 'page';
@@ -66,7 +68,9 @@ let appState = {
   [ATTRIBUTE_OBSDATE]:   '',
   [ATTRIBUTE_ACTIVITYFILTER]: '',
   [ATTRIBUTE_FIELDNAME]: '',
+  [ATTRIBUTE_FIELDNAME2]: '',
   [ATTRIBUTE_FIELDVALUE]: '',
+  [ATTRIBUTE_FIELDVALUE2]: '',
   [ATTRIBUTE_LIFESTAGE]: '',
   [ATTRIBUTE_EVIDENCE]: '',
   [ATTRIBUTE_PAGE]:      '',
@@ -107,7 +111,9 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_OBSDATE]:   '',
     [ATTRIBUTE_ACTIVITYFILTER]:  '',
     [ATTRIBUTE_FIELDNAME]: '',
+    [ATTRIBUTE_FIELDNAME2]: '',
     [ATTRIBUTE_FIELDVALUE]: '',
+    [ATTRIBUTE_FIELDVALUE2]: '',
     [ATTRIBUTE_LIFESTAGE]: '',
     [ATTRIBUTE_EVIDENCE]: '',
     [ATTRIBUTE_PAGE]:      '',
@@ -221,7 +227,9 @@ function getObsId(state)           { return (getAttribute(state, ATTRIBUTE_OBSID
 function getObsDate(state)         { return (getAttribute(state, ATTRIBUTE_OBSDATE)); }
 function getActivityFilter(state)  { return (getAttribute(state, ATTRIBUTE_ACTIVITYFILTER)); }
 function getFieldName(state)       { return (getAttribute(state, ATTRIBUTE_FIELDNAME)); }
+function getFieldName2(state)      { return (getAttribute(state, ATTRIBUTE_FIELDNAME2)); }
 function getFieldValue(state)      { return (getAttribute(state, ATTRIBUTE_FIELDVALUE)); }
+function getFieldValue2(state)     { return (getAttribute(state, ATTRIBUTE_FIELDVALUE2)); }
 function getLifeStage(state)       { return (getAttribute(state, ATTRIBUTE_LIFESTAGE)); }
 function getEvidence(state)        { return (getAttribute(state, ATTRIBUTE_EVIDENCE)); }
 function getPage(state)            { return (getAttribute(state, ATTRIBUTE_PAGE)); }
@@ -256,7 +264,9 @@ function setObsId(state, value)           { return (setAttribute(state, ATTRIBUT
 function setObsDate(state, value)         { return (setAttribute(state, ATTRIBUTE_OBSDATE, value)); }
 function setActivityFilter(state, value)  { return (setAttribute(state, ATTRIBUTE_ACTIVITYFILTER, value)); }
 function setFieldName(state, value)       { return (setAttribute(state, ATTRIBUTE_FIELDNAME, value)); }
+function setFieldName2(state, value)      { return (setAttribute(state, ATTRIBUTE_FIELDNAME2, value)); }
 function setFieldValue(state, value)      { return (setAttribute(state, ATTRIBUTE_FIELDVALUE, value)); }
+function setFieldValue2(state, value)     { return (setAttribute(state, ATTRIBUTE_FIELDVALUE2, value)); }
 function setLifeStage(state, value)       { return (setAttribute(state, ATTRIBUTE_LIFESTAGE, value)); }
 function setEvidence(state, value)        { return (setAttribute(state, ATTRIBUTE_EVIDENCE, value)); }
 function setPage(state, value)            { return (setAttribute(state, ATTRIBUTE_PAGE, value)); }
@@ -856,7 +866,9 @@ function clearForDashParams(state) {
   urlState = setPerPage(urlState, '');
   urlState = setActivityFilter(urlState, '');
   urlState = setFieldName(urlState, '');
+  urlState = setFieldName2(urlState, '');
   urlState = setFieldValue(urlState, '');
+  urlState = setFieldValue2(urlState, '');
   urlState = setLifeStage(urlState, '');
   urlState = setEvidence(urlState, '');
   urlState = setStudyTitle(urlState, '');
