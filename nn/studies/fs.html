@@ -707,6 +707,7 @@ function setupAPIParams( config ) {
    api_params += '?project_id='+config.project;
 
    // the primary field name will always be stored in the .json.
+      console.log('val ' + config.fieldValue || getFieldValue(appState));
    if( config.fieldName )        { api_params += '&field:'    + config.fieldName; }
    if( getFieldValue(appState) ) { api_params += '='          + config.fieldValue || getFieldValue(appState); }
 
