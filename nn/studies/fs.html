@@ -350,7 +350,7 @@ function fresults( xobj, config ) {
                dlString += ('<tr id="trkey"><td id="tdkey">' + furl2(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + truncate(box_array[e].field_name.toLowerCase(), 25) + '</td></tr>');
                if( config.merge !== 'yes' ){
-                   if( box_array[e].field_name === config.fieldName ) {
+                   if( box_array[e].field_name.toLowerCase() === config.fieldName.toLowerCase() ) {
                        let urlState = appState;
                        urlState = setPage(urlState, '1');
                        urlState = setPlantName(urlState, '');
@@ -366,7 +366,7 @@ function fresults( xobj, config ) {
                        let resetLink = hasFilter ? ' ' + furl2(resetUrl, iconHtml) : '';
 
                        labels.push({ innerHTML: '<span class="filterable-header">'+ truncate(box_array[e].field_name,25) + resetLink + '</span>' });
-                   } else if( box_array[e].field_name === getFieldName2(appState) ) {
+                   } else if( box_array[e].field_name.toLowerCase() === getFieldName2(appState).toLowerCase() ) {
                        let urlState = appState;
                        urlState = setPage(urlState, '1');
                        urlState = setFieldName2(urlState, '');
@@ -575,10 +575,7 @@ function fresults( xobj, config ) {
                               if( rec.ofvs[j].field_id.toString() === '17383' ) {  // wild ancestral colony 
                                   values.push({innerHTML:furl2(root_observations+field1, field1)});
                               } else {
-                                  if( config.fieldName.toString() === box_array[r].field_name.toString() ) {
-                                        console.log('here ' );
-                                        console.log('box ' + box_array[r].field_name);
-                                        console.log('config ' + config.fieldName);
+                                  if( config.fieldName.toLowerCase() === box_array[r].field_name.toLowerCase() ) {
                                       let urlState = appState;
                                       urlState = setPage(urlState, '1');
                                       urlState = setPlantName(urlState, cname||name);
@@ -589,9 +586,6 @@ function fresults( xobj, config ) {
                                       if( config.fieldOutlink ) { outlink = furl2(config.fieldOutlink+rec.ofvs[j].value.toString(), '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">&#128712;</span>'); }
                                       values.push({ innerHTML:'<span class="filterable-header">' + outlink + '</span>' + url });
                                   } else {
-                                      console.log('not here' );
-                                        console.log('box ' + box_array[r].field_name);
-                                        console.log('config ' + config.fieldName);
                                       let urlState = appState;
                                       urlState = setPage(urlState, '1');
                                       urlState = setFieldName2(urlState, rec.ofvs[j].name);
