@@ -95,6 +95,14 @@ function faddelems(etype,eparent=null,eattributes=[]) { for (let e of eattribute
 
 function replaceDoubleQuotes(str) { return str.replace(/"/g, '%22'); }
 
+function truncate(str, maxLength) {
+  if (str.length <= maxLength) {
+    return str;
+  } else {
+     return (str.substring(0, maxLength) + '...');
+  }
+}
+
 function famp(str) { return str.replace(/&/g,'&amp;'); };
 function fshorten(num) { return num<10000 ? num : num<1000000 ? (num/1000).toFixed(1)+'K' : (num/1000000).toFixed(1)+'M'; };
 function fdate(str,dateonly=false) {
