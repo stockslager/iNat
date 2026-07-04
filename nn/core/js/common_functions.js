@@ -150,14 +150,14 @@ function capitalizeWords(str) {
 //****************************************
 // navbar title, url, drop-down helpers **
 //****************************************
-function buildNavHome( navbar, baseUrl=null, homeState=null ) {
+function buildNavHome( navbar, baseUrl=null, homeState=null, config=null ) {
     if( !baseUrl )   { baseUrl = '../admin/dashboard.html'; }
     if( !homeState ) { homeState = clearForDashParams(appState); }
     
     let homeUrl = baseUrl + buildParameterList(homeState);
     let homeDiv = faddelem('div', navbar, { id: 'home' });
     let hLink = faddelem('a', homeDiv, { href: homeUrl });
-    faddelem('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
+    faddelem('span', hLink, { innerHTML: config?.homeUTF8 || CONST_LEAF_UTF8 });
 }
 
 function buildNavTitle( navbar, title ) {
