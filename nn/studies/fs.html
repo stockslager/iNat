@@ -1,0 +1,787 @@
+<!DOCTYPE html>                      
+<html lang="en">                
+      
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Field Study" />
+<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
+<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+<meta name="apple-mobile-web-app-title" content="Field Study" />
+<script type="text/javascript" src='../core/js/common_functions.js'> </script>
+<script type="text/javascript" src='../core/js/store.js'> </script>
+<title>Field Study</title>
+</head>
+
+<style>
+/* for the column header un-filter */
+.filterable-header a,
+.filterable-header a:active {
+    color: cornflowerblue;
+    /*color: var(--color-text-link); */
+    background: transparent;
+    background-color: transparent;
+    text-decoration: none;
+    
+    /* Adds a subtle opacity so it blends nicely in the header, matching your old look */
+    opacity: 0.7;
+    transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+/* 2. Hover State: Turn off background blocks and amplify the blue color vibrancy */
+.filterable-header a:hover {
+    color: cornflowerblue;
+    /*color: var(--color-text-link); */
+    background: transparent;
+    background-color: transparent;
+    text-decoration: none;
+    
+    /* Brings icon to full opacity and injects a 40% vibrancy boost to make the blue pop */
+    opacity: 1;
+    filter: brightness(1.4); 
+}
+
+/* 3. Icon Thickness Management */
+.clear-btn { 
+    /* Ensures the custom bold text shadow uses the exact blue dictated by the link above */
+    text-shadow: 0 0 0.5px currentColor; 
+}
+
+.clear-all-filters a:active {
+    color: royalblue;
+    /*color: var(--color-text-link); */
+    background: transparent;
+    background-color: transparent;
+    text-decoration: none;
+    
+    /* Adds a subtle opacity so it blends nicely in the header, matching your old look */
+    opacity: 0.7;
+    transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+.clear-all-filters a:hover {
+    color: cornflowerblue;
+    /*color: var(--color-text-link); */
+    background: transparent;
+    background-color: transparent;
+    text-decoration: none;
+    
+    /* Brings icon to full opacity and injects a 40% vibrancy boost to make the blue pop */
+    opacity: 1;
+    filter: brightness(1.4); 
+}
+ 
+  /* 1. THE GUTTER FRAME */
+  body {
+    padding-left: 50px;
+    padding-right: 50px;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  /* 2. THE ALIGNMENT */
+  #main, .navbar, .top-bar, #divhead {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+  }
+
+  /* 3. THE TOP BAR */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  /* 4. THE BOXES: Fixed horizontal scroll and standard styling */
+  #stats, #dltest {
+    display: block;
+    box-sizing: border-box;
+    max-height: 64px;
+    overflow-y: auto;
+    overflow-x: hidden; 
+    width: fit-content;
+    white-space: nowrap;
+    border: 2px solid var(--color-border);
+    border-radius: 5px;
+    padding: 3px 8px;
+    background: var(--color-base);
+    line-height: 1.2;
+    color: var(--color-text);
+    font: 14px Sans-Serif;
+  }
+
+  /* 5. THE SHIELD: Reset internal table tags and remove ALL default underlines */
+  #stats table, #stats td, #stats tr,
+  #dltest table, #dltest td, #dltest tr {
+    border: none;
+    background: transparent;
+    padding: 0 12px 0 0; /* Extra 12px padding to the right for breathing room */
+    box-shadow: none;
+    color: inherit;
+    font: inherit;
+    text-decoration: none; /* KILLS ALL UNDERLINES IN ALL ROWS */
+    margin: 0; 
+    border-collapse: collapse;
+  }
+
+  /* KILL UNDERLINES FOR ALL LINKS IN THE BOXES */
+  #stats a, #dltest a {
+    color: var(--color-text-link);
+    text-decoration: none; 
+  }
+
+  /* RE-ADD UNDERLINE: Only for the very first row of the right box (#dltest) */
+  /* This ensures text-only headers are underlined, but URLs remain clean */
+  #dltest tr:first-child td {
+    text-decoration: underline;
+  }
+
+  /* 6. NAVBAR */
+  .navbar {
+    background-color: var(--color-brand);
+    border-radius: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    overflow: hidden;
+  }
+
+  /* Original Helpers */
+  #h2 { font-weight:bold; font-size:20px; }
+  p { width:100%; }
+  .npcicon { width:14px; height:14px; border: 1px solid cornflowerblue; padding: 5px; border-radius: 50px; }
+  .user_head { align-items: center; justify-content: center; }
+  .user { display: inline-flex; align-items: center; white-space: nowrap; gap: 8px; margin-left: 2px; } 
+</style>
+<body>
+<script>
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+let p_hide_dash       = winurlparams.get('hide_dash') || 'no';
+let p_without_term_id = winurlparams.get('without_term_id'); 
+let p_not_user_id     = winurlparams.get('without_user_id');
+let p_show_ls         = winurlparams.get('show_ls') || 'no';
+let p_field = '';
+let p_field_value = '';
+let field_array = [];
+
+appState       = buildStateFromParams(winurlparams);
+
+// find key/value pair for &field: param if one was passed in
+for (const [key, value] of winurlparams.entries()) {
+  if( key.startsWith('field') ){
+      p_field = key;
+      p_field_value = value;
+  }
+}   
+ 
+let url = window.location.origin + window.location.pathname;   
+//let apibase = 'https://api.inaturalist.org/v1/observations';
+//let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+//let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
+
+function replaceDoubleQuotes(str) {
+  return str.replace(/"/g, '%22');
+}
+
+function furl2(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
+
+function buildMenu2( results, config ) {
+      // Create the main navbar container
+      let navbar = document.createElement('div');
+      navbar.className = 'navbar v2-menu';
+
+      let baseUrl = window.location.origin + window.location.pathname;
+   
+      let menu_name = config.getSubIconNameByTaxonId(config, getMenuId(appState)) || CONST_SHOW;
+
+      if( config.subIcons && config.subIcons.length > 0 ) {
+          appState = setTaxonDD(appState, '');
+          buildNavDDFilteredShow( navbar, menu_name, results, config, baseUrl );
+      }
+
+      if( config.ddFilters && config.ddFilters.length > 0 ) {
+          buildNavActivityFiltersDD( navbar, 'Filters', config, baseUrl, appState );
+      }
+
+      if( getComponent(appState) === 'plantings' || getComponent(appState) === 'visits' || config.showStudyGrid === 'yes' ) {
+          buildNavLink( navbar, './study_grid.html', appState, 'Grid' );
+      }
+
+      if( p_hide_dash === 'no' ) {
+          let homeState = clearForDashParams(appState);
+          let homeUrl = '../admin/dashboard.html';
+          console.log('utf8 ' + config.home_utf8);
+          buildNavHome( navbar, homeUrl, homeState, config );
+      }
+
+      // Append the DOM nodes to the body
+      faddelem('p', document.body).appendChild(navbar);
+}
+
+function isMultipleOfFour(num) {
+  return num % 4 === 0;
+}
+
+function boxRow(field_id, field_name, field_value) {
+    this.field_id    = field_id;
+    this.field_name  = field_name;
+}
+
+function fresults( xobj, config ) {
+   let results = xobj.results;
+   let box_array = [];
+
+   if( config.obsFields ) {
+       field_array = config.obsFields.split(",");
+       for( let f=0; f<field_array.length; f++ ){
+            box_array.push(new boxRow(field_array[f], '') );
+       }
+   }
+ 
+   if (results) {
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+
+      buildMenu2(results, config);
+
+      let labels = [];
+      let mismatch = '';
+      let field_array_copy = field_array;
+      let flower = '';
+      let dlString = '<div id="divhead"><span id="topright">';
+      let labelCount = 0;
+      let iconHtml = '<span class="clear-btn" style="font-size:18px; padding-left:6px; display:inline-block; vertical-align:middle; line-height:1;">ⓧ</span>';
+
+      let merged = 'observation field';
+    
+      labels = [{innerText:'#'}];
+
+      labels.push({innerText:'Photo'});
+
+      // taxon name column...
+      let nameState = appState; 
+      nameState = setTaxonId(nameState, '');
+      nameState = setTaxonName(nameState, '');
+      nameState = setPage(nameState, '1'); 
+      let taxonUrl = './fs.html' + buildParameterList(nameState); 
+
+      // Is a valid, active taxon filter currently in the URL string? 
+      let hasTaxonFilter = window.location.search.includes('taxonid=') && 
+                          !window.location.search.includes('taxonid=&'); 
+
+      let resetTaxonLink = hasTaxonFilter ? ' ' + furl2(taxonUrl, iconHtml) : '';
+
+      labels.push({ innerHTML: '<span class="filterable-header">Name' + resetTaxonLink + '</span>' });
+
+      // life stages column...
+      if( p_show_ls === 'yes' ) { 
+          let urlState = appState; 
+          urlState = setLifeStage(urlState, ''); 
+          urlState = setPage(urlState, '1'); 
+          let resetUrl = './fs.html' + buildParameterList(urlState); 
+
+          // Is a valid, active lifestage filter currently in the URL string? 
+          let hasFilter = window.location.search.includes('lifestage=') && 
+                         !window.location.search.includes('lifestage=&'); 
+
+          let resetLink = hasFilter ? ' ' + furl2(resetUrl, iconHtml) : '';
+
+          labels.push({ innerHTML: '<span class="filterable-header">Life Stage' + resetLink + '</span>' });
+      }
+    
+      labels.push({innerText:'Obs Photo'});
+
+      if( config.merge === 'yes' ){
+          merged = 'merged observation field';
+      } 
+    
+      let tempBrow = [];
+
+      for (let i=0; i<results.length; i++) {
+         let rec = results[i];
+         if(rec.ofvs&&rec.ofvs.length>0){
+              for( let r=0; r<field_array_copy.length; r++ ) {
+                 for( let j=0; j<rec.ofvs.length; j++ ){
+                      if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){
+                          let box_row   = box_array.find( boxRow => boxRow.field_id === rec.ofvs[j].field_id.toString() );
+                          box_row.field_name = rec.ofvs[j].name.toString();
+                      }
+                 }
+              }
+         }
+      }
+      
+      let firstCol = 'yes';
+      let nf_box_array = [];
+
+      nf_box_array = box_array;
+
+      /*if( box_array.length === 0 ){
+          labels.push({innerText:' '});
+      }*/
+
+      dlString += '<span id="topright"><span id="mismatch">&#127800; ~ obs field mismatch</span><span id="dltest"><table id="tablekey">';
+
+      for( let e=0; e<box_array.length; e++ ){
+           if( labelCount === 0 ){
+               dlString += ('<tr id="trkey">  <td id="key">field id</td>  <td id="key">'+merged+'</td>  </tr>');                      
+           } 
+       
+           labelCount++;
+           if( box_array[e].field_name !== '' ) {
+            
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl2(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
+               dlString += ('<td id="tdkey">' + truncate(box_array[e].field_name.toLowerCase(), 25) + '</td></tr>');
+               if( config.merge !== 'yes' ){
+                   if( box_array[e].field_name === getFieldName(appState) ) {
+                       let urlState = appState;
+                       urlState = setPage(urlState, '1');
+                       urlState = setPlantName(urlState, '');
+                       urlState = setFieldName(urlState, '');
+                       urlState = setFieldValue(urlState, '');
+                                   
+                       let resetUrl = './fs.html'+buildParameterList(urlState); 
+    
+                       // Is a valid, active lifestage filter currently in the URL string? 
+                       let hasFilter = window.location.search.includes('fieldvalue=') && 
+                                      !window.location.search.includes('fieldvalue=&'); 
+
+                       let resetLink = hasFilter ? ' ' + furl2(resetUrl, iconHtml) : '';
+
+                       labels.push({ innerHTML: '<span class="filterable-header">'+ truncate(box_array[e].field_name,25) + resetLink + '</span>' });
+                   } else {
+                       labels.push({innerText:truncate(box_array[e].field_name,25)});
+                   }
+               } else {
+                   if( firstCol === 'yes' ){
+                       firstCol = 'no';
+                       labels.push({innerText:'Merged Fields (see above)'});
+                   } 
+               }
+           } else {
+               // not found on this page of data.  these can't be all moved to the end of the list because
+               // we need to match them in order with the column headers for the clear filters.
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl2(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
+               dlString += ('<td id="tdkey">missing from this page</td></tr>');
+               if( config.merge !== 'yes' ) {
+                   labels.push({innerText:''});
+               }
+           }
+      }
+
+      dlString += '</table></span></div>';
+      let clearState = clearForDashParams(appState);
+      clearState     = setComponent(clearState, getComponent(appState));    // component required when clearing state on a reset.
+      clearState     = setStudyTitle(clearState, getStudyTitle(appState));  // study title required when clearing state on a reset.
+
+      faddelem('p', document.body, {
+          innerHTML: '<div class="top-bar">' +
+               /* Parent flex container to align items side-by-side */
+               '<div class="stats-wrapper" style="display: inline-flex; align-items: flex-end; gap: 12px;">' +
+                 '<div id="stats">' +
+                   '<table id="tablekey">' +
+                     '<tr id="trkey"><td id="tdkey">total:</td><td id="tdright">' + fcomnum(total_results) + '</td></tr>' +
+                     '<tr id="trkey"><td id="tdkey">per page:</td><td id="tdright">' + fcomnum(per_page) + '</td></tr>' +
+                     '<tr id="trkey"><td id="tdkey">page:</td><td id="tdright">' + fcomnum(page_curr) + ' of ' + fcomnum(page_max) + '</td></tr>' +
+                   '</table>' +
+                 '</div>' +
+                 '<span class="clear-all-filters">' + 
+                    '<span style="white-space: nowrap; margin-bottom: 2px;">' + furl2('./fs.html'+buildParameterList(clearState), 'clear all filters') + '</span>' + 
+                 '</span>' +              
+               '</div>' +
+               dlString + 
+             '</div>'
+      });
+
+      // hide the mismatch warning... only display it if there is a mismatch in the table.
+      document.getElementById("mismatch").style.display = "none"; 
+     
+      for (let i=0; i<results.length; i++) {
+         let rec = results[i];
+         let tax_name = '';
+         let pref_tax_name = '';
+         let tax_photo = '<div class="clipart">&#127807</div>'; 
+         let tax_id = '';
+         let field1 = ''; 
+         let displayName = '';
+         let displayTaxonName = '';
+         let mismatch = '';
+         let matchedCopy = 'no';
+         let values = [];
+         let dataType = '';
+         let dataType2 = '';
+         let matchValue = '';
+         let matchTaxonId = '';
+         let taxon = '';
+         
+         if( rec.taxon ){
+             tax_id = rec.taxon.id;
+             tax_name = rec.taxon.name || '';
+             pref_tax_name = rec.taxon.preferred_common_name || '';
+           
+             if( rec.taxon.default_photo ){
+                 if( rec.taxon.default_photo.url ){
+                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
+                 }
+             }
+         }
+
+         if( tax_id !== '' ){
+             let urlState = appState;
+             urlState = setTaxonId(urlState, tax_id);
+             urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+             urlState = setTaxonName(urlState, pref_tax_name||tax_name);
+             taxon = furl2('./fs.html'+buildParameterList(urlState),'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+         }
+       
+         values = [{innerText:i+1}];
+
+         values.push({innerHTML:tax_photo});
+         values.push({innerHTML:taxon});
+
+         if( p_show_ls === 'yes' ) { 
+             let stage = ''; // Default placeholder if missing or empty 
+             let valueId = ''; 
+    
+             if( rec.annotations && rec.annotations.length > 0 ) { 
+                 for( let i = 0; i < rec.annotations.length; i++ ) { 
+                      if( rec.annotations[i].controlled_attribute_id?.toString() === '1' ) { 
+                          valueId = rec.annotations[i].controlled_value_id?.toString() || ''; 
+                          // look up the life stage in the life stages map... 
+                          stage = LIFE_STAGE_MAP[valueId] || 'unknown'; 
+                          break; 
+                      } 
+                 }  
+             } 
+    
+             if( stage === 'unknown' ) { 
+                 values.push({ innerHTML: stage }); 
+             } else { 
+                 let urlState = appState; 
+                 urlState = setPage(urlState, '1'); // set the page to 1 anytime they choose to filter. 
+        
+                 urlState = setLifeStage(urlState, valueId || 'null');     
+                 values.push({ innerHTML: furl2('./fs.html' + buildParameterList(urlState), stage || '[none]') }); 
+             } 
+         } 
+
+         values.push({ innerHTML: furl2(root_observations + rec.id, '<img class="mini_photo2" src="' + ((rec.photos && rec.photos.length > 0) ? rec.photos[0].url : '') + '" />') });
+       
+         let user_icon = rec.user.icon || '';
+         
+         if( user_icon === '' ){
+            user_icon += '<span class="user"><span class="npcicon"></span>';
+         } else {
+            user_icon = '<img class="smallicon" src="'+user_icon+'" />';
+         }
+
+         let emojiTitle = 'Merged Observation Fields:&#10;';
+
+         if(rec.ofvs&&rec.ofvs.length>0){
+              for( let r=0; r<box_array.length; r++ ) {
+                 for( let j=0; j<rec.ofvs.length; j++ ){
+
+                      if( field_array.includes(rec.ofvs[j].field_id.toString()) ){
+                          if( matchValue === '' ){
+                              matchValue = rec.ofvs[j].value;
+                          } else if( rec.ofvs[j].value !== '' && matchValue !== rec.ofvs[j].value ){
+                              mismatch = 'yes';
+                          }
+                      
+                          if( dataType === '' ){
+                              dataType = rec.ofvs[j].datatype;
+                          } else if( dataType !== rec.ofvs[j].datatype ){
+                              mismatch = 'yes';
+                          }
+                          if( rec.ofvs[j].taxon ){
+                              if( matchTaxonId === '' ){
+                                  matchTaxonId = rec.ofvs[j].taxon.id;
+                              }
+                              if( rec.ofvs[j].taxon.id !== matchTaxonId ){
+                                  mismatch = 'yes';
+                              }
+                          }
+                      } 
+
+                      if( config.merge === 'yes' && rec.ofvs[j].field_id.toString() === box_array[r].field_id.toString() ){
+                          
+                          field1 = rec.ofvs[j].value.toLowerCase();
+                                    
+                          if( rec.ofvs[j].taxon ){ 
+                              let name  = rec.ofvs[j].taxon.name || '';
+                              let cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                              if( !config.ofield_iconic || config.ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
+                                  field1 = name;
+                                  displayCommonName = cname.toLowerCase();
+                                  displayTaxonName = name;
+                                  displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                                  emojiTitle    += (rec.ofvs[j].field_id + ' ' + name + '&#10;');
+                              } else { 
+                                  emojiTitle    += (rec.ofvs[j].field_id + ' ' + name.toLowerCase() + '&#10;');
+                                  displayName = '';
+                              }
+                          } else {
+                                  if( rec.ofvs[j].value.toLowerCase() !== 'unknown' ){
+                                      displayName    = rec.ofvs[j].value.toLowerCase();
+                                  }
+                                  emojiTitle    += (rec.ofvs[j].field_id + ' ' + rec.ofvs[j].value.toLowerCase() + '&#10;');
+                          }
+                      }
+                      
+                      if( config.merge !== 'yes' && rec.ofvs[j].field_id.toString() === box_array[r].field_id.toString() ){
+                          matchedCopy = 'yes';
+                          if( rec.ofvs[j].value ) {
+                              field1 = rec.ofvs[j].value.toLowerCase();
+                              displayName = rec.ofvs[j].value.toLowerCase();
+                              let name = ''; let cname = '';
+                                
+                              if( rec.ofvs[j].taxon ){
+                                  name  = rec.ofvs[j].taxon.name || '';
+                                  cname = rec.ofvs[j].taxon.preferred_common_name || '';
+                                  field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
+                              }
+                              if( rec.ofvs[j].field_id.toString() === '17383' ) {  // wild ancestral colony 
+                                  values.push({innerHTML:furl2(root_observations+field1, field1)});
+                              } else {
+                                  let urlState = appState;
+                                  urlState = setPage(urlState, '1');
+                                  urlState = setPlantName(urlState, cname||name);
+                                  urlState = setFieldName(urlState, rec.ofvs[j].name);
+                                  urlState = setFieldValue(urlState, replaceDoubleQuotes(rec.ofvs[j].value.toString()));
+                                  let url  = furl2('./fs.html'+buildParameterList(urlState), field1);
+                                  let outlink = ''; 
+                                  if( config.fieldOutlink ) { outlink = furl2(config.fieldOutlink+rec.ofvs[j].value.toString(), '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">&#128712;</span>'); }
+                                  values.push({ innerHTML:'<span class="filterable-header">' + outlink + '</span>' + url });
+                              }
+                          } else {
+                              values.push({innerText:''});
+                          }
+                      }
+                  }
+                  if( config.merge !== 'yes' ){
+                      if( matchedCopy === 'yes' ){
+                          matchedCopy = 'no';
+                      } else {
+                          values.push({innerText:''});
+                      }
+                  }
+             }
+         }  
+
+         if( config.merge === 'yes' ){
+              if( displayTaxonName !== '' ){
+                  if( mismatch === 'yes' ){
+                      document.getElementById("mismatch").style.display = "inline"; 
+                      displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
+                  } else {
+                      displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+')</span>';
+                  }
+              } else {
+                  if( mismatch === 'yes' ){
+                      document.getElementById("mismatch").style.display = "inline"; 
+                      displayName += ' ';
+                      displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
+                  } 
+              }
+          
+              values.push({innerHTML:displayName});
+         }          
+
+         if( getComponent(appState) === COMPONENT_VISITS ) {
+             let urlState = appState;
+             urlState = setObsDate(urlState, rec.observed_on_details?.date ?? null);
+             urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+             values.push({innerHTML: furl2('./fs.html'+buildParameterList(urlState),rec.observed_on_details?.date ?? null) });
+             values.push({innerHTML: '<div style="max-width: 300px; max-height: 45px; overflow-y: auto; padding: 6px; scrollbar-width: thin; white-space: normal; ' + 
+                                           'background-color: var(--color-alt); ' + 
+                                           'color: var(--color-text); ' + 
+                                           'border: 1px solid var(--color-border); ' + 
+                                           'border-radius: 4px; font-size: 0.9em; line-height: 1.4;">' + 
+                                           (rec.description || '<i style="opacity: 0.6;">No description</i>') + 
+                                     '</div>'});
+         }
+         let urlState = appState;
+         urlState = setUser(urlState, rec.user.login);
+         urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+
+         values.push({innerHTML:'<span class="user">'+user_icon+furl2('./fs.html'+buildParameterList(urlState),rec.user.login)+'</span>'});
+         
+         tempBrow.push(values);
+      };
+
+      let table = faddelem('table',document.body,{id:'main'});
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+
+      //labels.push({innerText:'User Photo'});
+      if( getComponent(appState) === COMPONENT_VISITS ) {
+          labels.push({innerText:'Date'});
+          labels.push({innerText:'Field Notes'});
+      }
+
+      // Observer column...
+      let obsState = appState; 
+      obsState = setUser(obsState, '');
+      obsState = setPage(obsState, '1'); 
+      let obsUrl = './fs.html' + buildParameterList(obsState); 
+
+      // Is a valid, active observer filter currently in the URL string? 
+      let hasObsFilter = window.location.search.includes('user=') && 
+                        !window.location.search.includes('user=&'); 
+
+      let resetObsLink = hasObsFilter ? ' ' + furl2(obsUrl, iconHtml) : '';
+
+      labels.push({ innerHTML: '<span class="filterable-header"><span class="user_head">Observer' + resetObsLink + '</span></span>' });
+
+      faddelems('th',hrow,labels);
+
+      let tbody = faddelem('tbody',table);
+    
+      // loop through array of rows stored on object.
+      for( let q=0; q<tempBrow.length; q++ ){
+           let brow = faddelem('tr',tbody);
+           faddelems('td',brow,tempBrow[q]);
+      }
+
+      // buttons to go to prev or next page
+      let nav = faddelem('div',document.body,{id:'nav'});
+      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
+};
+
+</script>
+
+<script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
+<script type="text/javascript"   src="../core/js/api_fetch.js"></script>
+ 
+<script>
+function setupAPIParams( config ) {
+   let api_params = '';
+ 
+   api_params += '?project_id='+config.project;
+
+   // the primary field name will always be stored in the .json.
+   if( config.fieldName )        { api_params += '&field:'    + config.fieldName; }
+   if( getFieldValue(appState) ) { api_params += '='          + config.fieldValue || getFieldValue(appState); }
+
+   // secondary field names and values are stored in state
+   if( getFieldName2(appState) )  { api_params += '&field:' + getFieldName(appState); } 
+   if( getFieldName3(appState) )  { api_params += '&field:' + getFieldName2(appState); }
+   if( getFieldValue2(appState) ) { api_params += '='       + getFieldValue2(appState); }
+   if( getFieldValue3(appState) ) { api_params += '='       + getFieldValue3(appState); }
+  
+   if( getObsDate(appState)    ) { api_params += '&on='       + getObsDate(appState); }
+
+   if( getUser(appState) ) {
+       api_params += '&user_id=' + getUser(appState);
+   } else if( config.userId ) { 
+       api_params += '&user_id='  + config.userId; 
+   }
+ 
+   api_params += getPlaceMenuIdParam(appState, '&place_id=');
+
+   // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
+   // use the menu_id if one was passed in.
+   console.log('sub ' + config.defaultTaxonId);
+   if( getTaxonId(appState) ) {
+       api_params += '&taxon_id='+getTaxonId(appState);
+   } else if( getMenuId(appState) ) { 
+       api_params += '&taxon_id=' + getMenuId(appState); 
+   } else {
+       if( config.defaultTaxonId ) {
+           api_params += '&taxon_id=' + config.defaultTaxonId;
+       }
+   }
+
+   // if a filter has been chosen, get the filter api params
+   if( getActivityFilter(appState) ) {
+       api_params += getFilterAPIParams(config);
+   }
+
+   if( config.defaultPlace ) { api_params += '&place_id='        + config.defaultPlace; }
+
+   // filter for life stage annotation...
+   if( getLifeStage(appState) ) { 
+       if( getLifeStage(appState) === 'null' ) {
+           api_params += '&without_term_id=1';
+       } else {
+           api_params += '&term_id=1&term_value_id='  + getLifeStage(appState);
+       }
+   }
+
+   // filter for evidence annotation...
+   if( getEvidence(appState) ) { 
+       if( getEvidence(appState) === 'null' ) {
+           api_params += '&without_term_id=22';
+       } else {
+           api_params += '&term_id=1&term_value_id='  + getEvidence(appState);
+       }
+   }
+ 
+   if( p_without_term_id )   { api_params += '&without_term_id=' + p_without_term_id; }
+   if( p_not_user_id )       { api_params += '&not_user_id='     + p_not_user_id; }
+
+   if( config.obsAPIParams ) { api_params += config.obsAPIParams; }
+   api_params += getPageParam(appState, '&page=');
+   api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
+ 
+   return api_params;
+}
+   
+async function gatherResources() {
+  let api_base  = 'https://api.inaturalist.org/v1/observations';
+  let json_path = json_root + getParams(appState);
+ 
+  try {
+   
+      // Await the result of getObservations() and store the actual data
+      const config  = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
+      console.log('full config title: ' + config.getFullTitle());
+      const api_params    = setupAPIParams( config );
+      const api_url       = api_base+api_params;
+      console.log('api url: ' + api_url);
+      const obs_data      = await apiFetch( api_url ); 
+     
+      // Pass the data to the buildPage function
+      fresults(obs_data, config); 
+
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+let message = validateConfig(appState);
+ 
+if( message ) {
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
+  
+</script>
+</body>
+
+</html>
