@@ -1,4 +1,37 @@
-   :root {  
+:root {
+  /* 1. Global Setup */
+  background: var(--color-base); 
+  color: var(--color-text); 
+  font: 14px Sans-Serif; 
+
+  /* 2. Dark Mode (NOW THE DEFAULT BASELINE) */
+  --color-base: black;
+  --color-alt: #171717;
+  --color-brand: #333;
+  --color-text: #bababa;
+  --color-text-invert: white;
+  --color-text-link: cornflowerblue; /* Automatically fixes your filterable-header hover bug */
+  --color-border: #444;
+  --color-hover: #444;
+  --color-base-translucent: rgba(0,0,0,0.85);
+}
+
+/* 3. Light Mode Media Query Override */
+@media (prefers-color-scheme: light) { 
+  :root { 
+    --color-base: white;
+    --color-alt: whitesmoke;
+    --color-brand: #333;
+    --color-text: black;
+    --color-text-invert: white;
+    --color-text-link: royalblue;
+    --color-border: lightgray;
+    --color-hover: lightgray;
+    --color-base-translucent: rgba(255,255,255,0.85);
+  } 
+}
+
+/*   :root {  
       background: var(--color-base);
       color: var(--color-text);
       font: 14px Sans-Serif;
@@ -24,7 +57,7 @@
          --color-hover: #444;
          --color-base-translucent: rgba(0,0,0,0.85);
       }
-   }
+   }*/
 
    /**********************************************/
    /* left and right boxes of the header section */
