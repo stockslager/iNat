@@ -51,44 +51,7 @@ function escapeHtmlUrl(urlString) {
     return urlString.replace(/&/g, '&amp;');
 }
 
-function buildMenu(config) {
-
-   let links = '';
-   let menu_string = '';
-   let menu_params = '';
-
-   let id = getMenuId(appState);
-
-   if( id ) { menu_params += '&taxon_id=' + id + '&menu_id=' + id; }
-
-   // if a filter has been chosen, get the filter api params
-   if( getActivityFilter(appState) ) {
-       menu_params += getFilterAPIParams(config);
-   }
-
-   menu_string = '<div class="navbar">';
-
-   if( config.mapType !== 'hide' ) {
-       let api_params = new URL('./hcc/admin/map.html', window.location.origin);
-
-       setupMapAPIParams(config, api_params);
-
-       // Escape the raw ampersands before passing it to furl or buildMenuURL
-       let urlString = api_params.toString() + '&params=' + getParams(appState);
-       let safeHtmlUrl = escapeHtmlUrl(urlString);
-
-       menu_string += buildMenuURL(furl(safeHtmlUrl, "Collection Area Map"));      
-   }
-   //menu_string += buildMenuURL( furl('../admin/layered_map.html'+buildParameterList(appState)+'&project_id='+config.insectProject,"Map") );
-
-   let urlState = setTaxonId(appState, '');
-   menu_string += buildHome( furl('./field_study.html'+buildParameterList(urlState), config.homeUTF8 || CONST_LEAF_UTF8) );
-   menu_string += '</div>';
-   
-   return menu_string;
-}
-
-function buildMenu2( config ) {
+function buildMenu( config ) {
 
   // Create the main navbar container
   let navbar = document.createElement('div');    
@@ -115,18 +78,14 @@ function buildMenu2( config ) {
 
   // Build the Home Link
   let homeUrl = './field_study.html';
-  buildNavHome( navbar, homeUrl, appState );
+  buildNavHome( navbar, homeUrl, appState, config );
   
   faddelem('p', document.body).appendChild(navbar);
 }
 
 function buildPage(data, config) {  
 
-   //if( getComponent(appState) === 'plantings' || getComponent(appState) === 'visits' ) {
-       //faddelem('p',document.body,{innerHTML:buildMenu(config)}); 
-   //} else {
-       buildMenu2(config); 
-  // }
+   buildMenu(config); 
    
    // append the params needed by the grid to build the url for outlinks to iNat.
    let inat_url = setupAPIParams(config);
