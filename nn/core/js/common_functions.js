@@ -173,9 +173,31 @@ function buildNavURL( navbar, url, label ) {
 }
 
 // probably should be removed.  just use buildNavURL.
-function buildNavLink( navbar, baseUrl, homeState, label ) {
-    let homeUrl = baseUrl + buildParameterList(homeState);
-    buildNavURL( navbar, homeUrl, label );
+function buildNavLink( navbar, baseUrl, homeState, label ) { 
+    // Create a clean URL object relative to the current page
+    const cleanUrl = new URL(baseUrl, window.location.href);
+    
+    // Clear any existing parameters on the base URL to prevent doubling
+    cleanUrl.search = ''; 
+
+    // Loop through the state object
+    if (homeState && typeof homeState === 'object') {
+        Object.keys(homeState).forEach(key => {
+            const value = homeState[key];
+            
+            if (Array.isArray(value)) {
+                // For arrays: adds multiple entries (e.g., ?tags=apple&tags=orange)
+                // CHANGE 'key' TO `${key}[]` IF THE BACKEND REQUIRES SQUARE BRACKETS
+                value.forEach(item => cleanUrl.searchParams.append(key, item));
+            } else if (value !== undefined && value !== null) {
+                // For normal values: safely sets a single key/value pair
+                cleanUrl.searchParams.set(key, value);
+            }
+        });
+    }
+
+    // Send the finalized URL string to the link generator
+    buildNavURL( navbar, cleanUrl.toString(), label ); 
 }
 
 // wrapper for about... needs to be removed.
