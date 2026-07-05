@@ -219,7 +219,8 @@ function buildMenu2( results, config ) {
       }
 
       if( getComponent(appState) === 'plantings' || getComponent(appState) === 'visits' || config.showStudyGrid === 'yes' ) {
-          buildNavLink( navbar, './study_grid.html', appState, 'Grid' );
+          let urlState = Object.assign({}, appState);
+          buildNavLink( navbar, './study_grid.html', urlState, 'Grid' );
       }
 
       if( p_hide_dash === 'no' ) {
