@@ -766,16 +766,22 @@ function setupAPIParams( config ) {
    // single loop handles the primary field and all secondary fields automatically
    if( appState.activeFilters && appState.activeFilters.length > 0 ) {
        appState.activeFilters.forEach(filter => {
-          // Identify if this row is the primary field
-          const isPrimary = (filter.field_id === config.field_id?.toString());
+         // Identify if this row is the primary field
+         const isPrimary = (filter.field_id === config.field_id?.toString());
     
-          // Use the stable JSON name for the primary field, otherwise use the dynamic name
-          const finalFieldName = isPrimary ? config.fieldName : filter.field_name;
+         // Use the stable JSON name for the primary field, otherwise use the dynamic name
+         const finalFieldName = isPrimary ? config.fieldName : filter.field_name;
     
-          // Only append to the request if there is a name and an active filter value selected
-          if( finalFieldName && filter.field_value ) {
-              api_params += '&field:' + finalFieldName + '=' + encodeURIComponent(filter.field_value);
-          }
+         // Determine the correct value: check active filter first, then fall back to config default
+         let finalValue = filter.field_value;
+         if( isPrimary && !finalValue ) {
+             finalValue = config.fieldValue || ''; // Resolves empty filter on first page entrance
+         }
+    
+         // Only append to the request if there is a name and a value present
+         if( finalFieldName && finalValue ) {
+             api_params += '&field:' + finalFieldName + '=' + encodeURIComponent(finalValue);
+         }
        });
    }
   
