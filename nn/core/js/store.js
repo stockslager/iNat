@@ -248,21 +248,34 @@ function buildParameterList(state) {
  * @param {string} queryString The raw query string (e.g., "?user=Bob&place=Office").
  * @returns {object} A new application state object populated from URL parameters.
  */
-function buildStateFromParams(queryString) {
-  // Use URLSearchParams to easily parse the string
-  const params = new URLSearchParams(queryString);
+function buildStateFromParams(queryString) { 
+  // Use URLSearchParams to easily parse the string 
+  const params = new URLSearchParams(queryString); 
   
-  // Use Object.fromEntries to convert the URLSearchParams iterator into a simple object
-  // Object.fromEntries is a modern JS feature
-  const paramsObject = Object.fromEntries(params.entries());
-
-  // Use the existing factory function to create a clean state with defaults,
-  // then apply the parameters found in the URL over the top.
-  // Note: URL parameters are always strings. If you need numbers or booleans, 
-  // you may need additional logic to parse them (e.g., parseInt(value)).
-  const newState = createNewStateInstance(paramsObject);
-
-  return newState;
+  // 1. Manually build a clean parameters object for your standard single keys
+  const paramsObject = {};
+  params.forEach((value, key) => {
+    // Skip our repeating array keys so they don't corrupt the flat object fields
+    if (key !== 'fieldid' && key !== 'fieldname' && key !== 'fieldvalue') {
+      paramsObject[key] = value;
+    }
+  });
+  
+  // 2. Use the existing factory function to create a clean state with defaults
+  const newState = createNewStateInstance(paramsObject); 
+  
+  // 3. Extract the repeating multi-key arrays safely out of the URL parameters string
+  const ids = params.getAll('fieldid');
+  const names = params.getAll('fieldname');
+  const values = params.getAll('fieldvalue');
+  
+  // 4. Synchronize them directly into your modern activeFilters tracking array on load
+  newState.activeFilters = [];
+  for (let index = 0; index < ids.length; index++) {
+    newState.activeFilters.push(new boxRow(ids[index], names[index] || '', values[index] || ''));
+  }
+  
+  return newState; 
 }
 
 /*
