@@ -120,39 +120,38 @@ function createNewStateInstance(initialValues = {}) {
 }
 
 // builds an array of observation field parameters for use in field_study.html
-export const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, value) => {
-  const params = new URLSearchParams(currentUrlParams);
+const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, value) => { 
+  const params = new URLSearchParams(currentUrlParams); 
+  const ids = params.getAll('fieldId'); 
+  const names = params.getAll('fieldName'); 
+  const values = params.getAll('fieldValue'); 
   
-  const ids = params.getAll('fieldId');
-  const names = params.getAll('fieldName');
-  const values = params.getAll('fieldValue');
+  const currentFields = ids.map((id, index) => ({ 
+    id: id, 
+    name: names[index] || '', 
+    value: values[index] || '' 
+  })); 
   
-  const currentFields = ids.map((id, index) => ({
-    id: id,
-    name: names[index] || '',
-    value: values[index] || ''
-  }));
+  const targetIndex = currentFields.findIndex(f => f.id === targetFieldId.toString()); 
   
-  const targetIndex = currentFields.findIndex(f => f.id === targetFieldId.toString());
+  if (targetIndex !== -1) { 
+    currentFields[targetIndex].value = value; 
+    if (fieldName) currentFields[targetIndex].name = fieldName; 
+  } else { 
+    currentFields.push({ id: targetFieldId.toString(), name: fieldName, value: value }); 
+  } 
   
-  if (targetIndex !== -1) {
-    currentFields[targetIndex].value = value;
-    if (fieldName) currentFields[targetIndex].name = fieldName;
-  } else {
-    currentFields.push({ id: targetFieldId.toString(), name: fieldName, value: value });
-  }
+  params.delete('fieldId'); 
+  params.delete('fieldName'); 
+  params.delete('fieldValue'); 
   
-  params.delete('fieldId');
-  params.delete('fieldName');
-  params.delete('fieldValue');
+  currentFields.forEach(field => { 
+    params.append('fieldId', field.id); 
+    params.append('fieldName', field.name); 
+    params.append('fieldValue', field.value); 
+  }); 
   
-  currentFields.forEach(field => {
-    params.append('fieldId', field.id);
-    params.append('fieldName', field.name);
-    params.append('fieldValue', field.value);
-  });
-  
-  return params.toString();
+  return params.toString(); 
 };
 
 /*
