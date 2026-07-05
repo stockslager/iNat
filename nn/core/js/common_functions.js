@@ -206,52 +206,56 @@ function buildNavDD( navbar, dd_name, links ) {
 
 function buildNavActivityFiltersDD( navbar, dd_name, config ) { 
   if( config.ddFilters && config.ddFilters.length > 0 ) { 
-    let dd_name = config.ddFilters[0].ddName; 
+    let dd_name_tracker = config.ddFilters[0].ddName; 
     let filters = []; 
     
-    // Initialize from a fresh clone of your state to preserve existing variables
-    let urlState = { ...appState }; 
+    // 1. Shallow copy the appState object so we don't pollute global memory
+    let baseState = {};
+    for (const key in appState) {
+      if (appState.hasOwnProperty(key)) {
+        baseState[key] = appState[key];
+      }
+    }
     
-    // Read your lowercase URL multi-keys on page boot and sync them to your state instance!
+    // 2. Parse the current URL to find any active multi-key observation filters
     const urlParams = new URLSearchParams(window.location.search);
     const urlIds = urlParams.getAll('fieldid');
     const urlNames = urlParams.getAll('fieldname');
     const urlValues = urlParams.getAll('fieldvalue');
     
-    urlState.activeFilters = urlIds.map((id, index) => {
-      return new boxRow(id, urlNames[index] || '', urlValues[index] || '');
-    });
+    // 3. Stuff them straight into the activeFilters array of our local state clone
+    baseState.activeFilters = [];
+    for (let index = 0; index < urlIds.length; index++) {
+      baseState.activeFilters.push(new boxRow(urlIds[index], urlNames[index] || '', urlValues[index] || ''));
+    }
 
-    // Generate the "ALL" reset filter link safely
-    urlState = setActivityFilter(urlState, ''); 
-    filters.push(faddelem('a', null, { href: './garden_activity.html' + buildParameterList(urlState), textContent: CONST_ALL })); 
+    // Generate the "ALL" reset item link safely using our synchronized state clone
+    let allUrlState = {};
+    for (const key in baseState) { if (baseState.hasOwnProperty(key)) allUrlState[key] = baseState[key]; }
+    allUrlState = setActivityFilter(allUrlState, ''); 
+    filters.push(faddelem('a', null, { href: './garden_activity.html' + buildParameterList(allUrlState), textContent: CONST_ALL })); 
 
-    for( let i = 0; i<config.ddFilters.length; i++ ) { 
-      if( dd_name !== config.ddFilters[i].ddName ) { 
-        buildNavDD( navbar, getActivityFilter(appState) || dd_name, filters ); 
-        dd_name = config.ddFilters[0].ddName; 
+    // Generate each specific filter label option link inside the config array
+    for( let i = 0; i < config.ddFilters.length; i++ ) { 
+      if( dd_name_tracker !== config.ddFilters[i].ddName ) { 
+        buildNavDD( navbar, getActivityFilter(appState) || dd_name_tracker, filters ); 
+        dd_name_tracker = config.ddFilters[i].ddName; 
       } 
       
-      // Keep your tracking states separated inside your sequential navigation items loop
-      let innerUrlState = { ...urlState };
-      innerUrlState = setActivityFilter(innerUrlState, config.ddFilters[i].ddLabel); 
+      // Isolate each iteration link inside its own clean local memory assignment block
+      let loopUrlState = {};
+      for (const key in baseState) { if (baseState.hasOwnProperty(key)) loopUrlState[key] = baseState[key]; }
+      loopUrlState = setActivityFilter(loopUrlState, config.ddFilters[i].ddLabel); 
       
       let filter = faddelem('a', null, { 
-        href: './garden_activity.html' + buildParameterList(innerUrlState), 
+        href: './garden_activity.html' + buildParameterList(loopUrlState), 
         textContent: config.ddFilters[i].ddLabel 
       }); 
       filters.push(filter); 
     } 
     
-    buildNavDD( navbar, getActivityFilter(appState) || dd_name, filters ); 
+    buildNavDD( navbar, getActivityFilter(appState) || dd_name_tracker, filters ); 
   } 
-}
-
-function buildMenuURL( url ) {
-  let dd = '<div id="menu_title">' + url +     
-           '</div>';
-
-  return( dd );
 }
 
 function buildNavDDPlace( navbar, dd_name, results, config, baseUrl, sub_taxon_arr ) {
