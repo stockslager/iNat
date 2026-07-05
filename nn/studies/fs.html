@@ -629,7 +629,7 @@ function fresults( xobj, config ) {
                                    let updatedParamsStr = updateUrlParamsByFieldId(window.location.search, ofvFieldIdStr, ofv.name, cleanValue, config); 
           
                                    // Standard check: Is the current field in this loop pass your primary configuration field?
-                                   const isPrimaryField = (ofvFieldIdStr === config.field_id?.toString()); 
+                                   const isPrimaryField = config.fieldName && (ofv.name?.toLowerCase() === config.fieldName.toLowerCase()); 
           
                                    // Re-inject properties onto the query string if modifying the primary config field
                                    if( isPrimaryField ) { 
