@@ -931,12 +931,24 @@ function clearForDashParams(state) {
   urlState = setPage(urlState, '');
   urlState = setPerPage(urlState, '');
   urlState = setActivityFilter(urlState, '');
-  // clear all dynamic observation fields used on field_study ---
-  urlState.activeFilters = []; 
   urlState = setLifeStage(urlState, '');
   urlState = setEvidence(urlState, '');
   urlState = setStudyTitle(urlState, '');
   urlState = setActivityFilter(urlState, '');
+  
+  // clear all dynamic observation fields used on field_study ---
+  urlState.activeFilters = []; 
+  
+  // scan and delete all variations of dynamic field keys from the object.
+  // this removes any fieldid, fieldname, or fieldvalue parameters completely.
+  for (const key in urlState) {
+    if (urlState.hasOwnProperty(key)) {
+      const lowerKey = key.toLowerCase();
+      if (lowerKey.indexOf('fieldid') !== -1 || lowerKey.indexOf('fieldname') !== -1 || lowerKey.indexOf('fieldvalue') !== -1) {
+        delete urlState[key];
+      }
+    }
+  }  
 
   return urlState;
 }
