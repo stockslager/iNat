@@ -121,7 +121,7 @@ function createNewStateInstance(initialValues = {}) {
 }
 
 // builds an array of observation field parameters for use in field_study.html
-const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, value) => { 
+const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, value, config) => { 
   const params = new URLSearchParams(currentUrlParams); 
   
   const ids = params.getAll('fieldid'); 
