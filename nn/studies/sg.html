@@ -94,6 +94,7 @@ function buildPage(data, config) {
 };
 
 function setupCommonAPIParams( config, api_params ) {
+    
     if( getObsDate(appState)    ) { api_params += '&on='       + getObsDate(appState); } 
 
     if( getUser(appState) ) {
@@ -129,10 +130,10 @@ function setupCommonAPIParams( config, api_params ) {
     return api_params;
 }
 
-function setupMapAPIParams( config, api_params ) {
+function setupMapAPIParams( config ) {
 
     let api_params = '';
-
+    
     api_params += '?project_id='+config.project;
     
     // --- Consolidated iNat Multi-Field API Builder ---
