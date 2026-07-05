@@ -128,21 +128,20 @@ const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, va
   const names = params.getAll('fieldname'); 
   const values = params.getAll('fieldvalue'); 
   
-  // 1. Map existing parameter paths straight into our local data template tracking array
+  // 1. Reconstruct current parameter tracks cleanly into objects
   const currentFields = ids.map((id, index) => {
     const currentName = names[index] || '';
-    const isPrimary = config.fieldName && (currentName.toLowerCase() === config.fieldName.toLowerCase());
     return { 
       id: id.toString(), 
-      name: currentName || (isPrimary ? config.fieldName : ''), 
-      value: values[index] || (isPrimary ? (config.fieldValue || '') : '') 
+      name: currentName, 
+      value: values[index] || '' 
     };
   }); 
   
   const targetIdStr = targetFieldId.toString();
   const targetIndex = currentFields.findIndex(f => f.id === targetIdStr); 
   
-  // 2. Update existing active slot, or append if completely new
+  // 2. Mutate or append the current loop target cell filter configuration value
   if (targetIndex !== -1) { 
     currentFields[targetIndex].value = value; 
     if (fieldName) currentFields[targetIndex].name = fieldName; 
@@ -150,12 +149,24 @@ const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, va
     currentFields.push({ id: targetIdStr, name: fieldName || '', value: value }); 
   } 
   
-  // 3. Clear existing multi-keys entirely to rewrite them sequentially
+  // 3. FIX: Strict Positional Sort Guard!
+  // Force the primary configuration lane to always sit at index 0 of your array tracking collection
+  if (config.fieldName) {
+    currentFields.sort((a, b) => {
+      const isAPrimary = (a.name.toLowerCase() === config.fieldName.toLowerCase());
+      const isBPrimary = (b.name.toLowerCase() === config.fieldName.toLowerCase());
+      if (isAPrimary && !isBPrimary) return -1; // Move primary field to the absolute front
+      if (!isAPrimary && isBPrimary) return 1;  // Move secondary fields to the back
+      return 0;
+    });
+  }
+  
+  // 4. Hard wipe all existing parameter tracks to prevent leaks or duplicates
   params.delete('fieldid'); 
   params.delete('fieldname'); 
   params.delete('fieldvalue'); 
   
-  // 4. Re-append only clean, independent tracks sequentially using strict lowercase
+  // 5. Re-append the sorted entries sequentially using clean lowercase parameters
   currentFields.forEach(field => { 
     params.append('fieldid', field.id); 
     params.append('fieldname', field.name); 
