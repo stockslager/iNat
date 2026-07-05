@@ -458,26 +458,46 @@ for( let e=0; e<box_array.length; e++ ){
       const urlValues = urlParams.getAll('fieldvalue'); 
       const urlNames = urlParams.getAll('fieldname');
       
-      // 1. Clean check: Does this exact column ID have an active filter value in the URL parameters?
-      const idIndex = urlIds.indexOf(currentFieldId); 
+      // Identify if this column header represents your primary configuration lane
       const isPrimaryColumn = config.fieldName && (currentFieldName.toLowerCase() === config.fieldName.toLowerCase());
       
-      // If it's the primary column and the URL explicitly has a primary filter value, or if a secondary column has a value
-      const hasFilter = isPrimaryColumn 
-        ? (urlParams.has('fieldvalue') && (idIndex !== -1 ? urlValues[idIndex] !== '' : urlParams.get('fieldvalue') !== config.fieldValue))
-        : (idIndex !== -1 && urlValues[idIndex] !== '');
+      // Check if this column has an active filter in the URL
+      const idIndex = urlIds.indexOf(currentFieldId); 
+      const hasFilter = (idIndex !== -1 && urlValues[idIndex] !== '');
       
       if( hasFilter ) { 
-        // 2. FIX: Let your proven store function handle stripping out ONLY this specific filter column row!
-        // Passing an empty string '' clears out this field track perfectly without touching any other fields.
-        let resetParamsStr = updateUrlParamsByFieldId(window.location.search, currentFieldId, currentFieldName, '', config);
+        // 1. Map existing tracks into paired tracking objects to protect indices
+        const temporaryFields = urlIds.map((id, index) => ({
+          id: id.toString(),
+          name: urlNames[index] || '',
+          value: urlValues[index] || ''
+        }));
         
-        const newParams = new URLSearchParams(resetParamsStr);
+        // 2. Strip out ONLY this specific filter column row using its unique ID string
+        const remainingFilters = temporaryFields.filter(f => f.id !== currentFieldId.toString());
+
+        const newParams = new URLSearchParams(); 
+        
+        // 3. Retain standard layout tokens safely (studytitle, component, etc.)
+        urlParams.forEach((val, key) => { 
+          if (key !== 'fieldid' && key !== 'fieldname' && key !== 'fieldvalue') { 
+            newParams.set(key, val); 
+          } 
+        }); 
+        
+        // 4. Re-append only the surviving active filters sequentially
+        remainingFilters.forEach(f => { 
+          newParams.append('fieldid', f.id); 
+          newParams.append('fieldname', f.name); 
+          newParams.append('fieldvalue', f.value); 
+        }); 
+        
         newParams.set('page', '1'); 
         
+        // 5. FIX: Removed the destructive delete('fieldvalue') line! 
+        // We only clear the unique plant template token here
         if (isPrimaryColumn) {
           newParams.delete('plantname'); 
-          newParams.delete('fieldvalue'); // Flush any old flat fallback parameter overrides completely
         }
         
         const resetUrl = './fs.html?' + newParams.toString(); 
