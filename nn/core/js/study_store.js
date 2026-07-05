@@ -182,7 +182,38 @@ const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, va
  * @param {object} state The current application state object.
  * @returns {string} A formatted URL parameter string (e.g., "?key1=val1&key2=val2").
  */
-function buildParameterList(state) {
+function buildParameterList(state) { 
+    const params = new URLSearchParams(); 
+    
+    // Iterate over every key in the state object 
+    for (const key in state) { 
+        if (state.hasOwnProperty(key) && state[key] !== null && state[key] !== undefined && state[key] !== '') { 
+            
+            // FIX: Match the exact keys that are inside your homeState object (with underscores)
+            if (key === 'activeFilters' || key === 'field_id' || key === 'field_name' || key === 'field_value') { 
+                continue; 
+            } 
+            params.append(key, state[key]); 
+        } 
+    } 
+    
+    // --- Dynamic Array Appending Block --- // 
+    // Safely serialize your filters sequentially from the unified array tracking lane 
+    if (state.activeFilters && state.activeFilters.length > 0) { 
+        for (let i = 0; i < state.activeFilters.length; i++) { 
+            const filter = state.activeFilters[i]; 
+            if (filter.field_value) { 
+                params.append('fieldid', filter.field_id); 
+                params.append('fieldname', filter.field_name); 
+                params.append('fieldvalue', filter.field_value); 
+            } 
+        } 
+    } 
+    
+    const queryString = params.toString(); 
+    return queryString ? ('?' + queryString) : ''; 
+}
+/*function buildParameterList(state) {
   const params = new URLSearchParams();
 
   // Iterate over every key in the state object
@@ -214,7 +245,7 @@ function buildParameterList(state) {
 
   const queryString = params.toString();
   return queryString ? ('?' + queryString) : '';
-}
+}*/
 
 /**
  * Creates a new state instance, overlaying parameters found in a URL query string.
