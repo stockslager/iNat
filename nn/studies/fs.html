@@ -789,29 +789,35 @@ function setupAPIParams( config ) {
  
    api_params += '?project_id='+config.project;
 
-   // Handle primary field fallback cleanly on load if it has no active url parameter value yet
-   if( config.fieldName ) {
-       api_params += '&field:' + config.fieldName;
-       const activePrimaryVal = new URLSearchParams(window.location.search).get('fieldvalue') || config.fieldValue;
-       if( activePrimaryVal ) {
-           api_params += '=' + encodeURIComponent(activePrimaryVal);
-       }
-   }
-
-   // Loop through and append all secondary fields from your lowercase URL array parameters
-   const urlParams = new URLSearchParams(window.location.search);
-   const urlNames = urlParams.getAll('fieldname');    
-   const urlValues = urlParams.getAll('fieldvalue'); 
-
-   urlNames.forEach((name, index) => {
-     // Identify if this parameter matches the primary configuration category text string
-     const isPrimary = config.fieldName && (name.toLowerCase() === config.fieldName.toLowerCase());
+// Handle primary field fallback cleanly on load if it has no active url parameter value yet
+if( config.fieldName ) { 
+  api_params += '&field:' + config.fieldName; 
   
-     // Appends ONLY true secondary parameter tracks to protect separation boundaries
-     if( !isPrimary && name && urlValues[index] ) {
-         api_params += '&field:' + name + '=' + encodeURIComponent(urlValues[index]);
-     }
-   });
+  // FIX: Verify if the primary field name is actually explicitly written out in the URL string
+  const hasPrimaryInUrl = window.location.search.toLowerCase().indexOf('fieldname=' + encodeURIComponent(config.fieldName).toLowerCase()) !== -1;
+  
+  // Only grab the URL value if the primary field is present, otherwise drop straight back to the fallback config default!
+  const activePrimaryVal = hasPrimaryInUrl ? new URLSearchParams(window.location.search).get('fieldvalue') : config.fieldValue; 
+  
+  if( activePrimaryVal ) { 
+    api_params += '=' + encodeURIComponent(activePrimaryVal); 
+  } 
+} 
+
+// Loop through and append all secondary fields from your lowercase URL array parameters 
+const urlParams = new URLSearchParams(window.location.search); 
+const urlNames = urlParams.getAll('fieldname'); 
+const urlValues = urlParams.getAll('fieldvalue'); 
+
+urlNames.forEach((name, index) => { 
+  // Identify if this parameter matches the primary configuration category text string 
+  const isPrimary = config.fieldName && (name.toLowerCase() === config.fieldName.toLowerCase()); 
+  
+  // Appends ONLY true secondary parameter tracks to protect separation boundaries 
+  if( !isPrimary && name && urlValues[index] ) { 
+    api_params += '&field:' + name + '=' + encodeURIComponent(urlValues[index]); 
+  } 
+});
   
    if( getObsDate(appState)    ) { api_params += '&on='       + getObsDate(appState); }
 
@@ -879,52 +885,7 @@ async function gatherResources() {
    
       // Await the result of getObservations() and store the actual data
       const config  = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
-      console.log('full config title: ' + config.getFullTitle());
-// 1. FIX: Safe Primary Parameter Parser Guard
-if (config.fieldName) {
-  api_params += '&field:' + config.fieldName;
-  
-  const initialParams = new URLSearchParams(window.location.search);
-  const initialIds = initialParams.getAll('fieldid');
-  const initialNames = initialParams.getAll('fieldname');
-  const initialValues = initialParams.getAll('fieldvalue');
-  
-  // Find where the primary field name lives inside your URL arrays
-  let explicitPrimaryIndex = -1;
-  for (let idx = 0; idx < initialNames.length; idx++) {
-    if (initialNames[idx].toLowerCase() === config.fieldName.toLowerCase()) {
-      explicitPrimaryIndex = idx;
-      break;
-    }
-  }
-  
-  // Rule: Only append a value if it explicitly belongs to the primary field name string
-  // If the primary filter was cleared, ignore the lingering secondary 'fieldvalue' and fall back to your config!
-  let exactPrimaryValue = '';
-  if (explicitPrimaryIndex !== -1) {
-    exactPrimaryValue = initialValues[explicitPrimaryIndex];
-  } else if (!initialParams.has('fieldid')) {
-    // If there are zero array filters active, fallback to your config entry default
-    exactPrimaryValue = config.fieldValue || '';
-  }
-  
-  if (exactPrimaryValue) {
-    api_params += '=' + encodeURIComponent(exactPrimaryValue);
-  }
-}
-
-// 2. Loop through and append all true secondary fields from your lowercase URL array parameters
-const urlParams = new URLSearchParams(window.location.search);
-const urlNames = urlParams.getAll('fieldname');   
-const urlValues = urlParams.getAll('fieldvalue'); 
-
-urlNames.forEach((name, index) => {
-  const isPrimary = config.fieldName && (name.toLowerCase() === config.fieldName.toLowerCase());
-  if (!isPrimary && name && urlValues[index]) {
-    api_params += '&field:' + name + '=' + encodeURIComponent(urlValues[index]);
-  }
-});
-          
+      console.log('full config title: ' + config.getFullTitle());          
       const api_params    = setupAPIParams( config );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
