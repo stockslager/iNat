@@ -215,7 +215,7 @@ function buildParameterList(state) {
  * @param {string} queryString The raw query string (e.g., "?user=Bob&place=Office").
  * @returns {object} A new application state object populated from URL parameters.
  */
-function buildStateFromParams(queryString) { 
+function buildStateFromParams(queryString, primaryFieldName = '') { 
   const params = new URLSearchParams(queryString); 
   
   // 1. Map your standard individual tracking parameters
@@ -240,25 +240,24 @@ function buildStateFromParams(queryString) {
     newState.activeFilters.push(new boxRow(ids[index], names[index] || '', values[index] || ''));
   }
   
-  // 5. FIX: Safe, explicit mapping that protects column boundaries!
-  // Instead of using an arbitrary counter loop, match secondary fields safely
+  // 5. FIX: Safe, Text-Bound boundary check using the passed-in config text string!
   let secondaryCounter = 2;
   
   for (let idx = 0; idx < newState.activeFilters.length; idx++) {
     const item = newState.activeFilters[idx];
     const itemFieldName = item.field_name || '';
     
-    // Check if this specific array item represents your primary field column
-    const isPrimaryField = config.fieldName && (itemFieldName.toLowerCase() === config.fieldName.toLowerCase());
+    // Check if this item's text matches the known primary field text name string
+    const isPrimaryField = primaryFieldName && (itemFieldName.toLowerCase() === primaryFieldName.toLowerCase());
     
     if (isPrimaryField) {
       // Safely assign to your base primary properties
-      newState.fieldname = itemFieldName;
+      newState.fieldname = item.field_name || '';
       newState.fieldvalue = item.field_value || '';
     } else {
       // Safely assign to your numbered secondary properties (fieldname2, fieldvalue2, etc.)
       const suffixStr = secondaryCounter.toString();
-      newState['fieldname' + suffixStr] = itemFieldName;
+      newState['fieldname' + suffixStr] = item.field_name || '';
       newState['fieldvalue' + suffixStr] = item.field_value || '';
       secondaryCounter++;
     }
