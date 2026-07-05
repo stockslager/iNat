@@ -763,18 +763,19 @@ function setupAPIParams( config ) {
  
    api_params += '?project_id='+config.project;
 
-   // the primary field name will always be stored in the .json.
-      console.log('val ' + config.fieldValue || getFieldValue(appState));
-   if( config.fieldName )        { api_params += '&field:'    +  config.fieldName; }
-   if( getFieldValue(appState) ) { api_params += '='          + (config.fieldValue || getFieldValue(appState)); }
-
-   // appends all active observation field filters to the API query string
+   // single loop handles the primary field and all secondary fields automatically
    if( appState.activeFilters && appState.activeFilters.length > 0 ) {
        appState.activeFilters.forEach(filter => {
-         // Only append to the API string if both the field name and value are present
-         if( filter.field_name && filter.field_value ) {
-             api_params += '&field:' + filter.field_name + '=' + filter.field_value;
-         }
+          // Identify if this row is the primary field
+          const isPrimary = (filter.field_id === config.field_id?.toString());
+    
+          // Use the stable JSON name for the primary field, otherwise use the dynamic name
+          const finalFieldName = isPrimary ? config.fieldName : filter.field_name;
+    
+          // Only append to the request if there is a name and an active filter value selected
+          if( finalFieldName && filter.field_value ) {
+              api_params += '&field:' + finalFieldName + '=' + encodeURIComponent(filter.field_value);
+          }
        });
    }
   
