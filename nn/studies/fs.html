@@ -248,38 +248,6 @@ const hasActiveFilter = (queryString, fieldId) => {
   return idx !== -1 && values[idx] !== '';
 }
 
-/*const getUrlWithoutFilter = (queryString, targetFieldId, primaryFieldId = '') => {
-  const params = new URLSearchParams(queryString);
-  const ids = params.getAll('fieldid');
-  const names = params.getAll('fieldname');
-  const values = params.getAll('fieldvalue');
-  
-  // Filter out the target ID from the arrays
-  const remaining = ids
-    .map((id, index) => ({ id, name: names[index] || '', value: values[index] || '' }))
-    .filter(f => f.id !== targetFieldId.toString());
-
-  // Wipe only the field tracking keys
-  params.delete('fieldid');
-  params.delete('fieldname');
-  params.delete('fieldvalue');
-
-  // Re-append the parameters that survived
-  remaining.forEach(f => {
-    params.append('fieldid', f.id);
-    params.append('fieldname', f.name);
-    params.append('fieldvalue', f.value);
-  });
-
-  // Automatically handle page resets and primary key associations here
-  params.set('page', '1');
-  if (targetFieldId.toString() === primaryFieldId.toString()) {
-    params.delete('plantname');
-  }
-
-  return params.toString();
-};*/
-
 const getUrlWithoutFilter = (queryString, targetFieldId) => {
   const params = new URLSearchParams(queryString);
   const ids = params.getAll('fieldid');
@@ -835,18 +803,18 @@ function setupAPIParams( config ) {
  
    api_params += '?project_id='+config.project;
 
-// --- Consolidated iNat Multi-Field API Builder ---
-const initialParams = new URLSearchParams(window.location.search);
-const initialNames = initialParams.getAll('fieldname');
-const initialValues = initialParams.getAll('fieldvalue');
+   // --- Consolidated iNat Multi-Field API Builder ---
+   const initialParams = new URLSearchParams(window.location.search);
+   const initialNames = initialParams.getAll('fieldname');
+   const initialValues = initialParams.getAll('fieldvalue');
 
-// 1. Core Rule: If the URL has no active filters (First Entrance), use your config defaults
-if (initialNames.length === 0 && config.fieldName) {
-  api_params += '&field:' + config.fieldName;
-  if (config.fieldValue) {
-    api_params += '=' + encodeURIComponent(config.fieldValue);
-  }
-}
+   // Core Rule: If the URL has no active filters (First Entrance), use your config defaults
+   if( config.fieldName && !initialNames.includes(config.fieldName) ) {
+       api_params += '&field:' + config.fieldName;
+       if( config.fieldValue ) {
+           api_params += '=' + encodeURIComponent(config.fieldValue);
+       }
+   }
 
 // 2. Sequential Loop: Process whatever filters are explicitly remaining in the URL bar
 initialNames.forEach((name, index) => {
