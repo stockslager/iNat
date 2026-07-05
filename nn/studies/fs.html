@@ -239,14 +239,6 @@ function isMultipleOfFour(num) {
   return num % 4 === 0;
 }
 
-// used for the obs fields box in the upper right and for tracking selected values for filtration.
-function boxRow(field_id, field_name, field_value = '') { 
-  this.field_id    = field_id.toString(); 
-  this.field_name  = field_name; 
-  this.field_value = field_value; 
-}      
-
-
 //Checks if a specific Field ID has an active filter value in the current query string.
 const hasActiveFilter = (queryString, fieldId) => {
   const params = new URLSearchParams(queryString);
