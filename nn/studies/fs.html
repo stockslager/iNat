@@ -619,81 +619,28 @@ if( config.merge !== 'yes' && ofvFieldIdStr === targetBoxFieldIdStr ) {
     field1 = ofvValueLower; 
     displayName = ofvValueLower; 
     if( ofv.taxon ) { 
-      field1 = '<span style="font-size:larger">' + commonName.toLowerCase() + '</span><span style="font-style:italic"><br>(' + taxonName + ')</span>'; 
+      field1 = `<span style="font-size:larger">${commonName.toLowerCase()}</span><span style="font-style:italic"><br>(${taxonName})</span>`; 
     } 
+    
     // Wild ancestral colony 
     if( ofvFieldIdStr === '17383' ) { 
       values.push({ innerHTML: furl2(root_observations + field1, field1) }); 
     } else { 
       const cleanValue = replaceDoubleQuotes(ofvValue.toString()); 
       
-      // 1. Read strict lowercase query parameters from the window string
-      const cellUrlParams = new URLSearchParams(window.location.search);
-      const ids = cellUrlParams.getAll('fieldid');
-      const names = cellUrlParams.getAll('fieldname');
-      const valuesArr = cellUrlParams.getAll('fieldvalue');
-      
-      // 2. FIX: Reconstruct existing tracks safely without duplicating loops
-      let temporaryFields = [];
-      if (ids.length > 0) {
-        for (let idx = 0; idx < ids.length; idx++) {
-          temporaryFields.push({
-            id: ids[idx].toString(),
-            name: names[idx] || '',
-            value: valuesArr[idx] || ''
-          });
-        }
-      }
-      
-      // 3. Mutate or append the current loop cell configuration value
-      const targetIndex = temporaryFields.findIndex(f => f.id === ofvFieldIdStr);
-      if (targetIndex !== -1) {
-        temporaryFields[targetIndex].value = cleanValue;
-        if (ofv.name) temporaryFields[targetIndex].name = ofv.name;
-      } else {
-        temporaryFields.push({ id: ofvFieldIdStr, name: ofv.name || '', value: cleanValue });
-      }
-      
-      // 4. Strict inline de-duplication pass to guarantee uniqueness per field_id
-      const seenTracker = {};
-      const uniqueFieldsList = [];
-      for (let i = 0; i < temporaryFields.length; i++) {
-        const item = temporaryFields[i];
-        if (!seenTracker[item.id]) {
-          seenTracker[item.id] = true;
-          uniqueFieldsList.push(item);
-        } else {
-          const matchedItem = uniqueFieldsList.find(f => f.id === item.id);
-          if (matchedItem && item.value) {
-            matchedItem.value = item.value;
-            if (item.name) matchedItem.name = item.name;
-          }
-        }
-      }
-      
-      // 5. Hard purge ALL query variations before compilation
-      cellUrlParams.delete('fieldid');
-      cellUrlParams.delete('fieldname');
-      cellUrlParams.delete('fieldvalue');
-      cellUrlParams.delete('fieldId');
-      cellUrlParams.delete('fieldName');
-      cellUrlParams.delete('fieldValue');
-      
-      // 6. Append only the uniquely cleaned rows back sequentially
-      uniqueFieldsList.forEach(field => {
-        cellUrlParams.append('fieldid', field.id);
-        cellUrlParams.append('fieldname', field.name);
-        cellUrlParams.append('fieldvalue', field.value);
-      });
+      // 1. Let the store utility generate your clean lowercase array parameter string safely
+      let updatedParamsStr = updateUrlParamsByFieldId(window.location.search, ofvFieldIdStr, ofv.name, cleanValue, config); 
       
       const isPrimaryField = config.fieldName && (ofv.name?.toLowerCase() === config.fieldName.toLowerCase()); 
+      const finalParams = new URLSearchParams(updatedParamsStr);
       
-      cellUrlParams.set('page', '1'); 
+      finalParams.set('page', '1'); 
       if( isPrimaryField ) { 
-        cellUrlParams.set('plantname', commonName || taxonName); 
+        finalParams.set('plantname', commonName || taxonName); 
       } 
       
-      let url = '<a href="./fs.html?' + cellUrlParams.toString() + '">' + field1 + '</a>';
+      // 2. Safely restore furl2 now that parameter pollution is fully resolved
+      let url = furl2('./fs.html?' + finalParams.toString(), field1); 
       
       if( isPrimaryField && config.fieldOutlink ) { 
         let outlink = furl2( 
