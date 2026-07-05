@@ -608,6 +608,20 @@ function fresults( xobj, config ) {
                                       urlState = setFieldValue2(urlState, replaceDoubleQuotes(rec.ofvs[j].value.toString()));
                                       let url  = furl2('./fs.html'+buildParameterList(urlState), field1);
                                       values.push({ innerHTML:url });
+                                  } else if( getFieldName3(appState).toLowerCase() === box_array[r].field_name.toLowerCase() ) {
+                                      let urlState = appState;
+                                      urlState = setPage(urlState, '1');
+                                      urlState = setFieldName3(urlState, rec.ofvs[j].name);
+                                      urlState = setFieldValue3(urlState, replaceDoubleQuotes(rec.ofvs[j].value.toString()));
+                                      let url  = furl2('./fs.html'+buildParameterList(urlState), field1);
+                                      values.push({ innerHTML:url });
+                                  } else if( !getFieldName2(appState) ) {
+                                      let urlState = appState;
+                                      urlState = setPage(urlState, '1');
+                                      urlState = setFieldName2(urlState, rec.ofvs[j].name);
+                                      urlState = setFieldValue2(urlState, replaceDoubleQuotes(rec.ofvs[j].value.toString()));
+                                      let url  = furl2('./fs.html'+buildParameterList(urlState), field1);
+                                      values.push({ innerHTML:url });
                                   } else {
                                       let urlState = appState;
                                       urlState = setPage(urlState, '1');
