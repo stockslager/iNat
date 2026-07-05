@@ -33,13 +33,10 @@ const ATTRIBUTE_TAXONDD         = 'taxondd';
 const ATTRIBUTE_OBSID           = 'obsid';
 const ATTRIBUTE_OBSDATE         = 'obsdate';
 const ATTRIBUTE_ACTIVITYFILTER  = 'activityfilter';
-const ATTRIBUTE_FIELDNAME       = 'fieldname';
-const ATTRIBUTE_FIELDNAME2      = 'fieldname2';
-const ATTRIBUTE_FIELDNAME3      = 'fieldname3';
-const ATTRIBUTE_FIELDVALUE      = 'fieldvalue';
-const ATTRIBUTE_FIELDVALUE2     = 'fieldvalue2';
-const ATTRIBUTE_FIELDVALUE3     = 'fieldvalue3';
-const ATTRIBUTE_LIFESTAGE       = 'lifestage';
+// used for field_study.html observation field array
+const ATTRIBUTE_FIELDID      = 'fieldid';       
+const ATTRIBUTE_FIELDNAME    = 'fieldname';   
+const ATTRIBUTE_FIELDVALUE   = 'fieldvalue'; 
 const ATTRIBUTE_EVIDENCE        = 'evidence';
 const ATTRIBUTE_PAGE            = 'page';
 const ATTRIBUTE_PER_PAGE        = 'per_page';
@@ -69,12 +66,8 @@ let appState = {
   [ATTRIBUTE_OBSID]:     '',
   [ATTRIBUTE_OBSDATE]:   '',
   [ATTRIBUTE_ACTIVITYFILTER]: '',
-  [ATTRIBUTE_FIELDNAME]: '',
-  [ATTRIBUTE_FIELDNAME2]: '',
-  [ATTRIBUTE_FIELDNAME3]: '',
-  [ATTRIBUTE_FIELDVALUE]: '',
-  [ATTRIBUTE_FIELDVALUE2]: '',
-  [ATTRIBUTE_FIELDVALUE3]: '',
+  // holds { id, name, value } for dynamic list of observation fields used in field_study.html
+  activeFilters: [], 
   [ATTRIBUTE_LIFESTAGE]: '',
   [ATTRIBUTE_EVIDENCE]: '',
   [ATTRIBUTE_PAGE]:      '',
@@ -114,12 +107,8 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_OBSID]:     '',
     [ATTRIBUTE_OBSDATE]:   '',
     [ATTRIBUTE_ACTIVITYFILTER]:  '',
-    [ATTRIBUTE_FIELDNAME]: '',
-    [ATTRIBUTE_FIELDNAME2]: '',
-    [ATTRIBUTE_FIELDNAME3]: '',
-    [ATTRIBUTE_FIELDVALUE]: '',
-    [ATTRIBUTE_FIELDVALUE2]: '',
-    [ATTRIBUTE_FIELDVALUE3]: '',
+    // holds { id, name, value } for dynamic list of observation fields used in field_study.html
+     activeFilters: [], 
     [ATTRIBUTE_LIFESTAGE]: '',
     [ATTRIBUTE_EVIDENCE]: '',
     [ATTRIBUTE_PAGE]:      '',
@@ -268,16 +257,21 @@ function getTaxonDD(state)         { return (getAttribute(state, ATTRIBUTE_TAXON
 function getObsId(state)           { return (getAttribute(state, ATTRIBUTE_OBSID)); }
 function getObsDate(state)         { return (getAttribute(state, ATTRIBUTE_OBSDATE)); }
 function getActivityFilter(state)  { return (getAttribute(state, ATTRIBUTE_ACTIVITYFILTER)); }
-function getFieldName(state)       { return (getAttribute(state, ATTRIBUTE_FIELDNAME)); }
-function getFieldName2(state)      { return (getAttribute(state, ATTRIBUTE_FIELDNAME2)); }
-function getFieldName3(state)      { return (getAttribute(state, ATTRIBUTE_FIELDNAME3)); }
-function getFieldValue(state)      { return (getAttribute(state, ATTRIBUTE_FIELDVALUE)); }
-function getFieldValue2(state)     { return (getAttribute(state, ATTRIBUTE_FIELDVALUE2)); }
-function getFieldValue3(state)     { return (getAttribute(state, ATTRIBUTE_FIELDVALUE3)); }
 function getLifeStage(state)       { return (getAttribute(state, ATTRIBUTE_LIFESTAGE)); }
 function getEvidence(state)        { return (getAttribute(state, ATTRIBUTE_EVIDENCE)); }
 function getPage(state)            { return (getAttribute(state, ATTRIBUTE_PAGE)); }
 function getPerPage(state)         { return (getAttribute(state, ATTRIBUTE_PER_PAGE)); }
+
+//gets a specific filter box row object by its iNat Field ID string
+function getFilterByFieldId(state, fieldId) {
+  if (!state.activeFilters) return null;
+  return state.activeFilters.find(f => f.field_id === fieldId.toString()) || null;
+}
+
+//gets all active filter box rows currently stored in the state
+function getActiveFilters(state) {
+  return state.activeFilters || [];
+}
 
 /*
  * Helper Setters (Optional but Recommended) ---
@@ -307,16 +301,35 @@ function setTaxonDD(state, value)         { return (setAttribute(state, ATTRIBUT
 function setObsId(state, value)           { return (setAttribute(state, ATTRIBUTE_OBSID, value)); }
 function setObsDate(state, value)         { return (setAttribute(state, ATTRIBUTE_OBSDATE, value)); }
 function setActivityFilter(state, value)  { return (setAttribute(state, ATTRIBUTE_ACTIVITYFILTER, value)); }
-function setFieldName(state, value)       { return (setAttribute(state, ATTRIBUTE_FIELDNAME, value)); }
-function setFieldName2(state, value)      { return (setAttribute(state, ATTRIBUTE_FIELDNAME2, value)); }
-function setFieldName3(state, value)      { return (setAttribute(state, ATTRIBUTE_FIELDNAME3, value)); }
-function setFieldValue(state, value)      { return (setAttribute(state, ATTRIBUTE_FIELDVALUE, value)); }
-function setFieldValue2(state, value)     { return (setAttribute(state, ATTRIBUTE_FIELDVALUE2, value)); }
-function setFieldValue3(state, value)     { return (setAttribute(state, ATTRIBUTE_FIELDVALUE3, value)); }
 function setLifeStage(state, value)       { return (setAttribute(state, ATTRIBUTE_LIFESTAGE, value)); }
 function setEvidence(state, value)        { return (setAttribute(state, ATTRIBUTE_EVIDENCE, value)); }
 function setPage(state, value)            { return (setAttribute(state, ATTRIBUTE_PAGE, value)); }
 function setPerPage(state, value)         { return (setAttribute(state, ATTRIBUTE_PER_PAGE, value)); }
+
+// for observation fields
+// finds the filter by ID inside activeFilters and updates its properties cleanly.
+function setFilterByFieldId(state, fieldId, fieldName, fieldValue) {
+  // Shallow copy the array to maintain state structure safety
+  let filters = [...(state.activeFilters || [])];
+  
+  // Find where this filter sits in your array
+  const index = filters.findIndex(row => row.field_id === fieldId.toString());
+  
+  if (index !== -1) {
+    // If we found it, update its values
+    if (fieldValue !== undefined) filters[index].field_value = fieldValue;
+    if (fieldName) filters[index].field_name = fieldName;
+  } else {
+    // If it's a brand new dynamic ID, create a new boxRow instance and push it
+    filters.push(new boxRow(fieldId, fieldName || '', fieldValue || ''));
+  }
+  
+  // Return the updated state object with our modified array
+  return {
+    ...state,
+    activeFilters: filters
+  };
+}
 
 /*
  * Helper Getters 
@@ -911,12 +924,8 @@ function clearForDashParams(state) {
   urlState = setPage(urlState, '');
   urlState = setPerPage(urlState, '');
   urlState = setActivityFilter(urlState, '');
-  urlState = setFieldName(urlState, '');
-  urlState = setFieldName2(urlState, '');
-  urlState = setFieldName3(urlState, '');
-  urlState = setFieldValue(urlState, '');
-  urlState = setFieldValue2(urlState, '');
-  urlState = setFieldValue3(urlState, '');
+  // clear all dynamic observation fields used on field_study ---
+  urlState.activeFilters = []; 
   urlState = setLifeStage(urlState, '');
   urlState = setEvidence(urlState, '');
   urlState = setStudyTitle(urlState, '');
