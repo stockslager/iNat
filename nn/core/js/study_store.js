@@ -272,56 +272,34 @@ function buildParameterList(state) {
  * @returns {object} A new application state object populated from URL parameters.
  */
 function buildStateFromParams(queryString) { 
-  const params = new URLSearchParams(queryString); 
-  
-  // 1. Map your standard individual layout tracking parameters
-  const paramsObject = {};
-  params.forEach((value, key) => {
-    if (key !== 'fieldid' && key !== 'fieldname' && key !== 'fieldvalue') {
-      paramsObject[key] = value;
-    }
-  });
-  
-  // 2. Hydrate flat state defaults using your original factory instance
-  const newState = createNewStateInstance(paramsObject); 
-  
-  // 3. Gather multi-key parameters cleanly out of the address parameters
-  const ids = params.getAll('fieldid');
-  const names = params.getAll('fieldname');
-  const values = params.getAll('fieldvalue');
-  
-  // 4. Hydrate your modern array tracker space
-  newState.activeFilters = [];
-  for (let index = 0; index < ids.length; index++) {
-    newState.activeFilters.push(new boxRow(ids[index], names[index] || '', values[index] || ''));
-  }
-  
-  // 5. FIX: Bound boundary check that requires NO config scopes or name matching!
-  // It reads the direct sequence of IDs currently stored inside the live query string
-  let secondaryCounter = 2;
-  
-  for (let idx = 0; idx < newState.activeFilters.length; idx++) {
-    const item = newState.activeFilters[idx];
-    const itemFieldIdStr = item.field_id ? item.field_id.toString() : '';
+    const params = new URLSearchParams(queryString); 
     
-    // Check the live URL arrays: Is this item ID matching the FIRST fieldid parameter in the URL block?
-    // If it's the first one, it maps to the primary variables slot.
-    const isPrimaryField = (ids.length > 0 && itemFieldIdStr === ids[0].toString());
+    // 1. Map your standard individual layout tracking parameters 
+    const paramsObject = {}; 
+    params.forEach((value, key) => { 
+        if (key !== 'fieldid' && key !== 'fieldname' && key !== 'fieldvalue') { 
+            paramsObject[key] = value; 
+        } 
+    }); 
     
-    if (isPrimaryField) {
-      // Safely assign to your base primary properties
-      newState.fieldname = item.field_name || '';
-      newState.fieldvalue = item.field_value || '';
-    } else {
-      // Safely assign to your numbered secondary properties (fieldname2, fieldvalue2, etc.)
-      const suffixStr = secondaryCounter.toString();
-      newState['fieldname' + suffixStr] = item.field_name || '';
-      newState['fieldvalue' + suffixStr] = item.field_value || '';
-      secondaryCounter++;
-    }
-  }
-  
-  return newState; 
+    // 2. Hydrate flat state defaults using your original factory instance 
+    const newState = createNewStateInstance(paramsObject); 
+    
+    // 3. Gather multi-key parameters cleanly out of the address parameters 
+    const ids = params.getAll('fieldid'); 
+    const names = params.getAll('fieldname'); 
+    const values = params.getAll('fieldvalue'); 
+    
+    // 4. Hydrate your modern array tracker space 
+    newState.activeFilters = []; 
+    for (let index = 0; index < ids.length; index++) { 
+        newState.activeFilters.push(new boxRow(ids[index], names[index] || '', values[index] || '')); 
+    } 
+
+    // REMOVED STEP 5: No longer creating redundant flat fieldname2, fieldvalue2, etc. properties.
+    // The activeFilters array above handles everything cleanly now.
+
+    return newState; 
 }
 
 /*
