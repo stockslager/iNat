@@ -128,11 +128,11 @@ const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, va
   const names = params.getAll('fieldname'); 
   const values = params.getAll('fieldvalue'); 
   
-  // 1. Map current items into a clean data array
+  // 1. Map current items into a clean data array, matching primary fields by name
   const currentFields = ids.map((id, index) => {
     const currentName = names[index] || '';
     
-    // FIX: Detect if this is the primary field by comparing its name to the config name
+    // Identify primary field by name string text match
     const isPrimary = config.fieldName && (currentName.toLowerCase() === config.fieldName.toLowerCase());
     
     return { 
@@ -145,21 +145,20 @@ const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, va
   const targetIdStr = targetFieldId.toString();
   const targetIndex = currentFields.findIndex(f => f.id === targetIdStr); 
   
-  // 2. Safely mutate the slot
+  // 2. Safely mutate or append the clicked field value slot
   if (targetIndex !== -1) { 
     currentFields[targetIndex].value = value; 
-    // Save the dynamic name if it was empty
     if (fieldName) currentFields[targetIndex].name = fieldName; 
   } else { 
     currentFields.push({ id: targetIdStr, name: fieldName || '', value: value }); 
   } 
   
-  // 3. Clear parameter keys safely
+  // 3. Clear old parameter keys to prevent duplicates or pollution
   params.delete('fieldid'); 
   params.delete('fieldname'); 
   params.delete('fieldvalue'); 
   
-  // 4. Re-append the clean array sequentially
+  // 4. Re-append the clean array sequentially using lowercase parameters
   currentFields.forEach(field => { 
     params.append('fieldid', field.id); 
     params.append('fieldname', field.name); 
