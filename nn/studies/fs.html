@@ -626,7 +626,7 @@ function fresults( xobj, config ) {
                                    const cleanValue = replaceDoubleQuotes(ofvValue.toString()); 
           
                                    // store utility handles updating the field components directly by ID.
-                                   let updatedParamsStr = updateUrlParamsByFieldId(window.location.search, ofvFieldIdStr, ofv.name, cleanValue); 
+                                   let updatedParamsStr = updateUrlParamsByFieldId(window.location.search, ofvFieldIdStr, ofv.name, cleanValue, config); 
           
                                    // Standard check: Is the current field in this loop pass your primary configuration field?
                                    const isPrimaryField = (ofvFieldIdStr === config.field_id?.toString()); 
