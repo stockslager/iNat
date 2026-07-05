@@ -172,31 +172,38 @@ function buildNavURL( navbar, url, label ) {
     faddelem('span', hLink, { textContent: label });
 }
 
-// probably should be removed.  just use buildNavURL.
 function buildNavLink( navbar, baseUrl, homeState, label ) { 
-    // Create a clean URL object relative to the current page
+    // 1. Initialize a clean URL object to completely stop parameter duplication
     const cleanUrl = new URL(baseUrl, window.location.href);
-    
-    // Clear any existing parameters on the base URL to prevent doubling
     cleanUrl.search = ''; 
 
-    // Loop through the state object
     if (homeState && typeof homeState === 'object') {
         Object.keys(homeState).forEach(key => {
             const value = homeState[key];
             
-            if (Array.isArray(value)) {
-                // For arrays: adds multiple entries (e.g., ?tags=apple&tags=orange)
-                // CHANGE 'key' TO `${key}[]` IF THE BACKEND REQUIRES SQUARE BRACKETS
-                value.forEach(item => cleanUrl.searchParams.append(key, item));
-            } else if (value !== undefined && value !== null) {
-                // For normal values: safely sets a single key/value pair
+            // Skip empty string fields
+            if (value === "") return;
+
+            // 2. Parse iNaturalist Observation Fields from your array
+            if (key === 'activeFilters' && Array.isArray(value)) {
+                value.forEach(filter => {
+                    if (filter.field_name && filter.field_value) {
+                        // Creates iNat structure -> ?field:Feeding=yes
+                        // URLSearchParams automatically converts spaces to %20 safely
+                        cleanUrl.searchParams.set(`field:${filter.field_name}`, filter.field_value);
+                    }
+                });
+            } 
+            // 3. Keep global parameters like page, per_page, studytitle, etc.
+            // Ignore the redundant flat UI fields since they are processed above
+            else if (!Array.isArray(value) && value !== undefined && value !== null 
+                     && !key.startsWith('fieldvalue') && !key.startsWith('fieldname') && key !== 'params') {
                 cleanUrl.searchParams.set(key, value);
             }
         });
     }
 
-    // Send the finalized URL string to the link generator
+    // 4. Send the finalized, safe iNaturalist link to your link generator
     buildNavURL( navbar, cleanUrl.toString(), label ); 
 }
 
