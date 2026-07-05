@@ -381,6 +381,21 @@ function fresults( xobj, config ) {
                        let resetLink = hasFilter ? ' ' + furl2(resetUrl, iconHtml) : '';
 
                        labels.push({ innerHTML: '<span class="filterable-header">'+ truncate(box_array[e].field_name,25) + resetLink + '</span>' });
+                   } else if( box_array[e].field_name.toLowerCase() === getFieldName3(appState).toLowerCase() ) {
+                       let urlState = appState;
+                       urlState = setPage(urlState, '1');
+                       urlState = setFieldName3(urlState, '');
+                       urlState = setFieldValue3(urlState, '');
+                                   
+                       let resetUrl = './fs.html'+buildParameterList(urlState); 
+    
+                       // Is a valid, active lifestage filter currently in the URL string? 
+                       let hasFilter = window.location.search.includes('fieldvalue3=') && 
+                                      !window.location.search.includes('fieldvalue3=&'); 
+
+                       let resetLink = hasFilter ? ' ' + furl2(resetUrl, iconHtml) : '';
+
+                       labels.push({ innerHTML: '<span class="filterable-header">'+ truncate(box_array[e].field_name,25) + resetLink + '</span>' });
                    } else {
                        labels.push({innerText:truncate(box_array[e].field_name,25)});
                    }
@@ -586,11 +601,18 @@ function fresults( xobj, config ) {
                                       let outlink = ''; 
                                       if( config.fieldOutlink ) { outlink = furl2(config.fieldOutlink+rec.ofvs[j].value.toString(), '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">&#128712;</span>'); }
                                       values.push({ innerHTML:'<span class="filterable-header">' + outlink + '</span>' + url });
-                                  } else {
+                                  } else if( getFieldName2(appState).toLowerCase() === box_array[r].field_name.toLowerCase() ) {
                                       let urlState = appState;
                                       urlState = setPage(urlState, '1');
                                       urlState = setFieldName2(urlState, rec.ofvs[j].name);
                                       urlState = setFieldValue2(urlState, replaceDoubleQuotes(rec.ofvs[j].value.toString()));
+                                      let url  = furl2('./fs.html'+buildParameterList(urlState), field1);
+                                      values.push({ innerHTML:url });
+                                  } else {
+                                      let urlState = appState;
+                                      urlState = setPage(urlState, '1');
+                                      urlState = setFieldName3(urlState, rec.ofvs[j].name);
+                                      urlState = setFieldValue3(urlState, replaceDoubleQuotes(rec.ofvs[j].value.toString()));
                                       let url  = furl2('./fs.html'+buildParameterList(urlState), field1);
                                       values.push({ innerHTML:url });
                                   }
@@ -714,6 +736,10 @@ function setupAPIParams( config ) {
    // secondary field names and values are stored in state
    if( getFieldName2(appState) )  { api_params += '&field:' + getFieldName2(appState); } 
    if( getFieldValue2(appState) ) { api_params += '='       + getFieldValue2(appState); }
+
+   // secondary field names and values are stored in state
+   if( getFieldName3(appState) )  { api_params += '&field:' + getFieldName3(appState); } 
+   if( getFieldValue3(appState) ) { api_params += '='       + getFieldValue3(appState); }
   
    if( getObsDate(appState)    ) { api_params += '&on='       + getObsDate(appState); }
 
