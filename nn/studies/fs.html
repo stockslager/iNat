@@ -763,14 +763,23 @@ function setupAPIParams( config ) {
  
    api_params += '?project_id='+config.project;
 
-   // Handle primary field instantly on first entrance using your config values or URL parameters
-   if (config.fieldName) api_params += '&field:' + config.fieldName + 
-         (new URLSearchParams(window.location.search).get('fieldvalue') ? '=' + 
-          encodeURIComponent(new URLSearchParams(window.location.search).get('fieldvalue')) : config.fieldValue ? '=' + 
-          encodeURIComponent(config.fieldValue) : '');
+   // handle primary field instantly using config values or URL parameters
+   if (config.fieldName) api_params += '&field:' + config.fieldName + (new URLSearchParams(window.location.search).get('fieldvalue') ? '=' + encodeURIComponent(new URLSearchParams(window.location.search).get('fieldvalue')) : config.fieldValue ? '=' + encodeURIComponent(config.fieldValue) : '');
 
-   // Loop through and append all secondary fields automatically 
-   appState.activeFilters?.filter(f => f.field_id !== config.field_id?.toString() && f.field_name && f.field_value).forEach(f => api_params += `&field:${f.field_name}=${encodeURIComponent(f.field_value)}`);
+   // loop through and append all secondary fields directly from the lowercase URL arrays
+   const urlParams = new URLSearchParams(window.location.search);
+   const urlNames  = urlParams.getAll('fieldname');   
+   const urlValues = urlParams.getAll('fieldvalue'); 
+
+   urlNames.forEach((name, index) => {
+     // Check against config.fieldName string text instead of a missing ID
+     const isPrimary = config.fieldName && (name.toLowerCase() === config.fieldName.toLowerCase());
+  
+     // Only append true secondary fields that have both a name and an active value
+     if( !isPrimary && name && urlValues[index] ) {
+       api_params += '&field:' + name + '=' + encodeURIComponent(urlValues[index]);
+     }
+   });
   
    if( getObsDate(appState)    ) { api_params += '&on='       + getObsDate(appState); }
 
