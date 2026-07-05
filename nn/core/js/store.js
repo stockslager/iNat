@@ -192,12 +192,27 @@ function buildParameterList(state) {
     // Check if the property exists and isn't empty/null/undefined
     if (state.hasOwnProperty(key) && state[key] !== null && state[key] !== undefined && state[key] !== '') {
       
-      // Skip the internal array tracker entirely so it never appends to the URL
+      // Skip the internal array tracker key itself so it never appends as a raw object string
       if (key === 'activeFilters') {
         continue;
       }
       
       params.append(key, state[key]);
+    }
+  }
+
+  // --- Dynamic Array Appending Block ---
+  // Safely look inside the array tracker and build out each sequential parameter chunk
+  if (state.activeFilters && state.activeFilters.length > 0) {
+    for (let i = 0; i < state.activeFilters.length; i++) {
+      const filter = state.activeFilters[i];
+      
+      // Only append to the parameter lists if an active filter selection value is present
+      if (filter.field_value) {
+        params.append('fieldid', filter.field_id);
+        params.append('fieldname', filter.field_name);
+        params.append('fieldvalue', filter.field_value);
+      }
     }
   }
 
@@ -207,7 +222,6 @@ function buildParameterList(state) {
   // Return with a leading '?' if there are parameters, otherwise an empty string
   return queryString ? ('?' + queryString) : '';
 }
-
 
 /**
  * Creates a new state instance, overlaying parameters found in a URL query string.
