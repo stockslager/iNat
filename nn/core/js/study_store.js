@@ -189,36 +189,47 @@ const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, va
  * @param {object} state The current application state object.
  * @returns {string} A formatted URL parameter string (e.g., "?key1=val1&key2=val2").
  */
-function buildParameterList(state) { 
-    const params = new URLSearchParams(); 
+function buildParameterList(state) {
+    const params = new URLSearchParams();
     
-    // Iterate over every key in the state object 
-    for (const key in state) { 
-        if (state.hasOwnProperty(key) && state[key] !== null && state[key] !== undefined && state[key] !== '') { 
+    console.log("=== STEP 1: INITIAL STATE ===");
+    console.log("Is activeFilters an array?", Array.isArray(state.activeFilters));
+    console.log("Raw activeFilters content:", JSON.stringify(state.activeFilters));
+
+    // Iterate over every key in the state object
+    for (const key in state) {
+        if (state.hasOwnProperty(key) && state[key] !== null && state[key] !== undefined && state[key] !== '') {
+            if (key === 'activeFilters' || key === 'field_id' || key === 'field_name' || key === 'field_value') {
+                continue;
+            }
+            params.append(key, state[key]);
+        }
+    }
+
+    console.log("=== STEP 2: LOOP 1 COMPLETED ===");
+    console.log("URL state before adding filters:", params.toString());
+
+    // --- Dynamic Array Appending Block ---
+    if (state.activeFilters && state.activeFilters.length > 0) {
+        for (let i = 0; i < state.activeFilters.length; i++) {
+            const filter = state.activeFilters[i];
             
-            // CLEAN: Since both pages use study_store, you only need to skip the array tracking lane!
-            if (key === 'activeFilters') { 
-                continue; 
-            } 
-            params.append(key, state[key]); 
-        } 
-    } 
-    
-    // --- Dynamic Array Appending Block --- // 
-    // This block is now the single source of truth for both your main page and the grid page
-    if (state.activeFilters && state.activeFilters.length > 0) { 
-        for (let i = 0; i < state.activeFilters.length; i++) { 
-            const filter = state.activeFilters[i]; 
-            if (filter.field_value) { 
-                params.append('fieldid', filter.field_id); 
-                params.append('fieldname', filter.field_name); 
-                params.append('fieldvalue', filter.field_value); 
-            } 
-        } 
-    } 
-    
-    const queryString = params.toString(); 
-    return queryString ? ('?' + queryString) : ''; 
+            console.log(`=== STEP 3: PROCESSING FILTER INDEX ${i} ===`);
+            console.log(`Filter object values -> id: "${filter.field_id}", name: "${filter.field_name}", value: "${filter.field_value}"`);
+
+            if (filter.field_value) {
+                params.append('fieldid', filter.field_id);
+                params.append('fieldname', filter.field_name);
+                params.append('fieldvalue', filter.field_value);
+                
+                console.log(`URL state after adding index ${i}:`, params.toString());
+            }
+        }
+    }
+
+    const queryString = params.toString();
+    console.log("=== STEP 4: FINAL OUTPUT ===\n", queryString);
+    return queryString ? ('?' + queryString) : '';
 }
 
 /*function buildParameterList(state) {
