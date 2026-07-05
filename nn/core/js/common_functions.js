@@ -173,38 +173,8 @@ function buildNavURL( navbar, url, label ) {
 }
 
 function buildNavLink( navbar, baseUrl, homeState, label ) { 
-    // 1. Initialize a clean URL object to completely stop parameter duplication
-    const cleanUrl = new URL(baseUrl, window.location.href);
-    cleanUrl.search = ''; 
-
-    if (homeState && typeof homeState === 'object') {
-        Object.keys(homeState).forEach(key => {
-            const value = homeState[key];
-            
-            // Skip empty string fields
-            if (value === "") return;
-
-            // 2. Parse iNaturalist Observation Fields from your array
-            if (key === 'activeFilters' && Array.isArray(value)) {
-                value.forEach(filter => {
-                    if (filter.field_name && filter.field_value) {
-                        // Creates iNat structure -> ?field:Feeding=yes
-                        // URLSearchParams automatically converts spaces to %20 safely
-                        cleanUrl.searchParams.set(`field:${filter.field_name}`, filter.field_value);
-                    }
-                });
-            } 
-            // 3. Keep global parameters like page, per_page, studytitle, etc.
-            // Ignore the redundant flat UI fields since they are processed above
-            else if (!Array.isArray(value) && value !== undefined && value !== null 
-                     && !key.startsWith('fieldvalue') && !key.startsWith('fieldname') && key !== 'params') {
-                cleanUrl.searchParams.set(key, value);
-            }
-        });
-    }
-
-    // 4. Send the finalized, safe iNaturalist link to your link generator
-    buildNavURL( navbar, cleanUrl.toString(), label ); 
+    let homeUrl = baseUrl + buildParameterList(homeState); 
+    buildNavURL( navbar, homeUrl, label ); 
 }
 
 // wrapper for about... needs to be removed.
