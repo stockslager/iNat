@@ -128,13 +128,10 @@ const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, va
   const names = params.getAll('fieldname'); 
   const values = params.getAll('fieldvalue'); 
   
-  // 1. Map current items into a clean data array, matching primary fields by name
+  // 1. Map current items into a clean data array
   const currentFields = ids.map((id, index) => {
     const currentName = names[index] || '';
-    
-    // Identify primary field by name string text match
     const isPrimary = config.fieldName && (currentName.toLowerCase() === config.fieldName.toLowerCase());
-    
     return { 
       id: id.toString(), 
       name: currentName || (isPrimary ? config.fieldName : ''), 
@@ -152,13 +149,26 @@ const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, va
   } else { 
     currentFields.push({ id: targetIdStr, name: fieldName || '', value: value }); 
   } 
+
+  // 3. FIX: If the primary config field name isn't present in your current parameter tracks 
+  // (which happens on initial entry), force-inject it at the very front of your array!
+  const hasPrimary = config.fieldName && currentFields.some(f => f.name.toLowerCase() === config.fieldName.toLowerCase());
+  if (!hasPrimary && config.fieldName) {
+    // Attempt to discover the primary ID string out of the incoming config block
+    const primaryIdStr = config.field_id || '7623'; 
+    currentFields.unshift({
+      id: primaryIdStr.toString(),
+      name: config.fieldName,
+      value: params.get('fieldvalue') || config.fieldValue || '' // Grab url parameter first, fall back to default
+    });
+  }
   
-  // 3. Clear old parameter keys to prevent duplicates or pollution
+  // 4. Clear all parameter keys safely to prevent duplicates or leaks
   params.delete('fieldid'); 
   params.delete('fieldname'); 
   params.delete('fieldvalue'); 
   
-  // 4. Re-append the clean array sequentially using lowercase parameters
+  // 5. Append everything back sequentially using lowercase parameter tracks
   currentFields.forEach(field => { 
     params.append('fieldid', field.id); 
     params.append('fieldname', field.name); 
