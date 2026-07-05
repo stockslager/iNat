@@ -880,31 +880,6 @@ async function gatherResources() {
       // Await the result of getObservations() and store the actual data
       const config  = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
       console.log('full config title: ' + config.getFullTitle());
-    if (config && config.fieldName && appState.activeFilters) {
-      for (let s = 2; s <= 5; s++) {
-        delete appState['fieldname' + s];
-        delete appState['fieldvalue' + s];
-      }
-      appState.fieldname = config.fieldName;
-      appState.fieldvalue = config.fieldValue || '';
-
-      let secondaryCounter = 2;
-      for (let idx = 0; idx < appState.activeFilters.length; idx++) {
-        const item = appState.activeFilters[idx];
-        const itemFieldName = item.field_name || '';
-        const isPrimaryField = (itemFieldName.toLowerCase() === config.fieldName.toLowerCase());
-        
-        if (isPrimaryField) {
-          appState.fieldname = itemFieldName;
-          appState.fieldvalue = item.field_value || '';
-        } else {
-          const suffixStr = secondaryCounter.toString();
-          appState['fieldname' + suffixStr] = itemFieldName;
-          appState['fieldvalue' + suffixStr] = item.field_value || '';
-          secondaryCounter++;
-        }
-      }
-    }
       const api_params    = setupAPIParams( config );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
