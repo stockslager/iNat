@@ -610,13 +610,14 @@ function fresults( xobj, config ) {
                        } 
     
                        // --- SECTION C: No-Merge Mode --- 
+// --- SECTION C: No-Merge Mode --- 
 if( config.merge !== 'yes' && ofvFieldIdStr === targetBoxFieldIdStr ) { 
   matchedCopy = 'yes'; 
   if( ofv.value ) { 
     field1 = ofvValueLower; 
     displayName = ofvValueLower; 
     if( ofv.taxon ) { 
-      field1 = `<span style="font-size:larger">${commonName.toLowerCase()}</span><span style="font-style:italic"><br>(${taxonName})</span>`; 
+      field1 = '<span style="font-size:larger">' + commonName.toLowerCase() + '</span><span style="font-style:italic"><br>(' + taxonName + ')</span>'; 
     } 
     // Wild ancestral colony 
     if( ofvFieldIdStr === '17383' ) { 
@@ -624,18 +625,23 @@ if( config.merge !== 'yes' && ofvFieldIdStr === targetBoxFieldIdStr ) {
     } else { 
       const cleanValue = replaceDoubleQuotes(ofvValue.toString()); 
       
-      // 1. Read existing parameters directly from the browser window object
+      // 1. Read strict lowercase query parameters from the window string
       const cellUrlParams = new URLSearchParams(window.location.search);
       const ids = cellUrlParams.getAll('fieldid');
       const names = cellUrlParams.getAll('fieldname');
       const valuesArr = cellUrlParams.getAll('fieldvalue');
       
-      // 2. Map existing tracks into an array of isolated data objects
-      let temporaryFields = ids.map((id, index) => ({
-        id: id.toString(),
-        name: names[index] || '',
-        value: valuesArr[index] || ''
-      }));
+      // 2. FIX: Reconstruct existing tracks safely without duplicating loops
+      let temporaryFields = [];
+      if (ids.length > 0) {
+        for (let idx = 0; idx < ids.length; idx++) {
+          temporaryFields.push({
+            id: ids[idx].toString(),
+            name: names[idx] || '',
+            value: valuesArr[idx] || ''
+          });
+        }
+      }
       
       // 3. Mutate or append the current loop cell configuration value
       const targetIndex = temporaryFields.findIndex(f => f.id === ofvFieldIdStr);
@@ -646,7 +652,7 @@ if( config.merge !== 'yes' && ofvFieldIdStr === targetBoxFieldIdStr ) {
         temporaryFields.push({ id: ofvFieldIdStr, name: ofv.name || '', value: cleanValue });
       }
       
-      // 4. BULLETPROOF STEP: Strict inline de-duplication pass right before string construction
+      // 4. Strict inline de-duplication pass to guarantee uniqueness per field_id
       const seenTracker = {};
       const uniqueFieldsList = [];
       for (let i = 0; i < temporaryFields.length; i++) {
@@ -663,7 +669,7 @@ if( config.merge !== 'yes' && ofvFieldIdStr === targetBoxFieldIdStr ) {
         }
       }
       
-      // 5. Hard purge ALL query variations from this local url build instance 
+      // 5. Hard purge ALL query variations before compilation
       cellUrlParams.delete('fieldid');
       cellUrlParams.delete('fieldname');
       cellUrlParams.delete('fieldvalue');
@@ -671,23 +677,21 @@ if( config.merge !== 'yes' && ofvFieldIdStr === targetBoxFieldIdStr ) {
       cellUrlParams.delete('fieldName');
       cellUrlParams.delete('fieldValue');
       
-      // 6. Append only uniquely separated parameter arrays back sequentially
+      // 6. Append only the uniquely cleaned rows back sequentially
       uniqueFieldsList.forEach(field => {
         cellUrlParams.append('fieldid', field.id);
         cellUrlParams.append('fieldname', field.name);
         cellUrlParams.append('fieldvalue', field.value);
       });
       
-      // Evaluate primary condition targets using name checks
       const isPrimaryField = config.fieldName && (ofv.name?.toLowerCase() === config.fieldName.toLowerCase()); 
       
       cellUrlParams.set('page', '1'); 
       if( isPrimaryField ) { 
         cellUrlParams.set('plantname', commonName || taxonName); 
       } 
-
+      
       let url = '<a href="./fs.html?' + cellUrlParams.toString() + '">' + field1 + '</a>';
-      //let url = furl2('./fs.html?' + cellUrlParams.toString(), field1); 
       
       if( isPrimaryField && config.fieldOutlink ) { 
         let outlink = furl2( 
