@@ -187,11 +187,10 @@ function buildParameterList(state) {
 
   // Iterate over every key in the state object
   for (const key in state) {
-    // Check if the property exists and isn't empty/null/undefined
     if (state.hasOwnProperty(key) && state[key] !== null && state[key] !== undefined && state[key] !== '') {
       
-      // Skip the internal array tracker key itself so it never appends as a raw object string
-      if (key === 'activeFilters') {
+      // FIX: Skip the flat observation keys entirely so they don't double-stack into the string!
+      if (key === 'activeFilters' || key === 'fieldid' || key === 'fieldname' || key === 'fieldvalue') {
         continue;
       }
       
@@ -200,12 +199,11 @@ function buildParameterList(state) {
   }
 
   // --- Dynamic Array Appending Block ---
-  // Safely look inside the array tracker and build out each sequential parameter chunk
+  // Safely serialize your filters sequentially from the unified array tracking lane
   if (state.activeFilters && state.activeFilters.length > 0) {
     for (let i = 0; i < state.activeFilters.length; i++) {
       const filter = state.activeFilters[i];
       
-      // Only append to the parameter lists if an active filter selection value is present
       if (filter.field_value) {
         params.append('fieldid', filter.field_id);
         params.append('fieldname', filter.field_name);
@@ -214,10 +212,7 @@ function buildParameterList(state) {
     }
   }
 
-  // URLSearchParams automatically handles encoding and formatting
   const queryString = params.toString();
-
-  // Return with a leading '?' if there are parameters, otherwise an empty string
   return queryString ? ('?' + queryString) : '';
 }
 
