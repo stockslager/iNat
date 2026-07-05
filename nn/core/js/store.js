@@ -1,6 +1,6 @@
-// store.js    
-const COMPONENT_GARDEN    = 'plants';  
-const COMPONENT_COLONY    = 'colonies';
+// store.js
+const COMPONENT_GARDEN    = 'plants';
+const COMPONENT_COLONY    = 'colonies'; 
 const COMPONENT_OBSERVERS = 'observers';
 const COMPONENT_HIKER     = 'hiker';
 const COMPONENT_YARD      = 'yard';
@@ -8,6 +8,7 @@ const COMPONENT_ART       = 'art';
 const COMPONENT_ANIMALS   = 'animals';
 const COMPONENT_STUDIES   = 'studies';
 const COMPONENT_VISITS    = 'visits';
+const COMPONENT_SEARCH    = 'search';
 
 // --- Constants for Attribute Keys ---
 const ATTRIBUTE_PROJECT         = 'project';
@@ -33,12 +34,12 @@ const ATTRIBUTE_TAXONDD         = 'taxondd';
 const ATTRIBUTE_OBSID           = 'obsid';
 const ATTRIBUTE_OBSDATE         = 'obsdate';
 const ATTRIBUTE_ACTIVITYFILTER  = 'activityfilter';
-// used for field_study.html observation field array
-const ATTRIBUTE_FIELDID      = 'fieldid';       
-const ATTRIBUTE_FIELDNAME    = 'fieldname';   
-const ATTRIBUTE_FIELDVALUE   = 'fieldvalue'; 
+const ATTRIBUTE_FIELDNAME       = 'fieldname';
+const ATTRIBUTE_FIELDVALUE      = 'fieldvalue';
 const ATTRIBUTE_LIFESTAGE       = 'lifestage';
 const ATTRIBUTE_EVIDENCE        = 'evidence';
+const ATTRIBUTE_Q               = 'q';
+const ATTRIBUTE_RANK            = 'rank';
 const ATTRIBUTE_PAGE            = 'page';
 const ATTRIBUTE_PER_PAGE        = 'per_page';
 
@@ -67,10 +68,12 @@ let appState = {
   [ATTRIBUTE_OBSID]:     '',
   [ATTRIBUTE_OBSDATE]:   '',
   [ATTRIBUTE_ACTIVITYFILTER]: '',
-  // holds { id, name, value } for dynamic list of observation fields used in field_study.html
-  activeFilters: [], 
+  [ATTRIBUTE_FIELDNAME]: '',
+  [ATTRIBUTE_FIELDVALUE]: '',
   [ATTRIBUTE_LIFESTAGE]: '',
   [ATTRIBUTE_EVIDENCE]: '',
+  [ATTRIBUTE_Q]: '',
+  [ATTRIBUTE_RANK]: '',
   [ATTRIBUTE_PAGE]:      '',
   [ATTRIBUTE_PER_PAGE]:  ''
 
@@ -108,10 +111,12 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_OBSID]:     '',
     [ATTRIBUTE_OBSDATE]:   '',
     [ATTRIBUTE_ACTIVITYFILTER]:  '',
-    // holds { id, name, value } for dynamic list of observation fields used in field_study.html
-     activeFilters: [], 
+    [ATTRIBUTE_FIELDNAME]: '',
+    [ATTRIBUTE_FIELDVALUE]: '',
     [ATTRIBUTE_LIFESTAGE]: '',
     [ATTRIBUTE_EVIDENCE]: '',
+    [ATTRIBUTE_Q]: '',
+    [ATTRIBUTE_RANK]: '',
     [ATTRIBUTE_PAGE]:      '',
     [ATTRIBUTE_PER_PAGE]:  ''
   };
@@ -119,62 +124,6 @@ function createNewStateInstance(initialValues = {}) {
   // Combine defaults with any provided initial values using the spread syntax
   return { ...baseState, ...initialValues };
 }
-
-// builds an array of observation field parameters for use in field_study.html
-const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, value, config = {}) => { 
-  const params = new URLSearchParams(currentUrlParams); 
-  
-  const ids = params.getAll('fieldid'); 
-  const names = params.getAll('fieldname'); 
-  const values = params.getAll('fieldvalue'); 
-  
-  // 1. Reconstruct current parameter tracks cleanly into objects
-  const currentFields = ids.map((id, index) => {
-    const currentName = names[index] || '';
-    return { 
-      id: id.toString(), 
-      name: currentName, 
-      value: values[index] || '' 
-    };
-  }); 
-  
-  const targetIdStr = targetFieldId.toString();
-  const targetIndex = currentFields.findIndex(f => f.id === targetIdStr); 
-  
-  // 2. Mutate or append the current loop target cell filter configuration value
-  if (targetIndex !== -1) { 
-    currentFields[targetIndex].value = value; 
-    if (fieldName) currentFields[targetIndex].name = fieldName; 
-  } else { 
-    currentFields.push({ id: targetIdStr, name: fieldName || '', value: value }); 
-  } 
-  
-  // 3. FIX: Strict Positional Sort Guard!
-  // Force the primary configuration lane to always sit at index 0 of your array tracking collection
-  if (config.fieldName) {
-    currentFields.sort((a, b) => {
-      const isAPrimary = (a.name.toLowerCase() === config.fieldName.toLowerCase());
-      const isBPrimary = (b.name.toLowerCase() === config.fieldName.toLowerCase());
-      if (isAPrimary && !isBPrimary) return -1; // Move primary field to the absolute front
-      if (!isAPrimary && isBPrimary) return 1;  // Move secondary fields to the back
-      return 0;
-    });
-  }
-  
-  // 4. Hard wipe all existing parameter tracks to prevent leaks or duplicates
-  params.delete('fieldid'); 
-  params.delete('fieldname'); 
-  params.delete('fieldvalue'); 
-  
-  // 5. Re-append the sorted entries sequentially using clean lowercase parameters
-  currentFields.forEach(field => { 
-    params.append('fieldid', field.id); 
-    params.append('fieldname', field.name); 
-    params.append('fieldvalue', field.value); 
-  }); 
-  
-  return params.toString(); 
-};
 
 /*
  * Builds a URL query parameter string from the current state.
@@ -189,28 +138,7 @@ function buildParameterList(state) {
   for (const key in state) {
     // Check if the property exists and isn't empty/null/undefined
     if (state.hasOwnProperty(key) && state[key] !== null && state[key] !== undefined && state[key] !== '') {
-      
-      // Skip the internal array tracker key itself so it never appends as a raw object string
-      if (key === 'activeFilters') {
-        continue;
-      }
-      
       params.append(key, state[key]);
-    }
-  }
-
-  // --- Dynamic Array Appending Block ---
-  // Safely look inside the array tracker and build out each sequential parameter chunk
-  if (state.activeFilters && state.activeFilters.length > 0) {
-    for (let i = 0; i < state.activeFilters.length; i++) {
-      const filter = state.activeFilters[i];
-      
-      // Only append to the parameter lists if an active filter selection value is present
-      if (filter.field_value) {
-        params.append('fieldid', filter.field_id);
-        params.append('fieldname', filter.field_name);
-        params.append('fieldvalue', filter.field_value);
-      }
     }
   }
 
@@ -218,7 +146,7 @@ function buildParameterList(state) {
   const queryString = params.toString();
 
   // Return with a leading '?' if there are parameters, otherwise an empty string
-  return queryString ? ('?' + queryString) : '';
+  return queryString ? `?${queryString}` : '';
 }
 
 /**
@@ -226,57 +154,21 @@ function buildParameterList(state) {
  * @param {string} queryString The raw query string (e.g., "?user=Bob&place=Office").
  * @returns {object} A new application state object populated from URL parameters.
  */
-function buildStateFromParams(queryString) { 
-  const params = new URLSearchParams(queryString); 
+function buildStateFromParams(queryString) {
+  // Use URLSearchParams to easily parse the string
+  const params = new URLSearchParams(queryString);
   
-  // 1. Map your standard individual layout tracking parameters
-  const paramsObject = {};
-  params.forEach((value, key) => {
-    if (key !== 'fieldid' && key !== 'fieldname' && key !== 'fieldvalue') {
-      paramsObject[key] = value;
-    }
-  });
-  
-  // 2. Hydrate flat state defaults using your original factory instance
-  const newState = createNewStateInstance(paramsObject); 
-  
-  // 3. Gather multi-key parameters cleanly out of the address parameters
-  const ids = params.getAll('fieldid');
-  const names = params.getAll('fieldname');
-  const values = params.getAll('fieldvalue');
-  
-  // 4. Hydrate your modern array tracker space
-  newState.activeFilters = [];
-  for (let index = 0; index < ids.length; index++) {
-    newState.activeFilters.push(new boxRow(ids[index], names[index] || '', values[index] || ''));
-  }
-  
-  // 5. FIX: Bound boundary check that requires NO config scopes or name matching!
-  // It reads the direct sequence of IDs currently stored inside the live query string
-  let secondaryCounter = 2;
-  
-  for (let idx = 0; idx < newState.activeFilters.length; idx++) {
-    const item = newState.activeFilters[idx];
-    const itemFieldIdStr = item.field_id ? item.field_id.toString() : '';
-    
-    // Check the live URL arrays: Is this item ID matching the FIRST fieldid parameter in the URL block?
-    // If it's the first one, it maps to the primary variables slot.
-    const isPrimaryField = (ids.length > 0 && itemFieldIdStr === ids[0].toString());
-    
-    if (isPrimaryField) {
-      // Safely assign to your base primary properties
-      newState.fieldname = item.field_name || '';
-      newState.fieldvalue = item.field_value || '';
-    } else {
-      // Safely assign to your numbered secondary properties (fieldname2, fieldvalue2, etc.)
-      const suffixStr = secondaryCounter.toString();
-      newState['fieldname' + suffixStr] = item.field_name || '';
-      newState['fieldvalue' + suffixStr] = item.field_value || '';
-      secondaryCounter++;
-    }
-  }
-  
-  return newState; 
+  // Use Object.fromEntries to convert the URLSearchParams iterator into a simple object
+  // Object.fromEntries is a modern JS feature
+  const paramsObject = Object.fromEntries(params.entries());
+
+  // Use the existing factory function to create a clean state with defaults,
+  // then apply the parameters found in the URL over the top.
+  // Note: URL parameters are always strings. If you need numbers or booleans, 
+  // you may need additional logic to parse them (e.g., parseInt(value)).
+  const newState = createNewStateInstance(paramsObject);
+
+  return newState;
 }
 
 /*
@@ -335,21 +227,14 @@ function getTaxonDD(state)         { return (getAttribute(state, ATTRIBUTE_TAXON
 function getObsId(state)           { return (getAttribute(state, ATTRIBUTE_OBSID)); }
 function getObsDate(state)         { return (getAttribute(state, ATTRIBUTE_OBSDATE)); }
 function getActivityFilter(state)  { return (getAttribute(state, ATTRIBUTE_ACTIVITYFILTER)); }
+function getFieldName(state)       { return (getAttribute(state, ATTRIBUTE_FIELDNAME)); }
+function getFieldValue(state)      { return (getAttribute(state, ATTRIBUTE_FIELDVALUE)); }
 function getLifeStage(state)       { return (getAttribute(state, ATTRIBUTE_LIFESTAGE)); }
 function getEvidence(state)        { return (getAttribute(state, ATTRIBUTE_EVIDENCE)); }
+function getQ(state)               { return (getAttribute(state, ATTRIBUTE_Q)); }
+function getRank(state)            { return (getAttribute(state, ATTRIBUTE_RANK)); }
 function getPage(state)            { return (getAttribute(state, ATTRIBUTE_PAGE)); }
 function getPerPage(state)         { return (getAttribute(state, ATTRIBUTE_PER_PAGE)); }
-
-//gets a specific filter box row object by its iNat Field ID string
-function getFilterByFieldId(state, fieldId) {
-  if (!state.activeFilters) return null;
-  return state.activeFilters.find(f => f.field_id === fieldId.toString()) || null;
-}
-
-//gets all active filter box rows currently stored in the state
-function getActiveFilters(state) {
-  return state.activeFilters || [];
-}
 
 /*
  * Helper Setters (Optional but Recommended) ---
@@ -379,35 +264,14 @@ function setTaxonDD(state, value)         { return (setAttribute(state, ATTRIBUT
 function setObsId(state, value)           { return (setAttribute(state, ATTRIBUTE_OBSID, value)); }
 function setObsDate(state, value)         { return (setAttribute(state, ATTRIBUTE_OBSDATE, value)); }
 function setActivityFilter(state, value)  { return (setAttribute(state, ATTRIBUTE_ACTIVITYFILTER, value)); }
+function setFieldName(state, value)       { return (setAttribute(state, ATTRIBUTE_FIELDNAME, value)); }
+function setFieldValue(state, value)      { return (setAttribute(state, ATTRIBUTE_FIELDVALUE, value)); }
 function setLifeStage(state, value)       { return (setAttribute(state, ATTRIBUTE_LIFESTAGE, value)); }
 function setEvidence(state, value)        { return (setAttribute(state, ATTRIBUTE_EVIDENCE, value)); }
+function setQ(state, value)               { return (setAttribute(state, ATTRIBUTE_Q, value)); }
+function setRank(state, value)            { return (setAttribute(state, ATTRIBUTE_RANK, value)); }
 function setPage(state, value)            { return (setAttribute(state, ATTRIBUTE_PAGE, value)); }
 function setPerPage(state, value)         { return (setAttribute(state, ATTRIBUTE_PER_PAGE, value)); }
-
-// for observation fields
-// finds the filter by ID inside activeFilters and updates its properties cleanly.
-function setFilterByFieldId(state, fieldId, fieldName, fieldValue) {
-  // Shallow copy the array to maintain state structure safety
-  let filters = [...(state.activeFilters || [])];
-  
-  // Find where this filter sits in your array
-  const index = filters.findIndex(row => row.field_id === fieldId.toString());
-  
-  if (index !== -1) {
-    // If we found it, update its values
-    if (fieldValue !== undefined) filters[index].field_value = fieldValue;
-    if (fieldName) filters[index].field_name = fieldName;
-  } else {
-    // If it's a brand new dynamic ID, create a new boxRow instance and push it
-    filters.push(new boxRow(fieldId, fieldName || '', fieldValue || ''));
-  }
-  
-  // Return the updated state object with our modified array
-  return {
-    ...state,
-    activeFilters: filters
-  };
-}
 
 /*
  * Helper Getters 
@@ -568,7 +432,6 @@ function getObsDateParam(state, param_nm)   {
   }
 }
 
-
 function getActivityFilterParam(state, param_nm)   { 
   let activity_filter = getActivityFilter(state);
   if( activity_filter ) { 
@@ -591,6 +454,24 @@ function getFieldVaueParam(state, param_nm)   {
   let field_value = getFieldValue(state);
   if( field_value ) { 
       return (param_nm + field_value);
+  } else {
+      return '';
+  }
+}
+
+function getRankParam(state, param_nm)   { 
+  let rank = getRank(state);
+  if( rank ) { 
+      return (param_nm + rank);
+  } else {
+      return '';
+  }
+}
+
+function getQParam(state, param_nm)   { 
+  let q = getQ(state);
+  if( q ) { 
+      return (param_nm + q);
   } else {
       return '';
   }
@@ -1002,27 +883,56 @@ function clearForDashParams(state) {
   urlState = setPage(urlState, '');
   urlState = setPerPage(urlState, '');
   urlState = setActivityFilter(urlState, '');
+  urlState = setFieldName(urlState, '');
+  urlState = setFieldValue(urlState, '');
   urlState = setLifeStage(urlState, '');
   urlState = setEvidence(urlState, '');
+  urlState = setQ(urlState, '');
+  urlState = setRank(urlState, '');
   urlState = setStudyTitle(urlState, '');
   urlState = setActivityFilter(urlState, '');
-  
-  // clear all dynamic observation fields used on field_study ---
-  urlState.activeFilters = []; 
-  
-  // scan and delete all variations of dynamic field keys from the object.
-  // this removes any fieldid, fieldname, or fieldvalue parameters completely.
-  for (const key in urlState) {
-    if (urlState.hasOwnProperty(key)) {
-      const lowerKey = key.toLowerCase();
-      if (lowerKey.indexOf('fieldid') !== -1 || lowerKey.indexOf('fieldname') !== -1 || lowerKey.indexOf('fieldvalue') !== -1) {
-        delete urlState[key];
-      }
-    }
-  }  
 
   return urlState;
 }
+
+/*
+ * Used to clean up the state when returning to taxon search. 
+ * @param {object} state The current application state object.
+ * @returns {object} a copy with new values stored on a new state.
+ */
+function clearForSearchParams(state) {
+  let urlState = state;  
+
+  urlState = setPlace(urlState, '');
+  urlState = setProject(urlState, '');
+  urlState = setStudyTitle(urlState, '');
+  urlState = setUser(urlState, '');
+  urlState = setGarden(urlState, '');
+  urlState = setComponent(urlState, '');
+  urlState = setPlantId(urlState, '');
+  urlState = setPlantName(urlState, '');
+  urlState = setTaxonId(urlState, ''); 
+  urlState = setTaxonName(urlState, '');
+  urlState = setLSTaxonId( urlState, '');
+  urlState = setPlantMenuId(urlState, '');
+  urlState = setPlantMenuName(urlState, '');
+  urlState = setPlaceMenuId(urlState, '');
+  urlState = setPlaceMenuName(urlState, '');
+  urlState = setGardenListValue(urlState, '');
+  urlState = setTaxonDD(urlState, '');
+  urlState = setObsId(urlState, '');
+  urlState = setObsDate(urlState, '');
+  urlState = setPage(urlState, '');
+  urlState = setPerPage(urlState, '');
+  urlState = setActivityFilter(urlState, '');
+  urlState = setFieldName(urlState, '');
+  urlState = setFieldValue(urlState, '');
+  urlState = setStudyTitle(urlState, '');
+  urlState = setActivityFilter(urlState, '');
+
+  return urlState;
+}
+
 
 /*
  * Used from the pages in the app that display the images grid (GardenGrid.html, ThruHikerGrid.html, etc.)
