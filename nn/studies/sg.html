@@ -148,6 +148,7 @@ function setupMapAPIParams( config ) {
             api_params += '=' + encodeURIComponent(config.fieldValue);
         }
     }
+     console.log('api_params ' + api_params);
 
     // Sequential Loop: Process whatever filters are explicitly remaining in the URL bar
     initialNames.forEach((name, index) => {
@@ -156,7 +157,8 @@ function setupMapAPIParams( config ) {
           api_params += '&field:' + name + '=' + encodeURIComponent(value);
       }
     });
-
+     console.log('api_params ' + api_params);
+     
     api_params = setupCommonAPIParams( config, api_params );
 
     return api_params;
