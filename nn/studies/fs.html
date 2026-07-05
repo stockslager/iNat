@@ -808,8 +808,10 @@ function setupAPIParams( config ) {
    const initialNames = initialParams.getAll('fieldname');
    const initialValues = initialParams.getAll('fieldvalue');
 
+   const lowerCaseNames = initialNames.map(name => name.toLowerCase());
+
    // Core Rule: If the URL has no active filters (First Entrance), use your config defaults
-   if( config.fieldName && !initialNames.includes(config.fieldName) ) {
+   if( config.fieldName && !lowerCaseNames.includes(config.fieldName.toLowerCase() ) ) {
        api_params += '&field:' + config.fieldName;
        if( config.fieldValue ) {
            api_params += '=' + encodeURIComponent(config.fieldValue);
