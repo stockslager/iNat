@@ -763,21 +763,27 @@ function setupAPIParams( config ) {
  
    api_params += '?project_id='+config.project;
 
-   // handle primary field instantly using config values or URL parameters
-   if (config.fieldName) api_params += '&field:' + config.fieldName + (new URLSearchParams(window.location.search).get('fieldvalue') ? '=' + encodeURIComponent(new URLSearchParams(window.location.search).get('fieldvalue')) : config.fieldValue ? '=' + encodeURIComponent(config.fieldValue) : '');
+   // Handle primary field fallback cleanly on load if it has no active url parameter value yet
+   if( config.fieldName ) {
+       api_params += '&field:' + config.fieldName;
+       const activePrimaryVal = new URLSearchParams(window.location.search).get('fieldvalue') || config.fieldValue;
+       if( activePrimaryVal ) {
+           api_params += '=' + encodeURIComponent(activePrimaryVal);
+       }
+   }
 
-   // loop through and append all secondary fields directly from the lowercase URL arrays
+   // Loop through and append all secondary fields from your lowercase URL array parameters
    const urlParams = new URLSearchParams(window.location.search);
-   const urlNames  = urlParams.getAll('fieldname');   
+   const urlNames = urlParams.getAll('fieldname');    
    const urlValues = urlParams.getAll('fieldvalue'); 
 
    urlNames.forEach((name, index) => {
-     // Check against config.fieldName string text instead of a missing ID
+     // Identify if this parameter matches the primary configuration category text string
      const isPrimary = config.fieldName && (name.toLowerCase() === config.fieldName.toLowerCase());
   
-     // Only append true secondary fields that have both a name and an active value
+     // Appends ONLY true secondary parameter tracks to protect separation boundaries
      if( !isPrimary && name && urlValues[index] ) {
-       api_params += '&field:' + name + '=' + encodeURIComponent(urlValues[index]);
+         api_params += '&field:' + name + '=' + encodeURIComponent(urlValues[index]);
      }
    });
   
