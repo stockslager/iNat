@@ -794,8 +794,7 @@ const initialParams = new URLSearchParams(window.location.search);
 const initialNames = initialParams.getAll('fieldname');
 const initialValues = initialParams.getAll('fieldvalue');
 
-// 1. Core Rule: If the URL has absolutely no multi-key array filters active yet (First Entrance), 
-// fall back directly to your catalog config template defaults.
+// 1. Core Rule: If the URL has no active filters (First Entrance), use your config defaults
 if (initialNames.length === 0 && config.fieldName) {
   api_params += '&field:' + config.fieldName;
   if (config.fieldValue) {
@@ -803,11 +802,9 @@ if (initialNames.length === 0 && config.fieldName) {
   }
 }
 
-// 2. Comprehensive Sequential Loop: Process every single filter item present in the URL bar in order.
-// This handles the primary field and all secondary fields identically using the exact same rule.
+// 2. Sequential Loop: Process whatever filters are explicitly remaining in the URL bar
 initialNames.forEach((name, index) => {
   const value = initialValues[index];
-  
   if (name && value) {
     api_params += '&field:' + name + '=' + encodeURIComponent(value);
   }
