@@ -216,30 +216,52 @@ function buildParameterList(state) {
  * @returns {object} A new application state object populated from URL parameters.
  */
 function buildStateFromParams(queryString) { 
-  // Use URLSearchParams to easily parse the string 
   const params = new URLSearchParams(queryString); 
   
-  // 1. Manually build a clean parameters object for your standard single keys
+  // 1. Map your standard individual tracking parameters
   const paramsObject = {};
   params.forEach((value, key) => {
-    // Skip our repeating array keys so they don't corrupt the flat object fields
     if (key !== 'fieldid' && key !== 'fieldname' && key !== 'fieldvalue') {
       paramsObject[key] = value;
     }
   });
   
-  // 2. Use the existing factory function to create a clean state with defaults
+  // 2. Hydrate flat state defaults using your original factory instance
   const newState = createNewStateInstance(paramsObject); 
   
-  // 3. Extract the repeating multi-key arrays safely out of the URL parameters string
+  // 3. Gather multi-key parameters cleanly out of the address parameters
   const ids = params.getAll('fieldid');
   const names = params.getAll('fieldname');
   const values = params.getAll('fieldvalue');
   
-  // 4. Synchronize them directly into your modern activeFilters tracking array on load
+  // 4. Hydrate your modern array tracker space
   newState.activeFilters = [];
   for (let index = 0; index < ids.length; index++) {
     newState.activeFilters.push(new boxRow(ids[index], names[index] || '', values[index] || ''));
+  }
+  
+  // 5. FIX: Safe, explicit mapping that protects column boundaries!
+  // Instead of using an arbitrary counter loop, match secondary fields safely
+  let secondaryCounter = 2;
+  
+  for (let idx = 0; idx < newState.activeFilters.length; idx++) {
+    const item = newState.activeFilters[idx];
+    const itemFieldName = item.field_name || '';
+    
+    // Check if this specific array item represents your primary field column
+    const isPrimaryField = config.fieldName && (itemFieldName.toLowerCase() === config.fieldName.toLowerCase());
+    
+    if (isPrimaryField) {
+      // Safely assign to your base primary properties
+      newState.fieldname = itemFieldName;
+      newState.fieldvalue = item.field_value || '';
+    } else {
+      // Safely assign to your numbered secondary properties (fieldname2, fieldvalue2, etc.)
+      const suffixStr = secondaryCounter.toString();
+      newState['fieldname' + suffixStr] = itemFieldName;
+      newState['fieldvalue' + suffixStr] = item.field_value || '';
+      secondaryCounter++;
+    }
   }
   
   return newState; 
