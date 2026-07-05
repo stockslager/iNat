@@ -168,6 +168,12 @@ function buildParameterList(state) {
   for (const key in state) {
     // Check if the property exists and isn't empty/null/undefined
     if (state.hasOwnProperty(key) && state[key] !== null && state[key] !== undefined && state[key] !== '') {
+      
+      // Skip the internal array tracker entirely so it never appends to the URL
+      if (key === 'activeFilters') {
+        continue;
+      }
+      
       params.append(key, state[key]);
     }
   }
@@ -176,8 +182,9 @@ function buildParameterList(state) {
   const queryString = params.toString();
 
   // Return with a leading '?' if there are parameters, otherwise an empty string
-  return queryString ? `?${queryString}` : '';
+  return queryString ? ('?' + queryString) : '';
 }
+
 
 /**
  * Creates a new state instance, overlaying parameters found in a URL query string.
