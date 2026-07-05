@@ -1,5 +1,5 @@
 <!DOCTYPE html>              
-<html lang="en">                    
+<html lang="en">                     
         
 <head> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
@@ -789,43 +789,28 @@ function setupAPIParams( config ) {
  
    api_params += '?project_id='+config.project;
 
-// Handle primary field fallback cleanly on load if it has no active url parameter value yet
-if( config.fieldName ) { 
-  api_params += '&field:' + config.fieldName; 
-  
-  const initialParams = new URLSearchParams(window.location.search);
-  const initialNames = initialParams.getAll('fieldname');
-  
-  // FIX: Look inside the parsed array directly so spaces and plus signs do not break the string check
-  let hasPrimaryInUrl = false;
-  for( let k = 0; k < initialNames.length; k++ ) {
-    if( initialNames[k].toLowerCase() === config.fieldName.toLowerCase() ) {
-      hasPrimaryInUrl = true;
-      break;
-    }
+// --- Consolidated iNat Multi-Field API Builder ---
+const initialParams = new URLSearchParams(window.location.search);
+const initialNames = initialParams.getAll('fieldname');
+const initialValues = initialParams.getAll('fieldvalue');
+
+// 1. Core Rule: If the URL has absolutely no multi-key array filters active yet (First Entrance), 
+// fall back directly to your catalog config template defaults.
+if (initialNames.length === 0 && config.fieldName) {
+  api_params += '&field:' + config.fieldName;
+  if (config.fieldValue) {
+    api_params += '=' + encodeURIComponent(config.fieldValue);
   }
-  
-  // Only grab the URL value if the primary field is present, otherwise drop straight back to the fallback config default! 
-  const activePrimaryVal = hasPrimaryInUrl ? initialParams.get('fieldvalue') : config.fieldValue; 
-  
-  if( activePrimaryVal ) { 
-    api_params += '=' + encodeURIComponent(activePrimaryVal); 
-  } 
-} 
+}
 
-// Loop through and append all secondary fields from your lowercase URL array parameters 
-const urlParams = new URLSearchParams(window.location.search); 
-const urlNames = urlParams.getAll('fieldname'); 
-const urlValues = urlParams.getAll('fieldvalue'); 
-
-urlNames.forEach((name, index) => { 
-  // Identify if this parameter matches the primary configuration category text string 
-  const isPrimary = config.fieldName && (name.toLowerCase() === config.fieldName.toLowerCase()); 
+// 2. Comprehensive Sequential Loop: Process every single filter item present in the URL bar in order.
+// This handles the primary field and all secondary fields identically using the exact same rule.
+initialNames.forEach((name, index) => {
+  const value = initialValues[index];
   
-  // Appends ONLY true secondary parameter tracks to protect separation boundaries 
-  if( !isPrimary && name && urlValues[index] ) { 
-    api_params += '&field:' + name + '=' + encodeURIComponent(urlValues[index]); 
-  } 
+  if (name && value) {
+    api_params += '&field:' + name + '=' + encodeURIComponent(value);
+  }
 });
   
    if( getObsDate(appState)    ) { api_params += '&on='       + getObsDate(appState); }
