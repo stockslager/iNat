@@ -142,7 +142,7 @@ function setupMapAPIParams( config ) {
     const initialValues = initialParams.getAll('fieldvalue');
 
     // Core Rule: If the URL has no active filters (First Entrance), use your config defaults
-    if( config.fieldName ) {
+    if( initialNames.length === 0 && config.fieldName ) {
         api_params += '&field:' + config.fieldName;
         if( config.fieldValue ) {
             api_params += '=' + encodeURIComponent(config.fieldValue);
