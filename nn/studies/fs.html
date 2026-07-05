@@ -254,7 +254,7 @@ const hasActiveFilter = (queryString, fieldId) => {
   return idx !== -1 && values[idx] !== '';
 }
 
-const getUrlWithoutFilter = (queryString, targetFieldId, primaryFieldId = '') => {
+/*const getUrlWithoutFilter = (queryString, targetFieldId, primaryFieldId = '') => {
   const params = new URLSearchParams(queryString);
   const ids = params.getAll('fieldid');
   const names = params.getAll('fieldname');
@@ -283,6 +283,38 @@ const getUrlWithoutFilter = (queryString, targetFieldId, primaryFieldId = '') =>
     params.delete('plantname');
   }
 
+  return params.toString();
+};*/
+
+const getUrlWithoutFilter = (queryString, targetFieldId) => {
+  const params = new URLSearchParams(queryString);
+  const ids = params.getAll('fieldid');
+  const names = params.getAll('fieldname');
+  const values = params.getAll('fieldvalue');
+  
+  // 1. Group the URL parameters into clean individual tracking objects
+  const fields = ids.map((id, index) => ({
+    id: id.toString(),
+    name: names[index] || '',
+    value: values[index] || ''
+  }));
+  
+  // 2. Filter out the specific column ID we want to remove
+  const remaining = fields.filter(f => f.id !== targetFieldId.toString());
+  
+  // 3. Clear out the old keys entirely
+  params.delete('fieldid');
+  params.delete('fieldname');
+  params.delete('fieldvalue');
+  
+  // 4. Re-append ONLY the surviving filters with their correct matching values
+  remaining.forEach(f => {
+    params.append('fieldid', f.id);
+    params.append('fieldname', f.name);
+    params.append('fieldvalue', f.value);
+  });
+  
+  params.set('page', '1');
   return params.toString();
 };
     
