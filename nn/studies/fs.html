@@ -179,7 +179,7 @@ let p_field = '';
 let p_field_value = ''; 
 let field_array = []; 
 
-appState = buildStateFromParams(winurlparams);
+appState = buildStateFromParams(winurlparams, config.fieldName || '');
 
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of winurlparams.entries()) {
