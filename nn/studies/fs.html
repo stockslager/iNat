@@ -235,10 +235,12 @@ function isMultipleOfFour(num) {
   return num % 4 === 0;
 }
 
-function boxRow(field_id, field_name, field_value) {
-    this.field_id    = field_id;
-    this.field_name  = field_name;
-}
+// used for the obs fields box in the upper right and for tracking selected values for filtration.
+function boxRow(field_id, field_name, field_value = '') { 
+  this.field_id    = field_id.toString(); 
+  this.field_name  = field_name; 
+  this.field_value = field_value; 
+}      
 
 const getUpdatedState = (appState, page, name, value, suffix = '') => {
     let state = setPage(appState, page);
