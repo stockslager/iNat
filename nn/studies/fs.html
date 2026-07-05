@@ -240,6 +240,22 @@ function boxRow(field_id, field_name, field_value) {
     this.field_name  = field_name;
 }
 
+const getUpdatedState = (appState, page, name, value, suffix = '') => {
+    let state = setPage(appState, page);
+    
+    if (suffix === '2') {
+        state = setFieldName2(state, name);
+        state = setFieldValue2(state, value);
+    } else if (suffix === '3') {
+        state = setFieldName3(state, name);
+        state = setFieldValue3(state, value);
+    } else {
+        state = setFieldName(state, name);
+        state = setFieldValue(state, value);
+    }
+    return state;
+};
+      
 function fresults( xobj, config ) {
    let results = xobj.results;
    let box_array = [];
@@ -524,7 +540,143 @@ function fresults( xobj, config ) {
 
          let emojiTitle = 'Merged Observation Fields:&#10;';
 
-         if(rec.ofvs&&rec.ofvs.length>0){
+         if( rec.ofvs && rec.ofvs.length > 0) {
+             for (let r = 0; r < box_array.length; r++) {
+                  const box = box_array[r];
+                  const targetBoxFieldName = box.field_name?.toLowerCase();
+        const targetBoxFieldIdStr = box.field_id.toString();
+
+        for (let j = 0; j < rec.ofvs.length; j++) {
+            const ofv = rec.ofvs[j];
+            const ofvFieldIdStr = ofv.field_id.toString();
+            const ofvValue = ofv.value ?? '';
+            const ofvValueLower = ofvValue.toString().toLowerCase();
+
+            // --- SECTION A: Mismatch & Validation Checking ---
+            if (field_array.includes(ofvFieldIdStr)) {
+                if (matchValue === '') {
+                    matchValue = ofvValue;
+                } else if (ofvValue !== '' && matchValue !== ofvValue) {
+                    mismatch = 'yes';
+                }
+
+                if (dataType === '') {
+                    dataType = ofv.datatype;
+                } else if (dataType !== ofv.datatype) {
+                    mismatch = 'yes';
+                }
+
+                if (ofv.taxon) {
+                    if (matchTaxonId === '') {
+                        matchTaxonId = ofv.taxon.id;
+                    }
+                    if (ofv.taxon.id !== matchTaxonId) {
+                        mismatch = 'yes';
+                    }
+                }
+            }
+
+            // Cache taxon names for readability below
+            const taxonName = ofv.taxon?.name || '';
+            const commonName = ofv.taxon?.preferred_common_name || '';
+
+            // --- SECTION B: Merge Mode ---
+            if (config.merge === 'yes' && ofvFieldIdStr === targetBoxFieldIdStr) {
+                field1 = ofvValueLower;
+
+                if (ofv.taxon) {
+                    const iconicIdStr = ofv.taxon.iconic_taxon_id?.toString();
+                    
+                    if (!config.ofield_iconic || config.ofield_iconic === iconicIdStr) {
+                        field1 = taxonName;
+                        displayCommonName = commonName.toLowerCase();
+                        displayTaxonName = taxonName;
+                        displayName = `<span style="font-size:larger">${commonName.toLowerCase()}</span><span style="font-style:italic"><br>(${taxonName})</span>`;
+                        emojiTitle += `${ofv.field_id} ${taxonName}\n`;
+                    } else {
+                        emojiTitle += `${ofv.field_id} ${taxonName.toLowerCase()}\n`;
+                        displayName = '';
+                    }
+                } else {
+                    if (ofvValueLower !== 'unknown') {
+                        displayName = ofvValueLower;
+                    }
+                    emojiTitle += `${ofv.field_id} ${ofvValueLower}\n`;
+                }
+            }
+
+            // --- SECTION C: No-Merge Mode ---
+            if (config.merge !== 'yes' && ofvFieldIdStr === targetBoxFieldIdStr) {
+                matchedCopy = 'yes';
+
+                if (ofv.value) {
+                    field1 = ofvValueLower;
+                    displayName = ofvValueLower;
+
+                    if (ofv.taxon) {
+                        field1 = `<span style="font-size:larger">${commonName.toLowerCase()}</span><span style="font-style:italic"><br>(${taxonName})</span>`;
+                    }
+
+                    // Edge Case: Wild ancestral colony
+                    if (ofvFieldIdStr === '17383') {
+                        values.push({ innerHTML: furl2(root_observations + field1, field1) });
+                    } else {
+                        // Dynamically determine state suffix based on current configuration and state
+                        let suffix = '';
+                        const fieldName2 = getFieldName2(appState);
+                        const fieldName3 = getFieldName3(appState);
+
+                        if (config.fieldName && config.fieldName.toLowerCase() === targetBoxFieldName) {
+                            suffix = '1';
+                        } else if (fieldName2 && fieldName2.toLowerCase() === targetBoxFieldName) {
+                            suffix = '2';
+                        } else if (fieldName3 && fieldName3.toLowerCase() === targetBoxFieldName) {
+                            suffix = '3';
+                        } else if (!fieldName2) {
+                            suffix = '2';
+                        } else {
+                            suffix = '3';
+                        }
+
+                        // Generate the updated state using our isolated helper function
+                        const cleanValue = replaceDoubleQuotes(ofvValue.toString());
+                        let urlState = getUpdatedState(appState, '1', ofv.name, cleanValue, suffix);
+
+                        // Inject plant name *only* for the primary config condition
+                        if (suffix === '1') {
+                            urlState = setPlantName(urlState, commonName || taxonName);
+                            console.log('val ' + ofvValue.toString());
+                        }
+
+                        let url = furl2('./fs.html' + buildParameterList(urlState), field1);
+
+                        // Render outlink block if suffix is '1' and outlink config exists
+                        if (suffix === '1' && config.fieldOutlink) {
+                            let outlink = furl2(
+                                config.fieldOutlink + ofvValue.toString(),
+                                '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">🛈</span>'
+                            );
+                            values.push({ innerHTML: `<span class="filterable-header">${outlink}</span>${url}` });
+                        } else {
+                            values.push({ innerHTML: url });
+                        }
+                    }
+                } else {
+                    values.push({ innerText: '' });
+                }
+            }
+        } // End of j loop
+
+        if (config.merge !== 'yes') {
+            if (matchedCopy === 'yes') {
+                matchedCopy = 'no';
+            } else {
+                values.push({ innerText: '' });
+            }
+        }
+    } // End of r loop
+ }
+/*         if(rec.ofvs&&rec.ofvs.length>0){
               for( let r=0; r<box_array.length; r++ ) {
                  for( let j=0; j<rec.ofvs.length; j++ ){
 
@@ -645,6 +797,7 @@ function fresults( xobj, config ) {
                   }
              }
          }  
+         */
 
          if( config.merge === 'yes' ){
               if( displayTaxonName !== '' ){
