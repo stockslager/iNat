@@ -141,8 +141,10 @@ function setupMapAPIParams( config ) {
     const initialNames = initialParams.getAll('fieldname');
     const initialValues = initialParams.getAll('fieldvalue');
 
+    const lowerCaseNames = initialNames.map(name => name.toLowerCase());
+
     // if the config field name isn't already in the initial names array, add it in from the config.
-    if( config.fieldName && !initialNames.includes(config.fieldName) ) {
+    if( config.fieldName && !lowerCaseNames.includes(config.fieldName.toLowerCase()) ) {
         api_params += '&field:' + config.fieldName;
         if( config.fieldValue ) {
             api_params += '=' + encodeURIComponent(config.fieldValue);
@@ -175,8 +177,10 @@ function setupAPIParams( config ) {
     const initialNames = initialParams.getAll('fieldname');
     const initialValues = initialParams.getAll('fieldvalue');
 
+    const lowerCaseNames = initialNames.map(name => name.toLowerCase());
+
     // Core Rule: If the URL has no active filters (First Entrance), use your config defaults
-    if( initialNames.length === 0 && config.fieldName ) {
+    if( config.fieldName && !lowerCaseNames.includes(config.fieldName.toLowerCase()) {
         api_params += '&field:' + config.fieldName;
         if( config.fieldValue ) {
             api_params += '=' + encodeURIComponent(config.fieldValue);
