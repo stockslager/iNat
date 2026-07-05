@@ -187,6 +187,7 @@ function buildParameterList(state) {
     
     // Iterate over every key in the state object 
     for (const key in state) { 
+        console.log("Current Key passing through loop:", key, "Value:", state[key]);
         if (state.hasOwnProperty(key) && state[key] !== null && state[key] !== undefined && state[key] !== '') { 
             
             // FIX: Match the exact keys that are inside your homeState object (with underscores)
