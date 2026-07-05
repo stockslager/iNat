@@ -1,4 +1,4 @@
-// store.js       
+// store.js  
 const COMPONENT_GARDEN    = 'plants';  
 const COMPONENT_COLONY    = 'colonies';
 const COMPONENT_OBSERVERS = 'observers';
@@ -119,6 +119,13 @@ function createNewStateInstance(initialValues = {}) {
   // Combine defaults with any provided initial values using the spread syntax
   return { ...baseState, ...initialValues };
 }
+
+// used for the obs fields box in the upper right and for tracking selected values for filtration.
+function boxRow(field_id, field_name, field_value = '') { 
+  this.field_id    = field_id.toString(); 
+  this.field_name  = field_name; 
+  this.field_value = field_value; 
+}      
 
 // builds an array of observation field parameters for use in field_study.html
 const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, value, config = {}) => { 
