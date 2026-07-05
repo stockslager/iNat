@@ -426,7 +426,7 @@ for( let e=0; e<box_array.length; e++ ){
       const urlValues = urlParams.getAll('fieldvalue'); 
       const urlNames = urlParams.getAll('fieldname');
       
-      // 1. Identify if this column header represents your primary configuration lane
+      // Identify if this column header represents your primary configuration lane
       const isPrimaryColumn = config.fieldName && (currentFieldName.toLowerCase() === config.fieldName.toLowerCase());
       
       // Check if this column has an active filter in the URL, or if it's the primary field with a standalone fallback override
@@ -435,31 +435,27 @@ for( let e=0; e<box_array.length; e++ ){
       const hasFilter = (idIndex !== -1 && urlValues[idIndex] !== '') || hasStandalonePrimary;
       
       if( hasFilter ) { 
-        // 2. Map existing tracks into paired tracking objects to protect them from sliding
+        // 1. Map existing tracks into paired tracking objects to protect them from shifting indices
         const temporaryFields = urlIds.map((id, index) => ({
           id: id.toString(),
           name: urlNames[index] || '',
           value: urlValues[index] || ''
         }));
         
-        // 3. Drop the targeted row safely using BOTH unique ID checks and explicit name validation
-        const remainingFilters = temporaryFields.filter(f => {
-          if (isPrimaryColumn && config.fieldName) {
-            return f.name.toLowerCase() !== config.fieldName.toLowerCase() && f.id !== currentFieldId;
-          }
-          return f.id !== currentFieldId;
-        });
+        // 2. FIX: Rely strictly on the stable numeric ID to strip out ONLY this specific filter column row!
+        // This stops the text filter from accidentally stripping matching name strings or secondary lanes
+        const remainingFilters = temporaryFields.filter(f => f.id !== currentFieldId.toString());
 
         const newParams = new URLSearchParams(); 
         
-        // 4. Retain standard layout tokens safely (studytitle, component, etc.)
+        // 3. Retain standard layout tokens safely (studytitle, component, etc.)
         urlParams.forEach((val, key) => { 
           if (key !== 'fieldid' && key !== 'fieldname' && key !== 'fieldvalue') { 
             newParams.set(key, val); 
           } 
         }); 
         
-        // 5. Re-append only the surviving active filters sequentially
+        // 4. Re-append only the surviving active filters sequentially
         remainingFilters.forEach(f => { 
           newParams.append('fieldid', f.id); 
           newParams.append('fieldname', f.name); 
@@ -468,10 +464,10 @@ for( let e=0; e<box_array.length; e++ ){
         
         newParams.set('page', '1'); 
         
-        // 6. If we are intentionally clearing the primary column, wipe all associated plant keys completely
+        // 5. If we are intentionally clearing the primary column, wipe all associated plant keys completely
         if (isPrimaryColumn) {
           newParams.delete('plantname'); 
-          newParams.delete('fieldvalue'); // Clear the flat standalone query parameter completely
+          newParams.delete('fieldvalue'); // Clear the flat standalone query parameter completely if present
         }
         
         const resetUrl = './fs.html?' + newParams.toString(); 
