@@ -685,8 +685,9 @@ if( config.merge !== 'yes' && ofvFieldIdStr === targetBoxFieldIdStr ) {
       if( isPrimaryField ) { 
         cellUrlParams.set('plantname', commonName || taxonName); 
       } 
-      
-      let url = furl2('./fs.html?' + cellUrlParams.toString(), field1); 
+
+      let url = '<a href="./fs.html?' + cellUrlParams.toString() + '">' + field1 + '</a>';
+      //let url = furl2('./fs.html?' + cellUrlParams.toString(), field1); 
       
       if( isPrimaryField && config.fieldOutlink ) { 
         let outlink = furl2( 
