@@ -793,11 +793,20 @@ function setupAPIParams( config ) {
 if( config.fieldName ) { 
   api_params += '&field:' + config.fieldName; 
   
-  // FIX: Verify if the primary field name is actually explicitly written out in the URL string
-  const hasPrimaryInUrl = window.location.search.toLowerCase().indexOf('fieldname=' + encodeURIComponent(config.fieldName).toLowerCase()) !== -1;
+  const initialParams = new URLSearchParams(window.location.search);
+  const initialNames = initialParams.getAll('fieldname');
   
-  // Only grab the URL value if the primary field is present, otherwise drop straight back to the fallback config default!
-  const activePrimaryVal = hasPrimaryInUrl ? new URLSearchParams(window.location.search).get('fieldvalue') : config.fieldValue; 
+  // FIX: Look inside the parsed array directly so spaces and plus signs do not break the string check
+  let hasPrimaryInUrl = false;
+  for( let k = 0; k < initialNames.length; k++ ) {
+    if( initialNames[k].toLowerCase() === config.fieldName.toLowerCase() ) {
+      hasPrimaryInUrl = true;
+      break;
+    }
+  }
+  
+  // Only grab the URL value if the primary field is present, otherwise drop straight back to the fallback config default! 
+  const activePrimaryVal = hasPrimaryInUrl ? initialParams.get('fieldvalue') : config.fieldValue; 
   
   if( activePrimaryVal ) { 
     api_params += '=' + encodeURIComponent(activePrimaryVal); 
