@@ -123,9 +123,9 @@ function createNewStateInstance(initialValues = {}) {
 // builds an array of observation field parameters for use in field_study.html
 const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, value) => { 
   const params = new URLSearchParams(currentUrlParams); 
-  const ids = params.getAll('fieldId'); 
-  const names = params.getAll('fieldName'); 
-  const values = params.getAll('fieldValue'); 
+  const ids = params.getAll('fieldid'); 
+  const names = params.getAll('fieldname'); 
+  const values = params.getAll('fieldvalue'); 
   
   const currentFields = ids.map((id, index) => ({ 
     id: id, 
@@ -142,14 +142,14 @@ const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, va
     currentFields.push({ id: targetFieldId.toString(), name: fieldName, value: value }); 
   } 
   
-  params.delete('fieldId'); 
-  params.delete('fieldName'); 
-  params.delete('fieldValue'); 
+  params.delete('fieldid'); 
+  params.delete('fieldname'); 
+  params.delete('fieldvalue'); 
   
   currentFields.forEach(field => { 
-    params.append('fieldId', field.id); 
-    params.append('fieldName', field.name); 
-    params.append('fieldValue', field.value); 
+    params.append('fieldid', field.id); 
+    params.append('fieldname', field.name); 
+    params.append('fieldvalue', field.value); 
   }); 
   
   return params.toString(); 
