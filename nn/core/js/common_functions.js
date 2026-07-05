@@ -204,12 +204,34 @@ function buildNavDD( navbar, dd_name, links ) {
   }
 }
 
+function buildNavActivityFiltersDD( navbar, dd_name, config, url, homeState ) {
+    if( config.ddFilters && config.ddFilters.length > 0 ) {
+        let dd_name = config.ddFilters[0].ddName;
+        let filters = [];
+        let urlState = homeState;
+        urlState = setActivityFilter(urlState, '');
+        filters.push(faddelem('a', null, { href: url + buildParameterList(urlState), textContent: CONST_ALL }));
+        for( let i = 0; i<config.ddFilters.length; i++ ) {
+             if( dd_name !== config.ddFilters[i].ddName ) {
+                 buildNavDD( navbar, getActivityFilter(homeState) || dd_name, filters );
+                 dd_name = config.ddFilters[0].ddName;
+             }
+             let urlState = homeState;
+             urlState     = setActivityFilter(urlState, config.ddFilters[i].ddLabel);
+             let filter  = faddelem('a', null, { href: url + buildParameterList(urlState), textContent: config.ddFilters[i].ddLabel });
+             filters.push(filter);
+        }
+        buildNavDD( navbar, getActivityFilter(homeState) || dd_name, filters );
+    }
+}
+
+
 function buildNavActivityFiltersDD( navbar, dd_name, config ) { 
   if( config.ddFilters && config.ddFilters.length > 0 ) { 
-    let dd_name_tracker = config.ddFilters[0].ddName; 
+    let dd_name_tracker = config.ddFilters.ddName; 
     let filters = []; 
     
-    // 1. Shallow copy the appState object so we don't pollute global memory
+    // 1. Shallow copy the global appState structure safely
     let baseState = {};
     for (const key in appState) {
       if (appState.hasOwnProperty(key)) {
@@ -223,28 +245,53 @@ function buildNavActivityFiltersDD( navbar, dd_name, config ) {
     const urlNames = urlParams.getAll('fieldname');
     const urlValues = urlParams.getAll('fieldvalue');
     
-    // 3. Stuff them straight into the activeFilters array of our local state clone
+    // 3. Populate our baseline filters list natively
     baseState.activeFilters = [];
     for (let index = 0; index < urlIds.length; index++) {
-      baseState.activeFilters.push(new boxRow(urlIds[index], urlNames[index] || '', urlValues[index] || ''));
+      baseState.activeFilters.push({
+        field_id: urlIds[index],
+        field_name: urlNames[index] || '',
+        field_value: urlValues[index] || ''
+      });
     }
 
-    // Generate the "ALL" reset item link safely using our synchronized state clone
+    // Generate the "ALL" reset item link safely
     let allUrlState = {};
     for (const key in baseState) { if (baseState.hasOwnProperty(key)) allUrlState[key] = baseState[key]; }
+    // Deep copy the array reference for the "ALL" link track
+    allUrlState.activeFilters = [];
+    for (let k = 0; k < baseState.activeFilters.length; k++) {
+      allUrlState.activeFilters.push({
+        field_id: baseState.activeFilters[k].field_id,
+        field_name: baseState.activeFilters[k].field_name,
+        field_value: baseState.activeFilters[k].field_value
+      });
+    }
     allUrlState = setActivityFilter(allUrlState, ''); 
     filters.push(faddelem('a', null, { href: './garden_activity.html' + buildParameterList(allUrlState), textContent: CONST_ALL })); 
 
-    // Generate each specific filter label option link inside the config array
+    // Generate individual activity option menu dropdown links
     for( let i = 0; i < config.ddFilters.length; i++ ) { 
       if( dd_name_tracker !== config.ddFilters[i].ddName ) { 
         buildNavDD( navbar, getActivityFilter(appState) || dd_name_tracker, filters ); 
         dd_name_tracker = config.ddFilters[i].ddName; 
       } 
       
-      // Isolate each iteration link inside its own clean local memory assignment block
+      // 4. FIX: Isolate each loop row copy inside its own clean memory assignment block
       let loopUrlState = {};
       for (const key in baseState) { if (baseState.hasOwnProperty(key)) loopUrlState[key] = baseState[key]; }
+      
+      // 5. CRITICAL DEEP COPY PASS: Manually extract and duplicate the array tracking rows 
+      // This completely breaks the reference pointer link so filters cannot double-stack!
+      loopUrlState.activeFilters = [];
+      for (let k = 0; k < baseState.activeFilters.length; k++) {
+        loopUrlState.activeFilters.push({
+          field_id: baseState.activeFilters[k].field_id,
+          field_name: baseState.activeFilters[k].field_name,
+          field_value: baseState.activeFilters[k].field_value
+        });
+      }
+      
       loopUrlState = setActivityFilter(loopUrlState, config.ddFilters[i].ddLabel); 
       
       let filter = faddelem('a', null, { 
