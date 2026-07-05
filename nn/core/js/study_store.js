@@ -232,40 +232,6 @@ function buildParameterList(state) {
     return queryString ? ('?' + queryString) : '';
 }
 
-/*function buildParameterList(state) {
-  const params = new URLSearchParams();
-
-  // Iterate over every key in the state object
-  for (const key in state) {
-    if (state.hasOwnProperty(key) && state[key] !== null && state[key] !== undefined && state[key] !== '') {
-      
-      // FIX: Skip the flat observation keys entirely so they don't double-stack into the string!
-      if (key === 'activeFilters' || key === 'fieldid' || key === 'fieldname' || key === 'fieldvalue') {
-        continue;
-      }
-      
-      params.append(key, state[key]);
-    }
-  }
-
-  // --- Dynamic Array Appending Block ---
-  // Safely serialize your filters sequentially from the unified array tracking lane
-  if (state.activeFilters && state.activeFilters.length > 0) {
-    for (let i = 0; i < state.activeFilters.length; i++) {
-      const filter = state.activeFilters[i];
-      
-      if (filter.field_value) {
-        params.append('fieldid', filter.field_id);
-        params.append('fieldname', filter.field_name);
-        params.append('fieldvalue', filter.field_value);
-      }
-    }
-  }
-
-  const queryString = params.toString();
-  return queryString ? ('?' + queryString) : '';
-}*/
-
 /**
  * Creates a new state instance, overlaying parameters found in a URL query string.
  * @param {string} queryString The raw query string (e.g., "?user=Bob&place=Office").
@@ -274,7 +240,7 @@ function buildParameterList(state) {
 function buildStateFromParams(queryString) { 
     const params = new URLSearchParams(queryString); 
     
-    // 1. Map your standard individual layout tracking parameters 
+    // Map the standard individual layout tracking parameters 
     const paramsObject = {}; 
     params.forEach((value, key) => { 
         if (key !== 'fieldid' && key !== 'fieldname' && key !== 'fieldvalue') { 
@@ -282,22 +248,19 @@ function buildStateFromParams(queryString) {
         } 
     }); 
     
-    // 2. Hydrate flat state defaults using your original factory instance 
+    // Hydrate flat state defaults using your original factory instance 
     const newState = createNewStateInstance(paramsObject); 
     
-    // 3. Gather multi-key parameters cleanly out of the address parameters 
+    // Gather multi-key parameters cleanly out of the address parameters 
     const ids = params.getAll('fieldid'); 
     const names = params.getAll('fieldname'); 
     const values = params.getAll('fieldvalue'); 
     
-    // 4. Hydrate your modern array tracker space 
+    // Hydrate the modern array tracker space 
     newState.activeFilters = []; 
     for (let index = 0; index < ids.length; index++) { 
         newState.activeFilters.push(new boxRow(ids[index], names[index] || '', values[index] || '')); 
     } 
-
-    // REMOVED STEP 5: No longer creating redundant flat fieldname2, fieldvalue2, etc. properties.
-    // The activeFilters array above handles everything cleanly now.
 
     return newState; 
 }
