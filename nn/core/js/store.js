@@ -128,8 +128,8 @@ const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, va
   const names = params.getAll('fieldname'); 
   const values = params.getAll('fieldvalue'); 
   
-  // 1. Map current items into a clean data array
-  const currentFields = ids.map((id, index) => {
+  // 1. Reconstruct current items into a clean data array
+  let currentFields = ids.map((id, index) => {
     const currentName = names[index] || '';
     const isPrimary = config.fieldName && (currentName.toLowerCase() === config.fieldName.toLowerCase());
     return { 
@@ -150,26 +150,46 @@ const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, va
     currentFields.push({ id: targetIdStr, name: fieldName || '', value: value }); 
   } 
 
-  // 3. FIX: If the primary config field name isn't present in your current parameter tracks 
-  // (which happens on initial entry), force-inject it at the very front of your array!
+  // 3. Fallback: If the primary config field name isn't present, inject it
   const hasPrimary = config.fieldName && currentFields.some(f => f.name.toLowerCase() === config.fieldName.toLowerCase());
   if (!hasPrimary && config.fieldName) {
-    // Attempt to discover the primary ID string out of the incoming config block
     const primaryIdStr = config.field_id || '7623'; 
     currentFields.unshift({
       id: primaryIdStr.toString(),
       name: config.fieldName,
-      value: params.get('fieldvalue') || config.fieldValue || '' // Grab url parameter first, fall back to default
+      value: params.get('fieldvalue') || config.fieldValue || ''
     });
   }
   
-  // 4. Clear all parameter keys safely to prevent duplicates or leaks
+  // 4. FIX: Strict De-duplication check! 
+  // Loop backward and remove any elements that share a duplicate fieldid
+  const seenIds = {};
+  const uniqueFields = [];
+  for (let i = 0; i < currentFields.length; i++) {
+    const field = currentFields[i];
+    if (!seenIds[field.id]) {
+      seenIds[field.id] = true;
+      uniqueFields.push(field);
+    } else {
+      // If we've already seen this ID, overwrite the previous one with the newest value
+      const existing = uniqueFields.find(f => f.id === field.id);
+      if (existing && field.value) {
+        existing.value = field.value;
+        if (field.name) existing.name = field.name;
+      }
+    }
+  }
+  
+  // 5. Clear all parameter variations completely to strip previous duplicates out of the URL object
   params.delete('fieldid'); 
   params.delete('fieldname'); 
   params.delete('fieldvalue'); 
+  params.delete('fieldId'); 
+  params.delete('fieldName'); 
+  params.delete('fieldValue'); 
   
-  // 5. Append everything back sequentially using lowercase parameter tracks
-  currentFields.forEach(field => { 
+  // 6. Append only the uniquely cleaned rows back sequentially
+  uniqueFields.forEach(field => { 
     params.append('fieldid', field.id); 
     params.append('fieldname', field.name); 
     params.append('fieldvalue', field.value); 
