@@ -763,27 +763,14 @@ function setupAPIParams( config ) {
  
    api_params += '?project_id='+config.project;
 
-   // single loop handles the primary field and all secondary fields automatically
-   if( appState.activeFilters && appState.activeFilters.length > 0 ) {
-       appState.activeFilters.forEach(filter => {
-         // Identify if this row is the primary field
-         const isPrimary = (filter.field_id === config.field_id?.toString());
-    
-         // Use the stable JSON name for the primary field, otherwise use the dynamic name
-         const finalFieldName = isPrimary ? config.fieldName : filter.field_name;
-    
-         // Determine the correct value: check active filter first, then fall back to config default
-         let finalValue = filter.field_value;
-         if( isPrimary && !finalValue ) {
-             finalValue = config.fieldValue || ''; // Resolves empty filter on first page entrance
-         }
-    
-         // Only append to the request if there is a name and a value present
-         if( finalFieldName && finalValue ) {
-             api_params += '&field:' + finalFieldName + '=' + encodeURIComponent(finalValue);
-         }
-       });
-   }
+   // Handle primary field instantly on first entrance using your config values or URL parameters
+   if (config.fieldName) api_params += '&field:' + config.fieldName + 
+         (new URLSearchParams(window.location.search).get('fieldvalue') ? '=' + 
+          encodeURIComponent(new URLSearchParams(window.location.search).get('fieldvalue')) : config.fieldValue ? '=' + 
+          encodeURIComponent(config.fieldValue) : '');
+
+   // Loop through and append all secondary fields automatically 
+   appState.activeFilters?.filter(f => f.field_id !== config.field_id?.toString() && f.field_name && f.field_value).forEach(f => api_params += `&field:${f.field_name}=${encodeURIComponent(f.field_value)}`);
   
    if( getObsDate(appState)    ) { api_params += '&on='       + getObsDate(appState); }
 
