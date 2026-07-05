@@ -1,4 +1,4 @@
-// store.js 
+// store.js  
 const COMPONENT_GARDEN    = 'plants'; 
 const COMPONENT_COLONY    = 'colonies';
 const COMPONENT_OBSERVERS = 'observers';
