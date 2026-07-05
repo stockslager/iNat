@@ -33,6 +33,7 @@ const ATTRIBUTE_TAXONDD         = 'taxondd';
 const ATTRIBUTE_OBSID           = 'obsid';
 const ATTRIBUTE_OBSDATE         = 'obsdate';
 const ATTRIBUTE_ACTIVITYFILTER  = 'activityfilter';
+const ATTRIBUTE_LIFESTAGE       = 'lifestage';
 // used for field_study.html observation field array
 const ATTRIBUTE_FIELDID      = 'fieldid';       
 const ATTRIBUTE_FIELDNAME    = 'fieldname';   
