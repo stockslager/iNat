@@ -215,10 +215,10 @@ function buildParameterList(state) {
  * @param {string} queryString The raw query string (e.g., "?user=Bob&place=Office").
  * @returns {object} A new application state object populated from URL parameters.
  */
-function buildStateFromParams(queryString, primaryFieldName = '') { 
+function buildStateFromParams(queryString) { 
   const params = new URLSearchParams(queryString); 
   
-  // 1. Map your standard individual tracking parameters
+  // 1. Map your standard individual layout tracking parameters
   const paramsObject = {};
   params.forEach((value, key) => {
     if (key !== 'fieldid' && key !== 'fieldname' && key !== 'fieldvalue') {
@@ -240,15 +240,17 @@ function buildStateFromParams(queryString, primaryFieldName = '') {
     newState.activeFilters.push(new boxRow(ids[index], names[index] || '', values[index] || ''));
   }
   
-  // 5. FIX: Safe, Text-Bound boundary check using the passed-in config text string!
+  // 5. FIX: Bound boundary check that requires NO config scopes or name matching!
+  // It reads the direct sequence of IDs currently stored inside the live query string
   let secondaryCounter = 2;
   
   for (let idx = 0; idx < newState.activeFilters.length; idx++) {
     const item = newState.activeFilters[idx];
-    const itemFieldName = item.field_name || '';
+    const itemFieldIdStr = item.field_id ? item.field_id.toString() : '';
     
-    // Check if this item's text matches the known primary field text name string
-    const isPrimaryField = primaryFieldName && (itemFieldName.toLowerCase() === primaryFieldName.toLowerCase());
+    // Check the live URL arrays: Is this item ID matching the FIRST fieldid parameter in the URL block?
+    // If it's the first one, it maps to the primary variables slot.
+    const isPrimaryField = (ids.length > 0 && itemFieldIdStr === ids[0].toString());
     
     if (isPrimaryField) {
       // Safely assign to your base primary properties
