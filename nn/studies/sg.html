@@ -149,6 +149,14 @@ function setupMapAPIParams( config ) {
         }
     }
 
+    // Sequential Loop: Process whatever filters are explicitly remaining in the URL bar
+    initialNames.forEach((name, index) => {
+      const value = initialValues[index];
+      if( name && value ) {
+          api_params += '&field:' + name + '=' + encodeURIComponent(value);
+      }
+    });
+
     api_params = setupCommonAPIParams( config, api_params );
 
     return api_params;
