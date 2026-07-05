@@ -123,29 +123,39 @@ function createNewStateInstance(initialValues = {}) {
 // builds an array of observation field parameters for use in field_study.html
 const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, value) => { 
   const params = new URLSearchParams(currentUrlParams); 
+  
   const ids = params.getAll('fieldid'); 
   const names = params.getAll('fieldname'); 
   const values = params.getAll('fieldvalue'); 
   
-  const currentFields = ids.map((id, index) => ({ 
-    id: id, 
-    name: names[index] || '', 
-    value: values[index] || '' 
-  })); 
+  // 1. Safe reconstruction mapping that handles missing URL values on page entrance
+  const currentFields = ids.map((id, index) => {
+    const isPrimary = (id.toString() === config.field_id?.toString());
+    return { 
+      id: id.toString(), 
+      // Fall back to config values if the URL parameters are empty on load
+      name: names[index] || (isPrimary ? config.fieldName : ''), 
+      value: values[index] || (isPrimary ? (config.fieldValue || '') : '') 
+    };
+  }); 
   
-  const targetIndex = currentFields.findIndex(f => f.id === targetFieldId.toString()); 
+  const targetIdStr = targetFieldId.toString();
+  const targetIndex = currentFields.findIndex(f => f.id === targetIdStr); 
   
+  // 2. Safely mutate the slot
   if (targetIndex !== -1) { 
     currentFields[targetIndex].value = value; 
     if (fieldName) currentFields[targetIndex].name = fieldName; 
   } else { 
-    currentFields.push({ id: targetFieldId.toString(), name: fieldName, value: value }); 
+    currentFields.push({ id: targetIdStr, name: fieldName || '', value: value }); 
   } 
   
+  // 3. Clear parameter keys safely
   params.delete('fieldid'); 
   params.delete('fieldname'); 
   params.delete('fieldvalue'); 
   
+  // 4. Re-append the clean array sequentially
   currentFields.forEach(field => { 
     params.append('fieldid', field.id); 
     params.append('fieldname', field.name); 
