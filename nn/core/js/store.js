@@ -1,5 +1,5 @@
 // store.js 
-const COMPONENT_GARDEN    = 'plants';
+const COMPONENT_GARDEN    = 'plants'; 
 const COMPONENT_COLONY    = 'colonies';
 const COMPONENT_OBSERVERS = 'observers';
 const COMPONENT_HIKER     = 'hiker';
