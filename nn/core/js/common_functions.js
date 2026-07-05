@@ -204,32 +204,54 @@ function buildNavDD( navbar, dd_name, links ) {
   }
 }
 
+function buildNavActivityFiltersDD( navbar, dd_name, config ) { 
+  if( config.ddFilters && config.ddFilters.length > 0 ) { 
+    let dd_name = config.ddFilters[0].ddName; 
+    let filters = []; 
+    
+    // Initialize from a fresh clone of your state to preserve existing variables
+    let urlState = { ...appState }; 
+    
+    // Read your lowercase URL multi-keys on page boot and sync them to your state instance!
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlIds = urlParams.getAll('fieldid');
+    const urlNames = urlParams.getAll('fieldname');
+    const urlValues = urlParams.getAll('fieldvalue');
+    
+    urlState.activeFilters = urlIds.map((id, index) => {
+      return new boxRow(id, urlNames[index] || '', urlValues[index] || '');
+    });
+
+    // Generate the "ALL" reset filter link safely
+    urlState = setActivityFilter(urlState, ''); 
+    filters.push(faddelem('a', null, { href: './garden_activity.html' + buildParameterList(urlState), textContent: CONST_ALL })); 
+
+    for( let i = 0; i<config.ddFilters.length; i++ ) { 
+      if( dd_name !== config.ddFilters[i].ddName ) { 
+        buildNavDD( navbar, getActivityFilter(appState) || dd_name, filters ); 
+        dd_name = config.ddFilters[0].ddName; 
+      } 
+      
+      // Keep your tracking states separated inside your sequential navigation items loop
+      let innerUrlState = { ...urlState };
+      innerUrlState = setActivityFilter(innerUrlState, config.ddFilters[i].ddLabel); 
+      
+      let filter = faddelem('a', null, { 
+        href: './garden_activity.html' + buildParameterList(innerUrlState), 
+        textContent: config.ddFilters[i].ddLabel 
+      }); 
+      filters.push(filter); 
+    } 
+    
+    buildNavDD( navbar, getActivityFilter(appState) || dd_name, filters ); 
+  } 
+}
+
 function buildMenuURL( url ) {
   let dd = '<div id="menu_title">' + url +     
            '</div>';
 
   return( dd );
-}
-
-function buildNavActivityFiltersDD( navbar, dd_name, config ) {
-    if( config.ddFilters && config.ddFilters.length > 0 ) {
-        let dd_name = config.ddFilters[0].ddName;
-        let filters = [];
-        let urlState = appState;
-        urlState = setActivityFilter(urlState, '');
-        filters.push(faddelem('a', null, { href: './garden_activity.html' + buildParameterList(urlState), textContent: CONST_ALL }));
-        for( let i = 0; i<config.ddFilters.length; i++ ) {
-             if( dd_name !== config.ddFilters[i].ddName ) {
-                 buildNavDD( navbar, getActivityFilter(appState) || dd_name, filters );
-                 dd_name = config.ddFilters[0].ddName;
-             }
-             let urlState = appState;
-             urlState     = setActivityFilter(urlState, config.ddFilters[i].ddLabel);
-             let filter  = faddelem('a', null, { href: './garden_activity.html' + buildParameterList(urlState), textContent: config.ddFilters[i].ddLabel });
-             filters.push(filter);
-        }
-        buildNavDD( navbar, getActivityFilter(appState) || dd_name, filters );
-    }
 }
 
 function buildNavDDPlace( navbar, dd_name, results, config, baseUrl, sub_taxon_arr ) {
