@@ -121,20 +121,23 @@ function createNewStateInstance(initialValues = {}) {
 }
 
 // builds an array of observation field parameters for use in field_study.html
-const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, value, config) => { 
+const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, value, config = {}) => { 
   const params = new URLSearchParams(currentUrlParams); 
   
   const ids = params.getAll('fieldid'); 
   const names = params.getAll('fieldname'); 
   const values = params.getAll('fieldvalue'); 
   
-  // 1. Safe reconstruction mapping that handles missing URL values on page entrance
+  // 1. Map current items into a clean data array
   const currentFields = ids.map((id, index) => {
-    const isPrimary = (id.toString() === config.field_id?.toString());
+    const currentName = names[index] || '';
+    
+    // FIX: Detect if this is the primary field by comparing its name to the config name
+    const isPrimary = config.fieldName && (currentName.toLowerCase() === config.fieldName.toLowerCase());
+    
     return { 
       id: id.toString(), 
-      // Fall back to config values if the URL parameters are empty on load
-      name: names[index] || (isPrimary ? config.fieldName : ''), 
+      name: currentName || (isPrimary ? config.fieldName : ''), 
       value: values[index] || (isPrimary ? (config.fieldValue || '') : '') 
     };
   }); 
@@ -145,6 +148,7 @@ const updateUrlParamsByFieldId = (currentUrlParams, targetFieldId, fieldName, va
   // 2. Safely mutate the slot
   if (targetIndex !== -1) { 
     currentFields[targetIndex].value = value; 
+    // Save the dynamic name if it was empty
     if (fieldName) currentFields[targetIndex].name = fieldName; 
   } else { 
     currentFields.push({ id: targetIdStr, name: fieldName || '', value: value }); 
