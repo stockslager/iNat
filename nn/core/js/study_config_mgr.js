@@ -1,0 +1,355 @@
+/** 
+ * Represents a single place entry. 
+ */
+class Place {
+    constructor(data) {
+        this.placeId = data.place_id;
+        this.placeName = data.place_name;
+    }
+}
+
+/**
+ * Represents a sub-icon entry.
+ */
+class SubIcon {
+    constructor(data) {
+        this.name = data.nm;
+        this.taxonId = data.taxon_id;
+        this.icon = data.icon;
+    }
+}
+
+/**
+ * Represents a dd_obs_field entry.
+ */
+class DDObsField {
+    constructor(data) {
+        this.ddName     = data.dd_name;
+        this.fieldName  = data.field_name;
+        this.fieldValue = data.field_value;
+    }
+}
+
+/**
+ * Represents a filters entry.
+ */
+class DDFilters {
+    constructor(data) {
+        this.ddName    = data.dd_name;
+        this.ddLabel   = data.dd_label;
+        this.apiParams = data.api_params;
+    }
+}
+
+/**
+ * Represents an item within the main 'configurations' array.
+ */
+class ConfigurationItem {
+    constructor(configData) {
+        // Use the nullish coalescing operator (??) to ensure properties are never undefined
+        this.component = configData.component ?? null;
+        this.project = configData.project ?? null;
+        this.userId   = configData.user_id ?? null; // Should now consistently show the ID or null
+        this.title    = configData.title ?? null;
+        this.homeUTF8 = configData.home_utf8 ?? null;
+
+        this.mapType         = configData.map_type ?? null;
+        this.defaultMapZoom  = configData.default_map_zoom ?? null;
+        this.mapCenter       = configData.map_center ?? null;
+        this.mapExtent       = configData.map_extent ?? null;
+        this.defaultPlace = configData.default_place ?? null;
+        this.fieldId      = configData.field_id ?? null;
+        this.fieldName    = configData.field_name ?? null;
+        this.fieldValue   = configData.field_value ?? null;
+        this.fieldOutlink = configData.field_outlink ?? null; 
+
+        this.studyTitle = configData.study_title ?? null;
+        this.studyDesc  = configData.study_desc ?? null;
+        this.defaultTaxonId = configData.default_taxon_id ?? null;
+        this.utf8         = configData.utf8 ?? null;
+        this.obsAPIParams = configData.obs_api_params ?? null;
+        this.faunaAPIParams = configData.fauna_api_params ?? null;
+        this.ofieldIconic   = configData.ofield_iconic ?? null;
+        this.merge          = configData.merge ?? null;
+        this.showStudyGrid  = configData.show_study_grid ?? null; 
+
+        this.obsFields = configData.obs_fields ?? configData.field_id ?? null;
+        
+        // Map nested arrays, default to empty array if missing
+        this.places = configData.places?.map(t => new Place(t)) ?? [];
+        this.subIcons = configData.sub_icons?.map(s => new SubIcon(s)) ?? [];
+        this.ddObsFields = configData.dd_obs_fields?.map(d => new DDObsField(d)) ?? [];
+        this.ddFilters   = configData.dd_filters?.map(d => new DDFilters(d)) ?? [];
+        
+        // store the orginial .json with original field names that haven't been mapped to this object.
+        this.originalConfig = configData ?? null;  // used in about.html to pretty print the original .json
+
+        // Validation: Change from throwing errors to logging warnings and using defaults
+        const isNullOrEmpty = (value) => value === null || typeof value !== 'string' || value.trim().length === 0;
+
+        if (isNullOrEmpty(this.component)) {
+            console.warn('Component is missing for an entry. Defaulting.');
+            this.component = 'default-component'; // Provide a safe default
+        }
+    }
+
+    getSubTitle() {
+        if( this.studyTitle === null ) {
+            return( '' );
+        } else {
+            return this.studyTitle;
+        }
+    }
+
+    getFullTitle() {
+        return `${this.title} (${this.component})`;
+    }
+
+    // find the taxon name given the taxon_id in the list of sub_icons in the configuration
+    getSubIconNameByTaxonId( plantsConfig, taxon_id ) {
+        let sub_icon_name = '';
+
+        if( this.subIcons ) {
+            for( let i=0; i<this.subIcons.length; i++) {
+                 if( this.subIcons[i].taxonId.toString() === taxon_id.toString() ) {
+                     sub_icon_name = this.subIcons[i].name;
+                     break;
+                 }
+            }
+        }
+
+        if( !sub_icon_name ) { console.log('Sub Icon Name Not Found'); }
+    
+        return sub_icon_name;
+    }
+}
+
+// find the api params for the filter from the label
+function getFilterAPIParams(config) {
+    if( config.ddFilters ) {
+        for( let i = 0; i<config.ddFilters.length; i++ ) {
+             if( config.ddFilters[i].ddLabel === getActivityFilter(appState) ) {
+                 return( config.ddFilters[i].apiParams );
+             }
+        }
+    }
+    return( '' );
+}
+ 
+// helpers for ConfigurationItem()
+function getMapZoom( config ) {
+  // the geocoodinates to center the map should only be used when a default zoom is set.
+  // if the coordinates are used without a default zoom it defaults to zoom all the way out.
+  if( config.defaultMapZoom ) {
+      if( config.project === '94373' ) {    // western wildlife corridor
+          return( '&centerlat=39.10515368820593&centerlng=-84.64924319973807' + '&defaultzoom=' + config.defaultMapZoom );
+      } else {
+          return( (config.mapCenter || CONST_MAP_CENTER) + '&defaultzoom=' + config.defaultMapZoom );
+      }
+  } else {
+      return '';
+  }
+}
+
+/**
+ * Main class to manage the entire configuration structure. (No filtering of items now)
+ */
+class ConfigManager {
+    constructor(jsonData) {
+        // No try-catch needed here anymore, as ConfigurationItem doesn't throw errors
+        this.configurations = jsonData.configurations.map(config => {
+            // All items are processed and kept in the array, even if data is partial
+            return new ConfigurationItem(config);
+        });
+
+        // map the default_sub_icons if they're set
+        this.defaultSubIcons = jsonData.default_sub_icons?.map(ds => new SubIcon(ds)) ?? [];
+        this.plantProject    = jsonData.plant_project;
+        this.plantField      = jsonData.plant_field;
+        this.plantFieldValue = jsonData.plant_field_value;
+        this.plantIds        = jsonData.plant_ids;
+        this.plantListUserId = jsonData.plant_list_user_id;
+        this.usePlantProjectImages = jsonData.use_plant_project_images;
+        this.defaultMapZoom  = jsonData.default_map_zoom;
+        this.mapCenter       = jsonData.map_center;
+        this.mapExtent       = jsonData.map_extent;
+        this.mapType         = jsonData.map_type;
+        this.homeUTF8        = jsonData.home_utf8;
+    }
+
+    getConfigByComponent(componentName) {
+        return this.configurations.find(config => config.component === componentName);
+    }
+
+    getConfigByComponentAndStudyTitle(componentName, studyTitle) {
+        return this.configurations.find(config => (config.component === componentName && config.studyTitle === studyTitle));
+    }
+}
+
+// Function handles caching of the RAW data string for consistency
+async function asyncGetConfiguration( params, component, studyTitle=null ) {
+
+   const storageKey   = ('nn_configCache_'+params);
+   const cachedDataString = sessionStorage.getItem(storageKey); 
+   
+   let managerInstance;
+   let finalConfigInstance;
+
+   // --- Check the cache first ---
+   if( cachedDataString ) {
+       try {
+          const rawData = JSON.parse(cachedDataString); 
+          console.log('Returning configuration from cache: ' + storageKey);
+          
+          managerInstance = new ConfigManager(rawData); // Process raw data into classes
+
+          if( studyTitle ) {
+              finalConfigInstance = component 
+                                ? managerInstance.getConfigByComponentAndStudyTitle(component, studyTitle) 
+                                : managerInstance;
+
+          } else {
+              finalConfigInstance = component 
+                                ? managerInstance.getConfigByComponent(component) 
+                                : managerInstance;
+          }
+          
+          if( finalConfigInstance ) {
+              // if the sub-icons haven't been set, look for the default.
+              if( !finalConfigInstance.subIcons || finalConfigInstance.subIcons.length === 0 ) {
+                  if( managerInstance.defaultSubIcons ) {
+                      // deep copy the default sub-icons.
+                      finalConfigInstance.subIcons = JSON.parse(JSON.stringify(managerInstance.defaultSubIcons));
+                  }
+              }
+              if( !finalConfigInstance.plantProject ) {
+                  if( managerInstance.plantProject ) { finalConfigInstance.plantProject = managerInstance.plantProject; }
+              }
+              if( !finalConfigInstance.plantField ) {
+                  if( managerInstance.plantField ) { finalConfigInstance.plantField = managerInstance.plantField; }
+              }
+              if( !finalConfigInstance.plantFieldValue ) {
+                  if( managerInstance.plantFieldValue ) { finalConfigInstance.plantFieldValue = managerInstance.plantFieldValue; }
+              }
+              if( !finalConfigInstance.plantIds ) {
+                  if( managerInstance.plantIds ) { finalConfigInstance.plantIds = managerInstance.plantIds; }
+              }
+              if( !finalConfigInstance.plantListUserId ) {
+                  if( managerInstance.plantListUserId ) { finalConfigInstance.plantListUserId = managerInstance.plantListUserId; }
+              }
+              if( !finalConfigInstance.usePlantProjectImages ) {
+                  if( managerInstance.usePlantProjectImages ) { finalConfigInstance.usePlantProjectImages = managerInstance.usePlantProjectImages; }
+              }
+              if( !finalConfigInstance.defaultMapZoom ) {
+                  if( managerInstance.defaultMapZoom ) { finalConfigInstance.defaultMapZoom = managerInstance.defaultMapZoom; }
+              }
+              if( !finalConfigInstance.mapCenter ) {
+                  if( managerInstance.mapCenter ) { finalConfigInstance.mapCenter = managerInstance.mapCenter; }
+              }
+              if( !finalConfigInstance.mapExtent ) {
+                  if( managerInstance.mapExtent ) { finalConfigInstance.mapExtent = managerInstance.mapExtent; }
+              }
+              if( !finalConfigInstance.mapType ) {
+                  if( managerInstance.mapType ) { finalConfigInstance.mapType = managerInstance.mapType; }
+              }
+              if( !finalConfigInstance.homeUTF8 ) {
+                  if( managerInstance.homeUTF8 ) { finalConfigInstance.homeUTF8 = managerInstance.homeUTF8; }
+              }
+              
+              return finalConfigInstance; 
+          } else {
+              throw new Error(`Requested component "${component}" not found in cache.`);
+          }
+
+       } catch (e) {
+          console.error("Error processing cached configuration, fetching new data:", e.message);
+          sessionStorage.removeItem(storageKey); 
+       }
+   }  
+    
+   // --- Fetch New Data ---
+   if( !params ) {
+       throw new Error(`Name of .json file must be specified in the URL/params.`);
+   }
+
+      try {
+        const response = await fetch(params + '.json');
+          
+        // ... error handling for response (e.g. 500 Internal Server Error)...
+        if( !response.ok ) {
+            if( response.status === 404 ) {
+                console.error('Resource not found (404):', params + '.json');
+                throw new Error('Resource not found (404): ' + params + '.json');
+            }
+            console.error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json(); // The raw data object
+
+        // Store the *raw JSON string* in the cache immediately
+        sessionStorage.setItem(storageKey, JSON.stringify(data));
+
+        // Process the raw data using your classes
+        managerInstance = new ConfigManager(data);
+
+          if( studyTitle ) {
+              finalConfigInstance = component 
+                                ? managerInstance.getConfigByComponentAndStudyTitle(component, studyTitle) 
+                                : managerInstance;
+
+          } else {
+            finalConfigInstance = component 
+                            ? managerInstance.getConfigByComponent(component) 
+                            : managerInstance;
+          }
+
+        // if the sub-icons haven't been set, look for the default.
+        if( !finalConfigInstance.subIcons || finalConfigInstance.subIcons.length === 0 ) {
+            if( managerInstance.defaultSubIcons ) {
+                // deep copy the default sub-icons.
+                finalConfigInstance.subIcons = JSON.parse(JSON.stringify(managerInstance.defaultSubIcons));
+            }
+        }
+        if( !finalConfigInstance.plantProject ) {
+            if( managerInstance.plantProject ) { finalConfigInstance.plantProject = managerInstance.plantProject; }
+        }
+        if( !finalConfigInstance.plantField ) {
+            if( managerInstance.plantField ) { finalConfigInstance.plantField = managerInstance.plantField; }
+        }
+        if( !finalConfigInstance.plantFieldValue ) {
+            if( managerInstance.plantFieldValue ) { finalConfigInstance.plantFieldValue = managerInstance.plantFieldValue; }
+        }
+        if( !finalConfigInstance.plantIds ) {
+            if( managerInstance.plantIds ) { finalConfigInstance.plantIds = managerInstance.plantIds; }
+        }
+        if( !finalConfigInstance.plantListUserId ) {
+            if( managerInstance.plantListUserId ) { finalConfigInstance.plantListUserId = managerInstance.plantListUserId; }
+        }
+        if( !finalConfigInstance.usePlantProjectImages ) {
+            if( managerInstance.usePlantProjectImages ) { finalConfigInstance.usePlantProjectImages = managerInstance.usePlantProjectImages; }
+        }
+        if( !finalConfigInstance.defaultMapZoom ) {
+            if( managerInstance.defaultMapZoom ) { finalConfigInstance.defaultMapZoom = managerInstance.defaultMapZoom; }
+        }
+        if( !finalConfigInstance.mapCenter ) {
+            if( managerInstance.mapCenter ) { finalConfigInstance.mapCenter = managerInstance.mapCenter; }
+        }
+        if( !finalConfigInstance.mapExtent ) {
+            if( managerInstance.mapExtent ) { finalConfigInstance.mapExtent = managerInstance.mapExtent; }
+        }
+        if( !finalConfigInstance.mapType ) {
+            if( managerInstance.mapType ) { finalConfigInstance.mapType = managerInstance.mapType; }
+        }
+        if( !finalConfigInstance.homeUTF8 ) {
+            if( managerInstance.homeUTF8 ) { finalConfigInstance.homeUTF8 = managerInstance.homeUTF8; }
+        }
+
+      
+        return finalConfigInstance; 
+
+   } catch (error) {
+      console.error('Fatal Error during configuration fetch:', error.message);
+      throw error; 
+   }
+}
