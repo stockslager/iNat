@@ -194,11 +194,10 @@ function buildParameterList(state) {
     
     // Iterate over every key in the state object 
     for (const key in state) { 
-        console.log("Current Key passing through loop:", key, "Value:", state[key]);
         if (state.hasOwnProperty(key) && state[key] !== null && state[key] !== undefined && state[key] !== '') { 
             
-            // FIX: Match the exact keys that are inside your homeState object (with underscores)
-            if (key === 'activeFilters' || key === 'field_id' || key === 'field_name' || key === 'field_value') { 
+            // CLEAN: Since both pages use study_store, you only need to skip the array tracking lane!
+            if (key === 'activeFilters') { 
                 continue; 
             } 
             params.append(key, state[key]); 
@@ -206,7 +205,7 @@ function buildParameterList(state) {
     } 
     
     // --- Dynamic Array Appending Block --- // 
-    // Safely serialize your filters sequentially from the unified array tracking lane 
+    // This block is now the single source of truth for both your main page and the grid page
     if (state.activeFilters && state.activeFilters.length > 0) { 
         for (let i = 0; i < state.activeFilters.length; i++) { 
             const filter = state.activeFilters[i]; 
@@ -221,6 +220,7 @@ function buildParameterList(state) {
     const queryString = params.toString(); 
     return queryString ? ('?' + queryString) : ''; 
 }
+
 /*function buildParameterList(state) {
   const params = new URLSearchParams();
 
