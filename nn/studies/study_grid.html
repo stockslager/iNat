@@ -1,6 +1,6 @@
 <!DOCTYPE html>     
-<html lang="en">    
-   
+<html lang="en">     
+     
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
@@ -22,7 +22,7 @@
 
 <body>
 <script type="text/javascript"   src='../core/js/common_functions.js'> </script>
-<script type="text/javascript"   src='../core/js/store.js'> </script>
+<script type="text/javascript"   src='../core/js/study_store.js'> </script>
 <script>
 //get parameters from the url
 let winurlstr         = window.location.href;
@@ -71,7 +71,7 @@ function buildMenu( config ) {
 
            buildNavDD( navbar, 'Maps', links );
        } else {   
-           let url = '../admin/map.html' + setupAPIParams(config) + getMapZoom(config);
+           let url = '../admin/map.html' + setupMapAPIParams(config) + getMapZoom(config);
            buildNavURL( navbar, url, CONST_MAP );
        }
    }
@@ -93,72 +93,8 @@ function buildPage(data, config) {
    buildGrid(data, inat_url);    
 };
 
-function setupMapAPIParams( config, api_params ) {
+function setupCommonAPIParams( config, api_params ) {
     
-    api_params.searchParams.append('project_id', config.project);
-    api_params.searchParams.append('not_in_project', '157918');
-
-    if( getObsDate(appState)    ) { api_params.searchParams.append('on', getObsDate(appState)); } 
-
-    if( getUser(appState) ) {
-        api_params.searchParams.append('user_id', getUser(appState));
-    } else if( config.userId ) { 
-        api_params.searchParams.append('user_id', config.userId);
-    }
-
-    if( getPlaceMenuId(appState) ) { api_params.searchParams.append('place_id', getPlaceMenuId(appState)); }
-
-    // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
-    // use the menu_id if one was passed in.
-    if( getTaxonId(appState) ) {
-        api_params.searchParams.append('taxon_id', getTaxonId(appState));
-    } else if( getMenuId(appState) ) { 
-        api_params.searchParams.append('taxon_id', getMenuId(appState));
-    } else {
-        if( config.defaultTaxonId ) {
-            api_params.searchParams.append('taxon_id', config.defaultTaxonId);
-        }
-    }
-
-    /*if( getActivityFilter(appState) ) {
-        api_params.searchParams.append('field:plant+interaction', getActivityFilter(appState));
-    } */
-
-    if (config.obsAPIParams) {
-        const extraParams = new URLSearchParams(config.obsAPIParams);
-        extraParams.forEach((value, key) => {
-            api_params.searchParams.append(key, value);
-        });
-    }
-
-    if( getMapZoom(config) ) { 
-        const extraParams = new URLSearchParams(getMapZoom(config));
-        extraParams.forEach((value, key) => {
-            api_params.searchParams.append(key, value);
-        });
-    }
-   
-    if( getPage(appState) ) { api_params.searchParams.set('page', getPage(appState)); }
-    if( getPage(appState) ) { api_params.searchParams.set('per_page', CONST_OBSERVATIONS_PER_PAGE); }
-
-    return api_params;
-}
-
-function setupAPIParams( config ) {
-    
-    let api_params = '';
-
-    api_params += '?project_id='+config.project;
-
-    // url params will include field name when they filter based on a 
-    // obs field value by clicking it in the table.
-    if( getFieldName(appState) )  { 
-        api_params += '&field:' + getFieldName(appState); 
-    } else if( config.fieldName ) { 
-        api_params += '&field:'    + config.fieldName;  
-    }
- 
-    if( getFieldValue(appState) ) { api_params += '='          + getFieldValue(appState); }
     if( getObsDate(appState)    ) { api_params += '&on='       + getObsDate(appState); } 
 
     if( getUser(appState) ) {
@@ -186,13 +122,80 @@ function setupAPIParams( config ) {
     if( getActivityFilter(appState) ) {
         api_params += getFilterAPIParams(config);
     }
-    /*if( getActivityFilter(appState) ) {
-        api_params += '&field:plant+interaction='+getActivityFilter(appState);
-    } */
 
     if( config.obsAPIParams ) { api_params += config.obsAPIParams; }
     api_params += getPageParam(appState, '&page=');
     api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
+
+    return api_params;
+}
+
+function setupMapAPIParams( config ) {
+
+    let api_params = '';
+    
+    api_params += '?project_id='+config.project;
+    
+    // --- Consolidated iNat Multi-Field API Builder ---
+    const initialParams = new URLSearchParams(window.location.search);
+    const initialNames = initialParams.getAll('fieldname');
+    const initialValues = initialParams.getAll('fieldvalue');
+
+    const lowerCaseNames = initialNames.map(name => name.toLowerCase());
+
+    // if the config field name isn't already in the initial names array, add it in from the config.
+    if( config.fieldName && !lowerCaseNames.includes(config.fieldName.toLowerCase()) ) {
+        api_params += '&field:' + config.fieldName;
+        if( config.fieldValue ) {
+            api_params += '=' + encodeURIComponent(config.fieldValue);
+        }
+    }
+     console.log('api_params ' + api_params);
+
+    // Sequential Loop: Process whatever filters are explicitly remaining in the URL bar
+    initialNames.forEach((name, index) => {
+      const value = initialValues[index];
+      if( name && value ) {
+          api_params += '&field:' + name + '=' + encodeURIComponent(value);
+      }
+    });
+     console.log('api_params ' + api_params);
+     
+    api_params = setupCommonAPIParams( config, api_params );
+
+    return api_params;
+}
+
+function setupAPIParams( config ) {
+    
+    let api_params = '';
+
+    api_params += '?project_id='+config.project;
+
+    // --- Consolidated iNat Multi-Field API Builder ---
+    const initialParams = new URLSearchParams(window.location.search);
+    const initialNames = initialParams.getAll('fieldname');
+    const initialValues = initialParams.getAll('fieldvalue');
+
+    const lowerCaseNames = initialNames.map(name => name.toLowerCase());
+
+    // Core Rule: If the URL has no active filters (First Entrance), use your config defaults
+    if( config.fieldName && !lowerCaseNames.includes(config.fieldName.toLowerCase() ) ) {
+        api_params += '&field:' + config.fieldName;
+        if( config.fieldValue ) {
+            api_params += '=' + encodeURIComponent(config.fieldValue);
+        }
+    }
+
+    // Sequential Loop: Process whatever filters are explicitly remaining in the URL bar
+    initialNames.forEach((name, index) => {
+      const value = initialValues[index];
+      if( name && value ) {
+          api_params += '&field:' + name + '=' + encodeURIComponent(value);
+      }
+    });
+
+    api_params = setupCommonAPIParams( config, api_params );
 
     return api_params;
 }
