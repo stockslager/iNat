@@ -1,6 +1,6 @@
-<!DOCTYPE html>                      
-<html lang="en">                
-      
+<!DOCTYPE html>               
+<html lang="en">                     
+          
 <head> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
@@ -13,7 +13,7 @@
 <link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
 <meta name="apple-mobile-web-app-title" content="Field Study" />
 <script type="text/javascript" src='../core/js/common_functions.js'> </script>
-<script type="text/javascript" src='../core/js/store.js'> </script>
+<script type="text/javascript" src='../core/js/study_store.js'> </script>
 <title>Field Study</title>
 </head>
 
@@ -165,19 +165,21 @@
 </style>
 <body>
 <script>
-let winurlstr = window.location.href;
-let winurlsearchstr = window.location.search;
-let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
-let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-let p_hide_dash       = winurlparams.get('hide_dash') || 'no';
-let p_without_term_id = winurlparams.get('without_term_id'); 
-let p_not_user_id     = winurlparams.get('without_user_id');
-let p_show_ls         = winurlparams.get('show_ls') || 'no';
-let p_field = '';
-let p_field_value = '';
-let field_array = [];
+let winurlstr = window.location.href; 
+let winurlsearchstr = window.location.search; 
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,''); 
 
-appState       = buildStateFromParams(winurlparams);
+let winurlparams = new URLSearchParams(winurlsearchstr); 
+
+let p_hide_dash = winurlparams.get('hide_dash') || 'no'; 
+let p_without_term_id = winurlparams.get('without_term_id'); 
+let p_not_user_id = winurlparams.get('without_user_id'); 
+let p_show_ls = winurlparams.get('show_ls') || 'no'; 
+let p_field = ''; 
+let p_field_value = ''; 
+let field_array = []; 
+
+appState = buildStateFromParams(winurlparams);
 
 // find key/value pair for &field: param if one was passed in
 for (const [key, value] of winurlparams.entries()) {
@@ -213,11 +215,12 @@ function buildMenu2( results, config ) {
       }
 
       if( config.ddFilters && config.ddFilters.length > 0 ) {
-          buildNavActivityFiltersDD( navbar, 'Filters', config, baseUrl, appState );
+          buildNavActivityFiltersDD2( navbar, 'Filters', config, baseUrl, appState );
       }
 
       if( getComponent(appState) === 'plantings' || getComponent(appState) === 'visits' || config.showStudyGrid === 'yes' ) {
-          buildNavLink( navbar, './study_grid.html', appState, 'Grid' );
+          let urlState = Object.assign({}, appState);
+          buildNavLink( navbar, './study_grid.html', urlState, 'Grid' );
       }
 
       if( p_hide_dash === 'no' ) {
@@ -235,21 +238,82 @@ function isMultipleOfFour(num) {
   return num % 4 === 0;
 }
 
-function boxRow(field_id, field_name, field_value) {
-    this.field_id    = field_id;
-    this.field_name  = field_name;
+//Checks if a specific Field ID has an active filter value in the current query string.
+const hasActiveFilter = (queryString, fieldId) => {
+  const params = new URLSearchParams(queryString);
+  const ids = params.getAll('fieldid');
+  const values = params.getAll('fieldvalue');
+  const idx = ids.indexOf(fieldId.toString());
+  return idx !== -1 && values[idx] !== '';
 }
 
-function fresults( xobj, config ) {
-   let results = xobj.results;
-   let box_array = [];
-
-   if( config.obsFields ) {
-       field_array = config.obsFields.split(",");
-       for( let f=0; f<field_array.length; f++ ){
-            box_array.push(new boxRow(field_array[f], '') );
-       }
+const getUrlWithoutFilter = (queryString, targetFieldId) => {
+  const params = new URLSearchParams(queryString);
+  const ids = params.getAll('fieldid');
+  const names = params.getAll('fieldname');
+  const values = params.getAll('fieldvalue');
+  
+  // 1. Group the URL parameters into clean individual tracking objects
+  const fields = ids.map((id, index) => ({
+    id: id.toString(),
+    name: names[index] || '',
+    value: values[index] || ''
+  }));
+  
+  // 2. Filter out the specific column ID we want to remove
+  const remaining = fields.filter(f => f.id !== targetFieldId.toString());
+  
+  // 3. Clear out the old keys entirely
+  params.delete('fieldid');
+  params.delete('fieldname');
+  params.delete('fieldvalue');
+  
+  // 4. Re-append ONLY the surviving filters with their correct matching values
+  remaining.forEach(f => {
+    params.append('fieldid', f.id);
+    params.append('fieldname', f.name);
+    params.append('fieldvalue', f.value);
+  });
+  
+  params.set('page', '1');
+  return params.toString();
+};
+    
+function fresults( xobj, config ) { 
+   let results = xobj.results; 
+   let box_array = []; 
+  
+   if( config.obsFields ) { 
+       field_array = config.obsFields.split(","); 
+    
+       // Parse the current URL parameters to grab any active filter values 
+       const urlParams = new URLSearchParams(window.location.search); 
+      
+       const urlIds    = urlParams.getAll('fieldid'); 
+       const urlValues = urlParams.getAll('fieldvalue'); 
+       const urlNames  = urlParams.getAll('fieldname'); 
+    
+       for( let f = 0; f < field_array.length; f++ ) { 
+            const currentId = field_array[f].toString(); 
+      
+            // Find if this specific ID already has a value or name stored in the URL 
+            const urlIndex = urlIds.indexOf(currentId); 
+      
+            let activeValue = ''; 
+            let activeName = ''; 
+      
+            if( urlIndex !== -1 ) { 
+                activeValue = urlValues[urlIndex] || ''; 
+                activeName = urlNames[urlIndex] || ''; 
+            } 
+      
+            // Push the boxRow into the display array with its real URL state values 
+            box_array.push(new boxRow(currentId, activeName, activeValue)); 
+       } 
    }
+  
+   // store box_array into appState
+   appState.activeFilters = box_array;
  
    if (results) {
       let total_results = xobj.total_results;
@@ -312,81 +376,111 @@ function fresults( xobj, config ) {
           merged = 'merged observation field';
       } 
     
-      let tempBrow = [];
-
-      for (let i=0; i<results.length; i++) {
-         let rec = results[i];
-         if(rec.ofvs&&rec.ofvs.length>0){
-              for( let r=0; r<field_array_copy.length; r++ ) {
-                 for( let j=0; j<rec.ofvs.length; j++ ){
-                      if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){
-                          let box_row   = box_array.find( boxRow => boxRow.field_id === rec.ofvs[j].field_id.toString() );
-                          box_row.field_name = rec.ofvs[j].name.toString();
-                      }
-                 }
-              }
-         }
-      }
-      
-      let firstCol = 'yes';
-      let nf_box_array = [];
-
-      nf_box_array = box_array;
-
-      /*if( box_array.length === 0 ){
-          labels.push({innerText:' '});
-      }*/
-
-      dlString += '<span id="topright"><span id="mismatch">&#127800; ~ obs field mismatch</span><span id="dltest"><table id="tablekey">';
-
-      for( let e=0; e<box_array.length; e++ ){
-           if( labelCount === 0 ){
-               dlString += ('<tr id="trkey">  <td id="key">field id</td>  <td id="key">'+merged+'</td>  </tr>');                      
+      let tempBrow = []; 
+      for( let i=0; i<results.length; i++ ) { 
+           let rec = results[i]; 
+           if( rec.ofvs && rec.ofvs.length > 0 ){ 
+               for( let r=0; r<field_array_copy.length; r++ ) { 
+                    for( let j=0; j<rec.ofvs.length; j++ ){ 
+                         if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){ 
+                             let box_row = box_array.find( boxRow => boxRow.field_id === rec.ofvs[j].field_id.toString() ); 
+                             if( box_row ) box_row.field_name = rec.ofvs[j].name.toString(); 
+                         } 
+                    } 
+               } 
            } 
-       
-           labelCount++;
-           if( box_array[e].field_name !== '' ) {
-            
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl2(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
-               dlString += ('<td id="tdkey">' + truncate(box_array[e].field_name.toLowerCase(), 25) + '</td></tr>');
-               if( config.merge !== 'yes' ){
-                   if( box_array[e].field_name === getFieldName(appState) ) {
-                       let urlState = appState;
-                       urlState = setPage(urlState, '1');
-                       urlState = setPlantName(urlState, '');
-                       urlState = setFieldName(urlState, '');
-                       urlState = setFieldValue(urlState, '');
-                                   
-                       let resetUrl = './field_study.html'+buildParameterList(urlState); 
+      } 
+
+      let firstCol = 'yes'; 
+      let nf_box_array = box_array; 
+
+      if( box_array.length === 0 ) { 
+          labels.push({innerText:' '}); 
+      } 
+
+      dlString += '<span id="topright"><span id="mismatch">🌸 ~ obs field mismatch</span><span id="dltest"><table id="tablekey">'; 
+
+      for( let e=0; e<box_array.length; e++ ){ 
+           if( labelCount === 0 ) { 
+               dlString += ('<tr id="trkey"> <td id="key">field id</td> <td id="key">'+merged+'</td> </tr>'); 
+           } 
+           labelCount++; 
+  
+           if( box_array[e].field_name !== '' ) { 
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl2(root_obs_fields+box_array[e].field_id, box_array[e].field_id) + '</td>'); 
+               dlString += ('<td id="tdkey">' + truncate(box_array[e].field_name.toLowerCase(), 25) + '</td></tr>'); 
     
-                       // Is a valid, active lifestage filter currently in the URL string? 
-                       let hasFilter = window.location.search.includes('fieldvalue=') && 
-                                      !window.location.search.includes('fieldvalue=&'); 
+               if( config.merge !== 'yes' ) { 
+                   const currentFieldId = box_array[e].field_id; 
+                   const currentFieldName = box_array[e].field_name;
+      
+                   const urlParams = new URLSearchParams(window.location.search); 
+                   const urlIds = urlParams.getAll('fieldid'); 
+                   const urlValues = urlParams.getAll('fieldvalue'); 
+                   const urlNames = urlParams.getAll('fieldname');
+      
+                   // Identify if this column header represents your primary configuration lane
+                   const isPrimaryColumn = config.fieldName && (currentFieldName.toLowerCase() === config.fieldName.toLowerCase());
+      
+                   // Check if this column has an active filter in the URL
+                   const idIndex = urlIds.indexOf(currentFieldId); 
+                   const hasFilter = (idIndex !== -1 && urlValues[idIndex] !== '');
+      
+                   if( hasFilter ) { 
+                       // 1. Map existing tracks into paired tracking objects to protect indices
+                       const temporaryFields = urlIds.map((id, index) => ({
+                         id: id.toString(),
+                         name: urlNames[index] || '',
+                         value: urlValues[index] || ''
+                       }));
+        
+                       // 2. Strip out ONLY this specific filter column row using its unique ID string
+                       const remainingFilters = temporaryFields.filter(f => f.id !== currentFieldId.toString());
 
-                       let resetLink = hasFilter ? ' ' + furl2(resetUrl, iconHtml) : '';
-
-                       labels.push({ innerHTML: '<span class="filterable-header">'+ truncate(box_array[e].field_name,25) + resetLink + '</span>' });
-                   } else {
-                       labels.push({innerText:truncate(box_array[e].field_name,25)});
-                   }
-               } else {
-                   if( firstCol === 'yes' ){
-                       firstCol = 'no';
-                       labels.push({innerText:'Merged Fields (see above)'});
+                       const newParams = new URLSearchParams(); 
+        
+                       // 3. Retain standard layout tokens safely (studytitle, component, etc.)
+                       urlParams.forEach((val, key) => { 
+                         if( key !== 'fieldid' && key !== 'fieldname' && key !== 'fieldvalue') { 
+                             newParams.set(key, val); 
+                         } 
+                       }); 
+        
+                       // 4. Re-append only the surviving active filters sequentially
+                       remainingFilters.forEach(f => { 
+                         newParams.append('fieldid', f.id); 
+                         newParams.append('fieldname', f.name); 
+                         newParams.append('fieldvalue', f.value); 
+                       }); 
+        
+                       newParams.set('page', '1'); 
+        
+                       // 5. FIX: Removed the destructive delete('fieldvalue') line! 
+                       // We only clear the unique plant template token here
+                       if( isPrimaryColumn ) {
+                           newParams.delete('plantname'); 
+                       }
+        
+                       const resetUrl = './field_study.html?' + newParams.toString(); 
+                       const resetLink = ' ' + furl2(resetUrl, iconHtml); 
+        
+                       labels.push({ innerHTML: '<span class="filterable-header">' + truncate(box_array[e].field_name, 25) + resetLink + '</span>' }); 
+                   } else { 
+                       labels.push({ innerText: truncate(box_array[e].field_name, 25) }); 
                    } 
-               }
-           } else {
-               // not found on this page of data.  these can't be all moved to the end of the list because
-               // we need to match them in order with the column headers for the clear filters.
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl2(root_obs_fields+box_array[e].field_id,box_array[e].field_id) + '</td>');
-               dlString += ('<td id="tdkey">missing from this page</td></tr>');
-               if( config.merge !== 'yes' ) {
-                   labels.push({innerText:''});
-               }
-           }
+               } else if( firstCol === 'yes' ) { 
+                   firstCol = 'no'; 
+                   labels.push({innerText:'Merged Fields (see above)'}); 
+               } 
+           } else { 
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl2(root_obs_fields+box_array[e].field_id, box_array[e].field_id) + '</td>'); 
+               dlString += ('<td id="tdkey">missing from this page</td></tr>'); 
+               if( config.merge !== 'yes' ) labels.push({innerText:''}); 
+           } 
       }
 
       dlString += '</table></span></div>';
+
       let clearState = clearForDashParams(appState);
       clearState     = setComponent(clearState, getComponent(appState));    // component required when clearing state on a reset.
       clearState     = setStudyTitle(clearState, getStudyTitle(appState));  // study title required when clearing state on a reset.
@@ -494,97 +588,120 @@ function fresults( xobj, config ) {
 
          let emojiTitle = 'Merged Observation Fields:&#10;';
 
-         if(rec.ofvs&&rec.ofvs.length>0){
-              for( let r=0; r<box_array.length; r++ ) {
-                 for( let j=0; j<rec.ofvs.length; j++ ){
-
-                      if( field_array.includes(rec.ofvs[j].field_id.toString()) ){
-                          if( matchValue === '' ){
-                              matchValue = rec.ofvs[j].value;
-                          } else if( rec.ofvs[j].value !== '' && matchValue !== rec.ofvs[j].value ){
-                              mismatch = 'yes';
-                          }
-                      
-                          if( dataType === '' ){
-                              dataType = rec.ofvs[j].datatype;
-                          } else if( dataType !== rec.ofvs[j].datatype ){
-                              mismatch = 'yes';
-                          }
-                          if( rec.ofvs[j].taxon ){
-                              if( matchTaxonId === '' ){
-                                  matchTaxonId = rec.ofvs[j].taxon.id;
-                              }
-                              if( rec.ofvs[j].taxon.id !== matchTaxonId ){
-                                  mismatch = 'yes';
-                              }
-                          }
+         if( rec.ofvs && rec.ofvs.length > 0) {
+             for( let r = 0; r < box_array.length; r++ ) { 
+                  const box = box_array[r]; 
+                  const targetBoxFieldName = box.field_name?.toLowerCase(); 
+                  const targetBoxFieldIdStr = box.field_id.toString(); 
+  
+                  for( let j = 0; j < rec.ofvs.length; j++ ) { 
+                       const ofv = rec.ofvs[j]; 
+                       const ofvFieldIdStr = ofv.field_id.toString(); 
+                       const ofvValue = ofv.value ?? ''; 
+                       const ofvValueLower = ofvValue.toString().toLowerCase(); 
+    
+                       // Mismatch & Validation Checking --- 
+                       if( field_array.includes(ofvFieldIdStr) ) { 
+                           if( matchValue === '' ) { 
+                               matchValue = ofvValue; 
+                           } else if (ofvValue !== '' && matchValue !== ofvValue) { 
+                               mismatch = 'yes'; 
+                           } 
+                           if( dataType === '') { 
+                               dataType = ofv.datatype; 
+                           } else if (dataType !== ofv.datatype) { 
+                               mismatch = 'yes'; 
+                           } 
+                           if( ofv.taxon ) { 
+                               if( matchTaxonId === '' ) { 
+                                   matchTaxonId = ofv.taxon.id; 
+                               } 
+                               if( ofv.taxon.id !== matchTaxonId ) { 
+                                   mismatch = 'yes'; 
+                               } 
+                           }  
+                       } 
+    
+                       // Cache taxon names for readability below 
+                       const taxonName = ofv.taxon?.name || ''; 
+                       const commonName = ofv.taxon?.preferred_common_name || ''; 
+    
+                       // Merge Mode --- 
+                       if( config.merge === 'yes' && ofvFieldIdStr === targetBoxFieldIdStr ) { 
+                           field1 = ofvValueLower; 
+                           if( ofv.taxon ) { 
+                               const iconicIdStr = ofv.taxon.iconic_taxon_id?.toString(); 
+                               if( !config.ofield_iconic || config.ofield_iconic === iconicIdStr ) { 
+                                   field1 = taxonName; 
+                                   displayCommonName = commonName.toLowerCase(); 
+                                   displayTaxonName = taxonName; 
+                                   displayName = `<span style="font-size:larger">${commonName.toLowerCase()}</span><span style="font-style:italic"><br>(${taxonName})</span>`; 
+                                   emojiTitle += `${ofv.field_id} ${taxonName}\n`; 
+                               } else { 
+                                   emojiTitle += `${ofv.field_id} ${taxonName.toLowerCase()}\n`; 
+                                   displayName = ''; 
+                               } 
+                           } else { 
+                               if( ofvValueLower !== 'unknown' ) { 
+                                   displayName = ofvValueLower; 
+                               } 
+                               emojiTitle += `${ofv.field_id} ${ofvValueLower}\n`; 
+                           }  
+                       } 
+    
+                       // --- SECTION C: No-Merge Mode --- 
+                       if( config.merge !== 'yes' && ofvFieldIdStr === targetBoxFieldIdStr ) { 
+                           matchedCopy = 'yes'; 
+                           if( ofv.value ) { 
+                               field1 = ofvValueLower; 
+                               displayName = ofvValueLower; 
+                               if( ofv.taxon ) { 
+                                   field1 = `<span style="font-size:larger">${commonName.toLowerCase()}</span><span style="font-style:italic"><br>(${taxonName})</span>`; 
+                               } 
+    
+                               // Wild ancestral colony 
+                               if( ofvFieldIdStr === '17383' ) { 
+                                   values.push({ innerHTML: furl2(root_observations + field1, field1) }); 
+                               } else { 
+                                   const cleanValue = replaceDoubleQuotes(ofvValue.toString()); 
+      
+                                   // 1. Let the store utility generate your clean lowercase array parameter string safely
+                                   let updatedParamsStr = updateUrlParamsByFieldId(window.location.search, ofvFieldIdStr, ofv.name, cleanValue, config); 
+      
+                                   const isPrimaryField = config.fieldName && (ofv.name?.toLowerCase() === config.fieldName.toLowerCase()); 
+                                   const finalParams = new URLSearchParams(updatedParamsStr);
+      
+                                   finalParams.set('page', '1'); 
+                                   if( isPrimaryField ) { 
+                                       finalParams.set('plantname', commonName || taxonName); 
+                                   } 
+      
+                                   // 2. Safely restore furl2 now that parameter pollution is fully resolved
+                                   let url = furl2('./field_study.html?' + finalParams.toString(), field1); 
+      
+                                   if( isPrimaryField && config.fieldOutlink ) { 
+                                       let outlink = furl2( config.fieldOutlink + ofvValue.toString(), '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">🛈</span>' ); 
+                                       values.push({ innerHTML: '<span class="filterable-header">' + outlink + '</span>' + url }); 
+                                   } else { 
+                                       values.push({ innerHTML: url }); 
+                                   } 
+                               }  
+                           } else { 
+                               values.push({ innerText: '' }); 
+                           } 
+                      } // end c
+                  } // End of j loop 
+  
+                  if( config.merge !== 'yes' ) { 
+                      if( matchedCopy === 'yes' ) { 
+                          matchedCopy = 'no'; 
+                      } else { 
+                          values.push({ innerText: '' }); 
                       } 
-
-                      if( config.merge === 'yes' && rec.ofvs[j].field_id.toString() === box_array[r].field_id.toString() ){
-                          
-                          field1 = rec.ofvs[j].value.toLowerCase();
-                                    
-                          if( rec.ofvs[j].taxon ){ 
-                              let name  = rec.ofvs[j].taxon.name || '';
-                              let cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                              if( !config.ofield_iconic || config.ofield_iconic === rec.ofvs[j].taxon.iconic_taxon_id.toString() ){
-                                  field1 = name;
-                                  displayCommonName = cname.toLowerCase();
-                                  displayTaxonName = name;
-                                  displayName = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                                  emojiTitle    += (rec.ofvs[j].field_id + ' ' + name + '&#10;');
-                              } else { 
-                                  emojiTitle    += (rec.ofvs[j].field_id + ' ' + name.toLowerCase() + '&#10;');
-                                  displayName = '';
-                              }
-                          } else {
-                                  if( rec.ofvs[j].value.toLowerCase() !== 'unknown' ){
-                                      displayName    = rec.ofvs[j].value.toLowerCase();
-                                  }
-                                  emojiTitle    += (rec.ofvs[j].field_id + ' ' + rec.ofvs[j].value.toLowerCase() + '&#10;');
-                          }
-                      }
-                      
-                      if( config.merge !== 'yes' && rec.ofvs[j].field_id.toString() === box_array[r].field_id.toString() ){
-                          matchedCopy = 'yes';
-                          if( rec.ofvs[j].value ) {
-                              field1 = rec.ofvs[j].value.toLowerCase();
-                              displayName = rec.ofvs[j].value.toLowerCase();
-                              let name = ''; let cname = '';
-                                
-                              if( rec.ofvs[j].taxon ){
-                                  name  = rec.ofvs[j].taxon.name || '';
-                                  cname = rec.ofvs[j].taxon.preferred_common_name || '';
-                                  field1 = '<span style="font-size:larger">'+cname.toLowerCase()+'</span><span style="font-style:italic"><br>('+name+')</span>';
-                              }
-                              if( rec.ofvs[j].field_id.toString() === '17383' ) {  // wild ancestral colony 
-                                  values.push({innerHTML:furl2(root_observations+field1, field1)});
-                              } else {
-                                  let urlState = appState;
-                                  urlState = setPage(urlState, '1');
-                                  urlState = setPlantName(urlState, cname||name);
-                                  urlState = setFieldName(urlState, rec.ofvs[j].name);
-                                  urlState = setFieldValue(urlState, replaceDoubleQuotes(rec.ofvs[j].value.toString()));
-                                  let url  = furl2('./field_study.html'+buildParameterList(urlState), field1);
-                                  let outlink = ''; 
-                                  if( config.fieldOutlink ) { outlink = furl2(config.fieldOutlink+rec.ofvs[j].value.toString(), '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">&#128712;</span>'); }
-                                  values.push({ innerHTML:'<span class="filterable-header">' + outlink + '</span>' + url });
-                              }
-                          } else {
-                              values.push({innerText:''});
-                          }
-                      }
-                  }
-                  if( config.merge !== 'yes' ){
-                      if( matchedCopy === 'yes' ){
-                          matchedCopy = 'no';
-                      } else {
-                          values.push({innerText:''});
-                      }
-                  }
-             }
-         }  
-
+                  } 
+             } // End of r loop
+         }
+        
          if( config.merge === 'yes' ){
               if( displayTaxonName !== '' ){
                   if( mismatch === 'yes' ){
@@ -681,15 +798,29 @@ function setupAPIParams( config ) {
  
    api_params += '?project_id='+config.project;
 
-   // url params will include field name when they filter based on a 
-   // obs field value by clicking it in the table.
-   if( getFieldName(appState) )  { 
-       api_params += '&field:' + getFieldName(appState); 
-   } else if( config.fieldName ) { 
-       api_params += '&field:'    + config.fieldName;  
+   // --- Consolidated iNat Multi-Field API Builder ---
+   const initialParams = new URLSearchParams(window.location.search);
+   const initialNames = initialParams.getAll('fieldname');
+   const initialValues = initialParams.getAll('fieldvalue');
+
+   const lowerCaseNames = initialNames.map(name => name.toLowerCase());
+
+   // Core Rule: If the URL has no active filters (First Entrance), use your config defaults
+   if( config.fieldName && !lowerCaseNames.includes(config.fieldName.toLowerCase() ) ) {
+       api_params += '&field:' + config.fieldName;
+       if( config.fieldValue ) {
+           api_params += '=' + encodeURIComponent(config.fieldValue);
+       }
    }
- 
-   if( getFieldValue(appState) ) { api_params += '='          + getFieldValue(appState); }
+
+   // 2. Sequential Loop: Process whatever filters are explicitly remaining in the URL bar
+   initialNames.forEach((name, index) => {
+     const value = initialValues[index];
+     if( name && value ) {
+         api_params += '&field:' + name + '=' + encodeURIComponent(value);
+     }
+   });
+  
    if( getObsDate(appState)    ) { api_params += '&on='       + getObsDate(appState); }
 
    if( getUser(appState) ) {
@@ -756,7 +887,7 @@ async function gatherResources() {
    
       // Await the result of getObservations() and store the actual data
       const config  = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
-      console.log('full config title: ' + config.getFullTitle());
+      console.log('full config title: ' + config.getFullTitle());          
       const api_params    = setupAPIParams( config );
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
