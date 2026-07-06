@@ -118,6 +118,15 @@ function setupCommonAPIParams( config, api_params ) {
         }
     }
 
+   // filter for life stage annotation...
+   if( getLifeStage(appState) ) { 
+       if( getLifeStage(appState) === 'null' ) {
+           api_params += '&without_term_id=1';
+       } else {
+           api_params += '&term_id=1&term_value_id='  + getLifeStage(appState);
+       }
+   }
+
     // if a filter has been chosen, get the filter api params
     if( getActivityFilter(appState) ) {
         api_params += getFilterAPIParams(config);
