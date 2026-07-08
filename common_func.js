@@ -1,5 +1,3 @@
-const root_florida_dnr = 'https://myfwc.com/fishing/saltwater/recreational/';
-
 function fcomnum(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') }; 
 function furl(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
 function faddelem(etype,eparent=null,eattributes={}) { 
