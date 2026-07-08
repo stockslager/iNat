@@ -268,7 +268,7 @@ let config       = [];
 let p_field_opt  = '';
 
 // close pop-up if they click outside of pop-up
-window.onclick = function(event) { if (event.target == popup) { popup.style.display = "none"; } } 
+//window.onclick = function(event) { if (event.target == popup) { popup.style.display = "none"; } } 
 
 let opts = ('?project_id='+p_project_id+'&user_id='+p_user_id+'&place_id='+p_place_id+'&taxon_id='+p_taxon_id);
 
@@ -508,18 +508,15 @@ function fresults(xobj) {
 
          let warning = ' ';
 
-         for( let l=0; l<config.places.length; l++ ) { 
-              if( rec.place_ids.includes(config.places[l].place_id) ) {
-                  for( let k=0; k<config.places[l].disallows.length; k++ ) {
-                       if( rec.taxon.id === config.places[l].disallows[k].taxon ) {
-                           console.log('warn: ' + config.places[l].disallows[k].message);
-                           warning = ('<div class="popup" onclick="myFunction('+config.places[l].place_id.toString()+rec.taxon.id.toString()+')">&#9432;' +
-                                           '<span class="popuptext" id="'+config.places[l].place_id.toString()+rec.taxon.id.toString()+'">'+config.places[l].disallows[k].message+'</span>' +
-                                      '</div>');
-                       }
-                  }
-              }
-         }   
+         if( rec.project_ids.toString().includes('299445') ) {  // fwc fish species lists
+             if( rec.ofvs && rec.ofvs.length > 0 ) { 
+                 for( let j=0; j<rec.ofvs.length; j++ ) {
+                      if( rec.ofvs[j].field_id.toString() === '22135' ) {
+                          warning = furl(root_florida_dnr+rec.ofvs[j].value.toString(),'&#9432;');
+                      }
+                 }
+             }
+         }
                                       
          let values = [
                   {innerText:i+1},
