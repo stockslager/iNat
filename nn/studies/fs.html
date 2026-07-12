@@ -679,19 +679,21 @@ function fresults( xobj, config ) {
                                    let rawUrl = './field_study.html?' + finalParams.toString();
 
                                    if( isPrimaryField && config.fieldOutlink ) {
-                                       const htmlSafeValue = ofvValue.toString().replace(/"/g, '&quot;');
     
-                                       // Create the clickable info icon link
-                                       let outlink = furl2( config.fieldOutlink + htmlSafeValue, '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">🛈</span>' );
+                                       let apiSafeValue = encodeURIComponent(ofvValue.toString());
     
-                                       // Create the clickable main text link using the field1 text label
+                                       // Protect the HTML string by using single quotes outside, avoiding internal double-quote conflicts
+                                       let outlinkHref = config.fieldOutlink + apiSafeValue;
+    
+                                       // Manually construct the link HTML without running into furl2 inner-quote issues
+                                       let outlink = "<a href='" + outlinkHref + "' target='_blank'><span style='font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;'>🛈</span></a>";
+    
                                        let clickableUrl = furl2(rawUrl, field1);
     
                                        values.push({ innerHTML: '<span class="filterable-header">' + outlink + '</span>' + clickableUrl });
                                    } else {
-                                       // Generate a standard clickable link when it's not the primary field
                                        values.push({ innerHTML: furl2(rawUrl, field1) });
-                                   }                               
+                                   }                     
                                }  
                            } else { 
                                values.push({ innerText: '' }); 
