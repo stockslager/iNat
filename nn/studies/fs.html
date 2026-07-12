@@ -875,7 +875,9 @@ function setupAPIParams( config ) {
    if( config.obsAPIParams ) { api_params += config.obsAPIParams; }
    api_params += getPageParam(appState, '&page=');
    api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
- 
+
+   api_params = api_params.replace(/%2522/g, '%22').replace(/%252F/g, '%2F'); 
+          
    return api_params;
 }
    
