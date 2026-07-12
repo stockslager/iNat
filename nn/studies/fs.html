@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>                    
 <html lang="en">                     
           
@@ -675,8 +676,13 @@ function fresults( xobj, config ) {
                                    if( isPrimaryField ) { 
                                        finalParams.set('plantname', commonName || taxonName); 
                                    } 
-      
-                                   let rawUrl = './field_study.html?' + finalParams.toString();
+
+console.log({
+    "1_ofvName": ofv.name,
+    "2_ofvValue": ofvValue.toString(),
+    "3_updatedParamsStr": updatedParamsStr,
+    "4_fieldOutlink": config.fieldOutlink
+});                                   let rawUrl = './field_study.html?' + finalParams.toString();
 
                                    if( isPrimaryField && config.fieldOutlink ) {
     
