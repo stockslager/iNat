@@ -677,29 +677,32 @@ function fresults( xobj, config ) {
                                        finalParams.set('plantname', commonName || taxonName); 
                                    } 
 
+// 1. Keep the base local web-app layout path clean
 let rawUrl = './field_study.html?' + finalParams.toString();
 
 if (isPrimaryField) {
     // 2. Establish a clear fallback domain pathway if outlink configuration is missing
     let baseOutlink = config.fieldOutlink || 'https://inaturalist.org';
     
-    // 3. Format the observation parameter mapping exactly how the official target expects it
-    let fieldParamKey = 'field:' + ofv.name;
-    let cleanValue = ofvValue.toString();
-    
-    // Fix: Dynamically determine if we need a '?' or an '&' separator
+    // Determine if we need to append parameters using a '?' or an '&' separator
     let separator = baseOutlink.includes('?') ? '&' : '?';
     
-    // 4. Force valid explicit single-layer URI string generation manually
-    let safeOutlinkHref = baseOutlink + separator + encodeURIComponent(fieldParamKey) + '=' + encodeURIComponent(cleanValue);
+    // 3. Securely handle the unvalidated iNaturalist user input value
+    // This immediately neutralizes &, #, +, <, >, and single quotes (') to protect your DOM structure
+    let safeValue = encodeURIComponent(ofvValue.toString());
     
-    // 5. Clean up structural percent-encoding errors to support iNaturalist's server routing rules
-    safeOutlinkHref = safeOutlinkHref
-        .replace(/%22/g, '"') // Protect literal double-quotes if present
-        .replace(/%2F/g, '/') // Protect literal slashes
-        .replace(/%3A/g, ':'); // Restore the colon delimiter for custom field keys
+    // 4. Selectively undo percent-encoding *only* for the raw structures iNaturalist requires
+    let apiValue = safeValue
+        .replace(/%22/g, '"')   // Protect literal double-quotes if present
+        .replace(/%2F/g, '/')   // Protect literal slashes
+        .replace(/%3A/g, ':');  // Protect literal colons
+    
+    // 5. Construct the safe, final URL parameter mapping string
+    let fieldParamKey = 'field:' + encodeURIComponent(ofv.name);
+    let safeOutlinkHref = baseOutlink + separator + fieldParamKey + '=' + apiValue;
         
-    // 6. Generate the anchor layout cleanly using single-quotes to protect the HTML tree
+    // 6. Generate the anchor layout cleanly using single-quotes to protect the HTML tree.
+    // (Safe because any user apostrophes are now encoded as %27, and double-quotes are contained inside)
     let outlink = "<a href='" + safeOutlinkHref + "' target='_blank'><span style='font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;'>🛈</span></a>";
     let clickableUrl = furl2(rawUrl, field1);
     
