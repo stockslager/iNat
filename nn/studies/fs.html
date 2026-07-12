@@ -664,29 +664,34 @@ function fresults( xobj, config ) {
                                    values.push({ innerHTML: furl2(root_observations + field1, field1) }); 
                                } else { 
                                    const cleanValue = replaceDoubleQuotes(ofvValue.toString()); 
-
-                                   let updatedParamsStr = updateUrlParamsByFieldId(window.location.search, ofvFieldIdStr, ofv.name, cleanValue, config);
-                                   const isPrimaryField = config.fieldName && (ofv.name?.toLowerCase() === config.fieldName.toLowerCase());
-                                         
+      
+                                   // 1. Let the store utility generate your clean lowercase array parameter string safely
+                                   let updatedParamsStr = updateUrlParamsByFieldId(window.location.search, ofvFieldIdStr, ofv.name, cleanValue, config); 
+      
+                                   const isPrimaryField = config.fieldName && (ofv.name?.toLowerCase() === config.fieldName.toLowerCase()); 
                                    const finalParams = new URLSearchParams(updatedParamsStr);
-                                   finalParams.set('page', '1');
-
-                                   if( isPrimaryField ) {
-                                       finalParams.set('plantname', commonName || taxonName);
-                                   }
-
-                                   let url = furl2('./field_study.html?' + finalParams.toString(), field1);
+      
+                                   finalParams.set('page', '1'); 
+                                   if( isPrimaryField ) { 
+                                       finalParams.set('plantname', commonName || taxonName); 
+                                   } 
+      
+                                   let rawUrl = './field_study.html?' + finalParams.toString();
 
                                    if( isPrimaryField && config.fieldOutlink ) {
-                                       let secureOutlinkTarget = config.fieldOutlink + encodeURIComponent(ofvValue.toString());
-  
-                                       let outlink = furl2( secureOutlinkTarget, '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">🛈</span>' );
-  
-                                       values.push({ innerHTML: '<span class="filterable-header">' + outlink + '</span>' + url });
+                                       const htmlSafeValue = ofvValue.toString().replace(/"/g, '&quot;');
+    
+                                       // Create the clickable info icon link
+                                       let outlink = furl2( config.fieldOutlink + htmlSafeValue, '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">🛈</span>' );
+    
+                                       // Create the clickable main text link using the field1 text label
+                                       let clickableUrl = furl2(rawUrl, field1);
+    
+                                       values.push({ innerHTML: '<span class="filterable-header">' + outlink + '</span>' + clickableUrl });
                                    } else {
-                                       values.push({ innerHTML: url });
-                                   }
-
+                                       // Generate a standard clickable link when it's not the primary field
+                                       values.push({ innerHTML: furl2(rawUrl, field1) });
+                                   }                               
                                }  
                            } else { 
                                values.push({ innerText: '' }); 
