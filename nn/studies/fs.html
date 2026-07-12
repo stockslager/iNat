@@ -677,29 +677,38 @@ function fresults( xobj, config ) {
                                        finalParams.set('plantname', commonName || taxonName); 
                                    } 
 
-console.log({
-    "1_ofvName": ofv.name,
-    "2_ofvValue": ofvValue.toString(),
-    "3_updatedParamsStr": updatedParamsStr,
-    "4_fieldOutlink": config.fieldOutlink
-});                                   let rawUrl = './field_study.html?' + finalParams.toString();
+let rawUrl = './field_study.html?' + finalParams.toString();
 
-                                   if( isPrimaryField && config.fieldOutlink ) {
+if (isPrimaryField) {
+    // 2. Establish a clear fallback domain pathway if outlink configuration is missing
+    let baseOutlink = config.fieldOutlink || 'https://inaturalist.org';
     
-                                       let apiSafeValue = encodeURIComponent(ofvValue.toString());
+    // 3. Format the observation parameter mapping exactly how the official target expects it
+    let fieldParamKey = 'field:' + ofv.name;
+    let cleanValue = ofvValue.toString();
     
-                                       // Protect the HTML string by using single quotes outside, avoiding internal double-quote conflicts
-                                       let outlinkHref = config.fieldOutlink + apiSafeValue;
+    // Fix: Dynamically determine if we need a '?' or an '&' separator
+    let separator = baseOutlink.includes('?') ? '&' : '?';
     
-                                       // Manually construct the link HTML without running into furl2 inner-quote issues
-                                       let outlink = "<a href='" + outlinkHref + "' target='_blank'><span style='font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;'>🛈</span></a>";
+    // 4. Force valid explicit single-layer URI string generation manually
+    let safeOutlinkHref = baseOutlink + separator + encodeURIComponent(fieldParamKey) + '=' + encodeURIComponent(cleanValue);
     
-                                       let clickableUrl = furl2(rawUrl, field1);
+    // 5. Clean up structural percent-encoding errors to support iNaturalist's server routing rules
+    safeOutlinkHref = safeOutlinkHref
+        .replace(/%22/g, '"') // Protect literal double-quotes if present
+        .replace(/%2F/g, '/') // Protect literal slashes
+        .replace(/%3A/g, ':'); // Restore the colon delimiter for custom field keys
+        
+    // 6. Generate the anchor layout cleanly using single-quotes to protect the HTML tree
+    let outlink = "<a href='" + safeOutlinkHref + "' target='_blank'><span style='font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;'>🛈</span></a>";
+    let clickableUrl = furl2(rawUrl, field1);
     
-                                       values.push({ innerHTML: '<span class="filterable-header">' + outlink + '</span>' + clickableUrl });
-                                   } else {
-                                       values.push({ innerHTML: furl2(rawUrl, field1) });
-                                   }                     
+    // Push the structured output safely to the views container
+    values.push({ innerHTML: '<span class="filterable-header">' + outlink + '</span>' + clickableUrl });
+} else {
+    // Standard link execution when condition requirements are not met
+    values.push({ innerHTML: furl2(rawUrl, field1) });
+}
                                }  
                            } else { 
                                values.push({ innerText: '' }); 
