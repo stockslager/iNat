@@ -875,6 +875,10 @@ function setupAPIParams( config ) {
    if( config.obsAPIParams ) { api_params += config.obsAPIParams; }
    api_params += getPageParam(appState, '&page=');
    api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
+
+   // This prevents the application loop from inadvertently double-encoding quotes (%2522)
+   // This would break if there is ever a % symbol stored in a field value...may need to revisit
+   api_params = api_params.replace(/%2522/g, '%22').replace(/%252F/g, '%2F'); 
  
    return api_params;
 }
