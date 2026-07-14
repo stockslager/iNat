@@ -35,11 +35,13 @@ appState  =  buildStateFromParams(winurlparams);
 
 // page specific constants...
 const CONST_ICON           = 'Icon';
+const CONST_FISH_UTF8      = '&#128031;';
 const CONST_COMPONENT      = 'Component';
 const CONST_DESCRIPTION    = 'Description';
 const CONST_COMPONENTS     = 'components: ';
 const CONST_FIELD_STUDIES  = 'Field Studies';
 const CONST_GARDEN_DESC    = 'Interactions between plants and animals by plant.';
+const CONST_REGULATED_DESC = 'A list of regulatory categories with species perceived by lifelist anglers to fit into those categories.';
 const CONST_COLONY_DESC    = 'Lists the colonies of plants where collection has occurred.  Shows the child colonies established from each parent colony.';
 const CONST_HIKER_DESC   = 'Species encountered during this trek.';
 const CONST_OBSERVERS_DESC   = 'Interactions between plants and animals by observer.';
@@ -47,6 +49,7 @@ const CONST_PLANT_VALUE  = 'Plants';
 const CONST_COLONIES     = 'Colonies';
 const CONST_BIODIVERSITY = 'Biodiversity';
 const CONST_THRU_HIKES   = 'Thru Hikes';
+const CONST_REGULATED    = 'Regulated Categories';
 const CONST_ART          = 'Art & Journaling';
 const CONST_OBSERVERS    = 'Observers';
 const CONST_MISSIONS     = 'Missions';
@@ -121,9 +124,9 @@ function buildPage( configManager ) {
 
                    if( config.component === 'fish') {
                        let url  = '../florida/regulatory_categories.html';
-                       let icon = config.utf8 || CONST_LEAF_UTF8;
-                       let name = config.studyTitle || CONST_PLANT_VALUE;
-                       let desc = config.studyDesc || CONST_GARDEN_DESC;
+                       let icon = config.utf8 || CONST_FISH_UTF8;
+                       let name = config.studyTitle || CONST_REGULATED;
+                       let desc = config.studyDesc || CONST_REGULATED_DESC;
                        buildRow( name, icon, name, desc, tbody, url );
                    }
               }
