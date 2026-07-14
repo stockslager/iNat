@@ -44,7 +44,9 @@ function buildMenu( results, config ) {
 
     let menu_name = config.getSubIconNameByTaxonId(config, getMenuId(appState)) || CONST_SHOW;
 
-    buildNavDDFilteredShow( navbar, menu_name, results, config, baseUrl );
+    if( getComponent(appState) === COMPONENT_OBSERVERS ) {
+        buildNavDDFilteredShow( navbar, menu_name, results, config, baseUrl );
+    }
 
     // only show the additional filters if they haven't made a seleciton from the taxa menu.
     // otherwise there's too much risk of queries with no results.
@@ -77,7 +79,7 @@ function buildPage(xobj, config) {
 
       let title_1 = '', title_2 = '', title_3 = '';
 
-      let titleText = CONST_ON + capitalizeWords(getPlantName(appState));
+      let titleText = CONST_ALL + capitalizeWords(getPlantName(appState));
       let urlState = appState; 
       if( getMenuId(appState) ) {
           urlState = setTaxonId(appState, getMenuId(appState));
