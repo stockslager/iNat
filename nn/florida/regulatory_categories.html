@@ -199,9 +199,9 @@ function buildPage(xobj, config) {
                     urlState = setPage(urlState, '');
                     urlState = setTaxonId(urlState, '');
                     urlState = setTaxonName(urlState, '');
-                    urlState = setPlantId(urlState, rec.id);
+                    urlState = setPlantId(urlState, config.taxa[j].taxonName.toLowerCase());
                     urlState = setPlantName(urlState, header_name||'?');
-                    let url      = './garden_activity.html' + buildParameterList(urlState);
+                    let url      = './species_mapping.html' + buildParameterList(urlState);
 
                     let tdName = faddelem('td', brow);
                     let a = faddelem('a', tdName, { href: url });
