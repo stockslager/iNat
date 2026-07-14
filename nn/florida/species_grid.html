@@ -57,7 +57,6 @@ function buildMenu(config) {
 
    menu_string = '<div class="navbar">';
 
-   console.log('mt ' + config.mapType);
    if( config.mapType !== 'hide' ) {
        menu_string += buildMenuURL( furl('../admin/map.html' + setupAPIParams(config)  + getMapZoom(config) + '&params=' + getParams(appState), "Map") );
    }
@@ -65,7 +64,7 @@ function buildMenu(config) {
    
    let url_state = clearForSpeciesCountsParams( appState );
    
-   menu_string += buildHome( furl('./garden_activity.html'+buildParameterList(url_state),CONST_LEAF_UTF8) );
+   menu_string += buildHome( furl('./garden_activity.html'+buildParameterList(url_state), config.homeUTF8 || CONST_LEAF_UTF8) );
    menu_string += '</div>';
    
    return menu_string;
