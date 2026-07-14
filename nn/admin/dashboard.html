@@ -115,6 +115,18 @@ function buildPage( configManager ) {
       
               faddelems('th',hrow,labels);
               let tbody = faddelem('tbody',table);
+
+              for( let i=0; i<configManager.configurations.length; i++ ) {
+                   let config = configManager.configurations[i];
+
+                   if( config.component === 'fish') {
+                       let url  = '../florida/regulatory_categories.html';
+                       let icon = config.utf8 || CONST_LEAF_UTF8;
+                       let name = config.studyTitle || CONST_PLANT_VALUE;
+                       let desc = config.studyDesc || CONST_GARDEN_DESC;
+                       buildRow( name, icon, name, desc, tbody, url );
+                   }
+              }
   
               for( let i=0; i<configManager.configurations.length; i++ ) {
                    let config = configManager.configurations[i];
