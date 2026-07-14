@@ -161,6 +161,8 @@ function setupAPIParams( config ) {
       api_params += '&without_taxon_id='+CONST_WITHOUT_TAXON_PLANTAE; // only interested in visitors to plants here
       api_params += '&field:'+config.fieldName+'='+getPlantId(appState);
    }
+
+   if( plantConfig.obsAPIParams ) { api_params += plantConfig.obsAPIParams; }
  
    //api_params += getPlantIdParam(appState, '&taxon_id=');          
    api_params += getPageParam(appState, '&page=');
