@@ -212,7 +212,8 @@ function buildPage(xobj, config) {
                     // Column: Regs info
                     let tdReg      = faddelem('td', brow); 
                     let outlink    = furl2(config.fieldOutlink + config.taxa[j].taxonName.toLowerCase()); 
-                    let outWrapper = faddelem('span', tdReg, { class: 'filterable-header' }); 
+                    let outWrapper = faddelem('span', tdReg); 
+                    outWrapper.classList.add('filterable-header'
                     let out        = faddelem('a', outWrapper, { href: outlink, html: '<span style="font-size: 1rem; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">🛈</span>' });
                 }
            }
