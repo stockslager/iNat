@@ -184,11 +184,11 @@ function buildPage(xobj, config) {
                     // Regulatory Name 
                     faddelem('span', a, { style: { fontSize: 'larger' }, textContent: (config.taxa[j].taxonName).toLowerCase() });
 
-                    // Regs info
-                    let tdReg = faddelem('td', brow);
-                    let outlink = furl2( config.fieldOutlink + config.taxa[j].taxonName.toLowerCase(), '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">🛈</span>' ); 
-                    let outWrapper = faddelem('span', tdReg, { class: 'filterable_header' });
-                    let out = faddelem('a', outWrapper, { href: outlink });
+                    // Column: Regs info
+                    let tdReg      = faddelem('td', brow); 
+                    let outlink    = furl2(config.fieldOutlink + config.taxa[j].taxonName.toLowerCase()); 
+                    let outWrapper = faddelem('span', tdReg, { class: 'filterable_header' }); 
+                    let out        = faddelem('a', outWrapper, { href: outlink, html: '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">🛈</span>' });
                 }
            }
       }
