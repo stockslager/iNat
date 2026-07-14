@@ -200,7 +200,7 @@ function buildPage(xobj, config) {
                     urlState = setTaxonId(urlState, '');
                     urlState = setTaxonName(urlState, '');
                     urlState = setPlantId(urlState, config.taxa[j].taxonName.toLowerCase());
-                    urlState = setPlantName(urlState, header_name||'?');
+                    urlState = setPlantName(urlState, config.taxa[j].taxonName.toLowerCase());
                     let url      = './species_mapping.html' + buildParameterList(urlState);
 
                     let tdName = faddelem('td', brow);
