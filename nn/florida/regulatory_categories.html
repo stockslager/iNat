@@ -116,6 +116,8 @@ function buildMenu( config, results ) {
         return;
     }
 
+    let title = getPlaceMenuName(appState) || config.title;
+
     // if place filters were set in the configuration
     if( config.places && config.places.length > 0 ) {
         buildNavDDPlace( navbar, CONST_PLACE, results, config, baseUrl );
