@@ -161,7 +161,7 @@ function buildPage(xobj, config) {
                     header_name = pref_tax_name || tax_name || '';
                     
                     // Column: Species Pic
-                    let tdPhoto = faddelem('td', brow, { style: { textAlign: 'center', verticalAlign: 'middle' } }); 
+                    let tdPhoto = faddelem('td', brow); 
     
                     if( rec.default_photo ) {
                         faddelem('img', tdPhoto, { className: 'smallicon', src: rec.default_photo.square_url });
@@ -185,7 +185,7 @@ function buildPage(xobj, config) {
                     faddelem('span', a, { style: { fontSize: 'larger' }, textContent: (config.taxa[j].taxonName).toLowerCase() });
 
                     // Column: Regs info
-                    let tdReg      = faddelem('td', brow, { style: { textAlign: 'center', verticalAlign: 'middle' } }); 
+                    let tdReg      = faddelem('td', brow); 
                     let outlink    = furl2(config.fieldOutlink + config.taxa[j].taxonName.toLowerCase()); 
                     let outWrapper = faddelem('span', tdReg, { class: 'filterable_header' }); 
                     let out        = faddelem('a', outWrapper, { href: outlink, html: '<span style="font-size: 1rem; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">🛈</span>' });
