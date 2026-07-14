@@ -110,7 +110,7 @@ function buildMenu( config, results ) {
     let baseUrl = window.location.origin + window.location.pathname;
 
     if( p_hide_dash === 'yes' ) {
-        let title = getPlaceMenuName(appState) || config.getSubTitle() || config.title;        
+        let title = getPlaceMenuName(appState) || config.title;        
         buildNavTitle( navbar, title );
         faddelem('p', document.body).appendChild(navbar);
         return;
@@ -156,9 +156,7 @@ function buildPage(xobj, config) {
 
       let title_1 = '', title_2 = '', title_3 = '';
 
-      if( p_hide_dash === 'no' ) {
-          title_3 = getPlaceMenuName(appState) || config.getSubTitle() || config.title;
-      }
+      title_3 = getPlaceMenuName(appState) || config.getSubTitle() || config.title;
       
       let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, title_1, title_2, title_3 ); 
     
