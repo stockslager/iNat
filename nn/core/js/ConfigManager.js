@@ -14,6 +14,7 @@ class Place {
 class Taxon {
     constructor(data) {
         this.taxonId = data.taxon_id;
+        this.displayName = data.display_name;
         this.taxonName = data.taxon_name;
         this.icon = data.icon;
     }
