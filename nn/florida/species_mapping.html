@@ -56,12 +56,10 @@ function buildMenu( results, config ) {
     }
 
     // Build the Home Link
-    delete appState.invasive; 
     let homeState = clearForGardenListParams(appState);
+    delete homeState.invasive; 
     let homeUrl = './regulatory_categories.html';
     buildNavHome( navbar, homeUrl, homeState, config );
-    winurlparams.delete('invasive');
-    winurlparams.append('invasive', p_invasive);
 
     // Append the DOM nodes to the body
     faddelem('p', document.body).appendChild(navbar);
