@@ -857,6 +857,7 @@ var view = winurlparams.get('view') || 'default';
 var compexclparam = winurlparams.get('compare_exclude_param');
 var thresholded = winurlparams.get('thresholded') || 'true'; // even though the default in the API is false, set the default to true, since we're going to usually want to see Expected Nearby rather than Unthresholded
 var appParams = winurlparams.get('params') || '';	
+var iconic = winurlparams.get('iconic') || 'plantae';
 
 winurlparams.delete('centerlat');
 winurlparams.delete('centerlng');
@@ -903,7 +904,11 @@ let dashboardUrl = '../admin/dashboard.html?params='+appParams;
 let hLink = faddelemLocal('a', headerBar, { href: `javascript:goBackWithFallback('${dashboardUrl}');`, id: 'home-link' });	
 	
 // Add the leaf icon
-faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
+if( iconic === 'Actinopterygii' ) {
+    faddelemLocal('span', hLink, { innerHTML: '<span class=\"navbar-big-icon\">&#128031;</span>' });
+} else {
+    faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
+}
 
 // Add to the top of the page
 document.body.prepend(headerBar);
