@@ -82,6 +82,11 @@ function buildPage(xobj, config) {
       let title_1 = '', title_2 = '', title_3 = '';
 
       let titleText = capitalizeWords(CONST_ALL) + ' ' + capitalizeWords(getPlantName(appState));
+
+      if( p_invasive === 'yes' ) {
+          titleText = capitalizeWords(CONST_ALL) + ' Introduced';    
+      }
+    
       let urlState = appState; 
       if( getMenuId(appState) ) {
           urlState = setTaxonId(appState, getMenuId(appState));
