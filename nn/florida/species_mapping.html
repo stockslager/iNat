@@ -150,9 +150,8 @@ function setupAPIParams(config) {
    api_params += ('?project_id='+config.insectProject);
    //api_params += '&hrank=species';
 
-   // filter by field... uses the plant_id (the taxon_id) for the plant
-   // chosen from the garden list.
-   api_params += '&field:'+config.fieldName+'='+getPlantId(appState);
+   // use the taxon_id passed in via plantid to filter by taxon...
+   api_params += '&taxon_id='+getPlantId(appState);
 
    // default these to what's in the config even though the state sometimes
    // holds the same attributes for other components.
