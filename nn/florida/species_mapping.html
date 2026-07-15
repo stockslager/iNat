@@ -24,6 +24,7 @@ let winurlsearchstr   = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams      = new URLSearchParams(winurlsearchstr.substring(1));
 let p_mode         = winurlparams.get('mode') || '';
+let p_invasivev    = winurlParams.get('invasive') || 'no';
 
 appState       = buildStateFromParams(winurlparams);
 
@@ -155,8 +156,15 @@ function setupAPIParams(config) {
    if( getMenuId(appState) ) {
        api_params += getMenuIdParam(appState, '&taxon_id='); 
    } else {
-       api_params += '&taxon_id='+getPlantId(appState);   
+       if( p_invasive !== 'yes' ) {
+           api_params += '&taxon_id='+getPlantId(appState);   
+       }
    } 
+
+   // if the invasive parameter is set...
+   if( p_invasive === 'yes' ) {
+       api_params += '&native=false&introduced=true';
+   }
 
    // default these to what's in the config even though the state sometimes
    // holds the same attributes for other components.
