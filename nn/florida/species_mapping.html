@@ -150,8 +150,13 @@ function setupAPIParams(config) {
    api_params += ('?project_id='+config.insectProject);
    //api_params += '&hrank=species';
 
-   // use the taxon_id passed in via plantid to filter by taxon...
-   api_params += '&taxon_id='+getPlantId(appState);
+   // if a taxon was chosen from the "Show" drop-down filter with that taxon_id.
+   // otherwise, filter with the default passed in through &plantid
+   if( getMenuId(appState) ) {
+       api_params += getMenuIdParam(appState, '&taxon_id='); 
+   } else {
+       api_params += '&taxon_id='+getPlantId(appState);   
+   } 
 
    // default these to what's in the config even though the state sometimes
    // holds the same attributes for other components.
@@ -168,14 +173,6 @@ function setupAPIParams(config) {
    // if a filter has been chosen, get the filter api params
    if( getActivityFilter(appState) ) {
        api_params += getFilterAPIParams(config);
-   }
-
-   // if a taxon was chosen from the "Show" drop-down filter with that taxon_id.
-   // otherwise, filter with the default from the config file if there is one.
-   if( getMenuId(appState) ) {
-       api_params += getMenuIdParam(appState, '&taxon_id='); 
-   } else {
-       if( config.defaultTaxonId ) { api_params += '&taxon_id=' + config.defaultTaxonId; }
    }
  
    api_params += getPageParam(appState, '&page=');
