@@ -88,7 +88,9 @@ function setupAPIParams( config ) {
 
    // if a taxon was chosen from the "Show" drop-down filter with that taxon_id.
    // otherwise, filter with the default passed in through &plantid
-   if( getMenuId(appState) ) {
+   if( getTaxonId(appState) ) {
+       api_params += '&taxon_id=' + getTaxonId(appState);
+   } else if( getMenuId(appState) ) {
        api_params += getMenuIdParam(appState, '&taxon_id='); 
    } else {
        api_params += '&taxon_id='+getPlantId(appState);   
