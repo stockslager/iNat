@@ -83,32 +83,33 @@ function setupAPIParams( config ) {
     
     let api_params = '';
 
-    api_params += '?project_id='+config.insectProject;
+   api_params += ('?project_id='+config.insectProject);
+   //api_params += '&hrank=species';
 
-    // if a taxon was chosen from the "Show" drop-down filter with that taxon_id.
-    // otherwise, filter with the default from the config file if there is one.
-    if( getTaxonId(appState) ) {
-        api_params += getTaxonIdParam(appState, '&taxon_id='); 
-    } else {
-        if( config.defaultTaxonId ) { api_params += '&taxon_id=' + config.defaultTaxonId; }
-    }
+   // if a taxon was chosen from the "Show" drop-down filter with that taxon_id.
+   // otherwise, filter with the default passed in through &plantid
+   if( getMenuId(appState) ) {
+       api_params += getMenuIdParam(appState, '&taxon_id='); 
+   } else {
+       api_params += '&taxon_id='+getPlantId(appState);   
+   } 
 
-    if( config.userId )         { api_params += '&user_id='  + config.userId; }  
-    if( config.faunaAPIParams ) { api_params += config.faunaAPIParams; }
+   // default these to what's in the config even though the state sometimes
+   // holds the same attributes for other components.
+   if( config.userId         ) { api_params += '&user_id='  + config.userId; }
+   if( config.faunaAPIParams ) { api_params += config.faunaAPIParams; }
 
-    // if a filter has been chosen, get the filter api params
-    if( getActivityFilter(appState) ) {
-        api_params += getFilterAPIParams(config);
-    }
+   // if a place_id was chosen from the place drop-down, use that place_id...
+   if( getPlaceMenuId(appState) ) {
+       api_params += '&place_id=' + getPlaceMenuId(appState);
+   } else if( config.defaultPlace ) {
+       api_params += '&place_id=' + config.defaultPlace;
+   }
 
-    // if a place_id was chosen from the place drop-down, use that place_id...
-    if( getPlaceMenuId(appState) ) {
-        api_params += '&place_id=' + getPlaceMenuId(appState);
-    } else if( config.defaultPlace ) {
-        api_params += '&place_id=' + config.defaultPlace;
-    }
-  
-    api_params += '&field:'+config.fieldName+'=' + getPlantId(appState);
+   // if a filter has been chosen, get the filter api params
+   if( getActivityFilter(appState) ) {
+       api_params += getFilterAPIParams(config);
+   }
 
     return api_params;
 }
