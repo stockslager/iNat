@@ -97,6 +97,7 @@ class ConfigurationItem {
         this.ofieldIconic   = configData.ofield_iconic ?? null;
         this.merge          = configData.merge ?? null;
         this.showStudyGrid  = configData.show_study_grid ?? null; 
+        this.identifyEnabled = configData.identify_enabled ?? null;
 
         this.obsFields = configData.obs_fields ?? configData.field_id ?? null;
         
