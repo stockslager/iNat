@@ -178,6 +178,7 @@ let p_show_ls = winurlparams.get('show_ls') || 'no';
 let p_field = ''; 
 let p_field_value = ''; 
 let field_array = []; 
+let identify_params = '';
 
 appState = buildStateFromParams(winurlparams);
 
@@ -221,6 +222,11 @@ function buildMenu2( results, config ) {
       if( getComponent(appState) === 'plantings' || getComponent(appState) === 'visits' || config.showStudyGrid === 'yes' ) {
           let urlState = Object.assign({}, appState);
           buildNavLink( navbar, './study_grid.html', urlState, 'Grid' );
+      }
+
+      if( identify_params ) {
+          let url = 'https://www.inaturalist.org/observations/identify' + identify_params + '&reviewed=any&quality_grade=needs_id,research,casual';
+          buildNavURL( navbar, url, 'Identify' );
       }
 
       if( p_hide_dash === 'no' ) {
@@ -873,6 +879,14 @@ function setupAPIParams( config ) {
    if( p_not_user_id )       { api_params += '&not_user_id='     + p_not_user_id; }
 
    if( config.obsAPIParams ) { api_params += config.obsAPIParams; }
+
+   // set the params for the identify link to the exact filtration parameters
+   // to be used in the api transaction that will populate the table with whatever 
+   // filtrations were selected.
+   if( config.identifyEnabled === 'yes' ) {
+       identify_params = api_params;
+   } 
+          
    api_params += getPageParam(appState, '&page=');
    api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
 
