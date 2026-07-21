@@ -39,8 +39,11 @@ function buildMenu( config ) {
   let navbar = document.createElement('div');    
   navbar.className = 'navbar v2-menu';
 
-  let title = getPlaceMenuName(appState) || config.getSubTitle() || config.title;        
-  buildNavTitle( navbar, title );
+  let title = getPlaceMenuName(appState) || config.getSubTitle() || config.title;  
+
+  if( config.showChoose !== 'yes' ) {
+      buildNavTitle( navbar, title );
+  }
 
   // build the choose plant link
   if( config.showChoose === 'yes' ) {
