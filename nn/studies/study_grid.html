@@ -118,6 +118,8 @@ function setupCommonAPIParams( config, api_params ) {
         }
     }
 
+    if( config.defaultPlace ) { api_params += '&place_id='        + config.defaultPlace; }
+
     // filter for life stage annotation...
     if( getLifeStage(appState) ) { 
         if( getLifeStage(appState) === 'null' ) {
