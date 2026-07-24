@@ -1,5 +1,4 @@
-
-<!DOCTYPE html>                    
+<!DOCTYPE html>               
 <html lang="en">                     
           
 <head> 
@@ -179,6 +178,7 @@ let p_show_ls = winurlparams.get('show_ls') || 'no';
 let p_field = ''; 
 let p_field_value = ''; 
 let field_array = []; 
+let identify_params = '';
 
 appState = buildStateFromParams(winurlparams);
 
@@ -216,12 +216,17 @@ function buildMenu2( results, config ) {
       }
 
       if( config.ddFilters && config.ddFilters.length > 0 ) {
-          buildNavActivityFiltersDD2( navbar, 'Filters', config, baseUrl, appState );
+          buildNavActivityFiltersDD( navbar, 'Filters', config, baseUrl, appState );
       }
 
       if( getComponent(appState) === 'plantings' || getComponent(appState) === 'visits' || config.showStudyGrid === 'yes' ) {
           let urlState = Object.assign({}, appState);
           buildNavLink( navbar, './study_grid.html', urlState, 'Grid' );
+      }
+
+      if( identify_params ) {
+          let url = 'https://www.inaturalist.org/observations/identify' + identify_params + '&reviewed=any&quality_grade=needs_id,research,casual';
+          buildNavURL( navbar, url, 'Identify' );
       }
 
       if( p_hide_dash === 'no' ) {
@@ -577,8 +582,18 @@ function fresults( xobj, config ) {
              } 
          } 
 
-         values.push({ innerHTML: furl2(root_observations + rec.id, '<img class="mini_photo2" src="' + ((rec.photos && rec.photos.length > 0) ? rec.photos[0].url : '') + '" />') });
-       
+         if( rec.photos && rec.photos.length > 0 ) {
+             values.push({ innerHTML: furl2(root_observations + rec.id, '<img class="mini_photo2" src="' + rec.photos[0].url + '" />') });
+         } else {
+             values.push({ innerHTML: furl2(root_observations + rec.id, '<div style="max-width: 300px; max-height: 45px; overflow-y: auto; padding: 6px; scrollbar-width: thin; white-space: normal; ' + 
+                                                                          'background-color: var(--color-alt); ' + 
+                                                                          'color: var(--color-text); ' + 
+                                                                          'border: 1px solid var(--color-border); ' + 
+                                                                          'border-radius: 4px; font-size: 0.9em; line-height: 1.4;">' + 
+                                                                          (rec.description || '<i style="opacity: 0.6;">No notes</i>') + 
+                                                                        '</div>'});
+         }
+        
          let user_icon = rec.user.icon || '';
          
          if( user_icon === '' ){
@@ -676,7 +691,8 @@ function fresults( xobj, config ) {
                                    if( isPrimaryField ) { 
                                        finalParams.set('plantname', commonName || taxonName); 
                                    } 
-
+      
+                                   // 2. Safely restore furl2 now that parameter pollution is fully resolved
                                    let url = furl2('./field_study.html?' + finalParams.toString(), field1); 
       
                                    if( isPrimaryField && config.fieldOutlink ) { 
@@ -873,11 +889,21 @@ function setupAPIParams( config ) {
    if( p_not_user_id )       { api_params += '&not_user_id='     + p_not_user_id; }
 
    if( config.obsAPIParams ) { api_params += config.obsAPIParams; }
+
+   // set the params for the identify link to the exact filtration parameters
+   // to be used in the api transaction that will populate the table with whatever 
+   // filtrations were selected.
+   if( config.identifyEnabled === 'yes' ) {
+       identify_params = api_params;
+   } 
+          
    api_params += getPageParam(appState, '&page=');
    api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
 
+   // This prevents the application loop from inadvertently double-encoding quotes (%2522)
+   // This would break if there is ever a % symbol stored in a field value...may need to revisit
    api_params = api_params.replace(/%2522/g, '%22').replace(/%252F/g, '%2F'); 
-          
+ 
    return api_params;
 }
    
