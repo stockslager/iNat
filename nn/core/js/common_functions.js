@@ -468,8 +468,8 @@ function buildNavDDShow( navbar, dd_name, results, config, baseUrl, sub_taxon_ar
         let urlState = '';
         if( config.filterShow === 'no' ) {
             urlState = clearForDashParams(appState);
-            urlState = setComponent(clearState, getComponent(appState));    // component required when clearing state on a reset.
-            urlState = setStudyTitle(clearState, getStudyTitle(appState));  // study title required when clearing state on a reset.
+            urlState = setComponent(urlState, getComponent(appState));    // component required when clearing state on a reset.
+            urlState = setStudyTitle(urlState, getStudyTitle(appState));  // study title required when clearing state on a reset.
         } else {
             urlState = appState;
             urlState = setMenuId(urlState, '');
