@@ -98,6 +98,7 @@ class ConfigurationItem {
         this.merge          = configData.merge ?? null;
         this.showStudyGrid  = configData.show_study_grid ?? null; 
         this.identifyEnabled = configData.identify_enabled ?? null;
+        this.filterShow      = configData.filter_show ?? 'yes';
 
         this.obsFields = configData.obs_fields ?? configData.field_id ?? null;
         
