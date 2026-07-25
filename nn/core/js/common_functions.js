@@ -474,6 +474,7 @@ function buildNavDDShow( navbar, dd_name, results, config, baseUrl, sub_taxon_ar
             urlState = appState;
             urlState = setMenuId(urlState, '');
             urlState = setMenuName(urlState, '');
+            urlState = setTaxonId(urlState, '');
             urlState = setActivityFilter(urlState, '');  // only show the other filters drop-down if they haven't chosen from menu
             urlState = setPage(urlState, '1');
         }
