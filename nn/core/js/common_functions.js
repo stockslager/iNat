@@ -465,11 +465,18 @@ function buildNavDDShow( navbar, dd_name, results, config, baseUrl, sub_taxon_ar
 
     // Build the Show Dropdown
     if( config.subIcons ) {
-        let urlState = appState;
-        urlState = setMenuId(urlState, '');
-        urlState = setMenuName(urlState, '');
-        urlState = setActivityFilter(urlState, '');  // only show the other filters drop-down if they haven't chosen from menu
-        urlState = setPage(urlState, '1');
+        let urlState = '';
+        if( config.filterShow === 'no' ) {
+            urlState = clearForDashParams(appState);
+            urlState = setComponent(clearState, getComponent(appState));    // component required when clearing state on a reset.
+            urlState = setStudyTitle(clearState, getStudyTitle(appState));  // study title required when clearing state on a reset.
+        } else {
+            urlState = appState;
+            urlState = setMenuId(urlState, '');
+            urlState = setMenuName(urlState, '');
+            urlState = setActivityFilter(urlState, '');  // only show the other filters drop-down if they haven't chosen from menu
+            urlState = setPage(urlState, '1');
+        }
 
         // Create the Dropdown container
         let dropdown = faddelem('div', navbar, { className: 'dropdown' });
