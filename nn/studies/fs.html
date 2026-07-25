@@ -212,17 +212,17 @@ function buildMenu2( results, config ) {
 
       if( config.subIcons && config.subIcons.length > 0 ) {
           appState = setTaxonDD(appState, '');
-          let sub_taxon_arr = [];
-          for( let j=0; j<config.subIcons.length; j++ ) {
-               if( !sub_taxon_arr.includes( config.subIcons[j].taxonId ) ) {
-                   sub_taxon_arr.push( config.subIcons[j].taxonId );
-               }
+          if( config.filterShow === 'yes' ) {
+              buildNavDDFilteredShow( navbar, menu_name, results, config, baseUrl );
+          } else {
+              let sub_taxon_arr = [];
+              for( let j=0; j<config.subIcons.length; j++ ) {
+                   if( !sub_taxon_arr.includes( config.subIcons[j].taxonId ) ) {
+                       sub_taxon_arr.push( config.subIcons[j].taxonId );
+                   }
+              }
+              buildNavDDShow( navbar, menu_name, results, config, baseUrl, sub_taxon_arr );
           }
-          let clearState = clearForDashParams(appState);
-          clearState     = setComponent(clearState, getComponent(appState));    // component required when clearing state on a reset.
-          clearState     = setStudyTitle(clearState, getStudyTitle(appState));  // study title required when clearing state on a reset.
-          buildNavDDShow( navbar, menu_name, results, config, baseUrl, sub_taxon_arr );
-          //buildNavDDFilteredShow( navbar, menu_name, results, config, baseUrl );
       }
 
       if( config.ddFilters && config.ddFilters.length > 0 ) {
