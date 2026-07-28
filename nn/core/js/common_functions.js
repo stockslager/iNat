@@ -304,7 +304,7 @@ function buildNavActivityFiltersDD( navbar, dd_name, config ) {
   } 
 }
 
-function buildNavDDPlace( navbar, dd_name, results, config, baseUrl, sub_taxon_arr ) {
+function buildNavDDPlace( navbar, dd_name, results, config, baseUrl, sub_taxon_arr, all_lnk=null ) {
 
     // Build the Place Dropdown
     if( config.places ) {
@@ -326,7 +326,7 @@ function buildNavDDPlace( navbar, dd_name, results, config, baseUrl, sub_taxon_a
         let allUrl = baseUrl + buildParameterList(urlState);
         let allLink = faddelem('a', ddContent, { href: allUrl });
         // Text for ALL 
-        faddelem('span', allLink, { textContent: CONST_ENTIRE_UMBRELLA }); 
+        faddelem('span', allLink, { textContent: all_lnk || CONST_ENTIRE_UMBRELLA }); 
 
         // Place Links Loop
         for( let j = 0; j < config.places.length; j++ ) {
