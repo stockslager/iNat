@@ -304,8 +304,7 @@ function buildNavActivityFiltersDD( navbar, dd_name, config ) {
   } 
 }
 
-function buildNavDDPlace( navbar, dd_name, results, config, baseUrl, sub_taxon_arr, all_lnk=null ) {
-    console.log('all lnk ' + all_lnk );
+function buildNavDDPlace( navbar, dd_name, results, config, baseUrl, all_lnk=null ) {
 
     // Build the Place Dropdown
     if( config.places ) {
