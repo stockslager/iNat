@@ -210,7 +210,7 @@ function buildMenu2( results, config ) {
 
       // if place filters were set in the configuration
       if( config.places && config.places.length > 0 ) {
-          buildNavDDPlace( navbar, 'Choose Place', results, config, baseUrl, CONST_ALL );
+          buildNavDDPlace( navbar, getPlaceMenuName(appState) || 'Choose Place', results, config, baseUrl, CONST_ALL );
       }
    
       let menu_name = config.getSubIconNameByTaxonId(config, getMenuId(appState)) || CONST_SHOW;
@@ -880,7 +880,11 @@ function setupAPIParams( config ) {
        api_params += getFilterAPIParams(config);
    }
 
-   if( config.defaultPlace ) { api_params += '&place_id='        + config.defaultPlace; }
+   if( getPlaceMenuId(appState) ) {
+       api_params += '&place_id='        + getPlaceMenuId(appState);
+   } else if( config.defaultPlace ) { 
+       api_params += '&place_id='        + config.defaultPlace; 
+   }
 
    // filter for life stage annotation...
    if( getLifeStage(appState) ) { 
