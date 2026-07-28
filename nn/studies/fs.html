@@ -207,6 +207,11 @@ function buildMenu2( results, config ) {
       navbar.className = 'navbar v2-menu';
 
       let baseUrl = window.location.origin + window.location.pathname;
+
+      // if place filters were set in the configuration
+      if( config.places && config.places.length > 0 ) {
+          buildNavDDPlace( navbar, CONST_PLACE, results, config, baseUrl );
+      }
    
       let menu_name = config.getSubIconNameByTaxonId(config, getMenuId(appState)) || CONST_SHOW;
 
