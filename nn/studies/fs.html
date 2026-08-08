@@ -554,8 +554,8 @@ function fresults( xobj, config ) {
              if( rec.taxon.default_photo ){
                  if( rec.taxon.default_photo.url ){
                      const originalUrl = rec.taxon.default_photo.url;
-                     const rectangularUrl = originalUrl.replace("square.jpeg", "small.jpeg"); 
-                     tax_photo = '<img class="icon" src="'+rectangularUrl+'" style="object-fit: contain;" />';
+                     const rectangularUrl = originalUrl.replace(/\/square(\.(jpe?g))(\?.*)?$/i, '/small$1');
+                     tax_photo = '<img class="icon" src="'+rectangularUrl+'" style="object-fit: contain; " />';
                  }
              }
          }
