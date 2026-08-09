@@ -39,6 +39,7 @@ const ATTRIBUTE_FIELDNAME    = 'fieldname';
 const ATTRIBUTE_FIELDVALUE   = 'fieldvalue'; 
 const ATTRIBUTE_LIFESTAGE       = 'lifestage';
 const ATTRIBUTE_EVIDENCE        = 'evidence';
+const ATTRIBUTE_MONTH           = 'month';
 const ATTRIBUTE_PAGE            = 'page';
 const ATTRIBUTE_PER_PAGE        = 'per_page';
 
@@ -71,6 +72,7 @@ let appState = {
   activeFilters: [], 
   [ATTRIBUTE_LIFESTAGE]: '',
   [ATTRIBUTE_EVIDENCE]: '',
+  [ATTRIBUTE_MONTH]: '',
   [ATTRIBUTE_PAGE]:      '',
   [ATTRIBUTE_PER_PAGE]:  ''
 
@@ -112,6 +114,7 @@ function createNewStateInstance(initialValues = {}) {
      activeFilters: [], 
     [ATTRIBUTE_LIFESTAGE]: '',
     [ATTRIBUTE_EVIDENCE]: '',
+    [ATTRIBUTE_MONTH]: '',
     [ATTRIBUTE_PAGE]:      '',
     [ATTRIBUTE_PER_PAGE]:  ''
   };
@@ -311,6 +314,7 @@ function getObsDate(state)         { return (getAttribute(state, ATTRIBUTE_OBSDA
 function getActivityFilter(state)  { return (getAttribute(state, ATTRIBUTE_ACTIVITYFILTER)); }
 function getLifeStage(state)       { return (getAttribute(state, ATTRIBUTE_LIFESTAGE)); }
 function getEvidence(state)        { return (getAttribute(state, ATTRIBUTE_EVIDENCE)); }
+function getMonth(state)           { return (getAttribute(state, ATTRIBUTE_MONTH)); }
 function getPage(state)            { return (getAttribute(state, ATTRIBUTE_PAGE)); }
 function getPerPage(state)         { return (getAttribute(state, ATTRIBUTE_PER_PAGE)); }
 
@@ -355,6 +359,7 @@ function setObsDate(state, value)         { return (setAttribute(state, ATTRIBUT
 function setActivityFilter(state, value)  { return (setAttribute(state, ATTRIBUTE_ACTIVITYFILTER, value)); }
 function setLifeStage(state, value)       { return (setAttribute(state, ATTRIBUTE_LIFESTAGE, value)); }
 function setEvidence(state, value)        { return (setAttribute(state, ATTRIBUTE_EVIDENCE, value)); }
+function setMonth(state, value)           { return (setAttribute(state, ATTRIBUTE_MONTH, value)); }
 function setPage(state, value)            { return (setAttribute(state, ATTRIBUTE_PAGE, value)); }
 function setPerPage(state, value)         { return (setAttribute(state, ATTRIBUTE_PER_PAGE, value)); }
 
@@ -978,6 +983,7 @@ function clearForDashParams(state) {
   urlState = setActivityFilter(urlState, '');
   urlState = setLifeStage(urlState, '');
   urlState = setEvidence(urlState, '');
+  urlState = setMonth(urlState, '');
   urlState = setStudyTitle(urlState, '');
   urlState = setActivityFilter(urlState, '');
   
