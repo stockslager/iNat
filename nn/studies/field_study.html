@@ -391,6 +391,22 @@ function fresults( xobj, config ) {
       if( config.merge === 'yes' ){
           merged = 'merged observation field';
       } 
+
+      // month column...
+      if( config.showMonth === 'yes' ) { 
+          let urlState = appState; 
+          urlState = setMonth(urlState, ''); 
+          urlState = setPage(urlState, '1'); 
+          let resetUrl = './field_study.html' + buildParameterList(urlState); 
+
+          // Is a valid, active lifestage filter currently in the URL string? 
+          let hasFilter = window.location.search.includes('month=') && 
+                         !window.location.search.includes('month=&'); 
+
+          let resetLink = hasFilter ? ' ' + furl2(resetUrl, iconHtml) : '';
+
+          labels.push({ innerHTML: '<span class="filterable-header">Month' + resetLink + '</span>' });
+      }
     
       let tempBrow = []; 
       for( let i=0; i<results.length; i++ ) { 
@@ -604,6 +620,28 @@ function fresults( xobj, config ) {
                                                                           'border-radius: 4px; font-size: 0.9em; line-height: 1.4;">' + 
                                                                           rec.description + '</div>')});
          }
+
+         if( config.showMonth === 'yes' ) { 
+             let month = ''; // Default placeholder if missing or empty 
+             let valueId = ''; 
+    
+             if( rec.observed_on_details.month ) { 
+                 valueId = rec.observed_on_details.month || '';
+                 const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+                 // For 1-indexed month (1 = January, so index is month - 1)
+                 month = months[valueId-1] || 'unknown'; 
+             } 
+    
+             if( month === 'unknown' ) { 
+                 values.push({ innerHTML: month }); 
+             } else { 
+                 let urlState = appState; 
+                 urlState = setPage(urlState, '1'); // set the page to 1 anytime they choose to filter. 
+        
+                 urlState = setMonth(urlState, valueId || 'null');     
+                 values.push({ innerHTML: furl2('./field_study.html' + buildParameterList(urlState), month || '[none]') }); 
+             } 
+         } 
        
          let user_icon = rec.user.icon || '';
          
@@ -877,6 +915,13 @@ function setupAPIParams( config ) {
    }
 
    if( config.defaultPlace ) { api_params += '&place_id='        + config.defaultPlace; }
+
+   // filter for month...
+   if( getMonth(appState) ) {
+       if( getMonth(appState) !== 'null' ) {
+           api_params += '&month=' + getMonth(appState);
+       }
+   }
 
    // filter for life stage annotation...
    if( getLifeStage(appState) ) { 
