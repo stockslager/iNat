@@ -100,6 +100,7 @@ class ConfigurationItem {
         this.identifyEnabled = configData.identify_enabled ?? null;
         this.filterShow      = configData.filter_show ?? 'yes';
         this.showMonth       = configData.show_month ?? 'no';
+        this.defaultMonths   = configData.default_months ?? null;
 
         this.obsFields = configData.obs_fields ?? configData.field_id ?? null;
         
