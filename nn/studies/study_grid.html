@@ -120,6 +120,13 @@ function setupCommonAPIParams( config, api_params ) {
 
     if( config.defaultPlace ) { api_params += '&place_id='        + config.defaultPlace; }
 
+    // filter for month...
+    if( getMonth(appState) ) {
+        if( getMonth(appState) !== 'null' ) {
+            api_params += '&month=' + getMonth(appState);
+        }
+    }
+
     // filter for life stage annotation...
     if( getLifeStage(appState) ) { 
         if( getLifeStage(appState) === 'null' ) {
