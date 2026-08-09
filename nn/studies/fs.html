@@ -939,6 +939,8 @@ function setupAPIParams( config ) {
        if( getMonth(appState) !== 'null' ) {
            api_params += '&month=' + getMonth(appState);
        }
+   } else if( config.defaultMonths ) {
+           api_params += '&month=' + config.defaultMonths;
    }
 
    // filter for evidence annotation...
