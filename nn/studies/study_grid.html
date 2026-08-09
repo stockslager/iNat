@@ -122,9 +122,11 @@ function setupCommonAPIParams( config, api_params ) {
 
     // filter for month...
     if( getMonth(appState) ) {
-        if( getMonth(appState) !== 'null' ) {
+        if( getMonth(appState) !== 'null' ) { 
             api_params += '&month=' + getMonth(appState);
         }
+    } else if( config.defaultMonths ) {
+            api_params += '&month=' + config.defaultMonths;
     }
 
     // filter for life stage annotation...
