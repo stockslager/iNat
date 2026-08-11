@@ -1,8 +1,8 @@
-<!DOCTYPE html>                
-<html lang="en">                     
+<!DOCTYPE html>               
+<html lang="en">                      
           
 <head> 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />   
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
 <meta name="description" content="Field Study" />
 <link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
@@ -207,13 +207,8 @@ function buildMenu2( results, config ) {
       navbar.className = 'navbar v2-menu';
 
       let baseUrl = window.location.origin + window.location.pathname;
-
-      // if place filters were set in the configuration
-      if( config.places && config.places.length > 0 ) {
-          buildNavDDPlace( navbar, getPlaceMenuName(appState) || 'Place', results, config, baseUrl, CONST_ALL );
-      }
    
-      let menu_name = config.getSubIconNameByTaxonId(config, getMenuId(appState)) || 'Taxa';
+      let menu_name = config.getSubIconNameByTaxonId(config, getMenuId(appState)) || CONST_SHOW;
 
       if( config.subIcons && config.subIcons.length > 0 ) {
           appState = setTaxonDD(appState, '');
@@ -397,6 +392,10 @@ function fresults( xobj, config ) {
           merged = 'merged observation field';
       } 
 
+      if( config.showNotes === 'yes' ) {
+          labels.push({innerText:'Notes'});
+      }
+
       // month column...
       if( config.showMonth === 'yes' ) { 
           let urlState = appState; 
@@ -412,7 +411,7 @@ function fresults( xobj, config ) {
 
           labels.push({ innerHTML: '<span class="filterable-header">Month' + resetLink + '</span>' });
       }
-
+    
       let tempBrow = []; 
       for( let i=0; i<results.length; i++ ) { 
            let rec = results[i]; 
@@ -569,10 +568,7 @@ function fresults( xobj, config ) {
            
              if( rec.taxon.default_photo ){
                  if( rec.taxon.default_photo.url ){
-                     const originalUrl = rec.taxon.default_photo.url;
-                     const rectangularUrl = originalUrl.replace(/\/square(\.(jpe?g))(\?.*)?$/i, '/small$1');
-                     //tax_photo = '<img class="icon" src="'+rectangularUrl+'" style="object-fit: fill; " />';
-                     tax_photo = '<img class="mini_photo2" src="'+rectangularUrl+'" style="object-fit: fill; aspect-ratio: 4 / 3;" />';
+                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
                  }
              }
          }
@@ -616,6 +612,7 @@ function fresults( xobj, config ) {
              } 
          } 
 
+         // use a clickable scrollable div containing field notes in place of image when there is no image.
          if( rec.photos && rec.photos.length > 0 ) {
              values.push({ innerHTML: furl2(root_observations + rec.id, '<img class="mini_photo2" src="' + rec.photos[0].url + '" />') });
          } else {
@@ -626,6 +623,16 @@ function fresults( xobj, config ) {
                                                                           'border: 1px solid var(--color-border); ' + 
                                                                           'border-radius: 4px; font-size: 0.9em; line-height: 1.4;">' + 
                                                                           rec.description + '</div>')});
+         }
+
+         if( config.showNotes === 'yes' ) {
+             let desc = rec.description || '<i style="opacity: 0.6;">No notes</i>';
+             values.push({ innerHTML: '<div style="max-width: 150px; max-height: 45px; overflow-y: auto; padding: 6px; scrollbar-width: thin; white-space: normal; ' + 
+                                      'background-color: var(--color-alt); ' + 
+                                      'color: var(--color-text); ' + 
+                                      'border: 1px solid var(--color-border); ' + 
+                                      'border-radius: 4px; font-size: 0.9em; line-height: 1.4;">' + 
+                                      desc + '</div>' });
          }
 
          if( config.showMonth === 'yes' ) { 
@@ -649,7 +656,7 @@ function fresults( xobj, config ) {
                  values.push({ innerHTML: furl2('./field_study.html' + buildParameterList(urlState), month || '[none]') }); 
              } 
          } 
-        
+       
          let user_icon = rec.user.icon || '';
          
          if( user_icon === '' ){
@@ -901,6 +908,8 @@ function setupAPIParams( config ) {
        api_params += '&user_id='  + config.userId; 
    }
  
+   api_params += getPlaceMenuIdParam(appState, '&place_id=');
+
    // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
    // use the menu_id if one was passed in.
    console.log('sub ' + config.defaultTaxonId);
@@ -919,10 +928,15 @@ function setupAPIParams( config ) {
        api_params += getFilterAPIParams(config);
    }
 
-   if( getPlaceMenuId(appState) ) {
-       api_params += '&place_id='        + getPlaceMenuId(appState);
-   } else if( config.defaultPlace ) { 
-       api_params += '&place_id='        + config.defaultPlace; 
+   if( config.defaultPlace ) { api_params += '&place_id='        + config.defaultPlace; }
+
+   // filter for month...
+   if( getMonth(appState) ) {
+       if( getMonth(appState) !== 'null' ) {
+           api_params += '&month=' + getMonth(appState);
+       }
+   } else if( config.defaultMonths ) {
+           api_params += '&month=' + config.defaultMonths;
    }
 
    // filter for life stage annotation...
@@ -932,15 +946,6 @@ function setupAPIParams( config ) {
        } else {
            api_params += '&term_id=1&term_value_id='  + getLifeStage(appState);
        }
-   }
-
-   // filter for month...
-   if( getMonth(appState) ) {
-       if( getMonth(appState) !== 'null' ) {
-           api_params += '&month=' + getMonth(appState);
-       }
-   } else if( config.defaultMonths ) {
-           api_params += '&month=' + config.defaultMonths;
    }
 
    // filter for evidence annotation...
