@@ -101,6 +101,7 @@ class ConfigurationItem {
         this.filterShow      = configData.filter_show ?? 'yes';
         this.showMonth       = configData.show_month ?? 'no';
         this.defaultMonths   = configData.default_months ?? null;
+        this.showNotes       = configData.show_notes ?? 'no';
 
         this.obsFields = configData.obs_fields ?? configData.field_id ?? null;
         
