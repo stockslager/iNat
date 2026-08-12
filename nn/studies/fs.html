@@ -367,7 +367,7 @@ const getUrlWithoutFilter = (queryString, targetFieldId) => {
   return params.toString();
 };
 
-function buildMainTable( results, config ) {
+function buildMainTable( results, config, box_array ) {
       let labels = [];
       let mismatch = '';
       let field_array_copy = field_array;
@@ -869,7 +869,7 @@ function buildMainTable( results, config ) {
       }
 }
           
-function buildTagsTable( results, config ) {
+function buildTagsTable( results, config, box_array ) {
 }
     
 function fresults( xobj, config ) { 
@@ -921,9 +921,9 @@ function fresults( xobj, config ) {
       buildMenu2(results, config);
 
       if( p_tags === 'yes' ) {
-          buildTagsTable( results, config );
+          buildTagsTable( results, config, box_array );
       } else {
-          buildMainTable( results, config );
+          buildMainTable( results, config, box_array );
       }
              
       if( config.pagingEnabled ) {
