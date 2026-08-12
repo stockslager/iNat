@@ -200,6 +200,7 @@ function replaceDoubleQuotes(str) {
 }
 
 function furl2(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
+function furl_out(url, txt = url) { return '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + txt + '</a>'; };
 
 function buildMenu2( results, config ) {
       // Create the main navbar container
@@ -443,7 +444,7 @@ function fresults( xobj, config ) {
            labelCount++; 
   
            if( box_array[e].field_name !== '' ) { 
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl2(root_obs_fields+box_array[e].field_id, box_array[e].field_id) + '</td>'); 
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl_out(root_obs_fields+box_array[e].field_id, box_array[e].field_id) + '</td>'); 
                dlString += ('<td id="tdkey">' + truncate(box_array[e].field_name.toLowerCase(), 25) + '</td></tr>'); 
     
                if( config.merge !== 'yes' ) { 
