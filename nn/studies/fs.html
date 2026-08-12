@@ -215,9 +215,18 @@
   }
 
 /************************/
+/* The new wrapper that forces table cells to behave */
+.pill-wrapper {
+  display: block;
+  width: 100%;
+  max-width: 100%; /* Prevents the cell from blowing out horizontally */
+  white-space: normal; /* Crucial: Allows the pills themselves to wrap to new lines */
+}
+
+/* Individual Pill Container Styles */
 .pill {
-  display: inline-flex;
-  align-items: center;
+  display: inline-block;
+  vertical-align: middle;
   margin-right: 6px;
   margin-bottom: 6px;
   padding: 4px 12px;
@@ -226,34 +235,29 @@
   font-weight: 500;
   border-radius: 9999px;
   
-  /* Layout Constraints */
+  /* Sizing limits requested */
   max-width: 200px;
   max-height: 45px;
-  overflow: auto; /* Enables scrolling if text exceeds boundaries */
-  white-space: nowrap; /* Keeps text on a single line while scrolling */
+  overflow: hidden; /* Contains the text truncation */
 
-  /* Dark Mode Palette */
+  /* Dark Mode Styling */
   background-color: #1e293b; 
   border: 1px solid #334155; 
 }
 
-/* Link overrides inside the pill */
+/* Forces the inner links to append '...' if a single tag is over 200px */
 .pill a {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; /* Keeps the text inside a single pill on one line */
   color: #38bdf8;            
   text-decoration: none; 
 }
 
 .pill a:hover {
   color: #7dd3fc;
-}
-
-/* Optional: Hides the bulky scrollbar track inside pills for a cleaner UI */
-.pill::-webkit-scrollbar {
-  height: 4px; /* Tiny horizontal scrollbar */
-}
-.pill::-webkit-scrollbar-thumb {
-  background: #475569;
-  border-radius: 10px;
 }
 /************************/
           
@@ -717,17 +721,17 @@ function buildMainTable( results, config, box_array ) {
              let valueId = ''; 
 
              for( let i = 0; i < rec.tags.length; i++ ) {
-                 if( rec.tags[i] ) {
-                     let urlState = appState;
-                     urlState     = setPage(urlState, '1');
-                     urlState     = setTag(urlState, rec.tags[i]);
+                  if( rec.tags[i] ) {
+                      let urlState = appState;
+                      urlState = setPage(urlState, '1');
+                      urlState = setTag(urlState, rec.tags[i]);
         
-                     // Wrap the generated link inside a styled pill span
-                     valueId += '<span class="pill">' + furl2('./fs.html' + buildParameterList(urlState), rec.tags[i]) + '</span>';
-                 }
+                      valueId += '<span class="pill">' + furl2('./fs.html' + buildParameterList(urlState), rec.tags[i]) + '</span>';
+                  }
              }
 
-             values.push({ innerHTML: valueId });         
+             valueId = '<div class="pill-wrapper">' + valueId + '</div>';
+             values.push({ innerHTML: valueId });
          } 
                 
          if( config.showMonth === 'yes' ) { 
