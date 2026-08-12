@@ -1,6 +1,7 @@
 function furlCell(params,txt=url) { return '<a href="'+root_grid_cell+params+'">'+txt+'</a>'; };
+function furlCellBlank(params, txt = url) { return '<a href="' + root_grid_cell + params + '" target="_blank" rel="noopener noreferrer">' + txt + '</a>'; }
  
-function buildGrid(data, url=null) {
+function buildGrid(data, url=null, config=null) {
 
    var results = data.results;
    var recsfound = results ? results.length : 0;
@@ -15,14 +16,22 @@ function buildGrid(data, url=null) {
             left:((c-1)*cellpx+(c<=1?0:c-1)*spacerpx)+'px'
             }});
          if (recsfound===0&&data.total_results===0) { 
-            gcell.innerHTML = furlCell(famp(url || obsurl), '<span>no<br />data</span>');
+             if( config && config.blankTargets === 'yes' ) {
+                 gcell.innerHTML = furlCellBlank(famp(url || obsurl), '<span>no<br />data</span>');
+             } else {
+                 gcell.innerHTML = furlCell(famp(url || obsurl), '<span>no<br />data</span>');
+             }
             break;
             }
          else if (recsfound===obsseq) {
             if( (fshorten(data.total_results-obsseq)) === 0 ){
                gcell.innerHTML = '<span>+0<br />more</span>';
             } else {
-               gcell.innerHTML = furlCell(famp(url || obsurl),'<span>+'+(fshorten(data.total_results-obsseq))+'<br />more</span>');
+               if( config && config.blankTargets === 'yes' ) {
+                   gcell.innerHTML = furlCellBlank(famp(url || obsurl),'<span>+'+(fshorten(data.total_results-obsseq))+'<br />more</span>');
+               } else {
+                   gcell.innerHTML = furlCell(famp(url || obsurl),'<span>+'+(fshorten(data.total_results-obsseq))+'<br />more</span>');
+               }
             }
             obsseq = 0;
             if (r===1&&c>1) { grid.style.width = (c*cellpx+(c-1)*spacerpx)+'px'; };
