@@ -244,7 +244,11 @@ function buildMenu2( results, config ) {
 
       if( identify_params ) {
           let url = 'https://www.inaturalist.org/observations/identify' + identify_params + '&reviewed=any&quality_grade=needs_id,research,casual';
-          buildNavURL( navbar, url, 'Identify' );
+          if( config.blankTargets === 'yes' ) {
+              buildNavURL( navbar, url, 'Identify', true );
+          } else {
+              buildNavURL( navbar, url, 'Identify' );
+          }
       }
 
       if( p_hide_dash === 'no' ) {
