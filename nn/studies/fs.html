@@ -679,26 +679,21 @@ function buildMainTable( results, config, box_array ) {
                       urlState = setPage(urlState, '1');
                       urlState = setTag(urlState, rec.tags[i]);
         
-                      // Inline styles on individual pills to guarantee they clip at 200px
-                      let pillStyle = 'display: inline-block; max-width: 200px; padding: 4px 12px; margin: 3px; ' +
-                          'font-size: 13px; font-family: sans-serif; font-weight: 500; border-radius: 9999px; ' +
-                          'background-color: #1e293b; border: 1px solid #334155; overflow: hidden; vertical-align: middle;';
-                        
-                      let linkStyle = 'display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; ' +
-                          'white-space: nowrap; color: #38bdf8; text-decoration: none;';
+                      let pillStyle = 'display: inline-block; max-width: 200px; margin-right: 6px; margin-bottom: 6px; ' +
+                                      'padding: 4px 12px; font-size: 13px; font-family: sans-serif; font-weight: 500; ' +
+                                      'border-radius: 9999px; background-color: #1e293b; border: 1px solid #334155; ' +
+                                      'color: #38bdf8; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; ' +
+                                      'white-space: nowrap;'; 
+                             
+                      // Create the stylized HTML container block first
+                      let pillHtml = '<div style="' + pillStyle + '">' + rec.tags[i] + '</div>';
 
-                      // Custom string concatenation to build the pill and inner link
-                      let innerLink = furl2('./fs.html' + buildParameterList(urlState), rec.tags[i]);
-        
-                      // Injecting the inline styles directly into the tags
-                      valueId += '<span style="' + pillStyle + '">' +
-                                 '<span style="' + linkStyle + '">' + innerLink + '</span>' +
-                                 '</span>';
+                      valueId += furl2('./fs.html' + buildParameterList(urlState), pillHtml);
                   }
              }
 
-             // The master wrapper using inline 'white-space: normal' to force table cell wrapping
-             let wrapperStyle = 'display: block; width: 100%; white-space: normal;';
+             // Wrap the entire list of anchor-pills in a master div that commands the table cell to wrap text
+             let wrapperStyle = 'display: block; width: 100%; white-space: normal;'; 
              valueId = '<div style="' + wrapperStyle + '">' + valueId + '</div>';
 
              values.push({ innerHTML: valueId });
