@@ -1,4 +1,4 @@
-function furlCell(params,txt=url) { return '<a href="'+root_grid_cell+params+'">'+txt+'</a>'; };
+function furlCell(params,txt=url) { console.log('aaaaa'); return '<a href="'+root_grid_cell+params+'">'+txt+'</a>'; };
 function furlCellBlank(params, txt) { console.log('sdfasdf'); return '<a href="' + root_grid_cell + params + '" target="_blank" rel="noopener noreferrer">' + txt + '</a>'; }
   
 function buildGrid(data, url=null, config=null) {
