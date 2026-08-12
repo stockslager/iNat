@@ -679,17 +679,31 @@ function buildMainTable( results, config, box_array ) {
                       urlState = setPage(urlState, '1');
                       urlState = setTag(urlState, rec.tags[i]);
         
-                      let pillStyle = 'display: inline-block; max-width: 200px; margin-right: 6px; margin-bottom: 6px; ' +
-                                      'padding: 4px 12px; font-size: 13px; font-family: sans-serif; font-weight: 500; ' +
-                                      'border-radius: 9999px; background-color: #1e293b; border: 1px solid #334155; ' +
-                                      'color: #38bdf8; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; ' +
-                                      'white-space: nowrap;'; 
-                             
-                      // Create the stylized HTML container block first
-                      let pillHtml = '<div style="' + pillStyle + '">' + rec.tags[i] + '</div>';
+        // This style forces the text truncate and sets the pill design
+        let pillStyle = 'display: inline-block !important; ' +
+                        'max-width: 200px !important; ' +
+                        'padding: 4px 12px; ' +
+                        'font-size: 13px; ' +
+                        'font-family: sans-serif; ' +
+                        'font-weight: 500; ' +
+                        'border-radius: 9999px; ' +
+                        'background-color: #1e293b; ' +
+                        'border: 1px solid #334155; ' +
+                        'color: #38bdf8; ' + 
+                        'vertical-align: middle; ' +
+                        'overflow: hidden; ' +
+                        'text-overflow: ellipsis; ' +
+                        'white-space: nowrap;';
 
-                      valueId += furl2('./fs.html' + buildParameterList(urlState), pillHtml);
-                  }
+        let pillHtml = '<div style="' + pillStyle + '">' + rec.tags[i] + '</div>';
+
+        // 1. Generate the link
+        let individualLink = furl2('./fs.html' + buildParameterList(urlState), pillHtml);
+        
+        // 2. Inject an inline-block rule on the '<a>' tag itself, plus an HTML space (&#32;) at the end
+        individualLink = individualLink.replace('<a ', '<a style="display: inline-block !important; vertical-align: middle;" ');
+        
+        valueId += individualLink + '&#32;';                   }
              }
 
              // Wrap the entire list of anchor-pills in a master div that commands the table cell to wrap text
