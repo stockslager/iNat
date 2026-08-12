@@ -156,6 +156,25 @@
     overflow: hidden;
   }
 
+  .inat-custom-btn {
+    display: inline-block;
+    height: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: normal;
+    line-height: 1.4;
+    padding: 10px 16px;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    opacity: 0.7;
+    
+    /* Optional visual styling to match standard buttons */
+    background-color: #4a4a4a; 
+    color: #ffffff;
+    border-radius: 4px;
+  }
+          
   /* Original Helpers */
   #h2 { font-weight:bold; font-size:20px; }
   p { width:100%; }
@@ -864,7 +883,7 @@ function fresults( xobj, config ) {
       } else {
           let nav = faddelem('div',document.body,{});
           let url = root_observations + identify_params;
-          faddelem('a', nav, { title: 'entire dataset', classList: 'button external-link-button', innerText: 'View more on iNaturalist', href: url, target: '_blank', rel: 'noopener noreferrer', style: 'display: inline-block; opacity: 0.7; font-size: 14px; padding: 6px 12px; max-width: 100%; box-sizing: border-box; text-decoration: none; text-align: center; filter: alpha(opacity=70);' });
+          faddelem('a', nav, { title: 'entire dataset', classList: 'inat-custom-btn', innerText: 'View more on iNaturalist', href: url, target: '_blank', rel: 'noopener noreferrer' });      
       }
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
