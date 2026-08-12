@@ -166,10 +166,19 @@ function buildNavTitle( navbar, title ) {
   faddelem('div', titleDiv, { className: 'dd_title', textContent: title });
 }
 
-function buildNavURL( navbar, url, label ) {
-    let homeDiv = faddelem('div', navbar, { id: 'navlink' });
-    let hLink = faddelem('a', homeDiv, { href: url });
-    faddelem('span', hLink, { textContent: label });
+function buildNavURL( navbar, url, label, openInNewTab = false ) { 
+  let homeDiv = faddelem('div', navbar, { id: 'navlink' }); 
+  
+  let linkAttributes = { href: url };
+  
+  if (openInNewTab) {
+    linkAttributes.target = '_blank';
+    linkAttributes.rel = 'noopener noreferrer';
+  }
+  
+  let hLink = faddelem('a', homeDiv, linkAttributes); 
+  
+  faddelem('span', hLink, { textContent: label }); 
 }
 
 function buildNavLink( navbar, baseUrl, homeState, label ) { 
