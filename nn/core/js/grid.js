@@ -1,5 +1,5 @@
-function furlCell(params,txt=url) { console.log('aaaaa'); return '<a href="'+root_grid_cell+params+'">'+txt+'</a>'; };
-function furlCellBlank(params, txt) { console.log('sdfasdf'); return '<a href="' + root_grid_cell + params + '" target="_blank" rel="noopener noreferrer">' + txt + '</a>'; }
+function furlCell(params,txt=url) { return '<a href="'+root_grid_cell+params+'">'+txt+'</a>'; };
+function furlCellBlank(params, txt) { return '<a href="' + root_grid_cell + params + '" target="_blank" rel="noopener noreferrer">' + txt + '</a>'; }
   
 function buildGrid(data, url=null, config=null) {
 
@@ -43,7 +43,12 @@ function buildGrid(data, url=null, config=null) {
             let taxon = obs.taxon?(obs.taxon.preferred_common_name?(obs.taxon.preferred_common_name):obs.taxon.name):'(Unknown Taxon)';
             let user = obs.user.login+((obs.user.name&&obs.user.name!='')?(' ('+obs.user.name+')'):'');
             let obsdt = obs.time_observed_at?fdate(obs.time_observed_at,true):(obs.observed_on||'(Unknown Date)');
-            let anchor = faddelem('a',gcell,{href:famp(root_grid_cell+'/'+obs.id)});
+            let anchor = '';
+            if( config && config.blankTargets === 'yes' ) { 
+                anchor = faddelem('a', gcell, { href: famp(root_grid_cell + '/' + obs.id), target: '_blank', rel: 'noopener noreferrer' });            
+            } else {
+                anchor = faddelem('a',gcell,{href:famp(root_grid_cell+'/'+obs.id)});
+            }
             let photo = (photourl===null) ? faddelem('span',anchor,{innerText:'❎'})
                : faddelem('img',anchor,{style:{width:cellpx+'px',height:cellpx+'px'},
                   title: taxon + ' observed by ' + user + ' on ' + obsdt,
