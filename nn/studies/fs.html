@@ -671,17 +671,18 @@ function buildMainTable( results, config, box_array ) {
 
          // render the tag pills...
          if( p_tags === 'yes' ) { 
-             let valueId = ''; 
+let valueId = ''; 
 
-             for( let i = 0; i < rec.tags.length; i++ ) {
-                  if( rec.tags[i] ) {
-                      let urlState = appState;
-                      urlState = setPage(urlState, '1');
-                      urlState = setTag(urlState, rec.tags[i]);
+for (let i = 0; i < rec.tags.length; i++) {
+    if (rec.tags[i]) {
+        let urlState = appState;
+        urlState = setPage(urlState, '1');
+        urlState = setTag(urlState, rec.tags[i]);
         
-        // This style forces the text truncate and sets the pill design
-        let pillStyle = 'display: inline-block !important; ' +
-                        'max-width: 200px !important; ' +
+        // This is the clean pill styling (NO importants)
+        let pillStyle = 'display: inline-block; ' +
+                        'max-width: 200px; ' +
+                        'margin: 3px; ' +
                         'padding: 4px 12px; ' +
                         'font-size: 13px; ' +
                         'font-family: sans-serif; ' +
@@ -690,27 +691,22 @@ function buildMainTable( results, config, box_array ) {
                         'background-color: #1e293b; ' +
                         'border: 1px solid #334155; ' +
                         'color: #38bdf8; ' + 
-                        'vertical-align: middle; ' +
+                        'text-decoration: none; ' +
                         'overflow: hidden; ' +
                         'text-overflow: ellipsis; ' +
                         'white-space: nowrap;';
 
-        let pillHtml = '<div style="' + pillStyle + '">' + rec.tags[i] + '</div>';
+        // Wrap each individual link as its own independent inline pill block
+        valueId += furl2('./fs.html' + buildParameterList(urlState), rec.tags[i])
+                   .replace('<a ', '<a style="' + pillStyle + '" ');
+    }
+}
 
-        // 1. Generate the link
-        let individualLink = furl2('./fs.html' + buildParameterList(urlState), pillHtml);
-        
-        // 2. Inject an inline-block rule on the '<a>' tag itself, plus an HTML space (&#32;) at the end
-        individualLink = individualLink.replace('<a ', '<a style="display: inline-block !important; vertical-align: middle;" ');
-        
-        valueId += individualLink + '&#32;';                   }
-             }
+// Mirroring your working description box: One outer div wrapper with white-space: normal
+let containerStyle = 'max-width: 200px; white-space: normal; padding: 4px;';
+valueId = '<div style="' + containerStyle + '">' + valueId + '</div>';
 
-             // Wrap the entire list of anchor-pills in a master div that commands the table cell to wrap text
-             let wrapperStyle = 'display: block; width: 100%; white-space: normal;'; 
-             valueId = '<div style="' + wrapperStyle + '">' + valueId + '</div>';
-
-             values.push({ innerHTML: valueId });
+values.push({ innerHTML: valueId });
          } 
                 
          if( config.showMonth === 'yes' ) { 
