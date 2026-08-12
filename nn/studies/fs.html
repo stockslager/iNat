@@ -269,7 +269,7 @@ function furl_out(config, url, txt = url) {
     }
 };
 
-function buildMenu2( results, config ) {
+function buildMenu( results, config ) {
       // Create the main navbar container
       let navbar = document.createElement('div');
       navbar.className = 'navbar v2-menu';
@@ -423,6 +423,22 @@ function buildMainTable( results, config, box_array ) {
       if( config.merge === 'yes' ){
           merged = 'merged observation field';
       } 
+
+      // tags column...
+      if( p_tags === 'yes' ) {
+          let urlState = appState; 
+          urlState = setTag(urlState, ''); 
+          urlState = setPage(urlState, '1'); 
+          let resetUrl = './fs.html' + buildParameterList(urlState); 
+
+          // Is a valid, active lifestage filter currently in the URL string? 
+          let hasFilter = window.location.search.includes('tag=') && 
+                         !window.location.search.includes('tag=&'); 
+
+          let resetLink = hasFilter ? ' ' + furl2(resetUrl, iconHtml) : '';
+
+          labels.push({ innerHTML: '<span class="filterable-header">Tags' + resetLink + '</span>' });
+      }
 
       // month column...
       if( config.showMonth === 'yes' ) { 
@@ -653,6 +669,21 @@ function buildMainTable( results, config, box_array ) {
                                                                           rec.description + '</div>')});
          }
 
+         if( config.showTags === 'yes' ) { 
+             let valueId = ''; 
+
+             for( let i=0; i<rec.tags.length; i++ ) {
+                  if( i > 0 )       { valueId += ','; }
+                  if( rec.tags[i] ) { 
+                      let urlState = appState; 
+                      urlState = setPage( urlState, '1' ); 
+                      urlState = setTag(  urlState, rec.tags[i]) ;
+                      valueId += furl2('./fs.html' + buildParameterList(urlState), rec.tags[i] );
+                  }
+             }
+             values.push({ innerHTML: valueId }); 
+         } 
+                
          if( config.showMonth === 'yes' ) { 
              let month = ''; // Default placeholder if missing or empty 
              let valueId = ''; 
@@ -874,9 +905,6 @@ function buildMainTable( results, config, box_array ) {
            faddelems('td',brow,tempBrow[q]);
       }
 }
-          
-function buildTagsTable( results, config, box_array ) {
-}
     
 function fresults( xobj, config ) { 
    let results = xobj.results; 
@@ -924,13 +952,9 @@ function fresults( xobj, config ) {
       page_prev = ((page_curr>1)?page_curr-1:null);
       page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      buildMenu2(results, config);
+      buildMenu(results, config);
 
-      if( p_tags === 'yes' ) {
-          buildTagsTable( results, config, box_array );
-      } else {
-          buildMainTable( results, config, box_array );
-      }
+      buildMainTable( results, config, box_array );
              
       if( config.pagingEnabled ) {
           // buttons to go to prev or next page
@@ -1013,6 +1037,13 @@ function setupAPIParams( config ) {
 
    if( config.defaultPlace ) { api_params += '&place_id='        + config.defaultPlace; }
 
+   // filter for tags...
+   if( getTag(appState) ) {
+       if( getTag(appState) !== 'null' ) {
+           api_params += '&q=' + getTag(appState) + '&search_on=tags';
+       }
+   } 
+          
    // filter for month...
    if( getMonth(appState) ) {
        if( getMonth(appState) !== 'null' ) {
