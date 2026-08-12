@@ -237,6 +237,7 @@ let p_field = '';
 let p_field_value = ''; 
 let field_array = []; 
 let identify_params = '';
+let api_params = '';
 
 appState = buildStateFromParams(winurlparams);
 
@@ -920,25 +921,9 @@ function fresults( xobj, config ) {
           (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
           (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
       } else {
-// Container mirrors your sticky #nav styles perfectly
-let nav = faddelem('div', document.body, { classList: 'inat-floating-nav' }); 
-
-let url = root_observations + identify_params; 
-
-// Button inherits your standard styles but uses 'inat-wide-button' to fit the text
-faddelem('a', nav, { 
-    title: 'entire dataset', 
-    classList: 'button inat-wide-button', 
-    innerText: 'View more on iNaturalist', 
-    href: url, 
-    target: '_blank', 
-    rel: 'noopener noreferrer'
-});
-
-                
-        //  let nav = faddelem('div', document.body, { classList: 'inat-floating-container' }); 
-        //  let url = root_observations + identify_params; 
-        ///  faddelem('a', nav, { title: 'entire dataset', classList: 'inat-table-btn', innerText: 'View more on iNaturalist', href: url, target: '_blank', rel: 'noopener noreferrer' });
+          let nav = faddelem('div', document.body, { classList: 'inat-floating-nav' }); 
+          let url = root_observations + api_params; 
+          faddelem('a', nav, { title: 'entire dataset', classList: 'button inat-wide-button', innerText: 'View more on iNaturalist', href: url, target: '_blank', rel: 'noopener noreferrer' });
       }
    }
    else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
@@ -951,7 +936,6 @@ faddelem('a', nav, {
  
 <script>
 function setupAPIParams( config ) {
-   let api_params = '';
  
    api_params += '?project_id='+config.project;
 
