@@ -669,19 +669,22 @@ function buildMainTable( results, config, box_array ) {
                                                                           rec.description + '</div>')});
          }
 
+         // render the tag pills...
          if( p_tags === 'yes' ) { 
              let valueId = ''; 
 
-             for( let i=0; i<rec.tags.length; i++ ) {
-                  if( i > 0 )       { valueId += ','; }
-                  if( rec.tags[i] ) { 
-                      let urlState = appState; 
-                      urlState = setPage( urlState, '1' ); 
-                      urlState = setTag(  urlState, rec.tags[i]) ;
-                      valueId += furl2('./fs.html' + buildParameterList(urlState), rec.tags[i] );
-                  }
+             for( let i = 0; i < rec.tags.length; i++ ) {
+                 if( rec.tags[i] ) {
+                     let urlState = appState;
+                     urlState     = setPage(urlState, '1');
+                     urlState     = setTag(urlState, rec.tags[i]);
+        
+                     // Wrap the generated link inside a styled pill span
+                     valueId += `<span class="pill">${furl2('./fs.html' + buildParameterList(urlState), rec.tags[i])}</span>`;
+                 }
              }
-             values.push({ innerHTML: valueId }); 
+
+             values.push({ innerHTML: valueId });         
          } 
                 
          if( config.showMonth === 'yes' ) { 
