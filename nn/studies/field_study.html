@@ -157,8 +157,7 @@
   }
 
 /**********/
-/* 1. Matches your exact #nav specs, serving as the translucent backdrop wrapper */
-.inat-floating-nav {
+  .inat-floating-nav {
     margin-left: -8px;
     position: -webkit-sticky; /* Safari */
     position: sticky;
@@ -174,31 +173,29 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-}
+  }
 
-/* Hide the container entirely during print jobs just like your old rule */
-@media print { 
+  @media print { 
     .inat-floating-nav { display: none; } 
-}
+  }
 
-/* 2. Modifies the button rules to handle text layout inside the container */
-.button.inat-wide-button {
+  .button.inat-wide-button {
     /* Resets the narrow 32px bounds so the text fits */
-    width: 168px; /* 188px container minus side margins */
-    height: 36px; /* Sits elegantly inside the 52px parent container */
-    margin: 0;    /* Let the parent flexbox handle centering */
+    width: 168px; 
+    height: 36px; 
+    margin: 0;    
     
-    /* Inherits your native styles */
+    /* Inherits native styles */
     background: var(--color-alt);
     border: 1px solid var(--color-border);
     color: var(--color-text-link);
     
-    /* Custom Typography: Adjusts your large 24px font down so it fits */
+    /* Custom Typography */
     font-size: 13px;
     line-height: 1.2;
-    border-radius: 8px; /* Matches the container's rounded aesthetic */
+    border-radius: 8px; 
     
-    /* Displays and centers multi-line text blocks cleanly */
+    /* Displays and centers multi-line text blocks */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -207,20 +204,15 @@
     text-decoration: none;
     box-sizing: border-box;
     
-    /* Applied translucency matching your vision */
+    /* Apply translucency */
     opacity: 0.7;
     transition: opacity 0.2s ease, background 0.2s ease;
-}
+  }
 
-/* 3. Hover Effect: Becomes fully opaque and uses your site's hover theme color */
-.button.inat-wide-button:hover {
+  .button.inat-wide-button:hover {
     opacity: 1.0;
     background: var(--color-hover);
-}
-
-
-          
-/*********/
+  }
           
   /* Original Helpers */
   #h2 { font-weight:bold; font-size:20px; }
