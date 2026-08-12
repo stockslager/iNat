@@ -1,6 +1,6 @@
 function furlCell(params,txt=url) { return '<a href="'+root_grid_cell+params+'">'+txt+'</a>'; };
 function furlCellBlank(params, txt) { return '<a href="' + root_grid_cell + params + '" target="_blank" rel="noopener noreferrer">' + txt + '</a>'; }
- 
+  
 function buildGrid(data, url=null, config=null) {
 
    var results = data.results;
