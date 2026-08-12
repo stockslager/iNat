@@ -367,6 +367,12 @@ const getUrlWithoutFilter = (queryString, targetFieldId) => {
   return params.toString();
 };
 
+// **********************************
+// to common_function.js
+// **********************************
+// declares for paging and headers.
+let total_results, per_page, page_curr, page_max, page_prev, page_next;
+          
 function buildMainTable( results, config, box_array ) {
       let labels = [];
       let mismatch = '';
@@ -911,12 +917,12 @@ function fresults( xobj, config ) {
    if (results) {
 
       // grab the data for the paging buttons if paging is enabled.
-      let total_results = xobj.total_results;
-      let per_page = xobj.per_page;
-      let page_curr = xobj.page;
-      let page_max = Math.ceil(total_results/per_page);
-      let page_prev = ((page_curr>1)?page_curr-1:null);
-      let page_next = ((page_curr<page_max)?page_curr+1:null);
+      total_results = xobj.total_results;
+      per_page = xobj.per_page;
+      page_curr = xobj.page;
+      page_max = Math.ceil(total_results/per_page);
+      page_prev = ((page_curr>1)?page_curr-1:null);
+      page_next = ((page_curr<page_max)?page_curr+1:null);
 
       buildMenu2(results, config);
 
