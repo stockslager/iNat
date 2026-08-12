@@ -1,8 +1,8 @@
-<!DOCTYPE html>               
-<html lang="en">                      
+<!DOCTYPE html>                
+<html lang="en">                       
           
 <head> 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />   
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
 <meta name="description" content="Field Study" />
 <link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
@@ -156,6 +156,64 @@
     overflow: hidden;
   }
 
+/**********/
+  .inat-floating-nav {
+    margin-left: -8px;
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    left: 0;
+    bottom: 0;
+    background: var(--color-base-translucent);
+    width: 188px;
+    height: 52px;
+    border-radius: 14px;
+    
+    /* Alignment: Centers the outlined button neatly inside this container */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  @media print { 
+    .inat-floating-nav { display: none; } 
+  }
+
+  .button.inat-wide-button {
+    /* Resets the narrow 32px bounds so the text fits */
+    width: 168px; 
+    height: 36px; 
+    margin: 0;    
+    
+    /* Inherits native styles */
+    background: var(--color-alt);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-link);
+    
+    /* Custom Typography */
+    font-size: 13px;
+    line-height: 1.2;
+    border-radius: 8px; 
+    
+    /* Displays and centers multi-line text blocks */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+    text-decoration: none;
+    box-sizing: border-box;
+    
+    /* Apply translucency */
+    opacity: 0.7;
+    transition: opacity 0.2s ease, background 0.2s ease;
+  }
+
+  .button.inat-wide-button:hover {
+    opacity: 1.0;
+    background: var(--color-hover);
+  }
+          
   /* Original Helpers */
   #h2 { font-weight:bold; font-size:20px; }
   p { width:100%; }
@@ -175,10 +233,12 @@ let p_hide_dash = winurlparams.get('hide_dash') || 'no';
 let p_without_term_id = winurlparams.get('without_term_id'); 
 let p_not_user_id = winurlparams.get('without_user_id'); 
 let p_show_ls = winurlparams.get('show_ls') || 'no'; 
+let p_tags    = winurlparams.get('tags') || 'no';
 let p_field = ''; 
 let p_field_value = ''; 
 let field_array = []; 
 let identify_params = '';
+let api_params = '';
 
 appState = buildStateFromParams(winurlparams);
 
@@ -200,7 +260,14 @@ function replaceDoubleQuotes(str) {
 }
 
 function furl2(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
-function furl_out(url, txt = url) { return '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + txt + '</a>'; };
+          
+function furl_out(config, url, txt = url) { 
+    if( config.blankTargets === 'yes' ) {
+        return '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + txt + '</a>'; 
+    } else {
+        return '<a href="'+url+'">'+txt+'</a>';    
+    }
+};
 
 function buildMenu2( results, config ) {
       // Create the main navbar container
@@ -237,7 +304,11 @@ function buildMenu2( results, config ) {
 
       if( identify_params ) {
           let url = 'https://www.inaturalist.org/observations/identify' + identify_params + '&reviewed=any&quality_grade=needs_id,research,casual';
-          buildNavURL( navbar, url, 'Identify' );
+          if( config.blankTargets === 'yes' ) {
+              buildNavURL( navbar, url, 'Identify', true );
+          } else {
+              buildNavURL( navbar, url, 'Identify' );
+          }
       }
 
       if( p_hide_dash === 'no' ) {
@@ -295,57 +366,11 @@ const getUrlWithoutFilter = (queryString, targetFieldId) => {
   params.set('page', '1');
   return params.toString();
 };
-    
-function fresults( xobj, config ) { 
-   let results = xobj.results; 
-   let box_array = []; 
-  
-   if( config.obsFields ) { 
-       field_array = config.obsFields.split(","); 
-    
-       // Parse the current URL parameters to grab any active filter values 
-       const urlParams = new URLSearchParams(window.location.search); 
-      
-       const urlIds    = urlParams.getAll('fieldid'); 
-       const urlValues = urlParams.getAll('fieldvalue'); 
-       const urlNames  = urlParams.getAll('fieldname'); 
-    
-       for( let f = 0; f < field_array.length; f++ ) { 
-            const currentId = field_array[f].toString(); 
-      
-            // Find if this specific ID already has a value or name stored in the URL 
-            const urlIndex = urlIds.indexOf(currentId); 
-      
-            let activeValue = ''; 
-            let activeName = ''; 
-      
-            if( urlIndex !== -1 ) { 
-                activeValue = urlValues[urlIndex] || ''; 
-                activeName = urlNames[urlIndex] || ''; 
-            } 
-      
-            // Push the boxRow into the display array with its real URL state values 
-            box_array.push(new boxRow(currentId, activeName, activeValue)); 
-       } 
-   }
-  
-   // store box_array into appState
-   appState.activeFilters = box_array;
- 
-   if (results) {
-      let total_results = xobj.total_results;
-      let per_page = xobj.per_page;
-      let page_curr = xobj.page;
-      let page_max = Math.ceil(total_results/per_page);
-      let page_prev = ((page_curr>1)?page_curr-1:null);
-      let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-      buildMenu2(results, config);
-
+function buldMainTable( results, config ) {
       let labels = [];
       let mismatch = '';
       let field_array_copy = field_array;
-      let flower = '';
       let dlString = '<div id="divhead"><span id="topright">';
       let labelCount = 0;
       let iconHtml = '<span class="clear-btn" style="font-size:18px; padding-left:6px; display:inline-block; vertical-align:middle; line-height:1;">ⓧ</span>';
@@ -361,7 +386,7 @@ function fresults( xobj, config ) {
       nameState = setTaxonId(nameState, '');
       nameState = setTaxonName(nameState, '');
       nameState = setPage(nameState, '1'); 
-      let taxonUrl = './field_study.html' + buildParameterList(nameState); 
+      let taxonUrl = './fs.html' + buildParameterList(nameState); 
 
       // Is a valid, active taxon filter currently in the URL string? 
       let hasTaxonFilter = window.location.search.includes('taxonid=') && 
@@ -376,7 +401,7 @@ function fresults( xobj, config ) {
           let urlState = appState; 
           urlState = setLifeStage(urlState, ''); 
           urlState = setPage(urlState, '1'); 
-          let resetUrl = './field_study.html' + buildParameterList(urlState); 
+          let resetUrl = './fs.html' + buildParameterList(urlState); 
 
           // Is a valid, active lifestage filter currently in the URL string? 
           let hasFilter = window.location.search.includes('lifestage=') && 
@@ -393,16 +418,12 @@ function fresults( xobj, config ) {
           merged = 'merged observation field';
       } 
 
-      if( config.showNotes === 'yes' ) {
-          labels.push({innerText:'Notes'});
-      }
-
       // month column...
       if( config.showMonth === 'yes' ) { 
           let urlState = appState; 
           urlState = setMonth(urlState, ''); 
           urlState = setPage(urlState, '1'); 
-          let resetUrl = './field_study.html' + buildParameterList(urlState); 
+          let resetUrl = './fs.html' + buildParameterList(urlState); 
 
           // Is a valid, active lifestage filter currently in the URL string? 
           let hasFilter = window.location.search.includes('month=') && 
@@ -444,7 +465,7 @@ function fresults( xobj, config ) {
            labelCount++; 
   
            if( box_array[e].field_name !== '' ) { 
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl_out(root_obs_fields+box_array[e].field_id, box_array[e].field_id) + '</td>'); 
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl_out(config, root_obs_fields+box_array[e].field_id, box_array[e].field_id) + '</td>');
                dlString += ('<td id="tdkey">' + truncate(box_array[e].field_name.toLowerCase(), 25) + '</td></tr>'); 
     
                if( config.merge !== 'yes' ) { 
@@ -498,7 +519,7 @@ function fresults( xobj, config ) {
                            newParams.delete('plantname'); 
                        }
         
-                       const resetUrl = './field_study.html?' + newParams.toString(); 
+                       const resetUrl = './fs.html?' + newParams.toString(); 
                        const resetLink = ' ' + furl2(resetUrl, iconHtml); 
         
                        labels.push({ innerHTML: '<span class="filterable-header">' + truncate(box_array[e].field_name, 25) + resetLink + '</span>' }); 
@@ -510,7 +531,7 @@ function fresults( xobj, config ) {
                    labels.push({innerText:'Merged Fields (see above)'}); 
                } 
            } else { 
-               dlString += ('<tr id="trkey"><td id="tdkey">' + furl2(root_obs_fields+box_array[e].field_id, box_array[e].field_id) + '</td>'); 
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl_out(config, root_obs_fields+box_array[e].field_id, box_array[e].field_id) + '</td>'); 
                dlString += ('<td id="tdkey">missing from this page</td></tr>'); 
                if( config.merge !== 'yes' ) labels.push({innerText:''}); 
            } 
@@ -534,7 +555,7 @@ function fresults( xobj, config ) {
                    '</table>' +
                  '</div>' +
                  '<span class="clear-all-filters">' + 
-                    '<span style="white-space: nowrap; margin-bottom: 2px;">' + furl2('./field_study.html'+buildParameterList(clearState), 'clear all filters') + '</span>' + 
+                    '<span style="white-space: nowrap; margin-bottom: 2px;">' + furl2('./fs.html'+buildParameterList(clearState), 'clear all filters') + '</span>' + 
                  '</span>' +              
                '</div>' +
                dlString + 
@@ -579,7 +600,7 @@ function fresults( xobj, config ) {
              urlState = setTaxonId(urlState, tax_id);
              urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
              urlState = setTaxonName(urlState, pref_tax_name||tax_name);
-             taxon = furl2('./field_study.html'+buildParameterList(urlState),'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl2('./fs.html'+buildParameterList(urlState),'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
          values = [{innerText:i+1}];
@@ -609,31 +630,21 @@ function fresults( xobj, config ) {
                  urlState = setPage(urlState, '1'); // set the page to 1 anytime they choose to filter. 
         
                  urlState = setLifeStage(urlState, valueId || 'null');     
-                 values.push({ innerHTML: furl2('./field_study.html' + buildParameterList(urlState), stage || '[none]') }); 
+                 values.push({ innerHTML: furl2('./fs.html' + buildParameterList(urlState), stage || '[none]') }); 
              } 
          } 
 
          // use a clickable scrollable div containing field notes in place of image when there is no image.
          if( rec.photos && rec.photos.length > 0 ) {
-             values.push({ innerHTML: furl2(root_observations + rec.id, '<img class="mini_photo2" src="' + rec.photos[0].url + '" />') });
+             values.push({ innerHTML: furl_out(config, root_observations + rec.id, '<img class="mini_photo2" src="' + rec.photos[0].url + '" />') });
          } else {
              let desc = rec.description || '<i style="opacity: 0.6;">No notes</i>';
-             values.push({ innerHTML: furl2(root_observations + rec.id, '<div style="max-width: 150px; max-height: 45px; overflow-y: auto; padding: 6px; scrollbar-width: thin; white-space: normal; ' + 
+             values.push({ innerHTML: furl_out(config, root_observations + rec.id, '<div style="max-width: 150px; max-height: 45px; overflow-y: auto; padding: 6px; scrollbar-width: thin; white-space: normal; ' + 
                                                                           'background-color: var(--color-alt); ' + 
                                                                           'color: var(--color-text); ' + 
                                                                           'border: 1px solid var(--color-border); ' + 
                                                                           'border-radius: 4px; font-size: 0.9em; line-height: 1.4;">' + 
                                                                           rec.description + '</div>')});
-         }
-
-         if( config.showNotes === 'yes' ) {
-             let desc = rec.description || '<i style="opacity: 0.6;">No notes</i>';
-             values.push({ innerHTML: '<div style="max-width: 150px; max-height: 45px; overflow-y: auto; padding: 6px; scrollbar-width: thin; white-space: normal; ' + 
-                                      'background-color: var(--color-alt); ' + 
-                                      'color: var(--color-text); ' + 
-                                      'border: 1px solid var(--color-border); ' + 
-                                      'border-radius: 4px; font-size: 0.9em; line-height: 1.4;">' + 
-                                      desc + '</div>' });
          }
 
          if( config.showMonth === 'yes' ) { 
@@ -654,7 +665,7 @@ function fresults( xobj, config ) {
                  urlState = setPage(urlState, '1'); // set the page to 1 anytime they choose to filter. 
         
                  urlState = setMonth(urlState, valueId || 'null');     
-                 values.push({ innerHTML: furl2('./field_study.html' + buildParameterList(urlState), month || '[none]') }); 
+                 values.push({ innerHTML: furl2('./fs.html' + buildParameterList(urlState), month || '[none]') }); 
              } 
          } 
        
@@ -741,7 +752,7 @@ function fresults( xobj, config ) {
     
                                // Wild ancestral colony 
                                if( ofvFieldIdStr === '17383' ) { 
-                                   values.push({ innerHTML: furl2(root_observations + field1, field1) }); 
+                                   values.push({ innerHTML: furl_out(config, root_observations + field1, field1) }); 
                                } else { 
                                    const cleanValue = replaceDoubleQuotes(ofvValue.toString()); 
       
@@ -757,7 +768,7 @@ function fresults( xobj, config ) {
                                    } 
       
                                    // 2. Safely restore furl2 now that parameter pollution is fully resolved
-                                   let url = furl2('./field_study.html?' + finalParams.toString(), field1); 
+                                   let url = furl2('./fs.html?' + finalParams.toString(), field1); 
       
                                    if( isPrimaryField && config.fieldOutlink ) { 
                                        let outlink = furl2( config.fieldOutlink + ofvValue.toString(), '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">🛈</span>' ); 
@@ -805,7 +816,7 @@ function fresults( xobj, config ) {
              let urlState = appState;
              urlState = setObsDate(urlState, rec.observed_on_details?.date ?? null);
              urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
-             values.push({innerHTML: furl2('./field_study.html'+buildParameterList(urlState),rec.observed_on_details?.date ?? null) });
+             values.push({innerHTML: furl2('./fs.html'+buildParameterList(urlState),rec.observed_on_details?.date ?? null) });
              values.push({innerHTML: '<div style="max-width: 300px; max-height: 45px; overflow-y: auto; padding: 6px; scrollbar-width: thin; white-space: normal; ' + 
                                            'background-color: var(--color-alt); ' + 
                                            'color: var(--color-text); ' + 
@@ -818,7 +829,7 @@ function fresults( xobj, config ) {
          urlState = setUser(urlState, rec.user.login);
          urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
 
-         values.push({innerHTML:'<span class="user">'+user_icon+furl2('./field_study.html'+buildParameterList(urlState),rec.user.login)+'</span>'});
+         values.push({innerHTML:'<span class="user">'+user_icon+furl2('./fs.html'+buildParameterList(urlState),rec.user.login)+'</span>'});
          
          tempBrow.push(values);
       };
@@ -837,7 +848,7 @@ function fresults( xobj, config ) {
       let obsState = appState; 
       obsState = setUser(obsState, '');
       obsState = setPage(obsState, '1'); 
-      let obsUrl = './field_study.html' + buildParameterList(obsState); 
+      let obsUrl = './fs.html' + buildParameterList(obsState); 
 
       // Is a valid, active observer filter currently in the URL string? 
       let hasObsFilter = window.location.search.includes('user=') && 
@@ -856,15 +867,81 @@ function fresults( xobj, config ) {
            let brow = faddelem('tr',tbody);
            faddelems('td',brow,tempBrow[q]);
       }
-
-      // buttons to go to prev or next page
-      let nav = faddelem('div',document.body,{id:'nav'});
-      (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
-      (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
-      (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
-      (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+}
+          
+function buildTagsTable( results, config ) {
+}
+    
+function fresults( xobj, config ) { 
+   let results = xobj.results; 
+   let box_array = []; 
+  
+   if( config.obsFields ) { 
+       field_array = config.obsFields.split(","); 
+    
+       // Parse the current URL parameters to grab any active filter values 
+       const urlParams = new URLSearchParams(window.location.search); 
+      
+       const urlIds    = urlParams.getAll('fieldid'); 
+       const urlValues = urlParams.getAll('fieldvalue'); 
+       const urlNames  = urlParams.getAll('fieldname'); 
+    
+       for( let f = 0; f < field_array.length; f++ ) { 
+            const currentId = field_array[f].toString(); 
+      
+            // Find if this specific ID already has a value or name stored in the URL 
+            const urlIndex = urlIds.indexOf(currentId); 
+      
+            let activeValue = ''; 
+            let activeName = ''; 
+      
+            if( urlIndex !== -1 ) { 
+                activeValue = urlValues[urlIndex] || ''; 
+                activeName = urlNames[urlIndex] || ''; 
+            } 
+      
+            // Push the boxRow into the display array with its real URL state values 
+            box_array.push(new boxRow(currentId, activeName, activeValue)); 
+       } 
    }
-   else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
+  
+   // store box_array into appState
+   appState.activeFilters = box_array;
+ 
+   if (results) {
+
+      // grab the data for the paging buttons if paging is enabled.
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
+
+      buildMenu2(results, config);
+
+      if( p_tags === 'yes' ) {
+          buildTagsTable( results, config );
+      } else {
+          buildMainTable( results, config );
+      }
+             
+      if( config.pagingEnabled ) {
+          // buttons to go to prev or next page
+          let nav = faddelem('div',document.body,{id:'nav'});
+          (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+          (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+          (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+          (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+      } else {
+          let nav = faddelem('div', document.body, { classList: 'inat-floating-nav' }); 
+          let url = root_observations + api_params; 
+          faddelem('a', nav, { title: 'entire dataset', classList: 'button inat-wide-button', innerText: 'View more on iNaturalist', href: url, target: '_blank', rel: 'noopener noreferrer' });
+      }
+             
+   } else { 
+          faddelem('p',document.body,{innerText:'No results returned.'}); 
+   }; 
 };
 
 </script>
@@ -874,7 +951,6 @@ function fresults( xobj, config ) {
  
 <script>
 function setupAPIParams( config ) {
-   let api_params = '';
  
    api_params += '?project_id='+config.project;
 
