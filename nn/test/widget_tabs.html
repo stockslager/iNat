@@ -3,28 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabbed Iframe Viewer</title>
+    <title>Tabbed Iframe Application Terminal</title>
     
-    <!-- Paste your CSS here -->
     <style>
+        /* Global Background Reset Resetting to Dark Baseline */
         body {
             background-color: #0f172a;
             margin: 0;
             padding: 20px;
+            transition: background-color 0.2s ease;
         }
-        
+
+        /* Master Container Layout Framework */
         .tab-component-container {
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            background-color: #0f172a;
             padding: 20px;
             box-sizing: border-box;
+            font-family: sans-serif;
+            transition: background-color 0.2s ease;
+        }
+
+        /* --- DARK THEME STYLING CONFIGURATION --- */
+        .tab-component-container.dark-theme {
+            background-color: #0f172a;
+        }
+        .dark-theme .tab-header-track {
+            border-bottom: 1px solid #334155;
+        }
+        .dark-theme .custom-tab-header {
+            background-color: #0f172a;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            border-bottom: none;
+        }
+        .dark-theme .custom-tab-header.active-tab {
+            background-color: #1e293b;
+            color: #38bdf8;
+        }
+        .dark-theme .custom-tab-content {
+            border: 1px solid #334155;
+            background-color: #1e293b;
+        }
+
+        /* --- LIGHT THEME STYLING CONFIGURATION --- */
+        .tab-component-container.light-theme {
+            background-color: #f8fafc;
+        }
+        .light-theme .tab-header-track {
+            border-bottom: 1px solid #cbd5e1;
+        }
+        .light-theme .custom-tab-header {
+            background-color: #e2e8f0;
+            color: #64748b;
+            border: 1px solid #cbd5e1;
+            border-bottom: none;
+        }
+        .light-theme .custom-tab-header.active-tab {
+            background-color: #ffffff;
+            color: #0284c7;
+        }
+        .light-theme .custom-tab-content {
+            border: 1px solid #cbd5e1;
+            background-color: #ffffff;
+        }
+
+        /* --- STRUCTURAL INTERFACE MECHANICS --- */
+        .tab-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .tab-header-track {
-            border-bottom: 1px solid #334155;
             padding-bottom: 0;
+            flex-grow: 1;
         }
 
         .custom-tab-header {
@@ -32,27 +86,16 @@
             padding: 10px 20px;
             margin-right: 4px;
             cursor: pointer;
-            font-family: sans-serif;
             font-size: 14px;
             font-weight: 500;
             border-radius: 6px 6px 0 0;
-            background-color: #0f172a;
-            color: #94a3b8;
-            border: 1px solid #334155;
-            border-bottom: none;
-        }
-
-        .custom-tab-header.active-tab {
-            background-color: #1e293b;
-            color: #38bdf8;
+            transition: all 0.15s ease;
         }
 
         .custom-tab-content {
             display: none;
             width: 100%;
-            height: 600px; /* Adjusted height for desktop viewing */
-            border: 1px solid #334155;
-            background-color: #1e293b;
+            height: 600px;
             border-radius: 0 0 6px 6px;
             overflow: hidden;
         }
@@ -66,27 +109,55 @@
             height: 100%;
             border: none;
         }
+
+        /* Interactive Theme Action Trigger Element Button */
+        .theme-toggle-btn {
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 20px;
+            border: 1px solid #334155;
+            background-color: #1e293b;
+            color: #e2e8f0;
+            transition: all 0.2s ease;
+        }
+
+        .light-theme .theme-toggle-btn {
+            background-color: #ffffff;
+            color: #1e293b;
+            border: 1px solid #cbd5e1;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Container where the JavaScript will render the tabs -->
+    <!-- Base anchor location layout slot -->
     <div id="app"></div>
 
-    <!-- Paste your JavaScript logic here -->
     <script>
-        // Mock container array to match your array push setup
+        // Array container mock initialization
         var values = [];
 
+        // 1. Setup widget iframe configuration mappings (Ensure endpoints are https://)
         var tabConfig = [
             { id: 'tab1', label: 'Analytics', url: 'https://example.com' },
             { id: 'tab2', label: 'System Logs', url: 'https://example.com' },
             { id: 'tab3', label: 'Configuration', url: 'https://example.com' }
         ];
 
+        // 2. Scan localized browser storage key values to assert default session layout
+        var savedTheme = localStorage.getItem('app-ui-theme') || 'dark-theme';
+        
+        // Match the background of the main document canvas frame straight out of the box
+        if (savedTheme === 'light-theme') {
+            document.body.style.backgroundColor = '#f8fafc';
+        }
+
         var tabHeadersHtml = '';
         var tabContentsHtml = '';
 
+        // 3. String concatenation iteration loop parsing structure inputs
         for (var i = 0; i < tabConfig.length; i++) {
             var tab = tabConfig[i];
             var isFirst = (i === 0);
@@ -102,11 +173,18 @@
                                '</div>';
         }
 
-        var tabsWrapperHtml = '<div class="tab-component-container">' +
+        var btnLabel = (savedTheme === 'dark-theme') ? '☀️ Light Mode' : '🌙 Dark Mode';
+
+        // 4. Form template view construction frame assignments
+        var tabsWrapperHtml = '<div id="themeContainer" class="tab-component-container ' + savedTheme + '">' +
+                              '<div class="tab-header-row">' +
                               '<div class="tab-header-track">' + tabHeadersHtml + '</div>' +
+                              '<button class="theme-toggle-btn" onclick="toggleTheme()">' + btnLabel + '</button>' +
+                              '</div>' +
                               '<div>' + tabContentsHtml + '</div>' +
                               '</div>';
 
+        // 5. Global Action Runtime Trigger Logic Operations mapping pointers
         window.switchTab = function(activeTabId, targetUrl) {
             var headers = document.querySelectorAll('.custom-tab-header');
             var contents = document.querySelectorAll('.custom-tab-content');
@@ -132,9 +210,31 @@
             }
         };
 
-        // Render the code immediately to your display view
+        window.toggleTheme = function() {
+            var container = document.getElementById('themeContainer');
+            var toggleBtn = document.querySelector('.theme-toggle-btn');
+            
+            if (container && toggleBtn) {
+                if (container.classList.contains('dark-theme')) {
+                    container.classList.remove('dark-theme');
+                    container.classList.add('light-theme');
+                    document.body.style.backgroundColor = '#f8fafc';
+                    toggleBtn.innerHTML = '🌙 Dark Mode';
+                    localStorage.setItem('app-ui-theme', 'light-theme');
+                } else {
+                    container.classList.remove('light-theme');
+                    container.classList.add('dark-theme');
+                    document.body.style.backgroundColor = '#0f172a';
+                    toggleBtn.innerHTML = '☀️ Light Mode';
+                    localStorage.setItem('app-ui-theme', 'dark-theme');
+                }
+            }
+        };
+
+        // Render the setup string down to the live window document view location
         values.push({ innerHTML: tabsWrapperHtml });
         document.getElementById('app').innerHTML = values[0].innerHTML;
     </script>
 </body>
 </html>
+
