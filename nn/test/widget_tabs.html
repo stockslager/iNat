@@ -97,7 +97,7 @@
             width: 100%;
             height: 640px;
             border-radius: 0 0 6px 6px;
-            overflow: auto; /* Changed to auto so the native widget content can scroll natively */
+            overflow: auto; 
             padding: 20px;
             box-sizing: border-box;
         }
@@ -191,7 +191,6 @@ for (var i = 0; i < tabConfig.length; i++) {
     '</div>';
 }
 
-// FIXED: Removed URL percentage strings to prevent broken visual layouts
 var btnLabel = (savedTheme === 'dark-theme') ? '☀️ Light Mode' : '🌙 Dark Mode';
 
 // 4. Form template view construction frame assignments
@@ -269,14 +268,11 @@ window.toggleTheme = function() {
   }
 };
 
-// 6. FIXED: Stripped out broken array references to mount strings directly to the target layout DOM container node
 document.getElementById('app').innerHTML = tabsWrapperHtml;
 
 // Run switch tab immediately initialization trigger on execution completion
 window.switchTab(tabConfig[0].id);
 </script>
-
-
 
 </body>
 </html>
