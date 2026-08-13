@@ -137,149 +137,146 @@
     <!-- Base anchor location layout slot -->
     <div id="app"></div>
 
-    <script>
-        // Array container mock initialization
-        var values = [];
+<script>
+// 1. Setup widget configurations
+var tabConfig = [
+  { id: 'tab1', type: 'widget', label: 'Amphibians', taxon: '20978' },
+  { id: 'tab2', type: 'widget', label: 'Bees', taxon: '47222' },
+  { id: 'tab3', type: 'widget', label: 'Beetles', taxon: '47208' },
+  { id: 'tab4', type: 'widget', label: 'Birds', taxon: '3' },
+  { id: 'tab5', type: 'widget', label: 'Lepidoptera', taxon: '47157' },
+  { id: 'tab6', type: 'widget', label: 'Mammals', taxon: '40151' },
+  { id: 'tab7', type: 'widget', label: 'Mushrooms', taxon: '47170' },
+  { id: 'tab8', type: 'widget', label: 'Reptiles', taxon: '26036' },
+  { id: 'tab9', type: 'widget', label: 'Snails', taxon: '47115' },
+  { id: 'tab10', type: 'widget', label: 'Spiders', taxon: '47118' }
+];
 
-        // 1. Setup widget configurations. Notice tab1 uses type: 'widget' instead of a pure iframe URL string
-        var tabConfig = [
-            { id: 'tab1', label: 'iNaturalist', type: 'widget' },
-            { id: 'tab2', label: 'System Logs', type: 'iframe', url: 'https://example.com' },
-            { id: 'tab3', label: 'Configuration', type: 'iframe', url: 'https://example.com' }
-        ];
+// 2. Scan localized browser storage key values to assert default session layout
+var savedTheme = localStorage.getItem('app-ui-theme') || 'dark-theme';
 
-        // 2. Scan localized browser storage key values to assert default session layout
-        var savedTheme = localStorage.getItem('app-ui-theme') || 'dark-theme';
+// Match the background of the main document canvas frame straight out of the box
+if (savedTheme === 'light-theme') {
+  document.body.style.backgroundColor = '#f8fafc';
+} else {
+  document.body.style.backgroundColor = '#0f172a';
+}
 
-        // Match the background of the main document canvas frame straight out of the box
-        if (savedTheme === 'light-theme') {
-            document.body.style.backgroundColor = '#f8fafc';
-        }
+var tabHeadersHtml = '';
+var tabContentsHtml = '';
 
-        var tabHeadersHtml = '';
-        var tabContentsHtml = '';
+// 3. String concatenation iteration loop parsing structure inputs
+for (var i = 0; i < tabConfig.length; i++) {
+  var tab = tabConfig[i];
+  var isFirst = (i === 0);
+  var headerClass = isFirst ? 'custom-tab-header active-tab' : 'custom-tab-header';
+  var contentClass = isFirst ? 'custom-tab-content active-panel' : 'custom-tab-content';
+  var initialWidgetTheme = (savedTheme === 'light-theme') ? 'light' : 'transparent-dark';
 
-        // 3. String concatenation iteration loop parsing structure inputs
-        for (var i = 0; i < tabConfig.length; i++) {
-            var tab = tabConfig[i];
-            var isFirst = (i === 0);
+  tabHeadersHtml += '<div id="header_' + tab.id + '" class="' + headerClass + '" onclick="switchTab(\'' + tab.id + '\')">' + tab.label + '</div>';
 
-            var headerClass = isFirst ? 'custom-tab-header active-tab' : 'custom-tab-header';
-            var contentClass = isFirst ? 'custom-tab-content active-panel' : 'custom-tab-content';
+  tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
+    '<div id="inat-widget-container-' + tab.id + '" ' +
+    'data-inat-widget ' +
+    'data-inat-source="cincinnati-nature-center-at-rowe-woods-oh-usa" ' +
+    'data-inat-source-type="project" ' +
+    'data-inat-theme="' + initialWidgetTheme + '" ' +
+    'data-inat-title="Cincinnati Nature Center at Rowe Woods, OH, USA" ' +
+    'data-inat-layout="cards" ' +
+    'data-inat-limit="12" ' +
+    'data-inat-order-by="observed_on" ' +
+    'data-inat-taxon="' + tab.taxon + '" ' +
+    'data-inat-compact="true">' +
+    '</div>' +
+    '</div>';
+}
 
-            tabHeadersHtml += '<div id="header_' + tab.id + '" class="' + headerClass + '" onclick="switchTab(\'' + tab.id + '\')">' + tab.label + '</div>';
+// FIXED: Removed URL percentage strings to prevent broken visual layouts
+var btnLabel = (savedTheme === 'dark-theme') ? '☀️ Light Mode' : '🌙 Dark Mode';
 
-            if (tab.type === 'widget') {
-                // If it is the iNaturalist widget, construct the exact inline div node placeholder you provided
-                tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
-                                   '<div id="inat-widget-container" ' +
-                                   'data-inat-widget ' +
-                                   'data-inat-source="cincinnati-nature-center-at-rowe-woods-oh-usa" ' +
-                                   'data-inat-source-type="project" ' +
-                                   'data-inat-theme="transparent-dark" ' +
-                                   'data-inat-title="Cincinnati Nature Center at Rowe Woods, OH, USA" ' +
-                                   'data-inat-layout="cards" ' +
-                                   'data-inat-limit="12" ' +
-                                   'data-inat-order-by="observed_on" ' +
-                                   'data-inat-taxon="47224" ' +
-                                   'data-inat-compact="true">' +
-                                   '</div>' +
-                                   '</div>';
-            } else {
-                // Keep standard iframe fallback configurations operational for regular pages
-                var initialSrc = isFirst ? tab.url : '';
-                tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
-                                   '<iframe id="iframe_' + tab.id + '" class="tab-widget-frame" src="' + initialSrc + '"></iframe>' +
-                                   '</div>';
-            }
-        }
+// 4. Form template view construction frame assignments
+var tabsWrapperHtml = '<div id="themeContainer" class="tab-component-container ' + savedTheme + '">' +
+  '<div class="tab-header-row">' +
+  '<div class="tab-header-track">' + tabHeadersHtml + '</div>' +
+  '<button class="theme-toggle-btn" onclick="toggleTheme()">' + btnLabel + '</button>' +
+  '</div>' +
+  '<div>' + tabContentsHtml + '</div>' +
+  '</div>';
 
-        var btnLabel = (savedTheme === 'dark-theme') ? '☀️ Light Mode' : '🌙 Dark Mode';
+var inatScriptLoaded = false;
 
-        // 4. Form template view construction frame assignments
-        var tabsWrapperHtml = '<div id="themeContainer" class="tab-component-container ' + savedTheme + '">' +
-                              '<div class="tab-header-row">' +
-                              '<div class="tab-header-track">' + tabHeadersHtml + '</div>' +
-                              '<button class="theme-toggle-btn" onclick="toggleTheme()">' + btnLabel + '</button>' +
-                              '</div>' +
-                              '<div>' + tabContentsHtml + '</div>' +
-                              '</div>';
+// 5. Global Action Runtime Trigger Logic Operations mapping pointers
+window.switchTab = function(activeTabId) {
+  var headers = document.querySelectorAll('.custom-tab-header');
+  var contents = document.querySelectorAll('.custom-tab-content');
+  
+  for (var j = 0; j < headers.length; j++) {
+    headers[j].classList.remove('active-tab');
+  }
+  for (var k = 0; k < contents.length; k++) {
+    contents[k].classList.remove('active-panel');
+  }
 
-        // Helper tracker tracking if the iNaturalist dependency payload script has executed on the DOM
-        var inatScriptLoaded = false;
+  var activeHeader = document.getElementById('header_' + activeTabId);
+  var activeContent = document.getElementById('content_' + activeTabId);
+  
+  if (activeHeader && activeContent) {
+    activeHeader.classList.add('active-tab');
+    activeContent.classList.add('active-panel');
 
-        // 5. Global Action Runtime Trigger Logic Operations mapping pointers
-        window.switchTab = function(activeTabId) {
-            var headers = document.querySelectorAll('.custom-tab-header');
-            var contents = document.querySelectorAll('.custom-tab-content');
+    var targetConfig = tabConfig.find(function(t) { return t.id === activeTabId; });
+    
+    if (targetConfig && targetConfig.type === 'widget') {
+      if (!inatScriptLoaded) {
+        inatScriptLoaded = true;
+        var scriptNode = document.createElement('script');
+        scriptNode.src = 'https://glauberramos.github.io/inat/inat-widget.js';
+        document.body.appendChild(scriptNode);
+      } else if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
+        window.iNatWidget.init();
+      }
+    }
+  }
+};
 
-            for (var j = 0; j < headers.length; j++) {
-                headers[j].classList.remove('active-tab');
-            }
-            for (var k = 0; k < contents.length; k++) {
-                contents[k].classList.remove('active-panel');
-            }
+window.toggleTheme = function() {
+  var container = document.getElementById('themeContainer');
+  var toggleBtn = document.querySelector('.theme-toggle-btn');
+  
+  if (container && toggleBtn) {
+    var isDarkNow = container.classList.contains('dark-theme');
+    var targetThemeClass = isDarkNow ? 'light-theme' : 'dark-theme';
+    var targetBgColor = isDarkNow ? '#f8fafc' : '#0f172a';
+    var targetBtnLabel = isDarkNow ? '🌙 Dark Mode' : '☀️ Light Mode';
+    var targetWidgetTheme = isDarkNow ? 'light' : 'transparent-dark';
 
-            var activeHeader = document.getElementById('header_' + activeTabId);
-            var activeContent = document.getElementById('content_' + activeTabId);
+    container.className = 'tab-component-container ' + targetThemeClass;
+    document.body.style.backgroundColor = targetBgColor;
+    toggleBtn.innerHTML = targetBtnLabel;
+    localStorage.setItem('app-ui-theme', targetThemeClass);
 
-            if (activeHeader && activeContent) {
-                activeHeader.classList.add('active-tab');
-                activeContent.classList.add('active-panel');
+    // Sweeps and updates the parameters across all 10 tab elements safely
+    for (var m = 0; m < tabConfig.length; m++) {
+      var widgetNode = document.getElementById('inat-widget-container-' + tabConfig[m].id);
+      if (widgetNode) {
+        widgetNode.setAttribute('data-inat-theme', targetWidgetTheme);
+      }
+    }
 
-                // Find matching configuration data model
-                var targetConfig = tabConfig.find(function(t) { return t.id === activeTabId; });
+    if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
+      window.iNatWidget.init();
+    }
+  }
+};
 
-                if (targetConfig.type === 'iframe') {
-                    var activeIframe = document.getElementById('iframe_' + activeTabId);
-                    if (activeIframe && !activeIframe.getAttribute('src')) {
-                        activeIframe.setAttribute('src', targetConfig.url);
-                    }
-                } else if (targetConfig.type === 'widget' && !inatScriptLoaded) {
-                    // Lazy-loading injection workflow workflow specifically for handling the external widget JS asset safely
-                    inatScriptLoaded = true;
-                    var scriptNode = document.createElement('script');
-                    scriptNode.src = 'https://glauberramos.github.io/inat/inat-widget.js';
-                    document.body.appendChild(scriptNode);
-                }
-            }
-        };
+// 6. FIXED: Stripped out broken array references to mount strings directly to the target layout DOM container node
+document.getElementById('app').innerHTML = tabsWrapperHtml;
 
-        window.toggleTheme = function() {
-          var container = document.getElementById('themeContainer');
-          var toggleBtn = document.querySelector('.theme-toggle-btn');
-          var inatWidget = document.getElementById('inat-widget-container');
-          if (container && toggleBtn) {
-            if (container.classList.contains('dark-theme')) {
-              container.classList.remove('dark-theme');
-              container.classList.add('light-theme');
-              document.body.style.backgroundColor = '#f8fafc';
-              toggleBtn.innerHTML = '🌙 Dark Mode';
-              localStorage.setItem('app-ui-theme', 'light-theme');
-              // Dynamically swap the iNaturalist widget layout parameters theme attribute safely if it exists
-              if (inatWidget) {
-                inatWidget.setAttribute('data-inat-theme', 'light');
-              }
-            } else {
-              container.classList.remove('light-theme');
-              container.classList.add('dark-theme');
-              document.body.style.backgroundColor = '#0f172a';
-              toggleBtn.innerHTML = '☀️ Light Mode';
-              localStorage.setItem('app-ui-theme', 'dark-theme');
-              if (inatWidget) {
-                inatWidget.setAttribute('data-inat-theme', 'transparent-dark');
-              }
-            }
-          }
-        };// Render the setup string down to the live window document view location
-values.push({ innerHTML: tabsWrapperHtml });
-
-document.getElementById('app').innerHTML = values[0].innerHTML; 
-
-window.switchTab('tab1'); 
-      // Run switch tab immediately initialization trigger on execution completion for the first item (iNaturalist)
-      window.switchTab(tabConfig[0].id);
-
+// Run switch tab immediately initialization trigger on execution completion
+window.switchTab(tabConfig[0].id);
 </script>
+
+
+
 </body>
 </html>
