@@ -143,9 +143,16 @@
 
         // 1. Setup widget configurations. Notice tab1 uses type: 'widget' instead of a pure iframe URL string
         var tabConfig = [
-            { id: 'tab1', label: 'iNaturalist', type: 'widget' },
-            { id: 'tab2', label: 'System Logs', type: 'iframe', url: 'https://example.com' },
-            { id: 'tab3', label: 'Configuration', type: 'iframe', url: 'https://example.com' }
+            { id: 'tab1',  label: 'Amphibians',  taxon: '20978' },
+            { id: 'tab2',  label: 'Bees',        taxon: '47222' },
+            { id: 'tab3',  label: 'Beetles',     taxon: '47208' },
+            { id: 'tab4',  label: 'Birds',       taxon: '3' },
+            { id: 'tab5',  label: 'Lepidoptera', taxon: '47157' },
+            { id: 'tab6',  label: 'Mammals',     taxon: '40151' },
+            { id: 'tab7',  label: 'Mushrooms',   taxon: '47170' },
+            { id: 'tab8',  label: 'Reptiles',    taxon: '26036' },
+            { id: 'tab9',  label: 'Snails',      taxon: '47115' },
+            { id: 'tab10', label: 'Spiders',     taxon: '47118' }
         ];
 
         // 2. Scan localized browser storage key values to assert default session layout
@@ -169,9 +176,8 @@
 
             tabHeadersHtml += '<div id="header_' + tab.id + '" class="' + headerClass + '" onclick="switchTab(\'' + tab.id + '\')">' + tab.label + '</div>';
             
-            if (tab.type === 'widget') {
-                // If it is the iNaturalist widget, construct the exact inline div node placeholder you provided
-                tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
+            // If it is the iNaturalist widget, construct the exact inline div node placeholder you provided
+            tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
                                    '<div id="inat-widget-container" ' +
                                    'data-inat-widget ' +
                                    'data-inat-source="cincinnati-nature-center-at-rowe-woods-oh-usa" ' +
@@ -181,17 +187,10 @@
                                    'data-inat-layout="cards" ' +
                                    'data-inat-limit="12" ' +
                                    'data-inat-order-by="observed_on" ' +
-                                   'data-inat-taxon="47224" ' +
+                                   'data-inat-taxon="' + tab.taxon  + '"' +
                                    'data-inat-compact="true">' +
                                    '</div>' +
                                    '</div>';
-            } else {
-                // Keep standard iframe fallback configurations operational for regular pages
-                var initialSrc = isFirst ? tab.url : '';
-                tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
-                                   '<iframe id="iframe_' + tab.id + '" class="tab-widget-frame" src="' + initialSrc + '"></iframe>' +
-                                   '</div>';
-            }
         }
 
         var btnLabel = (savedTheme === 'dark-theme') ? '☀️ Light Mode' : '🌙 Dark Mode';
