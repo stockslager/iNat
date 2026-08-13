@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabbed Iframe Application Terminal</title>
-    
+    <title>Recently Observed at Rowe Woods</title>
+
     <style>
         /* Global Background Reset Resetting to Dark Baseline */
         body {
@@ -95,9 +95,11 @@
         .custom-tab-content {
             display: none;
             width: 100%;
-            height: 600px;
+            height: 640px;
             border-radius: 0 0 6px 6px;
-            overflow: hidden;
+            overflow: auto; /* Changed to auto so the native widget content can scroll natively */
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         .custom-tab-content.active-panel {
@@ -135,107 +137,147 @@
     <!-- Base anchor location layout slot -->
     <div id="app"></div>
 
-    <script>
-        // Array container mock initialization
-        var values = [];
+<script>
+// 1. Setup widget configurations
+var tabConfig = [
+  { id: 'tab1', type: 'widget', label: 'Amphibians', taxon: '20978' },
+  { id: 'tab2', type: 'widget', label: 'Bees', taxon: '47222' },
+  { id: 'tab3', type: 'widget', label: 'Beetles', taxon: '47208' },
+  { id: 'tab4', type: 'widget', label: 'Birds', taxon: '3' },
+  { id: 'tab5', type: 'widget', label: 'Lepidoptera', taxon: '47157' },
+  { id: 'tab6', type: 'widget', label: 'Mammals', taxon: '40151' },
+  { id: 'tab7', type: 'widget', label: 'Mushrooms', taxon: '47170' },
+  { id: 'tab8', type: 'widget', label: 'Reptiles', taxon: '26036' },
+  { id: 'tab9', type: 'widget', label: 'Snails', taxon: '47115' },
+  { id: 'tab10', type: 'widget', label: 'Spiders', taxon: '47118' }
+];
 
-        // 1. Setup widget iframe configuration mappings (Ensure endpoints are https://)
-        var tabConfig = [
-            { id: 'tab1', label: 'All Insects', url: 'https://example.com' },
-            { id: 'tab2', label: 'Butterflies & Moths', url: 'https://example.com' },
-            { id: 'tab3', label: 'Birds', url: 'https://example.com' },
-            { id: 'tab3', label: 'Bees', url: 'https://example.com' }
-        ];
+// 2. Scan localized browser storage key values to assert default session layout
+var savedTheme = localStorage.getItem('app-ui-theme') || 'dark-theme';
 
-        // 2. Scan localized browser storage key values to assert default session layout
-        var savedTheme = localStorage.getItem('app-ui-theme') || 'dark-theme';
-        
-        // Match the background of the main document canvas frame straight out of the box
-        if (savedTheme === 'light-theme') {
-            document.body.style.backgroundColor = '#f8fafc';
-        }
+// Match the background of the main document canvas frame straight out of the box
+if (savedTheme === 'light-theme') {
+  document.body.style.backgroundColor = '#f8fafc';
+} else {
+  document.body.style.backgroundColor = '#0f172a';
+}
 
-        var tabHeadersHtml = '';
-        var tabContentsHtml = '';
+var tabHeadersHtml = '';
+var tabContentsHtml = '';
 
-        // 3. String concatenation iteration loop parsing structure inputs
-        for (var i = 0; i < tabConfig.length; i++) {
-            var tab = tabConfig[i];
-            var isFirst = (i === 0);
-            
-            var headerClass = isFirst ? 'custom-tab-header active-tab' : 'custom-tab-header';
-            var contentClass = isFirst ? 'custom-tab-content active-panel' : 'custom-tab-content';
-            var initialSrc = isFirst ? tab.url : '';
+// 3. String concatenation iteration loop parsing structure inputs
+for (var i = 0; i < tabConfig.length; i++) {
+  var tab = tabConfig[i];
+  var isFirst = (i === 0);
+  var headerClass = isFirst ? 'custom-tab-header active-tab' : 'custom-tab-header';
+  var contentClass = isFirst ? 'custom-tab-content active-panel' : 'custom-tab-content';
+  var initialWidgetTheme = (savedTheme === 'light-theme') ? 'light' : 'transparent-dark';
 
-            tabHeadersHtml += '<div id="header_' + tab.id + '" class="' + headerClass + '" onclick="switchTab(\'' + tab.id + '\', \'' + tab.url + '\')">' + tab.label + '</div>';
-            
-            tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
-                               '<iframe id="iframe_' + tab.id + '" class="tab-widget-frame" src="' + initialSrc + '"></iframe>' +
-                               '</div>';
-        }
+  tabHeadersHtml += '<div id="header_' + tab.id + '" class="' + headerClass + '" onclick="switchTab(\'' + tab.id + '\')">' + tab.label + '</div>';
 
-        var btnLabel = (savedTheme === 'dark-theme') ? '☀️ Light Mode' : '🌙 Dark Mode';
+  tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
+    '<div id="inat-widget-container-' + tab.id + '" ' +
+    'data-inat-widget ' +
+    'data-inat-source="cincinnati-nature-center-at-rowe-woods-oh-usa" ' +
+    'data-inat-source-type="project" ' +
+    'data-inat-theme="' + initialWidgetTheme + '" ' +
+    'data-inat-title="Cincinnati Nature Center at Rowe Woods, OH, USA" ' +
+    'data-inat-layout="cards" ' +
+    'data-inat-limit="12" ' +
+    'data-inat-order-by="observed_on" ' +
+    'data-inat-taxon="' + tab.taxon + '" ' +
+    'data-inat-compact="true">' +
+    '</div>' +
+    '</div>';
+}
 
-        // 4. Form template view construction frame assignments
-        var tabsWrapperHtml = '<div id="themeContainer" class="tab-component-container ' + savedTheme + '">' +
-                              '<div class="tab-header-row">' +
-                              '<div class="tab-header-track">' + tabHeadersHtml + '</div>' +
-                              '<button class="theme-toggle-btn" onclick="toggleTheme()">' + btnLabel + '</button>' +
-                              '</div>' +
-                              '<div>' + tabContentsHtml + '</div>' +
-                              '</div>';
+// FIXED: Removed URL percentage strings to prevent broken visual layouts
+var btnLabel = (savedTheme === 'dark-theme') ? '☀️ Light Mode' : '🌙 Dark Mode';
 
-        // 5. Global Action Runtime Trigger Logic Operations mapping pointers
-        window.switchTab = function(activeTabId, targetUrl) {
-            var headers = document.querySelectorAll('.custom-tab-header');
-            var contents = document.querySelectorAll('.custom-tab-content');
-            
-            for (var j = 0; j < headers.length; j++) {
-                headers[j].classList.remove('active-tab');
-            }
-            for (var k = 0; k < contents.length; k++) {
-                contents[k].classList.remove('active-panel');
-            }
-            
-            var activeHeader = document.getElementById('header_' + activeTabId);
-            var activeContent = document.getElementById('content_' + activeTabId);
-            var activeIframe = document.getElementById('iframe_' + activeTabId);
-            
-            if (activeHeader && activeContent && activeIframe) {
-                activeHeader.classList.add('active-tab');
-                activeContent.classList.add('active-panel');
-                
-                if (!activeIframe.getAttribute('src')) {
-                    activeIframe.setAttribute('src', targetUrl);
-                }
-            }
-        };
+// 4. Form template view construction frame assignments
+var tabsWrapperHtml = '<div id="themeContainer" class="tab-component-container ' + savedTheme + '">' +
+  '<div class="tab-header-row">' +
+  '<div class="tab-header-track">' + tabHeadersHtml + '</div>' +
+  '<button class="theme-toggle-btn" onclick="toggleTheme()">' + btnLabel + '</button>' +
+  '</div>' +
+  '<div>' + tabContentsHtml + '</div>' +
+  '</div>';
 
-        window.toggleTheme = function() {
-            var container = document.getElementById('themeContainer');
-            var toggleBtn = document.querySelector('.theme-toggle-btn');
-            
-            if (container && toggleBtn) {
-                if (container.classList.contains('dark-theme')) {
-                    container.classList.remove('dark-theme');
-                    container.classList.add('light-theme');
-                    document.body.style.backgroundColor = '#f8fafc';
-                    toggleBtn.innerHTML = '🌙 Dark Mode';
-                    localStorage.setItem('app-ui-theme', 'light-theme');
-                } else {
-                    container.classList.remove('light-theme');
-                    container.classList.add('dark-theme');
-                    document.body.style.backgroundColor = '#0f172a';
-                    toggleBtn.innerHTML = '☀️ Light Mode';
-                    localStorage.setItem('app-ui-theme', 'dark-theme');
-                }
-            }
-        };
+var inatScriptLoaded = false;
 
-        // Render the setup string down to the live window document view location
-        values.push({ innerHTML: tabsWrapperHtml });
-        document.getElementById('app').innerHTML = values[0].innerHTML;
-    </script>
+// 5. Global Action Runtime Trigger Logic Operations mapping pointers
+window.switchTab = function(activeTabId) {
+  var headers = document.querySelectorAll('.custom-tab-header');
+  var contents = document.querySelectorAll('.custom-tab-content');
+
+  for (var j = 0; j < headers.length; j++) {
+    headers[j].classList.remove('active-tab');
+  }
+  for (var k = 0; k < contents.length; k++) {
+    contents[k].classList.remove('active-panel');
+  }
+
+  var activeHeader = document.getElementById('header_' + activeTabId);
+  var activeContent = document.getElementById('content_' + activeTabId);
+
+  if (activeHeader && activeContent) {
+    activeHeader.classList.add('active-tab');
+    activeContent.classList.add('active-panel');
+
+    var targetConfig = tabConfig.find(function(t) { return t.id === activeTabId; });
+
+    if (targetConfig && targetConfig.type === 'widget') {
+      if (!inatScriptLoaded) {
+        inatScriptLoaded = true;
+        var scriptNode = document.createElement('script');
+        scriptNode.src = 'https://glauberramos.github.io/inat/inat-widget.js';
+        document.body.appendChild(scriptNode);
+      } else if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
+        window.iNatWidget.init();
+      }
+    }
+  }
+};
+
+window.toggleTheme = function() {
+  var container = document.getElementById('themeContainer');
+  var toggleBtn = document.querySelector('.theme-toggle-btn');
+
+  if (container && toggleBtn) {
+    var isDarkNow = container.classList.contains('dark-theme');
+    var targetThemeClass = isDarkNow ? 'light-theme' : 'dark-theme';
+    var targetBgColor = isDarkNow ? '#f8fafc' : '#0f172a';
+    var targetBtnLabel = isDarkNow ? '🌙 Dark Mode' : '☀️ Light Mode';
+    var targetWidgetTheme = isDarkNow ? 'light' : 'transparent-dark';
+
+    container.className = 'tab-component-container ' + targetThemeClass;
+    document.body.style.backgroundColor = targetBgColor;
+    toggleBtn.innerHTML = targetBtnLabel;
+    localStorage.setItem('app-ui-theme', targetThemeClass);
+
+    // Sweeps and updates the parameters across all 10 tab elements safely
+    for (var m = 0; m < tabConfig.length; m++) {
+      var widgetNode = document.getElementById('inat-widget-container-' + tabConfig[m].id);
+      if (widgetNode) {
+        widgetNode.setAttribute('data-inat-theme', targetWidgetTheme);
+      }
+    }
+
+    if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
+      window.iNatWidget.init();
+    }
+  }
+};
+
+// 6. FIXED: Stripped out broken array references to mount strings directly to the target layout DOM container node
+document.getElementById('app').innerHTML = tabsWrapperHtml;
+
+// Run switch tab immediately initialization trigger on execution completion
+window.switchTab(tabConfig[0].id);
+</script>
+
+
+
 </body>
 </html>
 
