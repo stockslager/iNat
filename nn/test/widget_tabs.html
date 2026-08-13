@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabbed Iframe Viewer</title>
+    
+    <!-- Paste your CSS here -->
+    <style>
+        body {
+            background-color: #0f172a;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .tab-component-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #0f172a;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .tab-header-track {
+            border-bottom: 1px solid #334155;
+            padding-bottom: 0;
+        }
+
+        .custom-tab-header {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 4px;
+            cursor: pointer;
+            font-family: sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 6px 6px 0 0;
+            background-color: #0f172a;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            border-bottom: none;
+        }
+
+        .custom-tab-header.active-tab {
+            background-color: #1e293b;
+            color: #38bdf8;
+        }
+
+        .custom-tab-content {
+            display: none;
+            width: 100%;
+            height: 600px; /* Adjusted height for desktop viewing */
+            border: 1px solid #334155;
+            background-color: #1e293b;
+            border-radius: 0 0 6px 6px;
+            overflow: hidden;
+        }
+
+        .custom-tab-content.active-panel {
+            display: block;
+        }
+
+        .tab-widget-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Container where the JavaScript will render the tabs -->
+    <div id="app"></div>
+
+    <!-- Paste your JavaScript logic here -->
+    <script>
+        // Mock container array to match your array push setup
+        var values = [];
+
+        var tabConfig = [
+            { id: 'tab1', label: 'Analytics', url: 'https://example.com' },
+            { id: 'tab2', label: 'System Logs', url: 'https://example.com' },
+            { id: 'tab3', label: 'Configuration', url: 'https://example.com' }
+        ];
+
+        var tabHeadersHtml = '';
+        var tabContentsHtml = '';
+
+        for (var i = 0; i < tabConfig.length; i++) {
+            var tab = tabConfig[i];
+            var isFirst = (i === 0);
+            
+            var headerClass = isFirst ? 'custom-tab-header active-tab' : 'custom-tab-header';
+            var contentClass = isFirst ? 'custom-tab-content active-panel' : 'custom-tab-content';
+            var initialSrc = isFirst ? tab.url : '';
+
+            tabHeadersHtml += '<div id="header_' + tab.id + '" class="' + headerClass + '" onclick="switchTab(\'' + tab.id + '\', \'' + tab.url + '\')">' + tab.label + '</div>';
+            
+            tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
+                               '<iframe id="iframe_' + tab.id + '" class="tab-widget-frame" src="' + initialSrc + '"></iframe>' +
+                               '</div>';
+        }
+
+        var tabsWrapperHtml = '<div class="tab-component-container">' +
+                              '<div class="tab-header-track">' + tabHeadersHtml + '</div>' +
+                              '<div>' + tabContentsHtml + '</div>' +
+                              '</div>';
+
+        window.switchTab = function(activeTabId, targetUrl) {
+            var headers = document.querySelectorAll('.custom-tab-header');
+            var contents = document.querySelectorAll('.custom-tab-content');
+            
+            for (var j = 0; j < headers.length; j++) {
+                headers[j].classList.remove('active-tab');
+            }
+            for (var k = 0; k < contents.length; k++) {
+                contents[k].classList.remove('active-panel');
+            }
+            
+            var activeHeader = document.getElementById('header_' + activeTabId);
+            var activeContent = document.getElementById('content_' + activeTabId);
+            var activeIframe = document.getElementById('iframe_' + activeTabId);
+            
+            if (activeHeader && activeContent && activeIframe) {
+                activeHeader.classList.add('active-tab');
+                activeContent.classList.add('active-panel');
+                
+                if (!activeIframe.getAttribute('src')) {
+                    activeIframe.setAttribute('src', targetUrl);
+                }
+            }
+        };
+
+        // Render the code immediately to your display view
+        values.push({ innerHTML: tabsWrapperHtml });
+        document.getElementById('app').innerHTML = values[0].innerHTML;
+    </script>
+</body>
+</html>
