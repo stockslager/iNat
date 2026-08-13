@@ -166,31 +166,21 @@ var tabHeadersHtml = '';
 var tabContentsHtml = '';
 
 // 3. String concatenation iteration loop parsing structure inputs
+// Also update your HTML construction loop so it prints empty targets instead of active components:
 for (var i = 0; i < tabConfig.length; i++) {
   var tab = tabConfig[i];
   var isFirst = (i === 0);
   var headerClass = isFirst ? 'custom-tab-header active-tab' : 'custom-tab-header';
   var contentClass = isFirst ? 'custom-tab-content active-panel' : 'custom-tab-content';
-  var initialWidgetTheme = (savedTheme === 'light-theme') ? 'light' : 'transparent-dark';
 
   tabHeadersHtml += '<div id="header_' + tab.id + '" class="' + headerClass + '" onclick="switchTab(\'' + tab.id + '\')">' + tab.label + '</div>';
-
+  
+  // This prints an entirely empty target slot that won't trigger the API script until clicked
   tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
-    '<div id="inat-widget-container-' + tab.id + '" ' +
-    'data-inat-widget ' +
-    'data-inat-source="cincinnati-nature-center-at-rowe-woods-oh-usa" ' +
-    'data-inat-source-type="project" ' +
-    'data-inat-theme="' + initialWidgetTheme + '" ' +
-    'data-inat-title="Cincinnati Nature Center at Rowe Woods, OH, USA" ' +
-    'data-inat-layout="cards" ' +
-    'data-inat-limit="12" ' +
-    'data-inat-order-by="observed_on" ' +
-    'data-inat-taxon="' + tab.taxon + '" ' +
-    'data-inat-compact="true">' +
-    '</div>' +
+    '<div id="inat-widget-container-' + tab.id + '"></div>' +
     '</div>';
 }
-
+    
 // FIXED: Removed URL percentage strings to prevent broken visual layouts
 var btnLabel = (savedTheme === 'dark-theme') ? '☀️ Light Mode' : '🌙 Dark Mode';
 
@@ -209,7 +199,8 @@ var inatScriptLoaded = false;
 window.switchTab = function(activeTabId) {
   var headers = document.querySelectorAll('.custom-tab-header');
   var contents = document.querySelectorAll('.custom-tab-content');
-  
+
+  // 1. Reset visual classes
   for (var j = 0; j < headers.length; j++) {
     headers[j].classList.remove('active-tab');
   }
@@ -219,26 +210,49 @@ window.switchTab = function(activeTabId) {
 
   var activeHeader = document.getElementById('header_' + activeTabId);
   var activeContent = document.getElementById('content_' + activeTabId);
-  
+
   if (activeHeader && activeContent) {
     activeHeader.classList.add('active-tab');
     activeContent.classList.add('active-panel');
 
+    // 2. Find the configuration data for the clicked tab
     var targetConfig = tabConfig.find(function(t) { return t.id === activeTabId; });
     
     if (targetConfig && targetConfig.type === 'widget') {
-      if (!inatScriptLoaded) {
-        inatScriptLoaded = true;
-        var scriptNode = document.createElement('script');
-        scriptNode.src = 'https://glauberramos.github.io/inat/inat-widget.js';
-        document.body.appendChild(scriptNode);
-      } else if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
-        window.iNatWidget.init();
+      var widgetContainer = document.getElementById('inat-widget-container-' + activeTabId);
+      
+      // 3. LAZY CACHING CHECK: Only build the widget if the container is empty
+      if (widgetContainer && widgetContainer.innerHTML.trim() === "") {
+        var currentTheme = document.getElementById('themeContainer').classList.contains('light-theme') ? 'light' : 'transparent-dark';
+        
+        // Dynamic string construction
+        widgetContainer.innerHTML = 
+          '<div data-inat-widget ' +
+          'data-inat-source="cincinnati-nature-center-at-rowe-woods-oh-usa" ' +
+          'data-inat-source-type="project" ' +
+          'data-inat-theme="' + currentTheme + '" ' +
+          'data-inat-title="Cincinnati Nature Center at Rowe Woods, OH, USA" ' +
+          'data-inat-layout="cards" ' +
+          'data-inat-limit="12" ' +
+          'data-inat-order-by="observed_on" ' +
+          'data-inat-taxon="' + targetConfig.taxon + '" ' +
+          'data-inat-compact="true">' +
+          '</div>';
+
+        // 4. Trigger script injection or re-initialization
+        if (!inatScriptLoaded) {
+          inatScriptLoaded = true;
+          var scriptNode = document.createElement('script');
+          scriptNode.src = 'https://github.io';
+          document.body.appendChild(scriptNode);
+        } else if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
+          window.iNatWidget.init();
+        }
       }
     }
   }
 };
-
+    
 window.toggleTheme = function() {
   var container = document.getElementById('themeContainer');
   var toggleBtn = document.querySelector('.theme-toggle-btn');
