@@ -77,6 +77,57 @@ const CONST_OBSERVATIONS_PER_PAGE           = '30';
 const CONST_SPECIES_COUNTS_PER_PAGE         = '100';
 const CONST_OBSERVATIONS_OBSERVERS_PER_PAGE = '100';
 
+//*************************************************
+// --- GLOBAL HISTORY FIX FOR iNATURALIST EMBED ---
+//*************************************************
+function initHistoryBlocker() {
+    // 1. Intercept Link & Table Cell Clicks
+    document.addEventListener('click', function (event) {
+        if (window.self === window.top) return;
+
+        const link = event.target.closest('a');
+        if (!link) return;
+        
+        // CRITICAL SKIPS:
+        // Skip links running actual Javascript commands (like your goBackWithFallback script)
+        // Skip normal new tabs, blank links, or local page anchors
+        if (link.href.startsWith('javascript:') || 
+            link.target === '_blank' || 
+            !link.href || 
+            link.href.startsWith('#')) {
+            return; // Let the browser/your custom scripts execute naturally
+        }
+
+        // Kill standard table cell matrix filtering link-pushes
+        event.preventDefault();
+        window.location.replace(link.href);
+    });
+
+    // 2. Intercept Search Boxes & Filter Forms
+    document.addEventListener('submit', function (event) {
+        if (window.self === window.top) return;
+
+        const form = event.target.closest('form');
+        if (!form || form.method.toLowerCase() === 'post') return;
+
+        event.preventDefault();
+        
+        const formData = new URLSearchParams(new FormData(form)).toString();
+        const actionUrl = form.action || window.location.pathname;
+        window.location.replace(`${actionUrl}?${formData}`);
+    });
+}
+
+// Automatically runs itself safely based on page load state
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHistoryBlocker);
+} else {
+    initHistoryBlocker();
+}
+//**********************************
+// --- END OF GLOBAL HISTORY FIX ---
+//**********************************
+
 function fcomnum(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') }; 
 
 function furl(url, txt = url) {
