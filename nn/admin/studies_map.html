@@ -840,40 +840,12 @@ L.gridLayer.utfGridCompare = function (options) {
 
 <script>
 //get parameters from the url
-let winurlstr = window.location.href;
-let winurlsearchstr = window.location.search;
-let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
-let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
-var taxon_id = winurlparams.get('taxon_id');
-taxon_id = (taxon_id===null?null:taxon_id.split(',')[0]);
-var place_id = winurlparams.get('place_id');
-place_id = (place_id===null?null:place_id.split(',')[0]);
-var centerlat = winurlparams.get('centerlat');
-var centerlng = winurlparams.get('centerlng');
-var defaultzoom = winurlparams.get('defaultzoom');
-var showtaxonplace = winurlparams.get('showtaxonplace') || 'false';
-var showtaxonrange = winurlparams.get('showtaxonrange') || 'false';
-var showexpectednearby = winurlparams.get('showexpectednearby') || 'false';
-var showplace = winurlparams.get('showplace') || 'false';
-var view = winurlparams.get('view') || 'default';
-var compexclparam = winurlparams.get('compare_exclude_param');
-var thresholded = winurlparams.get('thresholded') || 'true'; // even though the default in the API is false, set the default to true, since we're going to usually want to see Expected Nearby rather than Unthresholded
-var appParams = winurlparams.get('params') || '';	
-var iconic = winurlparams.get('iconic') || 'plantae';
+let winurlstr_orig = window.location.href;
+let winurlsearchstr_orig = window.location.search;
+let winurlexsearchstr_orig = winurlstr.replace(winurlsearchstr,'');
+let winurlparams_orig = new URLSearchParams(winurlsearchstr.substring(1));
 
-appState = buildStateFromParams(winurlparams);
-
-winurlparams.delete('centerlat');
-winurlparams.delete('centerlng');
-winurlparams.delete('defaultzoom');
-winurlparams.delete('showtaxonplace');
-winurlparams.delete('showtaxonrange');
-winurlparams.delete('showexpectednearby');
-winurlparams.delete('showplace');
-winurlparams.delete('view');
-winurlparams.delete('compare_exclude_param');
-winurlparams.delete('thresholded');
-winurlparams.delete('gridmode');
+appState = buildStateFromParams(winurlparams_orig);
 
 let config = '';
 
@@ -979,8 +951,6 @@ async function gatherResources() {
       // Await the result of getObservations() and store the actual data
       config   = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
 
-      let api_params = setupAPIParams( config );
-      window.location.search = api_params; 	  
 	  console.log('config comp ' + config.component);
      
     } catch (error) {
@@ -1000,6 +970,42 @@ if( message ) {
 	console.log('twotow');
     gatherResources(); 
 }
+
+let api_params = setupAPIParams( config );
+window.location.search = api_params; 	  
+	
+let winurlstr = window.location.href;
+let winurlsearchstr = window.location.search;
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
+let winurlparams = new URLSearchParams(winurlsearchstr.substring(1));
+var taxon_id = winurlparams.get('taxon_id');
+taxon_id = (taxon_id===null?null:taxon_id.split(',')[0]);
+var place_id = winurlparams.get('place_id');
+place_id = (place_id===null?null:place_id.split(',')[0]);
+var centerlat = winurlparams.get('centerlat');
+var centerlng = winurlparams.get('centerlng');
+var defaultzoom = winurlparams.get('defaultzoom');
+var showtaxonplace = winurlparams.get('showtaxonplace') || 'false';
+var showtaxonrange = winurlparams.get('showtaxonrange') || 'false';
+var showexpectednearby = winurlparams.get('showexpectednearby') || 'false';
+var showplace = winurlparams.get('showplace') || 'false';
+var view = winurlparams.get('view') || 'default';
+var compexclparam = winurlparams.get('compare_exclude_param');
+var thresholded = winurlparams.get('thresholded') || 'true'; // even though the default in the API is false, set the default to true, since we're going to usually want to see Expected Nearby rather than Unthresholded
+var appParams = winurlparams.get('params') || '';	
+var iconic = winurlparams.get('iconic') || 'plantae';
+
+winurlparams.delete('centerlat');
+winurlparams.delete('centerlng');
+winurlparams.delete('defaultzoom');
+winurlparams.delete('showtaxonplace');
+winurlparams.delete('showtaxonrange');
+winurlparams.delete('showexpectednearby');
+winurlparams.delete('showplace');
+winurlparams.delete('view');
+winurlparams.delete('compare_exclude_param');
+winurlparams.delete('thresholded');
+winurlparams.delete('gridmode');
 
 let compareurlparams = new URLSearchParams(winurlparams);
 if (compexclparam) { for (p of compexclparam.split(',')) { compareurlparams.delete(p); }; };
