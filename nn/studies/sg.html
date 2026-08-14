@@ -1,5 +1,5 @@
-<!DOCTYPE html>     
-<html lang="en">     
+<!DOCTYPE html>      
+<html lang="en">      
      
 <head>
 <meta charset="utf-8">
@@ -90,7 +90,7 @@ function buildPage(data, config) {
    // append the params needed by the grid to build the url for outlinks to iNat.
    let inat_url = setupAPIParams(config);
                                     
-   buildGrid(data);    
+   buildGrid(data, inat_url, config);    
 };
 
 function setupCommonAPIParams( config, api_params ) {
@@ -103,11 +103,18 @@ function setupCommonAPIParams( config, api_params ) {
         api_params += '&user_id='  + config.userId; 
     }
  
-    api_params += getPlaceMenuIdParam(appState, '&place_id=');
+   if( getPlaceMenuId(appState) ) {
+       api_params += getPlaceMenuIdParam(appState, '&place_id=');
+   } else {
+       if( config.defaultPlace ) { 
+           api_params += '&place_id='        + config.defaultPlace; 
+       } else {
+           api_params += '&place_id=any';
+       }
+   }
 
     // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
     // use the menu_id if one was passed in.
-    console.log('sub ' + config.defaultTaxonId);
     if( getTaxonId(appState) ) {
         api_params += '&taxon_id='+getTaxonId(appState);
     } else if( getMenuId(appState) ) { 
@@ -118,19 +125,32 @@ function setupCommonAPIParams( config, api_params ) {
         }
     }
 
-   // filter for life stage annotation...
-   if( getLifeStage(appState) ) { 
-       if( getLifeStage(appState) === 'null' ) {
-           api_params += '&without_term_id=1';
-       } else {
-           api_params += '&term_id=1&term_value_id='  + getLifeStage(appState);
-       }
-   }
+    // filter for month...
+    if( getMonth(appState) ) {
+        if( getMonth(appState) !== 'null' ) { 
+            api_params += '&month=' + getMonth(appState);
+        }
+    } else if( config.defaultMonths ) {
+            api_params += '&month=' + config.defaultMonths;
+    }
+
+    // filter for life stage annotation...
+    if( getLifeStage(appState) ) { 
+        if( getLifeStage(appState) === 'null' ) {
+            api_params += '&without_term_id=1';
+        } else {
+            api_params += '&term_id=1&term_value_id='  + getLifeStage(appState);
+        }
+    }
 
     // if a filter has been chosen, get the filter api params
     if( getActivityFilter(appState) ) {
         api_params += getFilterAPIParams(config);
     }
+
+    // default all of these so they stay consistent across the map and grid.
+    // may need to revisit if/when the table sorts by quality_grade.
+    api_params += '&reviewed=any&quality_grade=needs_id,research,casual&verifiable=any';
 
     if( config.obsAPIParams ) { api_params += config.obsAPIParams; }
     api_params += getPageParam(appState, '&page=');
