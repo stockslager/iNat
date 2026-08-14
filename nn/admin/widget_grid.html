@@ -257,11 +257,8 @@ function buildMenu( config ) {
    }
 }
 
-function setupAPIParams( config ) {
-
-    let api_params = '';
-
-    api_params += '?project_id='+config.project;
+function setupWidgetParams( config ) {
+    let widget_params = '';
 
     // --- Consolidated iNat Multi-Field API Builder ---
     const initialParams = new URLSearchParams(window.location.search);
@@ -272,9 +269,9 @@ function setupAPIParams( config ) {
 
     // Core Rule: If the URL has no active filters (First Entrance), use your config defaults
     if( config.fieldName && !lowerCaseNames.includes(config.fieldName.toLowerCase() ) ) {
-        api_params += '&field:' + config.fieldName;
+        widget_params += '&field:' + config.fieldName;
         if( config.fieldValue ) {
-            api_params += '=' + encodeURIComponent(config.fieldValue);
+            widget_params += '=' + encodeURIComponent(config.fieldValue);
         }
     }
 
@@ -282,23 +279,67 @@ function setupAPIParams( config ) {
     initialNames.forEach((name, index) => {
       const value = initialValues[index];
       if( name && value ) {
-          api_params += '&field:' + name + '=' + encodeURIComponent(value);
+          widget_params += '&field:' + name + '=' + encodeURIComponent(value);
       }
     });
-           
-    if( getObsDate(appState)    ) { api_params += '&on='       + getObsDate(appState); } 
+
+    if( getObsDate(appState)    ) { widget_params += '&on='       + getObsDate(appState); } 
 
     if( getUser(appState) ) {
-        api_params += '&user_id=' + getUser(appState);
+        widget_params += '&user_id=' + getUser(appState);
     } else if( config.userId ) { 
-        api_params += '&user_id='  + config.userId; 
+        widget_params += '&user_id='  + config.userId; 
     }
  
-    api_params += getPlaceMenuIdParam(appState, '&place_id=');
+    if( getPlaceMenuId(appState) ) {
+        widget_params += getPlaceMenuIdParam(appState, '&place_id=');
+    } else {
+        if( config.defaultPlace ) { 
+            widget_params += '&place_id='        + config.defaultPlace; 
+        } else {
+            widget_params += '&place_id=any';
+        }
+    }
 
+    // filter for month...
+    if( getMonth(appState) ) {
+        if( getMonth(appState) !== 'null' ) { 
+            widget_params += '&month=' + getMonth(appState);
+        }
+    } else if( config.defaultMonths ) {
+            widget_params += '&month=' + config.defaultMonths;
+    }
+
+    // filter for life stage annotation...
+    if( getLifeStage(appState) ) { 
+        if( getLifeStage(appState) === 'null' ) {
+            widget_params += '&without_term_id=1';
+        } else {
+            widget_params += '&term_id=1&term_value_id='  + getLifeStage(appState);
+        }
+    }
+
+    // if a filter has been chosen, get the filter api params
+    if( getActivityFilter(appState) ) {
+        widget_params += getFilterAPIParams(config);
+    }
+
+    if( config.obsAPIParams ) { widget_params += config.obsAPIParams; }
+
+    return widget_params;
+}
+
+function setupAPIParams( config ) {
+
+    let api_params = '';
+
+    api_params += '?project_id='+config.project;
+
+    // widget params are a subset of api params passed to map 
+    api_params += setupWidgetParams( config );
+           
     // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
     // use the menu_id if one was passed in.
-    console.log('sub ' + config.defaultTaxonId);
     if( getTaxonId(appState) ) {
         api_params += '&taxon_id='+getTaxonId(appState);
     } else if( getMenuId(appState) ) { 
@@ -309,34 +350,8 @@ function setupAPIParams( config ) {
         }
     }
 
-    if( config.defaultPlace ) { api_params += '&place_id='        + config.defaultPlace; }
-
-    // filter for month...
-    if( getMonth(appState) ) {
-        if( getMonth(appState) !== 'null' ) { 
-            api_params += '&month=' + getMonth(appState);
-        }
-    } else if( config.defaultMonths ) {
-            api_params += '&month=' + config.defaultMonths;
-    }
-
-    // filter for life stage annotation...
-    if( getLifeStage(appState) ) { 
-        if( getLifeStage(appState) === 'null' ) {
-            api_params += '&without_term_id=1';
-        } else {
-            api_params += '&term_id=1&term_value_id='  + getLifeStage(appState);
-        }
-    }
-
-    // if a filter has been chosen, get the filter api params
-    if( getActivityFilter(appState) ) {
-        api_params += getFilterAPIParams(config);
-    }
-
-    if( config.obsAPIParams ) { api_params += config.obsAPIParams; }
-    api_params += getPageParam(appState, '&page=');
-    api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
+    //widget_params += getPageParam(appState, '&page=');
+    //widget_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
 
     return api_params;
 }
@@ -346,6 +361,11 @@ function buildWidget( config ) {
     let taxonId = '';
     if( getTaxonId(appState) || getMenuId(appState) || config.defaultTaxonId ) {
         taxonId = 'data-inat-taxon="' + (getTaxonId(appState) || getMenuId(appState) || config.defaultTaxonId) + '" '; 
+    }
+
+    let inatParams = '';
+    if( setupWidgetParams(config) ) { 
+        inatParams = 'data-inat-params="' + setupWidgetParams(config) + '" ';   
     }
            
     // Form clean single-widget container layout view assignments
@@ -363,8 +383,7 @@ function buildWidget( config ) {
             'data-inat-layout="grid" ' +
             'data-inat-limit="30" ' +
             'data-inat-order-by="observed_on" ' +
-            'data-inat-params="order_by=observed_on" ' +   // when set, this will override data-inat-order-by.
-            taxonId +
+            inatParams + taxonId +
             'data-inat-show-title="false"' + 
             'data-inat-header-text="' + config.studyTitle + '" >' + 
         '</div>' +
