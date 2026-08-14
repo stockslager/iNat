@@ -297,7 +297,10 @@ function buildMenu2( results, config ) {
           buildNavActivityFiltersDD( navbar, 'Filters', config, baseUrl, appState );
       }
 
-      if( getComponent(appState) === 'plantings' || getComponent(appState) === 'visits' || config.showStudyGrid === 'yes' ) {
+      if( config.showStudyGrid === 'widget' ) {
+          let urlState = Object.assign({}, appState);
+          buildNavLink( navbar, '../admin/widget_grid.html', urlState, 'Grid' );
+      } else if( getComponent(appState) === 'plantings' || getComponent(appState) === 'visits' || config.showStudyGrid === 'yes' ) {
           let urlState = Object.assign({}, appState);
           buildNavLink( navbar, './study_grid.html', urlState, 'Grid' );
       }
