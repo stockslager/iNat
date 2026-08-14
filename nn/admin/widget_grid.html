@@ -30,55 +30,47 @@
    UPDATED CONTAINER SYSTEM: INVISIBLE GUTTER MATCHING FRAME
    ========================================================================== */
 
-/* 1. THE GUTTER FRAME (Matches your native layout body bounds) */
-/*body { 
-  padding-left: 200px; 
-  padding-right: 200px; 
-  margin: 0; 
-  box-sizing: border-box; 
-} */
 html {
-  /* 1. Setup the global theme backdrop layout metrics */
-  background-color: #000; /*#0f172a;               /* Base pitch black workspace canvas */
-  box-sizing: border-box;
-  min-height: 100vh;
-  padding: 24px;                           /* Pushes the border cleanly away from viewport edges */
-  padding-left: 50px;                   
-  padding-right: 50px;
+    background-color: #0f172a;
+    box-sizing: border-box;
+    min-height: 100vh;
+    padding: 24px;
+    padding-left: 50px;
+    padding-right: 50px;
 }
 
 body {
-  padding-left: 15px; 
-  padding-right: 15px; 
-  padding-top: 0px;                      
-  padding-bottom: 0px;
-           
-  margin: 24px 0 0 0; 
-  box-sizing: border-box; 
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: transparent; 
 }
 
-/****************/
+#app {
+    background-color: #000000; 
+    border: 2px solid #333; 
+    border-radius: 5px;
+    padding: 15px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 24px; 
+    
+    min-height: calc(100vh - 72px); 
+}
            
-/* 2. THE WIDGET WRAPPER FRAME 
-   Intentionally kept seamless (no borders, no backgrounds, no extra padding) 
-   so it shares your layout's exact 50px margins without breaking elements. */
 .widget-component-container {
   width: 100%;
   max-width: 100%;
   margin: 0;
   box-sizing: border-box;
-
-  border: 2px solid #333; 
-  border-radius: 16px;
-  min-height: calc(100vh - 48px);
 }
 
 /* ==========================================================================
    NATIVE LAYOUT FLOW ELEMENTS
    ========================================================================== */
 
-/* 2. THE ALIGNMENT */ 
-#main, .navbar, .top-bar, #divhead { 
+#main, .top-bar, #divhead { 
   width: 100%; 
   max-width: 100%; 
   margin-left: 0; 
@@ -86,7 +78,6 @@ body {
   box-sizing: border-box; 
 } 
 
-/* 3. THE TOP BAR */ 
 .top-bar { 
   display: flex; 
   justify-content: space-between; 
@@ -128,8 +119,6 @@ body {
 
 /* KILL UNDERLINES FOR ALL LINKS IN THE BOXES */ 
 #stats a, #dltest a { color: var(--color-text-link); text-decoration: none; } 
-/* RE-ADD UNDERLINE: Only for the very first row of the right box (#dltest) */ 
-/* This ensures text-only headers are underlined, but URLs remain clean */ 
 #dltest tr:first-child td { text-decoration: underline; } 
 
 /* 6. NAVBAR */ 
@@ -143,7 +132,6 @@ body {
   overflow: hidden; 
 } 
 
-/**********/ 
 .inat-floating-nav { 
   margin-left: -8px; 
   position: -webkit-sticky; /* Safari */ 
@@ -183,23 +171,32 @@ body {
 } 
 .button.inat-wide-button:hover { opacity: 1.0; background: var(--color-hover); } 
 
-/* Force black background on the widget container */
-#themeContainer {
-    background-color: #000000 !important; /* Forces a true black panel background */
-    padding: 10px;                         /* Provides breathing room around grid boundaries */
-    border-radius: 12px;                  /* Softens container borders */
+/* ==========================================================================
+   WIDGET INHERITANCE AND COLOR THEMING OVERRIDES
+   ========================================================================== */
+
+/* 1. Target theme container cleanly using nesting to drop padding/margin hacks */
+#app #themeContainer {
+    background-color: #000000; 
+    padding: 0; 
+    margin: 0;
 }
 
-/* Force standard iNat text fields to render clearly over black */
-#themeContainer [data-inat-widget] {
-    color: #ffffff !important;            /* Shifts default gray text items to white */
+/* 2. Target the widget wrappers using its exact composite chain to drop !important */
+#themeContainer .inat-widget, 
+#themeContainer [data-inat-widget],
+#themeContainer div[data-inat-widget] {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    color: #ffffff; /* Sets the default white text variant */
 }
 
-/* Adjust hyperlink parameters for clean contrast styling */
-#themeContainer [data-inat-widget] a {
-    color: #38bdf8 !important;            
+/* 3. Increase hyperlink specificity path so the sky blue overrides third-party files */
+#app #themeContainer [data-inat-widget] a,
+#themeContainer .inat-widget a {
+    color: #38bdf8; 
 }
-/* End - Force black background on the widget container */
            
 /* Original Helpers */ 
 #h2 { font-weight:bold; font-size:20px; } 
@@ -213,7 +210,7 @@ p { width:100%; }
 </head>
 <body>
 
-    <!-- Base anchor location layout slot -->
+    <!-- base anchor -->
     <div id="app"></div>
 
 <script>
