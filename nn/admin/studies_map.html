@@ -904,6 +904,7 @@ function goBackWithFallback(fallbackUrl) {
 // Create the home link inside the header bar
 let destinationUrl = '../admin/dashboard.html?params=' + appParams;
 
+console.log("Current Grid Mode:", getGridMode(appState));
 if (getGridMode(appState) === 'widget') {
   let urlState = setGridMode(appState, '');
   let computedGridUrl = './widget_grid.html' + buildParameterList(urlState);
