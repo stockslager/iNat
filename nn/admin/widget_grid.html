@@ -326,6 +326,10 @@ function setupWidgetParams( config ) {
 
     if( config.obsAPIParams ) { widget_params += config.obsAPIParams; }
 
+    // default all of these so they stay consistent across the map and grid.
+    // may need to revisit if/when the table sorts by quality_grade.
+    api_params += '&reviewed=any&quality_grade=needs_id,research,casual&verifiable=any';
+
     return widget_params;
 }
 
@@ -370,10 +374,7 @@ function buildWidget( config ) {
            
     // Form clean single-widget container layout view assignments
     var widgetHtml = 
-      '<div id="themeContainer" class="widget-component-container ' + /*savedTheme +*/ '">' +
-        /*'<div class="widget-header-row" style="display: flex; justify-content: flex-end; padding: 10px 0;">' +
-            '<button class="theme-toggle-btn" onclick="toggleTheme()">' + btnLabel + '</button>' +
-        '</div>' +*/
+      '<div id="themeContainer" class="widget-component-container ' + '">' +
         '<div id="inat-widget-container" ' +
             'data-inat-widget ' +
             'data-inat-source="' + config.project + '" ' +
