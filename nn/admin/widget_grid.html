@@ -369,15 +369,17 @@ function buildWidget( config ) {
 
     let inatParams = '';
     if( setupWidgetParams(config) ) { 
-        inatParams = 'data-inat-params="' + setupWidgetParams(config) + '" ';   
+        inatParams = 'data-inat-params="' + setupWidgetParams(config);   
     }
 
     // if paging is enabled we need to send the widget a page number
     let pagination = '';
     if( config.pagingEnabled ) {
-        pagination = 'data-inat-pagination="true" ';
+        //pagination = 'data-inat-pagination="true" ';
         inatParams += getPageParam(appState, '&page=');
     }
+
+    if( inatParams ) { '" '; }
            
     // Form clean single-widget container layout view assignments
     var widgetHtml = 
