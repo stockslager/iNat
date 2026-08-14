@@ -371,6 +371,11 @@ function buildWidget( config ) {
     if( setupWidgetParams(config) ) { 
         inatParams = 'data-inat-params="' + setupWidgetParams(config) + '" ';   
     }
+
+    // if paging is enabled we need to send the widget a page number
+    if( config.pagingEnabled ) {
+        inatParams += getPageParam(appState, '&page=');
+    }
            
     // Form clean single-widget container layout view assignments
     var widgetHtml = 
