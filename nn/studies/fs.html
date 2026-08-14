@@ -46,7 +46,10 @@ body {
   --color-border: rgba(255, 255, 255, 0.1);       /* Muted semi-transparent silver borders */
   --color-text: #f1f5f9;                          /* Default font overrides */
   --color-text-link: #60a5fa;                     /* Crisp neon blue link tags */
-  --color-brand: #3b82f6;                         /* Vibrant brand header accents */
+  
+  /* DIALED DOWN: Swapped out bright blue for a smooth, dark translucent background */
+  --color-brand: rgba(30, 41, 59, 0.85);          
+  
   --color-alt: rgba(255, 255, 255, 0.05);         /* Button idle surface fills */
   --color-hover: rgba(255, 255, 255, 0.15);       /* Button pointer state hover highlight */
 }
@@ -107,19 +110,25 @@ body {
 
 /* KILL UNDERLINES FOR ALL LINKS IN THE BOXES */ 
 #stats a, #dltest a { color: var(--color-text-link); text-decoration: none; } 
-/* RE-ADD UNDERLINE: Only for the very first row of the right box (#dltest) */ 
-/* This ensures text-only headers are underlined, but URLs remain clean */ 
-#dltest tr:first-child td { text-decoration: underline; } 
+
+/* FIXED HEADERS: Forces table headers to be transparent and use a clean text underline */
+#dltest tr:first-child td, #stats tr:first-child td { 
+  text-decoration: underline; 
+  background: transparent !important;
+  color: var(--color-text-link);
+} 
 
 /* 6. NAVBAR */ 
 .navbar { 
   background-color: var(--color-brand); 
+  border: 1px solid var(--color-border); /* Added a fine border to define it without brightness */
   border-radius: 5px; 
   font-family: Arial, Helvetica, sans-serif; 
   display: flex; 
   align-items: center; 
   min-height: 40px; 
   overflow: hidden; 
+  backdrop-filter: blur(8px);            /* Makes the dark navbar feel glassy */
 } 
 
 /**********/ 
@@ -170,6 +179,7 @@ p { width:100%; }
 .user_head { align-items: center; justify-content: center; } 
 .user { display: inline-flex; align-items: center; white-space: nowrap; gap: 8px; margin-left: 2px; } 
 </style>
+
 
 <body>
 <script>
