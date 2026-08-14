@@ -876,6 +876,100 @@ winurlparams.delete('thresholded');
 winurlparams.delete('gridmode');
 
 let config = '';
+
+function setupAPIParams( config ) {
+
+    let api_params = '';
+
+    api_params += '?project_id='+config.project;
+
+    // --- Consolidated iNat Multi-Field API Builder ---
+    const initialParams = new URLSearchParams(window.location.search);
+    const initialNames = initialParams.getAll('fieldname');
+    const initialValues = initialParams.getAll('fieldvalue');
+
+    const lowerCaseNames = initialNames.map(name => name.toLowerCase());
+
+    // Core Rule: If the URL has no active filters (First Entrance), use your config defaults
+    if( config.fieldName && !lowerCaseNames.includes(config.fieldName.toLowerCase() ) ) {
+        api_params += '&field:' + config.fieldName;
+        if( config.fieldValue ) {
+            api_params += '=' + encodeURIComponent(config.fieldValue);
+        }
+    }
+
+    // Sequential Loop: Process whatever filters are explicitly remaining in the URL bar
+    initialNames.forEach((name, index) => {
+      const value = initialValues[index];
+      if( name && value ) {
+          api_params += '&field:' + name + '=' + encodeURIComponent(value);
+      }
+    });
+
+    if( getObsDate(appState)    ) { api_params += '&on='       + getObsDate(appState); } 
+
+    if( getUser(appState) ) {
+        api_params += '&user_id=' + getUser(appState);
+    } else if( config.userId ) { 
+        api_params += '&user_id='  + config.userId; 
+    }
+ 
+    if( getPlaceMenuId(appState) ) {
+        api_params += getPlaceMenuIdParam(appState, '&place_id=');
+    } else {
+        if( config.defaultPlace ) { 
+            api_params += '&place_id='        + config.defaultPlace; 
+        } else {
+            api_params += '&place_id=any';
+        }
+    }
+
+    // filter for month...
+    if( getMonth(appState) ) {
+        if( getMonth(appState) !== 'null' ) { 
+            api_params += '&month=' + getMonth(appState);
+        }
+    } else if( config.defaultMonths ) {
+            api_params += '&month=' + config.defaultMonths;
+    }
+
+    // filter for life stage annotation...
+    if( getLifeStage(appState) ) { 
+        if( getLifeStage(appState) === 'null' ) {
+            api_params += '&without_term_id=1';
+        } else {
+            api_params += '&term_id=1&term_value_id='  + getLifeStage(appState);
+        }
+    }
+
+    // if a filter has been chosen, get the filter api params
+    if( getActivityFilter(appState) ) {
+        api_params += getFilterAPIParams(config);
+    }
+
+    if( config.obsAPIParams ) { api_params += config.obsAPIParams; }
+
+    // default all of these so they stay consistent across the map and grid.
+    // may need to revisit if/when the table sorts by quality_grade.
+    api_params += '&reviewed=any&quality_grade=needs_id,research,casual&verifiable=any';
+           
+    // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
+    // use the menu_id if one was passed in.
+    if( getTaxonId(appState) ) {
+        api_params += '&taxon_id='+getTaxonId(appState);
+    } else if( getMenuId(appState) ) { 
+        api_params += '&taxon_id=' + getMenuId(appState); 
+    } else {
+        if( config.defaultTaxonId ) {
+            api_params += '&taxon_id=' + config.defaultTaxonId;
+        }
+    }
+
+    //api_params += getPageParam(appState, '&page=');
+    //api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
+
+    return api_params;
+}
 	
 async function gatherResources() {
   let json_path = json_root + getParams(appState);
@@ -885,6 +979,8 @@ async function gatherResources() {
       // Await the result of getObservations() and store the actual data
       config   = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
 
+      let api_params = setupAPIParams( config );
+      window.location.search = api_params; 	  
 	  console.log('config comp ' + config.component);
      
     } catch (error) {
@@ -933,7 +1029,6 @@ function goBackWithFallback(fallbackUrl) {
     }
 }
 
-// Create the home link inside the header bar
 // Create the home link inside the header bar 
 if (getGridMode(appState) === 'widget') {
   let widgetState = setGridMode(appState, '');
