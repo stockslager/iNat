@@ -238,7 +238,7 @@ function buildMenu( config ) {
 
            buildNavDD( navbar, 'Maps', links );
        } else {   
-           let url = '../admin/studies_map.html' + setupAPIParams(config) + getMapZoom(config) + '&gridmode=widget';
+           let url = '../admin/studies_map.html' + buildParameterList(appState) + getMapZoom(config) + '&gridmode=widget';
            buildNavURL( navbar, url, CONST_MAP );
        }
    }
