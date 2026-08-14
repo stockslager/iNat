@@ -275,10 +275,10 @@ function buildMenu( config ) {
   
    let appContainer = document.getElementById('app');
    if( appContainer ) {
-       // Prepend ensures it renders at the top of the #app container, before the widget
-       appContainer.prepend(navbar); 
+       // Inserts the navbar right before the #app element in the DOM tree
+       appContainer.parentNode.insertBefore(navbar, appContainer);
    } else {
-       // Fallback safety if #app isn't initialized yet
+       // Fallback if #app element isn't found
        document.body.insertBefore(navbar, document.body.firstChild);
    }
 }
@@ -388,8 +388,8 @@ async function gatherResources() {
       // Await the result of getObservations() and store the actual data
       const config   = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
      
+      buildMenu( config );
       buildWidget();
-      buildMenu( config ); 
 
     } catch (error) {
       console.error("An error occurred:", error);
