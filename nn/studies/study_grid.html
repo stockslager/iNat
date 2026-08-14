@@ -30,6 +30,12 @@ let winurlsearchstr   = window.location.search;
 let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams      = new URLSearchParams(winurlsearchstr);
 
+if (window.self !== window.top) {
+    // Replaces the newly pushed history entry with the previous one
+    // This effectively "pops" the new URL out of the parent browser's forward history
+    window.history.replaceState(null, '', window.location.href);
+}
+     
 appState       = buildStateFromParams(winurlparams);
 
 var api_base   = 'https://api.inaturalist.org/v1/observations'
