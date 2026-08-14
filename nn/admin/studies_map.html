@@ -906,12 +906,13 @@ let destinationUrl = '../admin/dashboard.html?params=' + appParams;
 
 if (getGridMode(appState) === 'widget') {
   let urlState = setGridMode(appState, '');
-  destinationUrl = './widget_grid.html' + buildParameterList(urlState);
+  let computedGridUrl = './widget_grid.html' + buildParameterList(urlState);
+  destinationUrl = computedGridUrl; // Pure string assignment (Safe)
 } else {
-  // browser back with fallback function string
-  destinationUrl = `javascript:goBackWithFallback('${destinationUrl}');`;
+  destinationUrl = `javascript:goBackWithFallback('${destinationUrl}');`; // Pure string assignment (Safe)
 }
 
+// Fixed: The link is created DOWN HERE using the finalized string, so hLink is never corrupted
 let hLink = faddelemLocal('a', headerBar, { href: destinationUrl, id: 'home-link' });
 
 faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
