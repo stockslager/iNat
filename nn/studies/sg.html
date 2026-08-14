@@ -71,7 +71,9 @@ function buildMenu( config ) {
 
            buildNavDD( navbar, 'Maps', links );
        } else {   
-           let url = '../admin/map.html' + setupMapAPIParams(config) + getMapZoom(config);
+           let gridMode = '&gridmode=styles';
+           if( config.showStudyGrid === 'widget' ) { gridMode = '&gridmode=widget'; }
+           let url = '../admin/map.html' + setupMapAPIParams(config) + getMapZoom(config) + gridMode;
            buildNavURL( navbar, url, CONST_MAP );
        }
    }
