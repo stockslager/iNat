@@ -80,10 +80,12 @@ const CONST_OBSERVATIONS_OBSERVERS_PER_PAGE = '100';
 //*************************************************
 // --- GLOBAL HISTORY FIX FOR iNATURALIST EMBED ---
 //*************************************************
+// --- GLOBAL HISTORY FIX FOR iNATURALIST EMBED ---
 function initHistoryBlocker() {
     
-    // A. Intercept and cache URL parameters whenever a cell filter updates the URL
-    if (window.self !== window.top && window.location.search) {
+    // FIX: Only save parameters if the user is explicitly on the dashboard file
+    const isCurrentlyOnDashboard = window.location.pathname.includes('dashboard.html');
+    if (window.self !== window.top && window.location.search && isCurrentlyOnDashboard) {
         sessionStorage.setItem('active_table_params', window.location.search);
     }
 
@@ -95,23 +97,21 @@ function initHistoryBlocker() {
         if (!link) return;
 
         // 1. UNIQUE FIX FOR YOUR CUSTOM BACK BUTTON
-        // If the user clicks the back icon which triggers your custom script link
         if (link.href && link.href.includes('goBackWithFallback')) {
             event.preventDefault();
             
-            // Read if there are cached filtration parameters saved from the table session
+            // Read the cached matrix parameters safely preserved from the dashboard
             const savedParams = sessionStorage.getItem('active_table_params');
             
-            // Determine the ideal return URL
             let returnUrl = '../admin/dashboard.html';
             if (savedParams) {
                 returnUrl += savedParams;
             } else if (link.href.includes("'")) {
-                // Fallback extraction if session storage is empty
-                returnUrl = link.href.split("'")[1]; 
+                // Safe string parsing fallback
+                const parts = link.href.split("'");
+                if (parts[1]) returnUrl = parts[1];
             }
             
-            // Safe replacement inside the iframe
             window.location.replace(returnUrl);
             return;
         }
@@ -147,6 +147,7 @@ if (document.readyState === 'loading') {
 } else {
     initHistoryBlocker();
 }
+// --- END OF GLOBAL HISTORY FIX ---
 //**********************************
 // --- END OF GLOBAL HISTORY FIX ---
 //**********************************
