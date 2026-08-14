@@ -230,7 +230,7 @@ function buildMenu( config ) {
        if( config.mapType === 'ls' && ( getLSTaxonId(appState) === '47157' || getTaxonId(appState) === '47157' || getMenuId(appState) === '47157' ) ) {  
            let links = [];
     
-           let mapLink  = faddelem('a', null, { href: '../admin/map.html' + setupAPIParams(config)  + getMapZoom(config) + '&params=' + getParams(appState), textContent: 'Standard Map' });
+           let mapLink  = faddelem('a', null, { href: '../admin/map.html' + setupAPIParams(config)  + getMapZoom(config) + '&gridmode=widget' + '&params=' + getParams(appState), textContent: 'Standard Map' });
            let lsLink   = faddelem('a', null, { href: '../admin/density_map.html'     + buildParameterList(appState), textContent: 'Life-Stages' });
 
            links.push(mapLink);
@@ -238,7 +238,7 @@ function buildMenu( config ) {
 
            buildNavDD( navbar, 'Maps', links );
        } else {   
-           let url = '../admin/map.html' + setupAPIParams(config) + getMapZoom(config);
+           let url = '../admin/map.html' + setupAPIParams(config) + getMapZoom(config) + '&gridmode=widget';
            buildNavURL( navbar, url, CONST_MAP );
        }
    }
