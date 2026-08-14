@@ -902,16 +902,15 @@ function goBackWithFallback(fallbackUrl) {
 }
 
 // Create the home link inside the header bar
+// Create the home link inside the header bar 
 if (getGridMode(appState) === 'widget') {
   let widgetState = setGridMode(appState, '');
   let widgetUrl = './widget_grid.html' + buildParameterList(widgetState);
   
-  // FIX: Changed id to 'widget-home-link' so global scripts cannot hijack the click event
-  let hLinkWidget = faddelemLocal('a', headerBar, { href: widgetUrl, id: 'widget-home-link' });
+  let hLinkWidget = faddelemLocal('a', headerBar, { href: widgetUrl, id: 'home-link' });
   faddelemLocal('span', hLinkWidget, { innerHTML: CONST_LEAF_UTF8 });
-}
-
-if (getGridMode(appState) !== 'widget') {
+} else {
+  // CRITICAL: Using 'else' prevents this code from executing when widget mode alters the state
   let dashboardUrl = '../admin/dashboard.html?params=' + appParams;
   let fallbackUrl = `javascript:goBackWithFallback('${dashboardUrl}');`;
   
