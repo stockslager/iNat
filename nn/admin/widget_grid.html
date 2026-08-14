@@ -238,42 +238,161 @@ var widgetHtml =
         '</div>' +
     '</div>';
 
-// Render the HTML view structure directly to the application mount point
-document.getElementById('app').innerHTML = widgetHtml;
+function buildMenu( config ) {
 
-// 4. Inject external iNaturalist custom widget asset dependency immediately
-var scriptNode = document.createElement('script');
-scriptNode.src = 'https://glauberramos.github.io/inat/inat-widget.js';
-document.body.appendChild(scriptNode);
+  // Create the main navbar container
+  let navbar = document.createElement('div');    
+  navbar.className = 'navbar v2-menu';
 
-// 5. Global Action Runtime Trigger Logic Operations
-window.toggleTheme = function() {
-    var container = document.getElementById('themeContainer');
-    var toggleBtn = document.querySelector('.theme-toggle-btn');
-    var widgetNode = document.getElementById('inat-widget-container');
+   // if life stages (ls) option was chosen for map type was set in the config and 
+   // they've chosen Butterflies from the drop-down or have chosen a butterfly from the list
+   if( config.mapType !== 'hide' ) {
+       if( config.mapType === 'ls' && ( getLSTaxonId(appState) === '47157' || getTaxonId(appState) === '47157' || getMenuId(appState) === '47157' ) ) {  
+           let links = [];
     
-    if (container && toggleBtn && widgetNode) {
-        var isDarkNow = container.classList.contains('dark-theme');
-        var targetThemeClass = isDarkNow ? 'light-theme' : 'dark-theme';
-        var targetBgColor = isDarkNow ? '#f8fafc' : '#0f172a';
-        var targetBtnLabel = isDarkNow ? '🌙 Dark Mode' : '☀️ Light Mode';
-        var targetWidgetTheme = isDarkNow ? 'light' : 'transparent-dark';
-        
-        // Execute structural document styling states updates
-        container.className = 'widget-component-container ' + targetThemeClass;
-        document.body.style.backgroundColor = targetBgColor;
-        toggleBtn.innerHTML = targetBtnLabel;
-        localStorage.setItem('app-ui-theme', targetThemeClass);
-        
-        // Update parameter targets directly on our single instance
-        widgetNode.setAttribute('data-inat-theme', targetWidgetTheme);
-        
-        // Signal target vendor frame rebuild processing
-        if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
-            window.iNatWidget.init();
+           let mapLink  = faddelem('a', null, { href: '../admin/map.html' + setupAPIParams(config)  + getMapZoom(config) + '&params=' + getParams(appState), textContent: 'Standard Map' });
+           let lsLink   = faddelem('a', null, { href: '../admin/density_map.html'     + buildParameterList(appState), textContent: 'Life-Stages' });
+
+           links.push(mapLink);
+           links.push(lsLink);
+
+           buildNavDD( navbar, 'Maps', links );
+       } else {   
+           let url = '../admin/map.html' + setupAPIParams(config) + getMapZoom(config);
+           buildNavURL( navbar, url, CONST_MAP );
+       }
+   }
+
+  // Build the Home Link
+  let homeUrl = '../studies/field_study.html';
+  buildNavHome( navbar, homeUrl, appState, config );
+  
+  faddelem('p', document.body).appendChild(navbar);
+}
+
+function setupAPIParams( config ) {
+
+    let api_params = '';
+
+    api_params += '?project_id='+config.project;
+
+    // --- Consolidated iNat Multi-Field API Builder ---
+    const initialParams = new URLSearchParams(window.location.search);
+    const initialNames = initialParams.getAll('fieldname');
+    const initialValues = initialParams.getAll('fieldvalue');
+
+    const lowerCaseNames = initialNames.map(name => name.toLowerCase());
+
+    // Core Rule: If the URL has no active filters (First Entrance), use your config defaults
+    if( config.fieldName && !lowerCaseNames.includes(config.fieldName.toLowerCase() ) ) {
+        api_params += '&field:' + config.fieldName;
+        if( config.fieldValue ) {
+            api_params += '=' + encodeURIComponent(config.fieldValue);
         }
     }
-};
+
+    // Sequential Loop: Process whatever filters are explicitly remaining in the URL bar
+    initialNames.forEach((name, index) => {
+      const value = initialValues[index];
+      if( name && value ) {
+          api_params += '&field:' + name + '=' + encodeURIComponent(value);
+      }
+    });
+           
+    if( getObsDate(appState)    ) { api_params += '&on='       + getObsDate(appState); } 
+
+    if( getUser(appState) ) {
+        api_params += '&user_id=' + getUser(appState);
+    } else if( config.userId ) { 
+        api_params += '&user_id='  + config.userId; 
+    }
+ 
+    api_params += getPlaceMenuIdParam(appState, '&place_id=');
+
+    // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
+    // use the menu_id if one was passed in.
+    console.log('sub ' + config.defaultTaxonId);
+    if( getTaxonId(appState) ) {
+        api_params += '&taxon_id='+getTaxonId(appState);
+    } else if( getMenuId(appState) ) { 
+        api_params += '&taxon_id=' + getMenuId(appState); 
+    } else {
+        if( config.defaultTaxonId ) {
+            api_params += '&taxon_id=' + config.defaultTaxonId;
+        }
+    }
+
+    if( config.defaultPlace ) { api_params += '&place_id='        + config.defaultPlace; }
+
+    // filter for month...
+    if( getMonth(appState) ) {
+        if( getMonth(appState) !== 'null' ) { 
+            api_params += '&month=' + getMonth(appState);
+        }
+    } else if( config.defaultMonths ) {
+            api_params += '&month=' + config.defaultMonths;
+    }
+
+    // filter for life stage annotation...
+    if( getLifeStage(appState) ) { 
+        if( getLifeStage(appState) === 'null' ) {
+            api_params += '&without_term_id=1';
+        } else {
+            api_params += '&term_id=1&term_value_id='  + getLifeStage(appState);
+        }
+    }
+
+    // if a filter has been chosen, get the filter api params
+    if( getActivityFilter(appState) ) {
+        api_params += getFilterAPIParams(config);
+    }
+
+    if( config.obsAPIParams ) { api_params += config.obsAPIParams; }
+    api_params += getPageParam(appState, '&page=');
+    api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
+
+    return api_params;
+}
+
+function buildWidget() {
+    // Render the HTML view structure directly to the application mount point
+    document.getElementById('app').innerHTML = widgetHtml;
+
+    var scriptNode = document.createElement('script');
+    scriptNode.src = 'https://glauberramos.github.io/inat/inat-widget.js';
+    document.body.appendChild(scriptNode);
+}
+           
+<script type="text/javascript"   src="../core/js/ConfigManager.js"> </script>
+
+<script>
+   
+async function gatherResources() {
+  let json_path = json_root + getParams(appState);
+ 
+  try {
+   
+      // Await the result of getObservations() and store the actual data
+      const config   = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
+     
+      // Pass the data to the buildPage function
+      buildMenu( config ); 
+      buildWidget();
+
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+let message = validateConfig(appState);
+ 
+if( message ) {
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
            
 </script>
 </body>
