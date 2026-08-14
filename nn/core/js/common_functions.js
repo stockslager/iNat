@@ -88,24 +88,17 @@ function initHistoryBlocker() {
         const link = event.target.closest('a');
         if (!link) return;
         
-        // Skip normal new tabs, blank links, or local page anchors
+        // Skip links running javascript scripts or blank anchors
         if (link.target === '_blank' || !link.href || link.href.startsWith('#')) return;
 
         event.preventDefault();
 
-        // UNIQUE OVERRIDE FOR THE CUSTOM BACK BUTTON
-        if (link.id === 'home-link') {
-            // Check if document.referrer exists and is part of your app
-            if (document.referrer && document.referrer.includes('/iNat/')) {
-                window.location.replace(document.referrer);
-            } else {
-                // If they bypassed the flow, use the link's built-in fallback URL
-                window.location.replace(link.href);
-            }
-            return;
+        // If clicking a standard navigation/filter link inside the matrix table,
+        // cache its URL parameters into storage before performing the location replace.
+        if (link.id !== 'home-link' && link.search) {
+            sessionStorage.setItem('active_table_params', link.search);
         }
 
-        // Standard dynamic table cell matrix filtering logic
         window.location.replace(link.href);
     });
 
@@ -120,7 +113,12 @@ function initHistoryBlocker() {
         
         const formData = new URLSearchParams(new FormData(form)).toString();
         const actionUrl = form.action || window.location.pathname;
-        window.location.replace(`${actionUrl}?${formData}`);
+        const finalUrl = `${actionUrl}?${formData}`;
+        
+        // Cache parameters for form submits too
+        sessionStorage.setItem('active_table_params', `?${formData}`);
+
+        window.location.replace(finalUrl);
     });
 }
 
