@@ -902,19 +902,20 @@ function goBackWithFallback(fallbackUrl) {
 }
 
 // Create the home link inside the header bar
-let destinationUrl = '../admin/dashboard.html?params=' + appParams;
+let dashboardUrl = '../admin/dashboard.html?params=' + appParams;
+let hLink = faddelemLocal('a', headerBar, { href: `javascript:goBackWithFallback('${dashboardUrl}');`, id: 'home-link' });
 
-console.log("Current Grid Mode:", getGridMode(appState));
-if (getGridMode(appState) === 'widget') {
-  let urlState = setGridMode(appState, '');
-  let computedGridUrl = './widget_grid.html' + buildParameterList(urlState);
-console.log("GENERATED WIDGET URL:", './widget_grid.html' + buildParameterList(urlState));
-  destinationUrl = computedGridUrl; // Pure string assignment (Safe)
-} else {
-  destinationUrl = `javascript:goBackWithFallback('${destinationUrl}');`; // Pure string assignment (Safe)
-}	
-
-let hLink = faddelemLocal('a', headerBar, { href: destinationUrl, id: 'home-link' });
+if( getGridMode(appState) === 'widget' ) {
+  // 1. Create a clean, isolated copy of the state object so it doesn't drag dashboard data along
+  let cleanState = Object.assign({}, appState); 
+  
+  // 2. Clear the grid mode on the clean copy
+  cleanState = setGridMode(cleanState, '');
+  
+  // 3. Build the URL using the isolated copy (dashboard params are gone!)
+  let destinationUrl = './widget_grid.html' + buildParameterList(cleanState);
+  hLink.href = destinationUrl;
+}
 
 faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
 	
