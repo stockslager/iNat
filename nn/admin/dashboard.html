@@ -30,6 +30,24 @@ let winurlstr = window.location.href;
 let winurlsearchstr    = window.location.search;
 let winurlexsearchstr  = winurlstr.replace(winurlsearchstr,'');
 let winurlparams       = new URLSearchParams(winurlsearchstr.substring(1));
+
+document.addEventListener('click', function (event) {
+    // return if the page is viewed normally (not in an iframe)
+    if (window.self === window.top) return;
+
+    // find if the clicked element (or its parent) is a link
+    const link = event.target.closest('a');
+    if (!link) return;
+
+    // skip external links, target="_blank", or empty hash links
+    if (link.target === '_blank' || !link.href || link.href.startsWith('#')) return;
+
+    // block the standard browser navigation that creates history
+    event.preventDefault();
+
+    // force the iframe to replace its current location instead
+    window.location.replace(link.href);
+});
  
 appState  =  buildStateFromParams(winurlparams);
 
@@ -53,12 +71,6 @@ const CONST_REGULATED    = 'Regulated Categories';
 const CONST_ART          = 'Art & Journaling';
 const CONST_OBSERVERS    = 'Observers';
 const CONST_MISSIONS     = 'Missions';
-
-if (window.self !== window.top) {
-    // Replaces the newly pushed history entry with the previous one
-    // This effectively "pops" the new URL out of the parent browser's forward history
-    window.history.replaceState(null, '', window.location.href);
-}
  
 function buildMenu( config ) {
   
