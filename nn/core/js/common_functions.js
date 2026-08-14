@@ -88,18 +88,24 @@ function initHistoryBlocker() {
         const link = event.target.closest('a');
         if (!link) return;
         
-        // CRITICAL SKIPS:
-        // Skip links running actual Javascript commands (like your goBackWithFallback script)
         // Skip normal new tabs, blank links, or local page anchors
-        if (link.href.startsWith('javascript:') || 
-            link.target === '_blank' || 
-            !link.href || 
-            link.href.startsWith('#')) {
-            return; // Let the browser/your custom scripts execute naturally
+        if (link.target === '_blank' || !link.href || link.href.startsWith('#')) return;
+
+        event.preventDefault();
+
+        // UNIQUE OVERRIDE FOR THE CUSTOM BACK BUTTON
+        if (link.id === 'home-link') {
+            // Check if document.referrer exists and is part of your app
+            if (document.referrer && document.referrer.includes('/iNat/')) {
+                window.location.replace(document.referrer);
+            } else {
+                // If they bypassed the flow, use the link's built-in fallback URL
+                window.location.replace(link.href);
+            }
+            return;
         }
 
-        // Kill standard table cell matrix filtering link-pushes
-        event.preventDefault();
+        // Standard dynamic table cell matrix filtering logic
         window.location.replace(link.href);
     });
 
