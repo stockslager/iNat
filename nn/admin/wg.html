@@ -58,12 +58,7 @@ body {
     
     min-height: calc(100vh - 72px); 
 }
-
-/****************/
            
-/* 2. THE WIDGET WRAPPER FRAME 
-   Intentionally kept seamless (no borders, no backgrounds, no extra padding) 
-   so it shares your layout's exact 50px margins without breaking elements. */
 .widget-component-container {
   width: 100%;
   max-width: 100%;
@@ -75,7 +70,6 @@ body {
    NATIVE LAYOUT FLOW ELEMENTS
    ========================================================================== */
 
-/* 2. THE ALIGNMENT */ 
 #main, .top-bar, #divhead { 
   width: 100%; 
   max-width: 100%; 
@@ -84,7 +78,6 @@ body {
   box-sizing: border-box; 
 } 
 
-/* 3. THE TOP BAR */ 
 .top-bar { 
   display: flex; 
   justify-content: space-between; 
@@ -126,8 +119,6 @@ body {
 
 /* KILL UNDERLINES FOR ALL LINKS IN THE BOXES */ 
 #stats a, #dltest a { color: var(--color-text-link); text-decoration: none; } 
-/* RE-ADD UNDERLINE: Only for the very first row of the right box (#dltest) */ 
-/* This ensures text-only headers are underlined, but URLs remain clean */ 
 #dltest tr:first-child td { text-decoration: underline; } 
 
 /* 6. NAVBAR */ 
@@ -141,7 +132,6 @@ body {
   overflow: hidden; 
 } 
 
-/**********/ 
 .inat-floating-nav { 
   margin-left: -8px; 
   position: -webkit-sticky; /* Safari */ 
@@ -180,13 +170,6 @@ body {
   transition: opacity 0.2s ease, background 0.2s ease; 
 } 
 .button.inat-wide-button:hover { opacity: 1.0; background: var(--color-hover); } 
-
-/* Force black background on the widget container */
-/*#themeContainer {
-    background-color: #000000 !important; 
-    padding: 0 !important;
-    margin: 0 !important;
-}*/
 
 /* ==========================================================================
    WIDGET INHERITANCE AND COLOR THEMING OVERRIDES
@@ -227,7 +210,7 @@ p { width:100%; }
 </head>
 <body>
 
-    <!-- Base anchor location layout slot -->
+    <!-- base anchor -->
     <div id="app"></div>
 
 <script>
