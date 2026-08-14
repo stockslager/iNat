@@ -211,19 +211,6 @@ appState       = buildStateFromParams(winurlparams);
 // 1. Setup specific single configurations
 var taxonId = '47157'; 
 
-// 2. Scan localized browser storage key values to assert default session layout
-var savedTheme = localStorage.getItem('app-ui-theme') || 'dark-theme';
-
-// Match the background of the main document canvas frame straight out of the box
-if (savedTheme === 'light-theme') {
-    document.body.style.backgroundColor = '#f8fafc';
-} else {
-    document.body.style.backgroundColor = '#0f172a';
-}
-
-var initialWidgetTheme = (savedTheme === 'light-theme') ? 'light' : 'transparent-dark';
-var btnLabel = (savedTheme === 'dark-theme') ? '☀️ Light Mode' : '🌙 Dark Mode';
-
 // 3. Form clean single-widget container layout view assignments
 var widgetHtml = 
     '<div id="themeContainer" class="widget-component-container ' + savedTheme + '">' +
