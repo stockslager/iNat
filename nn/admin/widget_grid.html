@@ -343,7 +343,10 @@ function setupAPIParams( config ) {
 
 function buildWidget( config ) {
 
-    let taxonId = getTaxonId(appState) || getMenuId(appState) || config.defaultTaxonId; 
+    let taxonId = '';
+    if( getTaxonId(appState) || getMenuId(appState) || config.defaultTaxonId ) {
+        taxonId = 'data-inat-taxon="' + (getTaxonId(appState) || getMenuId(appState) || config.defaultTaxonId) + '" '; 
+    }
            
     // Form clean single-widget container layout view assignments
     var widgetHtml = 
@@ -361,7 +364,7 @@ function buildWidget( config ) {
             'data-inat-limit="30" ' +
             'data-inat-order-by="observed_on" ' +
             'data-inat-params="order_by=observed_on" ' +   // when set, this will override data-inat-order-by.
-            'data-inat-taxon="' + taxonId + '" ' +
+            taxonId +
             'data-inat-show-title="false"' + 
             'data-inat-header-text="' + config.studyTitle + '" >' + 
         '</div>' +
