@@ -902,17 +902,19 @@ function goBackWithFallback(fallbackUrl) {
 }
 
 // Create the home link inside the header bar
-// add a fallback in case they entered this page directly thereby bypassing the ui flow.
-let dashboardUrl = '../admin/dashboard.html?params=' + appParams;
-let hLink = faddelemLocal('a', headerBar, { href: `javascript:goBackWithFallback('${dashboardUrl}');`, id: 'home-link' });
+let destinationUrl = '../admin/dashboard.html?params=' + appParams;
 
-if( getGridMode(appState) === 'widget' ) {
-    let urlState       = setGridMode(appState, ''); 
-    let destinationUrl = './widget_grid.html' + buildParameterList(urlState);
-    hLink.href = destinationUrl; 
-} 
-	
-faddelemLocal('span', headerBar, { innerHTML: CONST_LEAF_UTF8 });
+if (getGridMode(appState) === 'widget') {
+  let urlState = setGridMode(appState, '');
+  destinationUrl = './widget_grid.html' + buildParameterList(urlState);
+} else {
+  // browser back with fallback function string
+  destinationUrl = `javascript:goBackWithFallback('${destinationUrl}');`;
+}
+
+let hLink = faddelemLocal('a', headerBar, { href: destinationUrl, id: 'home-link' });
+
+faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
 	
 // Add the leaf icon
 if( getGridMode(appState) === 'widget' ) {
