@@ -81,28 +81,50 @@ const CONST_OBSERVATIONS_OBSERVERS_PER_PAGE = '100';
 // --- GLOBAL HISTORY FIX FOR iNATURALIST EMBED ---
 //*************************************************
 function initHistoryBlocker() {
-    // 1. Intercept Link & Table Cell Clicks
+    
+    // A. Intercept and cache URL parameters whenever a cell filter updates the URL
+    if (window.self !== window.top && window.location.search) {
+        sessionStorage.setItem('active_table_params', window.location.search);
+    }
+
+    // B. Hijack the global navigation routing
     document.addEventListener('click', function (event) {
         if (window.self === window.top) return;
 
         const link = event.target.closest('a');
         if (!link) return;
-        
-        // Skip links running javascript scripts or blank anchors
-        if (link.target === '_blank' || !link.href || link.href.startsWith('#')) return;
 
-        event.preventDefault();
-
-        // If clicking a standard navigation/filter link inside the matrix table,
-        // cache its URL parameters into storage before performing the location replace.
-        if (link.id !== 'home-link' && link.search) {
-            sessionStorage.setItem('active_table_params', link.search);
+        // 1. UNIQUE FIX FOR YOUR CUSTOM BACK BUTTON
+        // If the user clicks the back icon which triggers your custom script link
+        if (link.href && link.href.includes('goBackWithFallback')) {
+            event.preventDefault();
+            
+            // Read if there are cached filtration parameters saved from the table session
+            const savedParams = sessionStorage.getItem('active_table_params');
+            
+            // Determine the ideal return URL
+            let returnUrl = '../admin/dashboard.html';
+            if (savedParams) {
+                returnUrl += savedParams;
+            } else if (link.href.includes("'")) {
+                // Fallback extraction if session storage is empty
+                returnUrl = link.href.split("'")[1]; 
+            }
+            
+            // Safe replacement inside the iframe
+            window.location.replace(returnUrl);
+            return;
         }
 
+        // 2. Clear regular skips for blank anchors/new tabs
+        if (link.target === '_blank' || !link.href || link.href.startsWith('#')) return;
+
+        // 3. Keep standard table cell matrix filtering link-pushes clean
+        event.preventDefault();
         window.location.replace(link.href);
     });
 
-    // 2. Intercept Search Boxes & Filter Forms
+    // C. Intercept Search Boxes & Filter Forms
     document.addEventListener('submit', function (event) {
         if (window.self === window.top) return;
 
@@ -114,9 +136,6 @@ function initHistoryBlocker() {
         const formData = new URLSearchParams(new FormData(form)).toString();
         const actionUrl = form.action || window.location.pathname;
         const finalUrl = `${actionUrl}?${formData}`;
-        
-        // Cache parameters for form submits too
-        sessionStorage.setItem('active_table_params', `?${formData}`);
 
         window.location.replace(finalUrl);
     });
