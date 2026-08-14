@@ -908,6 +908,7 @@ console.log("Current Grid Mode:", getGridMode(appState));
 if (getGridMode(appState) === 'widget') {
   let urlState = setGridMode(appState, '');
   let computedGridUrl = './widget_grid.html' + buildParameterList(urlState);
+console.log("GENERATED WIDGET URL:", './widget_grid.html' + buildParameterList(urlState));
   destinationUrl = computedGridUrl; // Pure string assignment (Safe)
 } else {
   destinationUrl = `javascript:goBackWithFallback('${destinationUrl}');`; // Pure string assignment (Safe)
