@@ -910,23 +910,7 @@ if (getGridMode(appState) === 'widget') {
   destinationUrl = computedGridUrl; // Pure string assignment (Safe)
 } else {
   destinationUrl = `javascript:goBackWithFallback('${destinationUrl}');`; // Pure string assignment (Safe)
-}
-
-// Fixed: The link is created DOWN HERE using the finalized string, so hLink is never corrupted
-let hLink = faddelemLocal('a', headerBar, { href: destinationUrl, id: 'home-link' });
-
-faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
-	
-// Add the leaf icon
-if( getGridMode(appState) === 'widget' ) {
-	urlState = appState;
-	urlState = setGridMode('');
-    let gridLink = './widget_grid.html' + buildParameterList(urlState);
-    faddelemLocal('span', gridLink, { innerHTML: CONST_LEAF_UTF8 });
-} else {
-    faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
-}
-	
+}	
 // Add to the top of the page
 document.body.prepend(headerBar);
 	
