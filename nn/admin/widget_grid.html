@@ -217,31 +217,7 @@ let winurlsearchstr   = window.location.search;
 let winurlparams      = new URLSearchParams(winurlsearchstr);
 
 appState       = buildStateFromParams(winurlparams);
-           
-let taxonId = getTaxonId(appState) || getMenuId(appState) || config.defaultTaxonId; 
-           
-// 3. Form clean single-widget container layout view assignments
-var widgetHtml = 
-    '<div id="themeContainer" class="widget-component-container ' + /*savedTheme +*/ '">' +
-        /*'<div class="widget-header-row" style="display: flex; justify-content: flex-end; padding: 10px 0;">' +
-            '<button class="theme-toggle-btn" onclick="toggleTheme()">' + btnLabel + '</button>' +
-        '</div>' +*/
-        '<div id="inat-widget-container" ' +
-            'data-inat-widget ' +
-            'data-inat-source="' + config.project + '" ' +
-            'data-inat-source-type="project" ' +
-            'data-inat-theme="transparent-dark" ' +
-            'data-inat-title="' + config.studyTitle + '" ' + 
-            'data-inat-layout="grid" ' +
-            'data-inat-limit="30" ' +
-            'data-inat-order-by="observed_on" ' +
-            'data-inat-params="order_by=observed_on" ' +   // when set, this will override data-inat-order-by.
-            'data-inat-taxon="' + taxonId + '" ' +
-            'data-inat-show-title="false"' + 
-            'data-inat-header-text="' + config.studyTitle + '" ' + 
-        '</div>' +
-    '</div>';
-
+                      
 function buildMenu( config ) {
 
   // Create the main navbar container
@@ -365,7 +341,33 @@ function setupAPIParams( config ) {
     return api_params;
 }
 
-function buildWidget() {
+function buildWidget( config ) {
+
+    let taxonId = getTaxonId(appState) || getMenuId(appState) || config.defaultTaxonId; 
+           
+    // Form clean single-widget container layout view assignments
+    var widgetHtml = 
+      '<div id="themeContainer" class="widget-component-container ' + /*savedTheme +*/ '">' +
+        /*'<div class="widget-header-row" style="display: flex; justify-content: flex-end; padding: 10px 0;">' +
+            '<button class="theme-toggle-btn" onclick="toggleTheme()">' + btnLabel + '</button>' +
+        '</div>' +*/
+        '<div id="inat-widget-container" ' +
+            'data-inat-widget ' +
+            'data-inat-source="' + config.project + '" ' +
+            'data-inat-source-type="project" ' +
+            'data-inat-theme="transparent-dark" ' +
+            'data-inat-title="' + config.studyTitle + '" ' + 
+            'data-inat-layout="grid" ' +
+            'data-inat-limit="30" ' +
+            'data-inat-order-by="observed_on" ' +
+            'data-inat-params="order_by=observed_on" ' +   // when set, this will override data-inat-order-by.
+            'data-inat-taxon="' + taxonId + '" ' +
+            'data-inat-show-title="false"' + 
+            'data-inat-header-text="' + config.studyTitle + '" >' + 
+        '</div>' +
+      '</div>';
+
+           
     // Render the HTML view structure directly to the application mount point
     document.getElementById('app').innerHTML = widgetHtml;
 
@@ -387,7 +389,7 @@ async function gatherResources() {
       const config   = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
      
       buildMenu( config );
-      buildWidget();
+      buildWidget( config );
 
     } catch (error) {
       console.error("An error occurred:", error);
