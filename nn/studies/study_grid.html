@@ -148,6 +148,10 @@ function setupCommonAPIParams( config, api_params ) {
         api_params += getFilterAPIParams(config);
     }
 
+    // default all of these so they stay consistent across the map and grid.
+    // may need to revisit if/when the table sorts by quality_grade.
+    api_params += '&reviewed=any&quality_grade=needs_id,research,casual&verifiable=any';
+
     if( config.obsAPIParams ) { api_params += config.obsAPIParams; }
     api_params += getPageParam(appState, '&page=');
     api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
