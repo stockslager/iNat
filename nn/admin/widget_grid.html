@@ -186,6 +186,24 @@ body {
 } 
 .button.inat-wide-button:hover { opacity: 1.0; background: var(--color-hover); } 
 
+/* Force black background on the widget container */
+#themeContainer {
+    background-color: #000000 !important; /* Forces a true black panel background */
+    padding: 20px;                         /* Provides breathing room around grid boundaries */
+    border-radius: 12px;                  /* Softens container borders */
+}
+
+/* Force standard iNat text fields to render clearly over black */
+#themeContainer [data-inat-widget] {
+    color: #ffffff !important;            /* Shifts default gray text items to white */
+}
+
+/* Adjust hyperlink parameters for clean contrast styling */
+#themeContainer [data-inat-widget] a {
+    color: #38bdf8 !important;            
+}
+/* End - Force black background on the widget container */
+           
 /* Original Helpers */ 
 #h2 { font-weight:bold; font-size:20px; } 
 p { width:100%; } 
@@ -221,7 +239,7 @@ var widgetHtml =
             'data-inat-widget ' +
             'data-inat-source="cincinnati-nature-center-at-rowe-woods-oh-usa" ' +
             'data-inat-source-type="project" ' +
-            'data-inat-theme="' + initialWidgetTheme + '" ' +
+            'data-inat-theme="transparent-dark" ' +
             'data-inat-title="Cincinnati Nature Center at Rowe Woods, OH, USA" ' +
             'data-inat-layout="grid" ' +
             'data-inat-limit="50" ' +
