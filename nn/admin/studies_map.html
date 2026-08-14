@@ -831,6 +831,7 @@ L.gridLayer.utfGridCompare = function (options) {
    return new L.GridLayer.UTFGridCompare(options);
 };
 
+<script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
 
 </script>
 </head>
@@ -872,6 +873,33 @@ winurlparams.delete('view');
 winurlparams.delete('compare_exclude_param');
 winurlparams.delete('thresholded');
 winurlparams.delete('gridmode');
+
+let config = '';
+	
+async function gatherResources() {
+  let json_path = json_root + getParams(appState);
+ 
+  try {
+   
+      // Await the result of getObservations() and store the actual data
+      config   = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
+
+	  console.log('config comp ' + config.component;
+     
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+let message = validateConfig(appState);
+ 
+if( message ) {
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
 
 let compareurlparams = new URLSearchParams(winurlparams);
 if (compexclparam) { for (p of compexclparam.split(',')) { compareurlparams.delete(p); }; };
