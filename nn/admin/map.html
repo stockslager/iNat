@@ -902,14 +902,26 @@ function goBackWithFallback(fallbackUrl) {
 // add a fallback in case they entered this page directly thereby bypassing the ui flow.
 //let hLink = faddelemLocal('a', headerBar, { href: `javascript:goBackWithFallback('${dashboardUrl}');`, id: 'home-link' });
 let dashboardUrl = '../admin/dashboard.html?params=' + appParams;
-let hLink = faddelemLocal('a', headerBar, { href: dashboardUrl, id: 'home-link' });	
-	
-// Add the leaf icon
-if( iconic === 'Actinopterygii' ) {
-    faddelemLocal('span', hLink, { innerHTML: '<span class=\"navbar-big-icon\">&#128031;</span>' });
-} else {
-    faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
+
+// Read if there are cached filtration parameters saved from the table session
+const savedTableParams = sessionStorage.getItem('active_table_params');
+if (savedTableParams) {
+    dashboardUrl = '../admin/dashboard.html' + savedTableParams;
 }
+
+// Create link with the fully param-preserved URL
+let hLink = faddelemLocal('a', headerBar, { 
+    href: dashboardUrl, 
+    id: 'home-link' 
+});
+
+// Intercept the click to handle history stack replacement cleanly inside iNat
+hLink.addEventListener('click', function(event) {
+    if (window.self !== window.top) {
+        event.preventDefault();
+        window.location.replace(dashboardUrl);
+    }
+});
 
 // Add to the top of the page
 document.body.prepend(headerBar);
