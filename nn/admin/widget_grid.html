@@ -373,7 +373,9 @@ function buildWidget( config ) {
     }
 
     // if paging is enabled we need to send the widget a page number
+    let pagination = '';
     if( config.pagingEnabled ) {
+        pagination = 'data-inat-pagination="true" ';
         inatParams += getPageParam(appState, '&page=');
     }
            
@@ -389,7 +391,7 @@ function buildWidget( config ) {
             'data-inat-layout="grid" ' +
             'data-inat-limit="30" ' +
             'data-inat-order-by="observed_on" ' +
-            inatParams + taxonId +
+             inatParams + taxonId + pagination +
             'data-inat-show-title="false"' + 
             'data-inat-header-text="' + config.studyTitle + '" >' + 
         '</div>' +
