@@ -907,8 +907,7 @@ let dashboardUrl = '../admin/dashboard.html?params=' + appParams;
 let hLink = faddelemLocal('a', headerBar, { href: `javascript:goBackWithFallback('${dashboardUrl}');`, id: 'home-link' });
 
 if( getGridMode(appState) === 'widget' ) {
-    let urlState = appState; 
-    urlState = setGridMode(''); 
+    let urlState = setGridMode(appState, ''); 
     let gridLink = './widget_grid.html' + buildParameterList(urlState);
 	hLink.href = gridLink; 
 } 
