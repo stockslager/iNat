@@ -41,7 +41,7 @@ const ATTRIBUTE_LIFESTAGE       = 'lifestage';
 const ATTRIBUTE_EVIDENCE        = 'evidence';
 const ATTRIBUTE_MONTH           = 'month';
 const ATTRIBUTE_TAG             = 'tag';
-const ATTRIBUTE_GRID_MODE       = 'gridmode';
+const ATTRIBUTE_GRIDMODE        = 'gridmode';
 const ATTRIBUTE_PAGE            = 'page';
 const ATTRIBUTE_PER_PAGE        = 'per_page';
 
