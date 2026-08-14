@@ -906,6 +906,15 @@ function goBackWithFallback(fallbackUrl) {
 let dashboardUrl = '../admin/dashboard.html?params=' + appParams;
 let hLink = faddelemLocal('a', headerBar, { href: `javascript:goBackWithFallback('${dashboardUrl}');`, id: 'home-link' });
 
+if( getGridMode(appState) === 'widget' ) {
+    let urlState = appState; 
+    urlState = setGridMode(''); 
+    let gridLink = './widget_grid.html' + buildParameterList(urlState);
+	hLink.href = gridLink; 
+} 
+	
+faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 }); 
+
 // Add the leaf icon
 if( getGridMode(appState) === 'widget' ) {
 	urlState = appState;
