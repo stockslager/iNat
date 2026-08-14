@@ -41,6 +41,7 @@ const ATTRIBUTE_LIFESTAGE       = 'lifestage';
 const ATTRIBUTE_EVIDENCE        = 'evidence';
 const ATTRIBUTE_MONTH           = 'month';
 const ATTRIBUTE_TAG             = 'tag';
+const ATTRIBUTE_GRID_MODE       = 'gridmode';
 const ATTRIBUTE_PAGE            = 'page';
 const ATTRIBUTE_PER_PAGE        = 'per_page';
 
@@ -75,6 +76,7 @@ let appState = {
   [ATTRIBUTE_EVIDENCE]: '',
   [ATTRIBUTE_MONTH]: '',
   [ATTRIBUTE_TAG]: '',
+  [ATTRIBUTE_GRIDMODE]: '',
   [ATTRIBUTE_PAGE]:      '',
   [ATTRIBUTE_PER_PAGE]:  ''
 
@@ -118,6 +120,7 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_EVIDENCE]: '',
     [ATTRIBUTE_MONTH]: '',
     [ATTRIBUTE_TAG]: '',
+    [ATTRIBUTE_GRIDMODE]: '',
     [ATTRIBUTE_PAGE]:      '',
     [ATTRIBUTE_PER_PAGE]:  ''
   };
@@ -319,6 +322,7 @@ function getLifeStage(state)       { return (getAttribute(state, ATTRIBUTE_LIFES
 function getEvidence(state)        { return (getAttribute(state, ATTRIBUTE_EVIDENCE)); }
 function getMonth(state)           { return (getAttribute(state, ATTRIBUTE_MONTH)); }
 function getTag(state)             { return (getAttribute(state, ATTRIBUTE_TAG)); }
+function getGridMode(state)        { return (getAttribute(state, ATTRIBUTE_GRIDMODE)); }
 function getPage(state)            { return (getAttribute(state, ATTRIBUTE_PAGE)); }
 function getPerPage(state)         { return (getAttribute(state, ATTRIBUTE_PER_PAGE)); }
 
@@ -365,6 +369,7 @@ function setLifeStage(state, value)       { return (setAttribute(state, ATTRIBUT
 function setEvidence(state, value)        { return (setAttribute(state, ATTRIBUTE_EVIDENCE, value)); }
 function setMonth(state, value)           { return (setAttribute(state, ATTRIBUTE_MONTH, value)); }
 function setTag(state, value)             { return (setAttribute(state, ATTRIBUTE_TAG, value)); }
+function setGridMode(state, value)        { return (setAttribute(state, ATTRIBUTE_GRIDMODE, value)); }
 function setPage(state, value)            { return (setAttribute(state, ATTRIBUTE_PAGE, value)); }
 function setPerPage(state, value)         { return (setAttribute(state, ATTRIBUTE_PER_PAGE, value)); }
 
@@ -990,6 +995,7 @@ function clearForDashParams(state) {
   urlState = setEvidence(urlState, '');
   urlState = setMonth(urlState, '');
   urlState = setTag(urlState, '');
+  urlState = setGridMode(urlState, '');
   urlState = setStudyTitle(urlState, '');
   urlState = setActivityFilter(urlState, '');
   
