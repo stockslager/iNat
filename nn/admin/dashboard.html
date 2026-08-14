@@ -54,6 +54,12 @@ const CONST_ART          = 'Art & Journaling';
 const CONST_OBSERVERS    = 'Observers';
 const CONST_MISSIONS     = 'Missions';
 
+if (window.self !== window.top) {
+    // Replaces the newly pushed history entry with the previous one
+    // This effectively "pops" the new URL out of the parent browser's forward history
+    window.history.replaceState(null, '', window.location.href);
+}
+ 
 function buildMenu( config ) {
   
     // Create the main navbar container
