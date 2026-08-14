@@ -309,7 +309,7 @@ function buildMenu( results, config ) {
       }
 
       if( identify_params ) {
-          let url = 'https://www.inaturalist.org/observations/identify' + identify_params + '&reviewed=any&quality_grade=needs_id,research,casual';
+          let url = 'https://www.inaturalist.org/observations/identify' + identify_params;
           if( config.blankTargets === 'yes' ) {
               buildNavURL( navbar, url, 'Identify', true );
           } else {
@@ -1107,6 +1107,10 @@ function setupAPIParams( config ) {
 
    if( config.obsAPIParams ) { api_params += config.obsAPIParams; }
 
+   // default all of these so they stay consistent across inat identify page, inat explore page, and the table.
+   // may need to revisit if/when the table sorts by quality_grade.
+   api_params += '&reviewed=any&quality_grade=needs_id,research,casual';
+           
    // set the params for the identify link to the exact filtration parameters
    // to be used in the api transaction that will populate the table with whatever 
    // filtrations were selected.
