@@ -302,6 +302,11 @@ function buildMenu( results, config ) {
           buildNavLink( navbar, './study_grid.html', urlState, 'Grid' );
       }
 
+      if( config.showStudyGrid === 'widget' ) {
+          let urlState = Object.assign({}, appState);
+          buildNavLink( navbar, './widget_grid.html', urlState, 'Grid' );
+      }
+
       if( identify_params ) {
           let url = 'https://www.inaturalist.org/observations/identify' + identify_params + '&reviewed=any&quality_grade=needs_id,research,casual';
           if( config.blankTargets === 'yes' ) {
