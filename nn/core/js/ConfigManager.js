@@ -103,7 +103,7 @@ class ConfigurationItem {
         this.defaultMonths   = configData.default_months ?? null;
         this.showNotes       = configData.show_notes ?? 'no';
         this.blankTargets    = configData.blank_targets ?? 'no';     
-        this.pagingEnabled   = configData.paging_enabled ?? false;
+        this.pagingEnabled   = configData.paging_enabled ?? true;
 
         this.obsFields = configData.obs_fields ?? configData.field_id ?? null;
         
