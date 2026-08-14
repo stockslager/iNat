@@ -901,8 +901,8 @@ function goBackWithFallback(fallbackUrl) {
 // Create the home link inside the header bar
 // add a fallback in case they entered this page directly thereby bypassing the ui flow.
 let dashboardUrl = '../admin/dashboard.html?params='+appParams; 
-//let hLink = faddelemLocal('a', headerBar, { href: `javascript:goBackWithFallback('${dashboardUrl}');`, id: 'home-link' });
-let hLink = faddelemLocal('a', headerBar, { href: dashboardUrl, id: 'home-link' });
+let hLink = faddelemLocal('a', headerBar, { href: `javascript:goBackWithFallback('${dashboardUrl}');`, id: 'home-link' });
+/*let hLink = faddelemLocal('a', headerBar, { href: dashboardUrl, id: 'home-link' });
 
 // Intercept the click on the last page's back button so it stays inside the frame cleanly
 hLink.addEventListener('click', function(event) {
@@ -910,7 +910,7 @@ hLink.addEventListener('click', function(event) {
         event.preventDefault();
         window.location.replace(dashboardUrl);
     }
-});
+});*/
 	
 // Add the leaf icon
 if( iconic === 'Actinopterygii' ) {
