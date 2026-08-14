@@ -911,6 +911,11 @@ if (getGridMode(appState) === 'widget') {
 } else {
   destinationUrl = `javascript:goBackWithFallback('${destinationUrl}');`; // Pure string assignment (Safe)
 }	
+
+let hLink = faddelemLocal('a', headerBar, { href: destinationUrl, id: 'home-link' });
+
+faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
+	
 // Add to the top of the page
 document.body.prepend(headerBar);
 	
