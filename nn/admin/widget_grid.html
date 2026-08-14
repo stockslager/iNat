@@ -218,9 +218,8 @@ let winurlparams      = new URLSearchParams(winurlsearchstr);
 
 appState       = buildStateFromParams(winurlparams);
            
-// 1. Setup specific single configurations
-var taxonId = '47157'; 
-
+let taxonId = getTaxonId(appState) || getMenuId(appState) || config.defaultTaxonId; 
+           
 // 3. Form clean single-widget container layout view assignments
 var widgetHtml = 
     '<div id="themeContainer" class="widget-component-container ' + /*savedTheme +*/ '">' +
@@ -229,16 +228,17 @@ var widgetHtml =
         '</div>' +*/
         '<div id="inat-widget-container" ' +
             'data-inat-widget ' +
-            'data-inat-source="cincinnati-nature-center-at-rowe-woods-oh-usa" ' +
+            'data-inat-source="' + config.project + '" ' +
             'data-inat-source-type="project" ' +
             'data-inat-theme="transparent-dark" ' +
-            'data-inat-title="Cincinnati Nature Center at Rowe Woods, OH, USA" ' +
+            'data-inat-title="' + config.studyTitle + '" ' + 
             'data-inat-layout="grid" ' +
-            'data-inat-limit="50" ' +
+            'data-inat-limit="30" ' +
             'data-inat-order-by="observed_on" ' +
+            'data-inat-params="order_by=observed_on" ' +   // when set, this will override data-inat-order-by.
             'data-inat-taxon="' + taxonId + '" ' +
             'data-inat-show-title="false"' + 
-            'data-inat-header-text="config.studyTitle"' + 
+            'data-inat-header-text="' + config.studyTitle + '" ' + 
         '</div>' +
     '</div>';
 
