@@ -303,7 +303,7 @@ function buildMenu2( results, config ) {
       }
 
       if( identify_params ) {
-          let url = 'https://www.inaturalist.org/observations/identify' + identify_params + '&reviewed=any&quality_grade=needs_id,research,casual';
+          let url = 'https://www.inaturalist.org/observations/identify' + identify_params + '&reviewed=any&quality_grade=needs_id,research,casual&verifiable=any';
           if( config.blankTargets === 'yes' ) {
               buildNavURL( navbar, url, 'Identify', true );
           } else {
@@ -970,8 +970,12 @@ function setupAPIParams( config ) {
    } else if( config.userId ) { 
        api_params += '&user_id='  + config.userId; 
    }
- 
-   api_params += getPlaceMenuIdParam(appState, '&place_id=');
+
+   if( !getPlaceMenuId(appState) ) {
+       api_params += '&place_id=any';
+   } else {
+       api_params += getPlaceMenuIdParam(appState, '&place_id=');
+   }
 
    // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
    // use the menu_id if one was passed in.
