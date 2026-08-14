@@ -16,7 +16,7 @@
 <script type="text/javascript" src='../core/js/study_store.js'> </script>
 <title>Study Grid</title>
            
-<style>
+<style> 
 /* for the column header un-filter */ 
 .filterable-header a, .filterable-header a:active { color: cornflowerblue; /*color: var(--color-text-link); */ background: transparent; background-color: transparent; text-decoration: none; /* Adds a subtle opacity so it blends nicely in the header, matching your old look */ opacity: 0.7; transition: opacity 0.2s ease, filter 0.2s ease; } 
 /* 2. Hover State: Turn off background blocks and amplify the blue color vibrancy */ 
@@ -27,51 +27,32 @@
 .clear-all-filters a:hover { color: cornflowerblue; /*color: var(--color-text-link); */ background: transparent; background-color: transparent; text-decoration: none; /* Brings icon to full opacity and injects a 40% vibrancy boost to make the blue pop */ opacity: 1; filter: brightness(1.4); } 
 
 /* ==========================================================================
-   UPDATED CONTAINER SYSTEM: GUTTERS & BORDER WRAPPER
+   UPDATED CONTAINER SYSTEM: INVISIBLE GUTTER MATCHING FRAME
    ========================================================================== */
 
-/* 1. RESET BODY BOUNDS */
+/* 1. THE GUTTER FRAME (Matches your native layout body bounds) */
 body { 
+  padding-left: 50px; 
+  padding-right: 50px; 
   margin: 0; 
-  padding: 24px;                  /* Generates air around the floating canvas */
   box-sizing: border-box; 
 } 
 
-/* 2. THE FLOATING CONIFGURED BOUNDARY WRAPPER */
+/* 2. THE WIDGET WRAPPER FRAME 
+   Intentionally kept seamless (no borders, no backgrounds, no extra padding) 
+   so it shares your layout's exact 50px margins without breaking elements. */
 .widget-component-container {
-  box-sizing: border-box;
-  margin: 0 auto;
-  max-width: 1200px;              /* Caps width nicely for desktop readability */
   width: 100%;
-  
-  /* Gutters: Provides standard internal space matching your original 50px look */
-  padding: 32px 50px;             
-  
-  /* Border & Radius Construction Frame Elements */
-  border: 1px solid var(--color-border);
-  border-radius: 16px;            /* Smooth curved outer bounding box corners */
-  
-  /* Theme Transitions */
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-/* Explicit class-level theme overrides handling canvas separation */
-.widget-component-container.dark-theme {
-  background-color: #1e293b;      /* Slightly lighter than body background (#0f172a) to create lift */
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-.widget-component-container.light-theme {
-  background-color: #ffffff;      /* Clean crisp white paper elevation against #f8fafc */
-  border-color: rgba(0, 0, 0, 0.08);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Subtle depth shadow */
+  max-width: 100%;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 /* ==========================================================================
    NATIVE LAYOUT FLOW ELEMENTS
    ========================================================================== */
 
-/* 3. THE ALIGNMENT */ 
+/* 2. THE ALIGNMENT */ 
 #main, .navbar, .top-bar, #divhead { 
   width: 100%; 
   max-width: 100%; 
@@ -80,16 +61,16 @@ body {
   box-sizing: border-box; 
 } 
 
-/* 4. THE TOP BAR */ 
+/* 3. THE TOP BAR */ 
 .top-bar { 
   display: flex; 
   justify-content: space-between; 
   align-items: stretch; 
   gap: 10px; 
-  margin-bottom: 20px;            /* Extra breathing room between boxes and navbar */
+  margin-bottom: 10px; 
 } 
 
-/* 5. THE BOXES: Fixed horizontal scroll and standard styling */ 
+/* 4. THE BOXES: Fixed horizontal scroll and standard styling */ 
 #stats, #dltest { 
   display: block; 
   box-sizing: border-box; 
@@ -107,7 +88,7 @@ body {
   font: 14px Sans-Serif; 
 } 
 
-/* 6. THE SHIELD: Reset internal table tags and remove ALL default underlines */ 
+/* 5. THE SHIELD: Reset internal table tags and remove ALL default underlines */ 
 #stats table, #stats td, #stats tr, #dltest table, #dltest td, #dltest tr { 
   border: none; 
   background: transparent; 
@@ -126,7 +107,7 @@ body {
 /* This ensures text-only headers are underlined, but URLs remain clean */ 
 #dltest tr:first-child td { text-decoration: underline; } 
 
-/* 7. NAVBAR */ 
+/* 6. NAVBAR */ 
 .navbar { 
   background-color: var(--color-brand); 
   border-radius: 5px; 
@@ -135,7 +116,6 @@ body {
   align-items: center; 
   min-height: 40px; 
   overflow: hidden; 
-  margin-bottom: 24px;            /* Pushes down the main content block cleanly */
 } 
 
 /**********/ 
@@ -183,8 +163,9 @@ body {
 p { width:100%; } 
 .npcicon { width:14px; height:14px; border: 1px solid cornflowerblue; padding: 5px; border-radius: 50px; } 
 .user_head { align-items: center; justify-content: center; } 
-.user { display: inline-flex; align-items: center; white-space: nowrap; gap: 8px; margin-left: 2px; }    
+.user { display: inline-flex; align-items: center; white-space: nowrap; gap: 8px; margin-left: 2px; } 
 </style>
+
            
 </head>
 <body>
