@@ -971,15 +971,18 @@ function setupAPIParams( config ) {
        api_params += '&user_id='  + config.userId; 
    }
 
-   if( !getPlaceMenuId(appState) ) {
-       api_params += '&place_id=any';
-   } else {
+   if( getPlaceMenuId(appState) ) {
        api_params += getPlaceMenuIdParam(appState, '&place_id=');
+   } else {
+       if( config.defaultPlace ) { 
+           api_params += '&place_id='        + config.defaultPlace; 
+       } else {
+           api_params += '&place_id=any';
+       }
    }
 
    // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
    // use the menu_id if one was passed in.
-   console.log('sub ' + config.defaultTaxonId);
    if( getTaxonId(appState) ) {
        api_params += '&taxon_id='+getTaxonId(appState);
    } else if( getMenuId(appState) ) { 
@@ -994,8 +997,6 @@ function setupAPIParams( config ) {
    if( getActivityFilter(appState) ) {
        api_params += getFilterAPIParams(config);
    }
-
-   if( config.defaultPlace ) { api_params += '&place_id='        + config.defaultPlace; }
 
    // filter for month...
    if( getMonth(appState) ) {
