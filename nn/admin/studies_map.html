@@ -908,7 +908,9 @@ let hLink = faddelemLocal('a', headerBar, { href: `javascript:goBackWithFallback
 
 // Add the leaf icon
 if( getGridMode(appState) === 'widget' ) {
-    let gridLink = './widget_grid.html' + buildParameterList(appState);
+	urlState = appState;
+	urlState = setGridMode('');
+    let gridLink = './widget_grid.html' + buildParameterList(urlState);
     faddelemLocal('span', gridLink, { innerHTML: CONST_LEAF_UTF8 });
 } else {
     faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
