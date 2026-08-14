@@ -906,7 +906,8 @@ if (getGridMode(appState) === 'widget') {
   let widgetState = setGridMode(appState, '');
   let widgetUrl = './widget_grid.html' + buildParameterList(widgetState);
   
-  let hLinkWidget = faddelemLocal('a', headerBar, { href: widgetUrl, id: 'home-link' });
+  // FIX: Changed id to 'widget-home-link' so global scripts cannot hijack the click event
+  let hLinkWidget = faddelemLocal('a', headerBar, { href: widgetUrl, id: 'widget-home-link' });
   faddelemLocal('span', hLinkWidget, { innerHTML: CONST_LEAF_UTF8 });
 }
 
