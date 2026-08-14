@@ -31,13 +31,38 @@
    ========================================================================== */
 
 /* 1. THE GUTTER FRAME (Matches your native layout body bounds) */
-body { 
-  padding-left: 50px; 
-  padding-right: 50px; 
+/*body { 
+  padding-left: 200px; 
+  padding-right: 200px; 
   margin: 0; 
   box-sizing: border-box; 
-} 
+} */
+html {
+  /* 1. Setup the global theme backdrop layout metrics */
+  background-color: #0f172a;               /* Base pitch black workspace canvas */
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 24px;                           /* Pushes the border cleanly away from viewport edges */
+}
 
+body {
+  /* 2. Integrate your required vertical side gutters */
+  padding-left: 200px; 
+  padding-right: 200px; 
+  padding-top: 40px;                       /* Balances text top alignment */
+  padding-bottom: 40px;
+  margin: 0; 
+  box-sizing: border-box; 
+
+  /* 3. Build the smoky transparent dark layout boundary line */
+  background-color: rgba(30, 41, 59, 0.4); /* Translucent slate window surface fill */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Fine thinned-out silver accent rule */
+  border-radius: 16px;                     /* Smooth curved framing container corners */
+  min-height: calc(100vh - 48px);          /* Forces frame to lock perfectly to viewport bounds */
+}
+
+/****************/
+           
 /* 2. THE WIDGET WRAPPER FRAME 
    Intentionally kept seamless (no borders, no backgrounds, no extra padding) 
    so it shares your layout's exact 50px margins without breaking elements. */
