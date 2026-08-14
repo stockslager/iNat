@@ -844,6 +844,7 @@ let winurlstr_orig = window.location.href;
 let winurlsearchstr_orig = window.location.search;
 let winurlexsearchstr_orig = winurlstr_orig.replace(winurlsearchstr_orig,'');
 let winurlparams_orig = new URLSearchParams(winurlsearchstr_orig.substring(1));
+var appParams = winurlparams_orig.get('params') || '';	
 
 appState = buildStateFromParams(winurlparams_orig);
 
@@ -992,7 +993,6 @@ var showplace = winurlparams.get('showplace') || 'false';
 var view = winurlparams.get('view') || 'default';
 var compexclparam = winurlparams.get('compare_exclude_param');
 var thresholded = winurlparams.get('thresholded') || 'true'; // even though the default in the API is false, set the default to true, since we're going to usually want to see Expected Nearby rather than Unthresholded
-var appParams = winurlparams.get('params') || '';	
 var iconic = winurlparams.get('iconic') || 'plantae';
 
 winurlparams.delete('centerlat');
