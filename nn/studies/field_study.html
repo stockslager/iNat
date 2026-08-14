@@ -240,6 +240,12 @@ let field_array = [];
 let identify_params = '';
 let api_params = '';
 
+if (window.self !== window.top) {
+    // Replaces the newly pushed history entry with the previous one
+    // This effectively "pops" the new URL out of the parent browser's forward history
+    window.history.replaceState(null, '', window.location.href);
+}
+          
 appState = buildStateFromParams(winurlparams);
 
 // find key/value pair for &field: param if one was passed in
