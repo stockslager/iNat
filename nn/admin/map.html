@@ -903,6 +903,9 @@ function goBackWithFallback(fallbackUrl) {
 let dashboardUrl = '../admin/dashboard.html?params=' + appParams;
 let hLink = faddelemLocal('a', headerBar, { href: `javascript:goBackWithFallback('${dashboardUrl}');`, id: 'home-link' });
 
+// Add the leaf icon
+faddelemLocal('span', hLink, { innerHTML: CONST_LEAF_UTF8 });
+	
 // Add to the top of the page
 document.body.prepend(headerBar);
 	
