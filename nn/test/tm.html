@@ -6,7 +6,6 @@
     <title>Dynamic iNaturalist Observations Map</title>
     
     <!-- Leaflet Map CSS & JavaScript Assets -->
-<link rel="stylesheet" href="https://unpkg.com" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet. css" />
     <script src=""></script>
@@ -70,8 +69,8 @@ window.onload = function() {
     }).addTo(map);
 
     if (!urlParams.has('per_page')) urlParams.set('per_page', '200');
-    
-    const iNatApiUrl = `https://inaturalist.org{urlParams.toString()}`;
+
+    const iNatApiUrl = `https://api.inaturalist.org/v1/observations?'+urlParams.toString()}`;
 
     fetch(iNatApiUrl)
         .then(response => {
