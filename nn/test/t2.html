@@ -15,6 +15,32 @@
 
   <script type="text/javascript" src='../core/js/common_functions.js'></script>
   <script type="text/javascript" src='../core/js/study_store.js'></script>
+
+  <script type="text/javascript" src="../core/js/ConfigManager.js"></script>
+  <script>
+    let config = null; 
+    async function gatherResources() {
+      let json_path = json_root + getParams(appState);
+      try {
+        config = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
+      } catch (error) {
+        console.error("An error occurred:", error);
+        faddelem('p',document.body,{innerHTML:('<span id="error">⚠<br>' + error.message + '</span>')});
+        throw error;
+      }
+    }
+
+    let winurlsearchstr = window.location.search; 
+    let winurlparams = new URLSearchParams(winurlsearchstr); 
+    appState = buildStateFromParams(winurlparams); 
+
+    let message = validateConfig(appState);
+    if( message ) {
+      faddelem('p',document.body,{innerHTML:('<span id="error">⚠<br>' + message + '</span>')});
+    } else {
+      gatherResources();
+    }
+  </script>
   
   <title>Observations Map</title>
 
@@ -249,7 +275,27 @@
   </div>
 
   <script>
+    function buildMenu( config ) {
+       // Create the main navbar container
+       let navbar = document.createElement('div');
+       navbar.className = 'navbar v2-menu';
+  
+       // Build the Home Link
+       let homeUrl = '../studies/field_study.html';
+       buildNavHome( navbar, homeUrl, appState, config );
+  
+       let appContainer = document.getElementById('app');
+       if( appContainer ) {
+           appContainer.insertBefore(navbar, appContainer.firstChild);
+       } else {
+           document.body.insertBefore(navbar, document.body.firstChild);
+       }
+    }
+    
     window.addEventListener('load', function() {
+      
+      buildMenu( config );
+      
       const urlParams = new URLSearchParams(window.location.search);
       
       if ([...urlParams.keys()].length === 0) {
@@ -289,7 +335,8 @@
       }).addTo(map);
 
       // Cleanly remove loading notice panel when operations complete
-      document.getElementById('info').style.display = 'none';});
+      document.getElementById('info').style.display = 'none';
+    });
     
 </script>
 </body>
