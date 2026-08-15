@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic iNaturalist Tile Overlay Map</title>
+
+  <!-- Leaflet Map CSS & JavaScript Assets -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      font-family: sans-serif;
+    }
+    #map {
+      height: 100%;
+      width: 100%;
+    }
+    .info-shield {
+      position: absolute;
+      top: 15px;
+      left: 60px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 8px 15px;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      z-index: 1000;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="info" class="info-shield">Loading iNaturalist Map Layer...</div>
+  <div id="map"></div>
+
+  <script>
+    // Wait an extra split second to make sure the programmatically injected Leaflet loaded
+    window.addEventListener('load', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+
+      if ([...urlParams.keys()].length === 0) {
+        document.getElementById('info').innerHTML = "⚠️ Missing filters! Add '?project_id=157918' to your address bar.";
+        return;
+      }
+
+      const defaultLat = parseFloat(urlParams.get('centerlat')) || 39.1337;
+      const defaultLng = parseFloat(urlParams.get('centerlng')) || -84.3525;
+      const defaultZoom = parseInt(urlParams.get('defaultzoom')) || 12;
+
+      const map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
+
+      // 1. Broken up OpenStreetMap URL string
+      const osm1 = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+      
+      L.tileLayer(osm1, {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+
+      // 2. Broken up iNaturalist Tile URL string
+      const tileHost1 = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png?';
+      
+      const iNatTileUrl = tileHost1 + urlParams.toString();
+
+      L.tileLayer(iNatTileUrl, {
+        maxZoom: 20,
+        opacity: 0.85,
+        attribution: '&copy; iNaturalist Data Layer'
+      }).addTo(map);
+
+      document.getElementById('info').style.display = 'none';
+    });
+  </script>
+</body>
+</html>
