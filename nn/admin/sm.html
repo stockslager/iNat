@@ -156,38 +156,37 @@ body #error {
 
     <script>
 
-function errorMessage( message ) {
-    // Target floating info screen container element
-    // Check if high-priority error element already exists on screen
+function errorMessage(message) {
+    console.error("Configuration Failure:", message);
+
     let fallbackAlert = document.getElementById('critical-error-banner');
     
     if (!fallbackAlert) {
         fallbackAlert = document.createElement('div');
         fallbackAlert.id = 'critical-error-banner';
-
+        
         fallbackAlert.style.position = 'relative';
-        fallbackAlert.style.width = '100%'; 
+        fallbackAlert.style.width = '100%';
         fallbackAlert.style.boxSizing = 'border-box';
         fallbackAlert.style.marginBottom = '15px'; 
         fallbackAlert.style.padding = '16px 24px';
-        fallbackAlert.style.background = '#1e293b'; 
-        fallbackAlert.style.border = '2px solid'; 
+        fallbackAlert.style.background = '#1e293b'; // Sleek dark slate layout panel background
+        fallbackAlert.style.border = '2px solid #334155'; // Muted dark grey border line
         fallbackAlert.style.borderRadius = '8px';
-        fallbackAlert.style.color = '#ffffff';
+        fallbackAlert.style.color = '#e2e8f0'; // Muted white text color
         fallbackAlert.style.fontFamily = 'Arial, sans-serif';
         fallbackAlert.style.fontSize = '15px';
         fallbackAlert.style.lineHeight = '1.4';
-      
-        // Append it directly as the absolute last child of the document frame body
-        document.body.appendChild(fallbackAlert);
+        
+        let appContainer = document.getElementById('app');
+        if (appContainer) {
+            document.body.insertBefore(fallbackAlert, appContainer);
+        } else {
+            document.body.appendChild(fallbackAlert);
+        }
     }
     
-    // Inject the clean configuration message markup safely into the flat top banner
-    fallbackAlert.innerHTML = '<div style="display: flex; align-items: flex-start; gap: 12px;">' + 
-                                 '<span style="font-size: 20px; line-height: 1;">⚠️</span>' +
-                                 '<div> <span style="color: #f43f5e; font-size: 15px; display: block; margin-bottom: 2px;">Configuration Failure</span>' + 
-                                 '<span style="color: #e2e8f0;">' + message + '</span> </div> </div>';
-
+    fallbackAlert.innerHTML = '<div style="display: flex; align-items: flex-start; gap: 12px;"> <span style="font-size: 20px; line-height: 1;">⚠️</span> <div> <span style="color: #f43f5e; font-size: 15px; display: block; margin-bottom: 2px;">Configuration Failure</span> <span>' + message + '</span> </div> </div>';
 }
       
 document.addEventListener('DOMContentLoaded', async () => { 
