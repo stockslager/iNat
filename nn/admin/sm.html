@@ -131,19 +131,53 @@ body {
 
 function errorMessage( message ) {
     // Target floating info screen container element
-    const infoShield = document.getElementById('info');
+    // 1. Check if our high-priority error element already exists on screen
+    let fallbackAlert = document.getElementById('critical-error-banner');
+    
+    if (!fallbackAlert) {
+        // 2. If it doesn't exist, create a fresh, styling-isolated container
+        fallbackAlert = document.createElement('div');
+        fallbackAlert.id = 'critical-error-banner';
+        
+        // Apply heavy absolute overlay styles to force it to render ON TOP of all Leaflet/app layers
+        fallbackAlert.style.position = 'fixed';
+        fallbackAlert.style.top = '20px';
+        fallbackAlert.style.left = '50%';
+        fallbackAlert.style.transform = 'translateX(-50%)';
+        fallbackAlert.style.width = '90%';
+        fallbackAlert.style.maxWidth = '500px';
+        fallbackAlert.style.padding = '16px 24px';
+        fallbackAlert.style.background = '#1e293b'; // Sleek dark slate panel
+        fallbackAlert.style.border = '2px solid #ef4444'; // Bright warning red border
+        fallbackAlert.style.borderRadius = '8px';
+        fallbackAlert.style.color = '#ffffff';
+        fallbackAlert.style.fontFamily = 'Arial, sans-serif';
+        fallbackAlert.style.fontSize = '15px';
+        fallbackAlert.style.lineHeight = '1.4';
+        fallbackAlert.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.7)';
+        fallbackAlert.style.zIndex = '99999'; // Absurdly high index to break past Leaflet components
+        
+        // Append it directly as the absolute last child of the document frame body
+        document.body.appendChild(fallbackAlert);
+    }
+    
+    // 3. Inject the clean configuration message markup safely
+    fallbackAlert.innerHTML = `
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <span style="font-size: 24px; line-height: 1;">⚠️</span>
+            <div>
+                <strong style="color: #f43f5e; font-size: 16px; display: block; margin-bottom: 4px;">Configuration Failure</strong>
+                <span>${message}</span>
+            </div>
+        </div>
+    `;
 
-    if( infoShield ) {
-        // Overwrite its text with  custom validation error message
-        infoShield.innerHTML = `<span id="error" style="color: #f43f5e;">⚠ Configuration Failure<br>${message}</span>`;
-            
-        // Ensure it stays styled nicely as an open banner box on screen
+    // 4. Try updating your native panel if it happens to be present in the tree
+    const infoShield = document.getElementById('info');
+    if (infoShield) {
+        infoShield.innerHTML = `⚠️ ${message}`;
         infoShield.style.display = 'block';
-        infoShield.style.background = 'rgba(30, 41, 59, 0.95)'; // Deep Slate
-        infoShield.style.borderColor = '#ef4444'; // Red Border
-    } else {
-        // Fallback to body injection just in case the container isn't ready
-        faddelem('p', document.body, { innerHTML: ('<span id="error">⚠<br>' + message + '</span>') });
+        infoShield.style.borderColor = '#ef4444';
     }
 }
       
@@ -176,8 +210,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log("--- 6. gatherResources() Execution Complete ---");
     } catch (gatherError) {
         console.error("Validation Failure:", message);
-        document.write(`<h1 style="color:#ef4444; font-family:sans-serif; padding:40px;">⚠️ Configuration Error</h1>`);
-        document.write(`<p style="color:#ffffff; font-family:sans-serif; padding:0 40px; font-size:16px;">${message}</p>`);
+        errorMessage(gatherError.message);
+        throw gatherError;
     }
 
   /*
