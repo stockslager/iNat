@@ -118,33 +118,7 @@ body {
     font-size: 14px;
     font-weight: bold;
 }
-/* Highly specific selector targets the element structure to beat external files naturally */
-body #error {
-    position: relative;
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    
-    /* Clean, flat positioning layout rules */
-    margin: 0 0 15px 0; /* Zero top/sides, adds 15px gap below the banner */
-    top: auto;
-    left: auto;
-    z-index: 1;
-    
-    /* Clean layout card colors */
-    background: #1e293b; /* Sleek dark slate */
-    border: 2px solid #334155; /* Muted dark gray border */
-    border-radius: 8px;
-    color: #e2e8f0; /* Muted white text color */
-    
-    /* Strips the loud bold and cleans up typography */
-    font-family: Arial, sans-serif;
-    font-weight: normal; 
-    font-size: 15px;
-    line-height: 1.4;
-    padding: 16px 24px;
-    box-shadow: none;
-}
+  
 </style>
 </head>
 <body>
@@ -194,23 +168,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.body.innerHTML = '<div style="background:#1e293b; color:#e2e8f0; font-family:sans-serif; padding:24px; border:2px solid #334155; border-radius:8px; margin:20px;">⚠️ Configuration Failure: ' + message + '</div>';
         return;     
     }
-
-  /*
-    // 1. Parse your state string from the URL
-    let winurlsearchstr = window.location.search;
-    let winurlparams = new URLSearchParams(winurlsearchstr);
-    appState = buildStateFromParams(winurlparams);
-
-    // 2. Run your configuration validation check
-    let message = validateConfig(appState);
-    if( message ) {
-        faddelem('p', document.body, { innerHTML: ('<span id="error">⚠️<br>' + message + '</span>') });
-        return; // Halt if configuration setup fails
-    } 
-    
-    // 3. Fetch remote resources and render the map
-    await gatherResources();
-    */
 });
 
 function setupInatParams( config ) {
@@ -307,12 +264,10 @@ async function gatherResources() {
     let json_path = json_root + getParams(appState);
     try {
         // Fetch the remote JSON orientation profile
-console.log('one');
         config = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
-console.log('two');
         // Build your navigation components
         buildMenu(config);
-console.log('three');
+      
         // ==========================================================================
         // MAP INITIALIZATION 
         // ==========================================================================
@@ -320,14 +275,6 @@ console.log('three');
         const defaultLat  = parseFloat(getCenterLat(config))  || 39.1337;
         const defaultLng  = parseFloat(getCenterLng(config))  || -84.3525;
         const defaultZoom = parseInt(getDefaultZoom(config)) || 12;
-// ADD THIS LOG BLOCK HERE
-console.log("--- LEAFLET INITIALIZATION CHECK ---");
-console.log("Raw Lat String from Getter:", getCenterLat(config));
-console.log("Raw Lng String from Getter:", getCenterLng(config));
-console.log("Parsed defaultLat value:", defaultLat);
-console.log("Parsed defaultLng value:", defaultLng);
-console.log("Parsed defaultZoom value:", defaultZoom);
-console.log("-------------------------------------");
 
         // ========================================================================== 
         // MAP BASE TILES (Street View & Satellite View Options)
@@ -339,45 +286,44 @@ console.log("-------------------------------------");
         const satelliteView = L.tileLayer(esri, { maxZoom: 19, attribution: 'Tiles &copy; Esri &mdash; Source: Esri and the GIS User Community' }); 
 
         // ==========================================================================
-        // CUSTOM OVERLAY FOR DATA COMMUNITIES
+        // CUSTOM OVERLAY FOR DATA COMMUNITIES (Trees and Leaves)
         // ==========================================================================
 
-        // Define a custom icon (Red Pushpin)
-        const communityPin = L.divIcon({
-            html: '<span style="font-size: 26px; line-height: 1;">📍</span>',
-            iconSize:    [30, 30], // Square boundary box for the emoji string
-            iconAnchor:  [15, 30], // Centers horizontally (15px), anchors near the tip (30px)
-            popupAnchor: [0, -26], // Pushes the text description popup cleanly above the pin
-            className: 'custom-pin-reset' // Empty class name strips Leaflet's native white box styles
+        // Deciduous Tree Pin (&#x1F333;) - Anchored at the bottom trunk base
+        const communityPin = L.divIcon({ html: '<span style="font-size: 26px; line-height: 1;">&#x1F333;</span>',
+            iconSize: [30, 30], 
+            iconAnchor: [15, 30], // Centers horizontally, anchors at the bottom trunk edge
+            popupAnchor: [0, -30], // Pushes the text popup cleanly above the tree canopy
+            className: 'custom-pin-reset'   
         });
 
-        // Define a custom icon (Green Tinted Pushpin via CSS filter)
-        const neighborhoodPin = L.divIcon({
-            html: '<span style="font-size: 26px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>',
-            iconSize:    [30, 30],
-            iconAnchor:  [15, 30], 
-            popupAnchor: [0, -26],
-            className: 'custom-pin-reset'
+        // Herb/Leaf Pin (&#x1F33F;) - Anchored at the absolute physical center
+        const neighborhoodPin = L.divIcon({ html: '<span style="font-size: 26px; line-height: 1;">&#x1F33F;</span>',
+            iconSize: [30, 30], 
+            iconAnchor: [15, 15], 
+            popupAnchor: [0, -15],
+            className: 'custom-pin-reset' 
         });
 
-        // Initialize an isolated layer group to manage your custom points
-        const customLocationsLayer = L.layerGroup();
+        // Initialize an isolated layer group to manage your custom points 
+        const customLocationsLayer = L.layerGroup(); 
 
-        // Your unified custom dataset list array
-        const customGeoLocations = [
-            { lat: 39.1350, lng: -84.3540, name: "Red Landmark", details: "Standard hub", color: "red" },
-            { lat: 39.1310, lng: -84.3520, name: "Green Landmark", details: "Special site", color: "green" }
-        ];
+        // unified custom dataset list array 
+        const customGeoLocations = [ 
+            { lat: 39.1350, lng: -84.3540, name: "Community Group",    details: "Standard hub", color: "lightgreen" }, 
+            { lat: 39.1310, lng: -84.3520, name: "Neighborhood Group", details: "Special site", color: "green" } 
+        ]; 
 
-        customGeoLocations.forEach(spot => {
-            // Choose between the community pin (red) or neighborhood pin (green)
-            const chosenIcon = (spot.color === 'green') ? neighborhoodPin : communityPin;
-
-            const marker = L.marker([spot.lat, spot.lng], { icon: chosenIcon })
-                .bindPopup(`<strong>${spot.name}</strong><br>${spot.details}`);
-
-            // Add the new pin directly to the tracking layer group
-            customLocationsLayer.addLayer(marker);
+        // Process the dataset items sequentially
+        customGeoLocations.forEach(spot => { 
+            // If the color property is 'green', pass the leaf icon. Otherwise, pass the tree icon.
+            const chosenIcon = (spot.color === 'green') ? neighborhoodPin : communityPin; 
+    
+            const marker = L.marker([spot.lat, spot.lng], { icon: chosenIcon }) 
+                .bindPopup(`<strong>${spot.name}</strong><br>${spot.details}`); 
+        
+            // Add the new pin directly to the tracking layer group 
+            customLocationsLayer.addLayer(marker); 
         });
 
         // ========================================================================== 
@@ -426,7 +372,7 @@ console.log("-------------------------------------");
         // Add the taxonomic checkboxes AND your custom landmarks checkbox to the same menu object
         const overlayMaps = {
             ...iNatLayers,
-            "Custom Landmarks 📍": customLocationsLayer
+            "Custom Landmarks ": customLocationsLayer
         };
 
         // Mount single consolidated layout control dashboard panel widget to top right corner
