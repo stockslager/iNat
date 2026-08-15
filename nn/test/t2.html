@@ -163,12 +163,27 @@ async function gatherResources() {
         const defaultLng  = parseFloat(getCenterLng(config))  || -84.3525;
         const defaultZoom = parseInt(getDefaultZoom(config)) || 12;
 
-        // Initialize Leaflet Map Instance using JSON orientation properties
-        const map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
+        // ========================================================================== 
+        // MAP BASE TILES (Street View & Satellite View Options)
+        // ========================================================================== 
 
-        // Map Base Tiles (OpenStreetMap)
-        const osm1 = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-        L.tileLayer(osm1, { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
+        // OpenStreetMap Base Layer
+        const streetView = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }); 
+
+        // New High-Resolution Satellite View Layer (via Esri World Imagery)
+        const satelliteView = L.tileLayer('https://arcgisonline.com{z}/{y}/{x}', { maxZoom: 19, attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community' });
+
+        // Initialize Map Instance (we default it to streetView)
+        const map = L.map('map', { center: [defaultLat, defaultLng], zoom: defaultZoom, layers: [streetView]  });
+
+        // ceate the base layers selection object for the toggle menu
+        const baseMaps = {
+           "Street View": streetView,
+           "Satellite": satelliteView
+        };
+
+        // add the interactive toggle widget to the top-right corner of the map
+        L.control.layers(baseMaps, null, { position: 'topright' }).addTo(map);
 
         // ==========================================================================
         // INATURALIST LAYER CONFIGURATION
