@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic iNaturalist Observations Map</title>
+    
+    <!-- Leaflet Map CSS & JavaScript Assets -->
+    <link rel="stylesheet" href="https://unpkg.com" />
+    <script src="https://unpkg.com"></script>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            font-family: sans-serif;
+        }
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+        .loading-shield {
+            position: absolute;
+            top: 15px;
+            left: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            z-index: 1000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading" class="loading-shield">Fetching observations...</div>
+    <div id="map"></div>
+
+    <script>
+        // 1. Gather all URL parameters appended to your browser's address bar
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // 2. Set map baseline fallbacks if URL parameters are completely empty
+        const defaultLat = parseFloat(urlParams.get('centerlat')) || 0;
+        const defaultLng = parseFloat(urlParams.get('centerlng')) || 0;
+        const defaultZoom = parseInt(urlParams.get('defaultzoom')) || 2;
+
+        // 3. Initialize Leaflet Map using OpenStreetMap exclusively
+        const map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // 4. Construct the dynamic API request URL using your browser params
+        // Sets a high per_page cap to extract up to 200 explicit pinpoint markers 
+        if (!urlParams.has('per_page')) urlParams.set('per_page', '200');
+        
+        const iNatApiUrl = `https://inaturalist.org{urlParams.toString()}`;
+
+        // 5. Query iNaturalist API and plot markers
+        fetch(iNatApiUrl)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loading').style.display = 'none';
+                
+                const observations = data.results || [];
+                const markerGroup = L.featureGroup();
+
+                if (observations.length === 0) {
+                    alert('No observations found for these specific parameters.');
+                    return;
+                }
+
+                observations.forEach(obs => {
+                    // Check if observation contains valid public geospatial coordinates
+                    if (obs.location) {
+                        const [lat, lng] = obs.location.split(',').map(Number);
+                        
+                        // Extract observation meta summaries for popups
+                        const speciesName = obs.taxon ? obs.taxon.preferred_common_name || obs.taxon.name : 'Unknown Organism';
+                        const obsUser = obs.user ? obs.user.login : 'Anonymous';
+                        const thumbUrl = obs.observation_photos?.[0]?.photo?.url || '';
+                        
+                        // Structure popup content text
+                        let popupText = `<strong>${speciesName}</strong><br>Observed by: ${obsUser}<br>`;
+                        if (thumbUrl) {
+                            popupText += `<img src="${thumbUrl}" style="width:100px;margin-top:5px;border-radius:4px;"><br>`;
+                        }
+                        popupText += `<a href="${obs.uri}" target="_blank">View on iNaturalist</a>`;
+
+                        // Generate the map pin marker item
+                        const marker = L.marker([lat, lng]).bindPopup(popupText);
+                        markerGroup.addLayer(marker);
+                    }
+                });
+
+                // Attach markers to active map layer layout
+                markerGroup.addTo(map);
+
+                // Auto-center view to wrap neatly around the found pins if coordinates were omitted from URL
+                if (!urlParams.has('centerlat') || !urlParams.has('centerlng')) {
+                    map.fitBounds(markerGroup.getBounds(), { padding: [50, 50] });
+                }
+            })
+            .catch(error => {
+                console.error('Error loading data:', error);
+                document.getElementById('loading').innerText = 'Error loading iNaturalist data.';
+            });
+    </script>
+</body>
+</html>
