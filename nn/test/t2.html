@@ -159,9 +159,9 @@ async function gatherResources() {
         const urlParams = new URLSearchParams(window.location.search);
         
         // Target your JSON getters on your active config object instead of URL queries
-        const defaultLat  = parseFloat(config.getCenterLat())  || 39.1337;
-        const defaultLng  = parseFloat(config.getCenterLng())  || -84.3525;
-        const defaultZoom = parseInt(config.getDefaultZoom()) || 12;
+        const defaultLat  = parseFloat(urlParams.get('centerlat'))  || 39.1337;
+        const defaultLng  = parseFloat(urlParams.get('centerlng'))  || -84.3525;
+        const defaultZoom = parseInt(config.defaultMapZoom()) || 12;
 
         // Initialize Leaflet Map Instance using your JSON orientation properties
         const map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
