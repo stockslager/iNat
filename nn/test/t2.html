@@ -144,6 +144,83 @@ document.addEventListener('DOMContentLoaded', async () => {
     await gatherResources();
 });
 
+function setupWidgetParams( config ) {
+    let widget_params = '';
+
+    // --- Consolidated iNat Multi-Field API Builder ---
+    const initialParams = new URLSearchParams(window.location.search);
+    const initialNames = initialParams.getAll('fieldname');
+    const initialValues = initialParams.getAll('fieldvalue');
+
+    const lowerCaseNames = initialNames.map(name => name.toLowerCase());
+
+    // Core Rule: If the URL has no active filters (First Entrance), use your config defaults
+    if( config.fieldName && !lowerCaseNames.includes(config.fieldName.toLowerCase() ) ) {
+        widget_params += '&field:' + config.fieldName;
+        if( config.fieldValue ) {
+            widget_params += '=' + encodeURIComponent(config.fieldValue);
+        }
+    }
+
+    // Sequential Loop: Process whatever filters are explicitly remaining in the URL bar
+    initialNames.forEach((name, index) => {
+      const value = initialValues[index];
+      if( name && value ) {
+          widget_params += '&field:' + name + '=' + encodeURIComponent(value);
+      }
+    });
+
+    if( getObsDate(appState)    ) { widget_params += '&on='       + getObsDate(appState); } 
+
+    if( getUser(appState) ) {
+        widget_params += '&user_id=' + getUser(appState);
+    } else if( config.userId ) { 
+        widget_params += '&user_id='  + config.userId; 
+    }
+ 
+    if( getPlaceMenuId(appState) ) {
+        widget_params += getPlaceMenuIdParam(appState, '&place_id=');
+    } else {
+        if( config.defaultPlace ) { 
+            widget_params += '&place_id='        + config.defaultPlace; 
+        } else {
+            widget_params += '&place_id=any';
+        }
+    }
+
+    // filter for month...
+    if( getMonth(appState) ) {
+        if( getMonth(appState) !== 'null' ) { 
+            widget_params += '&month=' + getMonth(appState);
+        }
+    } else if( config.defaultMonths ) {
+            widget_params += '&month=' + config.defaultMonths;
+    }
+
+    // filter for life stage annotation...
+    if( getLifeStage(appState) ) { 
+        if( getLifeStage(appState) === 'null' ) {
+            widget_params += '&without_term_id=1';
+        } else {
+            widget_params += '&term_id=1&term_value_id='  + getLifeStage(appState);
+        }
+    }
+
+    // if a filter has been chosen, get the filter api params
+    if( getActivityFilter(appState) ) {
+        widget_params += getFilterAPIParams(config);
+    }
+
+    if( config.obsAPIParams ) { widget_params += config.obsAPIParams; }
+
+    // default all of these so they stay consistent across the map and grid.
+    // may need to revisit if/when the table sorts by quality_grade.
+    widget_params += '&reviewed=any&quality_grade=needs_id,research,casual&verifiable=any';
+
+    return widget_params;
+}
+
+  
 async function gatherResources() {
     let json_path = json_root + getParams(appState);
     try {
@@ -176,6 +253,9 @@ async function gatherResources() {
        // INATURALIST OVERLAY CONFIGURATION 
        // ========================================================================== 
        const urlParams = new URLSearchParams(window.location.search); 
+       const urlParams2 = setupWidgetParams( config );
+       console.log('url params ' + urlParams);
+       console.log('url params2 ' + urlParams2);
        const tileHost1 = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png?'; 
        const iNatTileUrl = tileHost1 + urlParams.toString(); 
 
