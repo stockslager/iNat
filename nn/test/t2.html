@@ -284,7 +284,10 @@ async function gatherResources() {
        // UNIFIED INSTANCE CONTROL (so the pins sit above both maps)
        // ========================================================================== 
        // Boot up the canvas showing the base maps and select which ones load turned ON by default
-       const map = L.map('map', { center: [defaultLat, defaultLng], zoom: defaultZoom, layers: [streetView, iNatLayers["Plants 🌿"], iNatLayers["Birds 🐦"]] }); 
+       const map = L.map('map', { center: [defaultLat, defaultLng], zoom: defaultZoom, 
+                                 layers: [streetView, iNatLayers["Plants 🌿"],   iNatLayers["Birds 🐦"],
+                                                      iNatLayers["Insects 🦋"],  iNatLayers["Mammals 🦊"],
+                                                      iNatLayers["Fungi 🍄"],    iNatLayers["Herps 🐸"]] }); 
 
        // Base layer targets menu structure
        const baseMaps = { 
