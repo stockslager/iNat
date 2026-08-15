@@ -1,4 +1,4 @@
-/** 
+/**
  * Represents a single place entry. 
  */
 class Place {
@@ -167,6 +167,30 @@ function getFilterAPIParams(config) {
         }
     }
     return( '' );
+}
+
+// pulls out and returns centerlat
+function getCenterLat(config) {
+    if (!config.data || !config.data.map_center) return null;
+        
+    // URLSearchParams handles the leading ampersand safely
+    const params = new URLSearchParams(config.data.map_center);
+    return params.get('centerlat');
+}
+
+// extracts the raw string parameter stack and pulls out centerlng
+function getCenterLng(config) {
+    if (!config.data || !config.data.map_center) return null;
+        
+    const params = new URLSearchParams(config.data.map_center);
+    return params.get('centerlng');
+}
+
+//  reads out the simple map zoom key string 
+function getDefaultZoom(config) {
+    if (!config.data || !config.data.default_map_zoom) return null;
+        
+    return config.data.default_map_zoom;
 }
  
 // helpers for ConfigurationItem()
