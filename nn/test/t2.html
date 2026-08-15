@@ -37,23 +37,9 @@
        }
     }
     
-    async function gatherResources() {
-      let json_path = json_root + getParams(appState);
-      try {
-        config = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
-        buildMenu(config);    
-      } catch (error) {
-        console.error("An error occurred:", error);
-        faddelem('p',document.body,{innerHTML:('<span id="error">⚠<br>' + error.message + '</span>')});
-        throw error;
-      }
-    }
-
   </script>
   
   <title>Observations Map</title>
-
-  <!-- Leaflet Map CSS & JavaScript Assets -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   
@@ -140,55 +126,71 @@ body {
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            // 1. Parse your state string from the URL
-            let winurlsearchstr = window.location.search;
-            let winurlparams = new URLSearchParams(winurlsearchstr);
-            appState = buildStateFromParams(winurlparams);
+      
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Parse your state string from the URL
+    let winurlsearchstr = window.location.search;
+    let winurlparams = new URLSearchParams(winurlsearchstr);
+    appState = buildStateFromParams(winurlparams);
 
-            // 2. Run your configuration validation check
-            let message = validateConfig(appState);
-            if (message) {
-                faddelem('p', document.body, { innerHTML: ('<span id="error">⚠️<br>' + message + '</span>') });
-                return; // Stop execution if config is invalid
-            }
+    // 2. Run your configuration validation check
+    let message = validateConfig(appState);
+    if( message ) {
+        faddelem('p', document.body, { innerHTML: ('<span id="error">⚠️<br>' + message + '</span>') });
+        return; // Halt if configuration setup fails
+    } 
+    
+    // 3. Fetch remote resources and render the map
+    await gatherResources();
+});
 
-            // 3. Build your menu components first
-            await gatherResources();
+async function gatherResources() {
+    let json_path = json_root + getParams(appState);
+    try {
+        // Fetch the remote JSON orientation profile
+        config = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
+        
+        // Build your navigation components
+        buildMenu(config);
 
-            // 4. Initialize Map Setup Steps
-            const urlParams = new URLSearchParams(window.location.search);
-            if ([...urlParams.keys()].length === 0) {
-                document.getElementById('info').innerHTML = "⚠️ Missing filters! Add '?project_id=157918' to your address bar.";
-                return;
-            }
+        // ==========================================================================
+        // MAP INITIALIZATION (Moved here so 'config' getters are populated)
+        // ==========================================================================
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Target your JSON getters on your active config object instead of URL queries
+        const defaultLat  = parseFloat(config.getCenterLat())  || 39.1337;
+        const defaultLng  = parseFloat(config.getCenterLng())  || -84.3525;
+        const defaultZoom = parseInt(config.getDefaultZoom()) || 12;
 
-            // Read positional coordinates out of the parameters
-            const defaultLat = parseFloat(urlParams.get('centerlat')) || 39.1337;
-            const defaultLng = parseFloat(urlParams.get('centerlng')) || -84.3525;
-            const defaultZoom = parseInt(urlParams.get('defaultzoom')) || 12;
+        // Initialize Leaflet Map Instance using your JSON orientation properties
+        const map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
 
-            // Initialize Leaflet Map Instance
-            const map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
+        // Map Base Tiles (OpenStreetMap)
+        const osm1 = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        L.tileLayer(osm1, { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
 
-            // Map Base Tiles (OpenStreetMap)
-            const osm1 = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-            L.tileLayer(osm1, { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
+        // Purge layout commands from the parameter stack so they do not error the iNat endpoint
+        const iNatParams = new URLSearchParams(urlParams);
+        iNatParams.delete('centerlat');
+        iNatParams.delete('centerlng');
+        iNatParams.delete('defaultzoom');
 
-            // Purge layout commands from the parameter stack so they do not error the iNat endpoint
-            const iNatParams = new URLSearchParams(urlParams);
-            iNatParams.delete('centerlat');
-            iNatParams.delete('centerlng');
-            iNatParams.delete('defaultzoom');
+        // Custom Points Layer (iNaturalist API Engine)
+        const tileHost1 = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png?';
+        const iNatTileUrl = tileHost1 + iNatParams.toString();
+        L.tileLayer(iNatTileUrl, { maxZoom: 20, opacity: 0.85, attribution: '&copy; iNaturalist Data Layer' }).addTo(map);
 
-            // Custom Points Layer (iNaturalist API Engine)
-            const tileHost1 = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png?';
-            const iNatTileUrl = tileHost1 + iNatParams.toString();
-            L.tileLayer(iNatTileUrl, { maxZoom: 20, opacity: 0.85, attribution: '&copy; iNaturalist Data Layer' }).addTo(map);
+        // Clear the layout loader shield once rendering wraps up safely
+        document.getElementById('info').style.display = 'none';
 
-            // Cleanly remove loading notice panel when operations complete
-            document.getElementById('info').style.display = 'none';
-        });
+    } catch (error) {
+        console.error("An error occurred:", error);
+        faddelem('p', document.body, {innerHTML:('<span id="error">⚠️<br>' + error.message + '</span>')});
+        throw error;
+    }
+}
+
     </script>
 </body>
 
