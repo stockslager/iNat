@@ -176,6 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log("--- 4. validateConfig Output Message:", message);
 
     if( message ) { 
+        console.log('error ~ ' + message);      
         document.body.innerHTML = '<div style="background:#1e293b; color:#e2e8f0; font-family:sans-serif; padding:24px; border:2px solid #334155; border-radius:8px; margin:20px;">⚠️ Configuration Failure: ' + message + '</div>';
         return;    
     } 
@@ -184,6 +185,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await gatherResources(); 
         console.log("--- 6. gatherResources() Execution Complete ---");
     } catch (gatherError) {
+        console.log('error ~ ' + gatherError.message);
         document.body.innerHTML = '<div style="background:#1e293b; color:#e2e8f0; font-family:sans-serif; padding:24px; border:2px solid #334155; border-radius:8px; margin:20px;">⚠️ Configuration Failure: ' + message + '</div>';
         return;     
     }
