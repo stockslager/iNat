@@ -40,77 +40,87 @@
     <div id="map"></div>
 
     <script>
-        // 1. Gather all URL parameters appended to your browser's address bar
-        const urlParams = new URLSearchParams(window.location.search);
-        
-        // 2. Set map baseline fallbacks if URL parameters are completely empty
-        const defaultLat = parseFloat(urlParams.get('centerlat')) || 0;
-        const defaultLng = parseFloat(urlParams.get('centerlng')) || 0;
-        const defaultZoom = parseInt(urlParams.get('defaultzoom')) || 2;
+// Wrap everything in an onload function to wait until Leaflet is ready
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // Error handling helper
+    const setStatus = (msg) => {
+        document.getElementById('loading').innerHTML = msg;
+    };
 
-        // 3. Initialize Leaflet Map using OpenStreetMap exclusively
-        const map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
+    // Check if user completely forgot parameters
+    if ([...urlParams.keys()].length === 0) {
+        setStatus("⚠️ Missing filters! Add '?project_id=157918' to the end of your browser address bar.");
+        return; // Stop running
+    }
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
-        }).addTo(map);
+    const defaultLat = parseFloat(urlParams.get('centerlat')) || 39.1337;
+    const defaultLng = parseFloat(urlParams.get('centerlng')) || -84.3525;
+    const defaultZoom = parseInt(urlParams.get('defaultzoom')) || 12;
 
-        // 4. Construct the dynamic API request URL using your browser params
-        // Sets a high per_page cap to extract up to 200 explicit pinpoint markers 
-        if (!urlParams.has('per_page')) urlParams.set('per_page', '200');
-        
-        const iNatApiUrl = `https://inaturalist.org{urlParams.toString()}`;
+    // L will now definitely be defined here because the page has fully loaded
+    const map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
 
-        // 5. Query iNaturalist API and plot markers
-        fetch(iNatApiUrl)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('loading').style.display = 'none';
-                
-                const observations = data.results || [];
-                const markerGroup = L.featureGroup();
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
 
-                if (observations.length === 0) {
-                    alert('No observations found for these specific parameters.');
-                    return;
+    if (!urlParams.has('per_page')) urlParams.set('per_page', '200');
+    
+    const iNatApiUrl = `https://inaturalist.org{urlParams.toString()}`;
+
+    fetch(iNatApiUrl)
+        .then(response => {
+            if (!response.ok) throw new Error(`iNaturalist API Server Error (Status ${response.status})`);
+            return response.json();
+        })
+        .then(data => {
+            const observations = data.results || [];
+            const markerGroup = L.featureGroup();
+
+            if (observations.length === 0) {
+                setStatus("❌ No observations found matching these filters.");
+                return;
+            }
+
+            let validPinsCount = 0;
+
+            observations.forEach(obs => {
+                if (obs.location) {
+                    const [lat, lng] = obs.location.split(',').map(Number);
+                    const speciesName = obs.taxon ? obs.taxon.preferred_common_name || obs.taxon.name : 'Unknown Organism';
+                    const obsUser = obs.user ? obs.user.login : 'Anonymous';
+                    const thumbUrl = obs.observation_photos?.[0]?.photo?.url || '';
+                    
+                    let popupText = `<strong>${speciesName}</strong><br>By: ${obsUser}<br>`;
+                    if (thumbUrl) popupText += `<img src="${thumbUrl}" style="width:100px;margin-top:5px;border-radius:4px;"><br>`;
+                    popupText += `<a href="${obs.uri}" target="_blank">View Entry</a>`;
+
+                    const marker = L.marker([lat, lng]).bindPopup(popupText);
+                    markerGroup.addLayer(marker);
+                    validPinsCount++;
                 }
-
-                observations.forEach(obs => {
-                    // Check if observation contains valid public geospatial coordinates
-                    if (obs.location) {
-                        const [lat, lng] = obs.location.split(',').map(Number);
-                        
-                        // Extract observation meta summaries for popups
-                        const speciesName = obs.taxon ? obs.taxon.preferred_common_name || obs.taxon.name : 'Unknown Organism';
-                        const obsUser = obs.user ? obs.user.login : 'Anonymous';
-                        const thumbUrl = obs.observation_photos?.[0]?.photo?.url || '';
-                        
-                        // Structure popup content text
-                        let popupText = `<strong>${speciesName}</strong><br>Observed by: ${obsUser}<br>`;
-                        if (thumbUrl) {
-                            popupText += `<img src="${thumbUrl}" style="width:100px;margin-top:5px;border-radius:4px;"><br>`;
-                        }
-                        popupText += `<a href="${obs.uri}" target="_blank">View on iNaturalist</a>`;
-
-                        // Generate the map pin marker item
-                        const marker = L.marker([lat, lng]).bindPopup(popupText);
-                        markerGroup.addLayer(marker);
-                    }
-                });
-
-                // Attach markers to active map layer layout
-                markerGroup.addTo(map);
-
-                // Auto-center view to wrap neatly around the found pins if coordinates were omitted from URL
-                if (!urlParams.has('centerlat') || !urlParams.has('centerlng')) {
-                    map.fitBounds(markerGroup.getBounds(), { padding: [50, 50] });
-                }
-            })
-            .catch(error => {
-                console.error('Error loading data:', error);
-                document.getElementById('loading').innerText = 'Error loading iNaturalist data.';
             });
+
+            if (validPinsCount === 0) {
+                setStatus("⚠️ Found items, but none contain public map coordinates.");
+                return;
+            }
+
+            markerGroup.addTo(map);
+            document.getElementById('loading').style.display = 'none';
+
+            if (!urlParams.has('centerlat') || !urlParams.has('centerlng')) {
+                map.fitBounds(markerGroup.getBounds(), { padding: [50, 50] });
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            setStatus(`🛑 Connection Error: ${error.message}`);
+        });
+};
     </script>
 </body>
 </html>
