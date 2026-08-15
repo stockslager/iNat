@@ -131,37 +131,31 @@ body {
 
 function errorMessage( message ) {
     // Target floating info screen container element
-    // 1. Check if our high-priority error element already exists on screen
+    // Check if high-priority error element already exists on screen
     let fallbackAlert = document.getElementById('critical-error-banner');
     
     if (!fallbackAlert) {
-        // 2. If it doesn't exist, create a fresh, styling-isolated container
         fallbackAlert = document.createElement('div');
         fallbackAlert.id = 'critical-error-banner';
-        
-        // Apply heavy absolute overlay styles to force it to render ON TOP of all Leaflet/app layers
-        fallbackAlert.style.position = 'fixed';
-        fallbackAlert.style.top = '20px';
-        fallbackAlert.style.left = '50%';
-        fallbackAlert.style.transform = 'translateX(-50%)';
-        fallbackAlert.style.width = '90%';
-        fallbackAlert.style.maxWidth = '500px';
+
+        fallbackAlert.style.position = 'relative';
+        fallbackAlert.style.width = '100%'; 
+        fallbackAlert.style.boxSizing = 'border-box';
+        fallbackAlert.style.marginBottom = '15px'; 
         fallbackAlert.style.padding = '16px 24px';
-        fallbackAlert.style.background = '#1e293b'; // Sleek dark slate panel
+        fallbackAlert.style.background = '#1e293b'; 
         fallbackAlert.style.border = '2px solid #ef4444'; // Bright warning red border
         fallbackAlert.style.borderRadius = '8px';
         fallbackAlert.style.color = '#ffffff';
         fallbackAlert.style.fontFamily = 'Arial, sans-serif';
         fallbackAlert.style.fontSize = '15px';
         fallbackAlert.style.lineHeight = '1.4';
-        fallbackAlert.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.7)';
-        fallbackAlert.style.zIndex = '99999'; // Absurdly high index to break past Leaflet components
-        
+      
         // Append it directly as the absolute last child of the document frame body
         document.body.appendChild(fallbackAlert);
     }
     
-    // 3. Inject the clean configuration message markup safely
+    // Inject the clean configuration message markup safely
     fallbackAlert.innerHTML = `
         <div style="display: flex; align-items: flex-start; gap: 12px;">
             <span style="font-size: 24px; line-height: 1;">⚠️</span>
