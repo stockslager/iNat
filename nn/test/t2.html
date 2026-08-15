@@ -148,9 +148,8 @@ async function gatherResources() {
     let json_path = json_root + getParams(appState);
     try {
         // Fetch the remote JSON orientation profile
-        let raw_config = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
+        config = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
 
-        config = JSON.parse(raw_config);
         console.log("Parsed JSON object:", config);
         
         // Build your navigation components
