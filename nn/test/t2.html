@@ -266,10 +266,9 @@ async function gatherResources() {
        // ========================================================================== 
        // INATURALIST OVERLAY CONFIGURATION 
        // ========================================================================== 
-       const urlParams = new URLSearchParams(window.location.search); 
-       const urlParams2 = setupInatParams( config );
-       console.log('url params ' + urlParams);
-       console.log('url params2 ' + urlParams2);
+       //const urlParams = new URLSearchParams(window.location.search); 
+       const urlParams = setupInatParams( config );
+       console.log('inat url params ' + urlParams);
        const tileHost1 = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png?'; 
        const iNatTileUrl = tileHost1 + urlParams.toString(); 
 
