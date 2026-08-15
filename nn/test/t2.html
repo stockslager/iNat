@@ -166,10 +166,10 @@ async function gatherResources() {
         // ========================================================================== 
         // MAP BASE TILES (Street View & Satellite View Options)
         // ========================================================================== 
-        const streetView = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }); 
-
         const esri = "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+        const osm  = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
+        const streetView    = L.tileLayer(osm,  { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }); 
         const satelliteView = L.tileLayer(esri, { maxZoom: 19, attribution: 'Tiles &copy; Esri &mdash; Source: Esri and the GIS User Community' }); 
 
        // ========================================================================== 
