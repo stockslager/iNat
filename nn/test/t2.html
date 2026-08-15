@@ -18,6 +18,9 @@
   <script type="text/javascript" src="../core/js/ConfigManager.js"></script>
   
   <script>
+    let config   = null; 
+    let appState = null;
+
     function buildMenu( config ) {
        // Create the main navbar container
        let navbar = document.createElement('div');
@@ -34,7 +37,7 @@
            document.body.insertBefore(navbar, document.body.firstChild);
        }
     }
-    let config = null; 
+    
     async function gatherResources() {
       let json_path = json_root + getParams(appState);
       try {
