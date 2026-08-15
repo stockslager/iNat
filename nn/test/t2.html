@@ -270,7 +270,7 @@ async function gatherResources() {
        const urlParams = setupInatParams( config );
        console.log('inat url params ' + urlParams);
        const tileHost1 = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png?'; 
-       const iNatTileUrl = tileHost1 + urlParams.toString(); 
+       const iNatTileUrl = tileHost1 + urlParams; 
 
        // Create the layer object first, but DO NOT call .addTo(map) right here
        const iNatOverlayLayer = L.tileLayer(iNatTileUrl, { maxZoom: 20, opacity: 0.85, attribution: '&copy; iNaturalist Data Layer' }); 
