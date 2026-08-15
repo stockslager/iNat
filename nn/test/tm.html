@@ -96,17 +96,28 @@ window.onload = function() {
             observations.forEach(obs => {
                 if (obs.location) {
                     const [lat, lng] = obs.location.split(',').map(Number);
-                    const speciesName = obs.taxon ? obs.taxon.preferred_common_name || obs.taxon.name : 'Unknown Organism';
-                    const obsUser = obs.user ? obs.user.login : 'Anonymous';
-                    const thumbUrl = obs.observation_photos?.[0]?.photo?.url || '';
-                    
-                    let popupText = `<strong>${speciesName}</strong><br>By: ${obsUser}<br>`;
-                    if (thumbUrl) popupText += `<img src="${thumbUrl}" style="width:100px;margin-top:5px;border-radius:4px;"><br>`;
-                    popupText += `<a href="${obs.uri}" target="_blank">View Entry</a>`;
+                    if (!isNaN(lat) && !isNaN(lng)) {
+                        const speciesName = obs.taxon ? obs.taxon.preferred_common_name || obs.taxon.name : 'Unknown Organism';
+                        const obsUser = obs.user ? obs.user.login : 'Anonymous';
+                        const thumbUrl = obs.observation_photos?.[0]?.photo?.url || '';
+ 
+                        let popupText = `<strong>${speciesName}</strong><br>By: ${obsUser}<br>`;
+                        if (thumbUrl) popupText += `<img src="${thumbUrl}" style="width:100px;margin-top:5px;border-radius:4px;"><br>`;
+                        popupText += `<a href="${obs.uri}" target="_blank">View Entry</a>`;
 
-                    const marker = L.marker([lat, lng]).bindPopup(popupText);
-                    markerGroup.addLayer(marker);
-                    validPinsCount++;
+                        // Replaced large default image markers with elegant vector dots
+                        const marker = L.circleMarker([lat, lng], {
+                           radius: 6,         // Controls pin size directly
+                           fillColor: '#22c55e', // Nature-green color fill
+                           color: '#ffffff',    // Crisp white border line
+                           weight: 2,         // Border thickness
+                           opacity: 1,        // Border alpha
+                           fillOpacity: 0.9   // Fill opacity
+                        }).bindPopup(popupText);
+
+                        markerGroup.addLayer(marker);
+                        validPinsCount++;
+                    }
                 }
             });
 
