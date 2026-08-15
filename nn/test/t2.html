@@ -147,9 +147,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 function setupInatParams( config ) {
     let inat_params = '';
 
-          console.log("inat config: ", config.project);
-
-
     inat_params += '?project_id='+config.project;
 
     // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
@@ -244,8 +241,6 @@ async function gatherResources() {
         // Fetch the remote JSON orientation profile
         config = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
 
-        console.log("Parsed JSON object:", config);
-        
         // Build your navigation components
         buildMenu(config);
 
@@ -269,32 +264,39 @@ async function gatherResources() {
        // ========================================================================== 
        // INATURALIST OVERLAY CONFIGURATION 
        // ========================================================================== 
-       //const urlParams = new URLSearchParams(window.location.search); 
        let urlParams = setupInatParams( config );
        console.log('inat url params ' + urlParams);
        const tileHost1 = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png?'; 
        const iNatTileUrl = tileHost1 + urlParams; 
 
-       // Create the layer object first, but DO NOT call .addTo(map) right here
-       const iNatOverlayLayer = L.tileLayer(iNatTileUrl, { maxZoom: 20, opacity: 0.85, attribution: '&copy; iNaturalist Data Layer' }); 
+       // Build distinct, filterable overlay tile pipelines
+       const iNatLayers = {
+         "Plants 🌿": L.tileLayer(`${tileHost}${baseParamsStr}&iconic_taxa[]=Plantae`, { maxZoom: 20, opacity: 0.85 }),
+         "Birds 🐦": L.tileLayer(`${tileHost}${baseParamsStr}&iconic_taxa[]=Aves`, { maxZoom: 20, opacity: 0.85 }),
+         "Insects 🦋": L.tileLayer(`${tileHost}${baseParamsStr}&iconic_taxa[]=Insecta`, { maxZoom: 20, opacity: 0.85 }),
+         "Mammals 🦊": L.tileLayer(`${tileHost}${baseParamsStr}&iconic_taxa[]=Mammalia`, { maxZoom: 20, opacity: 0.85 }),
+         "Fungi 🍄": L.tileLayer(`${tileHost}${baseParamsStr}&iconic_taxa[]=Fungi`, { maxZoom: 20, opacity: 0.85 }),
+         "Amphibians/Reptiles 🐸": L.tileLayer(`${tileHost1}${urlParams}&iconic_taxa[]=Amphibia&iconic_taxa[]=Reptilia`, { maxZoom: 20, opacity: 0.85 })
+       };
+       //const iNatOverlayLayer = L.tileLayer(iNatTileUrl, { maxZoom: 20, opacity: 0.85, attribution: '&copy; iNaturalist Data Layer' }); 
 
        // ========================================================================== 
        // UNIFIED INSTANCE CONTROL (so the pins sit above both maps)
        // ========================================================================== 
+       // Boot up the canvas showing the base maps and select which ones load turned ON by default
+       const map = L.map('map', { center: [defaultLat, defaultLng], zoom: defaultZoom, layers: [streetView, iNatLayers["Plants 🌿"], iNatLayers["Birds 🐦"]] }); 
 
-       // Initialize Map Instance passing BOTH the default base and the default overlay stack
-       const map = L.map('map', { center: [defaultLat, defaultLng], zoom: defaultZoom, layers: [streetView, iNatOverlayLayer] }); 
-
-       // Base choices wrapper (Mutually exclusive radios)
+       // Base layer targets menu structure
        const baseMaps = { 
-          "Street View": streetView, 
-          "Satellite": satelliteView 
+         "Street View": streetView, 
+         "Satellite": satelliteView 
        }; 
 
-       // Overlay choices wrapper (Checkbox style)
-       const overlayMaps = { "iNaturalist Pins": iNatOverlayLayer };
+       // Pass categorized object straight to the overlayMaps block
+       // Leaflet automatically unpacks this object into separate checkbox entries!
+       const overlayMaps = iNatLayers;
 
-       // Pass overlayMaps as the second argument instead of null
+       // Mount layout control dashboard panel widget to top right corner
        L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
 
        document.getElementById('info').style.display = 'none';
