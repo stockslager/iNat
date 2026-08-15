@@ -171,26 +171,28 @@ function getFilterAPIParams(config) {
 
 // pulls out and returns centerlat
 function getCenterLat(config) {
-    if (!config.data || !config.map_center) return null;
-        
+    if (!config || !config.mapCenter) return null;
+
+    // these are bundled together in the .json and need to be split apart
     // URLSearchParams handles the leading ampersand safely
-    const params = new URLSearchParams(config.map_center);
+    const params = new URLSearchParams(config.mapCenter);
     return params.get('centerlat');
 }
 
 // extracts the raw string parameter stack and pulls out centerlng
 function getCenterLng(config) {
-    if (!config.data || !config.map_center) return null;
-        
-    const params = new URLSearchParams(config.map_center);
+    if (!config || !config.mapCenter) return null;
+
+    // these are bundled together in the .json and need to be split apart
+    const params = new URLSearchParams(config.mapCenter);
     return params.get('centerlng');
 }
 
 //  reads out the simple map zoom key string 
 function getDefaultZoom(config) {
-    if (!config || !config.default_map_zoom) return null;
+    if (!config || !config.defaultMapZoom) return null;
         
-    return config.default_map_zoom;
+    return config.defaultMapZoom;
 }
  
 // helpers for ConfigurationItem()
