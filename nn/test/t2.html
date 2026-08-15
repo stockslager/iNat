@@ -166,37 +166,42 @@ async function gatherResources() {
         // ========================================================================== 
         // MAP BASE TILES (Street View & Satellite View Options)
         // ========================================================================== 
-
-        // OpenStreetMap Base Layer
         const streetView = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }); 
 
-        // New High-Resolution Satellite View Layer (via Esri World Imagery)
-        const satelliteView = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community' });
+        const esri = "https://arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
 
-        // Initialize Map Instance (we default it to streetView)
-        const map = L.map('map', { center: [defaultLat, defaultLng], zoom: defaultZoom, layers: [streetView]  });
+        const satelliteView = L.tileLayer(esri, { maxZoom: 19, attribution: 'Tiles &copy; Esri &mdash; Source: Esri and the GIS User Community' }); 
 
-        // ceate the base layers selection object for the toggle menu
-        const baseMaps = {
-           "Street View": streetView,
-           "Satellite": satelliteView
-        };
+       // ========================================================================== 
+       // INATURALIST OVERLAY CONFIGURATION 
+       // ========================================================================== 
+       const urlParams = new URLSearchParams(window.location.search); 
+       const tileHost1 = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png?'; 
+       const iNatTileUrl = tileHost1 + urlParams.toString(); 
 
-        // add the interactive toggle widget to the top-right corner of the map
-        L.control.layers(baseMaps, null, { position: 'topright' }).addTo(map);
+       // Create the layer object first, but DO NOT call .addTo(map) right here
+       const iNatOverlayLayer = L.tileLayer(iNatTileUrl, { maxZoom: 20, opacity: 0.85, attribution: '&copy; iNaturalist Data Layer' }); 
 
-        // ==========================================================================
-        // INATURALIST LAYER CONFIGURATION
-        // ==========================================================================
-        const urlParams = new URLSearchParams(window.location.search);
-      
-        // Custom Points Layer (iNaturalist API Engine)
-        const tileHost1 = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png?';
-        const iNatTileUrl = tileHost1 + urlParams.toString();
-        L.tileLayer(iNatTileUrl, { maxZoom: 20, opacity: 0.85, attribution: '&copy; iNaturalist Data Layer' }).addTo(map);
+       // ========================================================================== 
+       // UNIFIED INSTANCE CONTROL (so the pins sit above both maps)
+       // ========================================================================== 
 
-        // Hide the loading panel
-        document.getElementById('info').style.display = 'none';
+       // Initialize Map Instance passing BOTH the default base and the default overlay stack
+       const map = L.map('map', { center: [defaultLat, defaultLng], zoom: defaultZoom, layers: [streetView, iNatOverlayLayer] }); 
+
+       // Base choices wrapper (Mutually exclusive radios)
+       const baseMaps = { 
+          "Street View": streetView, 
+          "Satellite": satelliteView 
+       }; 
+
+       // Overlay choices wrapper (Checkbox style)
+       const overlayMaps = { "iNaturalist Pins": iNatOverlayLayer };
+
+       // Pass overlayMaps as the second argument instead of null
+       L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+
+       document.getElementById('info').style.display = 'none';
 
     } catch (error) {
         console.error("An error occurred:", error);
