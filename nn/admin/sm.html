@@ -288,30 +288,53 @@ async function gatherResources() {
         // ==========================================================================
         // CUSTOM OVERLAY FOR DATA COMMUNITIES (Green Pins)
         // ==========================================================================
-        const customGeoLocations = [ 
-            { 
-                  lat: 39.1350, 
-                  lng: -84.3540, 
-                  name: "Noteworthy Natives Network", 
-                  details: "Data community offering iNat data to other regional groups.", 
-                  url: "https://www.inaturalist.org/projects/noteworthy-natives-network", 
-                  linkText: "iNat Project",      
-                  color: "green" 
-            }, 
-            { 
-                  lat: 39.1310, 
-                  lng: -84.3520, 
-                  name: "Horizon Community Church", 
-                  details: "Restorative gardeners group.", 
-                  url: "https://www.inaturalist.org/projects/horizon-community-church",
-                  linkText: "iNat Project",
-                  color: "green" 
-            } 
-        ];
+        const bigWidth  = 30;
+        const bigHeight = 30;
+        const halfX     = 15;
 
+        // Community Pin (Big Green Tinted Pushpin)
+        const communityPin = L.divIcon({
+            html: '<span style="font-size: 26px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>',
+            iconSize: [bigWidth, bigHeight], 
+            iconAnchor: [halfX, bigHeight], 
+            popupAnchor: [0, -30], 
+            className: 'custom-pin-reset' 
+        });
+
+        // Neighborhood Pin (Identical Big Green Tinted Pushpin)
+        const neighborhoodPin = L.divIcon({
+            html: '<span style="font-size: 26px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>',
+            iconSize: [bigWidth, bigHeight], 
+            iconAnchor: [halfX, bigHeight], 
+            popupAnchor: [0, -30], 
+            className: 'custom-pin-reset' 
+        });
+      
         // Initialize an isolated layer group to manage custom points 
         const customLocationsLayer = L.layerGroup(); 
 
+        // Unified custom dataset list array with extra web link keys
+        const customGeoLocations = [ 
+            { 
+                lat: 39.1350, 
+                lng: -84.3540, 
+                name: "Community Group", 
+                details: "Standard hub operations.", 
+                url: "https://inaturalist.org", // Target web address
+                linkText: "View Observations",       // Clickable text label
+                color: "green" 
+            }, 
+            { 
+                lat: 39.1310, 
+                lng: -84.3520, 
+                name: "Neighborhood Group", 
+                details: "Special local field study site.", 
+                url: "https://ebird.org",
+                linkText: "View Bird Checklists",
+                color: "green" 
+            } 
+        ];
+      
         // Process the dataset items sequentially
         customGeoLocations.forEach(spot => { 
             // Both variables evaluate to identical green pins, guaranteeing layout safety
