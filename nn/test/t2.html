@@ -266,16 +266,16 @@ async function gatherResources() {
        // ========================================================================== 
        let urlParams = setupInatParams( config );
        console.log('inat url params ' + urlParams);
-       const tileHost = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png?'; 
+       const tileHost = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png'; 
        const iNatTileUrl = tileHost + urlParams; 
 
        // Build distinct, filterable overlay tile pipelines
        const iNatLayers = {
-         "Plants 🌿": L.tileLayer(`${tileHost}${baseParamsStr}&iconic_taxa[]=Plantae`, { maxZoom: 20, opacity: 0.85 }),
-         "Birds 🐦": L.tileLayer(`${tileHost}${baseParamsStr}&iconic_taxa[]=Aves`, { maxZoom: 20, opacity: 0.85 }),
-         "Insects 🦋": L.tileLayer(`${tileHost}${baseParamsStr}&iconic_taxa[]=Insecta`, { maxZoom: 20, opacity: 0.85 }),
-         "Mammals 🦊": L.tileLayer(`${tileHost}${baseParamsStr}&iconic_taxa[]=Mammalia`, { maxZoom: 20, opacity: 0.85 }),
-         "Fungi 🍄": L.tileLayer(`${tileHost}${baseParamsStr}&iconic_taxa[]=Fungi`, { maxZoom: 20, opacity: 0.85 }),
+         "Plants 🌿":  L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Plantae`,  { maxZoom: 20, opacity: 0.85 }),
+         "Birds 🐦":   L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Aves`,     { maxZoom: 20, opacity: 0.85 }),
+         "Insects 🦋": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Insecta`,  { maxZoom: 20, opacity: 0.85 }),
+         "Mammals 🦊": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Mammalia`, { maxZoom: 20, opacity: 0.85 }),
+         "Fungi 🍄":   L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Fungi`,    { maxZoom: 20, opacity: 0.85 }),
          "Amphibians/Reptiles 🐸": L.tileLayer(`${tileHost1}${urlParams}&iconic_taxa[]=Amphibia&iconic_taxa[]=Reptilia`, { maxZoom: 20, opacity: 0.85 })
        };
        //const iNatOverlayLayer = L.tileLayer(iNatTileUrl, { maxZoom: 20, opacity: 0.85, attribution: '&copy; iNaturalist Data Layer' }); 
