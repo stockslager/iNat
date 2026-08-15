@@ -1,45 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />   
-<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
-<meta name="description" content="Observations Map" />
-<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
-<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
-<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
-<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
-<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
-<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
-<meta name="apple-mobile-web-app-title" content="Observations Map" />
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script type="text/javascript" src='../core/js/common_functions.js'> </script>
-<script type="text/javascript" src='../core/js/study_store.js'> </script>
-<title>Observations Map</title>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Observations Map" />
+  <meta name="apple-mobile-web-app-title" content="Observations Map" />
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+  <link rel="icon" type="image/png" href="../core/assets/plant-icon-96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="../core/assets/plant-icon-96.svg" />
+  <link rel="shortcut icon" href="../core/assets/plant-club.ico" />
+  <link rel="manifest" href="../core/assets/plant_club.webmanifest" />
+  <link rel="stylesheet" type="text/css" href="../core/css/core.css" />
 
+  <script type="text/javascript" src='../core/js/common_functions.js'></script>
+  <script type="text/javascript" src='../core/js/study_store.js'></script>
+  
+  <title>Observations Map</title>
 
   <!-- Leaflet Map CSS & JavaScript Assets -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
-html {
-    background-color: #0f172a;
-    box-sizing: border-box;
-    min-height: 100vh;
-    padding: 10px 50px 24px 50px; /* Top, Right, Bottom, Left */
-}
-
-body {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    background-color: transparent; 
-}
+    /* FIX: Force html and body to fill the entire height of the screen */
+    html, body {
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background-color: #0f172a;
+      overflow: hidden; /* Stops scrollbars from appearing */
+    }
+    
+    /* FIX: Make sure the absolute layout takes account of padding if you want spacing */
     #map {
       height: 100%;
       width: 100%;
     }
+
     .info-shield {
       position: absolute;
       top: 15px;
@@ -50,6 +49,7 @@ body {
       box-shadow: 0 2px 5px rgba(0,0,0,0.3);
       z-index: 1000;
       font-weight: bold;
+      color: #000;
     }
   </style>
 </head>
@@ -59,33 +59,39 @@ body {
   <div id="map"></div>
 
   <script>
-    // Wait an extra split second to make sure the programmatically injected Leaflet loaded
     window.addEventListener('load', function() {
       const urlParams = new URLSearchParams(window.location.search);
-
+      
       if ([...urlParams.keys()].length === 0) {
+        // Cleaned up the raw encoded emojis
         document.getElementById('info').innerHTML = "⚠️ Missing filters! Add '?project_id=157918' to your address bar.";
         return;
       }
 
+      // Extract map layout controls
       const defaultLat = parseFloat(urlParams.get('centerlat')) || 39.1337;
       const defaultLng = parseFloat(urlParams.get('centerlng')) || -84.3525;
       const defaultZoom = parseInt(urlParams.get('defaultzoom')) || 12;
 
+      // Initialize Leaflet map instance
       const map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
 
-      // 1. Broken up OpenStreetMap URL string
+      // 1. Base OpenStreetMap Layer
       const osm1 = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-      
       L.tileLayer(osm1, {
         maxZoom: 19,
         attribution: '&copy; OpenStreetMap'
       }).addTo(map);
 
-      // 2. Broken up iNaturalist Tile URL string
+      // FIX: Clone params and purge map controls so they don't break the iNaturalist API
+      const iNatParams = new URLSearchParams(urlParams);
+      iNatParams.delete('centerlat');
+      iNatParams.delete('centerlng');
+      iNatParams.delete('defaultzoom');
+
+      // 2. Clear iNaturalist Tile URL string
       const tileHost1 = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png?';
-      
-      const iNatTileUrl = tileHost1 + urlParams.toString();
+      const iNatTileUrl = tileHost1 + iNatParams.toString();
 
       L.tileLayer(iNatTileUrl, {
         maxZoom: 20,
@@ -93,8 +99,10 @@ body {
         attribution: '&copy; iNaturalist Data Layer'
       }).addTo(map);
 
+      // Hide loading shield once map initialization completes
       document.getElementById('info').style.display = 'none';
     });
   </script>
 </body>
 </html>
+
