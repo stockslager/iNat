@@ -175,8 +175,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         await gatherResources(); 
         console.log("--- 6. gatherResources() Execution Complete ---");
     } catch (gatherError) {
-        console.error(gatherError);
-        alert("⚠️ Data Load Error:\n" + (gatherError.message || "Unknown error.")); // 👈 ONE LINE
+        console.error("Validation Failure:", message);
+        document.write(`<h1 style="color:#ef4444; font-family:sans-serif; padding:40px;">⚠️ Configuration Error</h1>`);
+        document.write(`<p style="color:#ffffff; font-family:sans-serif; padding:0 40px; font-size:16px;">${message}</p>`);
     }
 
   /*
