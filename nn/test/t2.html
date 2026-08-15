@@ -34,13 +34,6 @@
     let winurlparams = new URLSearchParams(winurlsearchstr); 
     appState = buildStateFromParams(winurlparams); 
 
-    let message = validateConfig(appState);
-    if( message ) {
-      faddelem('p',document.body,{innerHTML:('<span id="error">⚠<br>' + message + '</span>')});
-    } else {
-      gatherResources();
-      buildMenu(config);    
-    }
   </script>
   
   <title>Observations Map</title>
@@ -291,6 +284,14 @@
        } else {
            document.body.insertBefore(navbar, document.body.firstChild);
        }
+    }
+
+    let message = validateConfig(appState);
+    if( message ) {
+      faddelem('p',document.body,{innerHTML:('<span id="error">⚠<br>' + message + '</span>')});
+    } else {
+      gatherResources();
+      buildMenu(config);    
     }
     
     window.addEventListener('load', function() {
