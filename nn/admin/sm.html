@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log("--- 6. gatherResources() Execution Complete ---");
     } catch (gatherError) {
         console.error("Validation Failure:", message);
-        errorMessage(gatherError.message);
+        errorMessage((gatherError.message+'<br>Verify that the params parameter has a valid name of a configuration .json file'));
         throw gatherError;
     }
 
