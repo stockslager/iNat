@@ -85,6 +85,9 @@
       min-height: calc(100vh - 72px);
       position: relative; /* FIX: Prevents elements from breaking absolute mapping boundaries */
       overflow: hidden;   /* FIX: Keeps rounded corners clean around child elements */
+      
+      display: flex;
+      flex-direction: column;
     } 
     .widget-component-container { 
       width: 100%; 
@@ -153,6 +156,8 @@
       align-items: center; 
       min-height: 40px; 
       overflow: hidden; 
+      
+      flex-shrink: 0;
     } 
     .inat-floating-nav { 
       margin-left: -8px; 
@@ -249,13 +254,11 @@
        ========================================================================== */
     #map {
       /* FIX: Explicit absolute positioning relative to #app to keep height perfectly fluid */
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
       width: 100%;
       height: 100%;
+      position: relative;
+      flex-grow: 1;
+      width: 100%;    
     }
 
     .info-shield {
