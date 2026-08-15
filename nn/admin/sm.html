@@ -129,7 +129,44 @@ body {
 
     <script>
       
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', async () => { 
+    console.log("--- 1. DOMContentLoaded Fired Successfully ---");
+    
+    // Parse your state string from the URL 
+    let winurlsearchstr = window.location.search; 
+    let winurlparams = new URLSearchParams(winurlsearchstr); 
+    
+    console.log("--- 2. URL Parameters Checked:", winurlsearchstr);
+
+    try {
+        // Test if the external state engine function is actually completing
+        appState = buildStateFromParams(winurlparams); 
+        console.log("--- 3. appState Built Successfully:", appState);
+    } catch (stateError) {
+        console.error("❌ CRASH inside buildStateFromParams():", stateError);
+        return;
+    }
+
+    // Run your configuration validation check 
+    let message = validateConfig(appState); 
+    console.log("--- 4. validateConfig Output Message:", message);
+
+    if (message) { 
+        console.warn("⚠️ STOPPED: Validation failed. Skipping gatherResources().");
+        faddelem('p', document.body, { innerHTML: ('<span id="error">⚠️<br>' + message + '</span>') }); 
+        return; // Halt if configuration setup fails 
+    } 
+
+    console.log("--- 5. Validation Passed! Invoking gatherResources() Now ---");
+    
+    try {
+        await gatherResources(); 
+        console.log("--- 6. gatherResources() Execution Complete ---");
+    } catch (gatherError) {
+        console.error("❌ CRASH inside gatherResources() execution loop:", gatherError);
+    }
+
+  /*
     // 1. Parse your state string from the URL
     let winurlsearchstr = window.location.search;
     let winurlparams = new URLSearchParams(winurlsearchstr);
@@ -144,6 +181,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     // 3. Fetch remote resources and render the map
     await gatherResources();
+    */
 });
 
 function setupInatParams( config ) {
