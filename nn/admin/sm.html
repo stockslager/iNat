@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await gatherResources(); 
         console.log("--- 6. gatherResources() Execution Complete ---");
     } catch (gatherError) {
-        errorMessage(gatherError);
+        errorMessage((gatherError.message || "An unknown retrieval error occurred."));
         console.error("❌ CRASH inside gatherResources() execution loop:", gatherError);
     }
 
