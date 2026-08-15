@@ -230,15 +230,15 @@ function buildMenu( config ) {
        if( config.mapType === 'ls' && ( getLSTaxonId(appState) === '47157' || getTaxonId(appState) === '47157' || getMenuId(appState) === '47157' ) ) {  
            let links = [];
     
-           let mapLink  = faddelem('a', null, { href: '../admin/map.html' + setupAPIParams(config)  + getMapZoom(config) + '&gridmode=widget' + '&params=' + getParams(appState), textContent: 'Standard Map' });
-           let lsLink   = faddelem('a', null, { href: '../admin/density_map.html'     + buildParameterList(appState), textContent: 'Life-Stages' });
+           let mapLink  = faddelem('a', null, { href: '../admin/studies_map.html' + buildParameterList(appState) + '&gridmode=widget', textContent: 'Standard Map' });
+           let lsLink   = faddelem('a', null, { href: '../admin/density_map.html' + buildParameterList(appState), textContent: 'Life-Stages' });
 
            links.push(mapLink);
            links.push(lsLink);
 
            buildNavDD( navbar, 'Maps', links );
        } else {   
-           let url = '../admin/map.html' + setupAPIParams(config) + getMapZoom(config) + '&gridmode=widget';
+           let url = '../admin/studies_map.html' + buildParameterList(appState) + '&gridmode=widget';
            buildNavURL( navbar, url, CONST_MAP );
        }
    }
@@ -331,33 +331,6 @@ function setupWidgetParams( config ) {
     widget_params += '&reviewed=any&quality_grade=needs_id,research,casual&verifiable=any';
 
     return widget_params;
-}
-
-function setupAPIParams( config ) {
-
-    let api_params = '';
-
-    api_params += '?project_id='+config.project;
-
-    // widget params are a subset of api params passed to map 
-    api_params += setupWidgetParams( config );
-           
-    // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
-    // use the menu_id if one was passed in.
-    if( getTaxonId(appState) ) {
-        api_params += '&taxon_id='+getTaxonId(appState);
-    } else if( getMenuId(appState) ) { 
-        api_params += '&taxon_id=' + getMenuId(appState); 
-    } else {
-        if( config.defaultTaxonId ) {
-            api_params += '&taxon_id=' + config.defaultTaxonId;
-        }
-    }
-
-    //widget_params += getPageParam(appState, '&page=');
-    //widget_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
-
-    return api_params;
 }
 
 function buildWidget( config ) {
