@@ -218,8 +218,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         await gatherResources(); 
         console.log("--- 6. gatherResources() Execution Complete ---");
     } catch (gatherError) {
-        console.error("An error occurred:", gatherError); 
-        errorMessage(gatherError.message || "An unknown retrieval error occurred."); 
+        confirm("⚠️ Configuration Failure:\n\n" + message); 
+        return;     
     }
 
   /*
