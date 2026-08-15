@@ -263,89 +263,105 @@ async function gatherResources() {
         const streetView    = L.tileLayer(osm,  { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }); 
         const satelliteView = L.tileLayer(esri, { maxZoom: 19, attribution: 'Tiles &copy; Esri &mdash; Source: Esri and the GIS User Community' }); 
 
-        //======================================
-        //  custom overlay for data communities
-        //======================================
-        // Define a custom icon 
-        const communityIcon    = L.icon({ iconUrl: '../core/assets/plant-icon-96.png', iconSize:, iconAnchor:, popupAnchor: [0, -32] });
-        const neighborhoodIcon = L.icon({ iconUrl: '../core/assets/plant-icon-96.png', iconSize:, iconAnchor:, popupAnchor: [0, -32] });
+// ==========================================================================
+// CUSTOM OVERLAY FOR DATA COMMUNITIES
+// ==========================================================================
 
-        // Initialize an isolated layer group to manage your custom points
-        const customLocationsLayer = L.layerGroup();
+// Define a custom icon (Red Pushpin)
+const communityPin = L.divIcon({
+    html: '<span style="font-size: 26px; line-height: 1;">📍</span>',
+    iconSize:, // Square boundary box for the emoji string
+    iconAnchor:, // Centers horizontally (15px), anchors near the tip (26px)
+    popupAnchor: [0, -26], // Pushes the text description popup cleanly above the pin
+    className: 'custom-pin-reset' // Empty class name strips Leaflet's native white box styles
+});
 
-        // Your custom dataset list array
-        const customGeoLocations = [
-           { lat: 39.1350, lng: -84.3540, name: "Research Center Alpha", details: "Main collection hub", style: "station" },
-           { lat: 39.1300, lng: -84.3500, name: "Rare Specimen Grove", details: "Protected plot area", style: "observation" }
-       ];
+// Define a custom icon (Green Tinted Pushpin via CSS filter)
+const neighborhoodPin = L.divIcon({
+    html: '<span style="font-size: 26px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>',
+    iconSize:,
+    iconAnchor:,
+    popupAnchor: [0, -26],
+    className: 'custom-pin-reset'
+});
 
-       // Process the dataset items for the community and neighborhood pins sequentially
-       customGeoLocations.forEach(spot => {
-          // Choose the icon dynamically based on the location data properties
-          const chosenIcon = (spot.style === "station") ? customStationIcon : customObservationIcon;
+// Initialize an isolated layer group to manage your custom points
+const customLocationsLayer = L.layerGroup();
 
-          // Build the visual pin layout configuration mapping
-          const marker = L.marker([spot.lat, spot.lng], { icon: chosenIcon })
-             .bindPopup(`<strong>${spot.name}</strong><br>${spot.details}`);
+// Your unified custom dataset list array
+const customGeoLocations = [
+    { lat: 39.1350, lng: -84.3540, name: "Red Landmark", details: "Standard hub", color: "red" },
+    { lat: 39.1310, lng: -84.3520, name: "Green Landmark", details: "Special site", color: "green" }
+];
 
-          // Add the new pin directly to your tracking layer group
-          customLocationsLayer.addLayer(marker);
-       });
-      
-       // ========================================================================== 
-       // INATURALIST OVERLAY CONFIGURATION 
-       // ========================================================================== 
-       let urlParams = setupInatParams( config );
-       console.log('inat url params ' + urlParams);
-       const tileHost = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png'; 
-       const iNatTileUrl = tileHost + urlParams; 
+// FIXED: Restored the missing loop and inner logic to draw the pins!
+customGeoLocations.forEach(spot => {
+    // Choose between the community pin (red) or neighborhood pin (green)
+    const chosenIcon = (spot.color === 'green') ? neighborhoodPin : communityPin;
 
-       // Build distinct, filterable overlay tile pipelines
-       const iNatLayers = {
-         "Plants 🌿":  L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Plantae`,  { maxZoom: 20, opacity: 0.85 }),
-         "Birds 🐦":   L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Aves`,     { maxZoom: 20, opacity: 0.85 }),
-         "Insects 🦋": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Insecta`,  { maxZoom: 20, opacity: 0.85 }),
-         "Mammals 🦊": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Mammalia`, { maxZoom: 20, opacity: 0.85 }),
-         "Fungi 🍄":   L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Fungi`,    { maxZoom: 20, opacity: 0.85 }),
-         "Herps 🐸":   L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Amphibia&iconic_taxa[]=Reptilia`, { maxZoom: 20, opacity: 0.85 })
-       };
-       //const iNatOverlayLayer = L.tileLayer(iNatTileUrl, { maxZoom: 20, opacity: 0.85, attribution: '&copy; iNaturalist Data Layer' }); 
+    const marker = L.marker([spot.lat, spot.lng], { icon: chosenIcon })
+        .bindPopup(`<strong>${spot.name}</strong><br>${spot.details}`);
 
-       // ========================================================================== 
-       // UNIFIED INSTANCE CONTROL (so the pins sit above both maps)
-       // ========================================================================== 
-       // Boot up the canvas showing the base maps and select which ones load turned ON by default
-       const map = L.map('map', { center: [defaultLat, defaultLng], zoom: defaultZoom, 
-                                 layers: [streetView, iNatLayers["Plants 🌿"],   iNatLayers["Birds 🐦"],
-                                                      iNatLayers["Insects 🦋"],  iNatLayers["Mammals 🦊"],
-                                                      iNatLayers["Fungi 🍄"],    iNatLayers["Herps 🐸"]] }); 
+    // Add the new pin directly to the tracking layer group
+    customLocationsLayer.addLayer(marker);
+});
 
-       //add the community and neighborhood pins to the map
-       const overlayMaps = {
-           ...iNatLayers, 
-           "Custom Landmarks 📍": customLocationsLayer // checkbox control
-       };
+// ========================================================================== 
+// INATURALIST OVERLAY CONFIGURATION 
+// ========================================================================== 
+let urlParams = setupInatParams(config); 
+console.log('inat url params ' + urlParams); 
 
-       // Mount layout control manager dashboard panel widget onto the canvas view screen
-       L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+const tileHost = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png';
 
-       // Force your custom pins layer to render turned ON by default on bootup
-       customLocationsLayer.addTo(map);
-      
-       // Base layer targets menu structure
-       const baseMaps = { 
-         "Street View": streetView, 
-         "Satellite": satelliteView 
-       }; 
+// Build distinct, filterable overlay tile pipelines
+const iNatLayers = {
+    "Plants 🌿": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Plantae`, { maxZoom: 20, opacity: 0.85 }),
+    "Birds 🐦": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Aves`, { maxZoom: 20, opacity: 0.85 }),
+    "Insects 🦋": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Insecta`, { maxZoom: 20, opacity: 0.85 }),
+    "Mammals 🦊": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Mammalia`, { maxZoom: 20, opacity: 0.85 }),
+    "Fungi 🍄": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Fungi`, { maxZoom: 20, opacity: 0.85 }),
+    "Herps 🐸": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Amphibia&iconic_taxa[]=Reptilia`, { maxZoom: 20, opacity: 0.85 })
+};
 
-       // Pass categorized object straight to the overlayMaps block
-       // Leaflet automatically unpacks this object into separate checkbox entries!
-       const overlayMaps = iNatLayers;
+// ========================================================================== 
+// UNIFIED INSTANCE CONTROL (Cleaned and consolidated)
+// ========================================================================== 
 
-       // Mount layout control dashboard panel widget to top right corner
-       L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+// Base layer targets menu structure
+const baseMaps = { 
+    "Street View": streetView, 
+    "Satellite": satelliteView 
+};
 
-       document.getElementById('info').style.display = 'none';
+// Initialize Map Instance (We load all taxonomic groups by default on startup)
+const map = L.map('map', { 
+    center: [defaultLat, defaultLng], 
+    zoom: defaultZoom, 
+    layers: [
+        streetView, 
+        iNatLayers["Plants 🌿"], 
+        iNatLayers["Birds 🐦"], 
+        iNatLayers["Insects 🦋"], 
+        iNatLayers["Mammals 🦊"], 
+        iNatLayers["Fungi 🍄"], 
+        iNatLayers["Herps 🐸"]
+    ] 
+}); 
+
+// Add the taxonomic checkboxes AND your custom landmarks checkbox to the same menu object
+const overlayMaps = {
+    ...iNatLayers,
+    "Custom Landmarks 📍": customLocationsLayer
+};
+
+// Mount single consolidated layout control dashboard panel widget to top right corner
+L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+
+// Force your custom landmarks layer to render turned ON by default on bootup
+customLocationsLayer.addTo(map);
+
+document.getElementById('info').style.display = 'none';
 
     } catch (error) {
         console.error("An error occurred:", error);
