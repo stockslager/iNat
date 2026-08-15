@@ -155,39 +155,6 @@ body #error {
     </div>
 
     <script>
-
-function errorMessage(message) {
-    console.error("Configuration Failure:", message);
-
-    let fallbackAlert = document.getElementById('critical-error-banner');
-    
-    if (!fallbackAlert) {
-        fallbackAlert = document.createElement('div');
-        fallbackAlert.id = 'critical-error-banner';
-        
-        fallbackAlert.style.position = 'relative';
-        fallbackAlert.style.width = '100%';
-        fallbackAlert.style.boxSizing = 'border-box';
-        fallbackAlert.style.marginBottom = '15px'; 
-        fallbackAlert.style.padding = '16px 24px';
-        fallbackAlert.style.background = '#1e293b'; // Sleek dark slate layout panel background
-        fallbackAlert.style.border = '2px solid #334155'; // Muted dark grey border line
-        fallbackAlert.style.borderRadius = '8px';
-        fallbackAlert.style.color = '#e2e8f0'; // Muted white text color
-        fallbackAlert.style.fontFamily = 'Arial, sans-serif';
-        fallbackAlert.style.fontSize = '15px';
-        fallbackAlert.style.lineHeight = '1.4';
-        
-        let appContainer = document.getElementById('app');
-        if (appContainer) {
-            document.body.insertBefore(fallbackAlert, appContainer);
-        } else {
-            document.body.appendChild(fallbackAlert);
-        }
-    }
-    
-    fallbackAlert.innerHTML = '<div style="display: flex; align-items: flex-start; gap: 12px;"> <span style="font-size: 20px; line-height: 1;">⚠️</span> <div> <span style="color: #f43f5e; font-size: 15px; display: block; margin-bottom: 2px;">Configuration Failure</span> <span>' + message + '</span> </div> </div>';
-}
       
 document.addEventListener('DOMContentLoaded', async () => { 
     console.log("--- 1. DOMContentLoaded Fired Successfully ---");
@@ -217,7 +184,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await gatherResources(); 
         console.log("--- 6. gatherResources() Execution Complete ---");
     } catch (gatherError) {
-        confirm("⚠️ Configuration Failure:\n\n" + message); 
+        document.body.innerHTML = '<div style="background:#1e293b; color:#e2e8f0; font-family:sans-serif; padding:24px; border:2px solid #334155; border-radius:8px; margin:20px;">⚠️ Configuration Failure: ' + message + '</div>';
         return;     
     }
 
