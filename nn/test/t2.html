@@ -18,6 +18,22 @@
 
   <script type="text/javascript" src="../core/js/ConfigManager.js"></script>
   <script>
+    function buildMenu( config ) {
+       // Create the main navbar container
+       let navbar = document.createElement('div');
+       navbar.className = 'navbar v2-menu';
+  
+       // Build the Home Link
+       let homeUrl = '../studies/field_study.html';
+       buildNavHome( navbar, homeUrl, appState, config );
+  
+       let appContainer = document.getElementById('app');
+       if( appContainer ) {
+           appContainer.insertBefore(navbar, appContainer.firstChild);
+       } else {
+           document.body.insertBefore(navbar, document.body.firstChild);
+       }
+    }
     let config = null; 
     async function gatherResources() {
       let json_path = json_root + getParams(appState);
@@ -30,10 +46,6 @@
         throw error;
       }
     }
-
-    let winurlsearchstr = window.location.search; 
-    let winurlparams = new URLSearchParams(winurlsearchstr); 
-    appState = buildStateFromParams(winurlparams); 
 
   </script>
   
@@ -270,22 +282,6 @@
   </div>
 
   <script>
-    function buildMenu( config ) {
-       // Create the main navbar container
-       let navbar = document.createElement('div');
-       navbar.className = 'navbar v2-menu';
-  
-       // Build the Home Link
-       let homeUrl = '../studies/field_study.html';
-       buildNavHome( navbar, homeUrl, appState, config );
-  
-       let appContainer = document.getElementById('app');
-       if( appContainer ) {
-           appContainer.insertBefore(navbar, appContainer.firstChild);
-       } else {
-           document.body.insertBefore(navbar, document.body.firstChild);
-       }
-    }
 
     window.addEventListener('load', function() {
             
