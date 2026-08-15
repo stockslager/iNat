@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 function setupInatParams( config ) {
     let inat_params = '';
 
-          console.log("inat config: ", config);
+          console.log("inat config: ", config.project);
 
 
     inat_params += '?project_id='+config.project;
@@ -270,7 +270,7 @@ async function gatherResources() {
        // INATURALIST OVERLAY CONFIGURATION 
        // ========================================================================== 
        //const urlParams = new URLSearchParams(window.location.search); 
-       const urlParams = setupInatParams( config );
+       let urlParams = setupInatParams( config );
        console.log('inat url params ' + urlParams);
        const tileHost1 = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png?'; 
        const iNatTileUrl = tileHost1 + urlParams; 
