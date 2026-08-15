@@ -182,18 +182,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     let message = validateConfig(appState); 
     console.log("--- 4. validateConfig Output Message:", message);
 
-    if (message) { 
-        errorMessage( message );
-        return; // Halt execution safely so gatherResources never fires
+    if( message ) { 
+        errorMessage(message); 
+        return;    
     } 
     
     try {
         await gatherResources(); 
         console.log("--- 6. gatherResources() Execution Complete ---");
     } catch (gatherError) {
-        console.error("Validation Failure:", message);
-        errorMessage((gatherError.message+'<br>Verify that the params parameter has a valid name of a configuration .json file'));
-        throw gatherError;
+        console.error("An error occurred:", gatherError); 
+        errorMessage(gatherError.message || "An unknown retrieval error occurred."); 
     }
 
   /*
