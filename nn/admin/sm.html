@@ -270,8 +270,8 @@ async function gatherResources() {
 // Define a custom icon (Red Pushpin)
 const communityPin = L.divIcon({
     html: '<span style="font-size: 26px; line-height: 1;">📍</span>',
-    iconSize:, // Square boundary box for the emoji string
-    iconAnchor:, // Centers horizontally (15px), anchors near the tip (26px)
+    iconSize:    [30, 30], // Square boundary box for the emoji string
+    iconAnchor:  [15, 30], // Centers horizontally (15px), anchors near the tip (30px)
     popupAnchor: [0, -26], // Pushes the text description popup cleanly above the pin
     className: 'custom-pin-reset' // Empty class name strips Leaflet's native white box styles
 });
@@ -279,8 +279,8 @@ const communityPin = L.divIcon({
 // Define a custom icon (Green Tinted Pushpin via CSS filter)
 const neighborhoodPin = L.divIcon({
     html: '<span style="font-size: 26px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>',
-    iconSize:,
-    iconAnchor:,
+    iconSize:    [30, 30],
+    iconAnchor:  [15, 30], 
     popupAnchor: [0, -26],
     className: 'custom-pin-reset'
 });
