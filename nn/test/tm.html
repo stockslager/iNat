@@ -70,8 +70,8 @@ window.onload = function() {
 
     if (!urlParams.has('per_page')) urlParams.set('per_page', '200');
 
-    const iNatApiUrl = `https://api.inaturalist.org/v1/observations?'+urlParams.toString()}`;
-
+    const iNatApiUrl = 'https://inaturalist.org?' + urlParams.toString();
+    
     fetch(iNatApiUrl)
         .then(response => {
             if (!response.ok) throw new Error(`iNaturalist API Server Error (Status ${response.status})`);
