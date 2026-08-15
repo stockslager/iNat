@@ -154,34 +154,31 @@ async function gatherResources() {
         buildMenu(config);
 
         // ==========================================================================
-        // MAP INITIALIZATION (Moved here so 'config' getters are populated)
+        // MAP INITIALIZATION 
         // ==========================================================================
-        const urlParams = new URLSearchParams(window.location.search);
         
-        // Target your JSON getters on your active config object instead of URL queries
-        const defaultLat  = parseFloat(urlParams.get('centerlat'))  || 39.1337;
-        const defaultLng  = parseFloat(urlParams.get('centerlng'))  || -84.3525;
-        const defaultZoom = parseInt(config.defaultMapZoom()) || 12;
+        const defaultLat  = parseFloat(getCenterLat(config))  || 39.1337;
+        const defaultLng  = parseFloat(getCenterlng(config))  || -84.3525;
+        const defaultZoom = parseInt(getDefaultZoom(config)) || 12;
 
-        // Initialize Leaflet Map Instance using your JSON orientation properties
+        // Initialize Leaflet Map Instance using JSON orientation properties
         const map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
 
         // Map Base Tiles (OpenStreetMap)
         const osm1 = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
         L.tileLayer(osm1, { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
 
-        // Purge layout commands from the parameter stack so they do not error the iNat endpoint
+        // ==========================================================================
+        // INATURALIST LAYER CONFIGURATION
+        // ==========================================================================
         const iNatParams = new URLSearchParams(urlParams);
-        iNatParams.delete('centerlat');
-        iNatParams.delete('centerlng');
-        iNatParams.delete('defaultzoom');
 
         // Custom Points Layer (iNaturalist API Engine)
         const tileHost1 = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png?';
-        const iNatTileUrl = tileHost1 + iNatParams.toString();
+        const iNatTileUrl = tileHost1 + urlParams.toString();
         L.tileLayer(iNatTileUrl, { maxZoom: 20, opacity: 0.85, attribution: '&copy; iNaturalist Data Layer' }).addTo(map);
 
-        // Clear the layout loader shield once rendering wraps up safely
+        // Hide the loading panel
         document.getElementById('info').style.display = 'none';
 
     } catch (error) {
