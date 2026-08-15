@@ -128,6 +128,16 @@ body {
     </div>
 
     <script>
+
+function errorMessage( message ) {
+    // Overwrite its text with  custom validation error message
+    infoShield.innerHTML = `<span id="error" style="color: #f43f5e;">⚠ Configuration Failure<br>${message}</span>`;
+            
+    // Ensure it stays styled nicely as an open banner box on screen
+    infoShield.style.display = 'block';
+    infoShield.style.background = 'rgba(30, 41, 59, 0.95)'; // Deep Slate
+    infoShield.style.borderColor = '#ef4444'; // Red Border
+}
       
 document.addEventListener('DOMContentLoaded', async () => { 
     console.log("--- 1. DOMContentLoaded Fired Successfully ---");
@@ -136,12 +146,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     let winurlsearchstr = window.location.search; 
     let winurlparams = new URLSearchParams(winurlsearchstr); 
     
-    console.log("--- 2. URL Parameters Checked:", winurlsearchstr);
-
     try {
         // Test if the external state engine function is actually completing
         appState = buildStateFromParams(winurlparams); 
-        console.log("--- 3. appState Built Successfully:", appState);
     } catch (stateError) {
         console.error("❌ CRASH inside buildStateFromParams():", stateError);
         return;
@@ -155,14 +162,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Target floating info screen container element
         const infoShield = document.getElementById('info');
         
-        if (infoShield) {
-            // Overwrite its text with  custom validation error message
-            infoShield.innerHTML = `<span id="error" style="color: #f43f5e;">⚠ Configuration Failure<br>${message}</span>`;
-            
-            // Ensure it stays styled nicely as an open banner box on screen
-            infoShield.style.display = 'block';
-            infoShield.style.background = 'rgba(30, 41, 59, 0.95)'; // Deep Slate
-            infoShield.style.borderColor = '#ef4444'; // Red Border
+        if( infoShield ) {
+            errorMessage( message );
         } else {
             // Fallback to body injection just in case the container isn't ready
             faddelem('p', document.body, { innerHTML: ('<span id="error">⚠<br>' + message + '</span>') });
@@ -422,9 +423,15 @@ console.log("-------------------------------------");
         document.getElementById('info').style.display = 'none';
 
     } catch (error) {
-        console.error("An error occurred:", error);
-        faddelem('p', document.body, {innerHTML:('<span id="error">⚠️<br>' + error.message + '</span>')});
-        throw error;
+        // Target floating info screen container element
+        const infoShield = document.getElementById('info');
+        
+        if( infoShield ) {
+            errorMessage( message );
+        } else {
+            // Fallback to body injection just in case the container isn't ready
+            faddelem('p', document.body, { innerHTML: ('<span id="error">⚠<br>' + message + '</span>') });
+        }
     }
 }
 
