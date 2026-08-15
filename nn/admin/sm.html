@@ -241,11 +241,12 @@ async function gatherResources() {
     let json_path = json_root + getParams(appState);
     try {
         // Fetch the remote JSON orientation profile
+console.log('one');
         config = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
-
+console.log('two');
         // Build your navigation components
         buildMenu(config);
-
+console.log('three');
         // ==========================================================================
         // MAP INITIALIZATION 
         // ==========================================================================
