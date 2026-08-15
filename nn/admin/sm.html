@@ -263,105 +263,104 @@ async function gatherResources() {
         const streetView    = L.tileLayer(osm,  { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }); 
         const satelliteView = L.tileLayer(esri, { maxZoom: 19, attribution: 'Tiles &copy; Esri &mdash; Source: Esri and the GIS User Community' }); 
 
-// ==========================================================================
-// CUSTOM OVERLAY FOR DATA COMMUNITIES
-// ==========================================================================
+        // ==========================================================================
+        // CUSTOM OVERLAY FOR DATA COMMUNITIES
+        // ==========================================================================
 
-// Define a custom icon (Red Pushpin)
-const communityPin = L.divIcon({
-    html: '<span style="font-size: 26px; line-height: 1;">📍</span>',
-    iconSize:    [30, 30], // Square boundary box for the emoji string
-    iconAnchor:  [15, 30], // Centers horizontally (15px), anchors near the tip (30px)
-    popupAnchor: [0, -26], // Pushes the text description popup cleanly above the pin
-    className: 'custom-pin-reset' // Empty class name strips Leaflet's native white box styles
-});
+        // Define a custom icon (Red Pushpin)
+        const communityPin = L.divIcon({
+            html: '<span style="font-size: 26px; line-height: 1;">📍</span>',
+            iconSize:    [30, 30], // Square boundary box for the emoji string
+            iconAnchor:  [15, 30], // Centers horizontally (15px), anchors near the tip (30px)
+            popupAnchor: [0, -26], // Pushes the text description popup cleanly above the pin
+            className: 'custom-pin-reset' // Empty class name strips Leaflet's native white box styles
+        });
 
-// Define a custom icon (Green Tinted Pushpin via CSS filter)
-const neighborhoodPin = L.divIcon({
-    html: '<span style="font-size: 26px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>',
-    iconSize:    [30, 30],
-    iconAnchor:  [15, 30], 
-    popupAnchor: [0, -26],
-    className: 'custom-pin-reset'
-});
+        // Define a custom icon (Green Tinted Pushpin via CSS filter)
+        const neighborhoodPin = L.divIcon({
+            html: '<span style="font-size: 26px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>',
+            iconSize:    [30, 30],
+            iconAnchor:  [15, 30], 
+            popupAnchor: [0, -26],
+            className: 'custom-pin-reset'
+        });
 
-// Initialize an isolated layer group to manage your custom points
-const customLocationsLayer = L.layerGroup();
+        // Initialize an isolated layer group to manage your custom points
+        const customLocationsLayer = L.layerGroup();
 
-// Your unified custom dataset list array
-const customGeoLocations = [
-    { lat: 39.1350, lng: -84.3540, name: "Red Landmark", details: "Standard hub", color: "red" },
-    { lat: 39.1310, lng: -84.3520, name: "Green Landmark", details: "Special site", color: "green" }
-];
+        // Your unified custom dataset list array
+        const customGeoLocations = [
+            { lat: 39.1350, lng: -84.3540, name: "Red Landmark", details: "Standard hub", color: "red" },
+            { lat: 39.1310, lng: -84.3520, name: "Green Landmark", details: "Special site", color: "green" }
+        ];
 
-// FIXED: Restored the missing loop and inner logic to draw the pins!
-customGeoLocations.forEach(spot => {
-    // Choose between the community pin (red) or neighborhood pin (green)
-    const chosenIcon = (spot.color === 'green') ? neighborhoodPin : communityPin;
+        customGeoLocations.forEach(spot => {
+            // Choose between the community pin (red) or neighborhood pin (green)
+            const chosenIcon = (spot.color === 'green') ? neighborhoodPin : communityPin;
 
-    const marker = L.marker([spot.lat, spot.lng], { icon: chosenIcon })
-        .bindPopup(`<strong>${spot.name}</strong><br>${spot.details}`);
+            const marker = L.marker([spot.lat, spot.lng], { icon: chosenIcon })
+                .bindPopup(`<strong>${spot.name}</strong><br>${spot.details}`);
 
-    // Add the new pin directly to the tracking layer group
-    customLocationsLayer.addLayer(marker);
-});
+            // Add the new pin directly to the tracking layer group
+            customLocationsLayer.addLayer(marker);
+        });
 
-// ========================================================================== 
-// INATURALIST OVERLAY CONFIGURATION 
-// ========================================================================== 
-let urlParams = setupInatParams(config); 
-console.log('inat url params ' + urlParams); 
+        // ========================================================================== 
+        // INATURALIST OVERLAY CONFIGURATION 
+        // ========================================================================== 
+        let urlParams = setupInatParams(config); 
+        console.log('inat url params ' + urlParams); 
 
-const tileHost = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png';
+        const tileHost = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png';
 
-// Build distinct, filterable overlay tile pipelines
-const iNatLayers = {
-    "Plants 🌿": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Plantae`, { maxZoom: 20, opacity: 0.85 }),
-    "Birds 🐦": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Aves`, { maxZoom: 20, opacity: 0.85 }),
-    "Insects 🦋": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Insecta`, { maxZoom: 20, opacity: 0.85 }),
-    "Mammals 🦊": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Mammalia`, { maxZoom: 20, opacity: 0.85 }),
-    "Fungi 🍄": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Fungi`, { maxZoom: 20, opacity: 0.85 }),
-    "Herps 🐸": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Amphibia&iconic_taxa[]=Reptilia`, { maxZoom: 20, opacity: 0.85 })
-};
+        // Build distinct, filterable overlay tile pipelines
+        const iNatLayers = {
+            "Plants 🌿": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Plantae`, { maxZoom: 20, opacity: 0.85 }),
+            "Birds 🐦": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Aves`, { maxZoom: 20, opacity: 0.85 }),
+            "Insects 🦋": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Insecta`, { maxZoom: 20, opacity: 0.85 }),
+            "Mammals 🦊": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Mammalia`, { maxZoom: 20, opacity: 0.85 }),
+            "Fungi 🍄": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Fungi`, { maxZoom: 20, opacity: 0.85 }),
+            "Herps 🐸": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Amphibia&iconic_taxa[]=Reptilia`, { maxZoom: 20, opacity: 0.85 })
+        };
 
-// ========================================================================== 
-// UNIFIED INSTANCE CONTROL (Cleaned and consolidated)
-// ========================================================================== 
+        // ========================================================================== 
+        // UNIFIED INSTANCE CONTROL (Cleaned and consolidated)
+        // ========================================================================== 
 
-// Base layer targets menu structure
-const baseMaps = { 
-    "Street View": streetView, 
-    "Satellite": satelliteView 
-};
+        // Base layer targets menu structure
+        const baseMaps = { 
+            "Street View": streetView, 
+            "Satellite": satelliteView 
+        };
 
-// Initialize Map Instance (We load all taxonomic groups by default on startup)
-const map = L.map('map', { 
-    center: [defaultLat, defaultLng], 
-    zoom: defaultZoom, 
-    layers: [
-        streetView, 
-        iNatLayers["Plants 🌿"], 
-        iNatLayers["Birds 🐦"], 
-        iNatLayers["Insects 🦋"], 
-        iNatLayers["Mammals 🦊"], 
-        iNatLayers["Fungi 🍄"], 
-        iNatLayers["Herps 🐸"]
-    ] 
-}); 
+        // Initialize Map Instance (We load all taxonomic groups by default on startup)
+        const map = L.map('map', { 
+            center: [defaultLat, defaultLng], 
+            zoom: defaultZoom, 
+            layers: [
+                streetView, 
+                iNatLayers["Plants 🌿"], 
+                iNatLayers["Birds 🐦"], 
+                iNatLayers["Insects 🦋"], 
+                iNatLayers["Mammals 🦊"], 
+                iNatLayers["Fungi 🍄"], 
+                iNatLayers["Herps 🐸"]
+            ] 
+        }); 
 
-// Add the taxonomic checkboxes AND your custom landmarks checkbox to the same menu object
-const overlayMaps = {
-    ...iNatLayers,
-    "Custom Landmarks 📍": customLocationsLayer
-};
+        // Add the taxonomic checkboxes AND your custom landmarks checkbox to the same menu object
+        const overlayMaps = {
+            ...iNatLayers,
+            "Custom Landmarks 📍": customLocationsLayer
+        };
 
-// Mount single consolidated layout control dashboard panel widget to top right corner
-L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+        // Mount single consolidated layout control dashboard panel widget to top right corner
+        L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
 
-// Force your custom landmarks layer to render turned ON by default on bootup
-customLocationsLayer.addTo(map);
+        // Force custom landmarks layer to render turned ON by default on bootup
+        customLocationsLayer.addTo(map);
 
-document.getElementById('info').style.display = 'none';
+        document.getElementById('info').style.display = 'none';
 
     } catch (error) {
         console.error("An error occurred:", error);
@@ -370,7 +369,7 @@ document.getElementById('info').style.display = 'none';
     }
 }
 
-    </script>
+</script>
 </body>
 
 </html>
