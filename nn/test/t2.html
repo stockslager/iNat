@@ -23,6 +23,7 @@
       let json_path = json_root + getParams(appState);
       try {
         config = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
+        buildMenu(config);    
       } catch (error) {
         console.error("An error occurred:", error);
         faddelem('p',document.body,{innerHTML:('<span id="error">⚠<br>' + error.message + '</span>')});
@@ -291,7 +292,6 @@
       faddelem('p',document.body,{innerHTML:('<span id="error">⚠<br>' + message + '</span>')});
     } else {
       gatherResources();
-      buildMenu(config);    
     }
     
     window.addEventListener('load', function() {
@@ -337,6 +337,24 @@
       // Cleanly remove loading notice panel when operations complete
       document.getElementById('info').style.display = 'none';
     });
+
+    // Change the execution trigger to wait until the DOM is 100% ready
+    document.addEventListener('DOMContentLoaded', () => {
+  
+      // 1. Parse your state string from the URL
+      let winurlsearchstr = window.location.search; 
+      let winurlparams = new URLSearchParams(winurlsearchstr); 
+      appState = buildStateFromParams(winurlparams);
+
+      // 2. Run your configuration validation check
+      let message = validateConfig(appState);
+      if( message ) {
+        faddelem('p', document.body, { innerHTML: ('<span id="error">⚠<br>' + message + '</span>') });
+      } else {
+        gatherResources();
+    }
+  
+});
     
 </script>
 </body>
