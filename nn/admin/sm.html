@@ -446,7 +446,8 @@ console.log("-------------------------------------");
             errorMessage( message );
         } else {
             // Fallback to body injection just in case the container isn't ready
-            faddelem('p', document.body, { innerHTML: ('<span id="error">⚠<br>' + message + '</span>') });
+            console.error("An error occurred:", error); 
+            errorMessage(error.message || "An unknown retrieval error occurred.");            
         }
     }
 }
