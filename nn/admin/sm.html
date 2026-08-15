@@ -288,21 +288,25 @@ async function gatherResources() {
         // ==========================================================================
         // CUSTOM OVERLAY FOR DATA COMMUNITIES (Green Pins)
         // ==========================================================================
-        // Community Pin (Green Tinted Pushpin)
-        const communityPin = L.divIcon({ html: '<span style="font-size: 26px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>',
-            iconSize: [30, 30], 
-            iconAnchor: [15, 30],  // Locks the bottom-center pin tip directly to the coordinate 
-            popupAnchor: [0, -30], // Floating text speech bubble docks perfectly above the pin head
-            className: 'custom-pin-reset' 
-        });
-
-        // Neighborhood Pin (Identical Matching Green Tinted Pushpin)
-        const neighborhoodPin = L.divIcon({ html: '<span style="font-size: 26px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>',
-            iconSize: [30, 30], 
-            iconAnchor: [15, 30], // Locks the bottom-center pin tip directly to the coordinate
-            popupAnchor: [0, -30], 
-            className: 'custom-pin-reset' 
-        });
+        const customGeoLocations = [ 
+            { 
+                  lat: 39.1350, 
+                  lng: -84.3540, 
+                  name: "Noteworthy Natives Network", 
+                  details: "Data community offering iNat data to other regional groups.", 
+                  url: "https://www.inaturalist.org/projects/noteworthy-natives-network", 
+                  linkText: "iNat Project",      
+                  color: "green" 
+            }, 
+            { 
+                  lat: 39.1310, 
+                  lng: -84.3520, 
+                  name: "Horizon Community Church", 
+                  details: "Restorative gardeners group.", 
+                  url: "https://www.inaturalist.org/projects/horizon-community-church",
+                  linkText: "iNat Project",
+                  color: "green" 
+            } 
 
         // Initialize an isolated layer group to manage custom points 
         const customLocationsLayer = L.layerGroup(); 
@@ -318,9 +322,20 @@ async function gatherResources() {
             // Both variables evaluate to identical green pins, guaranteeing layout safety
             const chosenIcon = (spot.color === 'green') ? neighborhoodPin : communityPin; 
     
-            const marker = L.marker([spot.lat, spot.lng], { icon: chosenIcon }) 
-                .bindPopup(`<strong>${spot.name}</strong><br>${spot.details}`); 
-        
+            // Assembles structured HTML layout blocks directly inside the pop-up container
+            let bubbleContent = '<div style="font-family: sans-serif; padding: 2px;">';
+            bubbleContent += '<strong style="display: block; font-size: 14px; color: #1e293b; margin-bottom: 4px;">' + spot.name + '</strong>';
+            bubbleContent += '<p style="font-size: 12px; color: #64748b; margin: 0 0 8px 0; line-height: 1.4;">' + spot.details + '</p>';
+    
+            // Safely appends the hyperlink only if the dataset row includes a target url string
+            if( spot.url && spot.linkText ) {
+                bubbleContent += '<a href="' + spot.url + '" target="_blank" style="display: inline-block; font-size: 12px; color: #2563eb; text-decoration: none; font-weight: bold;">' + spot.linkText + ' →</a>';
+            }
+    
+            bubbleContent += '</div>';
+
+            const marker = L.marker([spot.lat, spot.lng], { icon: chosenIcon }).bindPopup(bubbleContent);
+          
             // Add the new pin directly to the tracking layer group 
             customLocationsLayer.addLayer(marker); 
         });
