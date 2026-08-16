@@ -118,6 +118,14 @@ body {
     font-size: 14px;
     font-weight: bold;
 }
+
+/* Targets the absolute last checkbox line item in the Leaflet overlay menu */
+.leaflet-control-layers-overlays label:last-child {
+    border-top: 1px solid #ccc;
+    margin-top: 8px;
+    padding-top: 8px;
+    display: block;
+}
   
 </style>
 </head>
@@ -407,8 +415,7 @@ async function gatherResources() {
         // Add the taxonomic checkboxes AND your custom landmarks checkbox to the same menu object
         const overlayMaps = {
             ...iNatLayers,
-            // Injects a custom line that matches Leaflet's native separator width, color, and margin spacing
-            '</div><hr style="border: 0; border-top: 1px solid #ccc; margin: 6px -10px 8px -10px;"><div style="margin-top: 4px;">Custom Landmarks 📍': customLocationsLayer 
+            "Communities <span style="font-size: 26px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>": customLocationsLayer 
         };
 
         // Mount single consolidated layout control dashboard panel widget to top right corner
