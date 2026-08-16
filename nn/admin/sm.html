@@ -292,9 +292,12 @@ async function gatherResources() {
         const bigHeight = 30;
         const halfX     = 15;
 
+        // declare a green pin since it'll be used several times...
+        const greenpin '<span style="font-size: 26px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>'
+
         // Community Pin (Big Green Tinted Pushpin)
         const communityPin = L.divIcon({
-            html: '<span style="font-size: 26px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>',
+            html: greenpin,
             iconSize: [bigWidth, bigHeight], 
             iconAnchor: [halfX, bigHeight], 
             popupAnchor: [0, -30], 
@@ -303,7 +306,7 @@ async function gatherResources() {
 
         // Neighborhood Pin (Identical Big Green Tinted Pushpin)
         const neighborhoodPin = L.divIcon({
-            html: '<span style="font-size: 26px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>',
+            html: greenpin,
             iconSize: [bigWidth, bigHeight], 
             iconAnchor: [halfX, bigHeight], 
             popupAnchor: [0, -30], 
@@ -404,7 +407,8 @@ async function gatherResources() {
         // Add the taxonomic checkboxes AND your custom landmarks checkbox to the same menu object
         const overlayMaps = {
             ...iNatLayers,
-            "<hr>Communities ": customLocationsLayer
+            // Injects a custom line that matches Leaflet's native separator width, color, and margin spacing
+            '<hr style="border: 0; border-top: 1px solid #ddd; margin: 5px -10px 5px -10px;">Custom Landmarks <span style="font-size: 26px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>': customLocationsLayer 
         };
 
         // Mount single consolidated layout control dashboard panel widget to top right corner
