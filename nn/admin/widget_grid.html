@@ -335,25 +335,24 @@ function setupWidgetParams( config ) {
 
 function buildWidget( config ) {
 
+    let inatParams = '';
+    let paramValues = setupWidgetParams(config) || '';
+
+    // If paging is enabled, safely append it to the internal parameters
+    if( config.pagingEnabled ) {
+        paramValues += getPageParam(appState, '&page=');
+    }
+
+    // Wrap the entire parameter string in a single set of attributes
+    if( paramValues ) {
+        inatParams = 'data-inat-params="' + paramValues + '" ';
+    }          
+
     let taxonId = '';
     if( getTaxonId(appState) || getMenuId(appState) || config.defaultTaxonId ) {
         taxonId = 'data-inat-taxon="' + (getTaxonId(appState) || getMenuId(appState) || config.defaultTaxonId) + '" '; 
     }
 
-    let inatParams = '';
-    if( setupWidgetParams(config) ) { 
-        inatParams = 'data-inat-params="' + setupWidgetParams(config);   
-    }
-
-    // if paging is enabled we need to send the widget a page number
-    let pagination = '';
-    if( config.pagingEnabled ) {
-        //pagination = 'data-inat-pagination="true" ';
-        inatParams += getPageParam(appState, '&page=');
-    }
-
-    if( inatParams ) { inatParams += '" '; }
-           
     // Form clean single-widget container layout view assignments
     var widgetHtml = 
       '<div id="themeContainer" class="widget-component-container ' + '">' +
@@ -366,8 +365,8 @@ function buildWidget( config ) {
             'data-inat-layout="grid" ' +
             'data-inat-limit="30" ' +
             'data-inat-order-by="created_at" ' +
-             inatParams + taxonId + pagination +
-            'data-inat-show-title="false"' + 
+             inatParams + taxonId + 
+            'data-inat-show-title="false" ' + 
             'data-inat-header-text="' + config.title + '" >' + 
         '</div>' +
       '</div>';
