@@ -940,8 +940,15 @@ function fresults( xobj, config ) {
  
 <script>
 function setupAPIParams( config ) {
- 
-   api_params += '?project_id='+config.project;
+
+   if( config.obsExclusionParams ) {
+       // Strips any combination of leading '?' or '&' from the start of the string
+       const cleanExclusions = config.obsExclusionParams.replace(/^[?&]+/, '');
+       api_params += '?' + cleanExclusions;
+       api_params += '&project_id=' + config.project;
+   } else {
+       api_params += '?project_id='+config.project;
+   }
 
    // --- Consolidated iNat Multi-Field API Builder ---
    const initialParams = new URLSearchParams(window.location.search);
