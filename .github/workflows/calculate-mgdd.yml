@@ -7,8 +7,20 @@ on:
   push:
     branches: [ master ]
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   build-and-sync:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository code
@@ -19,19 +31,21 @@ jobs:
         with:
           node-version: 20
 
-      # NEW STEP: Downloads your project data to a file without using any JS scripts
-      - name: Download Raw iNaturalist Observations
-        run: |
-          mkdir -p nn/data
-          curl -s "https://inaturalist.org" -o nn/data/raw-obs.json
-
+      # This runs your exact JavaScript file securely
       - name: Run Weather Data Collection Script
         run: node nn/scripts/weather-sync.js
 
-      - name: Commit and Push Updated Weather Data
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@://github.com"
-          git add nn/data/weather-cache.json
-          git diff-index --quiet HEAD || git commit -m "Automated night-sync: Updated local MGDD values"
-          git push
+      # Setup and package your website files for deployment
+      - name: Setup GitHub Pages Site Assets
+        uses: actions/configure-pages@v4
+
+      - name: Upload Static Website Artifacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.' # Packs your whole project directory for deployment
+
+      # Deploys your live website using official, authenticated channels
+      - name: Deploy to GitHub Pages Production
+        id: deployment
+        uses: actions/deploy-pages@v4
+
