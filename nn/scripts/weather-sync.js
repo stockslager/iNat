@@ -87,9 +87,16 @@ async function runBackendSync() {
     // Map your new coordinates
     const referenceMap = cappedObs.map((obs) => {
       const [lon, lat] = obs.geojson.coordinates;
+  
+      // Safe extraction of YYYY-MM-DD
+      let targetDate = obs.observed_on_details?.date;
+      if (!targetDate && obs.created_at) {
+        targetDate = obs.created_at.split('T')[0]; // Grab the first element string
+      }
+
       return {
         obsId: obs.id,
-        date: obs.observed_on_details?.date || obs.created_at.split('T'),
+        date: targetDate,
         lat: Number(lat).toFixed(2),
         lon: Number(lon).toFixed(2)
       };
