@@ -1220,34 +1220,30 @@ const meteoData = await meteoResponse.json();
 // 4. Map the weather results back to the iNat Obs IDs 
 const finalReport = referenceMap.map((obsMeta, index) => {
   
-  // Open-Meteo batch responses put the "daily" object directly on the root payload
-  const dailyTimeline = meteoData.daily;
+  // Extract the individual weather record for this specific location index
+  // Handles both a flat array (batch) or a fallback single object
+  const weatherRecord = Array.isArray(meteoData) ? meteoData[index] : meteoData;
+  const dailyTimeline = weatherRecord?.daily;
 
-  // SAFETY GUARD: If Open-Meteo failed to return a root timeline object, stop safely
+  // SAFETY GUARD: If this specific coordinate index has no daily data, skip safely
   if (!dailyTimeline || !dailyTimeline.time) {
-    console.warn(`No root weather timeline data structure returned from the API payload.`);
+    console.warn(`No timeline structure found for index ${index} (Obs ID: ${obsMeta.obsId})`);
     return { obsId: obsMeta.obsId, date: obsMeta.date, tmax: null, tmin: null };
   }
 
-  // Find the position of the observation's date in the shared timeline array
-  // Trimming strings prevents hidden hour/timezone string mismatches
+  // Find the position of the observation's date in this location's timeline array
   const cleanInatTargetDate = String(obsMeta.date).slice(0, 10);
   const dateIndex = dailyTimeline.time.findIndex(timeStr => String(timeStr).slice(0, 10) === cleanInatTargetDate); 
 
   let tmax = null; 
   let tmin = null; 
 
-  // If the date exists in the timeline, extract the data using the layout index
+  // Pull the scalar max/min values out of the timelines for that specific day
   if (dateIndex !== -1) {
-    // Open-Meteo packs batched temperatures as: daily.temperature_2m_max[locationIndex][dateIndex]
-    if (dailyTimeline.temperature_2m_max && dailyTimeline.temperature_2m_max[index]) {
-      tmax = dailyTimeline.temperature_2m_max[index][dateIndex];
-    }
-    if (dailyTimeline.temperature_2m_min && dailyTimeline.temperature_2m_min[index]) {
-      tmin = dailyTimeline.temperature_2m_min[index][dateIndex];
-    }
+    tmax = dailyTimeline.temperature_2m_max ? dailyTimeline.temperature_2m_max[dateIndex] : null;
+    tmin = dailyTimeline.temperature_2m_min ? dailyTimeline.temperature_2m_min[dateIndex] : null;
   } else {
-    console.warn(`Date Mismatch: Observation date ${cleanInatTargetDate} was outside the fetched Meteo timeline range.`);
+    console.warn(`Date ${cleanInatTargetDate} not found in weather timeline for Obs ID: ${obsMeta.obsId}`);
   }
 
   return { 
