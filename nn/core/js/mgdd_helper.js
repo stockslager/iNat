@@ -48,19 +48,30 @@ function getMgddForObservationId(obsId) {
   const low = weatherRecord.tmin;
 
   // ==========================================
-  // YOUR MGDD MATHEMATICS HERE
-  // Adjust these baseline thresholds to match your study formulas
+  // STANDARD 86/50 MODIFIED GROWING DEGREE DAY LOGIC
   // ==========================================
-  const baselineThreshold = 50; 
-  
-  // Standard Growing Degree Day formula baseline calculation
-  let calculatedMgdd = ((high + low) / 2) - baselineThreshold;
-  
-  // Degree days can never be negative (if it's freezing, development just stalls)
+  const BASE_LOW = 50;   // Threshold below which growth/activity ceases
+  const CAP_HIGH = 86;   // Cutoff above which growth potential plateaus
+
+  // Extract raw weather records from the JSON payload
+  let actualHigh = weatherRecord.tmax;
+  let actualLow = weatherRecord.tmin;
+
+  // Apply the "Modified" clipping caps safely
+  let modifiedHigh = actualHigh > CAP_HIGH ? CAP_HIGH : actualHigh;
+  let modifiedLow = actualLow < BASE_LOW ? BASE_LOW : actualLow;
+
+  // Compute the daily average from the modified values
+  let dailyAverage = (modifiedHigh + modifiedLow) / 2;
+
+  // Subtract the baseline threshold to calculate heat accumulation
+  let calculatedMgdd = dailyAverage - BASE_LOW;
+
+  // Final fallback guard (safeguard against negative degree values)
   if (calculatedMgdd < 0) {
     calculatedMgdd = 0;
   }
 
-  // Return the final calculation rounded to 1 decimal place
+  // Return the clean score rounded to one decimal point
   return Number(calculatedMgdd.toFixed(1));
 }
