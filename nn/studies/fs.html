@@ -270,6 +270,33 @@ function furl_out(config, url, txt = url) {
     }
 };
 
+function checkAndLoadMgddScript( config ) {
+  return new Promise((resolve) => {
+    // Condition check: change this to whatever logic triggers your data view state
+    const needsWeatherMetrics = true; 
+
+    if (!needsWeatherMetrics) {
+      console.log("Weather metrics skipped for this view profile.");
+      return resolve(); // Exit safely without loading anything
+    }
+
+    console.log("Injecting weather script asset into layout head metadata...");
+
+    const dynamicScript = document.createElement('script');
+    dynamicScript.src = './nn/js/mgdd-helper.js';
+    dynamicScript.type = 'text/javascript';
+
+    dynamicScript.onload = async () => {
+      console.log("Script compilation complete. Launching memory cache mapping arrays...");
+      // Runs the initializer built inside mgdd_helper.js file
+      await initializeMgddHelper();
+      resolve(); // Resolution unlocks the 'await' pause in gatherResources
+    };
+
+    document.head.appendChild(dynamicScript);
+  });
+}
+           
 function buildMenu( results, config ) {
       // Create the main navbar container
       let navbar = document.createElement('div');
@@ -1147,31 +1174,8 @@ async function gatherResources() {
       console.log('api url: ' + api_url);
       const obs_data      = await apiFetch( api_url ); 
              
-      // Filter out any observations missing geolocation coordinates to prepare for
-      // fetch of mateo mgdd data.
-      const validObs = obs_data.results.filter(obs_data => obs_data.geojson && obs_data.geojson.coordinates);
-
-      if( validObs.length === 0) {
-          console.log("No observations found with valid coordinates.");
-          return;
-      }
-
-      //****************************
-      // move to it's own function
-      //****************************
-    // This fetches your pre-calculated cloud data directly from your static files
-    const response = await fetch('./data/weather-cache.json');
-    const computedWeatherData = await response.json();
-
-    console.log("Loaded weather metrics instantly without hitting Open-Meteo limits:", computedWeatherData);
-    
-    // Pass this data straight into your layout table renderer
-    // fresults(computedWeatherData);
+      await checkAndLoadMgddScript( config );   
              
-      //****************************
-      // end
-      //****************************
-     
       // Pass the data to the buildPage function
       fresults(obs_data, config); 
 
