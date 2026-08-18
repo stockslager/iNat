@@ -272,12 +272,10 @@ function furl_out(config, url, txt = url) {
 
 function checkAndLoadMgddScript( config ) {
   return new Promise((resolve) => {
-    // Condition check: change this to whatever logic triggers your data view state
-    const needsWeatherMetrics = true; 
-
-    if (!needsWeatherMetrics) {
-      console.log("Weather metrics skipped for this view profile.");
-      return resolve(); // Exit safely without loading anything
+             
+    if( config.showMGDD === 'no' ) {
+        console.log("Weather metrics skipped for this view profile.");
+        return resolve(); // Exit safely without loading anything
     }
 
     console.log("Injecting weather script asset into layout head metadata...");
@@ -471,6 +469,11 @@ function buildMainTable( results, config, box_array ) {
           let resetLink = hasFilter ? ' ' + furl2(resetUrl, iconHtml) : '';
 
           labels.push({ innerHTML: '<span class="filterable-header">Tags' + resetLink + '</span>' });
+      }
+
+      // mgdd column...
+      if( config.showMGDD === 'yes' ) { 
+          labels.push({ innerText: '86/50 MGDD' });
       }
 
       // month column...
@@ -741,6 +744,10 @@ valueId = '<div style="' + containerStyle + '">' + valueId + '</div>';
 
 values.push({ innerHTML: valueId });
          } 
+
+         if( config.showMGDD === 'yes' ) {
+             values.push({ innerText: getMgddForObservationId( rec.id ) });
+         }
                 
          if( config.showMonth === 'yes' ) { 
              let month = ''; // Default placeholder if missing or empty 
