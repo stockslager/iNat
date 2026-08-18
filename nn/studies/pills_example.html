@@ -1,0 +1,1171 @@
+<!DOCTYPE html>                 
+<html lang="en">                        
+           
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />   
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="description" content="Field Study" />
+<link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+<link rel="icon"    type="image/png"         href="../core/assets/plant-icon-96.png" sizes="96x96" />
+<link rel="icon"    type="image/svg+xml"     href="../core/assets/plant-icon-96.svg" />
+<link rel="shortcut icon"                    href="../core/assets/plant-club.ico" />
+<link rel="manifest"                         href="../core/assets/plant_club.webmanifest" />
+<link rel="stylesheet" type="text/css"       href="../core/css/core.css" />
+<meta name="apple-mobile-web-app-title" content="Field Study" />
+<script type="text/javascript" src='../core/js/common_functions.js'> </script>
+<script type="text/javascript" src='../core/js/study_store.js'> </script>
+<title>Field Study</title>
+</head>
+
+<style>
+/* for the column header un-filter */
+.filterable-header a,
+.filterable-header a:active {
+    color: cornflowerblue;
+    /*color: var(--color-text-link); */
+    background: transparent;
+    background-color: transparent;
+    text-decoration: none;
+    
+    /* Adds a subtle opacity so it blends nicely in the header, matching your old look */
+    opacity: 0.7;
+    transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+/* 2. Hover State: Turn off background blocks and amplify the blue color vibrancy */
+.filterable-header a:hover {
+    color: cornflowerblue;
+    /*color: var(--color-text-link); */
+    background: transparent;
+    background-color: transparent;
+    text-decoration: none;
+    
+    /* Brings icon to full opacity and injects a 40% vibrancy boost to make the blue pop */
+    opacity: 1;
+    filter: brightness(1.4); 
+}
+
+/* 3. Icon Thickness Management */
+.clear-btn { 
+    /* Ensures the custom bold text shadow uses the exact blue dictated by the link above */
+    text-shadow: 0 0 0.5px currentColor; 
+}
+
+.clear-all-filters a:active {
+    color: royalblue;
+    /*color: var(--color-text-link); */
+    background: transparent;
+    background-color: transparent;
+    text-decoration: none;
+    
+    /* Adds a subtle opacity so it blends nicely in the header, matching your old look */
+    opacity: 0.7;
+    transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+.clear-all-filters a:hover {
+    color: cornflowerblue;
+    /*color: var(--color-text-link); */
+    background: transparent;
+    background-color: transparent;
+    text-decoration: none;
+    
+    /* Brings icon to full opacity and injects a 40% vibrancy boost to make the blue pop */
+    opacity: 1;
+    filter: brightness(1.4); 
+}
+ 
+  /* 1. THE GUTTER FRAME */
+  body {
+    padding-left: 50px;
+    padding-right: 50px;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  /* 2. THE ALIGNMENT */
+  #main, .navbar, .top-bar, #divhead {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+  }
+
+  /* 3. THE TOP BAR */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  /* 4. THE BOXES: Fixed horizontal scroll and standard styling */
+  #stats, #dltest {
+    display: block;
+    box-sizing: border-box;
+    max-height: 64px;
+    overflow-y: auto;
+    overflow-x: hidden; 
+    width: fit-content;
+    white-space: nowrap;
+    border: 2px solid var(--color-border);
+    border-radius: 5px;
+    padding: 3px 8px;
+    background: var(--color-base);
+    line-height: 1.2;
+    color: var(--color-text);
+    font: 14px Sans-Serif;
+  }
+
+  /* 5. THE SHIELD: Reset internal table tags and remove ALL default underlines */
+  #stats table, #stats td, #stats tr,
+  #dltest table, #dltest td, #dltest tr {
+    border: none;
+    background: transparent;
+    padding: 0 12px 0 0; /* Extra 12px padding to the right for breathing room */
+    box-shadow: none;
+    color: inherit;
+    font: inherit;
+    text-decoration: none; /* KILLS ALL UNDERLINES IN ALL ROWS */
+    margin: 0; 
+    border-collapse: collapse;
+  }
+
+  /* KILL UNDERLINES FOR ALL LINKS IN THE BOXES */
+  #stats a, #dltest a {
+    color: var(--color-text-link);
+    text-decoration: none; 
+  }
+
+  /* RE-ADD UNDERLINE: Only for the very first row of the right box (#dltest) */
+  /* This ensures text-only headers are underlined, but URLs remain clean */
+  #dltest tr:first-child td {
+    text-decoration: underline;
+  }
+
+  /* 6. NAVBAR */
+  .navbar {
+    background-color: var(--color-brand);
+    border-radius: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    overflow: hidden;
+  }
+
+/**********/
+  .inat-floating-nav {
+    margin-left: -8px;
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    left: 0;
+    bottom: 0;
+    background: var(--color-base-translucent);
+    width: 188px;
+    height: 52px;
+    border-radius: 14px;
+    
+    /* Alignment: Centers the outlined button neatly inside this container */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  @media print { 
+    .inat-floating-nav { display: none; } 
+  }
+
+  .button.inat-wide-button {
+    /* Resets the narrow 32px bounds so the text fits */
+    width: 168px; 
+    height: 36px; 
+    margin: 0;    
+    
+    /* Inherits native styles */
+    background: var(--color-alt);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-link);
+    
+    /* Custom Typography */
+    font-size: 13px;
+    line-height: 1.2;
+    border-radius: 8px; 
+    
+    /* Displays and centers multi-line text blocks */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+    text-decoration: none;
+    box-sizing: border-box;
+    
+    /* Apply translucency */
+    opacity: 0.7;
+    transition: opacity 0.2s ease, background 0.2s ease;
+  }
+
+  .button.inat-wide-button:hover {
+    opacity: 1.0;
+    background: var(--color-hover);
+  }
+          
+  /* Original Helpers */
+  #h2 { font-weight:bold; font-size:20px; }
+  p { width:100%; }
+  .npcicon { width:14px; height:14px; border: 1px solid cornflowerblue; padding: 5px; border-radius: 50px; }
+  .user_head { align-items: center; justify-content: center; }
+  .user { display: inline-flex; align-items: center; white-space: nowrap; gap: 8px; margin-left: 2px; } 
+</style>
+
+<body>
+<script>
+let winurlstr = window.location.href; 
+let winurlsearchstr = window.location.search; 
+let winurlexsearchstr = winurlstr.replace(winurlsearchstr,''); 
+
+let winurlparams = new URLSearchParams(winurlsearchstr); 
+
+let p_hide_dash = winurlparams.get('hide_dash') || 'no'; 
+let p_without_term_id = winurlparams.get('without_term_id'); 
+let p_not_user_id = winurlparams.get('without_user_id'); 
+let p_show_ls = winurlparams.get('show_ls') || 'no'; 
+let p_tags    = winurlparams.get('tags') || 'no';
+let p_field = ''; 
+let p_field_value = ''; 
+let field_array = []; 
+let identify_params = '';
+let api_params = '';
+
+appState = buildStateFromParams(winurlparams);
+
+// find key/value pair for &field: param if one was passed in
+for (const [key, value] of winurlparams.entries()) {
+  if( key.startsWith('field') ){
+      p_field = key;
+      p_field_value = value;
+  }
+}   
+ 
+let url = window.location.origin + window.location.pathname;   
+//let apibase = 'https://api.inaturalist.org/v1/observations';
+//let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
+//let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
+
+function replaceDoubleQuotes(str) {
+  return str.replace(/"/g, '%22');
+}
+
+function furl2(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
+          
+function furl_out(config, url, txt = url) { 
+    if( config.blankTargets === 'yes' ) {
+        return '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + txt + '</a>'; 
+    } else {
+        return '<a href="'+url+'">'+txt+'</a>';    
+    }
+};
+
+function buildMenu( results, config ) {
+      // Create the main navbar container
+      let navbar = document.createElement('div');
+      navbar.className = 'navbar v2-menu';
+
+      let baseUrl = window.location.origin + window.location.pathname;
+   
+      let menu_name = config.getSubIconNameByTaxonId(config, getMenuId(appState)) || CONST_SHOW;
+
+      if( config.subIcons && config.subIcons.length > 0 ) {
+          appState = setTaxonDD(appState, '');
+          if( config.filterShow === 'yes' ) {
+              buildNavDDFilteredShow( navbar, menu_name, results, config, baseUrl );
+          } else {
+              let sub_taxon_arr = [];
+              for( let j=0; j<config.subIcons.length; j++ ) {
+                   if( !sub_taxon_arr.includes( config.subIcons[j].taxonId ) ) {
+                       sub_taxon_arr.push( config.subIcons[j].taxonId );
+                   }
+              }
+              buildNavDDShow( navbar, menu_name, results, config, baseUrl, sub_taxon_arr );
+          }
+      }
+
+      if( config.ddFilters && config.ddFilters.length > 0 ) {
+          buildNavActivityFiltersDD( navbar, 'Filters', config, baseUrl, appState );
+      }
+
+      if( getComponent(appState) === 'plantings' || getComponent(appState) === 'visits' || config.showStudyGrid === 'yes' ) {
+          let urlState = Object.assign({}, appState);
+          buildNavLink( navbar, './study_grid.html', urlState, 'Grid' );
+      }
+
+      if( config.showStudyGrid === 'widget' ) {
+          let urlState = Object.assign({}, appState);
+          buildNavLink( navbar, '../admin/widget_grid.html', urlState, 'Grid' );
+      }
+
+      if( identify_params ) {
+          let url = 'https://www.inaturalist.org/observations/identify' + identify_params;
+          if( config.blankTargets === 'yes' ) {
+              buildNavURL( navbar, url, 'Identify', true );
+          } else {
+              buildNavURL( navbar, url, 'Identify' );
+          }
+      }
+
+      if( p_hide_dash === 'no' ) {
+          let homeState = clearForDashParams(appState);
+          let homeUrl = '../admin/dashboard.html';
+          console.log('utf8 ' + config.home_utf8);
+          buildNavHome( navbar, homeUrl, homeState, config );
+      }
+
+      // Append the DOM nodes to the body
+      faddelem('p', document.body).appendChild(navbar);
+}
+
+function isMultipleOfFour(num) {
+  return num % 4 === 0;
+}
+
+//Checks if a specific Field ID has an active filter value in the current query string.
+const hasActiveFilter = (queryString, fieldId) => {
+  const params = new URLSearchParams(queryString);
+  const ids = params.getAll('fieldid');
+  const values = params.getAll('fieldvalue');
+  const idx = ids.indexOf(fieldId.toString());
+  return idx !== -1 && values[idx] !== '';
+}
+
+const getUrlWithoutFilter = (queryString, targetFieldId) => {
+  const params = new URLSearchParams(queryString);
+  const ids = params.getAll('fieldid');
+  const names = params.getAll('fieldname');
+  const values = params.getAll('fieldvalue');
+  
+  // 1. Group the URL parameters into clean individual tracking objects
+  const fields = ids.map((id, index) => ({
+    id: id.toString(),
+    name: names[index] || '',
+    value: values[index] || ''
+  }));
+  
+  // 2. Filter out the specific column ID we want to remove
+  const remaining = fields.filter(f => f.id !== targetFieldId.toString());
+  
+  // 3. Clear out the old keys entirely
+  params.delete('fieldid');
+  params.delete('fieldname');
+  params.delete('fieldvalue');
+  
+  // 4. Re-append ONLY the surviving filters with their correct matching values
+  remaining.forEach(f => {
+    params.append('fieldid', f.id);
+    params.append('fieldname', f.name);
+    params.append('fieldvalue', f.value);
+  });
+  
+  params.set('page', '1');
+  return params.toString();
+};
+
+// **********************************
+// to common_function.js
+// **********************************
+// declares for paging and headers.
+let total_results, per_page, page_curr, page_max, page_prev, page_next;
+          
+function buildMainTable( results, config, box_array ) {
+      let labels = [];
+      let mismatch = '';
+      let field_array_copy = field_array;
+      let dlString = '<div id="divhead"><span id="topright">';
+      let labelCount = 0;
+      let iconHtml = '<span class="clear-btn" style="font-size:18px; padding-left:6px; display:inline-block; vertical-align:middle; line-height:1;">ⓧ</span>';
+
+      let merged = 'observation field';
+    
+      labels = [{innerText:'#'}];
+
+      labels.push({innerText:'Photo'});
+
+      // taxon name column...
+      let nameState = appState; 
+      nameState = setTaxonId(nameState, '');
+      nameState = setTaxonName(nameState, '');
+      nameState = setPage(nameState, '1'); 
+      let taxonUrl = './fs.html' + buildParameterList(nameState); 
+
+      // Is a valid, active taxon filter currently in the URL string? 
+      let hasTaxonFilter = window.location.search.includes('taxonid=') && 
+                          !window.location.search.includes('taxonid=&'); 
+
+      let resetTaxonLink = hasTaxonFilter ? ' ' + furl2(taxonUrl, iconHtml) : '';
+
+      labels.push({ innerHTML: '<span class="filterable-header">Name' + resetTaxonLink + '</span>' });
+
+      // life stages column...
+      if( p_show_ls === 'yes' ) { 
+          let urlState = appState; 
+          urlState = setLifeStage(urlState, ''); 
+          urlState = setPage(urlState, '1'); 
+          let resetUrl = './fs.html' + buildParameterList(urlState); 
+
+          // Is a valid, active lifestage filter currently in the URL string? 
+          let hasFilter = window.location.search.includes('lifestage=') && 
+                         !window.location.search.includes('lifestage=&'); 
+
+          let resetLink = hasFilter ? ' ' + furl2(resetUrl, iconHtml) : '';
+
+          labels.push({ innerHTML: '<span class="filterable-header">Life Stage' + resetLink + '</span>' });
+      }
+    
+      labels.push({innerText:'Obs Photo'});
+
+      if( config.merge === 'yes' ){
+          merged = 'merged observation field';
+      } 
+
+      // tags column...
+      if( p_tags === 'yes' ) {
+          let urlState = appState; 
+          urlState = setTag(urlState, ''); 
+          urlState = setPage(urlState, '1'); 
+          let resetUrl = './fs.html' + buildParameterList(urlState); 
+
+          // Is a valid, active lifestage filter currently in the URL string? 
+          let hasFilter = window.location.search.includes('tag=') && 
+                         !window.location.search.includes('tag=&'); 
+
+          let resetLink = hasFilter ? ' ' + furl2(resetUrl, iconHtml) : '';
+
+          labels.push({ innerHTML: '<span class="filterable-header">Tags' + resetLink + '</span>' });
+      }
+
+      // month column...
+      if( config.showMonth === 'yes' ) { 
+          let urlState = appState; 
+          urlState = setMonth(urlState, ''); 
+          urlState = setPage(urlState, '1'); 
+          let resetUrl = './fs.html' + buildParameterList(urlState); 
+
+          // Is a valid, active lifestage filter currently in the URL string? 
+          let hasFilter = window.location.search.includes('month=') && 
+                         !window.location.search.includes('month=&'); 
+
+          let resetLink = hasFilter ? ' ' + furl2(resetUrl, iconHtml) : '';
+
+          labels.push({ innerHTML: '<span class="filterable-header">Month' + resetLink + '</span>' });
+      }
+    
+      let tempBrow = []; 
+      for( let i=0; i<results.length; i++ ) { 
+           let rec = results[i]; 
+           if( rec.ofvs && rec.ofvs.length > 0 ){ 
+               for( let r=0; r<field_array_copy.length; r++ ) { 
+                    for( let j=0; j<rec.ofvs.length; j++ ){ 
+                         if( field_array_copy[r] === rec.ofvs[j].field_id.toString() ){ 
+                             let box_row = box_array.find( boxRow => boxRow.field_id === rec.ofvs[j].field_id.toString() ); 
+                             if( box_row ) box_row.field_name = rec.ofvs[j].name.toString(); 
+                         } 
+                    } 
+               } 
+           } 
+      } 
+
+      let firstCol = 'yes'; 
+      let nf_box_array = box_array; 
+
+      /*if( box_array.length === 0 ) { 
+          labels.push({innerText:' '}); 
+      } */
+
+      dlString += '<span id="topright"><span id="mismatch">🌸 ~ obs field mismatch</span><span id="dltest"><table id="tablekey">'; 
+
+      for( let e=0; e<box_array.length; e++ ){ 
+           if( labelCount === 0 ) { 
+               dlString += ('<tr id="trkey"> <td id="key">field id</td> <td id="key">'+merged+'</td> </tr>'); 
+           } 
+           labelCount++; 
+  
+           if( box_array[e].field_name !== '' ) { 
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl_out(config, root_obs_fields+box_array[e].field_id, box_array[e].field_id) + '</td>');
+               dlString += ('<td id="tdkey">' + truncate(box_array[e].field_name.toLowerCase(), 25) + '</td></tr>'); 
+    
+               if( config.merge !== 'yes' ) { 
+                   const currentFieldId = box_array[e].field_id; 
+                   const currentFieldName = box_array[e].field_name;
+      
+                   const urlParams = new URLSearchParams(window.location.search); 
+                   const urlIds = urlParams.getAll('fieldid'); 
+                   const urlValues = urlParams.getAll('fieldvalue'); 
+                   const urlNames = urlParams.getAll('fieldname');
+      
+                   // Identify if this column header represents your primary configuration lane
+                   const isPrimaryColumn = config.fieldName && (currentFieldName.toLowerCase() === config.fieldName.toLowerCase());
+      
+                   // Check if this column has an active filter in the URL
+                   const idIndex = urlIds.indexOf(currentFieldId); 
+                   const hasFilter = (idIndex !== -1 && urlValues[idIndex] !== '');
+      
+                   if( hasFilter ) { 
+                       // 1. Map existing tracks into paired tracking objects to protect indices
+                       const temporaryFields = urlIds.map((id, index) => ({
+                         id: id.toString(),
+                         name: urlNames[index] || '',
+                         value: urlValues[index] || ''
+                       }));
+        
+                       // 2. Strip out ONLY this specific filter column row using its unique ID string
+                       const remainingFilters = temporaryFields.filter(f => f.id !== currentFieldId.toString());
+
+                       const newParams = new URLSearchParams(); 
+        
+                       // 3. Retain standard layout tokens safely (studytitle, component, etc.)
+                       urlParams.forEach((val, key) => { 
+                         if( key !== 'fieldid' && key !== 'fieldname' && key !== 'fieldvalue') { 
+                             newParams.set(key, val); 
+                         } 
+                       }); 
+        
+                       // 4. Re-append only the surviving active filters sequentially
+                       remainingFilters.forEach(f => { 
+                         newParams.append('fieldid', f.id); 
+                         newParams.append('fieldname', f.name); 
+                         newParams.append('fieldvalue', f.value); 
+                       }); 
+        
+                       newParams.set('page', '1'); 
+        
+                       // 5. FIX: Removed the destructive delete('fieldvalue') line! 
+                       // We only clear the unique plant template token here
+                       if( isPrimaryColumn ) {
+                           newParams.delete('plantname'); 
+                       }
+        
+                       const resetUrl = './fs.html?' + newParams.toString(); 
+                       const resetLink = ' ' + furl2(resetUrl, iconHtml); 
+        
+                       labels.push({ innerHTML: '<span class="filterable-header">' + truncate(box_array[e].field_name, 25) + resetLink + '</span>' }); 
+                   } else { 
+                       labels.push({ innerText: truncate(box_array[e].field_name, 25) }); 
+                   } 
+               } else if( firstCol === 'yes' ) { 
+                   firstCol = 'no'; 
+                   labels.push({innerText:'Merged Fields (see above)'}); 
+               } 
+           } else { 
+               dlString += ('<tr id="trkey"><td id="tdkey">' + furl_out(config, root_obs_fields+box_array[e].field_id, box_array[e].field_id) + '</td>'); 
+               dlString += ('<td id="tdkey">missing from this page</td></tr>'); 
+               if( config.merge !== 'yes' ) labels.push({innerText:''}); 
+           } 
+      }
+
+      dlString += '</table></span></div>';
+
+      let clearState = clearForDashParams(appState);
+      clearState     = setComponent(clearState, getComponent(appState));    // component required when clearing state on a reset.
+      clearState     = setStudyTitle(clearState, getStudyTitle(appState));  // study title required when clearing state on a reset.
+
+      faddelem('p', document.body, {
+          innerHTML: '<div class="top-bar">' +
+               /* Parent flex container to align items side-by-side */
+               '<div class="stats-wrapper" style="display: inline-flex; align-items: flex-end; gap: 12px;">' +
+                 '<div id="stats">' +
+                   '<table id="tablekey">' +
+                     '<tr id="trkey"><td id="tdkey">total:</td><td id="tdright">' + fcomnum(total_results) + '</td></tr>' +
+                     '<tr id="trkey"><td id="tdkey">per page:</td><td id="tdright">' + fcomnum(per_page) + '</td></tr>' +
+                     '<tr id="trkey"><td id="tdkey">page:</td><td id="tdright">' + fcomnum(page_curr) + ' of ' + fcomnum(page_max) + '</td></tr>' +
+                   '</table>' +
+                 '</div>' +
+                 '<span class="clear-all-filters">' + 
+                    '<span style="white-space: nowrap; margin-bottom: 2px;">' + furl2('./fs.html'+buildParameterList(clearState), 'clear all filters') + '</span>' + 
+                 '</span>' +              
+               '</div>' +
+               dlString + 
+             '</div>'
+      });
+
+      // hide the mismatch warning... only display it if there is a mismatch in the table.
+      document.getElementById("mismatch").style.display = "none"; 
+     
+      for (let i=0; i<results.length; i++) {
+         let rec = results[i];
+         let tax_name = '';
+         let pref_tax_name = '';
+         let tax_photo = '<div class="clipart">&#127807</div>'; 
+         let tax_id = '';
+         let field1 = ''; 
+         let displayName = '';
+         let displayTaxonName = '';
+         let mismatch = '';
+         let matchedCopy = 'no';
+         let values = [];
+         let dataType = '';
+         let dataType2 = '';
+         let matchValue = '';
+         let matchTaxonId = '';
+         let taxon = '';
+         
+         if( rec.taxon ){
+             tax_id = rec.taxon.id;
+             tax_name = rec.taxon.name || '';
+             pref_tax_name = rec.taxon.preferred_common_name || '';
+           
+             if( rec.taxon.default_photo ){
+                 if( rec.taxon.default_photo.url ){
+                     tax_photo = '<img class="icon" src="'+rec.taxon.default_photo.url+'" />';
+                 }
+             }
+         }
+
+         if( tax_id !== '' ){
+             let urlState = appState;
+             urlState = setTaxonId(urlState, tax_id);
+             urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+             urlState = setTaxonName(urlState, pref_tax_name||tax_name);
+             taxon = furl2('./fs.html'+buildParameterList(urlState),'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+         }
+       
+         values = [{innerText:i+1}];
+
+         values.push({innerHTML:tax_photo});
+         values.push({innerHTML:taxon});
+
+         if( p_show_ls === 'yes' ) { 
+             let stage = ''; // Default placeholder if missing or empty 
+             let valueId = ''; 
+    
+             if( rec.annotations && rec.annotations.length > 0 ) { 
+                 for( let i = 0; i < rec.annotations.length; i++ ) { 
+                      if( rec.annotations[i].controlled_attribute_id?.toString() === '1' ) { 
+                          valueId = rec.annotations[i].controlled_value_id?.toString() || ''; 
+                          // look up the life stage in the life stages map... 
+                          stage = LIFE_STAGE_MAP[valueId] || 'unknown'; 
+                          break; 
+                      } 
+                 }  
+             } 
+    
+             if( stage === 'unknown' ) { 
+                 values.push({ innerHTML: stage }); 
+             } else { 
+                 let urlState = appState; 
+                 urlState = setPage(urlState, '1'); // set the page to 1 anytime they choose to filter. 
+        
+                 urlState = setLifeStage(urlState, valueId || 'null');     
+                 values.push({ innerHTML: furl2('./fs.html' + buildParameterList(urlState), stage || '[none]') }); 
+             } 
+         } 
+
+         // use a clickable scrollable div containing field notes in place of image when there is no image.
+         if( rec.photos && rec.photos.length > 0 ) {
+             values.push({ innerHTML: furl_out(config, root_observations + rec.id, '<img class="mini_photo2" src="' + rec.photos[0].url + '" />') });
+         } else {
+             let desc = rec.description || '<i style="opacity: 0.6;">No notes</i>';
+             values.push({ innerHTML: furl_out(config, root_observations + rec.id, '<div style="max-width: 150px; max-height: 45px; overflow-y: auto; padding: 6px; scrollbar-width: thin; white-space: normal; ' + 
+                                                                          'background-color: var(--color-alt); ' + 
+                                                                          'color: var(--color-text); ' + 
+                                                                          'border: 1px solid var(--color-border); ' + 
+                                                                          'border-radius: 4px; font-size: 0.9em; line-height: 1.4;">' + 
+                                                                          rec.description + '</div>')});
+         }
+
+         // render the tag pills...
+         if( p_tags === 'yes' ) { 
+let valueId = ''; 
+
+for (let i = 0; i < rec.tags.length; i++) {
+    if (rec.tags[i]) {
+        let urlState = appState;
+        urlState = setPage(urlState, '1');
+        urlState = setTag(urlState, rec.tags[i]);
+        
+        // This is the clean pill styling (NO importants)
+        let pillStyle = 'display: inline-block; ' +
+                        'max-width: 300px; ' +
+                        'margin: 3px; ' +
+                        'padding: 4px 12px; ' +
+                        'font-size: 13px; ' +
+                        'font-family: sans-serif; ' +
+                        'font-weight: 500; ' +
+                        'border-radius: 9999px; ' +
+                        'background-color: #1e293b; ' +
+                        'border: 1px solid #334155; ' +
+                        'color: #38bdf8; ' + 
+                        'text-decoration: none; ' +
+                        'overflow: hidden; ' +
+                        'text-overflow: ellipsis; ' +
+                        'white-space: nowrap;';
+
+        // Wrap each individual link as its own independent inline pill block
+        valueId += furl2('./fs.html' + buildParameterList(urlState), rec.tags[i])
+                   .replace('<a ', '<a style="' + pillStyle + '" ');
+    }
+}
+
+// Mirroring your working description box: One outer div wrapper with white-space: normal
+let containerStyle = 'max-width: 300px; white-space: normal; padding: 4px;';
+valueId = '<div style="' + containerStyle + '">' + valueId + '</div>';
+
+values.push({ innerHTML: valueId });
+         } 
+                
+         if( config.showMonth === 'yes' ) { 
+             let month = ''; // Default placeholder if missing or empty 
+             let valueId = ''; 
+    
+             if( rec.observed_on_details.month ) { 
+                 valueId = rec.observed_on_details.month || '';
+                 const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+                 // For 1-indexed month (1 = January, so index is month - 1)
+                 month = months[valueId-1] || 'unknown'; 
+             } 
+    
+             if( month === 'unknown' ) { 
+                 values.push({ innerHTML: month }); 
+             } else { 
+                 let urlState = appState; 
+                 urlState = setPage(urlState, '1'); // set the page to 1 anytime they choose to filter. 
+        
+                 urlState = setMonth(urlState, valueId || 'null');     
+                 values.push({ innerHTML: furl2('./fs.html' + buildParameterList(urlState), month || '[none]') }); 
+             } 
+         } 
+       
+         let user_icon = rec.user.icon || '';
+         
+         if( user_icon === '' ){
+            user_icon += '<span class="user"><span class="npcicon"></span>';
+         } else {
+            user_icon = '<img class="smallicon" src="'+user_icon+'" />';
+         }
+
+         let emojiTitle = 'Merged Observation Fields:&#10;';
+
+         if( rec.ofvs && rec.ofvs.length > 0) {
+             for( let r = 0; r < box_array.length; r++ ) { 
+                  const box = box_array[r]; 
+                  const targetBoxFieldName = box.field_name?.toLowerCase(); 
+                  const targetBoxFieldIdStr = box.field_id.toString(); 
+  
+                  for( let j = 0; j < rec.ofvs.length; j++ ) { 
+                       const ofv = rec.ofvs[j]; 
+                       const ofvFieldIdStr = ofv.field_id.toString(); 
+                       const ofvValue = ofv.value ?? ''; 
+                       const ofvValueLower = ofvValue.toString().toLowerCase(); 
+    
+                       // Mismatch & Validation Checking --- 
+                       if( field_array.includes(ofvFieldIdStr) ) { 
+                           if( matchValue === '' ) { 
+                               matchValue = ofvValue; 
+                           } else if (ofvValue !== '' && matchValue !== ofvValue) { 
+                               mismatch = 'yes'; 
+                           } 
+                           if( dataType === '') { 
+                               dataType = ofv.datatype; 
+                           } else if (dataType !== ofv.datatype) { 
+                               mismatch = 'yes'; 
+                           } 
+                           if( ofv.taxon ) { 
+                               if( matchTaxonId === '' ) { 
+                                   matchTaxonId = ofv.taxon.id; 
+                               } 
+                               if( ofv.taxon.id !== matchTaxonId ) { 
+                                   mismatch = 'yes'; 
+                               } 
+                           }  
+                       } 
+    
+                       // Cache taxon names for readability below 
+                       const taxonName = ofv.taxon?.name || ''; 
+                       const commonName = ofv.taxon?.preferred_common_name || ''; 
+    
+                       // Merge Mode --- 
+                       if( config.merge === 'yes' && ofvFieldIdStr === targetBoxFieldIdStr ) { 
+                           field1 = ofvValueLower; 
+                           if( ofv.taxon ) { 
+                               const iconicIdStr = ofv.taxon.iconic_taxon_id?.toString(); 
+                               if( !config.ofield_iconic || config.ofield_iconic === iconicIdStr ) { 
+                                   field1 = taxonName; 
+                                   displayCommonName = commonName.toLowerCase(); 
+                                   displayTaxonName = taxonName; 
+                                   displayName = `<span style="font-size:larger">${commonName.toLowerCase()}</span><span style="font-style:italic"><br>(${taxonName})</span>`; 
+                                   emojiTitle += `${ofv.field_id} ${taxonName}\n`; 
+                               } else { 
+                                   emojiTitle += `${ofv.field_id} ${taxonName.toLowerCase()}\n`; 
+                                   displayName = ''; 
+                               } 
+                           } else { 
+                               if( ofvValueLower !== 'unknown' ) { 
+                                   displayName = ofvValueLower; 
+                               } 
+                               emojiTitle += `${ofv.field_id} ${ofvValueLower}\n`; 
+                           }  
+                       } 
+    
+                       // --- SECTION C: No-Merge Mode --- 
+                       if( config.merge !== 'yes' && ofvFieldIdStr === targetBoxFieldIdStr ) { 
+                           matchedCopy = 'yes'; 
+                           if( ofv.value ) { 
+                               field1 = ofvValueLower; 
+                               displayName = ofvValueLower; 
+                               if( ofv.taxon ) { 
+                                   field1 = `<span style="font-size:larger">${commonName.toLowerCase()}</span><span style="font-style:italic"><br>(${taxonName})</span>`; 
+                               } 
+    
+                               // Wild ancestral colony 
+                               if( ofvFieldIdStr === '17383' ) { 
+                                   values.push({ innerHTML: furl_out(config, root_observations + field1, field1) }); 
+                               } else { 
+                                   const cleanValue = replaceDoubleQuotes(ofvValue.toString()); 
+      
+                                   // 1. Let the store utility generate your clean lowercase array parameter string safely
+                                   let updatedParamsStr = updateUrlParamsByFieldId(window.location.search, ofvFieldIdStr, ofv.name, cleanValue, config); 
+      
+                                   const isPrimaryField = config.fieldName && (ofv.name?.toLowerCase() === config.fieldName.toLowerCase()); 
+                                   const finalParams = new URLSearchParams(updatedParamsStr);
+      
+                                   finalParams.set('page', '1'); 
+                                   if( isPrimaryField ) { 
+                                       finalParams.set('plantname', commonName || taxonName); 
+                                   } 
+      
+                                   // 2. Safely restore furl2 now that parameter pollution is fully resolved
+                                   let url = furl2('./fs.html?' + finalParams.toString(), field1); 
+      
+                                   if( isPrimaryField && config.fieldOutlink ) { 
+                                       let outlink = furl2( config.fieldOutlink + ofvValue.toString(), '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">🛈</span>' ); 
+                                       values.push({ innerHTML: '<span class="filterable-header">' + outlink + '</span>' + url }); 
+                                   } else { 
+                                       values.push({ innerHTML: url }); 
+                                   } 
+                               }  
+                           } else { 
+                               values.push({ innerText: '' }); 
+                           } 
+                      } // end c
+                  } // End of j loop 
+  
+                  if( config.merge !== 'yes' ) { 
+                      if( matchedCopy === 'yes' ) { 
+                          matchedCopy = 'no'; 
+                      } else { 
+                          values.push({ innerText: '' }); 
+                      } 
+                  } 
+             } // End of r loop
+         }
+        
+         if( config.merge === 'yes' ){
+              if( displayTaxonName !== '' ){
+                  if( mismatch === 'yes' ){
+                      document.getElementById("mismatch").style.display = "inline"; 
+                      displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
+                  } else {
+                      displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+')</span>';
+                  }
+              } else {
+                  if( mismatch === 'yes' ){
+                      document.getElementById("mismatch").style.display = "inline"; 
+                      displayName += ' ';
+                      displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
+                  } 
+              }
+          
+              values.push({innerHTML:displayName});
+         }          
+
+         if( getComponent(appState) === COMPONENT_VISITS ) {
+             let urlState = appState;
+             urlState = setObsDate(urlState, rec.observed_on_details?.date ?? null);
+             urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+             values.push({innerHTML: furl2('./fs.html'+buildParameterList(urlState),rec.observed_on_details?.date ?? null) });
+             values.push({innerHTML: '<div style="max-width: 300px; max-height: 45px; overflow-y: auto; padding: 6px; scrollbar-width: thin; white-space: normal; ' + 
+                                           'background-color: var(--color-alt); ' + 
+                                           'color: var(--color-text); ' + 
+                                           'border: 1px solid var(--color-border); ' + 
+                                           'border-radius: 4px; font-size: 0.9em; line-height: 1.4;">' + 
+                                           (rec.description || '<i style="opacity: 0.6;">No description</i>') + 
+                                     '</div>'});
+         }
+         let urlState = appState;
+         urlState = setUser(urlState, rec.user.login);
+         urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
+
+         values.push({innerHTML:'<span class="user">'+user_icon+furl2('./fs.html'+buildParameterList(urlState),rec.user.login)+'</span>'});
+         
+         tempBrow.push(values);
+      };
+
+      let table = faddelem('table',document.body,{id:'main'});
+      let thead = faddelem('thead',table);
+      let hrow = faddelem('tr',thead);
+
+      //labels.push({innerText:'User Photo'});
+      if( getComponent(appState) === COMPONENT_VISITS ) {
+          labels.push({innerText:'Date'});
+          labels.push({innerText:'Field Notes'});
+      }
+
+      // Observer column...
+      let obsState = appState; 
+      obsState = setUser(obsState, '');
+      obsState = setPage(obsState, '1'); 
+      let obsUrl = './fs.html' + buildParameterList(obsState); 
+
+      // Is a valid, active observer filter currently in the URL string? 
+      let hasObsFilter = window.location.search.includes('user=') && 
+                        !window.location.search.includes('user=&'); 
+
+      let resetObsLink = hasObsFilter ? ' ' + furl2(obsUrl, iconHtml) : '';
+
+      labels.push({ innerHTML: '<span class="filterable-header"><span class="user_head">Observer' + resetObsLink + '</span></span>' });
+
+      faddelems('th',hrow,labels);
+
+      let tbody = faddelem('tbody',table);
+    
+      // loop through array of rows stored on object.
+      for( let q=0; q<tempBrow.length; q++ ){
+           let brow = faddelem('tr',tbody);
+           faddelems('td',brow,tempBrow[q]);
+      }
+}
+    
+function fresults( xobj, config ) { 
+   let results = xobj.results; 
+   let box_array = []; 
+  
+   if( config.obsFields ) { 
+       field_array = config.obsFields.split(","); 
+    
+       // Parse the current URL parameters to grab any active filter values 
+       const urlParams = new URLSearchParams(window.location.search); 
+      
+       const urlIds    = urlParams.getAll('fieldid'); 
+       const urlValues = urlParams.getAll('fieldvalue'); 
+       const urlNames  = urlParams.getAll('fieldname'); 
+    
+       for( let f = 0; f < field_array.length; f++ ) { 
+            const currentId = field_array[f].toString(); 
+      
+            // Find if this specific ID already has a value or name stored in the URL 
+            const urlIndex = urlIds.indexOf(currentId); 
+      
+            let activeValue = ''; 
+            let activeName = ''; 
+      
+            if( urlIndex !== -1 ) { 
+                activeValue = urlValues[urlIndex] || ''; 
+                activeName = urlNames[urlIndex] || ''; 
+            } 
+      
+            // Push the boxRow into the display array with its real URL state values 
+            box_array.push(new boxRow(currentId, activeName, activeValue)); 
+       } 
+   }
+  
+   // store box_array into appState
+   appState.activeFilters = box_array;
+ 
+   if (results) {
+
+      // grab the data for the paging buttons if paging is enabled.
+      total_results = xobj.total_results;
+      per_page = xobj.per_page;
+      page_curr = xobj.page;
+      page_max = Math.ceil(total_results/per_page);
+      page_prev = ((page_curr>1)?page_curr-1:null);
+      page_next = ((page_curr<page_max)?page_curr+1:null);
+
+      buildMenu(results, config);
+
+      buildMainTable( results, config, box_array );
+             
+      if( config.pagingEnabled ) {
+          // buttons to go to prev or next page
+          let nav = faddelem('div',document.body,{id:'nav'});
+          (page_curr<=1)?faddelem('span',nav,{classList:'button_inactive',title:'already on first page',innerHTML:'&laquo'}):faddelem('a',nav,{classList:'button',title:'first page',id:'button_first',innerHTML:'&laquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,1)});
+          (page_prev===null)?faddelem('span',nav,{classList:'button_inactive',title:'no previous page',innerHTML:'&#8249'}):faddelem('a',nav,{classList:'button',title:'previous page',id:'button_prev',innerHTML:'&#8249',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_prev)});
+          (page_next===null)?faddelem('span',nav,{classList:'button_inactive',title:'no next page',innerHTML:'&#8250'}):faddelem('a',nav,{classList:'button',title:'next page',id:'button_next',innerHTML:'&#8250',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_next)});
+          (page_curr>=page_max)?faddelem('span',nav,{classList:'button_inactive',title:'already on last page',innerHTML:'&raquo'}):faddelem('a',nav,{classList:'button',title:'last page',id:'button_last',innerHTML:'&raquo',href:fpageurl(winurlexsearchstr,winurlparams,per_page,page_max)});
+      } else {
+          let nav = faddelem('div', document.body, { classList: 'inat-floating-nav' }); 
+          let url = root_observations + api_params; 
+          faddelem('a', nav, { title: 'entire dataset', classList: 'button inat-wide-button', innerText: 'View more on iNaturalist', href: url, target: '_blank', rel: 'noopener noreferrer' });
+      }
+             
+   } else { 
+          faddelem('p',document.body,{innerText:'No results returned.'}); 
+   }; 
+};
+
+</script>
+
+<script type="text/javascript"   src="../core/js/ConfigManager.js"></script>
+<script type="text/javascript"   src="../core/js/api_fetch.js"></script>
+ 
+<script>
+function setupAPIParams( config ) {
+ 
+   api_params += '?project_id='+config.project;
+
+   // --- Consolidated iNat Multi-Field API Builder ---
+   const initialParams = new URLSearchParams(window.location.search);
+   const initialNames = initialParams.getAll('fieldname');
+   const initialValues = initialParams.getAll('fieldvalue');
+
+   const lowerCaseNames = initialNames.map(name => name.toLowerCase());
+
+   // Core Rule: If the URL has no active filters (First Entrance), use your config defaults
+   if( config.fieldName && !lowerCaseNames.includes(config.fieldName.toLowerCase() ) ) {
+       api_params += '&field:' + config.fieldName;
+       if( config.fieldValue ) {
+           api_params += '=' + encodeURIComponent(config.fieldValue);
+       }
+   }
+
+   // 2. Sequential Loop: Process whatever filters are explicitly remaining in the URL bar
+   initialNames.forEach((name, index) => {
+     const value = initialValues[index];
+     if( name && value ) {
+         api_params += '&field:' + name + '=' + encodeURIComponent(value);
+     }
+   });
+  
+   if( getObsDate(appState)    ) { api_params += '&on='       + getObsDate(appState); }
+
+   if( getUser(appState) ) {
+       api_params += '&user_id=' + getUser(appState);
+   } else if( config.userId ) { 
+       api_params += '&user_id='  + config.userId; 
+   }
+ 
+   if( getPlaceMenuId(appState) ) {
+       api_params += getPlaceMenuIdParam(appState, '&place_id=');
+   } else {
+       if( config.defaultPlace ) { 
+           api_params += '&place_id='        + config.defaultPlace; 
+       } else {
+           api_params += '&place_id=any';
+       }
+   }
+
+   // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
+   // use the menu_id if one was passed in.
+   if( getTaxonId(appState) ) {
+       api_params += '&taxon_id='+getTaxonId(appState);
+   } else if( getMenuId(appState) ) { 
+       api_params += '&taxon_id=' + getMenuId(appState); 
+   } else {
+       if( config.defaultTaxonId ) {
+           api_params += '&taxon_id=' + config.defaultTaxonId;
+       }
+   }
+
+   // if a filter has been chosen, get the filter api params
+   if( getActivityFilter(appState) ) {
+       api_params += getFilterAPIParams(config);
+   }
+
+   // filter for tags...
+   if( getTag(appState) ) {
+       if( getTag(appState) !== 'null' ) {
+           api_params += '&q=' + getTag(appState) + '&search_on=tags';
+       }
+   } 
+          
+   // filter for month...
+   if( getMonth(appState) ) {
+       if( getMonth(appState) !== 'null' ) {
+           api_params += '&month=' + getMonth(appState);
+       }
+   } else if( config.defaultMonths ) {
+           api_params += '&month=' + config.defaultMonths;
+   }
+
+   // filter for life stage annotation...
+   if( getLifeStage(appState) ) { 
+       if( getLifeStage(appState) === 'null' ) {
+           api_params += '&without_term_id=1';
+       } else {
+           api_params += '&term_id=1&term_value_id='  + getLifeStage(appState);
+       }
+   }
+
+   // filter for evidence annotation...
+   if( getEvidence(appState) ) { 
+       if( getEvidence(appState) === 'null' ) {
+           api_params += '&without_term_id=22';
+       } else {
+           api_params += '&term_id=1&term_value_id='  + getEvidence(appState);
+       }
+   }
+ 
+   if( p_without_term_id )   { api_params += '&without_term_id=' + p_without_term_id; }
+   if( p_not_user_id )       { api_params += '&not_user_id='     + p_not_user_id; }
+
+   if( config.obsAPIParams ) { api_params += config.obsAPIParams; }
+
+   // default all of these so they stay consistent across inat identify page, inat explore page, and the table.
+   // may need to revisit if/when the table sorts by quality_grade.
+   api_params += '&reviewed=any&quality_grade=needs_id,research,casual';
+           
+   // set the params for the identify link to the exact filtration parameters
+   // to be used in the api transaction that will populate the table with whatever 
+   // filtrations were selected.
+   if( config.identifyEnabled === 'yes' ) {
+       identify_params = api_params;
+   } 
+          
+   api_params += getPageParam(appState, '&page=');
+   api_params += '&per_page='+CONST_OBSERVATIONS_PER_PAGE;
+
+   // This prevents the application loop from inadvertently double-encoding quotes (%2522)
+   // This would break if there is ever a % symbol stored in a field value...may need to revisit
+   api_params = api_params.replace(/%2522/g, '%22').replace(/%252F/g, '%2F'); 
+ 
+   return api_params;
+}
+   
+async function gatherResources() {
+  let api_base  = 'https://api.inaturalist.org/v1/observations';
+  let json_path = json_root + getParams(appState);
+ 
+  try {
+   
+      // Await the result of getObservations() and store the actual data
+      const config  = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
+      console.log('full config title: ' + config.getFullTitle());          
+      const api_params    = setupAPIParams( config );
+      const api_url       = api_base+api_params;
+      console.log('api url: ' + api_url);
+      const obs_data      = await apiFetch( api_url ); 
+     
+      // Pass the data to the buildPage function
+      fresults(obs_data, config); 
+
+    } catch (error) {
+      console.error("An error occurred:", error);
+      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      throw error;
+    }
+}
+
+let message = validateConfig(appState);
+ 
+if( message ) {
+    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+} else {
+    gatherResources(); 
+}
+  
+</script>
+</body>
+
+</html>
