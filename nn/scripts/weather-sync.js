@@ -1,12 +1,16 @@
 const fs = require('fs');
 const path = require('path');
+let api_base  = 'https://api.inaturalist.org/v1/observations';
+
+// import helper functions
+const { asyncGetConfiguration, apiFetch } = require('../core/js/study_store.js');
 
 async function runBackendSync() {
   try {
       // Await the result of getObservations() and store the actual data
-      const config  = await asyncGetConfiguration( '../core/json/firefly_patterns', 'studies', 'Firefly+Patterns' );
-      console.log('full config title: ' + config.getFullTitle());          
-      const api_params    = setupAPIParams( config );
+      const config  = await asyncGetConfiguration( path.join(__dirname, '../core/json/firefly_patterns'), 'studies', 'Firefly+Patterns' );
+      console.log('full config title: ' + config.getFullTitle());   
+      const api_params    = ('?project_id=' + config.project);  // pull all obs for the project to be mapped.
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
       const obs_data      = await apiFetch( api_url ); 
@@ -124,7 +128,6 @@ console.log(finalReport);
 
     console.log("Successfully paired iNat observations with local weather data:");
     console.log(finalReport);
-    return finalReport;
 
     // At the end of your script, instead of calling fresults() to render HTML:
     const outputDirectory = path.join(__dirname, '../data');
