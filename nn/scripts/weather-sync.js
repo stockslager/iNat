@@ -153,12 +153,15 @@ async function runBackendSync() {
       });
     });
 
-    // STEP 5: Save total updated array back to your file
-    if (!fs.existsSync(outputDirectory)) { 
-      fs.mkdirSync(outputDirectory, { recursive: true }); 
-    } 
+    // STEP 5: Save total updated array back to your file with one line per observation
+    if (!fs.existsSync(outputDirectory)) {
+      fs.mkdirSync(outputDirectory, { recursive: true });
+    }
 
-    fs.writeFileSync(filePath, JSON.stringify(finalReport));
+    // Convert each observation object into a compressed single string
+    const lineDelimitedJson = finalReport.map(item => JSON.stringify(item)).join('\n');
+
+    fs.writeFileSync(filePath, lineDelimitedJson);
     console.log(`SUCCESS: Weather file updated. Total items cached: ${finalReport.length}`); 
 
     return finalReport;
