@@ -1,13 +1,27 @@
 const fs = require('fs'); 
 const path = require('path'); 
+const https = require('https'); // Built-in Node tool: 100% immune to "fetch is not defined" errors
 
-// Direct string definitions ensure the chat interface cannot scrub the URL links
-const baseProtocol = "https://"; 
-const apiSubdomain = "archive-api"; 
-const apiDomain = "open-meteo"; 
-const apiTld = "com"; 
-const apiPath = "/v1/archive"; 
-const cleanMeteoUrl = baseProtocol + apiSubdomain + "." + apiDomain + "." + apiTld + apiPath;
+// Visual text helper function to execute clean, dependency-free cloud requests
+function nativeNodeGet(url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, { headers: { 'User-Agent': 'Mozilla/5.0' } }, (res) => {
+      let data = '';
+      res.on('data', (chunk) => { data += chunk; });
+      res.on('end', () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          try {
+            resolve(JSON.parse(data));
+          } catch (e) {
+            reject(new Error(`Failed to parse response JSON`));
+          }
+        } else {
+          reject(new Error(`Server responded with status: ${res.statusCode}`));
+        }
+      });
+    }).on('error', (err) => { reject(err); });
+  });
+}
 
 async function runBackendSync() { 
   try { 
@@ -16,12 +30,7 @@ async function runBackendSync() {
     const inatUrl = 'https://api.inaturalist.org/v1/observations' + projectId + '&per_page=50';
     
     console.log('Downloading observations from: ' + inatUrl); 
-    const inatResponse = await fetch(inatUrl);
-    
-    if (!inatResponse.ok) {
-      throw new Error(`iNaturalist API error status: ${inatResponse.status}`);
-    }
-    const obs_data = await inatResponse.json();
+    const obs_data = await nativeNodeGet(inatUrl);
 
     const validObs = obs_data.results.filter(obs => obs.geojson && obs.geojson.coordinates); 
     if (validObs.length === 0) { 
@@ -52,6 +61,13 @@ async function runBackendSync() {
     const maxDate = new Date(Math.max(...dates)).toISOString().split('T')[0]; 
 
     // 3. Assemble parameters to connect to Open-Meteo
+    const baseProtocol = "https://"; 
+    const apiSubdomain = "archive-api"; 
+    const apiDomain = "open-meteo"; 
+    const apiTld = "com"; 
+    const apiPath = "/v1/archive"; 
+    const cleanMeteoUrl = baseProtocol + apiSubdomain + "." + apiDomain + "." + apiTld + apiPath;
+
     const meteoUrl = new URL(cleanMeteoUrl); 
     meteoUrl.searchParams.append('latitude', lats.join(',')); 
     meteoUrl.searchParams.append('longitude', lons.join(',')); 
@@ -62,12 +78,7 @@ async function runBackendSync() {
     meteoUrl.searchParams.append('timezone', 'auto'); 
 
     console.log(`Querying weather data between: ${minDate} and ${maxDate}`); 
-    const meteoResponse = await fetch(meteoUrl);
-    
-    if (!meteoResponse.ok) {
-      throw new Error(`Meteo API error status: ${meteoResponse.status}`);
-    }
-    const meteoData = await meteoResponse.json(); 
+    const meteoData = await nativeNodeGet(meteoUrl.toString()); 
     console.log('Weather data download complete.'); 
 
     // 4. Map nested weather arrays back to table indices
@@ -121,4 +132,3 @@ async function runBackendSync() {
 } 
 
 runBackendSync();
-
