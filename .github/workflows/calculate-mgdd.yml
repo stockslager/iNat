@@ -7,20 +7,8 @@ on:
   push:
     branches: [ master ]
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
   build-and-sync:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository code
@@ -29,23 +17,19 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: 22 # Updated to node 22 to match the new action specs
+          node-version: 20
 
-      # Runs your clean, 100% fixed JavaScript data loop
+      # Runs your completely clean, fixed JavaScript data loop
       - name: Run Weather Data Collection Script
         run: node nn/scripts/weather-sync.js
 
-      # Setup and package your website files for deployment using v4 versions
-      - name: Setup GitHub Pages Site Assets
-        uses: actions/configure-pages@v5
+      # Saves the generated data file right back to your repository
+      - name: Commit and Push Updated Weather Data
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@://github.com"
+          git add nn/data/weather-cache.json
+          git diff-index --quiet HEAD || git commit -m "Automated night-sync: Updated local MGDD values"
+          git push
 
-      - name: Upload Static Website Artifacts
-        uses: actions/upload-pages-artifact@v3.0.1 # Secure patch release matching the v4 network update
-        with:
-          path: '.' 
-
-      # Deploys your live website using official, authenticated channels
-      - name: Deploy to GitHub Pages Production
-        id: deployment
-        uses: actions/deploy-pages@v4
 
