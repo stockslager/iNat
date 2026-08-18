@@ -23,7 +23,7 @@ function makeHttpRequest(url) {
       });
     }).on('error', (err) => { reject(err); });
   });
-}
+} 
 
 async function runBackendSync() { 
   try { 
