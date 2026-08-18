@@ -7,7 +7,7 @@ let localWeatherCacheMap = null;
  */
 async function initializeMgddHelper() {
   try {
-    const response = await fetch('./nn/data/weather-cache.json');
+    const response = await fetch('../data/weather-cache.json');
     const weatherDataArray = await response.json();
     
     // Convert the flat array into a fast ID-indexed lookup map: { "obsId": {tmax, tmin} }
