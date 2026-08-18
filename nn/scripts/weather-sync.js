@@ -5,8 +5,8 @@ async function runBackendSync() {
   try { 
     // 1. Target your exact iNaturalist Project ID directly
     // CHANGE THIS text string to match your exact iNat project slug or number ID
-    const projectId = "firefly-patterns"; 
-    const api_url = 'https://inaturalist.org' + projectId + '&per_page=50';
+    const projectId = "304098"; 
+    const api_url = 'https://api.inaturalist.org/v1/observations' + projectId + '&per_page=50';
     
     console.log('Fetching raw iNat observations from: ' + api_url); 
 
