@@ -158,7 +158,7 @@ async function runBackendSync() {
       fs.mkdirSync(outputDirectory, { recursive: true }); 
     } 
 
-    fs.writeFileSync(filePath, JSON.stringify(finalReport, null, 2)); 
+    fs.writeFileSync(filePath, JSON.stringify(finalReport));
     console.log(`SUCCESS: Weather file updated. Total items cached: ${finalReport.length}`); 
 
     return finalReport;
