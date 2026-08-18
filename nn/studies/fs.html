@@ -1200,6 +1200,7 @@ async function gatherResources() {
 console.log("meteo HTTP Status:", meteoResponse.status);
 console.log("meteo Content Type:", meteoResponse.headers.get("content-type"));
              
+const meteoData = await meteoResponse.json();
     console.log('query complete');
 
     // Handle responses whether it returns a single object (1 location) or an array (multiple locations)
