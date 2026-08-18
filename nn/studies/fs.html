@@ -1210,43 +1210,34 @@ const meteoData = await meteoResponse.json();
 // 4. Map the weather results back to the iNat Obs IDs 
 const finalReport = referenceMap.map((obsMeta, index) => {
   
-  // Cleanly identify multi-location arrays vs single-location objects from Open-Meteo
-  let weatherRecord = Array.isArray(meteoData) ? meteoData[index] : meteoData;
+  // Open-Meteo batch responses put the "daily" object directly on the root payload
+  const dailyTimeline = meteoData.daily;
 
-  // SAFETY GUARD: If Open-Meteo didn't return data for this index, or the daily property is missing, skip it safely
-  if (!weatherRecord || !weatherRecord.daily || !weatherRecord.daily.time) {
-    console.warn(`No weather timeline data found for Observation ID: ${obsMeta.obsId}`);
-    return {
-      obsId: obsMeta.obsId,
-      date: obsMeta.date,
-      coordinates: { lat: obsMeta.lat, lon: obsMeta.lon },
-      tmax: null,
-      tmin: null
-    };
+  // SAFETY GUARD: If Open-Meteo failed to return a root timeline object, stop safely
+  if (!dailyTimeline || !dailyTimeline.time) {
+    console.warn(`No root weather timeline data structure returned from the API payload.`);
+    return { obsId: obsMeta.obsId, date: obsMeta.date, tmax: null, tmin: null };
   }
 
-  // === FIX IS HERE ===
-  // Standardize Open-Meteo's date string array to match your clean 'YYYY-MM-DD' format exactly
-  const cleanMeteoDates = weatherRecord.daily.time.map(timeStr => {
-    // If it's an ISO string or timestamp, extract just the date part (first 10 characters)
-    return String(timeStr).slice(0, 10);
-  });
-
-  // Ensure your iNat metadata lookup date is also trimmed to a clean 10 characters
+  // Find the position of the observation's date in the shared timeline array
+  // Trimming strings prevents hidden hour/timezone string mismatches
   const cleanInatTargetDate = String(obsMeta.date).slice(0, 10);
+  const dateIndex = dailyTimeline.time.findIndex(timeStr => String(timeStr).slice(0, 10) === cleanInatTargetDate); 
 
-  // Search using the standardized arrays
-  const dateIndex = cleanMeteoDates.indexOf(cleanInatTargetDate); 
-  
   let tmax = null; 
   let tmin = null; 
 
-  if (dateIndex !== -1) { 
-    tmax = weatherRecord.daily.temperature_2m_max[dateIndex]; 
-    tmin = weatherRecord.daily.temperature_2m_min[dateIndex]; 
+  // If the date exists in the timeline, extract the data using the layout index
+  if (dateIndex !== -1) {
+    // Open-Meteo packs batched temperatures as: daily.temperature_2m_max[locationIndex][dateIndex]
+    if (dailyTimeline.temperature_2m_max && dailyTimeline.temperature_2m_max[index]) {
+      tmax = dailyTimeline.temperature_2m_max[index][dateIndex];
+    }
+    if (dailyTimeline.temperature_2m_min && dailyTimeline.temperature_2m_min[index]) {
+      tmin = dailyTimeline.temperature_2m_min[index][dateIndex];
+    }
   } else {
-    // Log helpful debug clues if a specific date still slips past the map criteria
-    console.log(`Date Mismatch Debug: Couldn't find iNat target "${cleanInatTargetDate}" inside Meteo options:`, cleanMeteoDates);
+    console.warn(`Date Mismatch: Observation date ${cleanInatTargetDate} was outside the fetched Meteo timeline range.`);
   }
 
   return { 
@@ -1257,6 +1248,9 @@ const finalReport = referenceMap.map((obsMeta, index) => {
     tmin 
   }; 
 });
+
+console.log("Successfully paired iNat observations with local weather data:");
+console.log(finalReport);
 
     console.log("Successfully paired iNat observations with local weather data:");
     console.log(finalReport);
