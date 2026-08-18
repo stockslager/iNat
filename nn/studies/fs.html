@@ -1197,6 +1197,7 @@ async function gatherResources() {
     console.log(`Querying Open-Meteo for dates between ${minDate} and ${maxDate}...`);
     const meteoResponse = await fetch(meteoUrl);
     const meteoData = await meteoResponse.json();
+    console.log('query complete');
 
     // Handle responses whether it returns a single object (1 location) or an array (multiple locations)
     const locationsWeatherData = Array.isArray(meteoData) ? meteoData : [meteoData];
