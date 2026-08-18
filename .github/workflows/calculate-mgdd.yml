@@ -16,15 +16,18 @@ jobs:
         with:
           ref: ${{ github.ref_name }}
 
-      # Explicit setup ensures execution stability across branches
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
+      # THIS STEP WILL FORCE THE RUNNER TO SHOW THE EXACT ERROR TEXT 
+      # INSTEAD OF JUST SILENTLY DYING AFTER 10 SECONDS
       - name: Run Weather Data Collection Script
-        run: node nn/scripts/weather-sync.js
+        run: |
+          node nn/scripts/weather-sync.js 2>&1 || (echo "=== SCRIPT FATAL ERROR REASON ===" && node nn/scripts/weather-sync.js && exit 1)
 
+      # Only attempts to push if the step above didn't crash
       - name: Commit and Push Updated Weather Data
         run: |
           git config --global user.name "github-actions[bot]"
