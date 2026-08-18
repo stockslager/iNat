@@ -1,4 +1,5 @@
 const fs = require('fs'); 
+console.log("=== VERIFYING SCRIPT VERSION: RUNNING MY NEW STEP 5 CODE ==="
 const path = require('path'); 
 const https = require('https'); 
 
