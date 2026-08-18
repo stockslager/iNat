@@ -11,21 +11,8 @@ jobs:
   build-and-sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Run Weather Data Collection Script
-        run: node nn/scripts/weather-sync.cjs
-
-      - name: Commit and Push Updated Weather Data
+      - name: Find the Real File Path
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@://github.com"
-          git add nn/data/weather-cache.json
-          git diff-index --quiet HEAD || git commit -m "Automated night-sync: Updated local MGDD values"
-          git push
+          echo "=== ACTUAL REPOSITORY FOLDER MAP ==="
+          find . -maxdepth 3 -not -path '*/.*'
+          echo "====================================="
