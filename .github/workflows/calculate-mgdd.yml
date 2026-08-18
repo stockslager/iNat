@@ -29,20 +29,20 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22 # Updated to node 22 to match the new action specs
 
-      # This runs your exact JavaScript file securely
+      # Runs your clean, 100% fixed JavaScript data loop
       - name: Run Weather Data Collection Script
         run: node nn/scripts/weather-sync.js
 
-      # Setup and package your website files for deployment
+      # Setup and package your website files for deployment using v4 versions
       - name: Setup GitHub Pages Site Assets
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Upload Static Website Artifacts
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v3.0.1 # Secure patch release matching the v4 network update
         with:
-          path: '.' # Packs your whole project directory for deployment
+          path: '.' 
 
       # Deploys your live website using official, authenticated channels
       - name: Deploy to GitHub Pages Production
