@@ -1210,8 +1210,7 @@ const meteoData = await meteoResponse.json();
 // 4. Map the weather results back to the iNat Obs IDs 
 const finalReport = referenceMap.map((obsMeta, index) => {
   
-  // Open-Meteo handles batches by returning a single object if there's only 1 item,
-  // or a flat array of location objects if there are multiple items.
+  // Cleanly identify multi-location arrays vs single-location objects from Open-Meteo
   let weatherRecord = Array.isArray(meteoData) ? meteoData[index] : meteoData;
 
   // SAFETY GUARD: If Open-Meteo didn't return data for this index, or the daily property is missing, skip it safely
@@ -1226,8 +1225,18 @@ const finalReport = referenceMap.map((obsMeta, index) => {
     };
   }
 
-  // Now it is completely safe to call indexOf() on the timeline array
-  const dateIndex = weatherRecord.daily.time.indexOf(obsMeta.date); 
+  // === FIX IS HERE ===
+  // Standardize Open-Meteo's date string array to match your clean 'YYYY-MM-DD' format exactly
+  const cleanMeteoDates = weatherRecord.daily.time.map(timeStr => {
+    // If it's an ISO string or timestamp, extract just the date part (first 10 characters)
+    return String(timeStr).slice(0, 10);
+  });
+
+  // Ensure your iNat metadata lookup date is also trimmed to a clean 10 characters
+  const cleanInatTargetDate = String(obsMeta.date).slice(0, 10);
+
+  // Search using the standardized arrays
+  const dateIndex = cleanMeteoDates.indexOf(cleanInatTargetDate); 
   
   let tmax = null; 
   let tmin = null; 
@@ -1235,11 +1244,14 @@ const finalReport = referenceMap.map((obsMeta, index) => {
   if (dateIndex !== -1) { 
     tmax = weatherRecord.daily.temperature_2m_max[dateIndex]; 
     tmin = weatherRecord.daily.temperature_2m_min[dateIndex]; 
-  } 
+  } else {
+    // Log helpful debug clues if a specific date still slips past the map criteria
+    console.log(`Date Mismatch Debug: Couldn't find iNat target "${cleanInatTargetDate}" inside Meteo options:`, cleanMeteoDates);
+  }
 
   return { 
     obsId: obsMeta.obsId, 
-    date: obsMeta.date, 
+    date: cleanInatTargetDate, 
     coordinates: { lat: obsMeta.lat, lon: obsMeta.lon }, 
     tmax, 
     tmin 
