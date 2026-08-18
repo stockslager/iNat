@@ -5,7 +5,6 @@ on:
     - cron: '0 0 * * *'
   workflow_dispatch:
   push:
-    # This triggers the sync whenever you push to your active branches
     branches: [ master, gh-pages ]
 
 jobs:
@@ -15,19 +14,17 @@ jobs:
       - name: Checkout repository code
         uses: actions/checkout@v4
         with:
-          # FIX IS HERE: Forces the cloud server to load your live website branch
           ref: ${{ github.ref_name }}
 
+      # Explicit setup ensures execution stability across branches
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18
 
-      # Runs your clean, 100% fixed JavaScript data loop
       - name: Run Weather Data Collection Script
         run: node nn/scripts/weather-sync.js
 
-      # Saves the generated data file right back to the current active branch
       - name: Commit and Push Updated Weather Data
         run: |
           git config --global user.name "github-actions[bot]"
