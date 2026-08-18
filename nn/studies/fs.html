@@ -1149,7 +1149,7 @@ async function gatherResources() {
 
       // Filter out any observations missing geolocation coordinates to prepare for
       // fetch of mateo mgdd data.
-      const validObs = inatData.results.filter(obs_data => obs_data.geojson && obs_data.geojson.coordinates);
+      const validObs = obs_data.results.filter(obs_data => obs_data.geojson && obs_data.geojson.coordinates);
 
       if( validObs.length === 0) {
           console.log("No observations found with valid coordinates.");
