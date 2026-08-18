@@ -26,7 +26,7 @@ function makeHttpRequest(url) {
 async function runBackendSync() { 
   try { 
     // 1. Target your exact iNaturalist Project ID
-    const projectId = "304098"; 
+    const projectId = "?project_id=304098"; 
     const inatUrl = 'https://api.inaturalist.org/v1/observations' + projectId + '&per_page=50';
     
     console.log('Downloading observations from: ' + inatUrl); 
