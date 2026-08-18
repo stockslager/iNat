@@ -158,14 +158,19 @@ async function runBackendSync() {
       fs.mkdirSync(outputDirectory, { recursive: true });
     }
 
-    // Convert each observation object into a compressed single string
-    const lineDelimitedJson = finalReport.map(item => JSON.stringify(item)).join('\n');
+    // Convert each observation into a single compact line, adding a comma if it's not the last item
+    const rows = finalReport.map((item, index) => {
+      const isLast = index === finalReport.length - 1;
+      return `  ${JSON.stringify(item)}${isLast ? '' : ','}`;
+    });
 
-    fs.writeFileSync(filePath, lineDelimitedJson);
-    console.log(`SUCCESS: Weather file updated. Total items cached: ${finalReport.length}`); 
+    // Combine everything into a standard, readable JSON array structure
+    const perfectArrayJson = `[\n${rows.join('\n')}\n]`;
 
+    fs.writeFileSync(filePath, perfectArrayJson);
+    console.log(`SUCCESS: Weather file updated. Total items cached: ${finalReport.length}`);
     return finalReport;
-
+    
   } catch (error) { 
     console.error("Workflow collection failed:", error.message); 
     process.exit(1); 
