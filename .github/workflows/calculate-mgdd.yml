@@ -6,9 +6,8 @@ on:
   workflow_dispatch:
   push:
     branches: [ master, gh-pages ]
-    # FIX IS HERE: Tells GitHub NOT to trigger a new run when the weather data updates
-    paths-ignore:
-      - 'nn/data/weather-cache.json'
+    paths:
+      - 'nn/scripts/weather-sync.js'
 
 jobs:
   build-and-sync:
