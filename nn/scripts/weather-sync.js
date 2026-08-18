@@ -159,16 +159,24 @@ if (!fs.existsSync(outputDirectory)) {
   fs.mkdirSync(outputDirectory, { recursive: true });
 }
 
-// Map each row with an explicit trailing carriage return and newline
-const rows = finalReport.map((item, index) => {
-  const isLast = index === finalReport.length - 1;
-  return `  ${JSON.stringify(item)}${isLast ? '' : ','}`;
-});
+// Build the array text line-by-line using a clean string collector
+let jsonLines = [];
+for (let i = 0; i < finalReport.length; i++) {
+  const itemString = JSON.stringify(finalReport[i]);
+  const isLastItem = (i === finalReport.length - 1);
+  
+  // Indent the object text and append a comma if it's not the final row
+  if (isLastItem) {
+    jsonLines.push("  " + itemString);
+  } else {
+    jsonLines.push("  " + itemString + ",");
+  }
+}
 
-// Join the outer array layers with \r\n so your editor cannot merge them
-const perfectArrayJson = `[\r\n${rows.join('\r\n')}\r\n]`;
+// Join the clean lines inside explicit top and bottom array brackets
+const formattedFileText = "[\n" + jsonLines.join("\n") + "\n]";
 
-fs.writeFileSync(filePath, perfectArrayJson);
+fs.writeFileSync(filePath, formattedFileText);
 console.log(`SUCCESS: Weather file updated. Total items cached: ${finalReport.length}`);
 return finalReport;
     
