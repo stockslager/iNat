@@ -106,8 +106,8 @@ async function runBackendSync() {
     const lons = referenceMap.map(r => r.lon);
 
     const chunkDates = referenceMap.map(r => new Date(r.date));
-    const minDate = new Date(Math.min(...chunkDates)).toISOString().split('T');
-    const maxDate = new Date(Math.max(...chunkDates)).toISOString().split('T');
+    const minDate = new Date(Math.min(...chunkDates)).toISOString().split('T')[0];
+    const maxDate = new Date(Math.max(...chunkDates)).toISOString().split('T')[0];
 
     const urlParams = new URLSearchParams({
       latitude: lats.join(','),
