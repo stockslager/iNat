@@ -1147,11 +1147,6 @@ async function gatherResources() {
       console.log('api url: ' + api_url);
       const obs_data      = await apiFetch( api_url ); 
              
-// ADD THESE THREE LINES TO CATCH THE ERROR IMMEDIATELY
-console.log("iNat HTTP Status:", obs_data.status);
-console.log("iNat Content Type:", obs_data.headers.get("content-type"));
-return; // Temporarily stop the script here so it doesn't crash
-             
       // Filter out any observations missing geolocation coordinates to prepare for
       // fetch of mateo mgdd data.
       const validObs = obs_data.results.filter(obs_data => obs_data.geojson && obs_data.geojson.coordinates);
@@ -1190,7 +1185,7 @@ return; // Temporarily stop the script here so it doesn't crash
     const maxDate = new Date(Math.max(...dates)).toISOString().split('T')[0];
 
     // 3. Construct the Open-Meteo batch API request
-    const meteoUrl = new URL('https://open-meteo.com');
+    const meteoUrl = new URL('https://archive-api.open-meteo.com/v1/archive');
     meteoUrl.searchParams.append('latitude', lats.join(','));
     meteoUrl.searchParams.append('longitude', lons.join(','));
     meteoUrl.searchParams.append('start_date', minDate);
