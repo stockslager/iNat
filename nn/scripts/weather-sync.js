@@ -3,25 +3,28 @@ const path = require('path');
 
 async function runBackendSync() { 
   try { 
-    // 1. Read the raw observations file downloaded by GitHub Actions
-    const rawDataPath = path.join(__dirname, '../data/raw-obs.json');
+    // 1. Target your exact iNaturalist Project ID directly
+    // CHANGE THIS text string to match your exact iNat project slug or number ID
+    const projectId = "firefly-patterns"; 
+    const api_url = 'https://inaturalist.org' + projectId + '&per_page=50';
     
-    if (!fs.existsSync(rawDataPath)) {
-      throw new Error(`Could not find the downloaded observation file at: ${rawDataPath}`);
+    console.log('Fetching raw iNat observations from: ' + api_url); 
+
+    // Pure, native Node fetch command - no browser helper dependencies
+    const inatResponse = await fetch(api_url);
+    if (!inatResponse.ok) {
+      throw new Error(`iNaturalist API rejected request with status: ${inatResponse.status}`);
     }
+    const obs_data = await inatResponse.json(); 
 
-    const fileContent = fs.readFileSync(rawDataPath, 'utf8');
-    const obs_data = JSON.parse(fileContent);
-    console.log(`Successfully loaded ${obs_data.results?.length || 0} observations from disk.`);
-
-    // Filter out any observations missing geolocation coordinates
+    // Filter out observations missing coordinates
     const validObs = obs_data.results.filter(obs => obs.geojson && obs.geojson.coordinates); 
     if (validObs.length === 0) { 
       console.log("No observations found with valid coordinates."); 
       return; 
     } 
 
-    // 2. Prepare arrays for Open-Meteo batching and map the index tracking 
+    // 2. Map coordinates and prepare tracking arrays
     const lats = []; 
     const lons = []; 
     const referenceMap = []; 
@@ -33,18 +36,18 @@ async function runBackendSync() {
       
       referenceMap.push({ 
         obsId: obs.id, 
-        date: obs.observed_on_details?.date || obs.created_at.split('T'), 
+        date: obs.observed_on_details?.date || obs.created_at.split('T')[0], 
         lat, 
         lon 
       }); 
     }); 
 
-    // Determine global start and end dates to encompass all observations in one batch 
+    // Establish your global start and end date tracking boundaries
     const dates = referenceMap.map(r => new Date(r.date)); 
-    const minDate = new Date(Math.min(...dates)).toISOString().split('T'); 
-    const maxDate = new Date(Math.max(...dates)).toISOString().split('T'); 
+    const minDate = new Date(Math.min(...dates)).toISOString().split('T')[0]; 
+    const maxDate = new Date(Math.max(...dates)).toISOString().split('T')[0]; 
 
-    // 3. Construct the Open-Meteo batch API request securely
+    // 3. Assemble un-scrubbable Open-Meteo archive parameters
     const baseProtocol = "https://"; 
     const apiSubdomain = "archive-api"; 
     const apiDomain = "open-meteo"; 
@@ -61,14 +64,17 @@ async function runBackendSync() {
     meteoUrl.searchParams.append('temperature_unit', 'fahrenheit'); 
     meteoUrl.searchParams.append('timezone', 'auto'); 
 
-    console.log(`Querying Open-Meteo for dates between ${minDate} and ${maxDate}...`); 
+    console.log(`Querying Open-Meteo for timeline window: ${minDate} to ${maxDate}`); 
     const meteoResponse = await fetch(meteoUrl); 
     
-    console.log("meteo HTTP Status:", meteoResponse.status); 
+    if (!meteoResponse.ok) {
+      throw new Error(`Open-Meteo server rejected parameters with status: ${meteoResponse.status}`);
+    }
+    
     const meteoData = await meteoResponse.json(); 
-    console.log('query complete'); 
+    console.log('Weather data download complete.'); 
 
-    // 4. Map the weather results back to the iNat Obs IDs 
+    // 4. Cleanly map nested weather arrays back to table indices
     const finalReport = referenceMap.map((obsMeta, index) => { 
       const weatherRecord = Array.isArray(meteoData) ? meteoData[index] : meteoData; 
       const dailyTimeline = weatherRecord?.daily; 
@@ -98,7 +104,9 @@ async function runBackendSync() {
       }; 
     }); 
 
-    // 5. Save the array as a clean, static JSON string file in your repository 
+    console.log("Successfully paired data array profiles. Processing write step..."); 
+
+    // 5. Secure file output mapping relative to script folder pathing
     const outputDirectory = path.join(__dirname, '../data'); 
     if (!fs.existsSync(outputDirectory)) { 
       fs.mkdirSync(outputDirectory); 
@@ -106,15 +114,16 @@ async function runBackendSync() {
 
     const filePath = path.join(outputDirectory, 'weather-cache.json'); 
     fs.writeFileSync(filePath, JSON.stringify(finalReport, null, 2)); 
-    console.log("Successfully wrote automated data update to weather-cache.json"); 
+    console.log("SUCCESS: Automated weather-cache.json has been written to disk."); 
 
     return finalReport;
 
   } catch (error) { 
-    console.error("Workflow collection failed:", error); 
+    console.error("Workflow collection failed:", error.message); 
     process.exit(1); 
   } 
 } 
 
 runBackendSync();
+
 
