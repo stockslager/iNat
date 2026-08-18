@@ -1146,6 +1146,91 @@ async function gatherResources() {
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
       const obs_data      = await apiFetch( api_url ); 
+
+      // Filter out any observations missing geolocation coordinates to prepare for
+      // fetch of mateo mgdd data.
+      const validObs = inatData.results.filter(obs_data => obs_data.geojson && obs_data.geojson.coordinates);
+
+      if( validObs.length === 0) {
+          console.log("No observations found with valid coordinates.");
+          return;
+      }
+
+      //****************************
+      // move to it's own function
+      //****************************
+    // 2. Prepare arrays for Open-Meteo batching and map the index tracking
+    const lats = [];
+    const lons = [];
+    const referenceMap = [];
+
+    validObs.forEach((obs) => {
+      // iNat GeoJSON is [longitude, latitude]
+      const [lon, lat] = obs.geojson.coordinates;
+      lats.push(lat);
+      lons.push(lon);
+      
+      // Keep track of the metadata in the exact same array order
+      referenceMap.push({
+        obsId: obs.id,
+        date: obs.observed_on_details?.date || obs.created_at.split('T')[0], // Falls back to upload date if observation date is missing
+        lat,
+        lon
+      });
+    });
+
+    // Determine global start and end dates to encompass all observations in one batch
+    const dates = referenceMap.map(r => new Date(r.date));
+    const minDate = new Date(Math.min(...dates)).toISOString().split('T')[0];
+    const maxDate = new Date(Math.max(...dates)).toISOString().split('T')[0];
+
+    // 3. Construct the Open-Meteo batch API request
+    const meteoUrl = new URL('https://open-meteo.com');
+    meteoUrl.searchParams.append('latitude', lats.join(','));
+    meteoUrl.searchParams.append('longitude', lons.join(','));
+    meteoUrl.searchParams.append('start_date', minDate);
+    meteoUrl.searchParams.append('end_date', maxDate);
+    meteoUrl.searchParams.append('daily', 'temperature_2m_max,temperature_2m_min');
+    meteoUrl.searchParams.append('temperature_unit', 'fahrenheit');
+    meteoUrl.searchParams.append('timezone', 'auto');
+
+    console.log(`Querying Open-Meteo for dates between ${minDate} and ${maxDate}...`);
+    const meteoResponse = await fetch(meteoUrl);
+    const meteoData = await meteoResponse.json();
+
+    // Handle responses whether it returns a single object (1 location) or an array (multiple locations)
+    const locationsWeatherData = Array.isArray(meteoData) ? meteoData : [meteoData];
+
+    // 4. Map the weather results back to the iNat Obs IDs
+    const finalReport = referenceMap.map((obsMeta, index) => {
+      const weatherRecord = locationsWeatherData[index];
+      
+      // Find the index of the specific observation date in the weather timeline array
+      const dateIndex = weatherRecord.daily.time.indexOf(obsMeta.date);
+      
+      let tmax = null;
+      let tmin = null;
+
+      if (dateIndex !== -1) {
+        tmax = weatherRecord.daily.temperature_2m_max[dateIndex];
+        tmin = weatherRecord.daily.temperature_2m_min[dateIndex];
+      }
+
+      return {
+        obsId: obsMeta.obsId,
+        date: obsMeta.date,
+        coordinates: { lat: obsMeta.lat, lon: obsMeta.lon },
+        tmax,
+        tmin
+      };
+    });
+
+    console.log("Successfully paired iNat observations with local weather data:");
+    console.log(finalReport);
+    return finalReport;
+      //****************************
+      // end
+      //****************************
      
       // Pass the data to the buildPage function
       fresults(obs_data, config); 
