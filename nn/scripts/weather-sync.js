@@ -137,7 +137,7 @@ async function runBackendSync() {
       // Pause for 1.5 seconds between chunks to stay well clear of Open-Meteo's rate limiter
       if (i + CHUNK_SIZE < referenceMap.length) {
         console.log("Pacing requests to prevent 429 locks...");
-        await delay(1500);
+        await delay(3500);
       }
     }
 
