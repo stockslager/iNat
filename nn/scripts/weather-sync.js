@@ -9,7 +9,6 @@ const apiTld = "com";
 const apiPath = "/v1/archive"; 
 const cleanMeteoUrl = baseProtocol + apiSubdomain + "." + apiDomain + "." + apiTld + apiPath;
 
-// A simple utility to pace your API requests
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 function makeHttpRequest(url) {
@@ -29,43 +28,59 @@ function makeHttpRequest(url) {
 async function runBackendSync() { 
   try { 
     const projectId = "304098"; 
+    const outputDirectory = path.join(__dirname, '../data'); 
+    const filePath = path.join(outputDirectory, 'weather-cache.json'); 
+    
+    // STEP 1: Load your existing cache file if it exists
+    let finalReport = [];
+    let existingIds = new Set();
+    
+    if (fs.existsSync(filePath)) {
+      try {
+        finalReport = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        existingIds = new Set(finalReport.map(item => String(item.obsId)));
+        console.log(`Loaded ${finalReport.length} existing records from your weather cache.`);
+      } catch (e) {
+        console.log("Weather cache file was empty or invalid. Starting fresh.");
+      }
+    }
+
+    // STEP 2: Download your project data from iNaturalist
     let allObservations = [];
     let currentPage = 1;
     let keepFetching = true;
 
-    // STEP 1: Loop through all iNaturalist pages to gather everything in the project
-    console.log(`Starting entire dataset download for project ${projectId}...`);
+    console.log(`Checking iNaturalist for data updates...`);
     while (keepFetching) {
-      // Fetching 200 at a time is the maximum allowed by iNaturalist per page
       const inatUrl = `https://api.inaturalist.org/v1/observations?project_id=304098&per_page=200&page=${currentPage}`;
-      console.log(`Downloading iNat page ${currentPage}...`);
-      
       const obs_data = await makeHttpRequest(inatUrl);
       const batchResults = obs_data.results || [];
       
       allObservations = allObservations.concat(batchResults);
       
-      // If we got fewer than 200 results, we've successfully reached the last page
       if (batchResults.length < 200) {
         keepFetching = false;
       } else {
         currentPage++;
-        await delay(1200); // 1-second pause to prevent slamming iNaturalist
+        await delay(2000);
       }
     }
 
-    console.log(`Total raw observations downloaded: ${allObservations.length}`);
-
-    // Filter out observations missing geolocation coordinates
+    // Filter down to valid coordinates
     const validObs = allObservations.filter(obs => obs.geojson && obs.geojson.coordinates); 
-    if (validObs.length === 0) { 
-      console.log("No observations found with valid coordinates."); 
-      return; 
-    } 
-    console.log(`Valid observations with coordinates: ${validObs.length}`);
 
-    // Create our base mapping profiles
-    const referenceMap = validObs.map((obs) => {
+    // STEP 3: Find observations that are completely missing from your cache
+    const missingObs = validObs.filter(obs => !existingIds.has(String(obs.id)));
+    
+    if (missingObs.length === 0) {
+      console.log("SUCCESS: Everything is up to date! Zero requests sent to Open-Meteo.");
+      return finalReport;
+    }
+
+    console.log(`Found ${missingObs.length} new observations requiring weather lookups.`);
+
+    // Map your new coordinates
+    const referenceMap = missingObs.map((obs) => {
       const [lon, lat] = obs.geojson.coordinates;
       return {
         obsId: obs.id,
@@ -75,83 +90,66 @@ async function runBackendSync() {
       };
     });
 
-    const finalReport = [];
-    const CHUNK_SIZE = 50; // Open-Meteo's max allowed coordinate batch size
+    // STEP 4: Query Open-Meteo for ONLY the missing data (caps at max 50 for safety)
+    const currentBatch = referenceMap.slice(0, 50);
+    const lats = currentBatch.map(r => r.lat);
+    const lons = currentBatch.map(r => r.lon);
 
-    // STEP 2: Process the weather data in safe batches of 50
-    for (let i = 0; i < referenceMap.length; i += CHUNK_SIZE) {
-      const chunk = referenceMap.slice(i, i + CHUNK_SIZE);
-      console.log(`Processing weather chunk ${Math.floor(i / CHUNK_SIZE) + 1} of ${Math.ceil(referenceMap.length / CHUNK_SIZE)}...`);
+    const chunkDates = currentBatch.map(r => new Date(r.date));
+    const minDate = new Date(Math.min(...chunkDates)).toISOString().split('T')[0];
+    const maxDate = new Date(Math.max(...chunkDates)).toISOString().split('T')[0];
 
-      const lats = chunk.map(r => r.lat);
-      const lons = chunk.map(r => r.lon);
+    const urlParams = new URLSearchParams({
+      latitude: lats.join(','),
+      longitude: lons.join(','),
+      start_date: minDate,
+      end_date: maxDate,
+      daily: 'temperature_2m_max,temperature_2m_min',
+      temperature_unit: 'fahrenheit',
+      timezone: 'auto'
+    });
 
-      // Find the specific date boundaries for just this chunk of 50
-      const chunkDates = chunk.map(r => new Date(r.date));
-      const minDate = new Date(Math.min(...chunkDates)).toISOString().split('T')[0];
-      const maxDate = new Date(Math.max(...chunkDates)).toISOString().split('T')[0];
+    const meteoUrl = cleanMeteoUrl + '?' + urlParams.toString();
+    console.log(`Sending ONE safe request to Open-Meteo for new data rows...`);
+    const meteoData = await makeHttpRequest(meteoUrl);
 
-      const urlParams = new URLSearchParams({
-        latitude: lats.join(','),
-        longitude: lons.join(','),
-        start_date: minDate,
-        end_date: maxDate,
-        daily: 'temperature_2m_max,temperature_2m_min',
-        temperature_unit: 'fahrenheit',
-        timezone: 'auto'
-      });
+    // Append new entries directly onto your existing data array
+    currentBatch.forEach((obsMeta, index) => {
+      const weatherRecord = Array.isArray(meteoData) ? meteoData[index] : meteoData;
+      const dailyTimeline = weatherRecord?.daily;
 
-      const meteoUrl = cleanMeteoUrl + '?' + urlParams.toString();
-      const meteoData = await makeHttpRequest(meteoUrl);
-
-      // Map this specific weather chunk's arrays back to their items
-      chunk.forEach((obsMeta, index) => {
-        const weatherRecord = Array.isArray(meteoData) ? meteoData[index] : meteoData;
-        const dailyTimeline = weatherRecord?.daily;
-
-        if (!dailyTimeline || !dailyTimeline.time) {
-          finalReport.push({ obsId: obsMeta.obsId, date: obsMeta.date, coordinates: { lat: obsMeta.lat, lon: obsMeta.lon }, tmax: null, tmin: null });
-          return;
-        }
-
-        const cleanInatTargetDate = String(obsMeta.date).slice(0, 10);
-        const dateIndex = dailyTimeline.time.findIndex(timeStr => String(timeStr).slice(0, 10) === cleanInatTargetDate);
-
-        let tmax = null;
-        let tmin = null;
-
-        if (dateIndex !== -1) {
-          tmax = dailyTimeline.temperature_2m_max ? dailyTimeline.temperature_2m_max[dateIndex] : null;
-          tmin = dailyTimeline.temperature_2m_min ? dailyTimeline.temperature_2m_min[dateIndex] : null;
-        }
-
-        finalReport.push({
-          obsId: obsMeta.obsId,
-          date: cleanInatTargetDate,
-          coordinates: { lat: obsMeta.lat, lon: obsMeta.lon },
-          tmax,
-          tmin
-        });
-      });
-
-      // Pause for 1.5 seconds between chunks to stay well clear of Open-Meteo's rate limiter
-      if (i + CHUNK_SIZE < referenceMap.length) {
-        console.log("Pacing requests to prevent 429 locks...");
-        await delay(3500);
+      if (!dailyTimeline || !dailyTimeline.time) {
+        finalReport.push({ obsId: obsMeta.obsId, date: obsMeta.date, coordinates: { lat: obsMeta.lat, lon: obsMeta.lon }, tmax: null, tmin: null });
+        return;
       }
-    }
 
-    console.log("Successfully paired total dataset weather profiles."); 
+      const cleanInatTargetDate = String(obsMeta.date).slice(0, 10);
+      const dateIndex = dailyTimeline.time.findIndex(timeStr => String(timeStr).slice(0, 10) === cleanInatTargetDate);
 
-    // STEP 3: Save output to files
-    const outputDirectory = path.join(__dirname, '../data'); 
+      let tmax = null;
+      let tmin = null;
+
+      if (dateIndex !== -1) {
+        tmax = dailyTimeline.temperature_2m_max ? dailyTimeline.temperature_2m_max[dateIndex] : null;
+        tmin = dailyTimeline.temperature_2m_min ? dailyTimeline.temperature_2m_min[dateIndex] : null;
+      }
+
+      finalReport.push({
+        obsId: obsMeta.obsId,
+        date: cleanInatTargetDate,
+        coordinates: { lat: obsMeta.lat, lon: obsMeta.lon },
+        tmax,
+        tmin
+      });
+    });
+
+    // STEP 5: Save total updated array back to your file
     if (!fs.existsSync(outputDirectory)) { 
       fs.mkdirSync(outputDirectory, { recursive: true }); 
     } 
 
-    const filePath = path.join(outputDirectory, 'weather-cache.json'); 
     fs.writeFileSync(filePath, JSON.stringify(finalReport, null, 2)); 
-    console.log(`SUCCESS: All ${finalReport.length} data rows cached to disk.`); 
+    console.log(`SUCCESS: Weather file updated. Total items cached: ${finalReport.length}`); 
 
     return finalReport;
 
