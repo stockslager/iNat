@@ -1207,28 +1207,44 @@ const meteoData = await meteoResponse.json();
     const locationsWeatherData = Array.isArray(meteoData) ? meteoData : [meteoData];
 
     // 4. Map the weather results back to the iNat Obs IDs
-    const finalReport = referenceMap.map((obsMeta, index) => {
-      const weatherRecord = locationsWeatherData[index];
-      
-      // Find the index of the specific observation date in the weather timeline array
-      const dateIndex = weatherRecord.daily.time.indexOf(obsMeta.date);
-      
-      let tmax = null;
-      let tmin = null;
+// 4. Map the weather results back to the iNat Obs IDs 
+const finalReport = referenceMap.map((obsMeta, index) => {
+  
+  // Open-Meteo handles batches by returning a single object if there's only 1 item,
+  // or a flat array of location objects if there are multiple items.
+  let weatherRecord = Array.isArray(meteoData) ? meteoData[index] : meteoData;
 
-      if (dateIndex !== -1) {
-        tmax = weatherRecord.daily.temperature_2m_max[dateIndex];
-        tmin = weatherRecord.daily.temperature_2m_min[dateIndex];
-      }
+  // SAFETY GUARD: If Open-Meteo didn't return data for this index, or the daily property is missing, skip it safely
+  if (!weatherRecord || !weatherRecord.daily || !weatherRecord.daily.time) {
+    console.warn(`No weather timeline data found for Observation ID: ${obsMeta.obsId}`);
+    return {
+      obsId: obsMeta.obsId,
+      date: obsMeta.date,
+      coordinates: { lat: obsMeta.lat, lon: obsMeta.lon },
+      tmax: null,
+      tmin: null
+    };
+  }
 
-      return {
-        obsId: obsMeta.obsId,
-        date: obsMeta.date,
-        coordinates: { lat: obsMeta.lat, lon: obsMeta.lon },
-        tmax,
-        tmin
-      };
-    });
+  // Now it is completely safe to call indexOf() on the timeline array
+  const dateIndex = weatherRecord.daily.time.indexOf(obsMeta.date); 
+  
+  let tmax = null; 
+  let tmin = null; 
+
+  if (dateIndex !== -1) { 
+    tmax = weatherRecord.daily.temperature_2m_max[dateIndex]; 
+    tmin = weatherRecord.daily.temperature_2m_min[dateIndex]; 
+  } 
+
+  return { 
+    obsId: obsMeta.obsId, 
+    date: obsMeta.date, 
+    coordinates: { lat: obsMeta.lat, lon: obsMeta.lon }, 
+    tmax, 
+    tmin 
+  }; 
+});
 
     console.log("Successfully paired iNat observations with local weather data:");
     console.log(finalReport);
