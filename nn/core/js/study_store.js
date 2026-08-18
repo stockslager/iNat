@@ -1031,3 +1031,8 @@ function clearForSpeciesCountsParams(state) {
 
   return urlState;
 }
+
+// tells Node.js what functions are allowed to be extracted for a nightly cron job
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { asyncGetConfiguration, apiFetch };
+}
