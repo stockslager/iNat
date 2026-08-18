@@ -45,7 +45,7 @@ async function runBackendSync() {
       }
     }
 
-    // STEP 2: Download your project data from iNaturalist
+    // STEP 2: Download your project data from iNaturalist using a safe page loop
     let allObservations = [];
     let currentPage = 1;
     let keepFetching = true;
@@ -62,14 +62,14 @@ async function runBackendSync() {
         keepFetching = false;
       } else {
         currentPage++;
-        await delay(2000);
+        await delay(2000); // Safe 2-second pause for iNaturalist limits
       }
     }
 
     // Filter down to valid coordinates
     const validObs = allObservations.filter(obs => obs.geojson && obs.geojson.coordinates); 
 
-    // STEP 3: Find observations that are completely missing from your cache
+    // STEP 3: Identify observations missing from the cache
     const missingObs = validObs.filter(obs => !existingIds.has(String(obs.id)));
     
     if (missingObs.length === 0) {
@@ -79,25 +79,28 @@ async function runBackendSync() {
 
     console.log(`Found ${missingObs.length} new observations requiring weather lookups.`);
 
+    // === CRITICAL FIX: HARD CAP THE WEATHER QUERY AT 50 ENTRIES ===
+    // If more than 50 items were added, it chops off the rest and catches them tomorrow night!
+    const cappedObs = missingObs.slice(0, 50);
+    console.log(`Capping this execution block at ${cappedObs.length} entries to protect Open-Meteo threshold limits.`);
+
     // Map your new coordinates
-    const referenceMap = missingObs.map((obs) => {
+    const referenceMap = cappedObs.map((obs) => {
       const [lon, lat] = obs.geojson.coordinates;
       return {
         obsId: obs.id,
-        date: obs.observed_on_details?.date || obs.created_at.split('T')[0],
+        date: obs.observed_on_details?.date || obs.created_at.split('T'),
         lat: Number(lat).toFixed(2),
         lon: Number(lon).toFixed(2)
       };
     });
 
-    // STEP 4: Query Open-Meteo for ONLY the missing data (caps at max 50 for safety)
-    const currentBatch = referenceMap.slice(0, 50);
-    const lats = currentBatch.map(r => r.lat);
-    const lons = currentBatch.map(r => r.lon);
+    const lats = referenceMap.map(r => r.lat);
+    const lons = referenceMap.map(r => r.lon);
 
-    const chunkDates = currentBatch.map(r => new Date(r.date));
-    const minDate = new Date(Math.min(...chunkDates)).toISOString().split('T')[0];
-    const maxDate = new Date(Math.max(...chunkDates)).toISOString().split('T')[0];
+    const chunkDates = referenceMap.map(r => new Date(r.date));
+    const minDate = new Date(Math.min(...chunkDates)).toISOString().split('T');
+    const maxDate = new Date(Math.max(...chunkDates)).toISOString().split('T');
 
     const urlParams = new URLSearchParams({
       latitude: lats.join(','),
@@ -113,8 +116,8 @@ async function runBackendSync() {
     console.log(`Sending ONE safe request to Open-Meteo for new data rows...`);
     const meteoData = await makeHttpRequest(meteoUrl);
 
-    // Append new entries directly onto your existing data array
-    currentBatch.forEach((obsMeta, index) => {
+    // STEP 4: Append new entries directly onto your existing data array layout
+    referenceMap.forEach((obsMeta, index) => {
       const weatherRecord = Array.isArray(meteoData) ? meteoData[index] : meteoData;
       const dailyTimeline = weatherRecord?.daily;
 
