@@ -1185,7 +1185,7 @@ async function gatherResources() {
     const maxDate = new Date(Math.max(...dates)).toISOString().split('T')[0];
 
     // 3. Construct the Open-Meteo batch API request
-    const meteoUrl = new URL('https://api.open-meteo.com/v1/forecast');
+    const meteoUrl = new URL('https://api.open-meteo.com/v1/archive');
     meteoUrl.searchParams.append('latitude', lats.join(','));
     meteoUrl.searchParams.append('longitude', lons.join(','));
     meteoUrl.searchParams.append('start_date', minDate);
