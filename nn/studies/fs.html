@@ -752,13 +752,17 @@ values.push({ innerHTML: valueId });
              var latVal = rec.geojson.coordinates.slice(1, 2).join('');
              var dateVal = rec.observed_on_details.date;
                     
-             // isolate the observation year, defaulting to the current calendar year if null
-             const activeDateStr = rec.observed_on_details?.date;
-             const targetYear = activeDateStr ? activeDateStr.slice(0, 4) : new Date().getFullYear();
-             const baselineDateStr = targetYear + '-02-01';
+             const activeDateStr = rec.observed_on_details?.date; // Expects "YYYY-MM-DD"
+             let displayDates = 'No Date';
 
-             // Format the display string (e.g., "2023-02-07 to 2023-02-01")
-             const displayDates = activeDateStr ? activeDateStr + ' to ' + baselineDateStr : 'No Date';      
+             if( activeDateStr && activeDateStr.length === 10 ) {
+                 const year  = activeDateStr.slice(0, 4);
+                 const month = activeDateStr.slice(5, 7);
+                 const day   = activeDateStr.slice(8, 10);
+    
+                 // Combine them directly into "02-01-YYYY to MM-DD-YYYY"
+                 displayDates = '02-01-' + year + ' to ' + month + '-' + day + '-' + year;
+             }
                     
              values.push({ innerHTML: furl2('javascript:void(0)" onclick="showMgddBreakdownModal(\'' + latVal + '\', \'' + lonVal + '\', \'' + dateVal + '\')', mgddValue + 
                                             '<br><i style="font-size: 0.85em;">(' + displayDates + ')</i>') });
