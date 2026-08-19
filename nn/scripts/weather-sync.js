@@ -71,7 +71,13 @@ async function runBackendSync() {
       }
     }
 
-    const validObs = allObservations.filter(obs => obs.geojson && obs.geojson.coordinates);
+    const validObs = allObservations.filter(function(obs) {
+      return obs && 
+         obs.geojson && 
+         Array.isArray(obs.geojson.coordinates) && 
+         obs.geojson.coordinates.length >= 2;
+    });
+    //const validObs = allObservations.filter(obs => obs.geojson && obs.geojson.coordinates);
     const missingObs = validObs.filter(obs => !existingIds.has(String(obs.id)));
     
     if (missingObs.length === 0) {
