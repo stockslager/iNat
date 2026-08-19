@@ -764,8 +764,15 @@ values.push({ innerHTML: valueId });
                  displayDates = '02-01-' + year + ' to ' + month + '-' + day + '-' + year;
              }
 
-             values.push({ innerHTML: furl2( 'javascript:void(0)" onclick="showMgddBreakdownModal(\'' + latVal + '\', \'' + lonVal + '\', \'' + dateVal + '\')', mgddValue + 
-                                             '<br><span style="font-size: 0.85em; font-style: italic;">(' + displayDates + ')</span>')  }); 
+values.push({ 
+    innerHTML: furl2(
+        'javascript:void(0)" onclick="showMgddBreakdownModal(\'' + latVal + '\', \'' + lonVal + '\', \'' + dateVal + '\')', 
+        '<span style="display: inline-block; line-height: 1.3;">' + mgddValue + '<br><span style="font-size: 0.85em; font-style: italic;">(' + displayDates + ')</span></span>'
+    ) 
+});
+                    
+                    /*values.push({ innerHTML: furl2( 'javascript:void(0)" onclick="showMgddBreakdownModal(\'' + latVal + '\', \'' + lonVal + '\', \'' + dateVal + '\')', mgddValue + 
+                                             '<br><span style="font-size: 0.85em; font-style: italic;">(' + displayDates + ')</span>')  }); */
          }
                 
          if( config.showMonth === 'yes' ) { 
