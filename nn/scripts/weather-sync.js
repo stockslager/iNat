@@ -115,8 +115,8 @@ async function runBackendSync() {
       var currentYear = yearsToProcess[y];
       var batchRows = groupsByYear[currentYear];
 
-      var batchLats = batchRows.map(function(r) { return r.lat; });
-      var batchLons = batchRows.map(function(r) { return r.lon; });
+      let batchLats = batchRows.map(function(r) { return r.lat; });
+      let batchLons = batchRows.map(function(r) { return r.lon; });
       
       var chunkDates = batchRows.map(function(r) { return new Date(r.date); });
       var uniformStartDate = currentYear + '-02-01';
