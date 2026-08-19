@@ -93,8 +93,8 @@ async function runBackendSync() {
       return { 
         obsId: obs.id, 
         date: String(targetDate).slice(0, 10), 
-        lat: Number(lat).toFixed(2), 
-        lon: Number(lon).toFixed(2) 
+        lat: Number(lat).toFixed(4), 
+        lon: Number(lon).toFixed(4) 
       };
     });
 
