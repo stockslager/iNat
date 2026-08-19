@@ -71,15 +71,9 @@ async function runBackendSync() {
       }
     }
 
-    const validObs = allObservations.filter(function(obs) {
-      return obs && 
-         obs.geojson && 
-         Array.isArray(obs.geojson.coordinates) && 
-         obs.geojson.coordinates.length >= 2;
-    });
-    //const validObs = allObservations.filter(obs => obs.geojson && obs.geojson.coordinates);
+    const validObs = allObservations.filter(obs => obs.geojson && obs.geojson.coordinates);
     const missingObs = validObs.filter(obs => !existingIds.has(String(obs.id)));
-    
+
     if (missingObs.length === 0) {
       console.log("SUCCESS: Everything is up to date! Zero requests sent to Open-Meteo.");
       return finalReport;
@@ -104,81 +98,81 @@ async function runBackendSync() {
       };
     });
 
-    // === STEP 4: Process each observation individually using isolated block parameters ===
-    //console.log('Processing ' + cappedObs.length + ' observations one-by-one...');
+    const lats = referenceMap.map(r => r.lat);
+    const lons = referenceMap.map(r => r.lon);
 
-    for (let i = 0; i < referenceMap.length; i++) {
-      const obs = referenceMap[i];
-      
-      const lon = obs.geojson.coordinates[0];
-      const lat = obs.geojson.coordinates[1];
-      
-      const cleanLat = obs.lat;
-      const cleanLon = obs.lon;
-      const targetDateStr = obs.date;
+    // Extract years as text and find the oldest baseline anchor safely
+    const yearStrings = referenceMap.map(r => r.date.slice(0, 4));
+    const uniqueYears = [...new Set(yearStrings)].map(Number);
+    const earliestYear = Math.min(...uniqueYears);
+
+    // Define the single global maximum wide envelope boundaries
+    const uniformStartDate = earliestYear + "-02-01";
+    const uniformEndDate = new Date().toISOString().split('T')[0];
+
+    const urlParams = new URLSearchParams({
+      latitude: lats.join(','),
+      longitude: lons.join(','),
+      start_date: uniformStartDate,
+      end_date: uniformEndDate,
+      daily: 'temperature_2m_max,temperature_2m_min',
+      temperature_unit: 'fahrenheit',
+      timezone: 'GMT'
+    });
+
+    const meteoUrl = cleanMeteoUrl + '?' + urlParams.toString();
+    console.log(`Sending ONE safe request to Open-Meteo for new data rows...`);
+    const meteoData = await makeHttpRequest(meteoUrl);
+
+    // STEP 4: Append new entries and calculate cumulative MGDD cleanly
+    referenceMap.forEach((obsMeta, index) => {
+      const weatherRecord = Array.isArray(meteoData) ? meteoData[index] : meteoData;
+      const dailyTimeline = weatherRecord?.daily;
+
+      if (!dailyTimeline || !dailyTimeline.time) {
+        finalReport.push({ obsId: obsMeta.obsId, date: obsMeta.date, coordinates: { lat: obsMeta.lat, lon: obsMeta.lon }, mgdd: null });
+        return;
+      }
+
+      if (String(obsMeta.obsId) === '173920616') {
+          console.log("=== SERVER SIDE API RECOVERY ===");
+          console.log("Timeline Length: " + (dailyTimeline?.time?.length || 0));
+          console.log("First Date: " + (dailyTimeline?.time ? dailyTimeline.time[0] : "NONE"));
+          console.log("Last Date: " + (dailyTimeline?.time ? dailyTimeline.time[dailyTimeline.time.length - 1] : "NONE"));
+          console.log("First Max Temp: " + (dailyTimeline?.temperature_2m_max ? dailyTimeline.temperature_2m_max[0] : "NONE"));
+      }
+
+      let cumulativeMgdd = 0;
+      const targetDateStr = obsMeta.date;
       const obsYear = targetDateStr.slice(0, 4);
-      const internalStartDate = obsYear + '-02-01';
-           
-      console.log('[' + (i + 1) + '/' + referenceMap.length + '] Fetching ID: ' + obs.obsId);
+      const internalStartDate = obsYear + "-02-01";
 
-      const urlParams = new URLSearchParams({
-        latitude: cleanLat,
-        longitude: cleanLon,
-        start_date: internalStartDate,
-        end_date: targetDateStr,
-        daily: 'temperature_2m_max,temperature_2m_min',
-        temperature_unit: 'fahrenheit',
-        timezone: 'GMT'
-      });
+      for (let d = 0; d < dailyTimeline.time.length; d++) {
+        const currentTimeStr = dailyTimeline.time[d];
 
-      const meteoUrl = 'https://open-meteo.com?' + urlParams.toString();
-      
-      try {
-        const meteoData = await makeHttpRequest(meteoUrl);
-        const dailyTimeline = meteoData ? meteoData.daily : null;
+        if (currentTimeStr < internalStartDate) continue;
+        if (currentTimeStr > targetDateStr) break;
 
-        if (!dailyTimeline || !dailyTimeline.time) {
-          console.warn('No weather data payload returned for ID: ' + obs.obsId);
-          finalReport.push({ obsId: obs.obsId, date: targetDateStr, coordinates: { lat: cleanLat, lon: cleanLon }, mgdd: null });
-          continue;
-        }
+        const tmax = dailyTimeline.temperature_2m_max ? dailyTimeline.temperature_2m_max[d] : null;
+        const tmin = dailyTimeline.temperature_2m_min ? dailyTimeline.temperature_2m_min[d] : null;
 
-        let cumulativeMgdd = 0;
-
-        for (let d = 0; d < dailyTimeline.time.length; d++) {
-          const currentTimeStr = dailyTimeline.time[d];
-          if (currentTimeStr < internalStartDate) continue;
-          if (currentTimeStr > targetDateStr) break;
-
-          const tmax = dailyTimeline.temperature_2m_max ? dailyTimeline.temperature_2m_max[d] : null;
-          const tmin = dailyTimeline.temperature_2m_min ? dailyTimeline.temperature_2m_min[d] : null;
-
-          if (tmax !== null && tmin !== null) {
-            const adjustedMax = Math.max(50, Math.min(86, tmax));
-            const adjustedMin = Math.max(50, Math.min(86, tmin));
-            const dailyGdd = ((adjustedMax + adjustedMin) / 2) - 50;
-            if (dailyGdd > 0) {
-              cumulativeMgdd += dailyGdd;
-            }
+        if (tmax !== null && tmin !== null) {
+          const adjustedMax = Math.max(50, Math.min(86, tmax));
+          const adjustedMin = Math.max(50, Math.min(86, tmin));
+          const dailyGdd = ((adjustedMax + adjustedMin) / 2) - 50;
+          if (dailyGdd > 0) {
+            cumulativeMgdd += dailyGdd;
           }
         }
-
-        finalReport.push({
-          obsId: obs.obsId,
-          date: targetDateStr,
-          coordinates: { lat: cleanLat, lon: cleanLon },
-          mgdd: Math.round(cumulativeMgdd)
-        });
-
-        // 200ms delay to space out transactions under the 60-req/min ceiling
-        await delay(200);
-
-      } catch (err) {
-        console.error('Failed lookup for ID ' + obs.obsId + ':', err.message);
-        finalReport.push({ obsId: obs.obsId, date: targetDateStr, coordinates: { lat: cleanLat, lon: cleanLon }, mgdd: null });
       }
-    }
-    // === END OF STEP 4 ===
+
+      finalReport.push({
+        obsId: obsMeta.obsId,
+        date: targetDateStr,
+        coordinates: { lat: obsMeta.lat, lon: obsMeta.lon },
+        mgdd: Math.round(cumulativeMgdd)
+      });
+    });
 
     // STEP 5: Save updated array back to file
     if (!fs.existsSync(outputDirectory)) {
