@@ -764,17 +764,8 @@ values.push({ innerHTML: valueId });
                  displayDates = '02-01-' + year + ' to ' + month + '-' + day + '-' + year;
              }
 
-values.push({ 
-    innerHTML: furl2(
-        'javascript:void(0)" onclick="showMgddBreakdownModal(\'' + latVal + '\', \'' + lonVal + '\', \'' + dateVal + '\')', 
-        '<span style="display: inline-flex; flex-direction: column; align-items: center; justify-content: center; row-gap: 3px; line-height: 1;">' +
-            '<span>' + mgddValue + '</span>' +
-            '<span style="font-size: 0.85em; font-style: italic; color: #555;">(' + displayDates + ')</span>' +
-        '</span>'
-    ) 
-});                    
-             /*values.push({ innerHTML: furl2( 'javascript:void(0)" onclick="showMgddBreakdownModal(\'' + latVal + '\', \'' + lonVal + '\', \'' + dateVal + '\')', mgddValue + 
-                                             '<span style="flex-basis: 100%; width: 100%; height: 0;"></span><span style="display: block; font-size: 0.85em; font-style: italic; padding-top: 4px; line-height: 1;">(' + displayDates + ')</span>')  }); */
+             values.push({ innerHTML: furl2( 'javascript:void(0)" onclick="showMgddBreakdownModal(\'' + latVal + '\', \'' + lonVal + '\', \'' + dateVal + '\')', mgddValue + 
+                                             '<span style="font-size: 0.85em; font-style: italic;">(' + displayDates + ')</span>')  }); 
          }
                 
          if( config.showMonth === 'yes' ) { 
