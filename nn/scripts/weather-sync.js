@@ -98,32 +98,6 @@ async function runBackendSync() {
       };
     });
 
-    const lats = referenceMap.map(r => r.lat);
-    const lons = referenceMap.map(r => r.lon);
-
-    // Extract years as text and find the oldest baseline anchor safely
-    const yearStrings = referenceMap.map(r => r.date.slice(0, 4));
-    const uniqueYears = [...new Set(yearStrings)].map(Number);
-    const earliestYear = Math.min(...uniqueYears);
-
-    // Define the single global maximum wide envelope boundaries
-    const uniformStartDate = earliestYear + "-02-01";
-    const uniformEndDate = new Date().toISOString().split('T')[0];
-
-    const urlParams = new URLSearchParams({
-      latitude: lats.join(','),
-      longitude: lons.join(','),
-      start_date: uniformStartDate,
-      end_date: uniformEndDate,
-      daily: 'temperature_2m_max,temperature_2m_min',
-      temperature_unit: 'fahrenheit',
-      timezone: 'GMT'
-    });
-
-    const meteoUrl = cleanMeteoUrl + '?' + urlParams.toString();
-    console.log(`Sending ONE safe request to Open-Meteo for new data rows...`);
-    const meteoData = await makeHttpRequest(meteoUrl);
-
     // === STEP 4: Group observations by year and process clusters in distinct batch requests ===
     var groupsByYear = {};
     referenceMap.forEach(function(obs) {
