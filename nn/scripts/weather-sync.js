@@ -147,6 +147,9 @@ referenceMap.forEach((obsMeta, index) => {
   let cumulativeMgdd = 0;
   const targetDateStr = String(obsMeta.date).slice(0, 10);
 
+  const obsYear = targetDateStr.slice(0, 4);
+  const internalStartDate = obsYear + "-02-01";
+
   // Loop day-by-day through this specific location's isolated timeline
   for (let d = 0; d < dailyTimeline.time.length; d++) {
     const currentTimeStr = dailyTimeline.time[d];
