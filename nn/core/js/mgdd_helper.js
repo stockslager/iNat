@@ -91,42 +91,51 @@ async function showMgddBreakdownModal(lat, lon, obsDate) {
       return;
     }
 
-    let runningTotal = 0;
-    let tableRowsHtml = "";
+  let cumulativeMgdd = 0;
+  let tableRowsHtml = "";
 
-    // Reconstruct the daily math loop directly inside the browser window
-    for (let d = 0; d < daily.time.length; d++) {
-      const currentDate = daily.time[d];
-      const tmax = daily.temperature_2m_max ? daily.temperature_2m_max[d] : null;
-      const tmin = daily.temperature_2m_min ? daily.temperature_2m_min[d] : null;
+  // Convert your string filters into raw numeric timestamps right before the loop
+  const targetTimestamp = Date.parse(String(obsDate).slice(0, 10));
+  const obsYear = String(obsDate).slice(0, 4);
+  const startTimestamp = Date.parse(obsYear + "-02-01");
 
-      let dailyGdd = 0;
-      let displayMax = "N/A";
-      let displayMin = "N/A";
+  for (let d = 0; d < daily.time.length; d++) {
+    const currentTimeStr = daily.time[d];
+    
+    // Convert the current timeline day string into a raw numeric timestamp
+    const currentTimestamp = Date.parse(currentTimeStr);
+    
+    // 1. SKIP any dates that occur before February 1st of that year
+    if (currentTimestamp < startTimestamp) continue;
 
-      if (tmax !== null && tmin !== null) {
-        displayMax = tmax + "°F";
-        displayMin = tmin + "°F";
-        const adjustedMax = Math.max(50, Math.min(86, tmax));
-        const adjustedMin = Math.max(50, Math.min(86, tmin));
-        const rawGdd = ((adjustedMax + adjustedMin) / 2) - 50;
-        if (rawGdd > 0) {
-          dailyGdd = rawGdd;
-          runningTotal += dailyGdd;
-        }
+    // 2. STOP counting immediately if we pass the actual observation day
+    if (currentTimestamp > targetTimestamp) break;
+
+    const tmax = daily.temperature_2m_max ? daily.temperature_2m_max[d] : null;
+    const tmin = daily.temperature_2m_min ? daily.temperature_2m_min[d] : null;
+
+    if (tmax !== null && tmin !== null) {
+      const adjustedMax = Math.max(50, Math.min(86, tmax));
+      const adjustedMin = Math.max(50, Math.min(86, tmin));
+      const dailyGdd = ((adjustedMax + adjustedMin) / 2) - 50;
+      
+      if (dailyGdd > 0) {
+        cumulativeMgdd += dailyGdd;
       }
-
-      // Build out individual HTML table row snippets
-      tableRowsHtml += `
-        <tr style="border-bottom:1px solid #ddd;">
-          <td style="padding:8px;text-align:left;">${currentDate}</td>
-          <td style="padding:8px;text-align:center;">${displayMax}</td>
-          <td style="padding:8px;text-align:center;">${displayMin}</td>
-          <td style="padding:8px;text-align:center;color:#2ecc71;font-weight:bold;">+${dailyGdd.toFixed(1)}</td>
-          <td style="padding:8px;text-align:right;font-weight:bold;">${Math.round(runningTotal)}</td>
-        </tr>
-      `;
     }
+
+    // Choose display number: Match the precise final rounded calculation
+    var currentRunningRound = Math.round(cumulativeMgdd);
+
+    tableRowsHtml += 
+      '<tr style="border-bottom:1px solid #ddd;">' +
+        '<td style="padding:8px;text-align:left;">' + currentTimeStr + '</td>' +
+        '<td style="padding:8px;text-align:center;">' + (tmax !== null ? tmax + "°F" : "N/A") + '</td>' +
+        '<td style="padding:8px;text-align:center;">' + (tmin !== null ? tmin + "°F" : "N/A") + '</td>' +
+        '<td style="padding:8px;text-align:center;color:#2ecc71;font-weight:bold;">+' + dailyGdd.toFixed(1) + '</td>' +
+        '<td style="padding:8px;text-align:right;font-weight:bold;">' + currentRunningRound + '</td>' +
+      '</tr>';
+  }
 
     // Build the popup modal container window
     const modalOverlay = document.createElement('div');
