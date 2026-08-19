@@ -98,100 +98,78 @@ async function runBackendSync() {
       };
     });
 
-    // === STEP 4: Group observations by year and process clusters in distinct batch requests ===
-    var groupsByYear = {};
-    referenceMap.forEach(function(obs) {
-      var year = obs.date.slice(0, 4);
-      if (!groupsByYear[year]) {
-        groupsByYear[year] = [];
-      }
-      groupsByYear[year].push(obs);
-    });
+    // === STEP 4: Process each observation individually using isolated block parameters ===
+    console.log('Processing ' + cappedObs.length + ' observations one-by-one...');
 
-    var yearsToProcess = Object.keys(groupsByYear);
-    console.log('Processing weather data across ' + yearsToProcess.length + ' distinct year groups...');
-
-    for (var y = 0; y < yearsToProcess.length; y++) {
-      var currentYear = yearsToProcess[y];
-      var batchRows = groupsByYear[currentYear];
-
-      let batchLats = batchRows.map(function(r) { return r.lat; });
-      let batchLons = batchRows.map(function(r) { return r.lon; });
+    for (let i = 0; i < cappedObs.length; i++) {
+      const obs = cappedObs[i];
       
-      var chunkDates = batchRows.map(function(r) { return new Date(r.date); });
-      var uniformStartDate = currentYear + '-02-01';
-      var uniformEndDate = new Date(Math.max.apply(null, chunkDates)).toISOString().split('T')[0];
+      const lon = obs.geojson.coordinates[0];
+      const lat = obs.geojson.coordinates[1];
+      const cleanLat = Number(lat).toFixed(2);
+      const cleanLon = Number(lon).toFixed(2);
+      
+      const targetDateStr = obs.date;
+      const obsYear = targetDateStr.slice(0, 4);
+      const internalStartDate = obsYear + '-02-01';
 
-      console.log('Querying year group ' + currentYear + ' (' + batchRows.length + ' items, range: ' + uniformStartDate + ' to ' + uniformEndDate + ')');
+      console.log('[' + (i + 1) + '/' + cappedObs.length + '] Fetching ID: ' + obs.obsId);
 
-      var urlParams = new URLSearchParams({
-        latitude: batchLats.join(','),
-        longitude: batchLons.join(','),
-        start_date: uniformStartDate,
-        end_date: uniformEndDate,
+      const urlParams = new URLSearchParams({
+        latitude: cleanLat,
+        longitude: cleanLon,
+        start_date: internalStartDate,
+        end_date: targetDateStr,
         daily: 'temperature_2m_max,temperature_2m_min',
         temperature_unit: 'fahrenheit',
         timezone: 'GMT'
       });
 
-      var meteoUrl = cleanMeteoUrl + '?' + urlParams.toString();
+      const meteoUrl = 'https://open-meteo.com?' + urlParams.toString();
       
       try {
-        var meteoData = await makeHttpRequest(meteoUrl);
-        var rootDaily = meteoData ? meteoData.daily : null;
-        var totalTimelineDays = rootDaily && rootDaily.time ? rootDaily.time.length : 0;
-        var daysPerLocation = batchLats.length > 0 ? totalTimelineDays / batchLats.length : 0;
+        const meteoData = await makeHttpRequest(meteoUrl);
+        const dailyTimeline = meteoData ? meteoData.daily : null;
 
-        batchRows.forEach(function(obsMeta, index) {
-          if (!rootDaily || !rootDaily.time || daysPerLocation === 0) {
-            finalReport.push({ obsId: obsMeta.obsId, date: obsMeta.date, coordinates: { lat: obsMeta.lat, lon: obsMeta.lon }, mgdd: null });
-            return;
-          }
+        if (!dailyTimeline || !dailyTimeline.time) {
+          console.warn('No weather data payload returned for ID: ' + obs.obsId);
+          finalReport.push({ obsId: obs.obsId, date: targetDateStr, coordinates: { lat: cleanLat, lon: cleanLon }, mgdd: null });
+          continue;
+        }
 
-          var startOffset = index * daysPerLocation;
-          var locationTimes = rootDaily.time.slice(startOffset, startOffset + daysPerLocation);
-          var locationMaxs = rootDaily.temperature_2m_max ? rootDaily.temperature_2m_max.slice(startOffset, startOffset + daysPerLocation) : [];
-          var locationMins = rootDaily.temperature_2m_min ? rootDaily.temperature_2m_min.slice(startOffset, startOffset + daysPerLocation) : [];
+        let cumulativeMgdd = 0;
 
-          var cumulativeMgdd = 0;
-          var targetDateStr = obsMeta.date;
-          var internalStartDate = currentYear + '-02-01';
+        for (let d = 0; d < dailyTimeline.time.length; d++) {
+          const currentTimeStr = dailyTimeline.time[d];
+          if (currentTimeStr < internalStartDate) continue;
+          if (currentTimeStr > targetDateStr) break;
 
-          for (var d = 0; d < locationTimes.length; d++) {
-            var currentTimeStr = locationTimes[d];
-            if (currentTimeStr < internalStartDate) continue;
-            if (currentTimeStr > targetDateStr) break;
+          const tmax = dailyTimeline.temperature_2m_max ? dailyTimeline.temperature_2m_max[d] : null;
+          const tmin = dailyTimeline.temperature_2m_min ? dailyTimeline.temperature_2m_min[d] : null;
 
-            var tmax = locationMaxs[d];
-            var tmin = locationMins[d];
-
-            if (tmax !== null && tmin !== null) {
-              var adjustedMax = Math.max(50, Math.min(86, tmax));
-              var adjustedMin = Math.max(50, Math.min(86, tmin));
-              var dailyGdd = ((adjustedMax + adjustedMin) / 2) - 50;
-              if (dailyGdd > 0) {
-                cumulativeMgdd += dailyGdd;
-              }
+          if (tmax !== null && tmin !== null) {
+            const adjustedMax = Math.max(50, Math.min(86, tmax));
+            const adjustedMin = Math.max(50, Math.min(86, tmin));
+            const dailyGdd = ((adjustedMax + adjustedMin) / 2) - 50;
+            if (dailyGdd > 0) {
+              cumulativeMgdd += dailyGdd;
             }
           }
+        }
 
-          finalReport.push({
-            obsId: obsMeta.obsId,
-            date: targetDateStr,
-            coordinates: { lat: obsMeta.lat, lon: obsMeta.lon },
-            mgdd: Math.round(cumulativeMgdd)
-          });
+        finalReport.push({
+          obsId: obs.obsId,
+          date: targetDateStr,
+          coordinates: { lat: cleanLat, lon: cleanLon },
+          mgdd: Math.round(cumulativeMgdd)
         });
+
+        // 200ms delay to space out transactions under the 60-req/min ceiling
+        await delay(200);
 
       } catch (err) {
-        console.error('API Group Call failed for year ' + currentYear + ':', err.message);
-        batchRows.forEach(function(obsMeta) {
-          finalReport.push({ obsId: obsMeta.obsId, date: obsMeta.date, coordinates: { lat: obsMeta.lat, lon: obsMeta.lon }, mgdd: null });
-        });
-      }
-
-      if (y < yearsToProcess.length - 1) {
-        await delay(2000); // 2-second buffer between year transactions to prevent rate thresholds
+        console.error('Failed lookup for ID ' + obs.obsId + ':', err.message);
+        finalReport.push({ obsId: obs.obsId, date: targetDateStr, coordinates: { lat: cleanLat, lon: cleanLon }, mgdd: null });
       }
     }
     // === END OF STEP 4 ===
