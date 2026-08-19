@@ -48,3 +48,76 @@ function getMgddForObservationId(obsId) {
   return weatherRecord.mgdd;
 }
 
+/**
+ * Dynamically fetches the daily weather history for a single clicked row 
+ * and console.logs the calculation breakdown (or sends it to a popup).
+ * @param {number|string} lat - Latitude of the observation
+ * @param {number|string} lon - Longitude of the observation
+ * @param {string} obsDate - The YYYY-MM-DD date of the observation
+ */
+async function getMgddBreakdownOnDemand(lat, lon, obsDate) {
+  try {
+    const obsYear = String(obsDate).slice(0, 4);
+    const startDate = obsYear + "-02-01";
+    const cleanEndDate = String(obsDate).slice(0, 10);
+
+    console.log(`Fetching on-demand daily breakdown from Open-Meteo for range: ${startDate} to ${cleanEndDate}`);
+
+    const mainDomain = "https://archive-api.open-meteo.com/v1/archive";
+
+    const url = mainDomain + 
+      "?latitude=" + lat + 
+      "&longitude=" + lon + 
+      "&start_date=" + startDate + 
+      "&end_date=" + cleanEndDate + 
+      "&daily=temperature_2m_max,temperature_2m_min" + 
+      "&temperature_unit=fahrenheit" + 
+      "&timezone=auto";
+    
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Server returned status code: ${response.status}`);
+    
+    const data = await response.json();
+    const daily = data?.daily;
+
+    if (!daily || !daily.time) {
+      console.warn("No daily timeline data returned from Open-Meteo for this point.");
+      return null;
+    }
+
+    let runningTotal = 0;
+    let breakdownLog = [];
+
+    // Loop through the data day-by-day to reconstruct the calculations
+    for (let d = 0; d < daily.time.length; d++) {
+      const currentDate = daily.time[d];
+      const tmax = daily.temperature_2m_max ? daily.temperature_2m_max[d] : null;
+      const tmin = daily.temperature_2m_min ? daily.temperature_2m_min[d] : null;
+
+      if (tmax !== null && tmin !== null) {
+        const adjustedMax = Math.max(50, Math.min(86, tmax));
+        const adjustedMin = Math.max(50, Math.min(86, tmin));
+        const dailyGdd = ((adjustedMax + adjustedMin) / 2) - 50;
+        
+        if (dailyGdd > 0) {
+          runningTotal += dailyGdd;
+        }
+
+        breakdownLog.push({
+          date: currentDate,
+          rawMax: tmax,
+          rawMin: tmin,
+          addedGdd: Number(dailyGdd.toFixed(1)),
+          runningGdd: Math.round(runningTotal)
+        });
+      }
+    }
+
+    // Returns the complete daily breakdown array to your table click event listener
+    return breakdownLog;
+
+  } catch (error) {
+    console.error("On-demand breakdown fetch failed:", error.message);
+    return null;
+  }
+}
