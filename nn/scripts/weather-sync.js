@@ -121,7 +121,7 @@ async function runBackendSync() {
       end_date: uniformEndDate,     // Single uniform string for the whole batch
       daily: 'temperature_2m_max,temperature_2m_min',
       temperature_unit: 'fahrenheit',
-      timezone: 'auto'
+      timezone: 'GMT'
     });   
 
     const meteoUrl = cleanMeteoUrl + '?' + urlParams.toString();
