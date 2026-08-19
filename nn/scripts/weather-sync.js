@@ -134,12 +134,58 @@ async function runBackendSync() {
         return;
       }
 
+      // Your printing diagnostic log tracking blocks for observation 173920616
       if (String(obsMeta.obsId) === '173920616') {
-          console.log("=== SERVER SIDE API RECOVERY ===");
-          console.log("Timeline Length: " + (dailyTimeline?.time?.length || 0));
-          console.log("First Date: " + (dailyTimeline?.time ? dailyTimeline.time[0] : "NONE"));
-          console.log("Last Date: " + (dailyTimeline?.time ? dailyTimeline.time[dailyTimeline.time.length - 1] : "NONE"));
-          console.log("First Max Temp: " + (dailyTimeline?.temperature_2m_max ? dailyTimeline.temperature_2m_max[0] : "NONE"));
+        console.log('================================================================================');
+        console.log('=== SERVER-SIDE DAILY BREAKDOWN HISTORY FOR OBS ID: 173920616 ===');
+        console.log('Coordinates: Lat ' + obsMeta.lat + ', Lon ' + obsMeta.lon);
+        console.log('Target Cutoff Date: ' + targetDateStr);
+        console.log('--------------------------------------------------------------------------------');
+        console.log('DATE       | RAW MAX | RAW MIN | ADJUST MAX | ADJUST MIN | DAILY GDD | RUNNING TOTAL');
+        console.log('--------------------------------------------------------------------------------');
+
+        let debugRunningTotal = 0;
+        
+        for (let d = 0; d < dailyTimeline.time.length; d++) {
+          const checkDate = dailyTimeline.time[d];
+          
+          // Mimic the exact scope gatekeepers
+          if (checkDate < internalStartDate) continue;
+          if (checkDate > targetDateStr) break;
+
+          const tmax = dailyTimeline.temperature_2m_max ? dailyTimeline.temperature_2m_max[d] : null;
+          const tmin = dailyTimeline.temperature_2m_min ? dailyTimeline.temperature_2m_min[d] : null;
+
+          let dailyGdd = 0;
+          let adjMax = 'N/A';
+          let adjMin = 'N/A';
+
+          if (tmax !== null && tmin !== null) {
+            const adjustedMax = Math.max(50, Math.min(86, tmax));
+            const adjustedMin = Math.max(50, Math.min(86, tmin));
+            adjMax = adjustedMax.toFixed(1);
+            adjMin = adjustedMin.toFixed(1);
+            
+            const rawGdd = ((adjustedMax + adjustedMin) / 2) - 50;
+            if (rawGdd > 0) {
+              dailyGdd = rawGdd;
+              debugRunningTotal += dailyGdd;
+            }
+          }
+
+          // Format strings manually to align columns neatly in the GitHub logs terminal
+          const padDate = (checkDate + '          ').slice(0, 10);
+          const padRawMax = ((tmax !== null ? tmax.toFixed(1) : 'N/A') + '      ').slice(0, 7);
+          const padRawMin = ((tmin !== null ? tmin.toFixed(1) : 'N/A') + '      ').slice(0, 7);
+          const padAdjMax = (adjMax + '      ').slice(0, 10);
+          const padAdjMin = (adjMin + '      ').slice(0, 10);
+          const padGdd = ('+' + dailyGdd.toFixed(1) + '       ').slice(0, 9);
+
+          console.log(padDate + ' | ' + padRawMax + ' | ' + padRawMin + ' | ' + padAdjMax + ' | ' + padAdjMin + ' | ' + padGdd + ' | ' + Math.round(debugRunningTotal));
+        }
+        console.log('--------------------------------------------------------------------------------');
+        console.log('FINAL ROUNDED SERVER SCORE: ' + Math.round(debugRunningTotal) + ' MGDD');
+        console.log('================================================================================');
       }
 
       let cumulativeMgdd = 0;
