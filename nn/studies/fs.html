@@ -751,15 +751,17 @@ values.push({ innerHTML: valueId });
              var lonVal = rec.geojson.coordinates.slice(0, 1).join('');
              var latVal = rec.geojson.coordinates.slice(1, 2).join('');
              var dateVal = rec.observed_on_details.date;
-  
-             /*values.push({ innerHTML: '<a href="javascript:void(0)" ' +
-                                      'onclick="showMgddBreakdownModal(\'' + latVal + '\', \'' + lonVal + '\', \'' + dateVal + '\')" ' +
-                                      'style="color: #0066cc; text-decoration: underline; cursor: pointer;">' +
-                                      mgddValue + '(<i>'+ (rec.observed_on_details?.date || 'No Date') + '</i>)</a>'
-             });          */
+                    
+             // isolate the observation year, defaulting to the current calendar year if null
+             const activeDateStr = rec.observed_on_details?.date;
+             const targetYear = activeDateStr ? activeDateStr.slice(0, 4) : new Date().getFullYear();
+             const baselineDateStr = targetYear + '-02-01';
+
+             // Format the display string (e.g., "2023-02-07 to 2023-02-01")
+             const displayDates = activeDateStr ? activeDateStr + ' to ' + baselineDateStr : 'No Date';      
                     
              values.push({ innerHTML: furl2('javascript:void(0)" onclick="showMgddBreakdownModal(\'' + latVal + '\', \'' + lonVal + '\', \'' + dateVal + '\')', mgddValue + 
-                                            '<br><i style="font-size: 0.85em;">(' + (rec.observed_on_details?.date || 'No Date') + ')</i>') });
+                                            '<br><i style="font-size: 0.85em;">(' + displayDates + ')</i>') });
          }
                 
          if( config.showMonth === 'yes' ) { 
