@@ -74,16 +74,15 @@ async function showMgddBreakdownModal(lat, lon, obsDate) {
     let cumulativeMgdd = 0;
     let tableRowsHtml = "";
 
-    // FIXED: Removed the second duplicate const obsYear declaration line
-    const targetTimestamp = Date.parse(String(obsDate).slice(0, 10));
-    const startTimestamp = Date.parse(obsYear + "-02-01");
-
+    var targetDateStr = String(obsDate).slice(0, 10);
+    var startStr = obsYear + "-02-01";
+    
     for (let d = 0; d < daily.time.length; d++) {
       const currentTimeStr = daily.time[d];
       const currentTimestamp = Date.parse(currentTimeStr);
 
-      if (currentTimestamp < startTimestamp) continue;
-      if (currentTimestamp > targetTimestamp) break;
+      if (currentTimeStr < startStr) continue;
+      if (currentTimeStr > targetDateStr) break;
 
       const tmax = daily.temperature_2m_max ? daily.temperature_2m_max[d] : null;
       const tmin = daily.temperature_2m_min ? daily.temperature_2m_min[d] : null;
