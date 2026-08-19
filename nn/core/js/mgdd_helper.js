@@ -70,7 +70,7 @@ async function showMgddBreakdownModal(lat, lon, obsDate) {
       "&end_date=" + cleanEndDate + 
       "&daily=temperature_2m_max,temperature_2m_min" + 
       "&temperature_unit=fahrenheit" + 
-      "&timezone=auto";
+      "&timezone=GMT";
 
     // Create a temporary loading notice on screen
     const loadingNotice = document.createElement('div');
