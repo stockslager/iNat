@@ -105,24 +105,24 @@ async function runBackendSync() {
     const lats = referenceMap.map(r => r.lat);
     const lons = referenceMap.map(r => r.lon);
 
-    const chunkDates = referenceMap.map(r => new Date(r.date));
+// Extract the years as plain text strings to completely bypass JavaScript timezone parsing bugs
+const yearStrings = referenceMap.map(r => String(r.date).slice(0, 4));
+const uniqueYears = [...new Set(yearStrings)].map(Number);
 
-    // Find the absolute oldest year present in this specific 50-item batch
-    const earliestYear = new Date(Math.min(...chunkDates)).getFullYear();
+// Safely identify the absolute oldest numerical year in this specific 50-item batch
+const earliestYear = Math.min(...uniqueYears);
 
-    // Map individual start and end dates matching each observation's exact calendar timeline
-    const startDatesArray = referenceMap.map(r => {
-      const obsYear = String(r.date).slice(0, 4);
-      return obsYear + "-02-01";
-    });
+// Establish the uniform Open-Meteo API request envelope boundaries safely
+const uniformStartDate = earliestYear + "-02-01";
 
-    const endDatesArray = referenceMap.map(r => String(r.date).slice(0, 10));
+const chunkDates = referenceMap.map(r => new Date(r.date));
+const uniformEndDate = new Date(Math.max(...chunkDates)).toISOString().split('T')[0];
 
     const urlParams = new URLSearchParams({
       latitude: lats.join(','),
       longitude: lons.join(','),
-      start_date: startDatesArray.join(','), // Pass the full matching array string
-      end_date: endDatesArray.join(','),     // Pass the full matching array string
+      start_date: uniformStartDate, // Pass the full matching array string
+      end_date: uniformEndDate,     // Pass the full matching array string
       daily: 'temperature_2m_max,temperature_2m_min',
       temperature_unit: 'fahrenheit',
       timezone: 'GMT' // Keep this anchored to GMT
