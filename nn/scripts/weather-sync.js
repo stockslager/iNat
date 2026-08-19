@@ -59,7 +59,7 @@ async function runBackendSync() {
     console.log(`Checking iNaturalist for data updates...`);
 
     while (keepFetching) {
-      const inatUrl = ('https://inaturalist.org?project_id=304098&per_page=200&page=' + currentPage);
+      const inatUrl = ('https://api.inaturalist.org/v1/observations?project_id=304098&per_page=200&page=' + currentPage);
       const obs_data = await makeHttpRequest(inatUrl);
       const batchResults = obs_data.results || [];
       allObservations = allObservations.concat(batchResults);
