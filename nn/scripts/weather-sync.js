@@ -133,13 +133,18 @@ const uniformEndDate = new Date(Math.max(...chunkDates)).toISOString().split('T'
     const meteoData = await makeHttpRequest(meteoUrl);
 
 // STEP 4: Append new entries and calculate cumulative MGDD directly from targeted arrays
+// STEP 4: Append new entries and calculate cumulative MGDD matching the frontend layout
 referenceMap.forEach((obsMeta, index) => {
-  // Extract this specific location object out of the response array envelope
   const weatherRecord = Array.isArray(meteoData) ? meteoData[index] : meteoData;
   const dailyTimeline = weatherRecord?.daily;
 
   if (!dailyTimeline || !dailyTimeline.time) {
-    finalReport.push({ obsId: obsMeta.obsId, date: obsMeta.date, coordinates: { lat: obsMeta.lat, lon: obsMeta.lon }, mgdd: null });
+    finalReport.push({
+      obsId: obsMeta.obsId,
+      date: obsMeta.date,
+      coordinates: { lat: obsMeta.lat, lon: obsMeta.lon },
+      mgdd: null
+    });
     return;
   }
 
@@ -160,9 +165,10 @@ referenceMap.forEach((obsMeta, index) => {
     if (tmax !== null && tmin !== null) {
       const adjustedMax = Math.max(50, Math.min(86, tmax));
       const adjustedMin = Math.max(50, Math.min(86, tmin));
-      const dailyGdd = ((adjustedMax + adjustedMin) / 2) - 50;
-      if (dailyGdd > 0) {
-        cumulativeMgdd += dailyGdd;
+      const rawGdd = ((adjustedMax + adjustedMin) / 2) - 50;
+      
+      if (rawGdd > 0) {
+        cumulativeMgdd += rawGdd;
       }
     }
   }
@@ -174,8 +180,6 @@ referenceMap.forEach((obsMeta, index) => {
     mgdd: Math.round(cumulativeMgdd)
   });
 });
-
-
 
     // STEP 5: Save total updated array back to your file with one line per observation
     if (!fs.existsSync(outputDirectory)) {
