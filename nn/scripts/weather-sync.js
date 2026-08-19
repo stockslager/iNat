@@ -128,62 +128,56 @@ async function runBackendSync() {
     console.log(`Sending ONE safe request to Open-Meteo for new data rows...`);
     const meteoData = await makeHttpRequest(meteoUrl);
 
-    // STEP 4: Append new entries and calculate cumulative MGDD from each item's specific Feb 1st
-    // Calculate how many days are allocated to each individual location in the data pool
-    const totalTimelineDays = meteoData?.daily?.time?.length || 0;
-    const daysPerLocation = totalTimelineDays / lats.length;
+// STEP 4: Append new entries and calculate cumulative MGDD from each item's specific Feb 1st
+referenceMap.forEach((obsMeta, index) => {
+  // Extract this specific location's weather dataset from the array response
+  const weatherRecord = Array.isArray(meteoData) ? meteoData[index] : meteoData;
+  const dailyTimeline = weatherRecord?.daily;
 
-    referenceMap.forEach((obsMeta, index) => {
-      const rootDaily = meteoData?.daily;
-
-      if (!rootDaily || !rootDaily.time || daysPerLocation === 0) {
-        finalReport.push({
-          obsId: obsMeta.obsId,
-          date: obsMeta.date,
-          coordinates: { lat: obsMeta.lat, lon: obsMeta.lon },
-          mgdd: null
-        });
-        return;
-      }
-
-      // Calculate the starting position for this specific location's weather chunk
-      const startOffset = index * daysPerLocation;
-  
-      // Extract the exact timeline slices belonging to this single observation
-      const locationTimes = rootDaily.time.slice(startOffset, startOffset + daysPerLocation);
-      const locationMaxs = rootDaily.temperature_2m_max ? rootDaily.temperature_2m_max.slice(startOffset, startOffset + daysPerLocation) : [];
-      const locationMins = rootDaily.temperature_2m_min ? rootDaily.temperature_2m_min.slice(startOffset, startOffset + daysPerLocation) : [];
-
-      let cumulativeMgdd = 0;
-      const targetDateStr = String(obsMeta.date).slice(0, 10);
-
-      // Loop through this observation's isolated slice of time
-      for (let d = 0; d < locationTimes.length; d++) {
-        const currentTimeStr = locationTimes[d];
-    
-        if (currentTimeStr > targetDateStr) break;
-
-        const tmax = locationMaxs[d];
-        const tmin = locationMins[d];
-
-        if (tmax !== null && tmin !== null) {
-          const adjustedMax = Math.max(50, Math.min(86, tmax));
-          const adjustedMin = Math.max(50, Math.min(86, tmin));
-          const dailyGdd = ((adjustedMax + adjustedMin) / 2) - 50;
-      
-          if (dailyGdd > 0) {
-            cumulativeMgdd += dailyGdd;
-          }
-        }
-      }
-
-      finalReport.push({
-        obsId: obsMeta.obsId,
-        date: targetDateStr,
-        coordinates: { lat: obsMeta.lat, lon: obsMeta.lon },
-        mgdd: Math.round(cumulativeMgdd)
-      }); 
+  if (!dailyTimeline || !dailyTimeline.time) {
+    finalReport.push({
+      obsId: obsMeta.obsId,
+      date: obsMeta.date,
+      coordinates: { lat: obsMeta.lat, lon: obsMeta.lon },
+      mgdd: null
     });
+    return;
+  }
+
+  let cumulativeMgdd = 0;
+  const targetDateStr = String(obsMeta.date).slice(0, 10);
+
+  // Loop day-by-day through this specific location's isolated timeline
+  for (let d = 0; d < dailyTimeline.time.length; d++) {
+    const currentTimeStr = dailyTimeline.time[d];
+    
+    // Stop counting if we pass the actual observation day
+    if (currentTimeStr > targetDateStr) break;
+
+    const tmax = dailyTimeline.temperature_2m_max ? dailyTimeline.temperature_2m_max[d] : null;
+    const tmin = dailyTimeline.temperature_2m_min ? dailyTimeline.temperature_2m_min[d] : null;
+
+    if (tmax !== null && tmin !== null) {
+      // Standard MGDD Base 50 / Cap 86 constraints
+      const adjustedMax = Math.max(50, Math.min(86, tmax));
+      const adjustedMin = Math.max(50, Math.min(86, tmin));
+      const dailyGdd = ((adjustedMax + adjustedMin) / 2) - 50;
+      
+      if (dailyGdd > 0) {
+        cumulativeMgdd += dailyGdd;
+      }
+    }
+  }
+
+  // Push a single clean row to your final output database
+  finalReport.push({
+    obsId: obsMeta.obsId,
+    date: targetDateStr,
+    coordinates: { lat: obsMeta.lat, lon: obsMeta.lon },
+    mgdd: Math.round(cumulativeMgdd)
+  });
+});
+
 
     // STEP 5: Save total updated array back to your file with one line per observation
     if (!fs.existsSync(outputDirectory)) {
