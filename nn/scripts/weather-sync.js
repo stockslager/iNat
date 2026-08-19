@@ -150,6 +150,9 @@ referenceMap.forEach((obsMeta, index) => {
   // Loop day-by-day through this specific location's isolated timeline
   for (let d = 0; d < dailyTimeline.time.length; d++) {
     const currentTimeStr = dailyTimeline.time[d];
+
+    // SKIP any dates that are from years earlier than the observation year
+    if (currentTimeStr < internalStartDate) continue;
     
     // Stop counting if we pass the actual observation day
     if (currentTimeStr > targetDateStr) break;
