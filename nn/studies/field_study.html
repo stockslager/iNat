@@ -269,6 +269,31 @@ function furl_out(config, url, txt = url) {
     }
 };
 
+function checkAndLoadMgddScript( config ) {
+  return new Promise((resolve) => {
+             
+    if( config.showMGDD === 'no' ) {
+        console.log("Weather metrics skipped for this view profile.");
+        return resolve(); // Exit safely without loading anything
+    }
+
+    console.log("Injecting weather script asset into layout head metadata...");
+
+    const dynamicScript = document.createElement('script');
+    dynamicScript.src = '../core/js/mgdd_helper.js';
+    dynamicScript.type = 'text/javascript';
+
+    dynamicScript.onload = async () => {
+      console.log("Script compilation complete. Launching memory cache mapping arrays...");
+      // Runs the initializer built inside mgdd_helper.js file
+      await initializeMgddHelper();
+      resolve(); // Resolution unlocks the 'await' pause in gatherResources
+    };
+
+    document.head.appendChild(dynamicScript);
+  });
+}
+          
 function buildMenu2( results, config ) {
       // Create the main navbar container
       let navbar = document.createElement('div');
@@ -466,6 +491,11 @@ function fresults( xobj, config ) {
       if( config.merge === 'yes' ){
           merged = 'merged observation field';
       } 
+
+      // mgdd column...
+      if( config.showMGDD === 'yes' ) { 
+          labels.push({ innerText: 'mGDD' });
+      }
 
       // month column...
       if( config.showMonth === 'yes' ) { 
@@ -694,6 +724,30 @@ function fresults( xobj, config ) {
                                                                           'border: 1px solid var(--color-border); ' + 
                                                                           'border-radius: 4px; font-size: 0.9em; line-height: 1.4;">' + 
                                                                           rec.description + '</div>')});
+         }
+
+         if( config.showMGDD === 'yes' ) {
+             var mgddValue = getMgddForObservationId( rec.id );
+  
+             var lonVal = rec.geojson.coordinates.slice(0, 1).join('');
+             var latVal = rec.geojson.coordinates.slice(1, 2).join('');
+             var dateVal = rec.observed_on_details.date;
+                    
+             const activeDateStr = rec.observed_on_details?.date; // Expects "YYYY-MM-DD"
+             let displayDates = 'No Date';
+
+             if( activeDateStr && activeDateStr.length === 10 ) {
+                 const year  = activeDateStr.slice(0, 4);
+                 const month = activeDateStr.slice(5, 7);
+                 const day   = activeDateStr.slice(8, 10);
+    
+                 // Combine them directly into "02-01-YYYY to MM-DD-YYYY"
+                 displayDates = '02-01-' + year + ' to ' + month + '-' + day + '-' + year;
+             }
+
+             values.push({ innerHTML: furl2( 'javascript:void(0)" onclick="showMgddBreakdownModal(\'' + latVal + '\', \'' + lonVal + '\', \'' + dateVal + '\')', '<span style="display: inline-block; line-height: 1.4;">' + mgddValue + 
+                                             '<br><span style="font-size: 0.85em; font-style: italic;">(' + displayDates + ')</span></span>') });
+                    
          }
 
          if( config.showMonth === 'yes' ) { 
