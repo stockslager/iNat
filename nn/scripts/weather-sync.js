@@ -134,6 +134,11 @@ async function runBackendSync() {
         return;
       }
 
+      let cumulativeMgdd = 0;
+      const targetDateStr = obsMetadate;
+      const obsYear = targetDateStr.slice(0, 4);
+      const internalStartDate = obsYear + "-02-01";
+
       // Your printing diagnostic log tracking blocks for observation 173920616
       if (String(obsMeta.obsId) === '173920616') {
         console.log('================================================================================');
@@ -187,11 +192,6 @@ async function runBackendSync() {
         console.log('FINAL ROUNDED SERVER SCORE: ' + Math.round(debugRunningTotal) + ' MGDD');
         console.log('================================================================================');
       }
-
-      let cumulativeMgdd = 0;
-      const targetDateStr = obsMeta.date;
-      const obsYear = targetDateStr.slice(0, 4);
-      const internalStartDate = obsYear + "-02-01";
 
       for (let d = 0; d < dailyTimeline.time.length; d++) {
         const currentTimeStr = dailyTimeline.time[d];
