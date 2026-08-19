@@ -110,72 +110,63 @@ async function runBackendSync() {
     // Find the absolute oldest year present in this specific 50-item batch
     const earliestYear = new Date(Math.min(...chunkDates)).getFullYear();
 
-    // Create a uniform window spanning from Feb 1st of that year to the newest batch date
-    const uniformStartDate = earliestYear + "-02-01";
-    const uniformEndDate = new Date(Math.max(...chunkDates)).toISOString().split('T')[0];
-    
+    // Map individual start and end dates matching each observation's exact calendar timeline
+    const startDatesArray = referenceMap.map(r => {
+      const obsYear = String(r.date).slice(0, 4);
+      return obsYear + "-02-01";
+    });
+
+    const endDatesArray = referenceMap.map(r => String(r.date).slice(0, 10));
+
     const urlParams = new URLSearchParams({
       latitude: lats.join(','),
       longitude: lons.join(','),
-      start_date: uniformStartDate, // Single uniform string for the whole batch
-      end_date: uniformEndDate,     // Single uniform string for the whole batch
+      start_date: startDatesArray.join(','), // Pass the full matching array string
+      end_date: endDatesArray.join(','),     // Pass the full matching array string
       daily: 'temperature_2m_max,temperature_2m_min',
       temperature_unit: 'fahrenheit',
-      timezone: 'GMT'
-    });   
+      timezone: 'GMT' // Keep this anchored to GMT
+    });
 
     const meteoUrl = cleanMeteoUrl + '?' + urlParams.toString();
     console.log(`Sending ONE safe request to Open-Meteo for new data rows...`);
     const meteoData = await makeHttpRequest(meteoUrl);
 
-// STEP 4: Append new entries and calculate cumulative MGDD from each item's specific Feb 1st
+// STEP 4: Append new entries and calculate cumulative MGDD directly from targeted arrays
 referenceMap.forEach((obsMeta, index) => {
-  // Extract this specific location's weather dataset from the array response
+  // Extract this specific location object out of the response array envelope
   const weatherRecord = Array.isArray(meteoData) ? meteoData[index] : meteoData;
   const dailyTimeline = weatherRecord?.daily;
 
   if (!dailyTimeline || !dailyTimeline.time) {
-    finalReport.push({
-      obsId: obsMeta.obsId,
-      date: obsMeta.date,
-      coordinates: { lat: obsMeta.lat, lon: obsMeta.lon },
-      mgdd: null
-    });
+    finalReport.push({ obsId: obsMeta.obsId, date: obsMeta.date, coordinates: { lat: obsMeta.lat, lon: obsMeta.lon }, mgdd: null });
     return;
   }
 
   let cumulativeMgdd = 0;
   const targetDateStr = String(obsMeta.date).slice(0, 10);
-
   const obsYear = targetDateStr.slice(0, 4);
   const internalStartDate = obsYear + "-02-01";
 
-  // Loop day-by-day through this specific location's isolated timeline
   for (let d = 0; d < dailyTimeline.time.length; d++) {
     const currentTimeStr = dailyTimeline.time[d];
-
-    // SKIP any dates that are from years earlier than the observation year
-    if (currentTimeStr < internalStartDate) continue;
     
-    // Stop counting if we pass the actual observation day
+    if (currentTimeStr < internalStartDate) continue;
     if (currentTimeStr > targetDateStr) break;
 
     const tmax = dailyTimeline.temperature_2m_max ? dailyTimeline.temperature_2m_max[d] : null;
     const tmin = dailyTimeline.temperature_2m_min ? dailyTimeline.temperature_2m_min[d] : null;
 
     if (tmax !== null && tmin !== null) {
-      // Standard MGDD Base 50 / Cap 86 constraints
       const adjustedMax = Math.max(50, Math.min(86, tmax));
       const adjustedMin = Math.max(50, Math.min(86, tmin));
       const dailyGdd = ((adjustedMax + adjustedMin) / 2) - 50;
-      
       if (dailyGdd > 0) {
         cumulativeMgdd += dailyGdd;
       }
     }
   }
 
-  // Push a single clean row to your final output database
   finalReport.push({
     obsId: obsMeta.obsId,
     date: targetDateStr,
@@ -183,6 +174,7 @@ referenceMap.forEach((obsMeta, index) => {
     mgdd: Math.round(cumulativeMgdd)
   });
 });
+
 
 
     // STEP 5: Save total updated array back to your file with one line per observation
