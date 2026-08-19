@@ -185,7 +185,7 @@ for (let i = 0; i < cappedObs.length; i++) {
       if (currentTimeStr > targetDateStr) break;
 
       const tmax = dailyTimeline.temperature_2m_max ? dailyTimeline.temperature_2m_max[d] : null;
-      consttmin = dailyTimeline.temperature_2m_min ? dailyTimeline.temperature_2m_min[d] : null;
+      const tmin = dailyTimeline.temperature_2m_min ? dailyTimeline.temperature_2m_min[d] : null;
 
       if (tmax !== null && tmin !== null) {
         const adjustedMax = Math.max(50, Math.min(86, tmax));
