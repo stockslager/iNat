@@ -34,7 +34,7 @@ function getMgddForObservationId(obsId) {
   const weatherRecord = localWeatherCacheMap.get(String(obsId));
 
   if (!weatherRecord || weatherRecord.mgdd === undefined || weatherRecord.mgdd === null) {
-    return "N/A";
+    return "Coming Soon";
   }
 
   return weatherRecord.mgdd;
