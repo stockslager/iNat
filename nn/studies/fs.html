@@ -746,7 +746,15 @@ values.push({ innerHTML: valueId });
          } 
 
          if( config.showMGDD === 'yes' ) {
-             values.push({ innerText: getMgddForObservationId( rec.id ) });
+             var mgddValue = getMgddForObservationId( rec.id );   
+                    
+             values.push({ innerHTML: '<a href="javascript:void(0)" ' +
+               'onclick="showMgddBreakdownModal(\'' + rec.geojson.coordinates[1] + '\', \'' + 
+                                                      rec.geojson.coordinates[0] + '\', \'' + 
+                                                      rec.observed_on_details.date + '\')" ' +
+                                                      'style="color: #0066cc; text-decoration: underline; cursor: pointer;">' +
+                                                      mgddValue + '</a>'
+             });
          }
                 
          if( config.showMonth === 'yes' ) { 
