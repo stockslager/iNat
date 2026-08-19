@@ -99,21 +99,21 @@ async function runBackendSync() {
     });
 
     // === STEP 4: Process each observation individually using isolated block parameters ===
-    console.log('Processing ' + cappedObs.length + ' observations one-by-one...');
+    //console.log('Processing ' + cappedObs.length + ' observations one-by-one...');
 
-    for (let i = 0; i < cappedObs.length; i++) {
-      const obs = cappedObs[i];
+    for (let i = 0; i < referenceMap.length; i++) {
+      const obs = referenceMap[i];
       
       const lon = obs.geojson.coordinates[0];
       const lat = obs.geojson.coordinates[1];
-      const cleanLat = Number(lat).toFixed(2);
-      const cleanLon = Number(lon).toFixed(2);
       
+      const cleanLat = obs.lat;
+      const cleanLon = obs.lon;
       const targetDateStr = obs.date;
       const obsYear = targetDateStr.slice(0, 4);
       const internalStartDate = obsYear + '-02-01';
-
-      console.log('[' + (i + 1) + '/' + cappedObs.length + '] Fetching ID: ' + obs.obsId);
+           
+      console.log('[' + (i + 1) + '/' + referenceMap.length + '] Fetching ID: ' + obs.obsId);
 
       const urlParams = new URLSearchParams({
         latitude: cleanLat,
