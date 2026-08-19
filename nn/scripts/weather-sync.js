@@ -132,54 +132,88 @@ const uniformEndDate = new Date(Math.max(...chunkDates)).toISOString().split('T'
     console.log(`Sending ONE safe request to Open-Meteo for new data rows...`);
     const meteoData = await makeHttpRequest(meteoUrl);
 
-// STEP 4: Append new entries and calculate cumulative MGDD directly from targeted arrays
-// STEP 4: Append new entries and calculate cumulative MGDD matching the frontend layout
-referenceMap.forEach((obsMeta, index) => {
-  const weatherRecord = Array.isArray(meteoData) ? meteoData[index] : meteoData;
-  const dailyTimeline = weatherRecord?.daily;
+// === STEP 4: Process each observation individually to guarantee exact date matching ===
+console.log("Processing " + cappedObs.length + " observations one-by-one...");
 
-  if (!dailyTimeline || !dailyTimeline.time) {
-    finalReport.push({
-      obsId: obsMeta.obsId,
-      date: obsMeta.date,
-      coordinates: { lat: obsMeta.lat, lon: obsMeta.lon },
-      mgdd: null
-    });
-    return;
+for (let i = 0; i < cappedObs.length; i++) {
+  const obs = cappedObs[i];
+  
+  // Safe extraction of coordinates and dates
+  const [lon, lat] = obs.geojson.coordinates;
+  let targetDate = obs.observed_on_details?.date;
+  if (!targetDate && obs.created_at) {
+    targetDate = obs.created_at.split('T')[0];
   }
-
-  let cumulativeMgdd = 0;
-  const targetDateStr = String(obsMeta.date).slice(0, 10);
+  
+  const targetDateStr = String(targetDate).slice(0, 10);
   const obsYear = targetDateStr.slice(0, 4);
   const internalStartDate = obsYear + "-02-01";
+  const cleanLat = Number(lat).toFixed(2);
+  const cleanLon = Number(lon).toFixed(2);
 
-  for (let d = 0; d < dailyTimeline.time.length; d++) {
-    const currentTimeStr = dailyTimeline.time[d];
-    
-    if (currentTimeStr < internalStartDate) continue;
-    if (currentTimeStr > targetDateStr) break;
+  console.log(`[${i + 1}/${cappedObs.length}] Querying ID ${obs.id} (${internalStartDate} to ${targetDateStr})`);
 
-    const tmax = dailyTimeline.temperature_2m_max ? dailyTimeline.temperature_2m_max[d] : null;
-    const tmin = dailyTimeline.temperature_2m_min ? dailyTimeline.temperature_2m_min[d] : null;
+  // Build a precise URL for this single location and date range
+  const urlParams = new URLSearchParams({
+    latitude: cleanLat,
+    longitude: cleanLon,
+    start_date: internalStartDate,
+    end_date: targetDateStr,
+    daily: 'temperature_2m_max,temperature_2m_min',
+    temperature_unit: 'fahrenheit',
+    timezone: 'GMT'
+  });
 
-    if (tmax !== null && tmin !== null) {
-      const adjustedMax = Math.max(50, Math.min(86, tmax));
-      const adjustedMin = Math.max(50, Math.min(86, tmin));
-      const rawGdd = ((adjustedMax + adjustedMin) / 2) - 50;
+  const singleMeteoUrl = cleanMeteoUrl + '?' + urlParams.toString();
+  
+  try {
+    const meteoData = await makeHttpRequest(singleMeteoUrl);
+    const dailyTimeline = meteoData?.daily;
+
+    if (!dailyTimeline || !dailyTimeline.time) {
+      finalReport.push({ obsId: obs.id, date: targetDateStr, coordinates: { lat: cleanLat, lon: cleanLon }, mgdd: null });
+      continue;
+    }
+
+    let cumulativeMgdd = 0;
+
+    // Loop through the precise individual timeline returned by the API
+    for (let d = 0; d < dailyTimeline.time.length; d++) {
+      const currentTimeStr = dailyTimeline.time[d];
       
-      if (rawGdd > 0) {
-        cumulativeMgdd += rawGdd;
+      if (currentTimeStr < internalStartDate) continue;
+      if (currentTimeStr > targetDateStr) break;
+
+      const tmax = dailyTimeline.temperature_2m_max ? dailyTimeline.temperature_2m_max[d] : null;
+      consttmin = dailyTimeline.temperature_2m_min ? dailyTimeline.temperature_2m_min[d] : null;
+
+      if (tmax !== null && tmin !== null) {
+        const adjustedMax = Math.max(50, Math.min(86, tmax));
+        const adjustedMin = Math.max(50, Math.min(86, tmin));
+        const dailyGdd = ((adjustedMax + adjustedMin) / 2) - 50;
+        
+        if (dailyGdd > 0) {
+          cumulativeMgdd += dailyGdd;
+        }
       }
     }
-  }
 
-  finalReport.push({
-    obsId: obsMeta.obsId,
-    date: targetDateStr,
-    coordinates: { lat: obsMeta.lat, lon: obsMeta.lon },
-    mgdd: Math.round(cumulativeMgdd)
-  });
-});
+    finalReport.push({
+      obsId: obs.id,
+      date: targetDateStr,
+      coordinates: { lat: cleanLat, lon: cleanLon },
+      mgdd: Math.round(cumulativeMgdd)
+    });
+
+    // Small 200ms delay to play nice with Open-Meteo's API firewall
+    await delay(200);
+
+  } catch (err) {
+    console.error(`Failed lookup for ID ${obs.id}:`, err.message);
+    finalReport.push({ obsId: obs.id, date: targetDateStr, coordinates: { lat: cleanLat, lon: cleanLon }, mgdd: null });
+  }
+}
+// === END OF STEP 4 ===
 
     // STEP 5: Save total updated array back to your file with one line per observation
     if (!fs.existsSync(outputDirectory)) {
