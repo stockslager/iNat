@@ -137,16 +137,27 @@ async function runBackendSync() {
 
         maxTempValues.forEach(item => {
           if (item.validTime) {
-            const dateKey = item.validTime.split('T')[0];
-            // Convert native Celsius float to precise Fahrenheit scalar integer
-            dailyMaxMap[dateKey] = (item.value * 9 / 5) + 32;
+            // FIXED: Cleanly isolate only the first 10 characters (YYYY-MM-DD)
+            const cleanKey = String(item.validTime).slice(0, 10);
+            const fahrenheitValue = (item.value * 9 / 5) + 32;
+            
+            // Keep the highest recorded entry if the NWS grid breaks down temperatures into small hour chunks
+            if (!dailyMaxMap[cleanKey] || fahrenheitValue > dailyMaxMap[cleanKey]) {
+              dailyMaxMap[cleanKey] = fahrenheitValue;
+            }
           }
         });
 
         minTempValues.forEach(item => {
           if (item.validTime) {
-            const dateKey = item.validTime.split('T')[0];
-            dailyMinMap[dateKey] = (item.value * 9 / 5) + 32;
+            // FIXED: Cleanly isolate only the first 10 characters (YYYY-MM-DD)
+            const cleanKey = String(item.validTime).slice(0, 10);
+            const fahrenheitValue = (item.value * 9 / 5) + 32;
+            
+            // Keep the lowest recorded entry if the NWS grid breaks down temperatures into small hour chunks
+            if (!dailyMinMap[cleanKey] || fahrenheitValue < dailyMinMap[cleanKey]) {
+              dailyMinMap[cleanKey] = fahrenheitValue;
+            }
           }
         });
 
