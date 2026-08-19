@@ -134,6 +134,14 @@ async function runBackendSync() {
         return;
       }
 
+      if (String(obsMeta.obsId) === '173920616') {
+          console.log("=== SERVER SIDE API RECOVERY ===");
+          console.log("Timeline Length: " + (dailyTimeline?.time?.length || 0));
+          console.log("First Date: " + (dailyTimeline?.time ? dailyTimeline.time[0] : "NONE"));
+          console.log("Last Date: " + (dailyTimeline?.time ? dailyTimeline.time[dailyTimeline.time.length - 1] : "NONE"));
+          console.log("First Max Temp: " + (dailyTimeline?.temperature_2m_max ? dailyTimeline.temperature_2m_max[0] : "NONE"));
+      }
+
       let cumulativeMgdd = 0;
       const targetDateStr = obsMeta.date;
       const obsYear = targetDateStr.slice(0, 4);
