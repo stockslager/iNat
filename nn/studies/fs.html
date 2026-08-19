@@ -473,7 +473,7 @@ function buildMainTable( results, config, box_array ) {
 
       // mgdd column...
       if( config.showMGDD === 'yes' ) { 
-          labels.push({ innerText: '86/50 MGDD' });
+          labels.push({ innerText: 'mGDD' });
       }
 
       // month column...
@@ -755,7 +755,7 @@ values.push({ innerHTML: valueId });
              values.push({ innerHTML: '<a href="javascript:void(0)" ' +
                                       'onclick="showMgddBreakdownModal(\'' + latVal + '\', \'' + lonVal + '\', \'' + dateVal + '\')" ' +
                                       'style="color: #0066cc; text-decoration: underline; cursor: pointer;">' +
-                                      mgddValue + '</a>'
+                                      mgddValue + '(<i>'+ rec.?observed_on_details.date + '</i>)</a>'
              });          
          }
                 
