@@ -284,9 +284,14 @@ function bindDynamicChildPins(mapInstance, parentInput) {
   markersToProcess.forEach(parentMarker => {
     
     parentMarker.on('popupopen', () => {
-      // FIX: Force clear the layer immediately so another parent's pins vanish
       childPinsLayer.clearLayers(); 
       isClickingChild = false; 
+
+      // Create a custom icon child pins 
+      const child_utf8 = L.divIcon({ html: '<span style="font-size: 24px; line-height: 1; color: #ff0000;">⦿</span>',
+        className: 'custom-utf8-pin', // Removes default Leaflet white box styling
+        iconAnchor: [12, 12]          // Centers the symbol directly over the lat/lng coordinate
+      });
 
       const children = [
         { lat: 39.09319066347188,  lng: -84.34097658959033, text: "AM Place" },
@@ -297,7 +302,8 @@ function bindDynamicChildPins(mapInstance, parentInput) {
       ];
 
       children.forEach(child => {
-        const childMarker = L.marker([child.lat, child.lng]);
+        const childMarker = L.marker([child.lat, child.lng], { icon: child_utf8 } );
+        
         childMarker.bindPopup(`<b>${child.text}</b>`);
 
         childMarker.on('click', () => {
