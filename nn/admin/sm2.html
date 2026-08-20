@@ -275,29 +275,40 @@ function setupInatParams( config ) {
  * @param {L.Map} mapInstance - The active Leaflet map instance
  * @param {L.Marker} parentMarker - The parent marker target
  */
-function bindDynamicChildPins(mapInstance, parentMarker) {
-  // 1. Create a dedicated tracking layer group for the children
+function bindDynamicChildPins(mapInstance, parentMarkerArray) {
   const childPinsLayer = L.layerGroup();
 
-  // 2. Mount child layer when parent marker popup opens
-  parentMarker.on('popupopen', () => {
-    childPinsLayer.clearLayers(); // Safety reset
+  // Loop through all parent markers saved in your tracking array
+  parentMarkerArray.forEach(parentMarker => {
+    
+    parentMarker.on('popupopen', () => {
+      childPinsLayer.clearLayers(); // Clean slate
 
-    // Example child dataset array
-    const children = [
-      { lat: 39.1260, lng: -84.2460, text: "Child Location A" },
-      { lat: 39.1240, lng: -84.2450, text: "Child Location B" }
-    ];
+      const children = [
+        { lat: 39.1260, lng: -84.2460, text: "Child Location A" },
+        { lat: 39.1240, lng: -84.2450, text: "Child Location B" }
+      ];
 
-    children.forEach(child => {
-      // Reuses standard Leaflet layer bindings
-      const childMarker = L.marker([child.lat, child.lng]).bindPopup(`<b>${child.text}</b>`);
-      childPinsLayer.addLayer(childMarker);
+      children.forEach(child => {
+        // 1. Create the marker instance FIRST
+        const childMarker = L.marker([child.lat, child.lng]);
+        
+        // 2. Safely attach the popup text on its own line
+        childMarker.bindPopup(`<b>${child.text}</b>`);
+        
+        // 3. Add the valid marker instance to your layer tracking group
+        childPinsLayer.addLayer(childMarker);
+      });
+
+      childPinsLayer.addTo(mapInstance);
     });
 
-    // Mount safely directly onto passed map object context
-    childPinsLayer.addTo(mapInstance);
+    parentMarker.on('popupclose', () => {
+      mapInstance.removeLayer(childPinsLayer);
+    });
+
   });
+}
 
   // 3. Wipe child layer away when parent marker popup closes
   parentMarker.on('popupclose', () => {
