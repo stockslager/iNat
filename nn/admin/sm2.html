@@ -275,14 +275,17 @@ function setupInatParams( config ) {
  * @param {L.Map} mapInstance - The active Leaflet map instance
  * @param {L.Marker} parentMarker - The parent marker target
  */
-function bindDynamicChildPins(mapInstance, parentMarkerArray) {
+function bindDynamicChildPins(mapInstance, parentInput) {
   const childPinsLayer = L.layerGroup();
 
-  // Loop through all parent markers saved in your tracking array
-  parentMarkerArray.forEach(parentMarker => {
+  // Safety Check: If it's a single marker, wrap it in an array so the loop works
+  const markersToProcess = Array.isArray(parentInput) ? parentInput : [parentInput];
+
+  // Loop through your markers safely
+  markersToProcess.forEach(parentMarker => {
     
     parentMarker.on('popupopen', () => {
-      childPinsLayer.clearLayers(); // Clean slate
+      childPinsLayer.clearLayers(); 
 
       const children = [
         { lat: 39.1260, lng: -84.2460, text: "Child Location A" },
@@ -290,13 +293,8 @@ function bindDynamicChildPins(mapInstance, parentMarkerArray) {
       ];
 
       children.forEach(child => {
-        // 1. Create the marker instance FIRST
         const childMarker = L.marker([child.lat, child.lng]);
-        
-        // 2. Safely attach the popup text on its own line
         childMarker.bindPopup(`<b>${child.text}</b>`);
-        
-        // 3. Add the valid marker instance to your layer tracking group
         childPinsLayer.addLayer(childMarker);
       });
 
