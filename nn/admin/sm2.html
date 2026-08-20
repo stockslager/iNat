@@ -125,7 +125,8 @@ body {
 }
 
 /* Targets the absolute last checkbox line item in the Leaflet overlay menu */
-.leaflet-control-layers-overlays label:last-child {
+/* Only add the fake line if the map DOES NOT have the .hide-first-rule class */
+#map:not(.hide-first-rule) .leaflet-control-layers-overlays label:first-child {
     border-top: 1px solid #ccc;
     margin-top: 8px;
     padding-top: 8px;
@@ -417,16 +418,21 @@ async function gatherResources() {
 
         // Add the taxonomic checkboxes AND your custom landmarks checkbox to the same menu object
         if( p_map_mode === 'default' ) {
-            overlayMaps = {
-                ...iNatLayers,
-                'Communities <span style="font-size: 14px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>': customLocationsLayer 
+            mapContainer.classList.remove('hide-first-rule');
+
+            overlayMaps = { 
+              ...iNatLayers, 
+              'Communities <span style="font-size: 14px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>': customLocationsLayer 
             };
         } else {
-            overlayMaps = {
-                'Communities <span style="font-size: 14px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>': customLocationsLayer 
+            // Add the class to completely disable that CSS border rule
+            mapContainer.classList.add('hide-first-rule');
+
+            overlayMaps = { 
+                'Communities <span style="font-size: 14px; display: inline-block; filter: hue-rotate(140deg);">📍</span>': customLocationsLayer 
             };
         }
-
+      
         // Mount single consolidated layout control dashboard panel widget to top right corner
         L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
 
