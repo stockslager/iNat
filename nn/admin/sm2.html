@@ -18,8 +18,12 @@
   <script type="text/javascript" src="../core/js/ConfigManager.js"></script>
   
   <script>
+    // Parse your state string from the URL 
+    let winurlsearchstr = window.location.search; 
+    let winurlparams = new URLSearchParams(winurlsearchstr); 
+    let p_map_mode   = winurlparams.get('map_mode') || 'default'; 
+
     let config     = null; 
-    let p_map_mode = '';
 
     function buildMenu( config ) {
        // Create the main navbar container
@@ -141,12 +145,7 @@ body {
       
 document.addEventListener('DOMContentLoaded', async () => { 
     console.log("--- 1. DOMContentLoaded Fired Successfully ---");
-    
-    // Parse your state string from the URL 
-    let winurlsearchstr = window.location.search; 
-    let winurlparams = new URLSearchParams(winurlsearchstr); 
-    let p_map_mode   = winurlparams.get('map_mode') || 'default'; 
-    
+        
     try {
         // Test if the external state engine function is actually completing
         appState = buildStateFromParams(winurlparams); 
