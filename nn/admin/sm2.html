@@ -418,7 +418,7 @@ async function gatherResources() {
 
         // Add the taxonomic checkboxes AND your custom landmarks checkbox to the same menu object
         if( p_map_mode === 'default' ) {
-            map.classList.remove('hide-first-rule');
+            map.getContainer().classList.remove('hide-first-rule');
 
             overlayMaps = { 
               ...iNatLayers, 
@@ -426,7 +426,7 @@ async function gatherResources() {
             };
         } else {
             // Add the class to completely disable that CSS border rule
-            mapContainer.classList.add('hide-first-rule');
+            map.getContainer().classList.add('hide-first-rule');
 
             overlayMaps = { 
                 'Communities <span style="font-size: 14px; display: inline-block; filter: hue-rotate(140deg);">📍</span>': customLocationsLayer 
