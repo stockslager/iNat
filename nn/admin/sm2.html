@@ -277,11 +277,12 @@ function setupInatParams( config ) {
  */
 function bindDynamicChildPins(mapInstance, parentInput) {
   const childPinsLayer = L.layerGroup();
+  
+  // Track if we are currently interacting with a child pin
+  let isClickingChild = false;
 
-  // Safety Check: If it's a single marker, wrap it in an array so the loop works
   const markersToProcess = Array.isArray(parentInput) ? parentInput : [parentInput];
 
-  // Loop through your markers safely
   markersToProcess.forEach(parentMarker => {
     
     parentMarker.on('popupopen', () => {
@@ -295,6 +296,12 @@ function bindDynamicChildPins(mapInstance, parentInput) {
       children.forEach(child => {
         const childMarker = L.marker([child.lat, child.lng]);
         childMarker.bindPopup(`<b>${child.text}</b>`);
+
+        // FIX: Set the flag to true right when a child pin is clicked
+        childMarker.on('click', () => {
+          isClickingChild = true;
+        });
+
         childPinsLayer.addLayer(childMarker);
       });
 
@@ -302,7 +309,14 @@ function bindDynamicChildPins(mapInstance, parentInput) {
     });
 
     parentMarker.on('popupclose', () => {
-      mapInstance.removeLayer(childPinsLayer);
+      // FIX: Only remove the children if the user clicked the blank map,
+      // NOT if they were just clicking on one of the child pins.
+      setTimeout(() => {
+        if (!isClickingChild) {
+          mapInstance.removeLayer(childPinsLayer);
+        }
+        isClickingChild = false; // Reset the flag for the next click
+      }, 50);
     });
 
   });
