@@ -318,7 +318,11 @@ function bindDynamicChildPins(mapInstance, parentInput) {
         isClickingChild = false; // Reset the flag for the next click
       }, 50);
     });
+  });
 
+  mapInstance.on('click', () => {
+    isClickingChild = false;
+    mapInstance.removeLayer(childPinsLayer);
   });
 }
 
