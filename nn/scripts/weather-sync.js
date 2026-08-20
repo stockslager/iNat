@@ -117,7 +117,7 @@ async function runBackendSync() {
       end_date: uniformEndDate,
       daily: 'temperature_2m_max,temperature_2m_min',
       temperature_unit: 'fahrenheit',
-      timezone: 'GMT'
+      timezone: 'auto'
     });
 
     const meteoUrl = cleanMeteoUrl + '?' + urlParams.toString();
