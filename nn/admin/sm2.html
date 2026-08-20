@@ -414,14 +414,16 @@ async function gatherResources() {
             ] 
         }); 
 
+        let overlayMaps = '';
+
         // Add the taxonomic checkboxes AND your custom landmarks checkbox to the same menu object
         if( p_map_mode === 'default' ) {
-            const overlayMaps = {
+            overlayMaps = {
                 ...iNatLayers,
                 'Communities <span style="font-size: 14px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>': customLocationsLayer 
             };
         } else {
-            const overlayMaps = {
+            overlayMaps = {
                 /*...iNatLayers,*/
                 'Communities <span style="font-size: 14px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>': customLocationsLayer 
             };
