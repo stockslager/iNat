@@ -51,7 +51,7 @@ async function showMgddBreakdownModal(lat, lon, obsDate) {
     const cleanEndDate = String(obsDate).slice(0, 10);
 
     const baseDomain = "https://archive-api.open-meteo.com/v1/archive";
-    const url = baseDomain + "?latitude=" + lat + "&longitude=" + lon + "&start_date=" + startDate + "&end_date=" + cleanEndDate + "&daily=temperature_2m_max,temperature_2m_min" + "&temperature_unit=fahrenheit" + "&timezone=EST";
+    const url = baseDomain + "?latitude=" + lat + "&longitude=" + lon + "&start_date=" + startDate + "&end_date=" + cleanEndDate + "&daily=temperature_2m_max,temperature_2m_min" + "&temperature_unit=fahrenheit" + "&timezone=auto";
 
     const loadingNotice = document.createElement('div');
     loadingNotice.id = 'mgdd-loading-overlay';
