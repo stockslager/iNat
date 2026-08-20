@@ -334,7 +334,7 @@ function bindDynamicChildPins(mapInstance, parentInput) {
 }
 
 async function gatherResources() {
-    let json_path = json_root + getParams(appState);
+    let json_path = '../../core/json' + getParams(appState);
     try {
         // Fetch the remote JSON orientation profile
         config = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
