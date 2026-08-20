@@ -310,12 +310,6 @@ function bindDynamicChildPins(mapInstance, parentMarkerArray) {
   });
 }
 
-  // 3. Wipe child layer away when parent marker popup closes
-  parentMarker.on('popupclose', () => {
-    mapInstance.removeLayer(childPinsLayer);
-  });
-}
-
 async function gatherResources() {
     let json_path = json_root + getParams(appState);
     try {
