@@ -270,6 +270,41 @@ function setupInatParams( config ) {
     return inat_params;
 }
 
+/**
+ * Handles binding dynamic child pins to a parent marker popup action
+ * @param {L.Map} mapInstance - The active Leaflet map instance
+ * @param {L.Marker} parentMarker - The parent marker target
+ */
+function bindDynamicChildPins(mapInstance, parentMarker) {
+  // 1. Create a dedicated tracking layer group for the children
+  const childPinsLayer = L.layerGroup();
+
+  // 2. Mount child layer when parent marker popup opens
+  parentMarker.on('popupopen', () => {
+    childPinsLayer.clearLayers(); // Safety reset
+
+    // Example child dataset array
+    const children = [
+      { lat: 39.1260, lng: -84.2460, text: "Child Location A" },
+      { lat: 39.1240, lng: -84.2450, text: "Child Location B" }
+    ];
+
+    children.forEach(child => {
+      // Reuses standard Leaflet layer bindings
+      const childMarker = L.marker([child.lat, child.lng]).bindPopup(`<b>${child.text}</b>`);
+      childPinsLayer.addLayer(childMarker);
+    });
+
+    // Mount safely directly onto passed map object context
+    childPinsLayer.addTo(mapInstance);
+  });
+
+  // 3. Wipe child layer away when parent marker popup closes
+  parentMarker.on('popupclose', () => {
+    mapInstance.removeLayer(childPinsLayer);
+  });
+}
+
 async function gatherResources() {
     let json_path = json_root + getParams(appState);
     try {
@@ -323,11 +358,18 @@ async function gatherResources() {
             className: 'custom-pin-reset' 
         });
       
-        // Initialize an isolated layer group to manage custom points 
-        const customLocationsLayer = L.layerGroup(); 
+        // Initialize an isolated layer group to manage parent points 
+        const parentLocationsLayer = L.layerGroup(); 
 
-        // Unified custom dataset list array with extra web link keys
-        const customGeoLocations = [ 
+        // Initialize a second layer group for the child points (the yard projects)
+        // This layer will only show up when a parent pin is clicked
+        const childLocationsLayer = L.layerGroup();
+
+        // An array to store references to your markers  
+        let mySavedMarkers = []; 
+      
+        // Unified parent dataset list array with extra web link keys
+        const parentGeoLocations = [ 
            { 
                   lat: 39.266935487, 
                   lng: -84.242105411, 
@@ -349,7 +391,7 @@ async function gatherResources() {
         ];
       
         // Process the dataset items sequentially
-        customGeoLocations.forEach(spot => { 
+        parentGeoLocations.forEach(spot => { 
             // Both variables evaluate to identical green pins, guaranteeing layout safety
             const chosenIcon = (spot.color === 'green') ? neighborhoodPin : communityPin; 
     
@@ -366,9 +408,11 @@ async function gatherResources() {
             bubbleContent += '</div>';
 
             const marker = L.marker([spot.lat, spot.lng], { icon: chosenIcon }).bindPopup(bubbleContent);
+
+            mySavedMarkers.push(marker); 
           
             // Add the new pin directly to the tracking layer group 
-            customLocationsLayer.addLayer(marker); 
+            parentLocationsLayer.addLayer(marker); 
         });
 
         // ========================================================================== 
@@ -414,31 +458,38 @@ async function gatherResources() {
             ] 
         }); 
 
+        // ==========================================================================
+        // DYNAMIC COMPONENT INITIALIZATION
+        // ==========================================================================
+        if( mySavedMarkers.length > 0 ) {
+            bindDynamicChildPins(map, mySavedMarkers[0]);
+        }
+      
         let overlayMaps = '';
 
-        // Add the taxonomic checkboxes AND your custom landmarks checkbox to the same menu object
+        // Add the taxonomic checkboxes AND your parent landmarks checkbox to the same menu object
         if( p_map_mode === 'default' ) {
             map.getContainer().classList.remove('hide-first-rule');
 
             overlayMaps = { 
               ...iNatLayers, 
-              'Communities <span style="font-size: 14px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>': customLocationsLayer 
+              'Communities <span style="font-size: 14px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>': parentLocationsLayer 
             };
         } else {
             // Add the class to completely disable that CSS border rule
             map.getContainer().classList.add('hide-first-rule');
 
             overlayMaps = { 
-                'Communities <span style="font-size: 14px; display: inline-block; filter: hue-rotate(140deg);">📍</span>': customLocationsLayer 
+                'Communities <span style="font-size: 14px; display: inline-block; filter: hue-rotate(140deg);">📍</span>': parentLocationsLayer 
             };
         }
       
         // Mount single consolidated layout control dashboard panel widget to top right corner
         L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
 
-        // Force custom landmarks layer to render turned ON by default on bootup
+        // Force parent landmarks layer to render turned ON by default on bootup
         // commenting this out would default this layer to "un-checked"
-        customLocationsLayer.addTo(map);
+        parentLocationsLayer.addTo(map);
 
         document.getElementById('info').style.display = 'none';
     } catch (error) { 
