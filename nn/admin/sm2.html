@@ -277,8 +277,6 @@ function setupInatParams( config ) {
  */
 function bindDynamicChildPins(mapInstance, parentInput) {
   const childPinsLayer = L.layerGroup();
-  
-  // Track if we are currently interacting with a child pin
   let isClickingChild = false;
 
   const markersToProcess = Array.isArray(parentInput) ? parentInput : [parentInput];
@@ -286,7 +284,9 @@ function bindDynamicChildPins(mapInstance, parentInput) {
   markersToProcess.forEach(parentMarker => {
     
     parentMarker.on('popupopen', () => {
+      // FIX: Force clear the layer immediately so another parent's pins vanish
       childPinsLayer.clearLayers(); 
+      isClickingChild = false; 
 
       const children = [
         { lat: 39.1260, lng: -84.2460, text: "Child Location A" },
@@ -297,9 +297,16 @@ function bindDynamicChildPins(mapInstance, parentInput) {
         const childMarker = L.marker([child.lat, child.lng]);
         childMarker.bindPopup(`<b>${child.text}</b>`);
 
-        // FIX: Set the flag to true right when a child pin is clicked
         childMarker.on('click', () => {
           isClickingChild = true;
+        });
+
+        childMarker.on('popupclose', () => {
+          setTimeout(() => {
+            if (!isClickingChild) {
+              mapInstance.removeLayer(childPinsLayer);
+            }
+          }, 50);
         });
 
         childPinsLayer.addLayer(childMarker);
@@ -309,17 +316,17 @@ function bindDynamicChildPins(mapInstance, parentInput) {
     });
 
     parentMarker.on('popupclose', () => {
-      // FIX: Only remove the children if the user clicked the blank map,
-      // NOT if they were just clicking on one of the child pins.
       setTimeout(() => {
         if (!isClickingChild) {
           mapInstance.removeLayer(childPinsLayer);
         }
-        isClickingChild = false; // Reset the flag for the next click
+        isClickingChild = false; 
       }, 50);
     });
+
   });
 
+  // Global map click safety reset
   mapInstance.on('click', () => {
     isClickingChild = false;
     mapInstance.removeLayer(childPinsLayer);
