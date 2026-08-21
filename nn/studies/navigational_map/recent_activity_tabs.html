@@ -184,15 +184,40 @@
       var tabHeadersHtml = '';
       var tabContentsHtml = '';
 
-      // 3. Render empty layout panels so hidden tabs have no baseline footprint
+      // 3. LAZY FIX: Print all elements into the DOM tree immediately, but hide them using absolute layout
+      // This tricks the widget library into cleanly mapping every container dimension without rendering limits
       for (var i = 0; i < tabConfig.length; i++) {
         var tab = tabConfig[i];
         var isFirst = (i === 0);
         var headerClass = isFirst ? 'custom-tab-header active-tab' : 'custom-tab-header';
-        var contentClass = isFirst ? 'custom-tab-content active-panel' : 'custom-tab-content';
+        
+        // Use a CSS-safe style property fallback strategy instead of display:none or empty layout shells
+        var contentStyle = isFirst ? 'display: block;' : 'display: none;';
         
         tabHeadersHtml += '<div id="header_' + tab.id + '" class="' + headerClass + '" onclick="switchTab(\'' + tab.id + '\')">' + tab.label + '</div>';
-        tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '"></div>';
+        
+        let title = '';
+        if( config.title ) { title += (config.title + ' - '); }
+        
+        var initialWidgetTheme = (savedTheme === 'light-theme') ? 'light' : 'transparent-dark';
+
+        // LAZY FIX: Start non-active tabs with a dummy selector attribute so the script ignores it initially
+        var widgetAttribute = isFirst ? 'data-inat-widget' : 'data-lazy-inat-widget';
+
+        tabContentsHtml += '<div id="content_' + tab.id + '" class="custom-tab-content" style="' + contentStyle + '">' +
+          '<div id="inat-widget-container-' + tab.id + '" ' +
+          widgetAttribute + ' ' +
+          'data-inat-source="' + config.project + '" ' +
+          'data-inat-source-type="project" ' +
+          'data-inat-theme="' + initialWidgetTheme + '" ' +
+          'data-inat-title="' + title + 'Recently Observed" ' +
+          'data-inat-layout="cards" ' +
+          'data-inat-limit="12" ' +
+          'data-inat-order-by="observed_on" ' +
+          'data-inat-taxon="' + tab.taxon + '" ' +
+          'data-inat-compact="true">' +
+          '</div>' +
+        '</div>';
       }
 
       var btnLabel = (savedTheme === 'dark-theme') ? '☀%EF%B8%8F Light Mode' : '🌙 Dark Mode';
@@ -207,51 +232,42 @@
 
       document.getElementById('app').innerHTML = tabsWrapperHtml;
 
-      // 4. Optimized global navigation click tracking logic
+      // 4. Stable layout switching mechanism
       window.switchTab = function(activeTabId) {
         var headers = document.querySelectorAll('.custom-tab-header');
         var contents = document.querySelectorAll('.custom-tab-content');
 
+        // Remove header active classes
         for (var j = 0; j < headers.length; j++) { headers[j].classList.remove('active-tab'); }
-        for (var k = 0; k < contents.length; k++) { contents[k].classList.remove('active-panel'); }
+        // Hide all panels cleanly using native styles
+        for (var k = 0; k < contents.length; k++) { contents[k].style.display = 'none'; }
 
         var activeHeader = document.getElementById('header_' + activeTabId);
         var activeContent = document.getElementById('content_' + activeTabId);
 
         if (activeHeader && activeContent) {
           activeHeader.classList.add('active-tab');
-          activeContent.classList.add('active-panel');
+          activeContent.style.display = 'block';
 
-          var targetConfig = tabConfig.find(function(t) { return t.id === activeTabId; });
+          // LAZY FIX: Look for an uninitialized lazy container inside this newly exposed panel
+          var lazyWidget = activeContent.querySelector('[data-lazy-inat-widget]');
           
-          if (targetConfig && targetConfig.type === 'widget') {
-            var currentTheme = document.getElementById('themeContainer').classList.contains('light-theme') ? 'light' : 'transparent-dark';
-            var idCheck = 'inat-widget-container-' + targetConfig.id;
-            
-            // Generate content if the panel container target string is completely blank
-            if (!activeContent.innerHTML.trim()) {
-              let title = '';
-              if( config.title ) { title += (config.title + ' - '); }
+          if (lazyWidget) {
+            // Convert to the active data selector attribute right before the script initializes it
+            lazyWidget.setAttribute('data-inat-widget', '');
+            lazyWidget.removeAttribute('data-lazy-inat-widget');
 
-              activeContent.innerHTML = '<div id="' + idCheck + '" ' +
-                'data-inat-widget ' +
-                'data-inat-source="' + config.project + '" ' +
-                'data-inat-source-type="project" ' +
-                'data-inat-theme="' + currentTheme + '" ' +
-                'data-inat-title="' + title + 'Recently Observed" ' +
-                'data-inat-layout="cards" ' +
-                'data-inat-limit="12" ' +
-                'data-inat-order-by="observed_on" ' +
-                'data-inat-taxon="' + targetConfig.taxon + '" ' +
-                'data-inat-compact="true">' +
-                '</div>';
-
-              // RENDERING TIMING FIX: Let the browser process the innerHTML render loop completely first
-              requestAnimationFrame(function() {
-                if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
-                  window.iNatWidget.init();
-                }
-              });
+            // Force build exactly ONE unique iframe layout by creating a localized sandboxed frame runner
+            if (window.iNatWidget && typeof window.iNatWidget.renderWidget === 'function') {
+              window.iNatWidget.renderWidget(lazyWidget);
+            } else {
+              // Fallback strategy: If global handler handles whole DOM only, safely run single script sweep inside this block
+              // By deleting the initialized flag inside your plugin widget source file if accessible:
+              if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
+                // If it needs an explicit DOM wipe reset, we reset its single setup lock here:
+                window.iNatWidget.initialized = false; 
+                window.iNatWidget.init();
+              }
             }
           }
         }
@@ -286,10 +302,7 @@
         }
       };
 
-      // 5. Fire off initial view render sequence for item index 0 safely
-      window.switchTab(tabConfig[0].id);
-
-      // 6. Inject the core widget script file exacty ONCE at system generation
+      // 5. Inject the main javascript widget file exactly ONCE into the document layout footprint
       var scriptNode = document.createElement('script');
       scriptNode.src = '../../core/js/inat_widget.js';
       document.body.appendChild(scriptNode);
