@@ -977,6 +977,7 @@
         }
 
         const endpoint = isSpecies ? "observations/species_counts" : "observations";
+        console.log(' ******** fetching obs ******* ');
         const response = await fetch(`${INAT_API}/${endpoint}?${params.toString()}`);
         if (!response.ok) throw new Error("Failed to fetch");
 
