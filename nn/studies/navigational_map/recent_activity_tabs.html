@@ -188,17 +188,34 @@ function buildTabs( config ) {
   var tabContentsHtml = '';
 
   // 3. String concatenation iteration loop parsing structure inputs
-  for (var i = 0; i < tabConfig.length; i++) {
-    var tab = tabConfig[i];
-    var isFirst = (i === 0);
-    var headerClass = isFirst ? 'custom-tab-header active-tab' : 'custom-tab-header';
-    var contentClass = isFirst ? 'custom-tab-content active-panel' : 'custom-tab-content';
-
-    tabHeadersHtml += '<div id="header_' + tab.id + '" class="' + headerClass + '" onclick="switchTab(\'' + tab.id + '\')">' + tab.label + '</div>';
-
-    tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '"></div>';
-
-  }
+for (var i = 0; i < tabConfig.length; i++) {
+  var tab = tabConfig[i];
+  var isFirst = (i === 0);
+  var headerClass = isFirst ? 'custom-tab-header active-tab' : 'custom-tab-header';
+  var contentClass = isFirst ? 'custom-tab-content active-panel' : 'custom-tab-content';
+  var initialWidgetTheme = (savedTheme === 'light-theme') ? 'light' : 'transparent-dark';
+  
+  tabHeadersHtml += '<div id="header_' + tab.id + '" class="' + headerClass + '" onclick="switchTab(\'' + tab.id + '\')">' + tab.label + '</div>';
+  
+  let title = '';
+  if( config.title ) { title += (config.title + ' - '); }
+  
+  // NOTE: data-inat-widget changed to data-lazy-inat
+  tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
+    '<div id="inat-widget-container-' + tab.id + '" ' +
+    'data-lazy-inat ' + 
+    'data-inat-source="' + config.project +'" ' +
+    'data-inat-source-type="project" ' +
+    'data-inat-theme="' + initialWidgetTheme + '" ' +
+    'data-inat-title="' + title + 'Recently Observed" ' +
+    'data-inat-layout="cards" ' +
+    'data-inat-limit="12" ' +
+    'data-inat-order-by="observed_on" ' +
+    'data-inat-taxon="' + tab.taxon + '" ' +
+    'data-inat-compact="true">' +
+    '</div>' +
+  '</div>';
+}
 
   var btnLabel = (savedTheme === 'dark-theme') ? '☀️ Light Mode' : '🌙 Dark Mode';
 
@@ -215,6 +232,7 @@ function buildTabs( config ) {
 
   // 5. Global Action Runtime Trigger Logic Operations mapping pointers
 // Keep track of script loading globally
+// 1. Standard simple tab switcher (No DOM manipulation, no script injection)
 window.switchTab = function(activeTabId) {
   var headers = document.querySelectorAll('.custom-tab-header');
   var contents = document.querySelectorAll('.custom-tab-content');
@@ -228,45 +246,47 @@ window.switchTab = function(activeTabId) {
   if (activeHeader && activeContent) {
     activeHeader.classList.add('active-tab');
     activeContent.classList.add('active-panel');
-
-    var targetConfig = tabConfig.find(function(t) { return t.id === activeTabId; });
-    
-    if (targetConfig && targetConfig.type === 'widget') {
-      var currentTheme = document.getElementById('themeContainer').classList.contains('light-theme') ? 'light' : 'transparent-dark';
-      var widgetExists = document.getElementById('inat-widget-container-' + targetConfig.id);
-      
-      // 1. Check if we need to load this tab for the first time
-      if (!widgetExists) {
-        let title = '';
-        if( config.title ) { title += (config.title + ' - '); }
-
-        activeContent.innerHTML = '<div id="inat-widget-container-' + targetConfig.id + '" ' +
-          'data-inat-widget ' +
-          'data-inat-source="' + config.project + '" ' +
-          'data-inat-source-type="project" ' +
-          'data-inat-theme="' + currentTheme + '" ' +
-          'data-inat-title="' + title + 'Recently Observed" ' +
-          'data-inat-layout="cards" ' +
-          'data-inat-limit="12" ' +
-          'data-inat-order-by="observed_on" ' +
-          'data-inat-taxon="' + targetConfig.taxon + '" ' +
-          'data-inat-compact="true">' +
-          '</div>';
-
-        // 2. Remove any previous DOM script nodes so the HTML doesn't look messy
-        var oldScript = document.getElementById('inat-loader-script');
-        if (oldScript) { oldScript.remove(); }
-
-        // 3. FORCE initialization using a cache-busting timestamp parameter
-        var scriptNode = document.createElement('script');
-        scriptNode.id = 'inat-loader-script';
-        // The timestamp query string forces a completely clean, isolated execution context
-        scriptNode.src = '../../core/js/inat_widget.js?v=' + new Date().getTime();
-        document.body.appendChild(scriptNode);
-      }
-    }
   }
 };
+
+// 2. Setup Intersection Observer to watch for tabs turning visible
+var lazyWidgetObserver = new IntersectionObserver(function(entries, observer) {
+  entries.forEach(function(entry) {
+    // If the tab panel becomes visible on screen
+    if (entry.isIntersecting) {
+      var container = entry.target;
+      
+      // Convert the fake attribute to the real one the script expects
+      container.setAttribute('data-inat-widget', '');
+      container.removeAttribute('data-lazy-inat');
+      
+      // Stop watching this specific tab container
+      observer.unobserve(container);
+      
+      // Trigger the single widget script instance to parse this newly exposed element
+      if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
+        window.iNatWidget.init();
+      }
+    }
+  });
+}, { root: null, threshold: 0.1 }); // Fires when at least 10% of the panel is visible
+
+// 3. Mount everything to the DOM
+document.getElementById('app').innerHTML = tabsWrapperHtml;
+
+// 4. Attach the observer to all our lazy widget targets
+var lazyTargets = document.querySelectorAll('[data-lazy-inat]');
+lazyTargets.forEach(function(target) {
+  lazyWidgetObserver.observe(target);
+});
+
+// 5. Load the script EXACTLY ONCE globally
+var scriptNode = document.createElement('script');
+scriptNode.src = '../../core/js/inat_widget.js';
+document.body.appendChild(scriptNode);
+
+// Run switch tab immediately initialization trigger on execution completion
+window.switchTab(tabConfig[0].id);
 
   window.toggleTheme = function() {
     var container = document.getElementById('themeContainer');
