@@ -304,8 +304,10 @@ async function gatherResources() {
         // Fetch, parse, and instantiate the map configuration object in one shot
         const config  = await asyncGetConfiguration( json_path, getComponent(appState), '' );
 
+        console.log( 'config ' + JSON.stringify( config ));
+
         // build the tabs...
-        buildTabs( config );
+        //buildTabs( config );
       
     } catch (error) { 
       console.error("An error occurred:", error); 
