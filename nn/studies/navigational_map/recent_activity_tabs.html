@@ -286,6 +286,11 @@ function buildTabs( config ) {
       }
     }
   };
+
+  document.getElementById('app').innerHTML = tabsWrapperHtml;
+
+  // Run switch tab immediately initialization trigger on execution completion
+  window.switchTab(tabConfig[0].id);
 }
 
 async function gatherResources() {
@@ -308,10 +313,6 @@ async function gatherResources() {
 
 gatherResources(); 
 
-document.getElementById('app').innerHTML = tabsWrapperHtml;
-
-// Run switch tab immediately initialization trigger on execution completion
-window.switchTab(tabConfig[0].id);
 </script>
 
 </body>
