@@ -1,10 +1,22 @@
 <!DOCTYPE html> 
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recently Observed</title>
+<head> 
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Recently Observed" />
+  <meta name="apple-mobile-web-app-title" content="Recently Observed" />
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="../../core/assets/plant-icon-192.png" />
+  <link rel="icon" type="image/png"      href="../../core/assets/plant-icon-96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml"  href="../../core/assets/plant-icon-96.svg" />
+  <link rel="shortcut icon"              href="../../core/assets/plant-club.ico" />
+  <link rel="manifest"                   href="../../core/assets/plant_club.webmanifest" />
+  <link rel="stylesheet" type="text/css" href="../../core/css/core.css" />
 
+  <script type="text/javascript" src='../../core/js/common_functions.js'></script>
+  <script type="text/javascript" src='../../core/js/study_store.js'></script>
+  <script type="text/javascript" src="../../core/js/map_manager.js"></script>
+    
     <style>
         /* Global Background Reset Resetting to Dark Baseline */
         body {
@@ -138,6 +150,11 @@
     <div id="app"></div>
 
 <script>
+// Parse your state string from the URL 
+let winurlsearchstr = window.location.search; 
+let winurlparams = new URLSearchParams(winurlsearchstr); 
+let p_params     = winurlparams.get('params') || 'nnn';
+    
 // 1. Setup widget configurations
 var tabConfig = [
   { id: 'tab1', type: 'widget', label: 'Butterflies', taxon: '47157' },
