@@ -21,7 +21,7 @@
     // Parse your state string from the URL 
     let winurlsearchstr = window.location.search; 
     let winurlparams = new URLSearchParams(winurlsearchstr); 
-    let p_map_mode   = winurlparams.get('map_mode') || 'default'; 
+    let p_params     = winurlparams.get('params') || 'nnn';
 
     let config     = null; 
 
@@ -30,11 +30,8 @@
        let navbar = document.createElement('div');
        navbar.className = 'navbar v2-menu';
   
-       // Build the Home Link
-       let homeUrl = './widget_grid.html';
-       urlState = appState;
-       urlState = setGridMode('');
-       buildNavHome( navbar, homeUrl, appState, config );
+       // Build the Title
+       buildNavTitle(navbar, config.title);
   
        let appContainer = document.getElementById('app');
        if( appContainer ) {
@@ -186,7 +183,7 @@ body {
 <body>
   
     <div id="app">
-        <div id="info" class="info-shield">Loading iNaturalist Map Layer...</div>
+        <div id="info" class="info-shield">Loading Map Layer...</div>
         <div id="map"></div>
     </div>
 
@@ -196,29 +193,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log("--- 1. DOMContentLoaded Fired Successfully ---");
         
     try {
-        // Test if the external state engine function is actually completing
-        appState = buildStateFromParams(winurlparams); 
-    } catch (stateError) {
-        console.error("❌ CRASH inside buildStateFromParams():", stateError); 
-        const stateErrMsg = stateError.message || "Invalid or corrupt URL parameter structure.";
-    
-        // Overwrite the canvas instantly with your clean inline warning banner
-        document.body.innerHTML = '<div style="background:#1e293b; color:#e2e8f0; font-family:sans-serif; padding:24px; border:2px solid #334155; border-radius:8px; margin:20px;">⚠️ URL Initialization Error: ' + stateErrMsg + '</div>';
-    
-        return;   
-    }
-
-    // Run your configuration validation check 
-    let message = validateConfig(appState); 
-    console.log("--- 4. validateConfig Output Message:", message);
-
-    if( message ) { 
-        console.log('⚠️ Error ~ ' + message);      
-        document.body.innerHTML = '<div style="background:#1e293b; color:#e2e8f0; font-family:sans-serif; padding:24px; border:2px solid #334155; border-radius:8px; margin:20px;">⚠️ Configuration Failure: ' + message + '</div>';
-        return;    
-    } 
-    
-    try {
         await gatherResources(); 
         console.log("--- 6. gatherResources() Execution Complete ---");
     } catch (gatherError) {
@@ -227,96 +201,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;     
     }
 });
-
-function setupInatParams( config ) {
-    let inat_params = '';
-
-    inat_params += '?project_id='+config.project;
-
-    // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
-    // use the menu_id if one was passed in.
-    if( getTaxonId(appState) ) {
-        inat_params += '&taxon_id='+getTaxonId(appState);
-    } else if( getMenuId(appState) ) { 
-        inat_params += '&taxon_id=' + getMenuId(appState); 
-    } else {
-        if( config.defaultTaxonId ) {
-            inat_params += '&taxon_id=' + config.defaultTaxonId;
-        }
-    }
-
-    // --- Consolidated iNat Multi-Field API Builder ---
-    const initialParams = new URLSearchParams(window.location.search);
-    const initialNames = initialParams.getAll('fieldname');
-    const initialValues = initialParams.getAll('fieldvalue');
-
-    const lowerCaseNames = initialNames.map(name => name.toLowerCase());
-
-    // Core Rule: If the URL has no active filters (First Entrance), use your config defaults
-    if( config.fieldName && !lowerCaseNames.includes(config.fieldName.toLowerCase() ) ) {
-        inat_params += '&field:' + config.fieldName;
-        if( config.fieldValue ) {
-            inat_params += '=' + encodeURIComponent(config.fieldValue);
-        }
-    }
-
-    // Sequential Loop: Process whatever filters are explicitly remaining in the URL bar
-    initialNames.forEach((name, index) => {
-      const value = initialValues[index];
-      if( name && value ) {
-          inat_params += '&field:' + name + '=' + encodeURIComponent(value);
-      }
-    });
-
-    if( getObsDate(appState)    ) { inat_params += '&on='       + getObsDate(appState); } 
-
-    if( getUser(appState) ) {
-        inat_params += '&user_id=' + getUser(appState);
-    } else if( config.userId ) { 
-        inat_params += '&user_id='  + config.userId; 
-    }
- 
-    if( getPlaceMenuId(appState) ) {
-        inat_params += getPlaceMenuIdParam(appState, '&place_id=');
-    } else {
-        if( config.defaultPlace ) { 
-            inat_params += '&place_id='        + config.defaultPlace; 
-        } else {
-            inat_params += '&place_id=any';
-        }
-    }
-
-    // filter for month...
-    if( getMonth(appState) ) {
-        if( getMonth(appState) !== 'null' ) { 
-            inat_params += '&month=' + getMonth(appState);
-        }
-    } else if( config.defaultMonths ) {
-            inat_params += '&month=' + config.defaultMonths;
-    }
-
-    // filter for life stage annotation...
-    if( getLifeStage(appState) ) { 
-        if( getLifeStage(appState) === 'null' ) {
-            inat_params += '&without_term_id=1';
-        } else {
-            inat_params += '&term_id=1&term_value_id='  + getLifeStage(appState);
-        }
-    }
-
-    // if a filter has been chosen, get the filter api params
-    if( getActivityFilter(appState) ) {
-        inat_params += getFilterAPIParams(config);
-    }
-
-    if( config.obsAPIParams ) { inat_params += config.obsAPIParams; }
-
-    // default all of these so they stay consistent across the map and grid.
-    // may need to revisit if/when the table sorts by quality_grade.
-    inat_params += '&reviewed=any&quality_grade=needs_id,research,casual&verifiable=any';
-
-    return inat_params;
-}
 
 /**
  * Handles binding dynamic child pins to a parent marker popup action
@@ -403,10 +287,12 @@ function bindDynamicChildPins(map, parentInput) {
 }
 
 async function gatherResources() {
-    let json_path = '../../core/json/' + getParams(appState);
-    try {
-        // Fetch the remote JSON orientation profile
-        config = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
+    let json_path = '../../core/json/maps/' + p_params;
+  
+    try { 
+        // Fetch, parse, and instantiate the map configuration object in one shot
+        config = await MapConfiguration.loadFromUrl(json_path);
+      
         // Build your navigation components
         buildMenu(config);
       
@@ -512,24 +398,6 @@ async function gatherResources() {
         });
 
         // ========================================================================== 
-        // INATURALIST OVERLAY CONFIGURATION 
-        // ========================================================================== 
-        let urlParams = setupInatParams(config); 
-        console.log('inat url params ' + urlParams); 
-
-        const tileHost = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png';
-
-        // Build distinct, filterable overlay tile pipelines
-        const iNatLayers = {
-            "Plants 🌿": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Plantae`, { maxZoom: 20, opacity: 0.85 }),
-            "Birds 🐦": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Aves`, { maxZoom: 20, opacity: 0.85 }),
-            "Insects 🦋": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Insecta`, { maxZoom: 20, opacity: 0.85 }),
-            "Mammals 🦊": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Mammalia`, { maxZoom: 20, opacity: 0.85 }),
-            "Fungi 🍄": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Fungi`, { maxZoom: 20, opacity: 0.85 }),
-            "Herps 🐸": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Amphibia&iconic_taxa[]=Reptilia`, { maxZoom: 20, opacity: 0.85 })
-        };
-
-        // ========================================================================== 
         // UNIFIED INSTANCE CONTROL (Cleaned and consolidated)
         // ========================================================================== 
 
@@ -538,21 +406,6 @@ async function gatherResources() {
             "Street View": streetView, 
             "Satellite": satelliteView 
         };
-
-        // Initialize Map Instance (We load all taxonomic groups by default on startup)
-        const map = L.map('map', { 
-            center: [defaultLat, defaultLng], 
-            zoom: defaultZoom, 
-            layers: [
-                streetView, 
-                iNatLayers["Plants 🌿"], 
-                iNatLayers["Birds 🐦"], 
-                iNatLayers["Insects 🦋"], 
-                iNatLayers["Mammals 🦊"], 
-                iNatLayers["Fungi 🍄"], 
-                iNatLayers["Herps 🐸"]
-            ] 
-        }); 
 
         // ==========================================================================
         // DYNAMIC COMPONENT INITIALIZATION
@@ -564,21 +417,11 @@ async function gatherResources() {
         let overlayMaps = '';
 
         // Add the taxonomic checkboxes AND your parent landmarks checkbox to the same menu object
-        if( p_map_mode === 'default' ) {
-            map.getContainer().classList.remove('hide-first-rule');
+        map.getContainer().classList.remove('hide-first-rule');
 
-            overlayMaps = { 
-              ...iNatLayers, 
+        overlayMaps = { 
               'Communities <span style="font-size: 14px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>': parentLocationsLayer 
-            };
-        } else {
-            // Add the class to completely disable that CSS border rule
-            map.getContainer().classList.add('hide-first-rule');
-
-            overlayMaps = { 
-                'Communities <span style="font-size: 14px; display: inline-block; filter: hue-rotate(140deg);">📍</span>': parentLocationsLayer 
-            };
-        }
+        };
       
         // Mount single consolidated layout control dashboard panel widget to top right corner
         L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
