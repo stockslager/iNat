@@ -48,6 +48,19 @@ class MapConfiguration {
     }
   }
 
+  // loader
+  static async loadFromUrl(url) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const jsonData = await response.json();
+      return new MapConfiguration(jsonData);
+    } catch (error) {
+      console.error("Error loading MapConfiguration:", error);
+      throw error;
+    }
+  }
+  
   /**
    * Helper method to parse the query-string style map_center into coordinates
    * @returns {{lat: number, lng: number}|null}
