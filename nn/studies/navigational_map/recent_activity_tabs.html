@@ -214,60 +214,57 @@ function buildTabs( config ) {
   var inatScriptLoaded = false;
 
   // 5. Global Action Runtime Trigger Logic Operations mapping pointers
-  window.switchTab = function(activeTabId) {
-    var headers = document.querySelectorAll('.custom-tab-header');
-    var contents = document.querySelectorAll('.custom-tab-content');
+window.switchTab = function(activeTabId) {
+  var headers = document.querySelectorAll('.custom-tab-header');
+  var contents = document.querySelectorAll('.custom-tab-content');
 
-    for (var j = 0; j < headers.length; j++) {
-      headers[j].classList.remove('active-tab');
-    }
-    for (var k = 0; k < contents.length; k++) {
-      contents[k].classList.remove('active-panel');
-    }
+  for (var j = 0; j < headers.length; j++) { headers[j].classList.remove('active-tab'); }
+  for (var k = 0; k < contents.length; k++) { contents[k].classList.remove('active-panel'); }
 
-    var activeHeader = document.getElementById('header_' + activeTabId);
-    var activeContent = document.getElementById('content_' + activeTabId);
+  var activeHeader = document.getElementById('header_' + activeTabId);
+  var activeContent = document.getElementById('content_' + activeTabId);
 
-    if (activeHeader && activeContent) {
-      activeHeader.classList.add('active-tab');
-      activeContent.classList.add('active-panel');
+  if (activeHeader && activeContent) {
+    activeHeader.classList.add('active-tab');
+    activeContent.classList.add('active-panel');
 
-      var targetConfig = tabConfig.find(function(t) { return t.id === activeTabId; });
+    var targetConfig = tabConfig.find(function(t) { return t.id === activeTabId; });
+    
+    if (targetConfig && targetConfig.type === 'widget') {
+      var currentTheme = document.getElementById('themeContainer').classList.contains('light-theme') ? 'light' : 'transparent-dark';
+      var widgetExists = document.getElementById('inat-widget-container-' + targetConfig.id);
+      
+      // 1. Inject the HTML wrapper if it'll be the first time rendering this tab
+      if (!widgetExists) {
+        let title = '';
+        if( config.title ) { title += (config.title + ' - '); }
 
-      if (targetConfig && targetConfig.type === 'widget') {
-        // LAZY LOAD FIX: Build the widget container HTML dynamically only if it does not exist yet
-        var currentTheme = document.getElementById('themeContainer').classList.contains('light-theme') ? 'light' : 'transparent-dark';
-        var widgetExists = document.getElementById('inat-widget-container-' + targetConfig.id);
-       
-        if (!widgetExists) {
-          let title = '';
-          if( config.title ) { title += (config.title + ' - '); }
+        activeContent.innerHTML = '<div id="inat-widget-container-' + targetConfig.id + '" ' +
+          'data-inat-widget ' +
+          'data-inat-source="' + config.project + '" ' +
+          'data-inat-source-type="project" ' +
+          'data-inat-theme="' + currentTheme + '" ' +
+          'data-inat-title="' + title + 'Recently Observed" ' +
+          'data-inat-layout="cards" ' +
+          'data-inat-limit="12" ' +
+          'data-inat-order-by="observed_on" ' +
+          'data-inat-taxon="' + targetConfig.taxon + '" ' +
+          'data-inat-compact="true">' +
+          '</div>';
+          
+        // 2. Clear out any previous script tags to prevent old copies piling up in the DOM
+        var oldScript = document.getElementById('inat-loader-script');
+        if (oldScript) { oldScript.remove(); }
 
-          activeContent.innerHTML = '<div id="inat-widget-container-' + targetConfig.id + '" ' +
-            'data-inat-widget ' +
-            'data-inat-source="' + config.project + '" ' +
-            'data-inat-source-type="project" ' +
-            'data-inat-theme="' + currentTheme + '" ' +
-            'data-inat-title="' + title + 'Recently Observed" ' +
-            'data-inat-layout="cards" ' +
-            'data-inat-limit="12" ' +
-            'data-inat-order-by="observed_on" ' +
-            'data-inat-taxon="' + targetConfig.taxon + '" ' +
-            'data-inat-compact="true">' +
-            '</div>';
-        }        
-        
-        if (!inatScriptLoaded) {
-          inatScriptLoaded = true;
-          var scriptNode = document.createElement('script');
-          scriptNode.src = '../../core/js/inat_widget.js';
-          document.body.appendChild(scriptNode);
-        } else if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
-          window.iNatWidget.init();
-        }
+        // 3. Inject a fresh copy of the script to force a total DOM sweep of the new container
+        var scriptNode = document.createElement('script');
+        scriptNode.id = 'inat-loader-script';
+        scriptNode.src = '../../core/js/inat_widget.js';
+        document.body.appendChild(scriptNode);
       }
     }
-  };
+  }
+};
 
   window.toggleTheme = function() {
     var container = document.getElementById('themeContainer');
