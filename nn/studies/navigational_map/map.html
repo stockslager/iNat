@@ -216,7 +216,7 @@ function bindDynamicChildPins(map, parentInput, config) {
 
   markersToProcess.forEach(parentMarker => {
     
-    parentMarker.on('popupopen', () => {
+    parentMarker.on('popupopen', (e) => {
   // Check the first item in your class array to see its real property names
   console.log("Sample class record keys:", Object.keys(config.parentPins[0] || {}));
   console.log("Looking for name matching:", e.target.parentIdentifier);      childPinsLayer.clearLayers(); 
