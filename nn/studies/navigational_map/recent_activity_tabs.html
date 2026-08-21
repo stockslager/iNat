@@ -195,13 +195,16 @@ function buildTabs( config ) {
 
     tabHeadersHtml += '<div id="header_' + tab.id + '" class="' + headerClass + '" onclick="switchTab(\'' + tab.id + '\')">' + tab.label + '</div>';
 
+    let title = '';
+    if( config.title ) { title += (config.title + ' - '); }
+
     tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
       '<div id="inat-widget-container-' + tab.id + '" ' +
       'data-inat-widget ' +
-      'data-inat-source="horizon-community-church" ' +
+      'data-inat-source="' + config.project +'" ' +
       'data-inat-source-type="project" ' +
       'data-inat-theme="' + initialWidgetTheme + '" ' +
-      'data-inat-title="Horizon Community Church - Recently Observed" ' +
+      'data-inat-title="' + title + 'Recently Observed" ' +
       'data-inat-layout="cards" ' +
       'data-inat-limit="12" ' +
       'data-inat-order-by="observed_on" ' +
