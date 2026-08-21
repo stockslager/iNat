@@ -572,20 +572,19 @@ async function gatherResources() {
         parentLocationsLayer.addTo(map);
 
         map.on('baselayerchange', function(e) {
-          // Replace 'Satellite' with the exact string name used in your L.control.layers baseMaps object
-          if (e.name === 'Satellite') {
-            document.querySelectorAll('.custom-utf8-pin').forEach(el => {
-               el.classList.remove('default-theme');
-               el.classList.add('satellite-theme');
-            });
-          } else {
-            document.querySelectorAll('.custom-utf8-pin').forEach(el => {
-               el.classList.remove('satellite-theme');
-               el.classList.add('default-theme');
-            });
-          }
+         if (e.name === 'Satellite') {
+           document.querySelectorAll('.custom-utf8-pin').forEach(el => {
+             el.classList.remove('default-theme');
+             el.classList.add('satellite-theme');
+           });
+         } else {
+           document.querySelectorAll('.custom-utf8-pin').forEach(el => {
+             el.classList.remove('satellite-theme');
+             el.classList.add('default-theme');
+           });
+         }
         });
-
+      
         document.getElementById('info').style.display = 'none';
       
     } catch (error) { 
