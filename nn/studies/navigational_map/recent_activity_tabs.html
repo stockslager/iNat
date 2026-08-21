@@ -193,27 +193,11 @@ function buildTabs( config ) {
     var isFirst = (i === 0);
     var headerClass = isFirst ? 'custom-tab-header active-tab' : 'custom-tab-header';
     var contentClass = isFirst ? 'custom-tab-content active-panel' : 'custom-tab-content';
-    var initialWidgetTheme = (savedTheme === 'light-theme') ? 'light' : 'transparent-dark';
 
     tabHeadersHtml += '<div id="header_' + tab.id + '" class="' + headerClass + '" onclick="switchTab(\'' + tab.id + '\')">' + tab.label + '</div>';
 
-    let title = '';
-    if( config.title ) { title += (config.title + ' - '); }
+    tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '"></div>';
 
-    tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
-      '<div id="inat-widget-container-' + tab.id + '" ' +
-      'data-inat-widget ' +
-      'data-inat-source="' + config.project +'" ' +
-      'data-inat-source-type="project" ' +
-      'data-inat-theme="' + initialWidgetTheme + '" ' +
-      'data-inat-title="' + title + 'Recently Observed" ' +
-      'data-inat-layout="cards" ' +
-      'data-inat-limit="12" ' +
-      'data-inat-order-by="observed_on" ' +
-      'data-inat-taxon="' + tab.taxon + '" ' +
-      'data-inat-compact="true">' +
-      '</div>' +
-      '</div>';
   }
 
   var btnLabel = (savedTheme === 'dark-theme') ? '☀️ Light Mode' : '🌙 Dark Mode';
@@ -251,6 +235,28 @@ function buildTabs( config ) {
       var targetConfig = tabConfig.find(function(t) { return t.id === activeTabId; });
 
       if (targetConfig && targetConfig.type === 'widget') {
+        // LAZY LOAD FIX: Build the widget container HTML dynamically only if it does not exist yet
+        var currentTheme = document.getElementById('themeContainer').classList.contains('light-theme') ? 'light' : 'transparent-dark';
+        var widgetExists = document.getElementById('inat-widget-container-' + targetConfig.id);
+       
+        if (!widgetExists) {
+          let title = '';
+          if( config.title ) { title += (config.title + ' - '); }
+
+          activeContent.innerHTML = '<div id="inat-widget-container-' + targetConfig.id + '" ' +
+            'data-inat-widget ' +
+            'data-inat-source="' + config.project + '" ' +
+            'data-inat-source-type="project" ' +
+            'data-inat-theme="' + currentTheme + '" ' +
+            'data-inat-title="' + title + 'Recently Observed" ' +
+            'data-inat-layout="cards" ' +
+            'data-inat-limit="12" ' +
+            'data-inat-order-by="observed_on" ' +
+            'data-inat-taxon="' + targetConfig.taxon + '" ' +
+            'data-inat-compact="true">' +
+            '</div>';
+        }        
+        
         if (!inatScriptLoaded) {
           inatScriptLoaded = true;
           var scriptNode = document.createElement('script');
