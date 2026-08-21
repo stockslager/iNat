@@ -214,6 +214,7 @@ function buildTabs( config ) {
   var inatScriptLoaded = false;
 
   // 5. Global Action Runtime Trigger Logic Operations mapping pointers
+// Keep track of script loading globally
 window.switchTab = function(activeTabId) {
   var headers = document.querySelectorAll('.custom-tab-header');
   var contents = document.querySelectorAll('.custom-tab-content');
@@ -234,7 +235,7 @@ window.switchTab = function(activeTabId) {
       var currentTheme = document.getElementById('themeContainer').classList.contains('light-theme') ? 'light' : 'transparent-dark';
       var widgetExists = document.getElementById('inat-widget-container-' + targetConfig.id);
       
-      // 1. Inject the HTML wrapper if it'll be the first time rendering this tab
+      // 1. Only build the HTML wrapper if it's the first time viewing this tab
       if (!widgetExists) {
         let title = '';
         if( config.title ) { title += (config.title + ' - '); }
@@ -251,16 +252,19 @@ window.switchTab = function(activeTabId) {
           'data-inat-taxon="' + targetConfig.taxon + '" ' +
           'data-inat-compact="true">' +
           '</div>';
-          
-        // 2. Clear out any previous script tags to prevent old copies piling up in the DOM
-        var oldScript = document.getElementById('inat-loader-script');
-        if (oldScript) { oldScript.remove(); }
+      }
 
-        // 3. Inject a fresh copy of the script to force a total DOM sweep of the new container
+      // 2. Load the script exactly ONCE globally
+      if (!inatScriptLoaded) {
+        inatScriptLoaded = true;
         var scriptNode = document.createElement('script');
-        scriptNode.id = 'inat-loader-script';
         scriptNode.src = '../../core/js/inat_widget.js';
         document.body.appendChild(scriptNode);
+      } else if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
+        // 3. If already loaded, give the DOM 50ms to render the new HTML, then run init exactly once
+        setTimeout(function() {
+          window.iNatWidget.init();
+        }, 50);
       }
     }
   }
