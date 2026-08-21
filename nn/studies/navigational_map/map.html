@@ -25,7 +25,7 @@
 
     let map;
     let config     = null; 
-
+    
     function buildMenu( config ) {
        // Create the main navbar container
        let navbar = document.createElement('div');
@@ -217,9 +217,6 @@ function bindDynamicChildPins(map, parentInput, config) {
   markersToProcess.forEach(parentMarker => {
     
     parentMarker.on('popupopen', (e) => {
-  // Check the first item in your class array to see its real property names
-  console.log("Sample class record keys:", Object.keys(config.parentPins[0] || {}));
-  console.log("Looking for name matching:", e.target.parentIdentifier);      childPinsLayer.clearLayers(); 
       isClickingChild = false; 
 
       // Check if the map layout is currently showing Satellite view
@@ -250,7 +247,7 @@ function bindDynamicChildPins(map, parentInput, config) {
       children.forEach(child => {
         // Correctly applies the functional icon instance to the marker
         const childMarker = L.marker([child.lat, child.lon], { icon: childIcon });
-        childMarker.bindPopup(`<b>${child.text}</b>`);
+        childMarker.bindPopup(`<b>${child.notes}</b>`);
 
         childMarker.on('click', () => {
           isClickingChild = true;
