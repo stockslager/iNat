@@ -178,6 +178,19 @@ body {
 .satellite-theme .flower-glyph {
   color: #ffffff; /* Or use #ccff00 for high-contrast neon green/yellow */
 }
+
+/* Stricter selector that beats the global 'a' */
+.leaflet-popup-content a {
+  text-decoration: none;
+  color: #2563eb;
+}
+
+/* Stricter selector that beats the global 'a:hover' */
+.leaflet-popup-content a:hover {
+  background: transparent; /* Overrides and removes the global background color */
+  color: #1d4ed8;          /* Changes text color on hover instead */
+  text-decoration: underline;
+}
   
 </style>
 </head>
