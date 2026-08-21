@@ -249,7 +249,7 @@ function bindDynamicChildPins(map, parentInput, config) {
       
       children.forEach(child => {
         // Correctly applies the functional icon instance to the marker
-        const childMarker = L.marker([child.lat, child.lng], { icon: childIcon });
+        const childMarker = L.marker([child.lat, child.lon], { icon: childIcon });
         childMarker.bindPopup(`<b>${child.text}</b>`);
 
         childMarker.on('click', () => {
