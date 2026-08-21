@@ -300,8 +300,8 @@ async function gatherResources() {
         // ==========================================================================
         // MAP INITIALIZATION 
         // ==========================================================================
-        //console.log('zoom ' + config.defaultMapZoom);
-        //const defaultZoom = parseInt(config.defaultMapZoom(config)) || 12;
+        console.log('zoom ' + config.defaultMapZoom);
+        const defaultZoom = parseInt(config.defaultMapZoom(config)) || 12;
 
         // ========================================================================== 
         // MAP BASE TILES (Street View & Satellite View Options)
@@ -406,6 +406,15 @@ async function gatherResources() {
             "Satellite": satelliteView 
         };
 
+        // Initialize Map Instance (We load all taxonomic groups by default on startup)
+        const map = L.map('map', { 
+            center: [defaultLat, defaultLng], 
+            zoom: defaultZoom, 
+            layers: [
+                streetView
+            ] 
+        }); 
+      
         // ==========================================================================
         // DYNAMIC COMPONENT INITIALIZATION
         // ==========================================================================
