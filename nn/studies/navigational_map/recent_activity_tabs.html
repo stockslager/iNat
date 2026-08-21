@@ -155,6 +155,8 @@ let winurlsearchstr = window.location.search;
 let winurlparams = new URLSearchParams(winurlsearchstr); 
 let p_params     = winurlparams.get('params') || 'nnn';
 
+appState = buildStateFromParams(winurlparams);
+
 // main function to build the tabs
 function buildTabs( config ) {
   
