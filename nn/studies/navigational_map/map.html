@@ -224,45 +224,47 @@ function buildBubble( pin ) {
  * @param {L.Marker} parentMarker - The parent marker target
  */
 function bindDynamicChildPins(map, parentInput, config) {
-  const childPinsLayer = L.layerGroup();
   let isClickingChild = false;
-
   const markersToProcess = Array.isArray(parentInput) ? parentInput : [parentInput];
 
   markersToProcess.forEach(parentMarker => {
-    
+    // 1. CHANGED: Moved layer group creation inside the loop so each parent owns an isolated group
+    parentMarker.myOwnChildLayer = L.layerGroup();
+
     parentMarker.on('popupopen', (e) => {
-      isClickingChild = false; 
+      isClickingChild = false;
+
+      // 2. CHANGED: Force clear and hide all other sibling layers immediately on click
+      markersToProcess.forEach(m => {
+        if (m.myOwnChildLayer) {
+          map.removeLayer(m.myOwnChildLayer);
+          m.myOwnChildLayer.clearLayers();
+        }
+      });
 
       // Check if the map layout is currently showing Satellite view
       const activeParentPin = document.querySelector('.custom-utf8-pin');
       const isSatelliteActive = activeParentPin ? activeParentPin.classList.contains('satellite-theme') : false;
-      
+
       // Set the starting theme class string based on that active map view state
       const currentThemeClass = isSatelliteActive ? 'satellite-theme' : 'default-theme';
 
       // Define the clean 12px child template matching your custom CSS parameters
-      const child_utf8 = '<span class="custom-utf8-pin ' + currentThemeClass + '">✿</span>'      
-      
+      const child_utf8 = '<span class="custom-utf8-pin ' + currentThemeClass + '">✿</span>'
       const childIcon = L.divIcon({
         html: child_utf8,
-        iconSize: [12, 12],       // Explicitly sets the 12px bounding box
-        iconAnchor:[6, 12],      // Anchors bottom-center of the 12px footprint
-        popupAnchor: [0, -12],    // Positions popup nicely above the pin
+        iconSize:, 
+        iconAnchor:[6, 12], 
+        popupAnchor: [0, -12], 
         className: 'custom-pin-reset'
       });
 
       const targetId = e.target.parentIdentifier;
-
-      // Update this selector logic path to match your exact configuration schema structure
-      // (For example: config.communities.find(item => item.name === targetId)?.children or similar)
       const parentDataRecord = config.parentPins ? config.parentPins.find(item => item.name === targetId) : null;
       const children = parentDataRecord ? parentDataRecord.childPins : [];
-      
+
       children.forEach(child => {
-        // Correctly applies the functional icon instance to the marker
         const childMarker = L.marker([child.lat, child.lon], { icon: childIcon });
-        
         childMarker.bindPopup( buildBubble(child) );
 
         childMarker.on('click', () => {
@@ -272,31 +274,39 @@ function bindDynamicChildPins(map, parentInput, config) {
         childMarker.on('popupclose', () => {
           setTimeout(() => {
             if (!isClickingChild) {
-              map.removeLayer(childPinsLayer);
+              // 3. CHANGED: Targets only this parent's specific layer group instance
+              map.removeLayer(parentMarker.myOwnChildLayer);
             }
           }, 50);
         });
 
-        childPinsLayer.addLayer(childMarker);
+        // 4. CHANGED: Pushes child pins to the isolated layer sandbox
+        parentMarker.myOwnChildLayer.addLayer(childMarker);
       });
 
-      childPinsLayer.addTo(map);
+      // 5. CHANGED: Mounts the safe isolated layer onto the map container view
+      parentMarker.myOwnChildLayer.addTo(map);
     });
 
     parentMarker.on('popupclose', () => {
       setTimeout(() => {
         if (!isClickingChild) {
-          map.removeLayer(childPinsLayer);
+          // 6. CHANGED: Targets the isolated layer cleanup path
+          map.removeLayer(parentMarker.myOwnChildLayer);
         }
-        isClickingChild = false; 
+        isClickingChild = false;
       }, 50);
     });
-
   });
 
   map.on('click', () => {
     isClickingChild = false;
-    map.removeLayer(childPinsLayer);
+    // 7. CHANGED: Wipes all child layers completely when clicking the blank map space
+    markersToProcess.forEach(m => {
+      if (m.myOwnChildLayer) {
+        map.removeLayer(m.myOwnChildLayer);
+      }
+    });
   });
 }
 
