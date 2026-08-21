@@ -235,7 +235,7 @@ window.switchTab = function(activeTabId) {
       var currentTheme = document.getElementById('themeContainer').classList.contains('light-theme') ? 'light' : 'transparent-dark';
       var widgetExists = document.getElementById('inat-widget-container-' + targetConfig.id);
       
-      // 1. Only build the HTML wrapper if it's the first time viewing this tab
+      // 1. Check if we need to load this tab for the first time
       if (!widgetExists) {
         let title = '';
         if( config.title ) { title += (config.title + ' - '); }
@@ -252,19 +252,17 @@ window.switchTab = function(activeTabId) {
           'data-inat-taxon="' + targetConfig.taxon + '" ' +
           'data-inat-compact="true">' +
           '</div>';
-      }
 
-      // 2. Load the script exactly ONCE globally
-      if (!inatScriptLoaded) {
-        inatScriptLoaded = true;
+        // 2. Remove any previous DOM script nodes so the HTML doesn't look messy
+        var oldScript = document.getElementById('inat-loader-script');
+        if (oldScript) { oldScript.remove(); }
+
+        // 3. FORCE initialization using a cache-busting timestamp parameter
         var scriptNode = document.createElement('script');
-        scriptNode.src = '../../core/js/inat_widget.js';
+        scriptNode.id = 'inat-loader-script';
+        // The timestamp query string forces a completely clean, isolated execution context
+        scriptNode.src = '../../core/js/inat_widget.js?v=' + new Date().getTime();
         document.body.appendChild(scriptNode);
-      } else if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
-        // 3. If already loaded, give the DOM 50ms to render the new HTML, then run init exactly once
-        setTimeout(function() {
-          window.iNatWidget.init();
-        }, 50);
       }
     }
   }
