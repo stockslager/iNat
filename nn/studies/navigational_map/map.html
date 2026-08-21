@@ -340,8 +340,8 @@ function bindDynamicChildPins(map, parentInput) {
       // FIXED: Hardcoded all structural dimension variables to prevent parsing crashes
       const childIcon = L.divIcon({
         html: child_utf8,
-        iconSize:,       // Explicitly sets the 12px bounding box
-        iconAnchor:,      // Anchors bottom-center of the 12px footprint
+        iconSize: [12, 12],       // Explicitly sets the 12px bounding box
+        iconAnchor:[6, 12],      // Anchors bottom-center of the 12px footprint
         popupAnchor: [0, -12],    // Positions popup nicely above the pin
         className: 'custom-pin-reset'
       });
