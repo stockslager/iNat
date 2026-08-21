@@ -132,6 +132,28 @@ body {
     padding-top: 8px;
     display: block;
 }
+
+/* Base styles for the icon wrapper and glyph */
+.custom-utf8-pin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.flower-glyph {
+  font-size: 12px;
+  line-height: 1;
+  transition: color 0.2s ease; /* Adds a smooth fade transition when toggled */
+}
+
+/* Base View Theme (Black Flower) */
+.default-theme .flower-glyph {
+  color: #000000;
+}
+
+/* Satellite View Theme (White or Neon Yellow Flower for visibility) */
+.satellite-theme .flower-glyph {
+  color: #ffffff; /* Or use #ccff00 for high-contrast neon green/yellow */
+}
   
 </style>
 </head>
@@ -143,6 +165,21 @@ body {
     </div>
 
     <script>
+
+map.on('baselayerchange', function(e) {
+  // Replace 'Satellite' with the exact string name used in your L.control.layers baseMaps object
+  if (e.name === 'Satellite') {
+    document.querySelectorAll('.custom-utf8-pin').forEach(el => {
+      el.classList.remove('default-theme');
+      el.classList.add('satellite-theme');
+    });
+  } else {
+    document.querySelectorAll('.custom-utf8-pin').forEach(el => {
+      el.classList.remove('satellite-theme');
+      el.classList.add('default-theme');
+    });
+  }
+});
       
 document.addEventListener('DOMContentLoaded', async () => { 
     console.log("--- 1. DOMContentLoaded Fired Successfully ---");
@@ -290,8 +327,8 @@ function bindDynamicChildPins(mapInstance, parentInput) {
       // Create a custom icon child pins 
       // house - &#127968; 12px;
       const child_utf8 = L.divIcon({ html: '<span style="font-size: 12px; line-height: 1; color: #000000;">&#10047;</span>',
-        className: 'custom-utf8-pin', // Removes default Leaflet white box styling
-        iconAnchor: [6, 6]          // Centers the symbol directly over the lat/lng coordinate
+        className: 'custom-utf8-pin default-theme', // Removes default Leaflet white box styling
+        iconAnchor: [6, 6]                          // Centers the symbol directly over the lat/lng coordinate
       });
 
       const children = [
@@ -383,7 +420,7 @@ async function gatherResources() {
             iconSize: [bigWidth, bigHeight], 
             iconAnchor: [halfX, bigHeight], 
             popupAnchor: [0, -30], 
-            className: 'custom-pin-reset' 
+            className: 'custom-pin-reset default-theme' 
         });
 
         // Neighborhood Pin (Identical Big Green Tinted Pushpin)
@@ -392,7 +429,7 @@ async function gatherResources() {
             iconSize: [bigWidth, bigHeight], 
             iconAnchor: [halfX, bigHeight], 
             popupAnchor: [0, -30], 
-            className: 'custom-pin-reset' 
+            className: 'custom-pin-reset default-theme'
         });
       
         // Initialize an isolated layer group to manage parent points 
