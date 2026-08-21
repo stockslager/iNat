@@ -335,10 +335,7 @@ function bindDynamicChildPins(map, parentInput) {
       const currentThemeClass = isSatelliteActive ? 'satellite-theme' : 'default-theme';
 
       // Define the clean 12px child template matching your custom CSS parameters
-      const child_utf8 = L.divIcon({ html: '<span style="font-size: 12px; line-height: 1; color: #000000;">&#10047;</span>',
-        className: 'custom-utf8-pin ' + currentThemeClass, // Removes default Leaflet white box styling
-        iconAnchor: [6, 6]                                 // Centers the symbol directly over the lat/lng coordinate
-      });      
+      const child_utf8 = '<span class="custom-utf8-pin ' + currentThemeClass + '">✿</span>'      
       
       // FIXED: Hardcoded all structural dimension variables to prevent parsing crashes
       const childIcon = L.divIcon({
