@@ -184,7 +184,7 @@
       var tabHeadersHtml = '';
       var tabContentsHtml = '';
 
-      // 3. Render empty tab panels to hold our on-demand elements safely
+      // 3. Render empty layout panels so hidden tabs have no baseline footprint
       for (var i = 0; i < tabConfig.length; i++) {
         var tab = tabConfig[i];
         var isFirst = (i === 0);
@@ -207,7 +207,7 @@
 
       document.getElementById('app').innerHTML = tabsWrapperHtml;
 
-      // 4. Clean global function to run everything natively
+      // 4. Optimized global navigation click tracking logic
       window.switchTab = function(activeTabId) {
         var headers = document.querySelectorAll('.custom-tab-header');
         var contents = document.querySelectorAll('.custom-tab-content');
@@ -228,12 +228,11 @@
             var currentTheme = document.getElementById('themeContainer').classList.contains('light-theme') ? 'light' : 'transparent-dark';
             var idCheck = 'inat-widget-container-' + targetConfig.id;
             
-            // Check if the tab content is completely unbuilt
+            // Generate content if the panel container target string is completely blank
             if (!activeContent.innerHTML.trim()) {
               let title = '';
               if( config.title ) { title += (config.title + ' - '); }
 
-              // Drop the container element right into the live DOM tree
               activeContent.innerHTML = '<div id="' + idCheck + '" ' +
                 'data-inat-widget ' +
                 'data-inat-source="' + config.project + '" ' +
@@ -247,10 +246,12 @@
                 'data-inat-compact="true">' +
                 '</div>';
 
-              // If the main library is already ready in window memory, run its standard initialization hook
-              if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
-                window.iNatWidget.init();
-              }
+              // RENDERING TIMING FIX: Let the browser process the innerHTML render loop completely first
+              requestAnimationFrame(function() {
+                if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
+                  window.iNatWidget.init();
+                }
+              });
             }
           }
         }
@@ -285,10 +286,10 @@
         }
       };
 
-      // 5. Fire off initial active view setup using your configurations array row 0
+      // 5. Fire off initial view render sequence for item index 0 safely
       window.switchTab(tabConfig[0].id);
 
-      // 6. Inject the main javascript widget file exactly ONCE into the document layout footprint
+      // 6. Inject the core widget script file exacty ONCE at system generation
       var scriptNode = document.createElement('script');
       scriptNode.src = '../../core/js/inat_widget.js';
       document.body.appendChild(scriptNode);
