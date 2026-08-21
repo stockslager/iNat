@@ -327,15 +327,18 @@ function bindDynamicChildPins(map, parentInput) {
       childPinsLayer.clearLayers(); 
       isClickingChild = false; 
 
-      // 1. Check if the map layout is currently showing Satellite view
+      // Check if the map layout is currently showing Satellite view
       const activeParentPin = document.querySelector('.custom-utf8-pin');
       const isSatelliteActive = activeParentPin ? activeParentPin.classList.contains('satellite-theme') : false;
       
-      // 2. Set the starting theme class string based on that active map view state
+      // Set the starting theme class string based on that active map view state
       const currentThemeClass = isSatelliteActive ? 'satellite-theme' : 'default-theme';
 
-      // 3. Define the clean 12px child template matching your custom CSS parameters
-      const child_utf8 = `<span class="custom-utf8-pin ${currentThemeClass}">📌</span>`;
+      // Define the clean 12px child template matching your custom CSS parameters
+      const child_utf8 = L.divIcon({ html: '<span style="font-size: 12px; line-height: 1; color: #000000;">&#10047;</span>',
+        className: 'custom-utf8-pin ' + currentThemeClass, // Removes default Leaflet white box styling
+        iconAnchor: [6, 6]                                 // Centers the symbol directly over the lat/lng coordinate
+      });      
       
       // FIXED: Hardcoded all structural dimension variables to prevent parsing crashes
       const childIcon = L.divIcon({
@@ -347,8 +350,11 @@ function bindDynamicChildPins(map, parentInput) {
       });
 
       const children = [
-        { lat: 39.1260, lng: -84.2460, text: "Child Location A" },
-        { lat: 39.1240, lng: -84.2450, text: "Child Location B" }
+        { lat: 39.09319066347188,  lng: -84.34097658959033, text: "AM Place" },
+        { lat: 39.133858629,       lng: -84.306554592,      text: "Ancient Oaks" },
+        { lat: 39.064112984999994, lng: -84.349825737,      text: "Casual Woodland Garden" },
+        { lat: 39.235488254,       lng: -84.321405655,      text: "CH Place" },
+        { lat: 39.190331269,       lng: -84.346331722,      text: "JS Place" }      
       ];
 
       children.forEach(child => {
