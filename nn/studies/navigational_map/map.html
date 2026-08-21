@@ -179,6 +179,23 @@ body {
   color: #ffffff; /* Or use #ccff00 for high-contrast neon green/yellow */
 }
 
+/* Handles the default state directly without inline styles */
+.leaflet-popup-content a.popup-link {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #2563eb; /* Your base blue color */
+  transition: color 0.15s ease; /* Makes the color change smooth */
+}
+
+/* Handles the interactive hover state shift */
+.leaflet-popup-content a.popup-link:hover {
+  background: transparent; /* Erases the global background block */
+  color: #1d4ed8;          /* Changes the text to your dark blue highlight */
+  text-decoration: underline; /* Visually underlines text */
+}
+
 /* Stricter selector that beats the global 'a' */
 .leaflet-popup-content a {
   text-decoration: none;
@@ -225,12 +242,10 @@ function buildBubble( pin ) {
     bubbleContent += '<p style="font-size: 12px; color: #64748b; margin: 0 0 8px 0; line-height: 1.4;">' + pin.notes + '</p>';
 
     bubbleContent += '<a href="../../studies/navigational_map/recent_activity_tabs.html?params='+pin.params+'&component=studies"' + 
-                     ' style="display: inline-block; font-size: 12px; color: #2563eb; text-decoration: none; font-weight: bold;">' + 
-                     'Recent Observations</a><br>';
+                     ' class="popup-link">' + 'Recent Observations</a><br>';
   
     bubbleContent += '<a href="../../studies/field_study.html?params='+pin.params+'&component=studies"' + 
-                     ' style="display: inline-block; font-size: 12px; color: #2563eb; text-decoration: none; font-weight: bold;">' + 
-                     'Plant / Insect Interactions</a>';
+                     ' class="popup-link">' + 'Plant / Insect Interactions</a>';
 
     return bubbleContent;
 }
