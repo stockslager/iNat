@@ -133,7 +133,25 @@ body {
     display: block;
 }
 
-/* Base styles for the icon wrapper and glyph */
+/* Base structural layout for your map pin element */
+.custom-utf8-pin {
+    font-size: 12px;
+    line-height: 1;
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    transition: filter 0.2s ease; /* Adds a clean transition when swapping views */
+}
+
+/* Natural CSS specificity handles the color states cleanly */
+.custom-utf8-pin.default-theme {
+    filter: grayscale(1) brightness(0);
+}
+
+.custom-utf8-pin.satellite-theme {
+    filter: none;
+}
+  
 .custom-utf8-pin {
   display: flex;
   justify-content: center;
@@ -397,15 +415,15 @@ async function gatherResources() {
         const bigHeight = 12;
         const halfX     = 6;
 
-        const parent_utf8 = '<span style="font-size: 12px; line-height: 1; display: inline-block; text-align: center; filter: grayscale(1) brightness(0); width: 100%;">🌟</span>';
+        // A totally naked HTML element with zero inline styles to override
+        const parent_utf8 = '<span class="custom-utf8-pin default-theme">🌟</span>';
 
-        // Community Pin (Big Green Tinted Pushpin)
-        const communityPin = L.divIcon({
-            html: parent_utf8,
-            iconSize: [bigWidth, bigHeight], 
-            iconAnchor: [halfX, bigHeight], 
-            popupAnchor: [0, -30], 
-            className: 'custom-pin-reset default-theme' 
+        const communityPin = L.divIcon({ 
+           html: parent_utf8, 
+           iconSize: [bigWidth, bigHeight], 
+           iconAnchor: [halfX, bigHeight], 
+           popupAnchor: [0, -12], 
+           className: 'custom-pin-reset' 
         });
 
         // Neighborhood Pin (Identical Big Green Tinted Pushpin)
@@ -413,8 +431,8 @@ async function gatherResources() {
             html: parent_utf8,
             iconSize: [bigWidth, bigHeight], 
             iconAnchor: [halfX, bigHeight], 
-            popupAnchor: [0, -30], 
-            className: 'custom-pin-reset default-theme'
+            popupAnchor: [0, -12], 
+            className: 'custom-pin-reset'
         });
       
         // Initialize an isolated layer group to manage parent points 
