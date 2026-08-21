@@ -156,23 +156,23 @@
 
     // main function to build the tabs
     function buildTabs( config ) {
-      // 1. Setup widget configurations
+      // 1. Setup configurations mapped cleanly to matching iNaturalist parameters
       var tabConfig = [
-        { id: 'tab1', type: 'widget', label: 'Butterflies', taxon: '47157' },
+        { id: 'tab1', label: 'Butterflies', taxon: '47157' },
         /* 
-        { id: 'tab2', type: 'widget', label: 'Bees', taxon: '47222' },
-        { id: 'tab3', type: 'widget', label: 'Beetles', taxon: '47208' },
-        { id: 'tab4', type: 'widget', label: 'Birds', taxon: '3' },
-        { id: 'tab5', type: 'widget', label: 'Herps', taxon: '20978,26036' },
-        { id: 'tab6', type: 'widget', label: 'Mammals', taxon: '40151' },
-        { id: 'tab7', type: 'widget', label: 'Mushrooms', taxon: '47170' },
-        { id: 'tab8', type: 'widget', label: 'Plants', taxon: '47126' },
-        { id: 'tab9', type: 'widget', label: 'Snails', taxon: '47115' }, 
+        { id: 'tab2', label: 'Bees', taxon: '47222' },
+        { id: 'tab3', label: 'Beetles', taxon: '47208' },
+        { id: 'tab4', label: 'Birds', taxon: '3' },
+        { id: 'tab5', label: 'Herps', taxon: '20978,26036' },
+        { id: 'tab6', label: 'Mammals', taxon: '40151' },
+        { id: 'tab7', label: 'Mushrooms', taxon: '47170' },
+        { id: 'tab8', label: 'Plants', taxon: '47126' },
+        { id: 'tab9', label: 'Snails', taxon: '47115' }, 
         */
-        { id: 'tab10', type: 'widget', label: 'Spiders', taxon: '47118' }
+        { id: 'tab10', label: 'Spiders', taxon: '47118' }
       ];
 
-      // 2. Scan localized browser storage key values to assert default session layout
+      // 2. Localized browser layout configuration storage lookup
       var savedTheme = localStorage.getItem('app-ui-theme') || 'dark-theme';
 
       if (savedTheme === 'light-theme') {
@@ -184,40 +184,15 @@
       var tabHeadersHtml = '';
       var tabContentsHtml = '';
 
-      // 3. LAZY FIX: Print all elements into the DOM tree immediately, but hide them using absolute layout
-      // This tricks the widget library into cleanly mapping every container dimension without rendering limits
+      // 3. Render raw, empty tab panel frames straight out of the box
       for (var i = 0; i < tabConfig.length; i++) {
         var tab = tabConfig[i];
         var isFirst = (i === 0);
         var headerClass = isFirst ? 'custom-tab-header active-tab' : 'custom-tab-header';
-        
-        // Use a CSS-safe style property fallback strategy instead of display:none or empty layout shells
-        var contentStyle = isFirst ? 'display: block;' : 'display: none;';
+        var contentClass = isFirst ? 'custom-tab-content active-panel' : 'custom-tab-content';
         
         tabHeadersHtml += '<div id="header_' + tab.id + '" class="' + headerClass + '" onclick="switchTab(\'' + tab.id + '\')">' + tab.label + '</div>';
-        
-        let title = '';
-        if( config.title ) { title += (config.title + ' - '); }
-        
-        var initialWidgetTheme = (savedTheme === 'light-theme') ? 'light' : 'transparent-dark';
-
-        // LAZY FIX: Start non-active tabs with a dummy selector attribute so the script ignores it initially
-        var widgetAttribute = isFirst ? 'data-inat-widget' : 'data-lazy-inat-widget';
-
-        tabContentsHtml += '<div id="content_' + tab.id + '" class="custom-tab-content" style="' + contentStyle + '">' +
-          '<div id="inat-widget-container-' + tab.id + '" ' +
-          widgetAttribute + ' ' +
-          'data-inat-source="' + config.project + '" ' +
-          'data-inat-source-type="project" ' +
-          'data-inat-theme="' + initialWidgetTheme + '" ' +
-          'data-inat-title="' + title + 'Recently Observed" ' +
-          'data-inat-layout="cards" ' +
-          'data-inat-limit="12" ' +
-          'data-inat-order-by="observed_on" ' +
-          'data-inat-taxon="' + tab.taxon + '" ' +
-          'data-inat-compact="true">' +
-          '</div>' +
-        '</div>';
+        tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '"></div>';
       }
 
       var btnLabel = (savedTheme === 'dark-theme') ? '☀%EF%B8%8F Light Mode' : '🌙 Dark Mode';
@@ -232,47 +207,52 @@
 
       document.getElementById('app').innerHTML = tabsWrapperHtml;
 
-      // 4. Stable layout switching mechanism
+      // 4. Bulletproof navigation mapping framework
       window.switchTab = function(activeTabId) {
         var headers = document.querySelectorAll('.custom-tab-header');
         var contents = document.querySelectorAll('.custom-tab-content');
 
-        // Remove header active classes
         for (var j = 0; j < headers.length; j++) { headers[j].classList.remove('active-tab'); }
-        // Hide all panels cleanly using native styles
-        for (var k = 0; k < contents.length; k++) { contents[k].style.display = 'none'; }
+        for (var k = 0; k < contents.length; k++) { contents[k].classList.remove('active-panel'); }
 
         var activeHeader = document.getElementById('header_' + activeTabId);
         var activeContent = document.getElementById('content_' + activeTabId);
 
         if (activeHeader && activeContent) {
           activeHeader.classList.add('active-tab');
-          activeContent.style.display = 'block';
+          activeContent.classList.add('active-panel');
 
-          // LAZY FIX: Look for an uninitialized lazy container inside this newly exposed panel
-          var lazyWidget = activeContent.querySelector('[data-lazy-inat-widget]');
+          var targetConfig = tabConfig.find(function(t) { return t.id === activeTabId; });
           
-          if (lazyWidget) {
-            // Convert to the active data selector attribute right before the script initializes it
-            lazyWidget.setAttribute('data-inat-widget', '');
-            lazyWidget.removeAttribute('data-lazy-inat-widget');
+          if (targetConfig) {
+            // Lazy load check: If completely blank, construct the native iNaturalist iframe view
+            if (!activeContent.innerHTML.trim()) {
+              var currentTheme = document.getElementById('themeContainer').classList.contains('light-theme') ? 'light' : 'transparent-dark';
+              let title = '';
+              if( config.title ) { title += (config.title + ' - '); }
+              var encodedTitle = encodeURIComponent(title + 'Recently Observed');
 
-            // Force build exactly ONE unique iframe layout by creating a localized sandboxed frame runner
-            if (window.iNatWidget && typeof window.iNatWidget.renderWidget === 'function') {
-              window.iNatWidget.renderWidget(lazyWidget);
-            } else {
-              // Fallback strategy: If global handler handles whole DOM only, safely run single script sweep inside this block
-              // By deleting the initialized flag inside your plugin widget source file if accessible:
-              if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
-                // If it needs an explicit DOM wipe reset, we reset its single setup lock here:
-                window.iNatWidget.initialized = false; 
-                window.iNatWidget.init();
-              }
+              // Map properties explicitly to the native widget frame endpoint URL structure
+              var iframeSrc = 'https://inaturalist.org?' +
+                'project_id=' + encodeURIComponent(config.project) +
+                '&theme=' + encodeURIComponent(currentTheme) +
+                '&title=' + encodedTitle +
+                '&layout=cards' +
+                '&limit=12' +
+                '&order_by=observed_on' +
+                '&taxon=' + encodeURIComponent(targetConfig.taxon) +
+                '&compact=true';
+
+              activeContent.innerHTML = '<iframe src="' + iframeSrc + '" ' +
+                'style="width:100%; border:none; min-height:500px; scrolling:no;" ' +
+                'id="iframe_' + targetConfig.id + '">' +
+                '</iframe>';
             }
           }
         }
       };
 
+      // 5. Clean, fast theme toggler
       window.toggleTheme = function() {
         var container = document.getElementById('themeContainer');
         var toggleBtn = document.querySelector('.theme-toggle-btn');
@@ -289,23 +269,23 @@
           toggleBtn.innerHTML = targetBtnLabel;
           localStorage.setItem('app-ui-theme', targetThemeClass);
 
+          // Update standard src structures across already initialized loaded tabs cleanly
           for (var m = 0; m < tabConfig.length; m++) {
-            var widgetNode = document.getElementById('inat-widget-container-' + tabConfig[m].id);
-            if (widgetNode) {
-              widgetNode.setAttribute('data-inat-theme', targetWidgetTheme);
+            var activeFrame = document.getElementById('iframe_' + tabConfig[m].id);
+            if (activeFrame) {
+              var currentUrl = new URL(activeFrame.src);
+              currentUrl.searchParams.set('theme', targetWidgetTheme);
+              activeFrame.src = currentUrl.toString();
             }
-          }
-
-          if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
-            window.iNatWidget.init();
           }
         }
       };
 
-      // 5. Inject the main javascript widget file exactly ONCE into the document layout footprint
-      var scriptNode = document.createElement('script');
-      scriptNode.src = '../../core/js/inat_widget.js';
-      document.body.appendChild(scriptNode);
+      // Initialize your first active tab row row 0 natively on run completion
+      var firstTab = tabConfig[0];
+      if (firstTab) {
+        window.switchTab(firstTab.id);
+      }
     }
 
     async function gatherResources() {
