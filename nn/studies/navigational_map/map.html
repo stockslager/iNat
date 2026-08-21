@@ -300,8 +300,11 @@ async function gatherResources() {
         // ==========================================================================
         // MAP INITIALIZATION 
         // ==========================================================================
-        console.log('zoom ' + config.defaultMapZoom);
-        const defaultZoom = parseInt(config.defaultMapZoom(config)) || 12;
+        const defaultZoom  = config.defaultMapZoom || 12;
+        const centerCoords = config.getParsedCenter();
+
+        const defaultLat = centerCoords ? centerCoords.lat : 39.1337;
+        const defaultLng = centerCoords ? centerCoords.lng : -84.3525;       
 
         // ========================================================================== 
         // MAP BASE TILES (Street View & Satellite View Options)
