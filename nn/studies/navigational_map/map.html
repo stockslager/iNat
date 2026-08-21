@@ -315,20 +315,10 @@ function setupInatParams( config ) {
  * @param {L.Map} mapInstance - The active Leaflet map instance
  * @param {L.Marker} parentMarker - The parent marker target
  */
-function bindDynamicChildPins(mapInstance, parentInput) {
+function bindDynamicChildPins(map, parentInput) {
   const childPinsLayer = L.layerGroup();
   let isClickingChild = false;
 
-  // We see if any parent pins currently have 'satellite-theme' applied
-  const activeParentPin = document.querySelector('.custom-utf8-pin');
-  const isSatelliteActive = activeParentPin ? activeParentPin.classList.contains('satellite-theme') : false;
-      
-  // Set the starting theme class string based on that active map view state
-  const currentThemeClass = isSatelliteActive ? 'satellite-theme' : 'default-theme';
-
-  // Define the clean 12px child template matching your custom CSS parameters
-  const child_utf8 = `<span class="custom-utf8-pin ${currentThemeClass}">📌</span>`; // Use any emoji pin icon you prefer
-      
   const markersToProcess = Array.isArray(parentInput) ? parentInput : [parentInput];
 
   markersToProcess.forEach(parentMarker => {
@@ -337,17 +327,33 @@ function bindDynamicChildPins(mapInstance, parentInput) {
       childPinsLayer.clearLayers(); 
       isClickingChild = false; 
 
+      // 1. Check if the map layout is currently showing Satellite view
+      const activeParentPin = document.querySelector('.custom-utf8-pin');
+      const isSatelliteActive = activeParentPin ? activeParentPin.classList.contains('satellite-theme') : false;
+      
+      // 2. Set the starting theme class string based on that active map view state
+      const currentThemeClass = isSatelliteActive ? 'satellite-theme' : 'default-theme';
+
+      // 3. Define the clean 12px child template matching your custom CSS parameters
+      const child_utf8 = `<span class="custom-utf8-pin ${currentThemeClass}">📌</span>`;
+      
+      // FIXED: Hardcoded all structural dimension variables to prevent parsing crashes
+      const childIcon = L.divIcon({
+        html: child_utf8,
+        iconSize:,       // Explicitly sets the 12px bounding box
+        iconAnchor:,      // Anchors bottom-center of the 12px footprint
+        popupAnchor: [0, -12],    // Positions popup nicely above the pin
+        className: 'custom-pin-reset'
+      });
+
       const children = [
-        { lat: 39.09319066347188,  lng: -84.34097658959033, text: "AM Place" },
-        { lat: 39.133858629,       lng: -84.306554592,      text: "Ancient Oaks" },
-        { lat: 39.064112984999994, lng: -84.349825737,      text: "Casual Woodland Garden" },
-        { lat: 39.235488254,       lng: -84.321405655,      text: "CH Place" },
-        { lat: 39.190331269,       lng: -84.346331722,      text: "JS Place" }
+        { lat: 39.1260, lng: -84.2460, text: "Child Location A" },
+        { lat: 39.1240, lng: -84.2450, text: "Child Location B" }
       ];
 
       children.forEach(child => {
-        const childMarker = L.marker([child.lat, child.lng], { icon: child_utf8 } );
-        
+        // Correctly applies the functional icon instance to the marker
+        const childMarker = L.marker([child.lat, child.lng], { icon: childIcon });
         childMarker.bindPopup(`<b>${child.text}</b>`);
 
         childMarker.on('click', () => {
@@ -357,7 +363,7 @@ function bindDynamicChildPins(mapInstance, parentInput) {
         childMarker.on('popupclose', () => {
           setTimeout(() => {
             if (!isClickingChild) {
-              mapInstance.removeLayer(childPinsLayer);
+              map.removeLayer(childPinsLayer);
             }
           }, 50);
         });
@@ -365,13 +371,13 @@ function bindDynamicChildPins(mapInstance, parentInput) {
         childPinsLayer.addLayer(childMarker);
       });
 
-      childPinsLayer.addTo(mapInstance);
+      childPinsLayer.addTo(map);
     });
 
     parentMarker.on('popupclose', () => {
       setTimeout(() => {
         if (!isClickingChild) {
-          mapInstance.removeLayer(childPinsLayer);
+          map.removeLayer(childPinsLayer);
         }
         isClickingChild = false; 
       }, 50);
@@ -379,10 +385,9 @@ function bindDynamicChildPins(mapInstance, parentInput) {
 
   });
 
-  // Global map click safety reset
-  mapInstance.on('click', () => {
+  map.on('click', () => {
     isClickingChild = false;
-    mapInstance.removeLayer(childPinsLayer);
+    map.removeLayer(childPinsLayer);
   });
 }
 
