@@ -319,6 +319,16 @@ function bindDynamicChildPins(mapInstance, parentInput) {
   const childPinsLayer = L.layerGroup();
   let isClickingChild = false;
 
+  // We see if any parent pins currently have 'satellite-theme' applied
+  const activeParentPin = document.querySelector('.custom-utf8-pin');
+  const isSatelliteActive = activeParentPin ? activeParentPin.classList.contains('satellite-theme') : false;
+      
+  // Set the starting theme class string based on that active map view state
+  const currentThemeClass = isSatelliteActive ? 'satellite-theme' : 'default-theme';
+
+  // Define the clean 12px child template matching your custom CSS parameters
+  const child_utf8 = `<span class="custom-utf8-pin ${currentThemeClass}">📌</span>`; // Use any emoji pin icon you prefer
+      
   const markersToProcess = Array.isArray(parentInput) ? parentInput : [parentInput];
 
   markersToProcess.forEach(parentMarker => {
@@ -326,13 +336,6 @@ function bindDynamicChildPins(mapInstance, parentInput) {
     parentMarker.on('popupopen', () => {
       childPinsLayer.clearLayers(); 
       isClickingChild = false; 
-
-      // Create a custom icon child pins 
-      // house - &#127968; 12px;
-      const child_utf8 = L.divIcon({ html: '<span style="font-size: 12px; line-height: 1; color: #000000;">&#10047;</span>',
-        className: 'custom-utf8-pin default-theme', // Removes default Leaflet white box styling
-        iconAnchor: [6, 6]                          // Centers the symbol directly over the lat/lng coordinate
-      });
 
       const children = [
         { lat: 39.09319066347188,  lng: -84.34097658959033, text: "AM Place" },
