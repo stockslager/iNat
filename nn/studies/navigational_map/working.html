@@ -1,0 +1,325 @@
+<!DOCTYPE html>  
+<html lang="en">
+<head> 
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Recently Observed" />
+  <meta name="apple-mobile-web-app-title" content="Recently Observed" />
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="../../core/assets/plant-icon-192.png" />
+  <link rel="icon" type="image/png"      href="../../core/assets/plant-icon-96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml"  href="../../core/assets/plant-icon-96.svg" />
+  <link rel="shortcut icon"              href="../../core/assets/plant-club.ico" />
+  <link rel="manifest"                   href="../../core/assets/plant_club.webmanifest" />
+  <!--<link rel="stylesheet" type="text/css" href="../../core/css/core.css" />-->
+
+  <script type="text/javascript" src='../../core/js/common_functions.js'></script>
+  <script type="text/javascript" src='../../core/js/study_store.js'></script>
+  <script type="text/javascript" src="../../core/js/ConfigManager.js"></script>
+    
+    <style>
+        /* Global Background Reset Resetting to Dark Baseline */
+        body {
+            background-color: #0f172a;
+            margin: 0;
+            padding: 20px;
+            transition: background-color 0.2s ease;
+        }
+
+        /* Master Container Layout Framework */
+        .tab-component-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+            font-family: sans-serif;
+            transition: background-color 0.2s ease;
+        }
+
+        /* --- DARK THEME STYLING CONFIGURATION --- */
+        .tab-component-container.dark-theme {
+            background-color: #0f172a;
+        }
+        .dark-theme .tab-header-track {
+            border-bottom: 1px solid #334155;
+        }
+        .dark-theme .custom-tab-header {
+            background-color: #0f172a;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            border-bottom: none;
+        }
+        .dark-theme .custom-tab-header.active-tab {
+            background-color: #1e293b;
+            color: #38bdf8;
+        }
+        .dark-theme .custom-tab-content {
+            border: 1px solid #334155;
+            background-color: #1e293b;
+        }
+
+        /* --- LIGHT THEME STYLING CONFIGURATION --- */
+        .tab-component-container.light-theme {
+            background-color: #f8fafc;
+        }
+        .light-theme .tab-header-track {
+            border-bottom: 1px solid #cbd5e1;
+        }
+        .light-theme .custom-tab-header {
+            background-color: #e2e8f0;
+            color: #64748b;
+            border: 1px solid #cbd5e1;
+            border-bottom: none;
+        }
+        .light-theme .custom-tab-header.active-tab {
+            background-color: #ffffff;
+            color: #0284c7;
+        }
+        .light-theme .custom-tab-content {
+            border: 1px solid #cbd5e1;
+            background-color: #ffffff;
+        }
+
+        /* --- STRUCTURAL INTERFACE MECHANICS --- */
+        .tab-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tab-header-track {
+            padding-bottom: 0;
+            flex-grow: 1;
+        }
+
+        .custom-tab-header {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 6px 6px 0 0;
+            transition: all 0.15s ease;
+        }
+
+        .custom-tab-content {
+            display: none;
+            width: 100%;
+            height: 680px;
+            border-radius: 0 0 6px 6px;
+            overflow: auto; 
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .custom-tab-content.active-panel {
+            display: block;
+        }
+
+        .tab-widget-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Interactive Theme Action Trigger Element Button */
+        .theme-toggle-btn {
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 20px;
+            border: 1px solid #334155;
+            background-color: #1e293b;
+            color: #e2e8f0;
+            transition: all 0.2s ease;
+        }
+
+        .light-theme .theme-toggle-btn {
+            background-color: #ffffff;
+            color: #1e293b;
+            border: 1px solid #cbd5e1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Base anchor location layout slot -->
+    <div id="app"></div>
+
+<script>
+// Parse your state string from the URL 
+let winurlsearchstr = window.location.search; 
+let winurlparams = new URLSearchParams(winurlsearchstr); 
+let p_params     = winurlparams.get('params') || 'nnn';
+
+appState = buildStateFromParams(winurlparams);
+
+// main function to build the tabs
+function buildTabs( config ) {
+  
+  // 1. Setup widget configurations
+  var tabConfig = [
+    { id: 'tab1', type: 'widget', label: 'Butterflies', taxon: '47157' },
+   /* { id: 'tab2', type: 'widget', label: 'Bees', taxon: '47222' },
+    { id: 'tab3', type: 'widget', label: 'Beetles', taxon: '47208' },
+    { id: 'tab4', type: 'widget', label: 'Birds', taxon: '3' },
+    { id: 'tab5', type: 'widget', label: 'Herps', taxon: '20978,26036' },
+    { id: 'tab6', type: 'widget', label: 'Mammals', taxon: '40151' },
+    { id: 'tab7', type: 'widget', label: 'Mushrooms', taxon: '47170' },
+    { id: 'tab8', type: 'widget', label: 'Plants', taxon: '47126' },
+    { id: 'tab9', type: 'widget', label: 'Snails', taxon: '47115' }, */
+    { id: 'tab10', type: 'widget', label: 'Spiders', taxon: '47118' }
+  ];
+
+  // 2. Scan localized browser storage key values to assert default session layout
+  var savedTheme = localStorage.getItem('app-ui-theme') || 'dark-theme';
+
+  // Match the background of the main document canvas frame straight out of the box
+  if (savedTheme === 'light-theme') {
+    document.body.style.backgroundColor = '#f8fafc';
+  } else {
+    document.body.style.backgroundColor = '#0f172a';
+  }
+
+  var tabHeadersHtml = '';
+  var tabContentsHtml = '';
+
+  // 3. String concatenation iteration loop parsing structure inputs
+  for (var i = 0; i < tabConfig.length; i++) {
+    var tab = tabConfig[i];
+    var isFirst = (i === 0);
+    var headerClass = isFirst ? 'custom-tab-header active-tab' : 'custom-tab-header';
+    var contentClass = isFirst ? 'custom-tab-content active-panel' : 'custom-tab-content';
+    var initialWidgetTheme = (savedTheme === 'light-theme') ? 'light' : 'transparent-dark';
+
+    tabHeadersHtml += '<div id="header_' + tab.id + '" class="' + headerClass + '" onclick="switchTab(\'' + tab.id + '\')">' + tab.label + '</div>';
+
+    let title = '';
+    if( config.title ) { title += (config.title + ' - '); }
+
+    tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
+      '<div id="inat-widget-container-' + tab.id + '" ' +
+      'data-inat-widget ' +
+      'data-inat-source="' + config.project +'" ' +
+      'data-inat-source-type="project" ' +
+      'data-inat-theme="' + initialWidgetTheme + '" ' +
+      'data-inat-title="' + title + 'Recently Observed" ' +
+      'data-inat-layout="cards" ' +
+      'data-inat-limit="12" ' +
+      'data-inat-order-by="observed_on" ' +
+      'data-inat-taxon="' + tab.taxon + '" ' +
+      'data-inat-compact="true">' +
+      '</div>' +
+      '</div>';
+  }
+
+  var btnLabel = (savedTheme === 'dark-theme') ? '☀️ Light Mode' : '🌙 Dark Mode';
+
+  // 4. Form template view construction frame assignments
+  var tabsWrapperHtml = '<div id="themeContainer" class="tab-component-container ' + savedTheme + '">' +
+    '<div class="tab-header-row">' +
+    '<div class="tab-header-track">' + tabHeadersHtml + '</div>' +
+    '<button class="theme-toggle-btn" onclick="toggleTheme()">' + btnLabel + '</button>' +
+    '</div>' +
+    '<div>' + tabContentsHtml + '</div>' +
+    '</div>';
+
+  var inatScriptLoaded = false;
+
+  // 5. Global Action Runtime Trigger Logic Operations mapping pointers
+  window.switchTab = function(activeTabId) {
+    var headers = document.querySelectorAll('.custom-tab-header');
+    var contents = document.querySelectorAll('.custom-tab-content');
+
+    for (var j = 0; j < headers.length; j++) {
+      headers[j].classList.remove('active-tab');
+    }
+    for (var k = 0; k < contents.length; k++) {
+      contents[k].classList.remove('active-panel');
+    }
+
+    var activeHeader = document.getElementById('header_' + activeTabId);
+    var activeContent = document.getElementById('content_' + activeTabId);
+
+    if (activeHeader && activeContent) {
+      activeHeader.classList.add('active-tab');
+      activeContent.classList.add('active-panel');
+
+      var targetConfig = tabConfig.find(function(t) { return t.id === activeTabId; });
+
+      if (targetConfig && targetConfig.type === 'widget') {
+        if (!inatScriptLoaded) {
+          inatScriptLoaded = true;
+          var scriptNode = document.createElement('script');
+          scriptNode.src = '../../core/js/inat_widget.js';
+          document.body.appendChild(scriptNode);
+        } else if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
+          window.iNatWidget.init();
+        }
+      }
+    }
+  };
+
+  window.toggleTheme = function() {
+    var container = document.getElementById('themeContainer');
+    var toggleBtn = document.querySelector('.theme-toggle-btn');
+
+  if (container && toggleBtn) {
+      var isDarkNow = container.classList.contains('dark-theme');
+      var targetThemeClass = isDarkNow ? 'light-theme' : 'dark-theme';
+      var targetBgColor = isDarkNow ? '#f8fafc' : '#0f172a';
+      var targetBtnLabel = isDarkNow ? '🌙 Dark Mode' : '☀️ Light Mode';
+      var targetWidgetTheme = isDarkNow ? 'light' : 'transparent-dark';
+
+      container.className = 'tab-component-container ' + targetThemeClass;
+      document.body.style.backgroundColor = targetBgColor;
+      toggleBtn.innerHTML = targetBtnLabel;
+      localStorage.setItem('app-ui-theme', targetThemeClass);
+
+      // Sweeps and updates the parameters across all 10 tab elements safely
+      for (var m = 0; m < tabConfig.length; m++) {
+        var widgetNode = document.getElementById('inat-widget-container-' + tabConfig[m].id);
+        if (widgetNode) {
+          widgetNode.setAttribute('data-inat-theme', targetWidgetTheme);
+        }
+      }
+
+      if (window.iNatWidget && typeof window.iNatWidget.init === 'function') {
+        window.iNatWidget.init();
+      }
+    }
+  };
+
+  document.getElementById('app').innerHTML = tabsWrapperHtml;
+
+  // Run switch tab immediately initialization trigger on execution completion
+  window.switchTab(tabConfig[0].id);
+}
+
+async function gatherResources() {
+    let json_path = '../../core/json/' + p_params;
+  
+    try { 
+        // Fetch, parse, and instantiate the map configuration object in one shot
+        const config  = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
+
+        // build the tabs...
+        buildTabs( config );
+      
+    } catch (error) { 
+      console.error("An error occurred:", error); 
+      const errMsg = error.message || "An unknown retrieval error occurred.";
+    
+      document.body.innerHTML = '<div style="background:#1e293b; color:#e2e8f0; font-family:sans-serif; padding:24px; border:2px solid #334155; border-radius:8px; margin:20px;">⚠️ Data Load Error: ' + errMsg + '</div>';
+    }
+}
+
+gatherResources(); 
+
+</script>
+
+</body>
+</html>
