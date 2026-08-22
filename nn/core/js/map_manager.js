@@ -50,6 +50,7 @@ class MapConfiguration {
     this.title = configData.title ?? "Map Network";
     this.defaultMapZoom = configData.default_map_zoom ? parseInt(configData.default_map_zoom, 10) : 11;
     this.rawMapCenter = configData.map_center ?? null;
+    this.fieldName    = configData.field_name ?? null;
     
     // Map nested parent pins array
     this.parentPins = configData.parent_pins?.map(p => new ParentPin(p)) ?? [];
