@@ -201,7 +201,7 @@ function buildTabs( config ) {
     tabHeadersHtml += '<div id="header_' + tab.id + '" class="' + headerClass + '" onclick="switchTab(\'' + tab.id + '\')">' + tab.label + '</div>';
 
     let title = '';
-    if( config.title ) { title += (config.title + ' - '); }
+    if( config.title ) { title += ( (config.title ?? config.originalConfig?.title ?? '') + ' - '); }
 
     tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
       '<div id="inat-widget-container-' + tab.id + '" ' +
@@ -217,6 +217,7 @@ function buildTabs( config ) {
       'data-inat-compact="true">' +
       '</div>' +
       '</div>';
+    console.log(' tab content ' + tabContentsHtml);
   }
 
   var btnLabel = (savedTheme === 'dark-theme') ? '☀️ Light Mode' : '🌙 Dark Mode';
