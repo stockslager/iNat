@@ -25,15 +25,6 @@
 
     let map;
     let config     = null; 
-
-    const flowerLocationsLayer = L.layerGroup();
-
-    // Define the tile layer instances globally so the zoom handler can see them
-    const esri = "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
-    const osm  = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-
-    const streetView    = L.tileLayer(osm,  { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }); 
-    const satelliteView = L.tileLayer(esri, { maxZoom: 19, attribution: 'Tiles &copy; Esri &mdash; Source: Esri and the GIS User Community' }); 
     
     function buildMenu( config ) {
        // Create the main navbar container
@@ -223,12 +214,21 @@ body {
 </head>
 <body>
   
-    <div id="app">
-        <div id="info" class="info-shield">Loading Map Layer...</div>
-        <div id="map"></div>
-    </div>
+<div id="app">
+    <div id="info" class="info-shield">Loading Map Layer...</div>
+    <div id="map"></div>
+</div>
 
-    <script>
+<script>
+
+const flowerLocationsLayer = L.layerGroup();
+
+// Define the tile layer instances globally so the zoom handler can see them
+const esri = "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+const osm  = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+
+const streetView    = L.tileLayer(osm,  { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }); 
+const satelliteView = L.tileLayer(esri, { maxZoom: 19, attribution: 'Tiles &copy; Esri &mdash; Source: Esri and the GIS User Community' }); 
 
 document.addEventListener('DOMContentLoaded', async () => { 
     console.log("--- 1. DOMContentLoaded Fired Successfully ---");
