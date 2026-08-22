@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // builds a bubble for the click of a pin
-function buildBubble( pin ) {
+function buildBubble( pin, config ) {
   
     // Assembles structured HTML layout blocks directly inside the pop-up container
     let bubbleContent = '<div style="font-family: sans-serif; padding: 2px;">';
@@ -254,10 +254,13 @@ function buildBubble( pin ) {
     let taxon_id = '';
     if( pin.taxonId ) { taxon_id = ('&fieldvalue=' + pin.taxonId); }
 
-    bubbleContent += '<a href="../../studies/navigational_map/recent_activity_tabs.html?params='+pin.params+'&component=studies'+taxon_id+'"' + 
+    let field = '';
+    if( config.fieldName ) { field = ('fieldname=' + config.fieldName); }
+
+    bubbleContent += '<a href="../../studies/navigational_map/recent_activity_tabs.html?params='+pin.params+'&component=studies'+taxon_id+field+'"' + 
                      ' class="popup-link">' + 'Recent Observations</a><br>';
   
-    bubbleContent += '<a href="../../studies/field_study.html?params='+pin.params+'&component=studies&hide_dash=yes'+taxon_id+'"' + 
+    bubbleContent += '<a href="../../studies/field_study.html?params='+pin.params+'&component=studies&hide_dash=yes'+taxon_id+field+'"' + 
                      ' class="popup-link">' + 'Plant / Insect Interactions</a>';
 
     return bubbleContent;
@@ -299,7 +302,7 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
       const marker = L.marker([pin.lat, pin.lon], { icon: communityPin });
       
       // Bind your clean browser-back bubble link framework
-      marker.bindPopup(buildBubble(pin));
+      marker.bindPopup(buildBubble(pin, config));
       
       // Keep your child link identifier tags intact
       marker.parentIdentifier = pin.name;
@@ -342,7 +345,7 @@ function buildFlowerPinsLayer(config) {
           const flowerMarker = L.marker([flower.lat, flower.lon], { icon: flowerIcon });
           
           // Bind existing standard popup bubble
-          flowerMarker.bindPopup(buildBubble(flower));
+          flowerMarker.bindPopup(buildBubble(flower, config));
           
           // Cache the pin directly inside your zoom-controlled group
           flowerLocationsLayer.addLayer(flowerMarker);
@@ -399,7 +402,7 @@ function bindDynamicChildPins(map, parentInput, config) {
 
       children.forEach(child => {
         const childMarker = L.marker([child.lat, child.lon], { icon: childIcon });
-        childMarker.bindPopup( buildBubble(child) );
+        childMarker.bindPopup( buildBubble(child, config) );
 
         childMarker.on('click', () => {
           isClickingChild = true;
