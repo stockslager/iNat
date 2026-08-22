@@ -252,6 +252,95 @@ function buildBubble( pin ) {
 }
 
 /**
+ * Processes config parent pins, builds Leaflet markers, and binds layer events.
+ * @param {L.Map} map - The active Leaflet map instance.
+ * @param {MapConfiguration} config - The loaded configuration object.
+ * @param {L.LayerGroup} parentLocationsLayer - The parent tracking layer group.
+ * @param {Array} mySavedMarkers - Shared array reference caching your markers.
+ */
+function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers) {
+  // Clear out arrays and groups first to prevent duplicate stacking bugs
+  mySavedMarkers.length = 0;
+  parentLocationsLayer.clearLayers();
+
+  // ==========================================================================
+  // CUSTOM OVERLAY FOR DATA COMMUNITIES (Green Pins)
+  // ==========================================================================
+  const bigWidth  = 12;
+  const bigHeight = 12;
+  const halfX     = 6;
+
+  // A totally naked HTML element with zero inline styles to override
+  const parent_utf8 = '<span class="custom-utf8-pin default-theme">🌟</span>';
+
+  const communityPin = L.divIcon({ 
+      html: parent_utf8, 
+      iconSize: [bigWidth, bigHeight], 
+      iconAnchor: [halfX, bigHeight], 
+      popupAnchor: [0, -12], 
+      className: 'custom-pin-reset' 
+  });
+
+  // Loop through your data structures natively
+  config.parentPins.forEach(pin => {
+    if (pin.lat && pin.lon) {
+      const marker = L.marker([pin.lat, pin.lon], { icon: communityPin });
+      
+      // Bind your clean browser-back bubble link framework
+      marker.bindPopup(buildBubble(pin));
+      
+      // Keep your child link identifier tags intact
+      marker.parentIdentifier = pin.name;
+      
+      mySavedMarkers.push(marker);
+      parentLocationsLayer.addLayer(marker);
+    }
+  });
+
+  // Bind dynamic children markers if you populated parents successfully
+  if (mySavedMarkers.length > 0) {
+    bindDynamicChildPins(map, mySavedMarkers, config);
+  }
+}
+
+/**
+ * Scans all parents to extract and build nested flower markers,
+ * then packs them into the global zoom-controlled layer group.
+ * @param {MapConfiguration} config - The instantiated configuration class object.
+ */
+function buildFlowerPinsLayer(config) {
+  // Clear any existing layers first to prevent double-rendering bugs if config changes
+  flowerLocationsLayer.clearLayers();
+
+  // Define visual flower icon parameters
+  const flowerIcon = L.divIcon({
+    html: '<span class="custom-flower-pin">🌸</span>',
+    iconSize: [16, 16],
+    iconAnchor: [8, 8],
+    popupAnchor: [0, -24],
+    className: 'custom-pin-reset'
+  });
+
+  // Drill down into the nested JSON architecture
+  config.parentPins.forEach(parent => {
+    if (parent.flowerPins && parent.flowerPins.length > 0) {
+      parent.flowerPins.forEach(flower => {
+        // Ensure coordinates exist before dropping a marker
+        if (flower.lat && flower.lon) {
+          const flowerMarker = L.marker([flower.lat, flower.lon], { icon: flowerIcon });
+          
+          // Bind existing standard popup bubble
+          flowerMarker.bindPopup(buildBubble(flower));
+          
+          // Cache the pin directly inside your zoom-controlled group
+          flowerLocationsLayer.addLayer(flowerMarker);
+        }
+      });
+    }
+  });
+}
+
+/**
  * Handles binding dynamic child pins to a parent marker popup action
  * @param {L.Map} mapInstance - The active Leaflet map instance
  * @param {L.Marker} parentMarker - The parent marker target
@@ -371,107 +460,58 @@ async function gatherResources() {
         const streetView    = L.tileLayer(osm,  { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }); 
         const satelliteView = L.tileLayer(esri, { maxZoom: 19, attribution: 'Tiles &copy; Esri &mdash; Source: Esri and the GIS User Community' }); 
 
-        // ==========================================================================
-        // CUSTOM OVERLAY FOR DATA COMMUNITIES (Green Pins)
-        // ==========================================================================
-        const bigWidth  = 12;
-        const bigHeight = 12;
-        const halfX     = 6;
+        // Declare Persistent Global Layer Groups and Marker Arrays
+        const parentLocationsLayer = L.layerGroup();
+        let mySavedMarkers = [];
 
-        // A totally naked HTML element with zero inline styles to override
-        const parent_utf8 = '<span class="custom-utf8-pin default-theme">🌟</span>';
-
-        const communityPin = L.divIcon({ 
-           html: parent_utf8, 
-           iconSize: [bigWidth, bigHeight], 
-           iconAnchor: [halfX, bigHeight], 
-           popupAnchor: [0, -12], 
-           className: 'custom-pin-reset' 
+        // Initialize Core Leaflet Map View Window
+        const baseMaps = { "Street View": streetView, "Satellite": satelliteView };
+        const map = L.map('map', {
+          center: [defaultLat, defaultLng],
+          zoom: defaultZoom,
+          layers: [ streetView ]
         });
 
-        // Initialize an isolated layer group to manage parent points 
-        const parentLocationsLayer = L.layerGroup(); 
+        // add flower pins over zoom level 15
+        map.on('zoomend', () => {
+           const currentZoom = map.getZoom();
 
-        // Initialize a second layer group for the child points (the yard projects)
-        // This layer will only show up when a parent pin is clicked
-        const childLocationsLayer = L.layerGroup();
-
-        // An array to store references to your markers  
-        let mySavedMarkers = []; 
-      
-        // Process the dataset items sequentially straight out of your loaded config instance
-        config.parentPins.forEach(pin => {
-  
-            // Initialize the Leaflet marker using mapped class lat/lon numbers
-            const marker = L.marker([pin.lat, pin.lon], { icon: communityPin });
-  
-            // Build and bind the HTML popup bubble by passing the config pin object directly
-            marker.bindPopup( buildBubble(pin) );
-  
-            // Attach the parent name metadata tracking references
-            marker.parentIdentifier = pin.name;
-  
-            // Cache the object instances safely inside your global script layer arrays
-            mySavedMarkers.push(marker);
-            parentLocationsLayer.addLayer(marker);
+           // Natively matches whatever limit you set in your JSON (e.g. config.showUnderZoomLevel)
+           if (currentZoom >= 15 /*config.showUnderZoomLevel*/) {
+             if (!map.hasLayer(flowerLocationsLayer)) {
+               map.addLayer(flowerLocationsLayer);
+             }
+           } else {
+             if (map.hasLayer(flowerLocationsLayer)) {
+               map.removeLayer(flowerLocationsLayer);
+             }
+           } 
         });
 
-        // ========================================================================== 
-        // UNIFIED INSTANCE CONTROL (Cleaned and consolidated)
-        // ========================================================================== 
-
-        // Base layer targets menu structure
-        const baseMaps = { 
-            "Street View": streetView, 
-            "Satellite": satelliteView 
-        };
-
-        // Initialize Map Instance (We load all taxonomic groups by default on startup)
-        const map = L.map('map', { 
-            center: [defaultLat, defaultLng], 
-            zoom: defaultZoom, 
-            layers: [
-                streetView
-            ] 
-        }); 
-      
-        // ==========================================================================
-        // DYNAMIC COMPONENT INITIALIZATION
-        // ==========================================================================
-        if( mySavedMarkers.length > 0 ) {
-            bindDynamicChildPins(map, mySavedMarkers, config);
+        // Generate parent markers & flower overlays
+        buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers);
+        if (typeof buildFlowerPinsLayer === 'function') {
+          buildFlowerPinsLayer(config); 
         }
-      
-        let overlayMaps = '';
 
-        // Add the taxonomic checkboxes AND your parent landmarks checkbox to the same menu object
+        // Mount UI Controls and Layer Checkboxes
         map.getContainer().classList.remove('hide-first-rule');
-
-        overlayMaps = { 
-              'Communities <span style="font-size: 14px; line-height: 1; display: inline-block; filter: hue-rotate(140deg);">📍</span>': parentLocationsLayer 
+        const overlayMaps = {
+          'Communities <span style="font-size: 14px; filter: hue-rotate(140deg);">📍</span>': parentLocationsLayer
         };
-      
-        // Mount single consolidated layout control dashboard panel widget to top right corner
         L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
-
-        // Force parent landmarks layer to render turned ON by default on bootup
-        // commenting this out would default this layer to "un-checked"
         parentLocationsLayer.addTo(map);
 
+        // Base Layer Visual Theme Toggle Listeners
         map.on('baselayerchange', function(e) {
-         if (e.name === 'Satellite') {
-           document.querySelectorAll('.custom-utf8-pin').forEach(el => {
-             el.classList.remove('default-theme');
-             el.classList.add('satellite-theme');
-           });
-         } else {
-           document.querySelectorAll('.custom-utf8-pin').forEach(el => {
-             el.classList.remove('satellite-theme');
-             el.classList.add('default-theme');
-           });
-         }
+          const pins = document.querySelectorAll('.custom-utf8-pin');
+          if (e.name === 'Satellite') {
+            pins.forEach(el => { el.classList.remove('default-theme'); el.classList.add('satellite-theme'); });
+          } else {
+            pins.forEach(el => { el.classList.remove('satellite-theme'); el.classList.add('default-theme'); });
+          }
         });
-      
+
         document.getElementById('info').style.display = 'none';
       
     } catch (error) { 
