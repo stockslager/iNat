@@ -25,6 +25,15 @@
 
     let map;
     let config     = null; 
+
+    const flowerLocationsLayer = L.layerGroup();
+
+    // Define the tile layer instances globally so the zoom handler can see them
+    const esri = "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+    const osm  = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+
+    const streetView    = L.tileLayer(osm,  { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }); 
+    const satelliteView = L.tileLayer(esri, { maxZoom: 19, attribution: 'Tiles &copy; Esri &mdash; Source: Esri and the GIS User Community' }); 
     
     function buildMenu( config ) {
        // Create the main navbar container
@@ -432,7 +441,57 @@ function bindDynamicChildPins(map, parentInput, config) {
   });
 }
 
-const flowerLocationsLayer = L.layerGroup();
+/**
+ * Monitors map zoom movements and automatically toggles the visibility 
+ * of the flower pins layer and swaps base map views natively.
+ * @param {L.Map} map - The live active Leaflet map instance.
+ * @param {MapConfiguration} config - The loaded map configuration class instance.
+ */
+function initializeZoomViewHandler(map, config) {
+  // Pull the custom zoom limit dynamically straight from your loaded JSON config
+  const thresholdZoom = config.showUnderZoomLevel || 15;
+
+  map.on('zoomend', () => {
+    const currentZoom = map.getZoom();
+
+    if (currentZoom >= thresholdZoom) {
+      // Reveal flower pins layer
+      if (!map.hasLayer(flowerLocationsLayer)) {
+        map.addLayer(flowerLocationsLayer);
+      }
+      
+      // Swaps base views smoothly to Satellite photography
+      if (map.hasLayer(streetView)) {
+        map.removeLayer(streetView);
+        map.addLayer(satelliteView);
+        
+        // Update pin styling themes to match satellite visibility
+        document.querySelectorAll('.custom-utf8-pin').forEach(el => {
+          el.classList.remove('default-theme');
+          el.classList.add('satellite-theme');
+        });
+      }
+      
+    } else {
+      // Strip out flower pins layer group
+      if (map.hasLayer(flowerLocationsLayer)) {
+        map.removeLayer(flowerLocationsLayer);
+      }
+      
+      // Revert back to the clean Street View map lines
+      if (map.hasLayer(satelliteView)) {
+        map.removeLayer(satelliteView);
+        map.addLayer(streetView);
+        
+        // Revert pin styling themes back to the default layout parameters
+        document.querySelectorAll('.custom-utf8-pin').forEach(el => {
+          el.classList.remove('satellite-theme');
+          el.classList.add('default-theme');
+        });
+      }
+    }
+  });
+}
       
 async function gatherResources() {
     let json_path = '../../core/json/maps/' + p_params + '.json';
@@ -453,15 +512,6 @@ async function gatherResources() {
         const defaultLat = centerCoords ? centerCoords.lat : 39.1337;
         const defaultLng = centerCoords ? centerCoords.lng : -84.3525;       
 
-        // ========================================================================== 
-        // MAP BASE TILES (Street View & Satellite View Options)
-        // ========================================================================== 
-        const esri = "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
-        const osm  = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-
-        const streetView    = L.tileLayer(osm,  { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }); 
-        const satelliteView = L.tileLayer(esri, { maxZoom: 19, attribution: 'Tiles &copy; Esri &mdash; Source: Esri and the GIS User Community' }); 
-
         // Declare Persistent Global Layer Groups and Marker Arrays
         const parentLocationsLayer = L.layerGroup();
         let mySavedMarkers = [];
@@ -474,24 +524,12 @@ async function gatherResources() {
           layers: [ streetView ]
         });
 
-        // add flower pins over zoom level 15
-        map.on('zoomend', () => {
-           const currentZoom = map.getZoom();
-
-           // Natively matches whatever limit you set in your JSON (e.g. config.showUnderZoomLevel)
-           if (currentZoom >= 15 /*config.showUnderZoomLevel*/) {
-             if (!map.hasLayer(flowerLocationsLayer)) {
-               map.addLayer(flowerLocationsLayer);
-             }
-           } else {
-             if (map.hasLayer(flowerLocationsLayer)) {
-               map.removeLayer(flowerLocationsLayer);
-             }
-           } 
-        });
-
-        // Generate parent markers & flower overlays
+        // 🌸 zoom handler for conditional display of flower pins
+        initializeZoomViewHandler(map, config);
+      
+        // Generate parent marker overlays
         buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers);
+      
         if (typeof buildFlowerPinsLayer === 'function') {
           buildFlowerPinsLayer(config); 
         }
