@@ -389,15 +389,6 @@ async function gatherResources() {
            className: 'custom-pin-reset' 
         });
 
-        // Neighborhood Pin (Identical Big Green Tinted Pushpin)
-        const neighborhoodPin = L.divIcon({
-            html: parent_utf8,
-            iconSize: [bigWidth, bigHeight], 
-            iconAnchor: [halfX, bigHeight], 
-            popupAnchor: [0, -12], 
-            className: 'custom-pin-reset'
-        });
-      
         // Initialize an isolated layer group to manage parent points 
         const parentLocationsLayer = L.layerGroup(); 
 
@@ -408,54 +399,21 @@ async function gatherResources() {
         // An array to store references to your markers  
         let mySavedMarkers = []; 
       
-        // Unified parent dataset list array with extra web link keys
-        const parentGeoLocations = [ 
-           { 
-                  lat: 39.266935487, 
-                  lng: -84.242105411, 
-                  name: "The Grail", 
-                  details: "931 O'Bannonville Road, Loveland, OH", 
-                  url: "https://www.inaturalist.org/projects/noteworthy-natives-network", 
-                  linkText: "Recent Observations",      
-                  color: "green" 
-            }, 
-            { 
-                  lat: 39.13318330389358, 
-                  lng: -84.35205596269721, 
-                  name: "Horizon Community Church", 
-                  details: "3950 Newtown Rd, Newtown, OH", 
-                  url: "https://www.inaturalist.org/projects/horizon-community-church",
-                  linkText: "Recent Observations",
-                  color: "green" 
-            }  
-        ];
-      
-        // Process the dataset items sequentially
-        parentGeoLocations.forEach(spot => { 
-            // Both variables evaluate to identical green pins, guaranteeing layout safety
-            const chosenIcon = (spot.color === 'green') ? neighborhoodPin : communityPin; 
-    
-            // Assembles structured HTML layout blocks directly inside the pop-up container
-            let bubbleContent = '<div style="font-family: sans-serif; padding: 2px;">';
-            bubbleContent += '<strong style="display: block; font-size: 14px; color: #1e293b; margin-bottom: 4px;">' + spot.name + '</strong>';
-            bubbleContent += '<p style="font-size: 12px; color: #64748b; margin: 0 0 8px 0; line-height: 1.4;">' + spot.details + '</p>';
-    
-            // Safely appends the hyperlink only if the dataset row includes a target url string
-            if( spot.url && spot.linkText ) {
-                bubbleContent += '<a href="' + spot.url + '" target="_blank" style="display: inline-block; font-size: 12px; color: #2563eb; text-decoration: none; font-weight: bold;">' + spot.linkText + ' →</a>';
-            }
-
-            bubbleContent += '</div>';
-
-            const marker = L.marker([spot.lat, spot.lng], { icon: chosenIcon }).bindPopup(bubbleContent);
-
-            // add the name of the parent to the marker so that its children can be looked up and bound to the marker
-            marker.parentIdentifier = spot.name;
-          
-            mySavedMarkers.push(marker); 
-          
-            // Add the new pin directly to the tracking layer group 
-            parentLocationsLayer.addLayer(marker); 
+        // Process the dataset items sequentially straight out of your loaded config instance
+        config.parentPins.forEach(pin => {
+  
+            // Initialize the Leaflet marker using mapped class lat/lon numbers
+            const marker = L.marker([pin.lat, pin.lon], { icon: communityPin });
+  
+            // Build and bind the HTML popup bubble by passing the config pin object directly
+            marker.bindPopup( buildBubble(pin) );
+  
+            // Attach the parent name metadata tracking references
+            marker.parentIdentifier = pin.name;
+  
+            // Cache the object instances safely inside your global script layer arrays
+            mySavedMarkers.push(marker);
+            parentLocationsLayer.addLayer(marker);
         });
 
         // ========================================================================== 
