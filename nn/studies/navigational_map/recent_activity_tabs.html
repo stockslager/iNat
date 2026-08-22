@@ -163,10 +163,10 @@ appState = buildStateFromParams(winurlparams);
 function buildTabs( config ) {
   
   // 1. Setup widget configurations
-  var tabConfig = [];
+  let tabConfig;
 
   if( p_taxon_id ) {
-        { id: 'tab1', type: 'widget', label: p_plant_name, taxon: p_taxon_id }
+      tabConfig = [ { id: 'tab1', type: 'widget', label: p_plant_name, taxon: p_taxon_id } ];
   } else {
       tabConfig = [
         { id: 'tab1', type: 'widget', label: 'Butterflies', taxon: '47157' },
