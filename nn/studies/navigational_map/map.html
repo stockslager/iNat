@@ -271,13 +271,12 @@ body {
 
 <!-- Parent Execution Script Code Controllers -->
 <script>
-  function openObservationsModal(buttonElement) {
-    const projectParams = buttonElement.getAttribute('data-project');
+  function openObservationsModal(params) {
     const modal = document.getElementById('obsModal');
     const iframe = document.getElementById('obsIframe');
     
     // 1. Calculate relative location steps straight to your tabs HTML page file path
-    const targetIframeUrl = '../../studies/navigational_map/recent_activity_tabs.html?params=' + pin.params;
+    const targetIframeUrl = '../../studies/navigational_map/recent_activity_tabs.html?params=' + params;
     
     // 2. Set the src path parameter and display the viewport frame container
     iframe.src = targetIframeUrl;
@@ -320,7 +319,7 @@ function buildBubble( pin ) {
     bubbleContent += '<p style="font-size: 12px; color: #64748b; margin: 0 0 8px 0; line-height: 1.4;">' + pin.notes + '</p>';
 
     bubbleContent += '<a href="#" data-project="' + pin.params + '"' + 
-                     ' onclick="window.parent.openObservationsModal(this); return false;"' + 
+                     ' onclick="window.parent.openObservationsModal('+pin.params+'); return false;"' + 
                      ' class="popup-link">' + 
                      'Recent Observations</a><br>';
   
