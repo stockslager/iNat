@@ -206,7 +206,7 @@ function buildTabs( config ) {
     tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
       '<div id="inat-widget-container-' + tab.id + '" ' +
       'data-inat-widget ' +
-      'data-inat-source="' + config.project +'" ' +
+      'data-inat-source="' + (config.project ?? config.originalConfig?.project ?? '') + '" '
       'data-inat-source-type="project" ' +
       'data-inat-theme="' + initialWidgetTheme + '" ' +
       'data-inat-title="' + title + 'Recently Observed" ' +
