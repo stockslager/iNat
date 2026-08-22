@@ -219,6 +219,83 @@ body {
         <div id="map"></div>
     </div>
 
+<!-- **************************************************** -->
+<!-- The Trigger Button (Change data-project to whatever your pin.params evaluates to) -->
+<button class="open-modal-btn" data-project="horizon" onclick="openObservationsModal(this)">
+  View Recent Observations
+</button>
+
+<!-- The Modal Structural Window Layout -->
+<div id="obsModal" class="modal-backdrop" onclick="closeObservationsModal()">
+  <div class="modal-content-frame" onclick="event.stopPropagation()">
+    <div class="modal-header-row">
+      <h3 id="modalTitle">Project Observations</h3>
+      <button class="close-modal-x" onclick="closeObservationsModal()">&times;</button>
+    </div>
+    <!-- The Active Iframe Target Container Slot -->
+    <iframe id="obsIframe" src="about:blank" frameborder="0" class="modal-iframe-viewport"></iframe>
+  </div>
+</div>
+
+<!-- Essential Parent Layout Styles Sheet Blocks -->
+<style>
+  .modal-backdrop {
+    display: none; /* Invisible by default configuration settings */
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(15, 23, 42, 0.75); /* Dark matching backdrop tone overlay */
+    z-index: 99999; /* Forces modal layer completely above the map view panels */
+    align-items: center; justify-content: center;
+  }
+  .modal-backdrop.modal-open { display: flex; }
+  
+  .modal-content-frame {
+    background: #0f172a; /* Slate background to match dark themes */
+    width: 90vw; height: 85vh; max-width: 1200px;
+    border-radius: 12px; border: 1px solid #334155;
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .modal-header-row {
+    padding: 16px 24px; border-bottom: 1px solid #334155;
+    display: flex; justify-content: space-between; align-items: center;
+    color: #e2e8f0; font-family: sans-serif;
+  }
+  .close-modal-x {
+    background: transparent; border: none; color: #94a3b8;
+    font-size: 24px; cursor: pointer;
+  }
+  .close-modal-x:hover { color: #f8fafc; }
+  
+  .modal-iframe-viewport { width: 100%; flex-grow: 1; height: 100%; }
+</style>
+
+<!-- Parent Execution Script Code Controllers -->
+<script>
+  function openObservationsModal(buttonElement) {
+    const projectParams = buttonElement.getAttribute('data-project');
+    const modal = document.getElementById('obsModal');
+    const iframe = document.getElementById('obsIframe');
+    
+    // 1. Calculate relative location steps straight to your tabs HTML page file path
+    const targetIframeUrl = `../../studies/navigational_map/recent_activity_tabs.html?params=${projectParams}`;
+    
+    // 2. Set the src path parameter and display the viewport frame container
+    iframe.src = targetIframeUrl;
+    modal.classList.add('modal-open');
+  }
+
+  function closeObservationsModal() {
+    const modal = document.getElementById('obsModal');
+    const iframe = document.getElementById('obsIframe');
+    
+    modal.classList.remove('modal-open');
+    // 3. Purge iframe context instantly to prevent ongoing background audio/script leaks
+    iframe.src = 'about:blank'; 
+  }
+</script>
+
+<!-- ***************************************************8 -->
+
     <script>
 
 document.addEventListener('DOMContentLoaded', async () => { 
