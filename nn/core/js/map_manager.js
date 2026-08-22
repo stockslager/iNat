@@ -1,4 +1,21 @@
 /**
+ * Represents a single parent pin entry which may contain nested child pins.
+ */
+class ParentPin {
+  constructor(data) {
+    this.name = data.name ?? null;
+    this.notes = data.notes ?? "";
+    this.params = data.params ?? "";
+    this.lat = data.lat ? parseFloat(data.lat) : null;
+    this.lon = data.lon ? parseFloat(data.lon) : null;
+    
+    // Map nested child pins and flower pins arrays, defaulting to an empty array if missing
+    this.childPins  = data.child_pins?.map(c => new ChildPin(c)) ?? [];
+    this.flowerPins = data.flower_pins?.map(f => new FlowerPin(f)) ?? [];  
+  }
+}
+
+/**
  * Represents a single child pin entry.
  */
 class ChildPin {
@@ -12,18 +29,16 @@ class ChildPin {
 }
 
 /**
- * Represents a single parent pin entry which may contain nested child pins.
+ * Represents an individual flower entry.
  */
-class ParentPin {
+class FlowerPin {
   constructor(data) {
     this.name = data.name ?? null;
     this.notes = data.notes ?? "";
     this.params = data.params ?? "";
+    this.taxonId = data.taxon_id ?? null;
     this.lat = data.lat ? parseFloat(data.lat) : null;
     this.lon = data.lon ? parseFloat(data.lon) : null;
-    
-    // Map nested child pins array, defaulting to an empty array if missing
-    this.childPins = data.child_pins?.map(c => new ChildPin(c)) ?? [];
   }
 }
 
