@@ -246,24 +246,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 // builds a bubble for the click of a pin
 function buildBubble( pin, config=null ) {
   
-    // Assembles structured HTML layout blocks directly inside the pop-up container
-    let bubbleContent = '<div style="font-family: sans-serif; padding: 2px;">';
-    bubbleContent += '<strong style="display: block; font-size: 14px; color: #1e293b; margin-bottom: 4px;">' + pin.name + '</strong>';
-    bubbleContent += '<p style="font-size: 12px; color: #64748b; margin: 0 0 8px 0; line-height: 1.4;">' + pin.notes + '</p>';
+  // Assembles structured HTML layout blocks directly inside the pop-up container
+  let bubbleContent = '<div style="font-family: sans-serif; padding: 2px;">';  
+  bubbleContent += '<strong style="display: block; font-size: 14px; color: #1e293b; margin-bottom: 4px;">' + pin.name + '</strong>';
+  bubbleContent += '<p style="font-size: 12px; color: #64748b; margin: 0 0 8px 0; line-height: 1.4;">' + pin.notes + '</p>';
 
-    let taxon_id = '';
-    if( pin.taxonId ) { taxon_id = ('&fieldvalue=' + pin.taxonId); }
-
-    let field = '';
-    if( config && config.fieldName ) { field = ('&fieldname=' + config.fieldName); }
-
-    bubbleContent += '<a href="../../studies/navigational_map/recent_activity_tabs.html?params='+pin.params+'&component=studies'+taxon_id+field+'"' + 
-                     ' class="popup-link">' + 'Recent Observations</a><br>';
+  // Instantly locks the taxonId value exclusively to this specific pin instance
+  const taxon_query = pin.taxonId ? '&fieldvalue=' + pin.taxonId : '';
   
-    bubbleContent += '<a href="../../studies/field_study.html?params='+pin.params+'&component=studies&hide_dash=yes'+taxon_id+field+'"' + 
-                     ' class="popup-link">' + 'Plant / Insect Interactions</a>';
+  // Instantly locks the fieldname exclusively to this config file state
+  const field_query = (config && config.fieldName) ? '&fieldname=' + config.fieldName : '';
 
-    return bubbleContent;
+  // Append the strings cleanly using your isolated local variables
+  bubbleContent += '<a href="../../studies/navigational_map/recent_activity_tabs.html?params=' + pin.params + '&component=studies' + 
+                   taxon_query + field_query + '" class="popup-link">Recent Observations</a><br>';
+  
+  bubbleContent += '<a href="../../studies/field_study.html?params=' + pin.params + '&component=studies&hide_dash=yes' + 
+                   taxon_query + field_query + '" class="popup-link">Plant / Insect Interactions</a>';
+  
+  bubbleContent += '</div>';
+  return bubbleContent;
 }
 
 /**
