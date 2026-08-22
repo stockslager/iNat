@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // builds a bubble for the click of a pin
-function buildBubble( pin, config ) {
+function buildBubble( pin, config=null ) {
   
     // Assembles structured HTML layout blocks directly inside the pop-up container
     let bubbleContent = '<div style="font-family: sans-serif; padding: 2px;">';
@@ -255,7 +255,7 @@ function buildBubble( pin, config ) {
     if( pin.taxonId ) { taxon_id = ('&fieldvalue=' + pin.taxonId); }
 
     let field = '';
-    if( config.fieldName ) { field = ('fieldname=' + config.fieldName); }
+    if( config && config.fieldName ) { field = ('&fieldname=' + config.fieldName); }
 
     bubbleContent += '<a href="../../studies/navigational_map/recent_activity_tabs.html?params='+pin.params+'&component=studies'+taxon_id+field+'"' + 
                      ' class="popup-link">' + 'Recent Observations</a><br>';
@@ -302,7 +302,7 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
       const marker = L.marker([pin.lat, pin.lon], { icon: communityPin });
       
       // Bind your clean browser-back bubble link framework
-      marker.bindPopup(buildBubble(pin, config));
+      marker.bindPopup(buildBubble(pin));
       
       // Keep your child link identifier tags intact
       marker.parentIdentifier = pin.name;
@@ -402,7 +402,7 @@ function bindDynamicChildPins(map, parentInput, config) {
 
       children.forEach(child => {
         const childMarker = L.marker([child.lat, child.lon], { icon: childIcon });
-        childMarker.bindPopup( buildBubble(child, config) );
+        childMarker.bindPopup( buildBubble(child) );
 
         childMarker.on('click', () => {
           isClickingChild = true;
