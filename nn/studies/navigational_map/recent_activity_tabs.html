@@ -154,6 +154,8 @@
 let winurlsearchstr = window.location.search; 
 let winurlparams = new URLSearchParams(winurlsearchstr); 
 let p_params     = winurlparams.get('params') || 'nnn';
+let p_plant_name = winurlparams.get('plantname') || '';
+let p_taxon_id   = winurlparams.get('fieldvalue') || '';
 
 appState = buildStateFromParams(winurlparams);
 
@@ -161,18 +163,24 @@ appState = buildStateFromParams(winurlparams);
 function buildTabs( config ) {
   
   // 1. Setup widget configurations
-  var tabConfig = [
-    { id: 'tab1', type: 'widget', label: 'Butterflies', taxon: '47157' },
-    { id: 'tab2', type: 'widget', label: 'Bees', taxon: '47222' },
-    { id: 'tab3', type: 'widget', label: 'Beetles', taxon: '47208' },
-    { id: 'tab4', type: 'widget', label: 'Birds', taxon: '3' },
-    { id: 'tab5', type: 'widget', label: 'Herps', taxon: '20978,26036' },
-    { id: 'tab6', type: 'widget', label: 'Mammals', taxon: '40151' },
-    { id: 'tab7', type: 'widget', label: 'Mushrooms', taxon: '47170' },
-    { id: 'tab8', type: 'widget', label: 'Plants', taxon: '47126' },
-    { id: 'tab9', type: 'widget', label: 'Snails', taxon: '47115' }, 
-    { id: 'tab10', type: 'widget', label: 'Spiders', taxon: '47118' }
-  ];
+  var tabConfig = [];
+
+  if( p_taxon_id ) {
+        { id: 'tab1', type: 'widget', label: p_plant_name, taxon: p_taxon_id }
+  } else {
+      tabConfig = [
+        { id: 'tab1', type: 'widget', label: 'Butterflies', taxon: '47157' },
+        { id: 'tab2', type: 'widget', label: 'Bees', taxon: '47222' },
+        { id: 'tab3', type: 'widget', label: 'Beetles', taxon: '47208' },
+        { id: 'tab4', type: 'widget', label: 'Birds', taxon: '3' },
+        { id: 'tab5', type: 'widget', label: 'Herps', taxon: '20978,26036' },
+        { id: 'tab6', type: 'widget', label: 'Mammals', taxon: '40151' },
+        { id: 'tab7', type: 'widget', label: 'Mushrooms', taxon: '47170' },
+        { id: 'tab8', type: 'widget', label: 'Plants', taxon: '47126' },
+        { id: 'tab9', type: 'widget', label: 'Snails', taxon: '47115' }, 
+        { id: 'tab10', type: 'widget', label: 'Spiders', taxon: '47118' }
+      ];
+  }
 
   // 2. Scan localized browser storage key values to assert default session layout
   var savedTheme = localStorage.getItem('app-ui-theme') || 'dark-theme';
@@ -199,7 +207,7 @@ function buildTabs( config ) {
 
     let title = '';
     if( config.title ) { title += (config.title + ' - '); }
-    
+
     tabContentsHtml += '<div id="content_' + tab.id + '" class="' + contentClass + '">' +
       '<div id="inat-widget-container-' + tab.id + '" ' +
       'data-inat-widget ' +
