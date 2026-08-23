@@ -620,7 +620,10 @@ async function gatherResources() {
         const overlayMaps = {
           'Communities <span style="font-size: 14px; filter: hue-rotate(140deg);">📍</span>': parentLocationsLayer
         };
-        L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+      
+        // i'm commenting this out for now since i'm controlling sat view based on zoom level and there
+        // aren't really any conditional pin groups to allow them to select from.
+        //L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
         parentLocationsLayer.addTo(map);
 
         // Base Layer Visual Theme Toggle Listeners
