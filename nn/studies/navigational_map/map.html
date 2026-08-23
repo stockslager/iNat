@@ -140,6 +140,17 @@ body {
     display: block;
 }
 
+/* let the parent pins stay black instead of toggling color on satellite view */
+.parent-utf8-pin {
+    font-size: 12px;
+    line-height: 1;
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    /*transition: filter 0.2s ease; /* Adds a clean transition when swapping views */
+    transition: filter 0.2s ease, color 0.2s ease;
+}
+
 /* Base structural layout for your map pin element */
 .custom-utf8-pin {
     font-size: 12px;
@@ -313,7 +324,7 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
   const halfX     = 6;
 
   // A totally naked HTML element with zero inline styles to override
-  const parent_utf8 = '<span class="custom-utf8-pin default-theme">🌟</span>';
+  const parent_utf8 = '<span class="parent-utf8-pin">🌟</span>';
 
   const communityPin = L.divIcon({ 
       html: parent_utf8, 
