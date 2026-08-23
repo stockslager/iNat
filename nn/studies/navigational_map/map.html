@@ -20,9 +20,12 @@
   <script>
     // Parse your state string from the URL 
     let winurlsearchstr = window.location.search; 
-    let winurlparams = new URLSearchParams(winurlsearchstr); 
-    let p_params     = winurlparams.get('params') || 'nnn';
-    let p_mode       = winurlparams.get('mode') || 'all';
+    let winurlparams   = new URLSearchParams(winurlsearchstr); 
+    let p_params       = winurlparams.get('params') || 'nnn';
+    let p_mode         = winurlparams.get('mode') || 'all';
+    let p_default_lat  = winurlparams.get('defaultlat') || '';
+    let p_default_lon  = winurlparams.get('defaultlon') || '';
+    let p_default_zoom = winurlparams.get('defaultzoom') || '';
 
     let map;
     let config     = null; 
@@ -569,11 +572,11 @@ async function gatherResources() {
         // ==========================================================================
         // MAP INITIALIZATION 
         // ==========================================================================
-        const defaultZoom  = config.defaultMapZoom || 12;
+        const defaultZoom  = p_default_zoom || config.defaultMapZoom || 12;
         const centerCoords = config.getParsedCenter();
 
-        const defaultLat = centerCoords ? centerCoords.lat : 39.1337;
-        const defaultLng = centerCoords ? centerCoords.lng : -84.3525;       
+        const defaultLat = p_default_lat || centerCoords ? centerCoords.lat : 39.1337;
+        const defaultLng = p_default_lon || centerCoords ? centerCoords.lng : -84.3525;       
 
         // Declare Persistent Global Layer Groups and Marker Arrays
         const parentLocationsLayer = L.layerGroup();
