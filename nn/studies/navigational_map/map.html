@@ -273,10 +273,11 @@ function buildPlantsURL( pin, config ) {
   const taxon_query = pin.taxonId ? '&fieldvalue=' + pin.taxonId : '';
   
   // Instantly locks the fieldname exclusively to this config file state
+  const field_id    = (config && config.fieldId)   ? '&fieldid='   + config.fieldId : '';
   const field_query = (config && config.fieldName) ? '&fieldname=' + config.fieldName : '';
   
   return( '../../studies/navigational_map/recent_activity_tabs.html?params=' + pin.params + '&component=studies' + 
-                   taxon_query + field_query );
+                   taxon_query + field_id + field_query );
 }
 
 function buildInsectActivityURL( pin, config ) {
@@ -285,10 +286,11 @@ function buildInsectActivityURL( pin, config ) {
   const taxon_query = pin.taxonId ? '&fieldvalue=' + pin.taxonId : '';
   
   // Instantly locks the fieldname exclusively to this config file state
+  const field_id    = (config && config.fieldId)   ? '&fieldid='   + config.fieldId : '';
   const field_query = (config && config.fieldName) ? '&fieldname=' + config.fieldName : '';
   
   return( '../../studies/field_study.html?params=' + pin.params + '&component=studies&hide_dash=yes' + 
-                   taxon_query + field_query );
+                   taxon_query + field_id + field_query );
 }
 
 // builds a bubble for the click of a pin
