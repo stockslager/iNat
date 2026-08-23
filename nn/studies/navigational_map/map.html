@@ -293,6 +293,11 @@ function buildInsectActivityURL( pin, config ) {
                    taxon_query + field_id + field_query );
 }
 
+function buildFlowerBedURL( pin, config ) {
+  return( '../../studies/field_study.html?params=beds&component=beds&garden='+pin.bed+'&hide_dash=yes' + 
+                   taxon_query + field_id + field_query );
+}
+
 // builds a bubble for the click of a pin
 function buildBubble( pin, config=null ) {
   
@@ -305,6 +310,10 @@ function buildBubble( pin, config=null ) {
   bubbleContent += '<a href="' + buildPlantsURL( pin, config ) + '" class="popup-link">Recent Observations</a><br>';
   
   bubbleContent += '<a href="' + buildInsectActivityURL( pin, config ) + '" class="popup-link">Plant / Insect Interactions</a>';
+
+  if( pin.bed ) {
+      bubbleContent += '<a href="' + buildFlowerBedURL( pin, config ) + '" class="popup-link">Flower Bed Overview</a><br>';
+  }
   
   bubbleContent += '</div>';
   return bubbleContent;
@@ -399,6 +408,8 @@ function buildFlowerPinsLayer(config, mapInstance = null) {
               flowerMarker.on('click', () => { window.location.href = buildPlantsURL( flower, config ); });  
           } else if( p_mode === 'activity' ) {
               flowerMarker.on('click', () => { window.location.href = buildInsectActivityURL( flower, config ); });
+          } else if( p_mode === 'beds' && flower.bed ) {
+              flowerMarker.on('click', () => { window.location.href = buildFlowerBedURL( flower, config ); });
           } else {
               flowerMarker.bindPopup(buildBubble(flower, config));
           }
