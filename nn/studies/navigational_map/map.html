@@ -371,7 +371,7 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
  * then packs them into the global zoom-controlled layer group.
  * @param {MapConfiguration} config - The instantiated configuration class object.
  */
-function buildFlowerPinsLayer(config) {
+function buildFlowerPinsLayer(config, mapInstance = null) {
   // Clear any existing layers first to prevent double-rendering bugs if config changes
   flowerLocationsLayer.clearLayers();
 
@@ -407,6 +407,13 @@ function buildFlowerPinsLayer(config) {
       });
     }
   });
+
+  // if a map instance is provided, add the entire layer group to it 
+  // (for initialization of flower pins if a default zoom over the threshold was
+  // passed in as a url parameter).
+  if (mapInstance) {
+      flowerLocationsLayer.addTo(mapInstance);
+  }
 }
 
 /**
@@ -598,8 +605,14 @@ async function gatherResources() {
         // Generate parent marker overlays
         buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers);
       
-        if (typeof buildFlowerPinsLayer === 'function' || defaultZoom >= thresholdZoom) {
-          buildFlowerPinsLayer(config); 
+        if (typeof buildFlowerPinsLayer === 'function') {
+           if (defaultZoom >= thresholdZoom) {
+              // Pass 'map' so the function can immediately run .addTo(map)
+              buildFlowerPinsLayer(config, map); 
+           } else {
+              // Initialize the layer dataset layout, but do not attach to map yet
+              buildFlowerPinsLayer(config); 
+           }   
         }
 
         // Mount UI Controls and Layer Checkboxes
