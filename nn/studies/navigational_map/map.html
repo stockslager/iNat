@@ -598,7 +598,7 @@ async function gatherResources() {
         // Generate parent marker overlays
         buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers);
       
-        if (typeof buildFlowerPinsLayer === 'function') {
+        if (typeof buildFlowerPinsLayer === 'function' || defaultZoom >= thresholdZoom) {
           buildFlowerPinsLayer(config); 
         }
 
