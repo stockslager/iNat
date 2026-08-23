@@ -294,7 +294,7 @@ function buildInsectActivityURL( pin, config ) {
 }
 
 function buildFlowerBedURL( pin, config ) {
-  return( '../../studies/field_study.html?params=beds&component=beds&garden='+pin.bed+'&hide_dash=yes' );
+  return( '../../beds/beds.html?params=horizon&component=beds&garden='+pin.bed+'&hide_dash=yes' );
 }
 
 // builds a bubble for the click of a pin
@@ -311,7 +311,7 @@ function buildBubble( pin, config=null ) {
   bubbleContent += '<a href="' + buildInsectActivityURL( pin, config ) + '" class="popup-link">Plant / Insect Interactions</a>';
 
   if( pin.bed ) {
-      bubbleContent += '<a href="' + buildFlowerBedURL( pin, config ) + '" class="popup-link">Flower Bed Overview</a><br>';
+      bubbleContent += '<br><a href="' + buildFlowerBedURL( pin, config ) + '" class="popup-link">Flower Bed Overview</a><br>';
   }
   
   bubbleContent += '</div>';
