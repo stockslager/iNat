@@ -22,6 +22,7 @@
     let winurlsearchstr = window.location.search; 
     let winurlparams = new URLSearchParams(winurlsearchstr); 
     let p_params     = winurlparams.get('params') || 'nnn';
+    let p_mode       = winurlparams.get('mode') || 'all';
 
     let map;
     let config     = null; 
@@ -304,7 +305,13 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
       const marker = L.marker([parentPin.lat, parentPin.lon], { icon: communityPin });
       
       // Bind your clean browser-back bubble link framework
-      marker.bindPopup(buildBubble(parentPin));
+      if( p_mode === 'plants' ) {
+          marker.on('click', () => { window.location.href = 'https://example.com'; });
+      } else if( p_mode === 'activity' ) {
+          marker.on('click', () => { window.location.href = 'https://example.com'; });
+      } else {
+          marker.bindPopup(buildBubble(parentPin));
+      }
       
       // Keep your child link identifier tags intact
       marker.parentIdentifier = parentPin.name;
@@ -347,7 +354,13 @@ function buildFlowerPinsLayer(config) {
           const flowerMarker = L.marker([flower.lat, flower.lon], { icon: flowerIcon });
           
           // Bind existing standard popup bubble
-          flowerMarker.bindPopup(buildBubble(flower, config));
+          if( p_mode === 'plants' ) {
+              flowerMarker.on('click', () => { window.location.href = 'https://example.com'; });  
+          } else if( p_mode === 'activity' ) {
+              flowerMarker.on('click', () => { window.location.href = 'https://example.com'; });
+          } else {
+              flowerMarker.bindPopup(buildBubble(flower, config));
+          }
           
           // Cache the pin directly inside your zoom-controlled group
           flowerLocationsLayer.addLayer(flowerMarker);
@@ -404,7 +417,14 @@ function bindDynamicChildPins(map, parentInput, config) {
 
       children.forEach(child => {
         const childMarker = L.marker([child.lat, child.lon], { icon: childIcon });
-        childMarker.bindPopup( buildBubble(child) );
+
+        if( p_mode === 'plants' ) {
+            childMarker.on('click', () => { window.location.href = 'https://example.com'; });
+        } else if( p_mode === 'activity' ) {
+            childMarker.on('click', () => { window.location.href = 'https://example.com'; });
+        } else {
+            childMarker.bindPopup( buildBubble(child) );
+        }
 
         childMarker.on('click', () => {
           isClickingChild = true;
