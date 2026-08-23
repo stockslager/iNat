@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-function buildPlantsLink( pin, config ) {
+function buildPlantsURL( pin, config ) {
   
   // Instantly locks the taxonId value exclusively to this specific pin instance
   const taxon_query = pin.taxonId ? '&fieldvalue=' + pin.taxonId : '';
@@ -252,11 +252,11 @@ function buildPlantsLink( pin, config ) {
   // Instantly locks the fieldname exclusively to this config file state
   const field_query = (config && config.fieldName) ? '&fieldname=' + config.fieldName : '';
   
-  return( '<a href="../../studies/navigational_map/recent_activity_tabs.html?params=' + pin.params + '&component=studies' + 
-                   taxon_query + field_query + '"');
+  return( '"../../studies/navigational_map/recent_activity_tabs.html?params=' + pin.params + '&component=studies' + 
+                   taxon_query + field_query );
 }
 
-function buildInsectActivityLink( pin, config ) {
+function buildInsectActivityURL( pin, config ) {
 
   // Instantly locks the taxonId value exclusively to this specific pin instance
   const taxon_query = pin.taxonId ? '&fieldvalue=' + pin.taxonId : '';
@@ -265,7 +265,7 @@ function buildInsectActivityLink( pin, config ) {
   const field_query = (config && config.fieldName) ? '&fieldname=' + config.fieldName : '';
   
   return( '<a href="../../studies/field_study.html?params=' + pin.params + '&component=studies&hide_dash=yes' + 
-                   taxon_query + field_query + '"' );
+                   taxon_query + field_query );
 }
 
 // builds a bubble for the click of a pin
@@ -277,9 +277,9 @@ function buildBubble( pin, config=null ) {
   bubbleContent += '<p style="font-size: 12px; color: #64748b; margin: 0 0 8px 0; line-height: 1.4;">' + pin.notes + '</p>';
 
   // Append the strings cleanly using your isolated local variables
-  bubbleContent += buildPlantsLink( pin, config ) + ' class="popup-link">Recent Observations</a><br>';
+  bubbleContent += '<a href="' + buildPlantsURL( pin, config ) + '" class="popup-link">Recent Observations</a><br>';
   
-  bubbleContent += buildInsectActivityLink( pin, config ) + ' class="popup-link">Plant / Insect Interactions</a>';
+  bubbleContent += '<a href="' + buildInsectActivityURL( pin, config ) + '" class="popup-link">Plant / Insect Interactions</a>';
   
   bubbleContent += '</div>';
   return bubbleContent;
@@ -322,9 +322,9 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
       
       // Bind your clean browser-back bubble link framework
       if( p_mode === 'plants' ) {
-          marker.on('click', () => { window.location.href = buildPlantsLink( parentPin ); });
+          marker.on('click', () => { window.location.href = buildPlantsURL( parentPin ); });
       } else if( p_mode === 'activity' ) {
-          marker.on('click', () => { window.location.href = buildInsectActivityLink( parentPin ); });
+          marker.on('click', () => { window.location.href = buildInsectActivityURL( parentPin ); });
       } else {
           marker.bindPopup(buildBubble(parentPin));
       }
@@ -371,9 +371,9 @@ function buildFlowerPinsLayer(config) {
           
           // Bind existing standard popup bubble
           if( p_mode === 'plants' ) {
-              flowerMarker.on('click', () => { window.location.href = buildPlantsLink( flower, config ); });  
+              flowerMarker.on('click', () => { window.location.href = buildPlantsURL( flower, config ); });  
           } else if( p_mode === 'activity' ) {
-              flowerMarker.on('click', () => { window.location.href = buildInsectActivityLink( flower, config ); });
+              flowerMarker.on('click', () => { window.location.href = buildInsectActivityURL( flower, config ); });
           } else {
               flowerMarker.bindPopup(buildBubble(flower, config));
           }
@@ -435,9 +435,9 @@ function bindDynamicChildPins(map, parentInput, config) {
         const childMarker = L.marker([child.lat, child.lon], { icon: childIcon });
 
         if( p_mode === 'plants' ) {
-            childMarker.on('click', () => { window.location.href = buildPlantsLink( child ); });
+            childMarker.on('click', () => { window.location.href = buildPlantsURL( child ); });
         } else if( p_mode === 'activity' ) {
-            childMarker.on('click', () => { window.location.href = buildInsectActivityLink( child ); });
+            childMarker.on('click', () => { window.location.href = buildInsectActivityURL( child ); });
         } else {
             childMarker.bindPopup( buildBubble(child) );
         }
