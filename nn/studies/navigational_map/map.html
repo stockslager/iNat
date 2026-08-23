@@ -581,8 +581,8 @@ async function gatherResources() {
         const defaultZoom  = p_default_zoom || config.defaultMapZoom || 12;
         const centerCoords = config.getParsedCenter();
 
-        const defaultLat = p_default_lat || centerCoords ? centerCoords.lat : 39.1337;
-        const defaultLng = p_default_lon || centerCoords ? centerCoords.lng : -84.3525;   
+        const defaultLat = p_default_lat || (centerCoords ? centerCoords.lat : 39.1337);
+        const defaultLng = p_default_lon || (centerCoords ? centerCoords.lng : -84.3525);   
 
         // Pull the custom zoom limit dynamically straight from your loaded JSON config
         thresholdZoom = config.showUnderZoomLevel || 15;
