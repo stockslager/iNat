@@ -299,15 +299,15 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
   });
 
   // Loop through your data structures natively
-  config.parentPins.forEach(pin => {
-    if (pin.lat && pin.lon) {
-      const marker = L.marker([pin.lat, pin.lon], { icon: communityPin });
+  config.parentPins.forEach(parentPin => {
+    if (parentPin.lat && parentPin.lon) {
+      const marker = L.marker([parentPin.lat, parentPin.lon], { icon: communityPin });
       
       // Bind your clean browser-back bubble link framework
-      marker.bindPopup(buildBubble(pin));
+      marker.bindPopup(buildBubble(parentPin));
       
       // Keep your child link identifier tags intact
-      marker.parentIdentifier = pin.name;
+      marker.parentIdentifier = parentPin.name;
       
       mySavedMarkers.push(marker);
       parentLocationsLayer.addLayer(marker);
