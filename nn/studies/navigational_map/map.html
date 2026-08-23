@@ -244,6 +244,7 @@ body {
 
 <script>
 
+let thresholdZoom = '';
 const flowerLocationsLayer = L.layerGroup();
 
 // Define the tile layer instances globally so the zoom handler can see them
@@ -514,8 +515,6 @@ function bindDynamicChildPins(map, parentInput, config) {
  * @param {MapConfiguration} config - The loaded map configuration class instance.
  */
 function initializeZoomViewHandler(map, config) {
-  // Pull the custom zoom limit dynamically straight from your loaded JSON config
-  const thresholdZoom = config.showUnderZoomLevel || 15;
 
   map.on('zoomend', () => {
     const currentZoom = map.getZoom();
@@ -576,7 +575,10 @@ async function gatherResources() {
         const centerCoords = config.getParsedCenter();
 
         const defaultLat = p_default_lat || centerCoords ? centerCoords.lat : 39.1337;
-        const defaultLng = p_default_lon || centerCoords ? centerCoords.lng : -84.3525;       
+        const defaultLng = p_default_lon || centerCoords ? centerCoords.lng : -84.3525;   
+
+        // Pull the custom zoom limit dynamically straight from your loaded JSON config
+        thresholdZoom = config.showUnderZoomLevel || 15;
 
         // Declare Persistent Global Layer Groups and Marker Arrays
         const parentLocationsLayer = L.layerGroup();
@@ -587,7 +589,7 @@ async function gatherResources() {
         const map = L.map('map', {
           center: [defaultLat, defaultLng],
           zoom: defaultZoom,
-          layers: [ streetView ]
+          layers: [ defaultZoom >= thresholdZoom ? satelliteView : streetView ]
         });
 
         // 🌸 zoom handler for conditional display of flower pins
