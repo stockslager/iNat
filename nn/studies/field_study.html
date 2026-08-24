@@ -340,10 +340,21 @@ function buildMenu2( results, config ) {
       }
 
       if( p_hide_dash === 'no' ) {
+        if( p_mode === 'beds' || p_mode === 'all' || p_mode === 'activity' || p_mode === 'flower' ) {
+            let homeState = clearForDashParams(appState);
+            homeState = setParams(homeState, 'nnn');
+            homeState = setComponent(homeState, p_mode);
+            let homeUrl = '../studies/navigational_map/map.html';
+            
+            let homeDiv = faddelem('div', navbar, { id: 'home' });
+            let hLink   = faddelem('a', homeDiv, { href: ( homeUrl + buildParameterList(homeState) ) });
+            faddelem('span', hLink, { innerHTML: '&#127758;' });
+        } else {
           let homeState = clearForDashParams(appState);
           let homeUrl = '../admin/dashboard.html';
           console.log('utf8 ' + config.home_utf8);
           buildNavHome( navbar, homeUrl, homeState, config );
+        }
       }
 
       // Append the DOM nodes to the body
