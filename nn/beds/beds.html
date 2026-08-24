@@ -249,10 +249,10 @@ function buildMenu( config, results ) {
 
     // Build the Home Link
     if( p_hide_dash !== 'yes' ) {
-        if( p_mode === 'beds' || p_mode === 'all' ) {
+        if( p_mode === 'beds' || p_mode === 'all' || p_mode === 'flower' ) {
             let homeState = clearForDashParams(appState);
             homeState = setParams(homeState, 'nnn');
-            homeState = setComponent(homeState, 'beds');
+            homeState = setComponent(homeState, p_mode);
             let homeUrl = '../studies/navigational_map/map.html';
             
             let homeDiv = faddelem('div', navbar, { id: 'home' });
