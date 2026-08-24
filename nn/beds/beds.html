@@ -101,17 +101,22 @@
 /********audio*********/
 /* Container placement and sizing */
 .custom-audio-player {
-  position: fixed;   /* Places it anywhere on screen */
-  bottom: 20px;      /* 20px up from the bottom edge */
-  right: 20px;       /* 20px in from the right edge */
-  width: 150px;      /* Explicitly set custom width */
-  height: 50px;      /* Explicitly set custom height */
+  /* FIX: Changed from fixed to absolute to lock onto the parent wrapper */
+  position: absolute; 
+  
+  /* Positions the player in the bottom-right corner of the image */
+  bottom: 10px;        
+  right: 10px;         
+  z-index: 10;         /* Ensures player sits on top of the image graphic */
+  
+  width: 150px;        /* Explicitly set custom width */
+  height: 50px;        /* Explicitly set custom height */
   
   display: flex;
   align-items: center;
   justify-content: space-around;
   background-color: #333333;
-  border-radius: 25px;
+  border-radius: 5px;
   padding: 5px 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
@@ -133,6 +138,17 @@
   font-family: sans-serif;
   font-size: 12px;
 }
+
+.image-audio-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.image-audio-wrapper img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
 /***** end audio ******/
     
   /* Original Helpers */
@@ -140,15 +156,20 @@
   p { width:100%; }
 </style>
 <body>
-<div class="custom-audio-player">
-  <!-- Hidden native audio element -->
-  <audio id="audio-track">
-    <source src="./artwork/pylon.mp3" type="audio/mpeg">
-  </audio>
+<!-- Parent wrapper that binds the image and player together -->
+<div class="image-audio-wrapper">
+  <img src="" id="artwork-image" alt="Artwork" class="anchored-image">
 
-  <!-- Your custom custom-sized control UI -->
-  <button id="play-pause-btn" class="player-btn">▶</button>
-  <span id="time-display">0:00</span>
+  <div class="custom-audio-player"> 
+    <!-- Hidden native audio element --> 
+    <audio id="audio-track"> 
+      <source src="" type="audio/mpeg" id="audio-source"> 
+    </audio> 
+    <!-- custom custom-sized control UI --> 
+    <button id="play-pause-btn" class="player-btn">▶</button> 
+    <span id="time-display">0:00</span> 
+  </div>
+
 </div>
     
 <script type="text/javascript"   src='../core/js/common_functions.js'> </script>
@@ -164,7 +185,7 @@ let p_mode         = winurlparams.get('mode') || '';
 appState       = buildStateFromParams(winurlparams);
 appState       = setComponent(appState, 'beds');
 
-let image_name = '';
+let image_audio_name = '';
 
 // page / api specific constants 
 const CONST_CUSTOM_PLANT   = 'Plant';
@@ -291,15 +312,33 @@ function buildPage(xobj, config) {
    // Clear layout overrides; let the element use your new CSS rules natively
    header.removeAttribute('style'); 
 
-   const img = document.createElement('img'); 
-   img.src = './artwork/' + image_name; 
+   // Create the parent wrapper container 
+   const wrapper = document.createElement('div');
+   wrapper.className = 'image-audio-wrapper';
 
-   // Only apply visual/scaling behavior, NOT layout-breaking width constraints
-   img.style.height = 'auto'; 
-   img.style.borderRadius = '5px'; 
-   img.style.objectFit = 'contain'; // Still needed to override that old global 'cover' property
+   // Create dynamic image element (keeping exact styling rules)
+   const img = document.createElement('img');
+   img.src = './artwork/' + image_audio_name + '.jpg'; 
+   img.style.height = 'auto';
+   img.style.borderRadius = '5px';  
+   img.style.objectFit = 'contain'; 
+   img.className = 'anchored-image';
 
-   header.appendChild(img);
+   // Create custom audio player block using a template string
+   const audioPlayerContainer = document.createElement('div');
+   audioPlayerContainer.className = 'custom-audio-player';
+   audioPlayerContainer.innerHTML = 
+       '<audio id="audio-track"> ' + 
+          '<source src="./artwork/${image_audio_name.replace(/\.[^/.]+$/, "")}.mp3" type="audio/mpeg">' + 
+       '</audio> ' + 
+       '<button id="play-pause-btn" class="player-btn">▶</button> ' + 
+       '<span id="time-display">0:00</span>';
+
+   // Nest everything safely together
+   wrapper.appendChild(img);
+   wrapper.appendChild(audioPlayerContainer);
+
+   header.appendChild(wrapper);
 
    if( p_mode === 'imageonly' ) {
        return;
@@ -453,7 +492,7 @@ function setupAPIParams( config ) {
        for( let i=0; i<config.beds.length; i++ ) {
             if( config.beds[i].bedName === (getGarden(appState)||'lake') ) {
                 api_params += '?id=' + config.beds[i].taxonIds; 
-                image_name = config.beds[i].image;
+                image_audio_name = config.beds[i].image;
             }
        }
    }
