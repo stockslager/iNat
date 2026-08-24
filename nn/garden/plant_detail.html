@@ -172,40 +172,32 @@
 
  
 
-/* Apply flex layout to the master header row container */
+/* Container layout control */
 .rl-box-bar {
   display: flex !important;
-  align-items: center;            /* Centers left stats and right group vertically */
-  justify-content: space-between; /* Pushes stats to far-left, everything else to far-right */
+  align-items: center;            /* Centers image and title rows vertically */
+  justify-content: space-between; /* Pushes image to far-left, title to far-right */
   width: 100%;
   box-sizing: border-box;
 }
 
-/* NEW: Keeps the image and the 3 title rows bundled on the right side */
-.header-right-group {
-  display: flex;
-  align-items: center;            /* Centers image vertically with the table rows */
-  justify-content: flex-end;      /* Aligns the group to the right wall */
-  margin-left: auto;              /* Forces the whole group to slide right */
-}
-
-/* Let the title container drop its layout-breaking widths */
+/* Ensure the title block container stretches correctly */
 #upperright {
   display: block;
-  margin-left: 15px;              /* Clean gap between the image and your title text */
+  margin-left: auto;              /* Pushes the titles cleanly to the right edge */
 }
 
-/* Force the table rows to stick cleanly to the right edge */
+/* Keep the titles right-justified */
 #upperright .tableboxkey {
   text-align: right;
   width: auto;
 }
 
-/* Sizing configurations for your header image */
-.header-center-image {
+/* Left-aligned image dimensions */
+.header-left-image {
   height: auto;
-  max-height: 55px;               /* Limits image size to perfectly match 3 table rows */
-  width: auto;                    /* Preserves aspect ratio */
+  max-height: 55px;               /* Limits image size to perfectly match the 3 title rows */
+  width: auto;                    /* Preserves aspect ratio without distortion */
   border-radius: 4px;
   object-fit: cover;
   display: block;
@@ -313,7 +305,7 @@ if( config.showStudyGrid === 'widget' ) {
 let title_3_element = faddelem('a', null, { href: titleUrl }); 
 faddelem('span', title_3_element, { textContent: titleText }); 
 
-// 2. Call buildHeader normally (pass your clean string variables and link element)
+// 2. Call buildHeader normally
 let header = buildHeader( 
   CONST_SPECIES, 
   total_results, 
@@ -328,23 +320,16 @@ let header = buildHeader(
 // 3. Create your dynamic header image 
 const img = document.createElement('img'); 
 img.src = root_photos + '722533441/small.jpg'; 
-img.className = 'header-center-image'; 
+img.className = 'header-left-image'; 
 
-// ... (Your code up through Step 3 creating the img element) ...
-
-// 4. FIX: Find the 'upperright' div inside the generated header
-const upperRightDiv = header.querySelector('#upperright');
-if (upperRightDiv) {
-  // Create a sub-container to bundle the image and the title table together
-  const rightGroupContainer = document.createElement('div');
-  rightGroupContainer.className = 'header-right-group';
-
-  // Put the original title div into our new group container first
-  header.insertBefore(rightGroupContainer, upperRightDiv);
+// 4. FIX: Remove the left stats box (counts) and insert the image at the far left instead
+const leftBox = header.querySelector('#lbox');
+if (leftBox) {
+  // Remove the counts block completely
+  leftBox.remove(); 
   
-  // Nest both elements side-by-side inside this new right-aligned group
-  rightGroupContainer.appendChild(img);
-  rightGroupContainer.appendChild(upperRightDiv);
+  // Insert the image as the very first item on the left side of the header bar
+  header.prepend(img); 
 }
 
 // 5. Append the modified header component to the page body layout natively
