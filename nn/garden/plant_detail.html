@@ -277,12 +277,13 @@ function buildPage(xobj, config) {
 
       let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, '', '', title_3_element ); 
     
-      faddelem('p', document.body).appendChild(header);
+      //faddelem('p', document.body).appendChild(header);
 
 
 // Look for your main structural container instead of the body root 
-const mainContainer = document.getElementById('main') || document.body; 
-const pic = faddelem('p', mainContainer); 
+//const mainContainer = document.getElementById('main') || document.body; 
+//const pic = faddelem('p', mainContainer); 
+const pic = faddelem('p', header); 
 
 // Clear layout overrides; let the element use your new CSS rules natively 
 pic.removeAttribute('style'); 
@@ -298,6 +299,7 @@ img.className = 'anchored-image';
 // Append the image directly into your 'pic' element
 pic.appendChild(img);
 
+      faddelem('p', document.body).appendChild(header);
 
 
 
