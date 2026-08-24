@@ -364,6 +364,8 @@ function buildPage(xobj, config) {
           labels.push({innerText:'Activity', style: 'text-align: center;'});
       } else if( p_mode === 'observers' ) {
           labels.push({innerText:'Observers', style: 'text-align: center;'});
+      } else {
+          labels.push({innerText:'Activity', style: 'text-align: center;'});
       }
 
       /*let title_1 = '', title_2 = '', title_3 = '';
@@ -439,7 +441,7 @@ function buildPage(xobj, config) {
                  }
              }            
 
-             if( p_mode === 'activity' ) {
+             if( p_mode === 'activity' || p_mode === 'all' || p_mode === 'beds' ) {
                  // Split the string into an array and trim any accidental whitespace
                  let taxonIdArray = (config.activityTaxonIds || '').split(',').map(id => id.trim());
                  if( rec?.id && taxonIdArray.includes(String(rec.id)) ) {
