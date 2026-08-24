@@ -37,7 +37,6 @@ class FlowerPin {
     this.name    = data.name ?? null;
     this.notes   = data.notes ?? "";
     this.params  = data.params ?? "";
-    this.studyTitle = data.study_title ?? "";
     this.pinType = data.pin_type ?? null;
     this.bed     = data.bed ?? null;
     this.taxonId = data.taxon_id ?? null;
