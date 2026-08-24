@@ -333,6 +333,14 @@ function buildPage(xobj, config) {
        timeDisplay.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
      });
    }
+
+   // Automatically hide the controls if the MP3 file 404s or fails to load
+   if (audioTrack) {
+     audioTrack.addEventListener('error', () => {
+       console.warn(`Audio file missing or broken: ./artwork/${image_audio_name}.mp3`);
+       audioPlayerContainer.style.display = 'none';
+     }, true); // The 'true' flag ensures the error event is captured from the inner source tag
+   }    
     
    if( p_mode === 'imageonly' ) {
        return;
