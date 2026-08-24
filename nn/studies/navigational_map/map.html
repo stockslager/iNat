@@ -436,7 +436,7 @@ function buildFlowerPinsLayer(config, mapInstance = null) {
               flowerMarker.on('click', () => { window.location.href = buildFlowerBedURL( flower, config ); });
           } else if( p_mode === 'flower' ) {
               flowerMarker.on('click', () => { window.location.href = buildFlowerURL( flower, config ); });
-          } else {
+          } else if( p_mode === 'all' ) {
               flowerMarker.bindPopup(buildBubble(flower, config));
           }
           
