@@ -437,7 +437,7 @@ function buildFlowerPinsLayer(config, mapInstance = null) {
           } else if( p_mode === 'beds' && flower.bed && flower.bed !== '' ) {
               flowerMarker.on('click', () => { window.location.href = buildFlowerBedURL( flower, config ); });
               flowerLocationsLayer.addLayer(flowerMarker);
-          } else if( p_mode === 'flower' ) {
+          } else if( p_mode === 'flower' && flower.pinType === 'flower' ) {
               flowerMarker.on('click', () => { window.location.href = buildFlowerURL( flower, config ); });
               flowerLocationsLayer.addLayer(flowerMarker);
           } else if( p_mode === 'all' ) {
