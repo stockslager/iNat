@@ -297,10 +297,13 @@ function buildInsectActivityURL( pin, config ) {
 }
 
 function buildFlowerBedURL( pin, config ) {
-  return( '../../beds/beds.html?params=horizon&component=beds&garden='+pin.bed+'&mode=' + p_mode + 
+
+  if( pin.bed ) {
+      return( '../../beds/beds.html?params=horizon&component=beds&garden='+pin.bed+'&mode=' + p_mode + 
                                              '&defaultlat=' + p_default_lat + 
                                              '&defaultlon=' + p_default_lon + 
                                              '&defaultzoom=' + p_default_zoom );
+  }
 }
 
 function buildFlowerURL( pin, config ) {
@@ -429,7 +432,7 @@ function buildFlowerPinsLayer(config, mapInstance = null) {
               flowerMarker.on('click', () => { window.location.href = buildPlantsURL( flower, config ); });  
           } else if( p_mode === 'activity' ) {
               flowerMarker.on('click', () => { window.location.href = buildInsectActivityURL( flower, config ); });
-          } else if( p_mode === 'beds' && flower.bed ) {
+          } else if( p_mode === 'beds' && flower.bed && flower.bed !== '' ) {
               flowerMarker.on('click', () => { window.location.href = buildFlowerBedURL( flower, config ); });
           } else if( p_mode === 'flower' ) {
               flowerMarker.on('click', () => { window.location.href = buildFlowerURL( flower, config ); });
