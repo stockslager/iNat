@@ -172,28 +172,35 @@
 
  
 
-/* Flex layout rule specifically inside your native title container */
+/* Master container holding the image on the left and the text block on the right */
 .header-split-wrapper {
-  display: inline-flex !important;
-  align-items: center;
+  display: flex !important;
+  align-items: stretch;          /* Forces the image to stretch to the text column's full height */
   justify-content: space-between;
   width: 100%;
 }
 
-/* FIX: Image scales perfectly relative to your template's text line-height */
-.header-left-image {
-  height: 2.2em;               /* Scaled using text sizes so it matches header proportions */
-  width: auto;                 /* Preserves width aspect ratios */
-  border-radius: 4px;
-  object-fit: contain;
-  margin-right: 15px;          /* Clean spacing padding */
+/* Vertical column block that keeps all text rows right-justified */
+.header-text-stack {
+  display: flex;
+  flex-direction: column;         /* Stacks title 1, 2, and 3 vertically */
+  justify-content: center;        /* Centers them vertically next to the image */
+  text-align: right;
+  align-items: flex-end;          /* Aligns all text block rows to the right wall margin */
+  flex-grow: 1;
 }
 
-/* Keeps your text tracking aligned cleanly to the right boundary */
-.header-right-title {
-  text-align: right;
-  margin-left: auto;
+/* The image scales to match the total height of the vertical text column */
+.header-left-image {
+  height: auto;                   /* Let height expand naturally based on max-height */
+  max-height: 5.5em;              /* Matches the rough height footprint of 3 text rows */
+  width: auto;                    /* Preserves aspect ratio without squishing */
+  border-radius: 5px;
+  object-fit: cover;              /* Clips edges cleanly if aspect ratio varies */
+  margin-right: 20px;             /* Distance between the image and your text stack */
 }
+
+
  
   /* Original Helpers */
   #h2 { font-weight:bold; font-size:20px; }
@@ -291,25 +298,34 @@ if( config.showStudyGrid === 'widget' ) {
   titleUrl = './garden_grid.html' + buildParameterList(urlState); 
 } 
 
-// 1. Create a lightweight span wrapper instead of a hard layout block to prevent style breaking
-const titleLayoutGroup = document.createElement('span');
-titleLayoutGroup.className = 'header-split-wrapper';
+// 1. Create your original title element link (Row 3)
+let title_3_element = faddelem('a', null, { href: titleUrl }); 
+faddelem('span', title_3_element, { textContent: titleText }); 
 
-// 2. Create your dynamic header image
+// 2. Create the outer master layout wrapper (holds the image on left, text column on right)
+const headerSplitWrapper = document.createElement('div');
+headerSplitWrapper.className = 'header-split-wrapper';
+
+// 3. Create your high-resolution dynamic image
 const img = document.createElement('img'); 
 img.src = root_photos + '722533441/small.jpg'; 
 img.className = 'header-left-image'; 
 
-// 3. Create your original title element link
-let title_3_element = faddelem('a', null, { href: titleUrl }); 
-title_3_element.className = 'header-right-title';
-faddelem('span', title_3_element, { textContent: titleText }); 
+// 4. Create a vertical stack column just for your text rows
+const textStackColumn = document.createElement('div');
+textStackColumn.className = 'header-text-stack';
 
-// 4. Nest them side-by-side inside your template inline container
-titleLayoutGroup.appendChild(img);
-titleLayoutGroup.appendChild(title_3_element);
+// 5. Append all three of your title variables into the text column stack
+// (If title_1 and title_2 are strings, wrap them in elements first, or append directly if they are DOM objects)
+if (title_1) textStackColumn.appendChild(typeof title_1 === 'string' ? faddelem('div', null, {textContent: title_1}) : title_1);
+if (title_2) textStackColumn.appendChild(typeof title_2 === 'string' ? faddelem('div', null, {textContent: title_2}) : title_2);
+textStackColumn.appendChild(title_3_element);
 
-// 5. FIX: Call buildHeader again so all your site styles instantly return!
+// 6. Nest the image and the text column side-by-side inside the master split wrapper
+headerSplitWrapper.appendChild(img);
+headerSplitWrapper.appendChild(textStackColumn);
+
+// 7. Pass the complete multi-row split bundle straight into the title slot
 let header = buildHeader( 
   CONST_SPECIES, 
   total_results, 
@@ -318,7 +334,7 @@ let header = buildHeader(
   page_max, 
   '', 
   '', 
-  titleLayoutGroup // Inject your split elements straight into the title slot
+  headerSplitWrapper 
 ); 
 
 faddelem('p', document.body).appendChild(header);
