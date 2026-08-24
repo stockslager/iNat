@@ -33,10 +33,11 @@ class ChildPin {
  */
 class FlowerPin {
   constructor(data) {
-    this.name = data.name ?? null;
-    this.notes = data.notes ?? "";
-    this.params = data.params ?? "";
-    this.bed    = data.bed ?? null;
+    this.name    = data.name ?? null;
+    this.notes   = data.notes ?? "";
+    this.params  = data.params ?? "";
+    this.pinType = data.pin_type ?? null;
+    this.bed     = data.bed ?? null;
     this.taxonId = data.taxon_id ?? null;
     this.lat = data.lat ? parseFloat(data.lat) : null;
     this.lon = data.lon ? parseFloat(data.lon) : null;
