@@ -275,7 +275,7 @@ function buildPage(xobj, config) {
       // CSS needs text inside span
       faddelem('span', title_3_element, { textContent: titleText });
 
-      let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, '', '', title_3_element ); 
+      //let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, '', '', title_3_element ); 
     
       //faddelem('p', document.body).appendChild(header);
 
@@ -299,6 +299,7 @@ img.className = 'anchored-image';
 // Append the image directly into your 'pic' element
 pic.appendChild(img);
 
+      let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, pic, '', title_3_element ); 
       faddelem('p', document.body).appendChild(header);
 
 
