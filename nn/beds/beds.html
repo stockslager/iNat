@@ -286,12 +286,11 @@ function buildPage(xobj, config) {
    // Create custom audio player block using a template string
    const audioPlayerContainer = document.createElement('div');
    audioPlayerContainer.className = 'custom-audio-player';
-   audioPlayerContainer.innerHTML = 
-       '<audio id="audio-track"> ' + 
-          '<source src="./artwork/' + image_audio_name + '.mp3" type="audio/mpeg">' + 
-       '</audio> ' + 
-       '<button id="play-pause-btn" class="player-btn">▶</button> ' + 
-       '<span id="time-display">0:00</span>';
+   audioPlayerContainer.innerHTML = '<audio class="dynamic-audio-track" preload="auto"> ' + 
+      '<source src="./artwork/' + image_audio_name + '.mp3" type="audio/mpeg">' + 
+      '</audio> ' + 
+      '<button class="dynamic-play-btn player-btn" type="button">▶</button> ' + 
+      '<span class="dynamic-time-display">0:00</span>';   
 
    // Nest everything safely together
    wrapper.appendChild(img);
@@ -303,6 +302,11 @@ function buildPage(xobj, config) {
    const audioTrack = audioPlayerContainer.querySelector('.dynamic-audio-track');
    const playBtn = audioPlayerContainer.querySelector('.dynamic-play-btn');
    const timeDisplay = audioPlayerContainer.querySelector('.dynamic-time-display');
+
+   // Force the audio engine to load the file properties instantly
+   if (audioTrack) {
+     audioTrack.load();
+   }
 
    // Use Leaflet's safe DOM event tracker if this is inside a map popup
    if (playBtn && audioTrack) {
