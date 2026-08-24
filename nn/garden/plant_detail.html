@@ -320,12 +320,15 @@ function buildPage(xobj, config) {
 
       let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, '', '', title_3_element ); 
     
-      //faddelem('p', document.body).appendChild(header);
+      faddelem('p', document.body).appendChild(header);
 
 
+   // Look for your main structural container instead of the body root 
+   const mainContainer = document.getElementById('main') || document.body; 
+   const pic = faddelem('p', mainContainer); 
 
    // Clear layout overrides; let the element use your new CSS rules natively
-   header.removeAttribute('style'); 
+   pic.removeAttribute('style'); 
 
    // Create the parent wrapper container 
    const wrapper = document.createElement('div');
@@ -352,7 +355,7 @@ function buildPage(xobj, config) {
    wrapper.appendChild(img);
    wrapper.appendChild(audioPlayerContainer);
 
-   header.appendChild(wrapper);
+   pic.appendChild(wrapper);
 
    // Direct Event Wiring (No separate function needed!)
    const audioTrack = audioPlayerContainer.querySelector('.dynamic-audio-track');
