@@ -308,22 +308,22 @@ function buildPage(xobj, config) {
      audioTrack.load();
    }
 
-   // Use Leaflet's safe DOM event tracker if this is inside a map popup
-   if (playBtn && audioTrack) {
-     L.DomEvent.on(playBtn, 'click', function(e) {
-       L.DomEvent.stopPropagation(e); // Stops the map layout from intercepting clicks
-       L.DomEvent.preventDefault(e);
+   // Native event listener for the play button
+   if (playBtn && audioTrack) { 
+     playBtn.addEventListener('click', function(e) { 
+       e.stopPropagation(); // Stops parent containers from stealing the click
+       e.preventDefault(); 
 
-       if (audioTrack.paused) {
-         audioTrack.play()
-           .then(() => { playBtn.textContent = '⏸'; })
-           .catch(err => console.error("Playback blocked or file missing:", err));
-       } else {
-         audioTrack.pause();
-         playBtn.textContent = '▶';  
-       }
-     });
-   }
+       if (audioTrack.paused) { 
+         audioTrack.play() 
+           .then(() => { playBtn.textContent = '⏸'; }) 
+           .catch(err => console.error("Playback blocked or file missing:", err)); 
+       } else { 
+         audioTrack.pause(); 
+         playBtn.textContent = '▶'; 
+       } 
+     }); 
+   } 
 
    // Track and update the running time display string
    if (audioTrack && timeDisplay) {
