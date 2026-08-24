@@ -170,29 +170,29 @@
     background: var(--color-hover);
   }
 
-/* Container layout control */
-.custom-flex-header {
-  display: flex;
-  align-items: center;            /* Vertically aligns text and image in the middle */
-  justify-content: space-between; /* Pins image to the far-left and title to the far-right */
-  width: 100%;                    /* Spans across the entire layout width footprint */
-  padding: 10px 15px;             /* Interior padding margins */
-  background-color: #f8f9fa;      /* Optional background fill to see header block */
-  box-sizing: border-box;
+ 
+
+/* Flex layout rule specifically inside your native title container */
+.header-split-wrapper {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
-/* Restricts image footprint */
+/* FIX: Image scales perfectly relative to your template's text line-height */
 .header-left-image {
-  height: 40px;                   /* Constrains header height scalability profiles */
-  width: auto;                    /* Preserves perfect proportional shape */
+  height: 2.2em;               /* Scaled using text sizes so it matches header proportions */
+  width: auto;                 /* Preserves width aspect ratios */
   border-radius: 4px;
-  object-fit: cover;
+  object-fit: contain;
+  margin-right: 15px;          /* Clean spacing padding */
 }
 
-/* Explicit text justification fallback */
+/* Keeps your text tracking aligned cleanly to the right boundary */
 .header-right-title {
   text-align: right;
-  text-decoration: none;          /* Strips underlying hyper-link underscores if needed */
+  margin-left: auto;
 }
  
   /* Original Helpers */
@@ -291,26 +291,37 @@ if( config.showStudyGrid === 'widget' ) {
   titleUrl = './garden_grid.html' + buildParameterList(urlState); 
 } 
 
-// 1. Create your own custom header container element
-const customHeader = document.createElement('div');
-customHeader.className = 'custom-flex-header';
+// 1. Create a lightweight span wrapper instead of a hard layout block to prevent style breaking
+const titleLayoutGroup = document.createElement('span');
+titleLayoutGroup.className = 'header-split-wrapper';
 
-// 2. Create the left-aligned image
+// 2. Create your dynamic header image
 const img = document.createElement('img'); 
 img.src = root_photos + '722533441/small.jpg'; 
 img.className = 'header-left-image'; 
 
-// 3. Create the right-aligned title anchor element
+// 3. Create your original title element link
 let title_3_element = faddelem('a', null, { href: titleUrl }); 
 title_3_element.className = 'header-right-title';
 faddelem('span', title_3_element, { textContent: titleText }); 
 
-// 4. Assemble them side-by-side into your new header component
-customHeader.appendChild(img);
-customHeader.appendChild(title_3_element);
+// 4. Nest them side-by-side inside your template inline container
+titleLayoutGroup.appendChild(img);
+titleLayoutGroup.appendChild(title_3_element);
 
-// 5. Inject your clean header layout directly into the page body container
-faddelem('p', document.body).appendChild(customHeader);
+// 5. FIX: Call buildHeader again so all your site styles instantly return!
+let header = buildHeader( 
+  CONST_SPECIES, 
+  total_results, 
+  per_page, 
+  page_curr, 
+  page_max, 
+  '', 
+  '', 
+  titleLayoutGroup // Inject your split elements straight into the title slot
+); 
+
+faddelem('p', document.body).appendChild(header);
 
     
     
