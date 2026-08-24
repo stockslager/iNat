@@ -171,51 +171,126 @@
   }
 
 
-/************* image modal **************/
-/* Full-screen absolute backdrop blurring out underlying content */
+/* ==========================================================================
+   HEADER ROW COMPONENTS
+   ========================================================================== */
+.rl-box-bar {
+  display: flex !important;
+  align-items: center;            
+  justify-content: space-between; 
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#upperright {
+  display: block;
+  margin-left: auto;              
+}
+
+#upperright .tableboxkey {
+  text-align: right;
+  width: auto;
+}
+
+.header-img-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.header-left-image {
+  height: auto;
+  max-height: 55px;               
+  width: auto;
+  border-radius: 4px;
+  object-fit: cover;
+  display: block;
+  cursor: zoom-in;                
+}
+
+.image-zoom-indicator {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  font-size: 11px;
+  background-color: rgba(0, 0, 0, 0.6); 
+  color: #ffffff;
+  padding: 2px 4px;
+  border-radius: 3px;
+  pointer-events: none;           
+  line-height: 1;
+}
+
+.header-img-wrapper:hover .image-zoom-indicator {
+  background-color: rgba(0, 0, 0, 0.85);
+  transform: scale(1.1);
+  transition: all 0.15s ease-in-out;
+}
+
+/* ==========================================================================
+   EXPANDED MODAL PORTAL WINDOW
+   ========================================================================== */
 .image-modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.85); /* Deep dark dimming fill */
-  z-index: 99999;                         /* Forces it on top of maps, headers, sidebars */
+  background-color: rgba(0, 0, 0, 0.85); 
+  z-index: 99999;                         
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: zoom-out;                       /* Signal that clicking closes it */
+  cursor: zoom-out;                       
   animation: fadeInModal 0.2s ease-out;
 }
 
-/* The centered high-resolution expanded visual footprint */
-.image-modal-content {
+/* Bounds container that matches the exact physical footprint of the image asset */
+.image-modal-content-box {
+  position: relative;
+  display: inline-block;
   max-width: 90%;
   max-height: 90%;
+}
+
+.image-modal-content {
+  display: block;
+  max-width: 100%;
+  max-height: 90vh; 
   border-radius: 8px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.6);
   object-fit: contain;
-  cursor: default;                        /* Resets arrow pointer inside picture bounds */
+  cursor: default;                        
   animation: scaleInImg 0.2s cubic-bezier(0.1, 0.8, 0.2, 1);
 }
 
-/* The 'X' escape route styling profile */
+/* Circular floating icon button locked tightly to the image edge boundaries */
 .image-modal-close {
   position: absolute;
-  top: 20px;
-  right: 25px;
+  top: -15px;       
+  right: -15px;     
+  width: 30px;
+  height: 30px;
+  background-color: #333333;
   color: #ffffff;
-  font-size: 35px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
   font-weight: bold;
   font-family: Arial, sans-serif;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  z-index: 100000;
   line-height: 1;
 }
+
 .image-modal-close:hover {
-  color: #ff4a4a;                         /* Optional hover warning flash feedback */
+  background-color: #ff4a4a; 
+  color: #ffffff;
 }
 
-/* Optional smooth animation paints */
 @keyframes fadeInModal {
   from { background-color: rgba(0, 0, 0, 0); }
   to { background-color: rgba(0, 0, 0, 0.85); }
@@ -225,48 +300,6 @@
   to { transform: scale(1); opacity: 1; }
 }
 
-/************* end image modal *************/
-
- 
- 
-
-/* Keeps the wrapper box matched perfectly to the thumbnail's boundaries */
-.header-img-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-/* Updated left-aligned image styling */
-.header-left-image {
-  height: auto;
-  max-height: 55px;               /* Limits size to match your 3 title rows */
-  width: auto;
-  border-radius: 4px;
-  object-fit: cover;
-  display: block;
-  cursor: zoom-in;                /* Turns the mouse pointer into a magnifying glass */
-}
-
-/* Places the symbol precisely in the bottom-right corner of the image */
-.image-zoom-indicator {
-  position: absolute;
-  bottom: 3px;
-  right: 3px;
-  font-size: 11px;
-  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black backing */
-  color: #ffffff;
-  padding: 2px 4px;
-  border-radius: 3px;
-  pointer-events: none;           /* Ensures mouse clicks pass directly into the image element below */
-  line-height: 1;
-}
-
-/* Optional Hover Effect: Makes the icon badge light up when the user hovers over the thumbnail */
-.header-img-wrapper:hover .image-zoom-indicator {
-  background-color: rgba(0, 0, 0, 0.85);
-  transform: scale(1.1);
-  transition: all 0.15s ease-in-out;
-}
 
 
  
@@ -351,7 +384,7 @@ function buildPage(xobj, config) {
 
 
 
-let title_1 = '', title_2 = '', title_3 = ''; 
+/*let title_1 = '', title_2 = '', title_3 = ''; 
 let titleText = CONST_ON + capitalizeWords(getPlantName(appState)); 
 let urlState = appState; 
 
@@ -439,6 +472,102 @@ if (img) {
     document.body.appendChild(modalBackdrop);
 
     // 5. Dismiss the modal instantly when the user clicks the dark background space
+    modalBackdrop.addEventListener('click', function(e) {
+      if (e.target === modalBackdrop || e.target === closeBtn) {
+        modalBackdrop.remove();
+      }
+    });
+  });
+}*/
+let title_1 = '', title_2 = '', title_3 = ''; 
+let titleText = CONST_ON + capitalizeWords(getPlantName(appState)); 
+let urlState = appState; 
+
+if( getMenuId(appState) ) { 
+  urlState = setTaxonId(appState, getMenuId(appState)); 
+} 
+
+let titleUrl = ''; 
+if( config.showStudyGrid === 'widget' ) { 
+  titleUrl = '../admin/widget_grid.html' + buildParameterList(urlState) + '&fieldname=' + config.fieldName + '&fieldvalue=' + getPlantId(appState); 
+} else { 
+  titleUrl = './garden_grid.html' + buildParameterList(urlState); 
+} 
+
+// 1. Revert title_3 back to your clean anchor element link
+let title_3_element = faddelem('a', null, { href: titleUrl }); 
+faddelem('span', title_3_element, { textContent: titleText }); 
+
+// 2. Call buildHeader normally
+let header = buildHeader( 
+  CONST_SPECIES, 
+  total_results, 
+  per_page, 
+  page_curr, 
+  page_max, 
+  title_1, 
+  title_2, 
+  title_3_element 
+); 
+
+// 3. Create a small relative wrapper just for the image and its corner icon badge
+const imageWrapper = document.createElement('div');
+imageWrapper.className = 'header-img-wrapper';
+
+// Create your high-resolution dynamic image 
+const img = document.createElement('img'); 
+img.src = root_photos + '722533441/small.jpg'; 
+img.className = 'header-left-image'; 
+
+// Create the zoom symbol icon badge
+const zoomBadge = document.createElement('span');
+zoomBadge.className = 'image-zoom-indicator';
+zoomBadge.textContent = '🔍'; 
+
+// Nest the image and its badge icon together
+imageWrapper.appendChild(img);
+imageWrapper.appendChild(zoomBadge);
+
+// 4. Remove the left stats box (counts) and insert the complete image unit
+const headerLeftBox = header.querySelector('#lbox');
+if (headerLeftBox) {
+  headerLeftBox.remove(); // Delete the counts box completely
+  header.prepend(imageWrapper); // Insert the image container at the far left edge
+}
+
+// 5. Append the modified header component to the page body layout natively
+faddelem('p', document.body).appendChild(header);
+
+// ==========================================================================
+// FULL MODAL EXPANSION TRIGGER
+// ==========================================================================
+if (img) {
+  img.addEventListener('click', function() {
+    // 1. Create the dark full-screen backdrop container
+    const modalBackdrop = document.createElement('div');
+    modalBackdrop.className = 'image-modal-backdrop';
+
+    // 2. Create the dynamic structural bounding box to lock elements together
+    const modalContentBox = document.createElement('div');
+    modalContentBox.className = 'image-modal-content-box';
+
+    // 3. Create the expanded, high-resolution image element
+    const modalImg = document.createElement('img');
+    modalImg.src = img.src.includes('small.jpg') ? img.src.replace('small.jpg', 'large.jpg') : img.src; 
+    modalImg.className = 'image-modal-content';
+
+    // 4. Create the clean circular dark 'X' button badge
+    const closeBtn = document.createElement('span');
+    closeBtn.className = 'image-modal-close';
+    closeBtn.innerHTML = '&times;'; 
+
+    // 5. Nest elements cleanly: Image + Close Button into Content Box -> onto Backdrop
+    modalContentBox.appendChild(modalImg);
+    modalContentBox.appendChild(closeBtn);
+    modalBackdrop.appendChild(modalContentBox);
+    document.body.appendChild(modalBackdrop);
+
+    // 6. Dismiss the modal instantly when clicking background elements or the 'X' button
     modalBackdrop.addEventListener('click', function(e) {
       if (e.target === modalBackdrop || e.target === closeBtn) {
         modalBackdrop.remove();
