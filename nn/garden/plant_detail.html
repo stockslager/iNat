@@ -248,7 +248,12 @@ function buildPage(xobj, config) {
           urlState = setTaxonId(appState, getMenuId(appState));
       } 
 
-      let titleUrl = './garden_grid.html' + buildParameterList(urlState);
+      let titleUrl = '';
+      if( config.showStudyGrid === 'widget' ) {
+          titleUrl = '../admin/widget_grid.html' + buildParameterList(urlState);
+      } else {
+          titleUrl = './garden_grid.html' + buildParameterList(urlState);
+      }
       let title_3_element = faddelem('a', null, { href: titleUrl });
 
       // CSS needs text inside span
@@ -285,7 +290,12 @@ function buildPage(xobj, config) {
            // Column: Name 
            let urlState = setTaxonId(appState, rec.taxon.id);
            if( rec.taxon.ancestor_ids.some(id => id == 47157) ) { urlState = setLSTaxonId(urlState, '47157'); }  // lepidoptera*/
-           let url      = './garden_grid.html' + buildParameterList(urlState);
+           let url = '';
+           if( config.showStudyGrid === 'widget' ) {
+               url = '../admin/widget_grid.html' + buildParameterList(urlState);
+           } else {
+               url = './garden_grid.html' + buildParameterList(urlState);
+           }
            buildSpeciesName( brow, rec, url );
        
            // Column: Count
