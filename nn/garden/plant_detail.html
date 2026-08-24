@@ -220,8 +220,8 @@ function buildMenu( results, config ) {
     let homeState = clearForGardenListParams(appState);
     let homeUrl = './garden_list.html';
     if( p_mode === 'activity' || p_mode === 'all' || p_mode === 'beds' ) { homeUrl = '../beds/beds.html'; }  // may need to change to use component instead of mode param
-    buildNavHome( navbar, homeUrl, homeState );
-
+    buildNavHome( navbar, homeUrl, appState, config );
+    
     // Append the DOM nodes to the body
     faddelem('p', document.body).appendChild(navbar);
 }
