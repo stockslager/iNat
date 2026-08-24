@@ -250,7 +250,7 @@ function buildPage(xobj, config) {
 
       let titleUrl = '';
       if( config.showStudyGrid === 'widget' ) {
-          titleUrl = '../admin/widget_grid.html' + buildParameterList(urlState);
+          titleUrl = '../admin/widget_grid.html' + buildParameterList(urlState) + '&fieldname=' + config.fieldName + '&fieldvalue=' + getPlantId(appState);
       } else {
           titleUrl = './garden_grid.html' + buildParameterList(urlState);
       }
@@ -292,7 +292,7 @@ function buildPage(xobj, config) {
            if( rec.taxon.ancestor_ids.some(id => id == 47157) ) { urlState = setLSTaxonId(urlState, '47157'); }  // lepidoptera*/
            let url = '';
            if( config.showStudyGrid === 'widget' ) {
-               url = '../admin/widget_grid.html' + buildParameterList(urlState);
+               url = '../admin/widget_grid.html' + buildParameterList(urlState) + '&fieldname=' + config.fieldName + '&fieldvalue=' + getPlantId(appState);
            } else {
                url = './garden_grid.html' + buildParameterList(urlState);
            }
