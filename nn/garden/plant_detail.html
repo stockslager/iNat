@@ -223,8 +223,10 @@ function buildMenu( results, config ) {
     if( p_mode === 'flower' ) { 
         homeState = clearForDashParams(appState); 
         homeUrl = '../studies/navigational_map/map.html'; 
+        buildNavHome( navbar, homeUrl, homeState, config );
+    } else {
+        buildNavHome( navbar, homeUrl, homeState, config );
     }
-    buildNavHome( navbar, homeUrl, appState, config );
     
     // Append the DOM nodes to the body
     faddelem('p', document.body).appendChild(navbar);
