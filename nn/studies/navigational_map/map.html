@@ -310,13 +310,14 @@ function buildFlowerBedURL( pin, config ) {
 function buildFlowerURL( pin, config ) {
   // Instantly locks the taxonId value exclusively to this specific pin instance
   const taxon_query = pin.taxonId ? '&fieldvalue=' + pin.taxonId : '';
+  const plant_name  = pin.name    ? '&plantname=' + pin.name : '';
   
   // Instantly locks the fieldname exclusively to this config file state
   const field_id    = (config && config.fieldId)   ? '&fieldid='   + config.fieldId : '';
   const field_query = (config && config.fieldName) ? '&fieldname=' + config.fieldName : '';
   
   return( '../../garden/plant_detail.html?params=horizon&component=plants&mode=' + p_mode + 
-                                             taxon_query + field_id + field_query +
+                                             taxon_query + field_id + field_query + plant_name + 
                                              '&defaultlat=' + p_default_lat + 
                                              '&defaultlon=' + p_default_lon + 
                                              '&defaultzoom=' + p_default_zoom );
