@@ -170,6 +170,64 @@
     background: var(--color-hover);
   }
 
+
+/************* image modal **************/
+/* Full-screen absolute backdrop blurring out underlying content */
+.image-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85); /* Deep dark dimming fill */
+  z-index: 99999;                         /* Forces it on top of maps, headers, sidebars */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;                       /* Signal that clicking closes it */
+  animation: fadeInModal 0.2s ease-out;
+}
+
+/* The centered high-resolution expanded visual footprint */
+.image-modal-content {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  object-fit: contain;
+  cursor: default;                        /* Resets arrow pointer inside picture bounds */
+  animation: scaleInImg 0.2s cubic-bezier(0.1, 0.8, 0.2, 1);
+}
+
+/* The 'X' escape route styling profile */
+.image-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  color: #ffffff;
+  font-size: 35px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  line-height: 1;
+}
+.image-modal-close:hover {
+  color: #ff4a4a;                         /* Optional hover warning flash feedback */
+}
+
+/* Optional smooth animation paints */
+@keyframes fadeInModal {
+  from { background-color: rgba(0, 0, 0, 0); }
+  to { background-color: rgba(0, 0, 0, 0.85); }
+}
+@keyframes scaleInImg {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/************* end image modal *************/
+
+ 
  
 
 /* Keeps the wrapper box matched perfectly to the thumbnail's boundaries */
@@ -355,6 +413,55 @@ if (leftBox) {
 // 5. Append the modified header component to the page body layout natively
 faddelem('p', document.body).appendChild(header);
 
+// ... (Keep your top title calculations and image/badge creation rows exactly as they are) ...
+
+// 4. Remove the left stats box (counts) and insert the complete image unit
+const leftBox = header.querySelector('#lbox');
+if (leftBox) {
+  leftBox.remove(); 
+  header.prepend(imageWrapper); 
+}
+
+// 5. Append the modified header component to the page body layout natively
+faddelem('p', document.body).appendChild(header);
+
+// ==========================================================================
+// image modal
+// ==========================================================================
+if (img) {
+  img.addEventListener('click', function() {
+    // 1. Create the dark full-screen backdrop container
+    const modalBackdrop = document.createElement('div');
+    modalBackdrop.className = 'image-modal-backdrop';
+
+    // 2. Create the expanded, high-resolution image element
+    const modalImg = document.createElement('img');
+    // Checks if 'small.jpg' is in the path, otherwise defaults to the regular source string
+    modalImg.src = img.src.includes('small.jpg') ? img.src.replace('small.jpg', 'large.jpg') : img.src; 
+    modalImg.className = 'image-modal-content';
+
+    // 3. Create a clean floating 'X' close button indicator
+    const closeBtn = document.createElement('span');
+    closeBtn.className = 'image-modal-close';
+    closeBtn.innerHTML = '&times;'; 
+
+    // 4. Nest components together and mount straight onto the page body root
+    modalBackdrop.appendChild(modalImg);
+    modalBackdrop.appendChild(closeBtn);
+    document.body.appendChild(modalBackdrop);
+
+    // 5. Dismiss the modal instantly when the user clicks the dark background space
+    modalBackdrop.addEventListener('click', function(e) {
+      if (e.target === modalBackdrop || e.target === closeBtn) {
+        modalBackdrop.remove();
+      }
+    });
+  });
+}
+
+
+
+    
     
     
       labels = [
