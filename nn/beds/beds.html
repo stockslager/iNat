@@ -175,32 +175,6 @@ let image_audio_name = '';
 // page / api specific constants 
 const CONST_CUSTOM_PLANT   = 'Plant';
 
-const audio = document.getElementById('audio-track');
-const playPauseBtn = document.getElementById('play-pause-btn');
-const timeDisplay = document.getElementById('time-display');
-
-// Toggle play and pause states
-playPauseBtn.addEventListener('click', () => {
-  if (audio.paused) {
-    audio.play();
-    playPauseBtn.textContent = '⏸'; // Switch icon to pause
-  } else {
-    audio.pause();
-    playPauseBtn.textContent = '▶'; // Switch icon to play
-  }
-});
-
-// Update the timeline string as the track plays
-audio.addEventListener('timeupdate', () => {
-  const minutes = Math.floor(audio.currentTime / 60);
-  const seconds = Math.floor(audio.currentTime % 60);
-  
-  // Format seconds to always show two digits (e.g., 05 instead of 5)
-  const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
-  
-  timeDisplay.textContent = `${minutes}:${formattedSeconds}`;
-});
-
 function sortWithNull(arr, ascending = true) {
   for( let i=0; i<arr.length; i++ ) {
        if( arr[i].preferred_common_name ){
@@ -325,6 +299,37 @@ function buildPage(xobj, config) {
 
    header.appendChild(wrapper);
 
+   // Direct Event Wiring (No separate function needed!)
+   const audioTrack = audioPlayerContainer.querySelector('.dynamic-audio-track');
+   const playBtn = audioPlayerContainer.querySelector('.dynamic-play-btn');
+   const timeDisplay = audioPlayerContainer.querySelector('.dynamic-time-display');
+
+   // Use Leaflet's safe DOM event tracker if this is inside a map popup
+   if (playBtn && audioTrack) {
+     L.DomEvent.on(playBtn, 'click', function(e) {
+       L.DomEvent.stopPropagation(e); // Stops the map layout from intercepting clicks
+       L.DomEvent.preventDefault(e);
+
+       if (audioTrack.paused) {
+         audioTrack.play()
+           .then(() => { playBtn.textContent = '⏸'; })
+           .catch(err => console.error("Playback blocked or file missing:", err));
+       } else {
+         audioTrack.pause();
+         playBtn.textContent = '▶';  
+       }
+     });
+   }
+
+   // Track and update the running time display string
+   if (audioTrack && timeDisplay) {
+     audioTrack.addEventListener('timeupdate', () => {
+       const min = Math.floor(audioTrack.currentTime / 60);
+       const sec = Math.floor(audioTrack.currentTime % 60);
+       timeDisplay.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+     });
+   }
+    
    if( p_mode === 'imageonly' ) {
        return;
    }
