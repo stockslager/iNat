@@ -251,6 +251,8 @@ function buildMenu( config, results ) {
     if( p_hide_dash !== 'yes' ) {
         if( p_mode === 'beds' || p_mode === 'all' ) {
             let homeState = clearForDashParams(appState);
+            homeState = setParams(homeState, 'nnn');
+            homeState = setComponent(homeState, 'beds');
             let homeUrl = '../studies/navigational_map/map.html';
             
             let homeDiv = faddelem('div', navbar, { id: 'home' });
