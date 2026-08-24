@@ -105,12 +105,12 @@
   position: absolute; 
   
   /* Positions the player in the bottom-right corner of the image */
-  bottom: 10px;        
-  right: 10px;         
+  bottom: 0px;        
+  right: 0px;         
   z-index: 10;         /* Ensures player sits on top of the image graphic */
   
   width: 150px;        /* Explicitly set custom width */
-  height: 50px;        /* Explicitly set custom height */
+  height: 40px;        /* Explicitly set custom height */
   
   display: flex;
   align-items: center;
@@ -329,7 +329,7 @@ function buildPage(xobj, config) {
    audioPlayerContainer.className = 'custom-audio-player';
    audioPlayerContainer.innerHTML = 
        '<audio id="audio-track"> ' + 
-          '<source src="./artwork/${image_audio_name.replace(/\.[^/.]+$/, "")}.mp3" type="audio/mpeg">' + 
+          '<source src="./artwork/' + image_audio_name + '.mp3" type="audio/mpeg">' + 
        '</audio> ' + 
        '<button id="play-pause-btn" class="player-btn">▶</button> ' + 
        '<span id="time-display">0:00</span>';
