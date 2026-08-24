@@ -246,7 +246,7 @@ function buildMenu( config ) {
 
    // Build the Home Link
    let homeUrl = '../studies/field_study.html';
-   if( p_mode === 'flower' ) { 
+   if( getComponent(appState) === COMPONENT_GARDEN && p_mode === 'flower' ) { 
         let urlState = appState;
         homeUrl = '../garden/plant_detail.html'; 
         buildNavHome( navbar, homeUrl, urlState, config );
