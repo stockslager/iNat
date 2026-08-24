@@ -172,35 +172,42 @@
 
  
 
-/* Container layout control */
-.rl-box-bar {
-  display: flex !important;
-  align-items: center;            /* Centers image and title rows vertically */
-  justify-content: space-between; /* Pushes image to far-left, title to far-right */
-  width: 100%;
-  box-sizing: border-box;
+/* Keeps the wrapper box matched perfectly to the thumbnail's boundaries */
+.header-img-wrapper {
+  position: relative;
+  display: inline-block;
 }
 
-/* Ensure the title block container stretches correctly */
-#upperright {
-  display: block;
-  margin-left: auto;              /* Pushes the titles cleanly to the right edge */
-}
-
-/* Keep the titles right-justified */
-#upperright .tableboxkey {
-  text-align: right;
-  width: auto;
-}
-
-/* Left-aligned image dimensions */
+/* Updated left-aligned image styling */
 .header-left-image {
   height: auto;
-  max-height: 55px;               /* Limits image size to perfectly match the 3 title rows */
-  width: auto;                    /* Preserves aspect ratio without distortion */
+  max-height: 55px;               /* Limits size to match your 3 title rows */
+  width: auto;
   border-radius: 4px;
   object-fit: cover;
   display: block;
+  cursor: zoom-in;                /* Turns the mouse pointer into a magnifying glass */
+}
+
+/* Places the symbol precisely in the bottom-right corner of the image */
+.image-zoom-indicator {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  font-size: 11px;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black backing */
+  color: #ffffff;
+  padding: 2px 4px;
+  border-radius: 3px;
+  pointer-events: none;           /* Ensures mouse clicks pass directly into the image element below */
+  line-height: 1;
+}
+
+/* Optional Hover Effect: Makes the icon badge light up when the user hovers over the thumbnail */
+.header-img-wrapper:hover .image-zoom-indicator {
+  background-color: rgba(0, 0, 0, 0.85);
+  transform: scale(1.1);
+  transition: all 0.15s ease-in-out;
 }
 
 
@@ -317,19 +324,32 @@ let header = buildHeader(
   title_3_element 
 ); 
 
-// 3. Create your dynamic header image 
+// ==========================================================================
+// 3. UPDATED IMAGE COMPONENT WITH ZOOM SYMBOL
+// ==========================================================================
+// Create a small relative wrapper just for the image and its corner icon badge
+const imageWrapper = document.createElement('div');
+imageWrapper.className = 'header-img-wrapper';
+
+// Create your high-resolution dynamic image 
 const img = document.createElement('img'); 
 img.src = root_photos + '722533441/small.jpg'; 
 img.className = 'header-left-image'; 
 
-// 4. FIX: Remove the left stats box (counts) and insert the image at the far left instead
+// Create the zoom symbol icon badge
+const zoomBadge = document.createElement('span');
+zoomBadge.className = 'image-zoom-indicator';
+zoomBadge.textContent = '🔍'; // Drop your chosen copy-paste symbol here
+
+// Nest the image and its badge icon together
+imageWrapper.appendChild(img);
+imageWrapper.appendChild(zoomBadge);
+
+// 4. FIX: Remove the left stats box (counts) and insert the complete image unit
 const leftBox = header.querySelector('#lbox');
 if (leftBox) {
-  // Remove the counts block completely
-  leftBox.remove(); 
-  
-  // Insert the image as the very first item on the left side of the header bar
-  header.prepend(img); 
+  leftBox.remove(); // Delete the counts box completely
+  header.prepend(imageWrapper); // Insert the image container at the far left edge
 }
 
 // 5. Append the modified header component to the page body layout natively
