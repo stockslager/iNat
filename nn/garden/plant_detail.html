@@ -170,12 +170,30 @@
     background: var(--color-hover);
   }
 
-  /* make image scale nicely on different screen sizes */
-  .anchored-image {
-    display: block;
-    max-width: 100%;
-    height: auto;
-  }
+/* Container layout control */
+.custom-flex-header {
+  display: flex;
+  align-items: center;            /* Vertically aligns text and image in the middle */
+  justify-content: space-between; /* Pins image to the far-left and title to the far-right */
+  width: 100%;                    /* Spans across the entire layout width footprint */
+  padding: 10px 15px;             /* Interior padding margins */
+  background-color: #f8f9fa;      /* Optional background fill to see header block */
+  box-sizing: border-box;
+}
+
+/* Restricts image footprint */
+.header-left-image {
+  height: 40px;                   /* Constrains header height scalability profiles */
+  width: auto;                    /* Preserves perfect proportional shape */
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* Explicit text justification fallback */
+.header-right-title {
+  text-align: right;
+  text-decoration: none;          /* Strips underlying hyper-link underscores if needed */
+}
  
   /* Original Helpers */
   #h2 { font-weight:bold; font-size:20px; }
@@ -256,54 +274,44 @@ function buildPage(xobj, config) {
 
       buildMenu( results, config );
 
-      let title_1 = '', title_2 = '', title_3 = '';
-
-      let titleText = CONST_ON + capitalizeWords(getPlantName(appState));
-      let urlState = appState; 
-      if( getMenuId(appState) ) {
-          urlState = setTaxonId(appState, getMenuId(appState));
-      } 
-
-      let titleUrl = '';
-      if( config.showStudyGrid === 'widget' ) {
-          titleUrl = '../admin/widget_grid.html' + buildParameterList(urlState) + '&fieldname=' + config.fieldName + '&fieldvalue=' + getPlantId(appState);
-      } else {
-          titleUrl = './garden_grid.html' + buildParameterList(urlState);
-      }
-      let title_3_element = faddelem('a', null, { href: titleUrl });
-
-      // CSS needs text inside span
-      faddelem('span', title_3_element, { textContent: titleText });
-
-      let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, '', '', title_3_element ); 
-    
-      //faddelem('p', document.body).appendChild(header);
 
 
-// Look for your main structural container instead of the body root 
-//const mainContainer = document.getElementById('main') || document.body; 
-//const pic = faddelem('p', mainContainer); 
-const pic = faddelem('p', header); 
+let title_1 = '', title_2 = '', title_3 = ''; 
+let titleText = CONST_ON + capitalizeWords(getPlantName(appState)); 
+let urlState = appState; 
 
-// Clear layout overrides; let the element use your new CSS rules natively 
-pic.removeAttribute('style'); 
+if( getMenuId(appState) ) { 
+  urlState = setTaxonId(appState, getMenuId(appState)); 
+} 
 
-// Create dynamic image element (keeping exact styling rules) 
+let titleUrl = ''; 
+if( config.showStudyGrid === 'widget' ) { 
+  titleUrl = '../admin/widget_grid.html' + buildParameterList(urlState) + '&fieldname=' + config.fieldName + '&fieldvalue=' + getPlantId(appState); 
+} else { 
+  titleUrl = './garden_grid.html' + buildParameterList(urlState); 
+} 
+
+// 1. Create your own custom header container element
+const customHeader = document.createElement('div');
+customHeader.className = 'custom-flex-header';
+
+// 2. Create the left-aligned image
 const img = document.createElement('img'); 
 img.src = root_photos + '722533441/small.jpg'; 
-img.style.height = 'auto'; 
-img.style.borderRadius = '5px'; 
-img.style.objectFit = 'contain'; 
-img.className = 'anchored-image'; 
+img.className = 'header-left-image'; 
 
-// Append the image directly into your 'pic' element
-pic.appendChild(img);
+// 3. Create the right-aligned title anchor element
+let title_3_element = faddelem('a', null, { href: titleUrl }); 
+title_3_element.className = 'header-right-title';
+faddelem('span', title_3_element, { textContent: titleText }); 
 
-      faddelem('p', document.body).appendChild(header);
+// 4. Assemble them side-by-side into your new header component
+customHeader.appendChild(img);
+customHeader.appendChild(title_3_element);
 
+// 5. Inject your clean header layout directly into the page body container
+faddelem('p', document.body).appendChild(customHeader);
 
-
-    
     
     
       labels = [
