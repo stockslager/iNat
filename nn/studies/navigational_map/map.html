@@ -303,6 +303,22 @@ function buildFlowerBedURL( pin, config ) {
                                              '&defaultzoom=' + p_default_zoom );
 }
 
+function buildFlowerURL( pin, config ) {
+  // Instantly locks the taxonId value exclusively to this specific pin instance
+  const taxon_query = pin.taxonId ? '&fieldvalue=' + pin.taxonId : '';
+  
+  // Instantly locks the fieldname exclusively to this config file state
+  const field_id    = (config && config.fieldId)   ? '&fieldid='   + config.fieldId : '';
+  const field_query = (config && config.fieldName) ? '&fieldname=' + config.fieldName : '';
+  
+  return( '../../garden/plant_detail.html?params=horizon&component=plants&mode=' + p_mode + 
+                                             taxon_query + field_id + field_query +
+                                             '&defaultlat=' + p_default_lat + 
+                                             '&defaultlon=' + p_default_lon + 
+                                             '&defaultzoom=' + p_default_zoom );
+}
+
+
 // builds a bubble for the click of a pin
 function buildBubble( pin, config=null ) {
   
@@ -415,6 +431,8 @@ function buildFlowerPinsLayer(config, mapInstance = null) {
               flowerMarker.on('click', () => { window.location.href = buildInsectActivityURL( flower, config ); });
           } else if( p_mode === 'beds' && flower.bed ) {
               flowerMarker.on('click', () => { window.location.href = buildFlowerBedURL( flower, config ); });
+          } else if( p_mode === 'flower' ) {
+              flowerMarker.on('click', () => { window.location.href = buildFlowerURL( flower, config ); });
           } else {
               flowerMarker.bindPopup(buildBubble(flower, config));
           }
