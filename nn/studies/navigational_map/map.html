@@ -286,10 +286,11 @@ function buildInsectActivityURL( pin, config ) {
   const taxon_query = pin.taxonId ? '&fieldvalue=' + pin.taxonId : '';
   
   // Instantly locks the fieldname exclusively to this config file state
-  const field_id    = (config && config.fieldId)   ? '&fieldid='   + config.fieldId : '';
-  const field_query = (config && config.fieldName) ? '&fieldname=' + config.fieldName : '';
+  const field_id    = (config && config.fieldId)    ? '&fieldid='   + config.fieldId : '';
+  const field_query = (config && config.fieldName)  ? '&fieldname=' + config.fieldName : '';
+  const study_title = (config && config.studyTitle) ? '&studytitle=' + config.studyTitle : '';
   
-  return( '../../studies/field_study.html?params=' + pin.params + '&component=studies&mode=' + p_mode + 
+  return( '../../studies/field_study.html?params=' + pin.params + '&component=studies&mode=' + p_mode + study_title +
                                              '&defaultlat=' + p_default_lat + 
                                              '&defaultlon=' + p_default_lon + 
                                              '&defaultzoom=' + p_default_zoom +
