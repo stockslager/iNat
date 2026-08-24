@@ -249,9 +249,18 @@ function buildMenu( config, results ) {
 
     // Build the Home Link
     if( p_hide_dash !== 'yes' ) {
-        let homeState = clearForDashParams(appState);
-        let homeUrl = '../admin/dashboard.html';
-        buildNavHome( navbar, homeUrl, homeState );
+        if( p_mode === 'beds' || p_mode === 'all' ) {
+            let homeState = clearForDashParams(appState);
+            let homeUrl = '../studies/navigational_map/map.html';
+            
+            let homeDiv = faddelem('div', navbar, { id: 'home' });
+            let hLink   = faddelem('a', homeDiv, { href: ( homeUrl + buildParameterList(homeState) ) });
+            faddelem('span', hLink, { innerHTML: &#127758; });
+        } else {
+            let homeState = clearForDashParams(appState);
+            let homeUrl = '../admin/dashboard.html';
+            buildNavHome( navbar, homeUrl, homeState );
+        }
     }
 
     // Append the DOM nodes to the body
