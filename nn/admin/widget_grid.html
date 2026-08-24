@@ -215,6 +215,7 @@ p { width:100%; }
 //get parameters from the url
 let winurlsearchstr   = window.location.search;
 let winurlparams      = new URLSearchParams(winurlsearchstr);
+let p_mode      = winurlparams.get('mode') || '';           
 
 appState       = buildStateFromParams(winurlparams);
                       
@@ -245,7 +246,13 @@ function buildMenu( config ) {
 
    // Build the Home Link
    let homeUrl = '../studies/field_study.html';
-   buildNavHome( navbar, homeUrl, appState, config );
+   if( p_mode === 'flower' ) { 
+        let urlState = appState;
+        homeUrl = '../garden/plant_detail.html'; 
+        buildNavHome( navbar, homeUrl, urlState, config );
+   } else {
+        buildNavHome( navbar, homeUrl, appState, config );
+   }
   
    let appContainer = document.getElementById('app');
    if( appContainer ) {
