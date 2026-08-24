@@ -403,18 +403,6 @@ zoomBadge.textContent = '🔍'; // Drop your chosen copy-paste symbol here
 imageWrapper.appendChild(img);
 imageWrapper.appendChild(zoomBadge);
 
-// 4. FIX: Remove the left stats box (counts) and insert the complete image unit
-const leftBox = header.querySelector('#lbox');
-if (leftBox) {
-  leftBox.remove(); // Delete the counts box completely
-  header.prepend(imageWrapper); // Insert the image container at the far left edge
-}
-
-// 5. Append the modified header component to the page body layout natively
-faddelem('p', document.body).appendChild(header);
-
-// ... (Keep your top title calculations and image/badge creation rows exactly as they are) ...
-
 // 4. Remove the left stats box (counts) and insert the complete image unit
 const leftBox = header.querySelector('#lbox');
 if (leftBox) {
