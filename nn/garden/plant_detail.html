@@ -222,6 +222,7 @@ function buildMenu( results, config ) {
     if( p_mode === 'activity' || p_mode === 'all' || p_mode === 'beds' ) { homeUrl = '../beds/beds.html'; }  
     if( p_mode === 'flower' ) { 
         homeState = clearForDashParams(appState); 
+        homeState = setParams(homeState, 'nnn');
         homeUrl = '../studies/navigational_map/map.html'; 
         buildNavHome( navbar, homeUrl, homeState, config );
     } else {
