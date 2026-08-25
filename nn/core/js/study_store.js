@@ -235,28 +235,6 @@ function buildParameterList(state) {
  * @param {string} queryString The raw query string (e.g., "?user=Bob&place=Office").
  * @returns {object} A new application state object populated from URL parameters.
  */
-function buildFullStateFromParams(queryString) {
-  // Use URLSearchParams to easily parse the string
-  const params = new URLSearchParams(queryString);
-  
-  // Use Object.fromEntries to convert the URLSearchParams iterator into a simple object
-  // Object.fromEntries is a modern JS feature
-  const paramsObject = Object.fromEntries(params.entries());
-
-  // Use the existing factory function to create a clean state with defaults,
-  // then apply the parameters found in the URL over the top.
-  // Note: URL parameters are always strings. If you need numbers or booleans, 
-  // you may need additional logic to parse them (e.g., parseInt(value)).
-  const newState = createNewStateInstance(paramsObject);
-
-  return newState;
-}
-
-/**
- * Creates a new state instance, overlaying parameters found in a URL query string.
- * @param {string} queryString The raw query string (e.g., "?user=Bob&place=Office").
- * @returns {object} A new application state object populated from URL parameters.
- */
 function buildStateFromParams(queryString) { 
     const params = new URLSearchParams(queryString); 
     
