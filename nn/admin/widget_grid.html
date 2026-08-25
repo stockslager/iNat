@@ -239,13 +239,8 @@ function buildMenu( config ) {
 
            buildNavDD( navbar, 'Maps', links );
        } else {   
-           if( p_mode === 'beds' && !getFieldValue(appState) ) {
-               let url = '../admin/studies_map.html' + buildParameterList(appState) + '&gridmode=widget';
-               buildNavURL( navbar, url, CONST_MAP );
-           } else {
                let url = '../admin/studies_map.html' + buildParameterList(appState) + '&gridmode=widget' + '&fieldname=' + config.fieldName + '&fieldvalue=' + getPlantId(appState);
                buildNavURL( navbar, url, CONST_MAP );
-           }
        }
    }
 
