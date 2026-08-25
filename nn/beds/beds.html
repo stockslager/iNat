@@ -461,15 +461,26 @@ function buildPage(xobj, config) {
                  let taxonIdArray = (config.activityTaxonIds || '').split(',').map(id => id.trim());
                  if( rec?.id && taxonIdArray.includes(String(rec.id)) ) {
                      // Column: wildlife activity
-                     urlState = appState;
-                     urlState = setPage(urlState, '');
-                     urlState = setTaxonId(urlState, '');
-                     urlState = setTaxonName(urlState, '');
-                     urlState = setComponent(urlState, COMPONENT_GARDEN);
-                     urlState = setPlantId(urlState, rec.id);
-                     urlState = setPlantName(urlState, header_name||'?');
-                     let activity_url      = '../garden/garden_activity.html' + buildParameterList(urlState);
-                     if( p_mode === 'beds' ) { activity_url = '../garden/plant_detail.html' + buildParameterList(urlState); }
+                     if( p_mode === 'beds' ) { 
+                         urlState = appState;
+                         urlState = setPage(urlState, '');
+                         urlState = setTaxonId(urlState, '');
+                         urlState = setTaxonName(urlState, '');
+                         urlState = setPlantId(urlState, rec.id);
+                         urlState = setPlantName(urlState, header_name||'?');
+                         urlState = setFieldName(urlState, config.fieldName);
+                         urlState = setFieldValue(urlState, rec.id);
+                         let activity_url      = '../garden/garden_activity.html' + buildParameterList(urlState);
+                     } else {
+                         urlState = appState;
+                         urlState = setPage(urlState, '');
+                         urlState = setTaxonId(urlState, '');
+                         urlState = setTaxonName(urlState, '');
+                         urlState = setComponent(urlState, COMPONENT_GARDEN);
+                         urlState = setPlantId(urlState, rec.id);
+                         urlState = setPlantName(urlState, header_name||'?');
+                         let activity_url      = '../garden/garden_activity.html' + buildParameterList(urlState);
+                     }
                      
                      let tdPhoto = faddelem('td', brow, { style: 'text-align: center;' });
 
