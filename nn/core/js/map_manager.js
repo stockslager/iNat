@@ -50,7 +50,8 @@ class FlowerPin {
  */
 class MapConfiguration {
   constructor(configData) {
-    this.title = configData.title ?? "Map Network";
+    this.pinsProject    = configData.pins_project ?? null;
+    this.title          = configData.title ?? "Map Network";
     this.defaultMapZoom = configData.default_map_zoom ? parseInt(configData.default_map_zoom, 10) : 11;
     this.rawMapCenter = configData.map_center ?? null;
     this.fieldId      = configData.field_id ?? null;
