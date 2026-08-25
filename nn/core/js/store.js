@@ -9,6 +9,7 @@ const COMPONENT_ANIMALS   = 'animals';
 const COMPONENT_STUDIES   = 'studies';
 const COMPONENT_VISITS    = 'visits';
 const COMPONENT_SEARCH    = 'search';
+const COMPONENT_BEDS      = 'beds';
 
 // --- Constants for Attribute Keys ---
 const ATTRIBUTE_PROJECT         = 'project';
