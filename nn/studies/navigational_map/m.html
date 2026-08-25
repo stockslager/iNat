@@ -309,11 +309,11 @@ function buildFlowerBedURL( pin, config ) {
 
 function buildFlowerURL( pin, config, rec ) {
   // Instantly locks the taxonId value exclusively to this specific pin instance
-  //const plant_id    = pin.taxonId ? '&plantid='   + pin.taxonId : '';
-  //const plant_name  = pin.name    ? '&plantname=' + pin.name : '';
+  let plant_id   = rec.taxon.id ? '&plantid='   + rec.taxon.id : '';
+  let plant_name = '&plantname=' + (rec.taxon.preferred_common_name || rec.taxon.name || 'unknown name');
   
   return( '../../garden/plant_detail.html?params=horizon&component=plants&mode=' + p_mode + 
-                                             rec.taxon.id + (rec.taxon.preferred_common_name || rec.taxon.name || 'unknown name') + 
+                                             plant_id + plant_name + 
                                              '&obsid=' + rec.id +
                                              '&defaultlat=' + p_default_lat + 
                                              '&defaultlon=' + p_default_lon + 
