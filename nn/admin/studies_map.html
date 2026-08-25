@@ -140,6 +140,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 1. Parse your state string from the URL
     let winurlsearchstr = window.location.search;
     let winurlparams = new URLSearchParams(winurlsearchstr);
+
+    let p_mode         = winurlparams.get('mode') || '';
+  
     appState = buildStateFromParams(winurlparams);
 
     // 2. Run your configuration validation check
