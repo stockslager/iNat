@@ -307,13 +307,14 @@ function buildFlowerBedURL( pin, config ) {
   }
 }
 
-function buildFlowerURL( pin, config ) {
+function buildFlowerURL( pin, config, rec ) {
   // Instantly locks the taxonId value exclusively to this specific pin instance
-  const plant_id    = pin.taxonId ? '&plantid='   + pin.taxonId : '';
-  const plant_name  = pin.name    ? '&plantname=' + pin.name : '';
+  //const plant_id    = pin.taxonId ? '&plantid='   + pin.taxonId : '';
+  //const plant_name  = pin.name    ? '&plantname=' + pin.name : '';
   
   return( '../../garden/plant_detail.html?params=horizon&component=plants&mode=' + p_mode + 
-                                             plant_id + plant_name + 
+                                             rec.taxon.id + (rec.taxon.preferred_common_name || rec.taxon.name || 'unknown name') + 
+                                             '&obsid=' + rec.id +
                                              '&defaultlat=' + p_default_lat + 
                                              '&defaultlon=' + p_default_lon + 
                                              '&defaultzoom=' + p_default_zoom );
@@ -404,7 +405,7 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
  * then packs them into the global zoom-controlled layer group.
  * @param {MapConfiguration} config - The instantiated configuration class object.
  */
-function buildFlowerPinsLayer(config, mapInstance = null) {
+function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
   // Clear any existing layers first to prevent double-rendering bugs if config changes
   flowerLocationsLayer.clearLayers();
 
@@ -416,6 +417,31 @@ function buildFlowerPinsLayer(config, mapInstance = null) {
     popupAnchor: [0, -16],
     className: 'custom-pin-reset'
   });
+
+  for (let i=0; i<obs_data.length; i++) {
+      let rec  = obs_data[i];
+
+      const [lat, lon] = rec.location.split(',');
+      const flowerMarker = L.marker([lat, lon], { icon: flowerIcon });
+          
+      // Bind existing standard popup bubble
+      if( p_mode === 'plants' ) {
+          flowerMarker.on('click', () => { window.location.href = buildPlantsURL( flower, config ); });  
+          flowerLocationsLayer.addLayer(flowerMarker);
+      } else if( p_mode === 'activity' ) {
+          flowerMarker.on('click', () => { window.location.href = buildInsectActivityURL( flower, config ); });
+          flowerLocationsLayer.addLayer(flowerMarker);
+      } else if( p_mode === 'beds' && flower.bed && flower.bed !== '' ) {
+          flowerMarker.on('click', () => { window.location.href = buildFlowerBedURL( flower, config ); });
+          flowerLocationsLayer.addLayer(flowerMarker);
+      } else if( p_mode === 'flower' && flower.pinType === 'flower' ) {
+          flowerMarker.on('click', () => { window.location.href = buildFlowerURL( flower, config, rec ); });
+          flowerLocationsLayer.addLayer(flowerMarker);
+      } else if( p_mode === 'all' ) {
+          flowerMarker.bindPopup(buildBubble(flower, config));
+          flowerLocationsLayer.addLayer(flowerMarker);
+      }
+  }
 
   // Drill down into the nested JSON architecture
   config.parentPins.forEach(parent => {
@@ -615,6 +641,7 @@ async function gatherResources() {
         // Fetch, parse, and instantiate the map configuration object in one shot
         config = await MapConfiguration.loadFromUrl(json_path);
 
+        let obs_data = '';
         if( p_mode === 'flower' ) {
             let api_base   = 'https://api.inaturalist.org/v1/observations'
             let inat_params = '';
@@ -623,8 +650,7 @@ async function gatherResources() {
 
             const api_url        = api_base+inat_params;
             console.log('api url: ' + api_url);
-            const obs_data       = await apiFetch( api_url ); 
-            console.log('data ' + JSON.stringify(obs_data));
+            obs_data             = await apiFetch( api_url ); 
         }
       
         // Build your navigation components
@@ -660,13 +686,13 @@ async function gatherResources() {
         // Generate parent marker overlays
         buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers);
       
-        if (typeof buildFlowerPinsLayer === 'function') {
+        if (typeof buildFlowerPinsLayer === 'function' && obs_data) {
            if (defaultZoom >= thresholdZoom) {
               // Pass 'map' so the function can immediately run .addTo(map)
-              buildFlowerPinsLayer(config, map); 
+              buildFlowerPinsLayer(config, obs_data, map); 
            } else {
               // Initialize the layer dataset layout, but do not attach to map yet
-              buildFlowerPinsLayer(config); 
+              buildFlowerPinsLayer(config, obs_data); 
            }   
         }
 
