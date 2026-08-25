@@ -249,16 +249,22 @@ function buildMenu( config ) {
    if( getComponent(appState) === COMPONENT_GARDEN && p_mode === 'flower' ) { 
         let urlState = appState;
         urlState = setTaxonId(urlState, '');
+        urlState = setFieldName(urlState, '');
+        urlState = setFieldValue(urlState, '');
         homeUrl = '../../garden/plant_detail.html'; 
         buildNavHome( navbar, homeUrl, urlState, config );
    } else if( getComponent(appState) === COMPONENT_BEDS && p_mode === 'beds' ) {   // if they came in from clicking plant name.
         let urlState = appState;
         urlState = setTaxonId(urlState, '');
+        urlState = setFieldName(urlState, '');
+        urlState = setFieldValue(urlState, '');
         homeUrl = '../../beds/beds.html'; 
         buildNavHome( navbar, homeUrl, urlState, config );
    } else if( getComponent(appState) === COMPONENT_GARDEN && p_mode === 'beds' ) {  // if they came in from clicking bug icon, then something on plant_detail
         let urlState = appState;
         urlState = setTaxonId(urlState, '');
+        urlState = setFieldName(urlState, '');
+        urlState = setFieldValue(urlState, '');
         homeUrl = '../../garden/plant_detail.html'; 
         buildNavHome( navbar, homeUrl, urlState, config );
    } else {
