@@ -1,4 +1,4 @@
-<!DOCTYPE html>   
+<!DOCTYPE html>    
 <html lang="en">  
 <head> 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -28,7 +28,8 @@
     let p_default_zoom = winurlparams.get('defaultzoom') || '';
 
     let map;
-    let config     = null; 
+    let config     = null;
+    let obs_data   = '';
     
     function buildMenu( config ) {
        // Create the main navbar container
@@ -307,13 +308,14 @@ function buildFlowerBedURL( pin, config ) {
   }
 }
 
-function buildFlowerURL( pin, config ) {
-  // Instantly locks the taxonId value exclusively to this specific pin instance
-  const plant_id    = pin.taxonId ? '&plantid='   + pin.taxonId : '';
-  const plant_name  = pin.name    ? '&plantname=' + pin.name : '';
+function buildFlowerURL( config, rec ) {
+  // Instantly locks the taxonId value exclusively to this specific instance
+  let plant_id   = rec.taxon.id ? '&plantid='   + rec.taxon.id : '';
+  let plant_name = '&plantname=' + (rec.taxon.preferred_common_name || rec.taxon.name || 'unknown name');
   
   return( '../../garden/plant_detail.html?params=horizon&component=plants&mode=' + p_mode + 
                                              plant_id + plant_name + 
+                                             '&photoid=' + rec.observation_photos[0].photo_id +
                                              '&defaultlat=' + p_default_lat + 
                                              '&defaultlon=' + p_default_lon + 
                                              '&defaultzoom=' + p_default_zoom );
@@ -404,7 +406,7 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
  * then packs them into the global zoom-controlled layer group.
  * @param {MapConfiguration} config - The instantiated configuration class object.
  */
-function buildFlowerPinsLayer(config, mapInstance = null) {
+function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
   // Clear any existing layers first to prevent double-rendering bugs if config changes
   flowerLocationsLayer.clearLayers();
 
@@ -417,35 +419,33 @@ function buildFlowerPinsLayer(config, mapInstance = null) {
     className: 'custom-pin-reset'
   });
 
-  // Drill down into the nested JSON architecture
-  config.parentPins.forEach(parent => {
-    if (parent.flowerPins && parent.flowerPins.length > 0) {
-      parent.flowerPins.forEach(flower => {
-        // Ensure coordinates exist before dropping a marker
-        if (flower.lat && flower.lon) {
-          const flowerMarker = L.marker([flower.lat, flower.lon], { icon: flowerIcon });
+  // Extract the actual array from iNaturalist's wrapper
+  const records = (obs_data && obs_data.results) ? obs_data.results : [];
+    
+  for (let i=0; i<records.length; i++) {
+      let rec  = records[i];
+
+      const [lat, lon] = rec.location.split(',');
+      const flowerMarker = L.marker([lat, lon], { icon: flowerIcon });
           
-          // Bind existing standard popup bubble
-          if( p_mode === 'plants' ) {
-              flowerMarker.on('click', () => { window.location.href = buildPlantsURL( flower, config ); });  
-              flowerLocationsLayer.addLayer(flowerMarker);
-          } else if( p_mode === 'activity' ) {
-              flowerMarker.on('click', () => { window.location.href = buildInsectActivityURL( flower, config ); });
-              flowerLocationsLayer.addLayer(flowerMarker);
-          } else if( p_mode === 'beds' && flower.bed && flower.bed !== '' ) {
-              flowerMarker.on('click', () => { window.location.href = buildFlowerBedURL( flower, config ); });
-              flowerLocationsLayer.addLayer(flowerMarker);
-          } else if( p_mode === 'flower' && flower.pinType === 'flower' ) {
-              flowerMarker.on('click', () => { window.location.href = buildFlowerURL( flower, config ); });
-              flowerLocationsLayer.addLayer(flowerMarker);
-          } else if( p_mode === 'all' ) {
-              flowerMarker.bindPopup(buildBubble(flower, config));
-              flowerLocationsLayer.addLayer(flowerMarker);
-          }
-        }
-      });
-    }
-  });
+      // Bind existing standard popup bubble
+      if( p_mode === 'plants' ) {
+          flowerMarker.on('click', () => { window.location.href = buildPlantsURL( flower, config ); });  
+          flowerLocationsLayer.addLayer(flowerMarker);
+      } else if( p_mode === 'activity' ) {
+          flowerMarker.on('click', () => { window.location.href = buildInsectActivityURL( flower, config ); });
+          flowerLocationsLayer.addLayer(flowerMarker);
+      } else if( p_mode === 'beds' && flower.bed && flower.bed !== '' ) {
+          flowerMarker.on('click', () => { window.location.href = buildFlowerBedURL( flower, config ); });
+          flowerLocationsLayer.addLayer(flowerMarker);
+      } else if( p_mode === 'flower' ) {
+          flowerMarker.on('click', () => { window.location.href = buildFlowerURL( config, rec ); });
+          flowerLocationsLayer.addLayer(flowerMarker);
+      } else if( p_mode === 'all' ) {
+          flowerMarker.bindPopup(buildBubble(flower, config));
+          flowerLocationsLayer.addLayer(flowerMarker);
+      }
+  }
 
   // if a map instance is provided, add the entire layer group to it 
   // (for initialization of flower pins if a default zoom over the threshold was
@@ -603,6 +603,10 @@ function initializeZoomViewHandler(map, config) {
     }
   });
 }
+
+</script>
+<script type="text/javascript"   src="../../core/js/api_fetch.js">     </script>
+<script>
       
 async function gatherResources() {
     let json_path = '../../core/json/maps/' + p_params + '.json';
@@ -610,7 +614,18 @@ async function gatherResources() {
     try { 
         // Fetch, parse, and instantiate the map configuration object in one shot
         config = await MapConfiguration.loadFromUrl(json_path);
-      
+
+        if( p_mode === 'flower' ) {
+            let api_base   = 'https://api.inaturalist.org/v1/observations'
+            let inat_params = '';
+            if( config.pinsProject ) { inat_params += '?project_id=' + config.pinsProject; }
+            inat_params += '&field:pin+type=flower';
+
+            const api_url        = api_base+inat_params;
+            console.log('api url: ' + api_url);
+            obs_data             = await apiFetch( api_url ); 
+        }
+
         // Build your navigation components
         buildMenu(config);
       
@@ -644,13 +659,13 @@ async function gatherResources() {
         // Generate parent marker overlays
         buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers);
       
-        if (typeof buildFlowerPinsLayer === 'function') {
+        if (typeof buildFlowerPinsLayer === 'function' && obs_data) {
            if (defaultZoom >= thresholdZoom) {
               // Pass 'map' so the function can immediately run .addTo(map)
-              buildFlowerPinsLayer(config, map); 
+              buildFlowerPinsLayer(config, obs_data, map); 
            } else {
               // Initialize the layer dataset layout, but do not attach to map yet
-              buildFlowerPinsLayer(config); 
+              buildFlowerPinsLayer(config, obs_data); 
            }   
         }
 
