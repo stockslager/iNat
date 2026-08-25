@@ -424,7 +424,6 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
     
   for (let i=0; i<records.length; i++) {
       let rec  = records[i];
-      console.log('recccc ' + JSON.stringify(rec));
 
       const [lat, lon] = rec.location.split(',');
       const flowerMarker = L.marker([lat, lon], { icon: flowerIcon });
@@ -447,36 +446,6 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
           flowerLocationsLayer.addLayer(flowerMarker);
       }
   }
-
-  // Drill down into the nested JSON architecture
-  /*config.parentPins.forEach(parent => {
-    if (parent.flowerPins && parent.flowerPins.length > 0) {
-      parent.flowerPins.forEach(flower => {
-        // Ensure coordinates exist before dropping a marker
-        if (flower.lat && flower.lon) {
-          const flowerMarker = L.marker([flower.lat, flower.lon], { icon: flowerIcon });
-          
-          // Bind existing standard popup bubble
-          if( p_mode === 'plants' ) {
-              flowerMarker.on('click', () => { window.location.href = buildPlantsURL( flower, config ); });  
-              flowerLocationsLayer.addLayer(flowerMarker);
-          } else if( p_mode === 'activity' ) {
-              flowerMarker.on('click', () => { window.location.href = buildInsectActivityURL( flower, config ); });
-              flowerLocationsLayer.addLayer(flowerMarker);
-          } else if( p_mode === 'beds' && flower.bed && flower.bed !== '' ) {
-              flowerMarker.on('click', () => { window.location.href = buildFlowerBedURL( flower, config ); });
-              flowerLocationsLayer.addLayer(flowerMarker);
-          } else if( p_mode === 'flower' && flower.pinType === 'flower' ) {
-              flowerMarker.on('click', () => { window.location.href = buildFlowerURL( flower, config ); });
-              flowerLocationsLayer.addLayer(flowerMarker);
-          } else if( p_mode === 'all' ) {
-              flowerMarker.bindPopup(buildBubble(flower, config));
-              flowerLocationsLayer.addLayer(flowerMarker);
-          }
-        }
-      });
-    }
-  });*/
 
   // if a map instance is provided, add the entire layer group to it 
   // (for initialization of flower pins if a default zoom over the threshold was
@@ -657,8 +626,6 @@ async function gatherResources() {
             obs_data             = await apiFetch( api_url ); 
         }
 
-        console.log('obs d ' + JSON.stringify(obs_data));
-      
         // Build your navigation components
         buildMenu(config);
       
@@ -695,7 +662,6 @@ async function gatherResources() {
         if (typeof buildFlowerPinsLayer === 'function' && obs_data) {
            if (defaultZoom >= thresholdZoom) {
               // Pass 'map' so the function can immediately run .addTo(map)
-              console.log('obs d2 ' + JSON.stringify(obs_data));
               buildFlowerPinsLayer(config, obs_data, map); 
            } else {
               // Initialize the layer dataset layout, but do not attach to map yet
