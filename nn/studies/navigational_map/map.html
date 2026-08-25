@@ -300,7 +300,15 @@ function buildInsectActivityURL( pin, config ) {
 
 function buildFlowerBedURL( config, rec ) {
 
-      return( '../../beds/beds.html?params=horizon&component=beds&garden=pylon&mode=' + p_mode + 
+      let garden = 'pylon';
+      // find the garden specified in the garden bed obs field.
+      for( let i=0; i<rec.ofvs.length; i++ ) {
+           if( rec.ofvs[i].field_id.toString() === '12337' ) {
+               garden = rec.ofvs[i].value.toString();
+           }
+      }
+
+      return( '../../beds/beds.html?params=horizon&component=beds&garden='+garden+'&mode=' + p_mode + 
                                              '&photoid=' + rec.observation_photos[0].photo_id +
                                              '&defaultlat=' + p_default_lat + 
                                              '&defaultlon=' + p_default_lon + 
