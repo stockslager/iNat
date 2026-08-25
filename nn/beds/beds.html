@@ -469,6 +469,8 @@ function buildPage(xobj, config) {
                      urlState = setPlantId(urlState, rec.id);
                      urlState = setPlantName(urlState, header_name||'?');
                      let activity_url      = '../garden/garden_activity.html' + buildParameterList(urlState);
+                     if( p_mode === 'beds' ) { activity_url = '../garden/plant_detail.html' + buildParameterList(urlState); }
+                     
                      let tdPhoto = faddelem('td', brow, { style: 'text-align: center;' });
 
                      // Create the anchor link pointing to the wildlife activity url
