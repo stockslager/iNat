@@ -239,7 +239,7 @@ function buildMenu( config ) {
 
            buildNavDD( navbar, 'Maps', links );
        } else {   
-           let url = '../admin/studies_map.html' + buildParameterList(appState) + '&gridmode=widget';
+           let url = '../admin/studies_map.html' + buildParameterList(appState) + '&gridmode=widget' + '&fieldname=' + config.fieldName + '&fieldvalue=' + getPlantId(appState);
            buildNavURL( navbar, url, CONST_MAP );
        }
    }
