@@ -231,7 +231,7 @@ function buildMenu( config ) {
        if( config.mapType === 'ls' && ( getLSTaxonId(appState) === '47157' || getTaxonId(appState) === '47157' || getMenuId(appState) === '47157' ) ) {  
            let links = [];
     
-           let mapLink  = faddelem('a', null, { href: '../admin/studies_map.html' + buildParameterList(appState) + '&gridmode=widget', textContent: 'Standard Map' });
+           let mapLink  = faddelem('a', null, { href: './studies_map.html' + buildParameterList(appState) + '&gridmode=widget', textContent: 'Standard Map' });
            let lsLink   = faddelem('a', null, { href: '../admin/density_map.html' + buildParameterList(appState), textContent: 'Life-Stages' });
 
            links.push(mapLink);
@@ -239,25 +239,25 @@ function buildMenu( config ) {
 
            buildNavDD( navbar, 'Maps', links );
        } else {   
-               let url = '../admin/studies_map.html' + buildParameterList(appState) + '&gridmode=widget' + '&fieldname=' + config.fieldName + '&fieldvalue=' + getPlantId(appState);
+               let url = './studies_map.html' + buildParameterList(appState) + '&gridmode=widget' + '&fieldname=' + config.fieldName + '&fieldvalue=' + getPlantId(appState);
                buildNavURL( navbar, url, CONST_MAP );
        }
    }
 
    // Build the Home Link
-   let homeUrl = '../studies/field_study.html';
+   let homeUrl = '../../garden/plant_detail.html';
    if( getComponent(appState) === COMPONENT_GARDEN && p_mode === 'flower' ) { 
         let urlState = appState;
-        homeUrl = '../garden/plant_detail.html'; 
+        homeUrl = '../../garden/plant_detail.html'; 
         buildNavHome( navbar, homeUrl, urlState, config );
    } else if( getComponent(appState) === COMPONENT_BEDS && p_mode === 'beds' ) {   // if they came in from clicking plant name.
         let urlState = appState;
-        homeUrl = '../beds/beds.html'; 
+        homeUrl = '../../beds/beds.html'; 
         buildNavHome( navbar, homeUrl, urlState, config );
    } else if( getComponent(appState) === COMPONENT_GARDEN && p_mode === 'beds' ) {  // if they came in from clicking bug icon, then something on plant_detail
         let urlState = appState;
         urlState = setTaxonId(urlState, '');
-        homeUrl = '../garden/plant_detail.html'; 
+        homeUrl = '../../garden/plant_detail.html'; 
         buildNavHome( navbar, homeUrl, urlState, config );
    } else {
         buildNavHome( navbar, homeUrl, appState, config );
