@@ -364,6 +364,11 @@ function buildWidget( config ) {
         taxonId = 'data-inat-taxon="' + (getTaxonId(appState) || getMenuId(appState) || config.defaultTaxonId) + '" '; 
     }
 
+    let compact = '';
+    if( p_mode === 'beds' ) {
+        compact = 'data-inat-compact="true" ';
+    }
+
     // Form clean single-widget container layout view assignments
     var widgetHtml = 
       '<div id="themeContainer" class="widget-component-container ' + '">' +
@@ -376,7 +381,7 @@ function buildWidget( config ) {
             'data-inat-layout="grid" ' +
             'data-inat-limit="' + CONST_OBSERVATIONS_PER_PAGE + '" ' +
             'data-inat-order-by="created_at" ' +
-             inatParams + taxonId + 
+             inatParams + taxonId + compact + 
             'data-inat-show-title="false" ' + 
             'data-inat-header-text="' + config.title + '" >' + 
         '</div>' +
