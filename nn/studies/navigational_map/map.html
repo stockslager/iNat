@@ -435,8 +435,8 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
       } else if( p_mode === 'activity' ) {
           flowerMarker.on('click', () => { window.location.href = buildInsectActivityURL( flower, config ); });
           flowerLocationsLayer.addLayer(flowerMarker);
-      } else if( p_mode === 'beds' && flower.bed && flower.bed !== '' ) {
-          flowerMarker.on('click', () => { window.location.href = buildFlowerBedURL( flower, config ); });
+      } else if( p_mode === 'beds' ) {
+          flowerMarker.on('click', () => { window.location.href = buildFlowerBedURL( config, rec ); });
           flowerLocationsLayer.addLayer(flowerMarker);
       } else if( p_mode === 'flower' ) {
           flowerMarker.on('click', () => { window.location.href = buildFlowerURL( config, rec ); });
@@ -620,6 +620,17 @@ async function gatherResources() {
             let inat_params = '';
             if( config.pinsProject ) { inat_params += '?project_id=' + config.pinsProject; }
             inat_params += '&field:pin+type=flower';
+
+            const api_url        = api_base+inat_params;
+            console.log('api url: ' + api_url);
+            obs_data             = await apiFetch( api_url ); 
+        }
+
+        if( p_mode === 'beds' ) {
+            let api_base   = 'https://api.inaturalist.org/v1/observations'
+            let inat_params = '';
+            if( config.pinsProject ) { inat_params += '?project_id=' + config.pinsProject; }
+            inat_params += '&field:pin+type=beds';
 
             const api_url        = api_base+inat_params;
             console.log('api url: ' + api_url);
