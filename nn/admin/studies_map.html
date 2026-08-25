@@ -18,6 +18,12 @@
   <script type="text/javascript" src="../core/js/ConfigManager.js"></script>
   
   <script>
+    // Parse your state string from the URL 
+    let winurlsearchstr = window.location.search; 
+    let winurlparams = new URLSearchParams(winurlsearchstr); 
+    let p_map_mode   = winurlparams.get('map_mode') || 'default'; 
+    let p_mode       = winurlparams.get('mode') || '';
+    appState = buildStateFromParams(winurlparams);
     let config   = null; 
 
     function buildMenu( config ) {
@@ -131,12 +137,7 @@ body {
     <script>
       
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Parse your state string from the URL
-    let winurlsearchstr = window.location.search;
-    let winurlparams = new URLSearchParams(winurlsearchstr);
   
-    appState = buildStateFromParams(winurlparams);
-
     // 2. Run your configuration validation check
     let message = validateConfig(appState);
     if( message ) {
