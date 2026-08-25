@@ -371,8 +371,6 @@ function setEvidence(state, value)        { return (setAttribute(state, ATTRIBUT
 function setMonth(state, value)           { return (setAttribute(state, ATTRIBUTE_MONTH, value)); }
 function setTag(state, value)             { return (setAttribute(state, ATTRIBUTE_TAG, value)); }
 function setGridMode(state, value)        { return (setAttribute(state, ATTRIBUTE_GRIDMODE, value)); }
-function setFieldValue(state, value)      { return (setAttribute(state, ATTRIBUTE_FIELDVALUE, value)); }
-function setFieldName(state, value)       { return (setAttribute(state, ATTRIBUTE_FIELDNAME, value)); }
 function setPage(state, value)            { return (setAttribute(state, ATTRIBUTE_PAGE, value)); }
 function setPerPage(state, value)         { return (setAttribute(state, ATTRIBUTE_PER_PAGE, value)); }
 
