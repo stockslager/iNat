@@ -27,16 +27,9 @@
   
        // Build the Home Link
        let homeUrl = './widget_grid.html';
-       if( p_mode === 'beds' ) {
-           urlState = appState;
-           urlState = setFieldValue( getPlantId(appState) );
-           urlState = setFieldName( config.fieldName );
-           buildNavHome( navbar, homeUrl, urlState, config );
-       } else {
-           urlState = appState;
-           urlState = setGridMode('');
-           buildNavHome( navbar, homeUrl, appState, config );
-       }
+       urlState = appState;
+       urlState = setGridMode('');
+       buildNavHome( navbar, homeUrl, appState, config );
   
        let appContainer = document.getElementById('app');
        if( appContainer ) {
@@ -140,8 +133,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 1. Parse your state string from the URL
     let winurlsearchstr = window.location.search;
     let winurlparams = new URLSearchParams(winurlsearchstr);
-
-    let p_mode         = winurlparams.get('mode') || '';
   
     appState = buildStateFromParams(winurlparams);
 
