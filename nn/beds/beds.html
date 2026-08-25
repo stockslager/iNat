@@ -426,6 +426,10 @@ function buildPage(xobj, config) {
              urlState = setPlantId(urlState, rec.id);
              urlState = setPlantName(urlState, header_name||'?');
              let url      = './beds_grid.html' + buildParameterList(urlState);
+             if( p_mode === 'beds' ) {
+                 url      = '../admin/widget_grid.html' + buildParameterList(urlState);
+             } 
+                 
              buildSpeciesName( brow, rec, url );
 
              if( p_mode === 'observers' ) {
