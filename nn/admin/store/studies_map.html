@@ -1,0 +1,335 @@
+<!DOCTYPE html> 
+<html lang="en">  
+<head> 
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Observations Map" />
+  <meta name="apple-mobile-web-app-title" content="Observations Map" />
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="../core/assets/plant-icon-192.png" />
+  <link rel="icon" type="image/png" href="../core/assets/plant-icon-96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="../core/assets/plant-icon-96.svg" />
+  <link rel="shortcut icon" href="../core/assets/plant-club.ico" />
+  <link rel="manifest" href="../core/assets/plant_club.webmanifest" />
+  <link rel="stylesheet" type="text/css" href="../core/css/core.css" />
+
+  <script type="text/javascript" src='../core/js/common_functions.js'></script>
+  <script type="text/javascript" src='../core/js/store.js'></script>
+  <script type="text/javascript" src="../core/js/ConfigManager.js"></script>
+  
+  <script>
+    // Parse your state string from the URL 
+    let winurlsearchstr = window.location.search; 
+    let winurlparams = new URLSearchParams(winurlsearchstr); 
+    let p_map_mode   = winurlparams.get('map_mode') || 'default'; 
+    let p_mode       = winurlparams.get('mode') || '';
+
+    if( p_mode === 'beds' ) {
+        appState = buildFullStateFromParams(winurlparams);
+    } else {
+        appState = buildStateFromParams(winurlparams);
+    }
+      
+    console.log('app1 ' + JSON.stringify(appState));
+    let config   = null; 
+
+    function buildMenu( config ) {
+       // Create the main navbar container
+       let navbar = document.createElement('div');
+       navbar.className = 'navbar v2-menu';
+  
+       // Build the Home Link
+       let homeUrl = './widget_grid.html';
+       if( p_mode === 'beds' ) {
+           let urlState = appState;
+           console.log('app state ' + JSON.stringify(urlState));
+           buildNavHome( navbar, homeUrl, urlState, config );
+       } else {
+           urlState = appState;
+           urlState = setGridMode('');
+           console.log('app state ' + JSON.stringify(appState));
+           buildNavHome( navbar, homeUrl, appState, config );
+       }
+  
+       let appContainer = document.getElementById('app');
+       if( appContainer ) {
+           document.body.insertBefore(navbar, appContainer);
+       } else {
+           document.body.insertBefore(navbar, document.body.firstChild);
+       }
+    }
+    
+  </script>
+  
+  <title>Observations Map</title>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+<style>
+/* ==========================================================================
+   BASE LAYOUT & APPLICATION WRAPPER
+   ========================================================================== */
+html {
+    background-color: #0f172a;
+    box-sizing: border-box;
+    min-height: 100vh;
+    padding: 10px 50px 24px 50px; /* Top, Right, Bottom, Left */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: transparent;
+}
+
+#app {
+    background-color: #000000;
+    border: 2px solid #333;
+    border-radius: 5px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 10px;
+    min-height: calc(100vh - 72px);
+    position: relative;
+    overflow: hidden; /* Keeps rounded corners clean around child elements */
+    
+    /* Flexbox prevents components from piling up or overlapping layout fields */
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   DYNAMIC NAVBAR (Injected via JS)
+   ========================================================================== */
+.navbar {
+    background-color: var(--color-brand, #1e293b); /* Fallback to slate color if variable missing */
+    border-radius: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    overflow: hidden;
+    flex-shrink: 0; /* Prevents map canvas from squishing navbar dimensions */
+}
+
+/* ==========================================================================
+   MAP RENDERING ENGINE & FLOATING COMPONENTS
+   ========================================================================== */
+#map {
+    position: relative;
+    flex-grow: 1; /* Automatically stretches map canvas to fill all remaining vertical viewport space */
+    width: 100%;
+}
+
+.info-shield {
+    position: absolute;
+    top: 15px;
+    left: 60px;
+    background: rgba(15, 23, 42, 0.9); /* Styled dark to match your dashboard palette */
+    color: #ffffff;
+    padding: 8px 15px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    z-index: 1000; /* Puts loading layer in front of the Leaflet canvas graphics */
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+  
+    <div id="app">
+        <div id="info" class="info-shield">Loading iNaturalist Map Layer...</div>
+        <div id="map"></div>
+    </div>
+
+    <script>
+      
+document.addEventListener('DOMContentLoaded', async () => {
+  
+    // 2. Run your configuration validation check
+    let message = validateConfig(appState);
+    if( message ) {
+        faddelem('p', document.body, { innerHTML: ('<span id="error">⚠️<br>' + message + '</span>') });
+        return; // Halt if configuration setup fails
+    } 
+    
+    // 3. Fetch remote resources and render the map
+    await gatherResources();
+});
+
+function setupInatParams( config ) {
+    let inat_params = '';
+
+    inat_params += '?project_id='+config.project;
+
+    // if a taxon_id was chosen from a row in the table, use that taxon_id.  if not, 
+    // use the menu_id if one was passed in.
+    if( getTaxonId(appState) ) {
+        inat_params += '&taxon_id='+getTaxonId(appState);
+    } else if( getMenuId(appState) ) { 
+        inat_params += '&taxon_id=' + getMenuId(appState); 
+    } else {
+        if( config.defaultTaxonId ) {
+            inat_params += '&taxon_id=' + config.defaultTaxonId;
+        }
+    }
+
+    // --- Consolidated iNat Multi-Field API Builder ---
+    const initialParams = new URLSearchParams(window.location.search);
+    const initialNames = initialParams.getAll('fieldname');
+    const initialValues = initialParams.getAll('fieldvalue');
+
+    const lowerCaseNames = initialNames.map(name => name.toLowerCase());
+
+    // Core Rule: If the URL has no active filters (First Entrance), use your config defaults
+    if( config.fieldName && !lowerCaseNames.includes(config.fieldName.toLowerCase() ) ) {
+        inat_params += '&field:' + config.fieldName;
+        if( config.fieldValue ) {
+            inat_params += '=' + encodeURIComponent(config.fieldValue);
+        }
+    }
+
+    // Sequential Loop: Process whatever filters are explicitly remaining in the URL bar
+    initialNames.forEach((name, index) => {
+      const value = initialValues[index];
+      if( name && value ) {
+          inat_params += '&field:' + name + '=' + encodeURIComponent(value);
+      }
+    });
+
+    if( getObsDate(appState)    ) { inat_params += '&on='       + getObsDate(appState); } 
+
+    if( getUser(appState) ) {
+        inat_params += '&user_id=' + getUser(appState);
+    } else if( config.userId ) { 
+        inat_params += '&user_id='  + config.userId; 
+    }
+ 
+    if( getPlaceMenuId(appState) ) {
+        inat_params += getPlaceMenuIdParam(appState, '&place_id=');
+    } else {
+        if( config.defaultPlace ) { 
+            inat_params += '&place_id='        + config.defaultPlace; 
+        } else {
+            inat_params += '&place_id=any';
+        }
+    }
+
+    // filter for month...
+    if( getMonth(appState) ) {
+        if( getMonth(appState) !== 'null' ) { 
+            inat_params += '&month=' + getMonth(appState);
+        }
+    } else if( config.defaultMonths ) {
+            inat_params += '&month=' + config.defaultMonths;
+    }
+
+    // filter for life stage annotation...
+    if( getLifeStage(appState) ) { 
+        if( getLifeStage(appState) === 'null' ) {
+            inat_params += '&without_term_id=1';
+        } else {
+            inat_params += '&term_id=1&term_value_id='  + getLifeStage(appState);
+        }
+    }
+
+    // if a filter has been chosen, get the filter api params
+    if( getActivityFilter(appState) ) {
+        inat_params += getFilterAPIParams(config);
+    }
+
+    if( config.obsAPIParams ) { inat_params += config.obsAPIParams; }
+
+    // default all of these so they stay consistent across the map and grid.
+    // may need to revisit if/when the table sorts by quality_grade.
+    inat_params += '&reviewed=any&quality_grade=needs_id,research,casual&verifiable=any';
+
+    return inat_params;
+}
+
+  
+async function gatherResources() {
+    let json_path = json_root + getParams(appState);
+    try {
+        // Fetch the remote JSON orientation profile
+        config = await asyncGetConfiguration( json_path, getComponent(appState), getStudyTitle(appState) );
+
+        // Build your navigation components
+        buildMenu(config);
+
+        // ==========================================================================
+        // MAP INITIALIZATION 
+        // ==========================================================================
+        console.log('zoom ' + getDefaultZoom(config));
+        const defaultLat  = parseFloat(getCenterLat(config))  || 39.1337;
+        const defaultLng  = parseFloat(getCenterLng(config))  || -84.3525;
+        const defaultZoom = parseInt(getDefaultZoom(config)) || 12;
+
+        // ========================================================================== 
+        // MAP BASE TILES (Street View & Satellite View Options)
+        // ========================================================================== 
+        const esri = "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+        const osm  = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+
+        const streetView    = L.tileLayer(osm,  { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }); 
+        const satelliteView = L.tileLayer(esri, { maxZoom: 19, attribution: 'Tiles &copy; Esri &mdash; Source: Esri and the GIS User Community' }); 
+
+       // ========================================================================== 
+       // INATURALIST OVERLAY CONFIGURATION 
+       // ========================================================================== 
+       let urlParams = setupInatParams( config );
+       console.log('inat url params ' + urlParams);
+       const tileHost = 'https://api.inaturalist.org/v1/points/{z}/{x}/{y}.png'; 
+       const iNatTileUrl = tileHost + urlParams; 
+
+       // Build distinct, filterable overlay tile pipelines
+       const iNatLayers = {
+         "Plants 🌿":  L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Plantae`,  { maxZoom: 20, opacity: 0.85 }),
+         "Birds 🐦":   L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Aves`,     { maxZoom: 20, opacity: 0.85 }),
+         "Insects 🦋": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Insecta`,  { maxZoom: 20, opacity: 0.85 }),
+         "Mammals 🦊": L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Mammalia`, { maxZoom: 20, opacity: 0.85 }),
+         "Fungi 🍄":   L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Fungi`,    { maxZoom: 20, opacity: 0.85 }),
+         "Herps 🐸":   L.tileLayer(`${tileHost}${urlParams}&iconic_taxa[]=Amphibia&iconic_taxa[]=Reptilia`, { maxZoom: 20, opacity: 0.85 })
+       };
+       //const iNatOverlayLayer = L.tileLayer(iNatTileUrl, { maxZoom: 20, opacity: 0.85, attribution: '&copy; iNaturalist Data Layer' }); 
+
+       // ========================================================================== 
+       // UNIFIED INSTANCE CONTROL (so the pins sit above both maps)
+       // ========================================================================== 
+       // Boot up the canvas showing the base maps and select which ones load turned ON by default
+       const map = L.map('map', { center: [defaultLat, defaultLng], zoom: defaultZoom, 
+                                 layers: [streetView, iNatLayers["Plants 🌿"],   iNatLayers["Birds 🐦"],
+                                                      iNatLayers["Insects 🦋"],  iNatLayers["Mammals 🦊"],
+                                                      iNatLayers["Fungi 🍄"],    iNatLayers["Herps 🐸"]] }); 
+
+       // Base layer targets menu structure
+       const baseMaps = { 
+         "Street View": streetView, 
+         "Satellite": satelliteView 
+       }; 
+
+       // Pass categorized object straight to the overlayMaps block
+       // Leaflet automatically unpacks this object into separate checkbox entries!
+       const overlayMaps = iNatLayers;
+
+       // Mount layout control dashboard panel widget to top right corner
+       L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+
+       document.getElementById('info').style.display = 'none';
+
+    } catch (error) {
+        console.error("An error occurred:", error);
+        faddelem('p', document.body, {innerHTML:('<span id="error">⚠️<br>' + error.message + '</span>')});
+        throw error;
+    }
+}
+
+    </script>
+</body>
+
+</html>
