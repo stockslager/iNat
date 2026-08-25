@@ -256,7 +256,7 @@ function buildMenu( config ) {
         buildNavHome( navbar, homeUrl, urlState, config );
    } else if( getComponent(appState) === COMPONENT_GARDEN && p_mode === 'beds' ) {  // if they came in from clicking bug icon, then something on plant_detail
         let urlState = appState;
-        let urlState = clearForObserverCountsParams(urlState);
+        let urlState = setTaxonId(urlState, '');
         homeUrl = '../garden/plant_detail.html'; 
         buildNavHome( navbar, homeUrl, urlState, config );
    } else {
