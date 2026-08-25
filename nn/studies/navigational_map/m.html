@@ -692,6 +692,7 @@ async function gatherResources() {
         if (typeof buildFlowerPinsLayer === 'function' && obs_data) {
            if (defaultZoom >= thresholdZoom) {
               // Pass 'map' so the function can immediately run .addTo(map)
+              console.log('obs d2 ' + JSON.stringify(obs_data));
               buildFlowerPinsLayer(config, obs_data, map); 
            } else {
               // Initialize the layer dataset layout, but do not attach to map yet
