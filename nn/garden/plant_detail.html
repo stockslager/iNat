@@ -396,6 +396,128 @@ function buildMenu( results, config ) {
     faddelem('p', document.body).appendChild(navbar);
 }
 
+// ==========================================================================
+// UNIFIED CUSTOM HEADER GENERATION FUNCTION
+// ==========================================================================
+function renderHeaderWithImage(appState, config, total_results, per_page, page_curr, page_max, image_id) {
+  let title_1 = '', title_2 = '', title_3 = ''; 
+  let titleText = CONST_ON + capitalizeWords(getPlantName(appState)); 
+  let urlState = appState; 
+
+  if (getMenuId(appState)) { 
+    urlState = setTaxonId(appState, getMenuId(appState)); 
+  } 
+
+  let titleUrl = ''; 
+  if (config.showStudyGrid === 'widget' ) { 
+    titleUrl = '../admin/widget_grid.html' + buildParameterList(urlState) + '&fieldname=' + config.fieldName + '&fieldvalue=' + getPlantId(appState); 
+  } else { 
+    titleUrl = './garden_grid.html' + buildParameterList(urlState); 
+  } 
+
+  // 1. Create title link element
+  let title_3_element = faddelem('a', null, { href: titleUrl }); 
+  faddelem('span', title_3_element, { textContent: titleText }); 
+
+  // 2. Call your framework's native buildHeader constructor engine
+  let header = buildHeader( 
+    CONST_SPECIES, 
+    total_results, 
+    per_page, 
+    page_curr, 
+    page_max, 
+    title_1, 
+    title_2, 
+    title_3_element 
+  ); 
+
+  // 3. Create a small relative wrapper just for the image and its corner icon badge
+  const imageWrapper = document.createElement('div');
+  imageWrapper.className = 'header-img-wrapper';
+
+  // Create your high-resolution dynamic image 
+  const img = document.createElement('img'); 
+  // FIX: Swapped out the hardcoded ID '722533441' for your dynamic 'image_id' parameter string
+  img.src = root_photos + image_id + '/small.jpg'; 
+  img.className = 'header-left-image'; 
+
+  // Create the zoom symbol icon badge
+  const zoomBadge = document.createElement('span');
+  zoomBadge.className = 'image-zoom-indicator';
+  zoomBadge.textContent = '🔍'; 
+
+  // Nest the image and its badge icon together
+  imageWrapper.appendChild(img);
+  imageWrapper.appendChild(zoomBadge);
+
+  // 4. Remove the left stats box (counts) and insert the complete image unit
+  const headerLeftBox = header.querySelector('#lbox');
+  if (headerLeftBox) {
+    headerLeftBox.remove(); // Delete the counts box completely
+    header.prepend(imageWrapper); // Insert the image container at the far left edge
+  }
+
+  // 5. Append the modified header component to the page body layout natively
+  faddelem('p', document.body).appendChild(header);
+
+  // 6. Full Modal Expansion Trigger Loop Logic
+  if (img) {
+    img.addEventListener('click', function() {
+      // Create the dark full-screen backdrop container
+      const modalBackdrop = document.createElement('div');
+      modalBackdrop.className = 'image-modal-backdrop';
+
+      // Create the dynamic structural bounding box to lock elements together
+      const modalContentBox = document.createElement('div');
+      modalContentBox.className = 'image-modal-content-box';
+
+      // Create the expanded, high-resolution image element
+      const modalImg = document.createElement('img');
+      modalImg.src = img.src.includes('small.jpg') ? img.src.replace('small.jpg', 'large.jpg') : img.src; 
+      modalImg.className = 'image-modal-content';
+
+      // Create the clean circular dark 'X' button badge
+      const closeBtn = document.createElement('span');
+      closeBtn.className = 'image-modal-close';
+      closeBtn.innerHTML = '&times;'; 
+
+      // Nest elements cleanly: Image + Close Button into Content Box -> onto Backdrop
+      modalContentBox.appendChild(modalImg);
+      modalContentBox.appendChild(closeBtn);
+      modalBackdrop.appendChild(modalContentBox);
+      document.body.appendChild(modalBackdrop);
+
+      // Dismiss the modal instantly when clicking background elements or the 'X' button
+      modalBackdrop.addEventListener('click', function(e) {
+        if (e.target === modalBackdrop || e.target === closeBtn) {
+          modalBackdrop.remove();
+        }
+      });
+    });
+  }
+}
+
+function renderHeaderWithStats( appState, config, total_results, per_page, page_curr, page_max ) {
+
+      let title_1 = '', title_2 = '', title_3 = '';
+
+      let titleText = CONST_ON + capitalizeWords(getPlantName(appState));
+      let urlState = appState; 
+      if( getMenuId(appState) ) {
+          urlState = setTaxonId(appState, getMenuId(appState));
+      } 
+
+      let titleUrl = './garden_grid.html' + buildParameterList(urlState);
+      let title_3_element = faddelem('a', null, { href: titleUrl });
+
+      // CSS needs text inside span
+      faddelem('span', title_3_element, { textContent: titleText });
+
+      let header = buildHeader( CONST_SPECIES, total_results, per_page, page_curr, page_max, '', '', title_3_element ); 
+    
+      faddelem('p', document.body).appendChild(header);
+}
+ 
 function buildPage(xobj, config) {
    let results = xobj.results;
  
@@ -410,204 +532,11 @@ function buildPage(xobj, config) {
 
       buildMenu( results, config );
 
-
-
-/*let title_1 = '', title_2 = '', title_3 = ''; 
-let titleText = CONST_ON + capitalizeWords(getPlantName(appState)); 
-let urlState = appState; 
-
-if( getMenuId(appState) ) { 
-  urlState = setTaxonId(appState, getMenuId(appState)); 
-} 
-
-let titleUrl = ''; 
-if( config.showStudyGrid === 'widget' ) { 
-  titleUrl = '../admin/widget_grid.html' + buildParameterList(urlState) + '&fieldname=' + config.fieldName + '&fieldvalue=' + getPlantId(appState); 
-} else { 
-  titleUrl = './garden_grid.html' + buildParameterList(urlState); 
-} 
-
-// 1. Revert title_3 back to your clean anchor element link
-let title_3_element = faddelem('a', null, { href: titleUrl }); 
-faddelem('span', title_3_element, { textContent: titleText }); 
-
-// 2. Call buildHeader normally
-let header = buildHeader( 
-  CONST_SPECIES, 
-  total_results, 
-  per_page, 
-  page_curr, 
-  page_max, 
-  title_1, 
-  title_2, 
-  title_3_element 
-); 
-
-// ==========================================================================
-// 3. UPDATED IMAGE COMPONENT WITH ZOOM SYMBOL
-// ==========================================================================
-// Create a small relative wrapper just for the image and its corner icon badge
-const imageWrapper = document.createElement('div');
-imageWrapper.className = 'header-img-wrapper';
-
-// Create your high-resolution dynamic image 
-const img = document.createElement('img'); 
-img.src = root_photos + '722533441/small.jpg'; 
-img.className = 'header-left-image'; 
-
-// Create the zoom symbol icon badge
-const zoomBadge = document.createElement('span');
-zoomBadge.className = 'image-zoom-indicator';
-zoomBadge.textContent = '🔍'; // Drop your chosen copy-paste symbol here
-
-// Nest the image and its badge icon together
-imageWrapper.appendChild(img);
-imageWrapper.appendChild(zoomBadge);
-
-// 4. Remove the left stats box (counts) and insert the complete image unit
-const leftBox = header.querySelector('#lbox');
-if (leftBox) {
-  leftBox.remove(); 
-  header.prepend(imageWrapper); 
-}
-
-// 5. Append the modified header component to the page body layout natively
-faddelem('p', document.body).appendChild(header);
-
-// ==========================================================================
-// image modal
-// ==========================================================================
-if (img) {
-  img.addEventListener('click', function() {
-    // 1. Create the dark full-screen backdrop container
-    const modalBackdrop = document.createElement('div');
-    modalBackdrop.className = 'image-modal-backdrop';
-
-    // 2. Create the expanded, high-resolution image element
-    const modalImg = document.createElement('img');
-    // Checks if 'small.jpg' is in the path, otherwise defaults to the regular source string
-    modalImg.src = img.src.includes('small.jpg') ? img.src.replace('small.jpg', 'large.jpg') : img.src; 
-    modalImg.className = 'image-modal-content';
-
-    // 3. Create a clean floating 'X' close button indicator
-    const closeBtn = document.createElement('span');
-    closeBtn.className = 'image-modal-close';
-    closeBtn.innerHTML = '&times;'; 
-
-    // 4. Nest components together and mount straight onto the page body root
-    modalBackdrop.appendChild(modalImg);
-    modalBackdrop.appendChild(closeBtn);
-    document.body.appendChild(modalBackdrop);
-
-    // 5. Dismiss the modal instantly when the user clicks the dark background space
-    modalBackdrop.addEventListener('click', function(e) {
-      if (e.target === modalBackdrop || e.target === closeBtn) {
-        modalBackdrop.remove();
+      if( p_mode === 'beds' ) {
+          renderHeaderWithStats(appState, config, total_results, per_page, page_curr, page_max);
+      } else {
+          renderHeaderWithImage(appState, config, total_results, per_page, page_curr, page_max, '722533441');
       }
-    });
-  });
-}*/
-let title_1 = '', title_2 = '', title_3 = ''; 
-let titleText = CONST_ON + capitalizeWords(getPlantName(appState)); 
-let urlState = appState; 
-
-if( getMenuId(appState) ) { 
-  urlState = setTaxonId(appState, getMenuId(appState)); 
-} 
-
-let titleUrl = ''; 
-if( config.showStudyGrid === 'widget' ) { 
-  titleUrl = '../admin/widget_grid.html' + buildParameterList(urlState) + '&fieldname=' + config.fieldName + '&fieldvalue=' + getPlantId(appState); 
-} else { 
-  titleUrl = './garden_grid.html' + buildParameterList(urlState); 
-} 
-
-// 1. Revert title_3 back to your clean anchor element link
-let title_3_element = faddelem('a', null, { href: titleUrl }); 
-faddelem('span', title_3_element, { textContent: titleText }); 
-
-// 2. Call buildHeader normally
-let header = buildHeader( 
-  CONST_SPECIES, 
-  total_results, 
-  per_page, 
-  page_curr, 
-  page_max, 
-  title_1, 
-  title_2, 
-  title_3_element 
-); 
-
-// 3. Create a small relative wrapper just for the image and its corner icon badge
-const imageWrapper = document.createElement('div');
-imageWrapper.className = 'header-img-wrapper';
-
-// Create your high-resolution dynamic image 
-const img = document.createElement('img'); 
-img.src = root_photos + '722533441/small.jpg'; 
-img.className = 'header-left-image'; 
-
-// Create the zoom symbol icon badge
-const zoomBadge = document.createElement('span');
-zoomBadge.className = 'image-zoom-indicator';
-zoomBadge.textContent = '🔍'; 
-
-// Nest the image and its badge icon together
-imageWrapper.appendChild(img);
-imageWrapper.appendChild(zoomBadge);
-
-// 4. Remove the left stats box (counts) and insert the complete image unit
-const headerLeftBox = header.querySelector('#lbox');
-if (headerLeftBox) {
-  headerLeftBox.remove(); // Delete the counts box completely
-  header.prepend(imageWrapper); // Insert the image container at the far left edge
-}
-
-// 5. Append the modified header component to the page body layout natively
-faddelem('p', document.body).appendChild(header);
-
-// ==========================================================================
-// FULL MODAL EXPANSION TRIGGER
-// ==========================================================================
-if (img) {
-  img.addEventListener('click', function() {
-    // 1. Create the dark full-screen backdrop container
-    const modalBackdrop = document.createElement('div');
-    modalBackdrop.className = 'image-modal-backdrop';
-
-    // 2. Create the dynamic structural bounding box to lock elements together
-    const modalContentBox = document.createElement('div');
-    modalContentBox.className = 'image-modal-content-box';
-
-    // 3. Create the expanded, high-resolution image element
-    const modalImg = document.createElement('img');
-    modalImg.src = img.src.includes('small.jpg') ? img.src.replace('small.jpg', 'large.jpg') : img.src; 
-    modalImg.className = 'image-modal-content';
-
-    // 4. Create the clean circular dark 'X' button badge
-    const closeBtn = document.createElement('span');
-    closeBtn.className = 'image-modal-close';
-    closeBtn.innerHTML = '&times;'; 
-
-    // 5. Nest elements cleanly: Image + Close Button into Content Box -> onto Backdrop
-    modalContentBox.appendChild(modalImg);
-    modalContentBox.appendChild(closeBtn);
-    modalBackdrop.appendChild(modalContentBox);
-    document.body.appendChild(modalBackdrop);
-
-    // 6. Dismiss the modal instantly when clicking background elements or the 'X' button
-    modalBackdrop.addEventListener('click', function(e) {
-      if (e.target === modalBackdrop || e.target === closeBtn) {
-        modalBackdrop.remove();
-      }
-    });
-  });
-}
-
-
-
-    
-    
     
       labels = [
             {innerText:'#'},
