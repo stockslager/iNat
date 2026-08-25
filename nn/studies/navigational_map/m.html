@@ -621,7 +621,7 @@ async function gatherResources() {
             if( config.pinsProject ) { inat_params += '?project_id=' + config.pinsProject; }
             inat_params += '&field:pin+type=flower';
 
-            const api_url        = api_base+api_params;
+            const api_url        = api_base+inat_params;
             console.log('api url: ' + api_url);
             const obs_data       = await apiFetch( api_url ); 
             console.log('data ' + JSON.stringify(obs_data));
