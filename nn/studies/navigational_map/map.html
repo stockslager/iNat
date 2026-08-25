@@ -298,7 +298,7 @@ function buildInsectActivityURL( pin, config ) {
                                              taxon_query + field_id + field_query );
 }
 
-function buildFlowerBedURL( pin, config ) {
+function buildFlowerBedURL( config, rec ) {
 
       return( '../../beds/beds.html?params=horizon&component=beds&garden='+pin.bed+'&mode=' + p_mode + 
                                              '&photoid=' + rec.observation_photos[0].photo_id +
@@ -334,9 +334,9 @@ function buildBubble( pin, config=null ) {
   
   bubbleContent += '<a href="' + buildInsectActivityURL( pin, config ) + '" class="popup-link">Plant / Insect Interactions</a>';
 
-  if( pin.bed ) {
+  /*if( pin.bed ) {
       bubbleContent += '<br><a href="' + buildFlowerBedURL( pin, config ) + '" class="popup-link">Flower Bed Overview</a><br>';
-  }
+  }*/
   
   bubbleContent += '</div>';
   return bubbleContent;
