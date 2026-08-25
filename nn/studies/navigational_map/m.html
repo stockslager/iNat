@@ -420,6 +420,7 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
 
   for (let i=0; i<obs_data.length; i++) {
       let rec  = obs_data[i];
+      console.log('rec ' + JSON.stringify(rec));
 
       const [lat, lon] = rec.location.split(',');
       const flowerMarker = L.marker([lat, lon], { icon: flowerIcon });
@@ -444,7 +445,7 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
   }
 
   // Drill down into the nested JSON architecture
-  config.parentPins.forEach(parent => {
+  /*config.parentPins.forEach(parent => {
     if (parent.flowerPins && parent.flowerPins.length > 0) {
       parent.flowerPins.forEach(flower => {
         // Ensure coordinates exist before dropping a marker
@@ -471,7 +472,7 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
         }
       });
     }
-  });
+  });*/
 
   // if a map instance is provided, add the entire layer group to it 
   // (for initialization of flower pins if a default zoom over the threshold was
