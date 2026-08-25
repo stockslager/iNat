@@ -308,8 +308,8 @@ function buildFlowerBedURL( pin, config ) {
   }
 }
 
-function buildFlowerURL( pin, config, rec ) {
-  // Instantly locks the taxonId value exclusively to this specific pin instance
+function buildFlowerURL( config, rec ) {
+  // Instantly locks the taxonId value exclusively to this specific instance
   let plant_id   = rec.taxon.id ? '&plantid='   + rec.taxon.id : '';
   let plant_name = '&plantname=' + (rec.taxon.preferred_common_name || rec.taxon.name || 'unknown name');
   
@@ -440,7 +440,7 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
           flowerMarker.on('click', () => { window.location.href = buildFlowerBedURL( flower, config ); });
           flowerLocationsLayer.addLayer(flowerMarker);
       } else if( p_mode === 'flower' ) {
-          flowerMarker.on('click', () => { window.location.href = buildFlowerURL( flower, config, rec ); });
+          flowerMarker.on('click', () => { window.location.href = buildFlowerURL( config, rec ); });
           flowerLocationsLayer.addLayer(flowerMarker);
       } else if( p_mode === 'all' ) {
           flowerMarker.bindPopup(buildBubble(flower, config));
