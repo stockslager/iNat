@@ -28,7 +28,8 @@
     let p_default_zoom = winurlparams.get('defaultzoom') || '';
 
     let map;
-    let config     = null; 
+    let config     = null;
+    let obs_data   = null;
     
     function buildMenu( config ) {
        // Create the main navbar container
@@ -642,7 +643,6 @@ async function gatherResources() {
         // Fetch, parse, and instantiate the map configuration object in one shot
         config = await MapConfiguration.loadFromUrl(json_path);
 
-        obs_data = '';
         if( p_mode === 'flower' ) {
             let api_base   = 'https://api.inaturalist.org/v1/observations'
             let inat_params = '';
