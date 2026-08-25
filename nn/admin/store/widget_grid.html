@@ -248,10 +248,12 @@ function buildMenu( config ) {
    let homeUrl = '../../garden/plant_detail.html';
    if( getComponent(appState) === COMPONENT_GARDEN && p_mode === 'flower' ) { 
         let urlState = appState;
+        urlState = setTaxonId(urlState, '');
         homeUrl = '../../garden/plant_detail.html'; 
         buildNavHome( navbar, homeUrl, urlState, config );
    } else if( getComponent(appState) === COMPONENT_BEDS && p_mode === 'beds' ) {   // if they came in from clicking plant name.
         let urlState = appState;
+        urlState = setTaxonId(urlState, '');
         homeUrl = '../../beds/beds.html'; 
         buildNavHome( navbar, homeUrl, urlState, config );
    } else if( getComponent(appState) === COMPONENT_GARDEN && p_mode === 'beds' ) {  // if they came in from clicking bug icon, then something on plant_detail
