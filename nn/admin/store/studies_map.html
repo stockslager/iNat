@@ -42,6 +42,7 @@
        let homeUrl = './widget_grid.html';
        if( p_mode === 'beds' ) {
            let urlState = appState;
+           urlState = setTaxonId(urlState, '');
            console.log('app state ' + JSON.stringify(urlState));
            buildNavHome( navbar, homeUrl, urlState, config );
        } else {
