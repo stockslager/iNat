@@ -250,7 +250,11 @@ function buildMenu( config ) {
         let urlState = appState;
         homeUrl = '../garden/plant_detail.html'; 
         buildNavHome( navbar, homeUrl, urlState, config );
-   } else {
+   } else if( getComponent(appState) === COMPONENT_BEDS && p_mode === 'beds' ) { 
+        let urlState = appState;
+        homeUrl = '../beds/beds.html'; 
+        buildNavHome( navbar, homeUrl, urlState, config );
+      else {
         buildNavHome( navbar, homeUrl, appState, config );
    }
   
