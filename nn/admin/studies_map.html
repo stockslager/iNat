@@ -23,7 +23,13 @@
     let winurlparams = new URLSearchParams(winurlsearchstr); 
     let p_map_mode   = winurlparams.get('map_mode') || 'default'; 
     let p_mode       = winurlparams.get('mode') || '';
-    appState = buildStateFromParams(winurlparams);
+
+    if( p_mode === 'beds' ) {
+        appState = buildFullStateFromParams(winurlparams);
+    } else {
+        appState = buildStateFromParams(winurlparams);
+    }
+      
     console.log('app1 ' + JSON.stringify(appState));
     let config   = null; 
 
