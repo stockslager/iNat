@@ -300,12 +300,11 @@ function buildInsectActivityURL( pin, config ) {
 
 function buildFlowerBedURL( pin, config ) {
 
-  if( pin.bed ) {
       return( '../../beds/beds.html?params=horizon&component=beds&garden='+pin.bed+'&mode=' + p_mode + 
+                                             '&photoid=' + rec.observation_photos[0].photo_id +
                                              '&defaultlat=' + p_default_lat + 
                                              '&defaultlon=' + p_default_lon + 
                                              '&defaultzoom=' + p_default_zoom );
-  }
 }
 
 function buildFlowerURL( config, rec ) {
