@@ -18,11 +18,26 @@
 </head>
 <style>
   /* 1. THE GUTTER FRAME */
+  html {
+      background-color: #0f172a;
+      box-sizing: border-box;
+      min-height: 100vh;
+      padding: 10px 300px 24px 300px; /* Top, Right, Bottom, Left */
+  }
+
+  /* hide gutters on small screens */
+  @media (max-width: 768px) {
+    html {
+      /* Keeps top/bottom spacing, but sets left/right gutters to 0 */
+      padding: 10px 0px 24px 0px; 
+    }
+  }
+ 
   body {
-    padding-left: 2%;
-    padding-right: 2%;
-    margin: 0;
-    box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background-color: transparent;
   }
 
   /* 2. THE ALIGNMENT */
