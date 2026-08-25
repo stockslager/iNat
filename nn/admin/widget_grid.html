@@ -250,9 +250,13 @@ function buildMenu( config ) {
         let urlState = appState;
         homeUrl = '../garden/plant_detail.html'; 
         buildNavHome( navbar, homeUrl, urlState, config );
-   } else if( getComponent(appState) === COMPONENT_BEDS && p_mode === 'beds' ) { 
+   } else if( getComponent(appState) === COMPONENT_BEDS && p_mode === 'beds' ) {   // if they came in from clicking plant name.
         let urlState = appState;
         homeUrl = '../beds/beds.html'; 
+        buildNavHome( navbar, homeUrl, urlState, config );
+   } else if( getComponent(appState) === COMPONENT_GARDEN && p_mode === 'beds' ) {  // if they came in from clicking bug icon, then something on plant_detail
+        let urlState = appState;
+        homeUrl = '../garden/plant_detail.html'; 
         buildNavHome( navbar, homeUrl, urlState, config );
    } else {
         buildNavHome( navbar, homeUrl, appState, config );
