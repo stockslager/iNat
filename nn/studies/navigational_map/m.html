@@ -419,8 +419,11 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
     className: 'custom-pin-reset'
   });
 
-  for (let i=0; i<obs_data.length; i++) {
-      let rec  = obs_data[i];
+  // Extract the actual array from iNaturalist's wrapper
+  const records = (obs_data && obs_data.results) ? obs_data.results : [];
+    
+  for (let i=0; i<records.length; i++) {
+      let rec  = records[i];
       console.log('recccc ' + JSON.stringify(rec));
 
       const [lat, lon] = rec.location.split(',');
