@@ -530,20 +530,14 @@ function buildPage(xobj, config) {
 <script>
 function setupAPIParams( config ) {
    let api_params = '';
- 
-   api_params += '?project_id='+config.project;
-    
+     
    //if( config.plantIds )          { api_params += '?id='       + config.plantIds;  }
    //if( config.userId )            { api_params += '&user_id='  + config.userId; }
 
-   api_params += ('&field:pin+type=beds&field:bed+name='+getGarden(appState));
-
-   image_audio_name = getPhotoId(appState);
-
    // use the taxon_id(s) from the config when present.
-   /*if( config.beds ) { 
+   if( config.beds ) { 
        for( let i=0; i<config.beds.length; i++ ) {
-            if( config.beds[i].bedName === (getGarden(appState)||'lake') ) {
+            if( config.beds[i].bedName === (getGarden(appState)||'change') ) {
                 api_params += '?id=' + config.beds[i].taxonIds; 
                 image_audio_name = config.beds[i].image;
             }
