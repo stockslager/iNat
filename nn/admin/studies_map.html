@@ -27,9 +27,16 @@
   
        // Build the Home Link
        let homeUrl = './widget_grid.html';
-       urlState = appState;
-       urlState = setGridMode('');
-       buildNavHome( navbar, homeUrl, appState, config );
+       if( p_mode === 'beds' ) {
+           urlState = appState;
+           urlState = setFieldValue( getPlantId(appState) );
+           urlState = setFieldName( config.fieldName );
+           buildNavHome( navbar, homeUrl, urlState, config );
+       } else {
+           urlState = appState;
+           urlState = setGridMode('');
+           buildNavHome( navbar, homeUrl, appState, config );
+       }
   
        let appContainer = document.getElementById('app');
        if( appContainer ) {
