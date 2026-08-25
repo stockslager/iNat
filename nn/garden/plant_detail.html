@@ -508,6 +508,10 @@ function renderHeaderWithStats( appState, config, total_results, per_page, page_
       } 
 
       let titleUrl = './garden_grid.html' + buildParameterList(urlState);
+      if (config.showStudyGrid === 'widget' ) { 
+        titleUrl = '../admin/store/widget_grid.html' + buildParameterList(urlState) + '&fieldname=' + config.fieldName + '&fieldvalue=' + getPlantId(appState); 
+      } 
+ 
       let title_3_element = faddelem('a', null, { href: titleUrl });
 
       // CSS needs text inside span
