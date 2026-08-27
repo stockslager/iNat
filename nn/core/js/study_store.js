@@ -39,6 +39,7 @@ const ATTRIBUTE_FIELDID      = 'fieldid';
 const ATTRIBUTE_FIELDNAME    = 'fieldname';   
 const ATTRIBUTE_FIELDVALUE   = 'fieldvalue'; 
 const ATTRIBUTE_LIFESTAGE       = 'lifestage';
+const ATTRIBUTE_SEX             = 'sx';
 const ATTRIBUTE_EVIDENCE        = 'evidence';
 const ATTRIBUTE_MONTH           = 'month';
 const ATTRIBUTE_TAG             = 'tag';
@@ -74,6 +75,7 @@ let appState = {
   // holds { id, name, value } for dynamic list of observation fields used in field_study.html
   activeFilters: [], 
   [ATTRIBUTE_LIFESTAGE]: '',
+  [ATTRIBUTE_SEX]: '',
   [ATTRIBUTE_EVIDENCE]: '',
   [ATTRIBUTE_MONTH]: '',
   [ATTRIBUTE_TAG]: '',
@@ -118,6 +120,7 @@ function createNewStateInstance(initialValues = {}) {
     // holds { id, name, value } for dynamic list of observation fields used in field_study.html
      activeFilters: [], 
     [ATTRIBUTE_LIFESTAGE]: '',
+    [ATTRIBUTE_SEX]: '',
     [ATTRIBUTE_EVIDENCE]: '',
     [ATTRIBUTE_MONTH]: '',
     [ATTRIBUTE_TAG]: '',
@@ -320,6 +323,7 @@ function getObsId(state)           { return (getAttribute(state, ATTRIBUTE_OBSID
 function getObsDate(state)         { return (getAttribute(state, ATTRIBUTE_OBSDATE)); }
 function getActivityFilter(state)  { return (getAttribute(state, ATTRIBUTE_ACTIVITYFILTER)); }
 function getLifeStage(state)       { return (getAttribute(state, ATTRIBUTE_LIFESTAGE)); }
+function getSex(state)             { return (getAttribute(state, ATTRIBUTE_SEX)); }
 function getEvidence(state)        { return (getAttribute(state, ATTRIBUTE_EVIDENCE)); }
 function getMonth(state)           { return (getAttribute(state, ATTRIBUTE_MONTH)); }
 function getTag(state)             { return (getAttribute(state, ATTRIBUTE_TAG)); }
@@ -367,6 +371,7 @@ function setObsId(state, value)           { return (setAttribute(state, ATTRIBUT
 function setObsDate(state, value)         { return (setAttribute(state, ATTRIBUTE_OBSDATE, value)); }
 function setActivityFilter(state, value)  { return (setAttribute(state, ATTRIBUTE_ACTIVITYFILTER, value)); }
 function setLifeStage(state, value)       { return (setAttribute(state, ATTRIBUTE_LIFESTAGE, value)); }
+function setSex(state, value)             { return (setAttribute(state, ATTRIBUTE_SEX, value)); }
 function setEvidence(state, value)        { return (setAttribute(state, ATTRIBUTE_EVIDENCE, value)); }
 function setMonth(state, value)           { return (setAttribute(state, ATTRIBUTE_MONTH, value)); }
 function setTag(state, value)             { return (setAttribute(state, ATTRIBUTE_TAG, value)); }
@@ -993,6 +998,7 @@ function clearForDashParams(state) {
   urlState = setPerPage(urlState, '');
   urlState = setActivityFilter(urlState, '');
   urlState = setLifeStage(urlState, '');
+  urlState = setSex(urlState, '');
   urlState = setEvidence(urlState, '');
   urlState = setMonth(urlState, '');
   urlState = setTag(urlState, '');
