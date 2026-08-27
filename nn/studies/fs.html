@@ -838,41 +838,40 @@ function fresults( xobj, config ) {
          }
 
          if( config.showMGDD === 'yes' ) {
-             var mgddValue = getMgddForObservationId( rec.id );
-  
-             var lonVal = rec.geojson.coordinates.slice(0, 1).join('');
-             var latVal = rec.geojson.coordinates.slice(1, 2).join('');
-             var dateVal = rec.observed_on_details.date;
-                    
+             // Safely extract variables with fallbacks to prevent crashes
+             var mgddValue = getMgddForObservationId(rec.id); 
+             var lonVal    = rec.geojson?.coordinates?.slice(0, 1).join('') ?? ''; 
+             var latVal    = rec.geojson?.coordinates?.slice(1, 2).join('') ?? ''; 
+             var dateVal   = rec.observed_on_details?.date ?? ''; 
+
              const activeDateStr = rec.observed_on_details?.date; // Expects "YYYY-MM-DD"
-             let displayDates = 'No Date';
+             let displayDates = 'No Date'; 
 
              if( activeDateStr && activeDateStr.length === 10 ) {
-                 const year  = activeDateStr.slice(0, 4);
+                 const year = activeDateStr.slice(0, 4);
                  const month = activeDateStr.slice(5, 7);
-                 const day   = activeDateStr.slice(8, 10);
-    
+                 const day = activeDateStr.slice(8, 10);
                  // Combine them directly into "02-01-YYYY to MM-DD-YYYY"
                  displayDates = '02-01-' + year + ' to ' + month + '-' + day + '-' + year;
              }
 
-             // Properly sanitize/escape your raw data inputs for attribute safety
-             const safeLat = escapeHtml(latVal);
-             const safeLon = escapeHtml(lonVal);
-             const safeDate = escapeHtml(dateVal);
-             const safeMgdd = escapeHtml(mgddValue);
-             const safeDisplayDates = escapeHtml(displayDates);
+             // FORCE string conversion using String() so escapeHtml never runs into a non-string type
+             const safeLat = escapeHtml(String(latVal));
+             const safeLon = escapeHtml(String(lonVal));
+             const safeDate = escapeHtml(String(dateVal));
+             const safeMgdd = escapeHtml(String(mgddValue));
+             const safeDisplayDates = escapeHtml(String(displayDates));
 
-             // Write out a clean, native HTML button or anchor structure directly
+             // Output the raw HTML structure directly
              values.push({ 
-                innerHTML: '<a href="#" class="clickable-breakdown-action" style="text-decoration: none; color: inherit;" ' +
-                   'onclick="showMgddBreakdownModal(\'' + safeLat + '\', \'' + safeLon + '\', \'' + safeDate + '\'); return false;">' +
-                   '<span style="display: inline-block; line-height: 1.4;">' + 
-                   safeMgdd + '<br>' +
-                   '<span style="font-size: 0.85em; font-style: italic;">(' + safeDisplayDates + ')</span>' +
-                   '</span>' +
-                   '</a>' 
-             });                    
+               innerHTML: '<a href="#" class="clickable-breakdown-action" style="text-decoration: none; color: inherit;" ' +
+                  'onclick="showMgddBreakdownModal(\'' + safeLat + '\', \'' + safeLon + '\', \'' + safeDate + '\'); return false;">' +
+                  '<span style="display: inline-block; line-height: 1.4;">' + 
+                  safeMgdd + '<br>' +
+                  '<span style="font-size: 0.85em; font-style: italic;">(' + safeDisplayDates + ')</span>' +
+                  '</span>' +
+                  '</a>' 
+             });
          }
 
          if( config.showMonth === 'yes' ) { 
