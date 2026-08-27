@@ -756,7 +756,7 @@ function fresults( xobj, config ) {
                                    '<br><span style="font-style:italic">(' + escapedTaxName + ')</span>';
 
              // Pass a modified, unescaped version of furl2 that ONLY escapes the URL
-             taxon = '<a href="' + escapeHtml('./field_study.html' + buildParameterList(urlState)) + '">' + formattedText + '</a>';
+             taxon = '<a href="' + escapeHtml('./fs.html' + buildParameterList(urlState)) + '">' + formattedText + '</a>';
          }
        
          values = [{innerText:i+1}];
@@ -994,7 +994,7 @@ function fresults( xobj, config ) {
                                    } 
 
                                    // If field1 contains rich HTML layouts, don't pass it to furl2. Assemble it directly.
-                                   const destinationUrl = './field_study.html?' + finalParams.toString();
+                                   const destinationUrl = './fs.html?' + finalParams.toString();
                                    let url;
                                    if( hasHtmlLayout ) {
                                        url = '<a href="' + escapeHtml(destinationUrl) + '">' + field1 + '</a>';
