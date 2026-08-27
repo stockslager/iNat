@@ -49,6 +49,12 @@ const LIFE_STAGE_MAP = {
   '16': 'submiago'
 };
 
+const SEX_MAP = {
+  '10': 'female',
+  '11': 'male',
+  '20': 'cannot be determined'
+};
+
 // over cnc
 const CONST_MAP_CENTER      = '&centerlat=39.125110765542274&centerlng=-84.2456670686007';   
 const CONST_LS_MAP_EXTENT   = { nelat:39.13893773451089,nelng:-84.2301281663201,swlat:39.112503771727305,swlng:-84.26446044171072 };
