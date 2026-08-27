@@ -18,208 +18,194 @@
 </head>
 
 <style>
-/* for the column header un-filter */
-.filterable-header a,
-.filterable-header a:active {
-    color: cornflowerblue;
-    /*color: var(--color-text-link); */
-    background: transparent;
-    background-color: transparent;
-    text-decoration: none;
-    
-    /* Adds a subtle opacity so it blends nicely in the header, matching your old look */
-    opacity: 0.7;
+/* === 1. FILTERABLE HEADERS & LINKS === */
+.filterable-header a, 
+.filterable-header a:active,
+.clear-all-filters a:active { 
+    color: cornflowerblue; 
+    background: transparent; 
+    text-decoration: none; 
+    opacity: 0.7; 
     transition: opacity 0.2s ease, filter 0.2s ease;
+    /* Cleanly integrated from the old duplicate block at the bottom: */
+    font-size: 18px; 
+    padding-left: 6px; 
+    display: inline-block; 
+    vertical-align: middle; 
+    line-height: 1;
 }
 
-/* 2. Hover State: Turn off background blocks and amplify the blue color vibrancy */
-.filterable-header a:hover {
-    color: cornflowerblue;
-    /*color: var(--color-text-link); */
-    background: transparent;
-    background-color: transparent;
-    text-decoration: none;
-    
-    /* Brings icon to full opacity and injects a 40% vibrancy boost to make the blue pop */
-    opacity: 1;
+/* Specific color tweak for active state */
+.clear-all-filters a:active { 
+    color: royalblue; 
+}
+
+/* Shared Hover States */
+.filterable-header a:hover,
+.clear-all-filters a:hover { 
+    color: cornflowerblue; 
+    background: transparent; 
+    text-decoration: none; 
+    opacity: 1; 
     filter: brightness(1.4); 
 }
 
-/* 3. Icon Thickness Management */
 .clear-btn { 
-    /* Ensures the custom bold text shadow uses the exact blue dictated by the link above */
     text-shadow: 0 0 0.5px currentColor; 
 }
 
-.clear-all-filters a:active {
-    color: royalblue;
-    /*color: var(--color-text-link); */
-    background: transparent;
-    background-color: transparent;
-    text-decoration: none;
-    
-    /* Adds a subtle opacity so it blends nicely in the header, matching your old look */
-    opacity: 0.7;
-    transition: opacity 0.2s ease, filter 0.2s ease;
-}
-
-.clear-all-filters a:hover {
-    color: cornflowerblue;
-    /*color: var(--color-text-link); */
-    background: transparent;
-    background-color: transparent;
-    text-decoration: none;
-    
-    /* Brings icon to full opacity and injects a 40% vibrancy boost to make the blue pop */
-    opacity: 1;
-    filter: brightness(1.4); 
-}
- 
-  /* 1. THE GUTTER FRAME */
-  body {
-    padding-left: 50px;
-    padding-right: 50px;
-    margin: 0;
-    box-sizing: border-box;
-  }
-
-  /* 2. THE ALIGNMENT */
-  #main, .navbar, .top-bar, #divhead {
-    width: 100%;
-    max-width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-    box-sizing: border-box;
-  }
-
-  /* 3. THE TOP BAR */
-  .top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-
-  /* 4. THE BOXES: Fixed horizontal scroll and standard styling */
-  #stats, #dltest {
-    display: block;
-    box-sizing: border-box;
-    max-height: 64px;
-    overflow-y: auto;
-    overflow-x: hidden; 
-    width: fit-content;
-    white-space: nowrap;
-    border: 2px solid var(--color-border);
-    border-radius: 5px;
-    padding: 3px 8px;
-    background: var(--color-base);
-    line-height: 1.2;
-    color: var(--color-text);
-    font: 14px Sans-Serif;
-  }
-
-  /* 5. THE SHIELD: Reset internal table tags and remove ALL default underlines */
-  #stats table, #stats td, #stats tr,
-  #dltest table, #dltest td, #dltest tr {
-    border: none;
-    background: transparent;
-    padding: 0 12px 0 0; /* Extra 12px padding to the right for breathing room */
-    box-shadow: none;
-    color: inherit;
-    font: inherit;
-    text-decoration: none; /* KILLS ALL UNDERLINES IN ALL ROWS */
+/* === 2. LAYOUT & FRAMING === */
+body { 
+    padding: 0 50px; 
     margin: 0; 
-    border-collapse: collapse;
-  }
+    box-sizing: border-box; 
+}
 
-  /* KILL UNDERLINES FOR ALL LINKS IN THE BOXES */
-  #stats a, #dltest a {
-    color: var(--color-text-link);
+#main, .navbar, .top-bar, #divhead { 
+    width: 100%; 
+    max-width: 100%; 
+    margin: 0; 
+    box-sizing: border-box; 
+}
+
+.top-bar { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: stretch; 
+    gap: 10px; 
+    margin-bottom: 10px; 
+}
+
+/* === 3. STATS & TESTING BOXES === */
+#stats, #dltest { 
+    display: block; 
+    box-sizing: border-box; 
+    max-height: 64px; 
+    overflow-y: auto; 
+    overflow-x: hidden; 
+    width: fit-content; 
+    white-space: nowrap; 
+    border: 2px solid var(--color-border); 
+    border-radius: 5px; 
+    padding: 3px 8px; 
+    background: var(--color-base); 
+    line-height: 1.2; 
+    color: var(--color-text); 
+    font: 14px Sans-Serif; 
+}
+
+#stats table, #stats td, #stats tr, 
+#dltest table, #dltest td, #dltest tr { 
+    border: none; 
+    background: transparent; 
+    padding: 0 12px 0 0; 
+    box-shadow: none; 
+    color: inherit; 
+    font: inherit; 
     text-decoration: none; 
-  }
+    margin: 0; 
+    border-collapse: collapse; 
+}
 
-  /* RE-ADD UNDERLINE: Only for the very first row of the right box (#dltest) */
-  /* This ensures text-only headers are underlined, but URLs remain clean */
-  #dltest tr:first-child td {
-    text-decoration: underline;
-  }
+#stats a, #dltest a { 
+    color: var(--color-text-link); 
+    text-decoration: none; 
+}
 
-  /* 6. NAVBAR */
-  .navbar {
-    background-color: var(--color-brand);
-    border-radius: 5px;
-    font-family: Arial, Helvetica, sans-serif;
-    display: flex;
-    align-items: center;
-    min-height: 40px;
-    overflow: hidden;
-  }
+#dltest tr:first-child td { 
+    text-decoration: underline; 
+}
 
-/**********/
-  .inat-floating-nav {
-    margin-left: -8px;
-    position: -webkit-sticky; /* Safari */
-    position: sticky;
-    left: 0;
-    bottom: 0;
-    background: var(--color-base-translucent);
-    width: 188px;
-    height: 52px;
-    border-radius: 14px;
-    
-    /* Alignment: Centers the outlined button neatly inside this container */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-  }
+/* === 4. STICKY NAV & WIDE BUTTON === */
+.inat-floating-nav { 
+    margin-left: -8px; 
+    position: -webkit-sticky; 
+    position: sticky; 
+    left: 0; 
+    bottom: 0; 
+    background: var(--color-base-translucent); 
+    width: 188px; 
+    height: 52px; 
+    border-radius: 14px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    box-sizing: border-box; 
+}
 
-  @media print { 
-    .inat-floating-nav { display: none; } 
-  }
+/* Media Query Preserved */
+@media print { 
+    .inat-floating-nav { 
+        display: none; 
+    } 
+}
 
-  .button.inat-wide-button {
-    /* Resets the narrow 32px bounds so the text fits */
+.button.inat-wide-button { 
     width: 168px; 
     height: 36px; 
-    margin: 0;    
-    
-    /* Inherits native styles */
-    background: var(--color-alt);
-    border: 1px solid var(--color-border);
-    color: var(--color-text-link);
-    
-    /* Custom Typography */
-    font-size: 13px;
-    line-height: 1.2;
+    margin: 0; 
+    background: var(--color-alt); 
+    border: 1px solid var(--color-border); 
+    color: var(--color-text-link); 
+    font-size: 13px; 
+    line-height: 1.2; 
     border-radius: 8px; 
-    
-    /* Displays and centers multi-line text blocks */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    white-space: normal;
-    text-decoration: none;
-    box-sizing: border-box;
-    
-    /* Apply translucency */
-    opacity: 0.7;
-    transition: opacity 0.2s ease, background 0.2s ease;
-  }
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center; 
+    white-space: normal; 
+    text-decoration: none; 
+    box-sizing: border-box; 
+    opacity: 0.7; 
+    transition: opacity 0.2s ease, background 0.2s ease; 
+}
 
-  .button.inat-wide-button:hover {
-    opacity: 1.0;
-    background: var(--color-hover);
-  }
-          
-  /* Original Helpers */
-  #h2 { font-weight:bold; font-size:20px; }
-  p { width:100%; }
-  .npcicon { width:14px; height:14px; border: 1px solid cornflowerblue; padding: 5px; border-radius: 50px; }
-  .user_head { align-items: center; justify-content: center; }
-  .user { display: inline-flex; align-items: center; white-space: nowrap; gap: 8px; margin-left: 2px; } 
+.button.inat-wide-button:hover { 
+    opacity: 1.0; 
+    background: var(--color-hover); 
+}
+
+/* === 5. NAVBAR & HELPERS === */
+.navbar { 
+    background-color: var(--color-brand); 
+    border-radius: 5px; 
+    font-family: Arial, Helvetica, sans-serif; 
+    display: flex; 
+    align-items: center; 
+    min-height: 40px; 
+    overflow: hidden; 
+}
+
+#h2 { 
+    font-weight: bold; 
+    font-size: 20px; 
+}
+
+p { 
+    width: 100%; 
+}
+
+.npcicon { 
+    width: 14px; 
+    height: 14px; 
+    border: 1px solid cornflowerblue; 
+    padding: 5px; 
+    border-radius: 50px; 
+}
+
+.user_head { 
+    align-items: center; 
+    justify-content: center; 
+}
+
+.user { 
+    display: inline-flex; 
+    align-items: center; 
+    white-space: nowrap; 
+    gap: 8px; 
+    margin-left: 2px; 
+}
 </style>
 
 <body>
@@ -234,7 +220,9 @@ let p_hide_dash = winurlparams.get('hide_dash') || 'no';
 let p_mode      = winurlparams.get('mode') || '';
 let p_without_term_id = winurlparams.get('without_term_id'); 
 let p_not_user_id = winurlparams.get('without_user_id'); 
-let p_show_ls = winurlparams.get('show_ls') || 'no'; 
+let p_show_ls    = winurlparams.get('show_ls') || 'no'; 
+let p_show_sex   = winurlparams.get('show_sex') || 'no';
+let p_show_notes = winurlparams.get('show_notes') || 'no';
 let p_field = ''; 
 let p_field_value = ''; 
 let field_array = []; 
@@ -252,24 +240,80 @@ for (const [key, value] of winurlparams.entries()) {
 }   
  
 let url = window.location.origin + window.location.pathname;   
-//let apibase = 'https://api.inaturalist.org/v1/observations';
-//let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-//let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
 
+function escapeHtml(str) { 
+    if (!str) return ''; 
+    return str 
+        .replace(/&/g, '&amp;') 
+        .replace(/</g, '&lt;') 
+        .replace(/>/g, '&gt;') 
+        .replace(/"/g, '&quot;') 
+        .replace(/'/g, '&#39;'); 
+}
+           
+// Opens the modal and injects the text
+function openNoteModal(element) {
+    const fullNote = element.getAttribute('data-full-note');
+    const relatedUrl = element.getAttribute('data-related-url');
+    
+    const textTarget = document.getElementById('globalNoteModalText');
+    
+    // 1. Set the main description safely as plain text
+    textTarget.innerText = fullNote; 
+    
+    // 2. Append the link dynamically as HTML if it exists
+    if (relatedUrl) {
+        textTarget.innerHTML += relatedUrl;
+    }
+    
+    document.getElementById('globalNoteModal').style.display = 'flex';
+}
+
+// Closes the modal
+function closeNoteModal() {
+  document.getElementById('globalNoteModal').style.display = 'none';
+}
+
+// Close the modal when clicking outside the content area
+window.addEventListener('click', function(event) {
+  const modal = document.getElementById('globalNoteModal');
+  if (event.target === modal) {
+    closeNoteModal();
+  }
+});
+          
 function replaceDoubleQuotes(str) {
   return str.replace(/"/g, '%22');
 }
 
-function furl2(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
-          
-function furl_out(config, url, txt = url) { 
-    if( config.blankTargets === 'yes' ) {
-        return '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + txt + '</a>'; 
-    } else {
-        return '<a href="'+url+'">'+txt+'</a>';    
-    }
-};
+function furl2(url, txt = url) {
+    // 1. Block malicious javascript: protocols
+    const safeUrl = url.trim().toLowerCase().startsWith('javascript:') ? '#' : url;
+    
+    // 2. Escape both variables so they can safely sit inside an HTML string
+    const escapedUrl = escapeHtml(safeUrl);
+    const escapedTxt = escapeHtml(txt);
+    
+    // 3. Return the raw HTML string
+    return '<a href="' + escapedUrl + '">' + escapedTxt + '</a>';
+}
 
+function furl_out(config, url, txt = url) {
+    // 1. Block malicious javascript: protocols
+    const safeUrl = url.trim().toLowerCase().startsWith('javascript:') ? '#' : url;
+
+    // 2. Escape both variables so they can safely sit inside an HTML string
+    const escapedUrl = escapeHtml(safeUrl);
+    const escapedTxt = escapeHtml(txt);
+
+    // 3. Return the raw HTML string with conditional target attributes
+    if (config.blankTargets === 'yes') {
+        return '<a href="' + escapedUrl + '" target="_blank" rel="noopener noreferrer">' + escapedTxt + '</a>';
+    } else {
+        return '<a href="' + escapedUrl + '">' + escapedTxt + '</a>';
+    }
+}
+          
 function checkAndLoadMgddScript( config ) {
   return new Promise((resolve) => {
              
@@ -459,7 +503,7 @@ function fresults( xobj, config ) {
       let flower = '';
       let dlString = '<div id="divhead"><span id="topright">';
       let labelCount = 0;
-      let iconHtml = '<span class="clear-btn" style="font-size:18px; padding-left:6px; display:inline-block; vertical-align:middle; line-height:1;">ⓧ</span>';
+      let iconHtml = 'ⓧ';
 
       let merged = 'observation field';
     
@@ -496,6 +540,22 @@ function fresults( xobj, config ) {
           let resetLink = hasFilter ? ' ' + furl2(resetUrl, iconHtml) : '';
 
           labels.push({ innerHTML: '<span class="filterable-header">Life Stage' + resetLink + '</span>' });
+      }
+
+      // sex column...
+      if( p_show_sex === 'yes' ) { 
+          let urlState = appState; 
+          urlState = setSex(urlState, '');  
+          urlState = setPage(urlState, '1'); 
+          let resetUrl = './field_study.html' + buildParameterList(urlState); 
+
+          // Is a valid, active sx filter currently in the URL string? 
+          let hasFilter = window.location.search.includes('sx=') && 
+                         !window.location.search.includes('sx=&'); 
+
+          let resetLink = hasFilter ? ' ' + furl2(resetUrl, iconHtml) : '';
+
+          labels.push({ innerHTML: '<span class="filterable-header">M/F' + resetLink + '</span>' });
       }
     
       labels.push({innerText:'Obs Photo'});
@@ -542,10 +602,6 @@ function fresults( xobj, config ) {
 
       let firstCol = 'yes'; 
       let nf_box_array = box_array; 
-
-      /*if( box_array.length === 0 ) { 
-          labels.push({innerText:' '}); 
-      } */
 
       dlString += '<span id="topright"><span id="mismatch">🌸 ~ obs field mismatch</span><span id="dltest"><table id="tablekey">'; 
 
@@ -691,7 +747,16 @@ function fresults( xobj, config ) {
              urlState = setTaxonId(urlState, tax_id);
              urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
              urlState = setTaxonName(urlState, pref_tax_name||tax_name);
-             taxon = furl2('./field_study.html'+buildParameterList(urlState),'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             // Manually escape only the unsafe variables from the API
+             const escapedPrefName = escapeHtml(pref_tax_name.toLowerCase());
+             const escapedTaxName = escapeHtml(tax_name);
+
+             // Assemble the structured HTML content safely
+             const formattedText = '<span style="font-size:larger">' + escapedPrefName + '</span>' +
+                                   '<br><span style="font-style:italic">(' + escapedTaxName + ')</span>';
+
+             // Pass a modified, unescaped version of furl2 that ONLY escapes the URL
+             taxon = '<a href="' + escapeHtml('./field_study.html' + buildParameterList(urlState)) + '">' + formattedText + '</a>';
          }
        
          values = [{innerText:i+1}];
@@ -725,41 +790,88 @@ function fresults( xobj, config ) {
              } 
          } 
 
+         if( p_show_sex === 'yes' ) { 
+             let sx = ''; // Default placeholder if missing or empty 
+             let valueId = ''; 
+    
+             if( rec.annotations && rec.annotations.length > 0 ) { 
+                 for( let i = 0; i < rec.annotations.length; i++ ) { 
+                      if( rec.annotations[i].controlled_attribute_id?.toString() === '9' ) { 
+                          valueId = rec.annotations[i].controlled_value_id?.toString() || ''; 
+                          // look up the sex in the life stages map... 
+                          sx = SEX_MAP[valueId] || 'unknown'; 
+                          break; 
+                      } 
+                 }  
+             } 
+    
+             if( sx === 'unknown' ) { 
+                 values.push({ innerHTML: sx }); 
+             } else { 
+                 let urlState = appState; 
+                 urlState = setPage(urlState, '1'); // set the page to 1 anytime they choose to filter. 
+        
+                 urlState = setSex(urlState, valueId || 'null');     
+                 values.push({ innerHTML: furl2('./field_study.html' + buildParameterList(urlState), sx || '[none]') }); 
+             } 
+         } 
+
          // use a clickable scrollable div containing field notes in place of image when there is no image.
          if( rec.photos && rec.photos.length > 0 ) {
-             values.push({ innerHTML: furl_out(config, root_observations + rec.id, '<img class="mini_photo2" src="' + rec.photos[0].url + '" />') });
+             const targetAttr = config.blankTargets === 'yes' ? ' target="_blank" rel="noopener noreferrer"' : '';
+             const safeUrl = escapeHtml(root_observations + rec.id);
+    
+             values.push({ innerHTML: '<a href="' + safeUrl + '"' + targetAttr + '><img class="mini_photo2" src="' + escapeHtml(rec.photos[0].url) + '" /></a>' });
          } else {
-             let desc = rec.description || '<i style="opacity: 0.6;">No notes</i>';
-             values.push({ innerHTML: furl_out(config, root_observations + rec.id, '<div style="max-width: 150px; max-height: 45px; overflow-y: auto; padding: 6px; scrollbar-width: thin; white-space: normal; ' + 
-                                                                          'background-color: var(--color-alt); ' + 
-                                                                          'color: var(--color-text); ' + 
-                                                                          'border: 1px solid var(--color-border); ' + 
-                                                                          'border-radius: 4px; font-size: 0.9em; line-height: 1.4;">' + 
-                                                                          rec.description + '</div>')});
+             const displayNotes  = rec.description ? escapeHtml(rec.description) : '<i style="opacity: 0.6;">No notes</i>';
+             const clickableLink = furl_out(config, root_observations + rec.id, rec.description ? 'View Details' : 'No notes');
+
+             values.push({ 
+                innerHTML: '<div style="max-width: 150px; max-height: 45px; overflow-y: auto; padding: 6px; scrollbar-width: thin; white-space: normal; ' + 
+                   'background-color: var(--color-alt); ' + 
+                   'color: var(--color-text); ' + 
+                   'border: 1px solid var(--color-border); ' + 
+                   'border-radius: 4px; font-size: 0.9em; line-height: 1.4;">' + 
+                   displayNotes + '<br>' + clickableLink +
+                   '</div>'
+             });         
          }
 
          if( config.showMGDD === 'yes' ) {
-             var mgddValue = getMgddForObservationId( rec.id );
-  
-             var lonVal = rec.geojson.coordinates.slice(0, 1).join('');
-             var latVal = rec.geojson.coordinates.slice(1, 2).join('');
-             var dateVal = rec.observed_on_details.date;
-                    
+             // Safely extract variables with fallbacks to prevent crashes
+             var mgddValue = getMgddForObservationId(rec.id); 
+             var lonVal    = rec.geojson?.coordinates?.slice(0, 1).join('') ?? ''; 
+             var latVal    = rec.geojson?.coordinates?.slice(1, 2).join('') ?? ''; 
+             var dateVal   = rec.observed_on_details?.date ?? ''; 
+
              const activeDateStr = rec.observed_on_details?.date; // Expects "YYYY-MM-DD"
-             let displayDates = 'No Date';
+             let displayDates = 'No Date'; 
 
              if( activeDateStr && activeDateStr.length === 10 ) {
-                 const year  = activeDateStr.slice(0, 4);
+                 const year = activeDateStr.slice(0, 4);
                  const month = activeDateStr.slice(5, 7);
-                 const day   = activeDateStr.slice(8, 10);
-    
+                 const day = activeDateStr.slice(8, 10);
                  // Combine them directly into "02-01-YYYY to MM-DD-YYYY"
                  displayDates = '02-01-' + year + ' to ' + month + '-' + day + '-' + year;
              }
 
-             values.push({ innerHTML: furl2( 'javascript:void(0)" onclick="showMgddBreakdownModal(\'' + latVal + '\', \'' + lonVal + '\', \'' + dateVal + '\')', '<span style="display: inline-block; line-height: 1.4;">' + mgddValue + 
-                                             '<br><span style="font-size: 0.85em; font-style: italic;">(' + displayDates + ')</span></span>') });
-                    
+             // FORCE string conversion using String() so escapeHtml never runs into a non-string type
+             const safeLat = escapeHtml(String(latVal));
+             const safeLon = escapeHtml(String(lonVal));
+             const safeDate = escapeHtml(String(dateVal));
+             const safeMgdd = escapeHtml(String(mgddValue));
+             const safeDisplayDates = escapeHtml(String(displayDates));
+
+             // Output the raw HTML structure directly
+             values.push({ 
+               innerHTML: '<a href="#" class="clickable-breakdown-action" style="text-decoration: none; color: var(--color-text-link);" ' +
+                  'onclick="showMgddBreakdownModal(\'' + safeLat + '\', \'' + safeLon + '\', \'' + safeDate + '\'); return false;">' +
+                  '<span style="display: inline-block; line-height: 1.4;">' + 
+                  safeMgdd + '<br>' +
+                  '<span style="font-size: 0.85em; font-style: italic;">(' + safeDisplayDates + ')</span>' +
+                  '</span>' +
+                  '</a>' 
+             });
          }
 
          if( config.showMonth === 'yes' ) { 
@@ -841,8 +953,16 @@ function fresults( xobj, config ) {
                                    field1 = taxonName; 
                                    displayCommonName = commonName.toLowerCase(); 
                                    displayTaxonName = taxonName; 
-                                   displayName = `<span style="font-size:larger">${commonName.toLowerCase()}</span><span style="font-style:italic"><br>(${taxonName})</span>`; 
-                                   emojiTitle += `${ofv.field_id} ${taxonName}\n`; 
+                                   // Manually escape only the unsafe variables from the API
+                                   const escapedPrefName = escapeHtml(displayCommonName);
+                                   const escapedTaxName = escapeHtml(displayTaxonName);
+
+                                   const formattedText = '<span style="font-size:larger">' + escapedPrefName + '</span>' +
+                                                         '<br><span style="font-style:italic">(' + escapedTaxName + ')</span>';
+
+                                   // Pass a modified, unescaped version of furl2 that ONLY escapes the URL
+                                   displayName = '<a href="' + escapeHtml('./field_study.html' + buildParameterList(appState)) + '">' + formattedText + '</a>';
+                                   emojiTitle += `${ofv.field_id} ${taxonName}\n`;
                                } else { 
                                    emojiTitle += `${ofv.field_id} ${taxonName.toLowerCase()}\n`; 
                                    displayName = ''; 
@@ -859,43 +979,66 @@ function fresults( xobj, config ) {
                        if( config.merge !== 'yes' && ofvFieldIdStr === targetBoxFieldIdStr ) { 
                            matchedCopy = 'yes'; 
                            if( ofv.value ) { 
-                               field1 = ofvValueLower; 
+                               // Start by escaping the raw text value from the API
+                               field1 = escapeHtml(ofvValueLower); 
                                displayName = ofvValueLower; 
+
+                               let hasHtmlLayout = false;
+
                                if( ofv.taxon ) { 
-                                   field1 = `<span style="font-size:larger">${commonName.toLowerCase()}</span><span style="font-style:italic"><br>(${taxonName})</span>`; 
+                                   // Escape both API text strings safely
+                                   const escapedCommon = escapeHtml(commonName.toLowerCase());
+                                   const escapedTaxon = escapeHtml(taxonName);
+            
+                                   //  Wrap them in hardcoded HTML formatting
+                                   field1 = `<span style="font-size:larger">${escapedCommon}</span><span style="font-style:italic"><br>(${escapedTaxon})</span>`; 
+                                   hasHtmlLayout = true;
                                } 
-    
+
                                // Wild ancestral colony 
                                if( ofvFieldIdStr === '17383' ) { 
-                                   values.push({ innerHTML: furl_out(config, root_observations + field1, field1) }); 
+                                   // Create a clean link using the ID or raw value, NOT the HTML spans.
+                                   // Since field1 contains HTML spans, we bypass furl2 so the browser renders the styling.
+                                   const targetUrl = root_observations + encodeURIComponent(ofvValue.toString());
+                                   values.push({ innerHTML: '<a href="' + escapeHtml(targetUrl) + '">' + field1 + '</a>' }); 
                                } else { 
                                    const cleanValue = replaceDoubleQuotes(ofvValue.toString()); 
-      
-                                   // 1. Let the store utility generate your clean lowercase array parameter string safely
+            
+                                   // Let the store utility generate your clean lowercase array parameter string safely 
                                    let updatedParamsStr = updateUrlParamsByFieldId(window.location.search, ofvFieldIdStr, ofv.name, cleanValue, config); 
-      
                                    const isPrimaryField = config.fieldName && (ofv.name?.toLowerCase() === config.fieldName.toLowerCase()); 
-                                   const finalParams = new URLSearchParams(updatedParamsStr);
-      
+                                   const finalParams = new URLSearchParams(updatedParamsStr); 
                                    finalParams.set('page', '1'); 
+            
                                    if( isPrimaryField ) { 
                                        finalParams.set('plantname', commonName || taxonName); 
                                    } 
-      
-                                   // 2. Safely restore furl2 now that parameter pollution is fully resolved
-                                   let url = furl2('./field_study.html?' + finalParams.toString(), field1); 
-      
+
+                                   // If field1 contains rich HTML layouts, don't pass it to furl2. Assemble it directly.
+                                   const destinationUrl = './field_study.html?' + finalParams.toString();
+                                   let url;
+                                   if( hasHtmlLayout ) {
+                                       url = '<a href="' + escapeHtml(destinationUrl) + '">' + field1 + '</a>';
+                                   } else {
+                                       url = furl2(destinationUrl, field1);
+                                   }
+
                                    if( isPrimaryField && config.fieldOutlink ) { 
-                                       let outlink = furl2( config.fieldOutlink + ofvValue.toString(), '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">🛈</span>' ); 
+                                       // This hardcoded icon string is safe to pass with your 'true' flag if you updated furl2,
+                                       // or just concatenate it manually here.
+                                       let outlink = '<a href="' + escapeHtml(config.fieldOutlink + ofvValue.toString()) + '">' +
+                                                     '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">🛈</span>' +
+                                                      '</a>';
+                
                                        values.push({ innerHTML: '<span class="filterable-header">' + outlink + '</span>' + url }); 
                                    } else { 
                                        values.push({ innerHTML: url }); 
                                    } 
-                               }  
+                               } 
                            } else { 
-                               values.push({ innerText: '' }); 
+                             values.push({ innerText: '' }); 
                            } 
-                      } // end c
+                       } // end c
                   } // End of j loop 
   
                   if( config.merge !== 'yes' ) { 
@@ -909,37 +1052,73 @@ function fresults( xobj, config ) {
          }
         
          if( config.merge === 'yes' ){
-              if( displayTaxonName !== '' ){
-                  if( mismatch === 'yes' ){
-                      document.getElementById("mismatch").style.display = "inline"; 
-                      displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+') <span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';
-                  } else {
-                      displayName = '<span style="font-size:larger">'+displayCommonName.toLowerCase()+'</span><span style="font-style:italic"><br>('+displayTaxonName+')</span>';
-                  }
-              } else {
-                  if( mismatch === 'yes' ){
-                      document.getElementById("mismatch").style.display = "inline"; 
-                      displayName += ' ';
-                      displayName += '<span class="flowericon" title="'+emojiTitle+'">&#x1F338;</span></span>';    
-                  } 
-              }
-          
-              values.push({innerHTML:displayName});
+             if( displayTaxonName !== '' ){ 
+                 // Escape the API text strings immediately
+                 const escapedCommon = escapeHtml(displayCommonName.toLowerCase());
+                 const escapedTaxon = escapeHtml(displayTaxonName);
+                 const escapedEmojiTitle = escapeHtml(emojiTitle);
+
+                 if( mismatch === 'yes' ){ 
+                     document.getElementById("mismatch").style.display = "inline"; 
+            
+                     // Assemble using the clean, escaped variables
+                     displayName = '<span style="font-size:larger">'+escapedCommon+'</span>' +
+                                   '<span style="font-style:italic"><br>('+escapedTaxon+') ' +
+                                   '<span class="flowericon" title="' + escapedEmojiTitle + '">&#x1F338;</span></span>'; 
+                 } else { 
+                     displayName = '<span style="font-size:larger">'+escapedCommon+'</span>' +
+                                   '<span style="font-style:italic"><br>('+escapedTaxon+')</span>'; 
+                 } 
+             } else { 
+                 if( mismatch === 'yes' ){ 
+                     document.getElementById("mismatch").style.display = "inline"; 
+            
+                     // Escape the emoji title text variable here too
+                     const escapedEmojiTitle = escapeHtml(emojiTitle);
+            
+                     displayName += ' '; 
+                     displayName += '<span class="flowericon" title="' + escapedEmojiTitle + '">&#x1F338;</span></span>'; 
+                 } 
+             } 
+             values.push({innerHTML:displayName}); 
          }          
 
-         if( getComponent(appState) === COMPONENT_VISITS ) {
+         if( getComponent(appState) === COMPONENT_VISITS || p_show_notes === 'yes' ) {
              let urlState = appState;
              urlState = setObsDate(urlState, rec.observed_on_details?.date ?? null);
-             urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
-             values.push({innerHTML: furl2('./field_study.html'+buildParameterList(urlState),rec.observed_on_details?.date ?? null) });
-             values.push({innerHTML: '<div style="max-width: 300px; max-height: 45px; overflow-y: auto; padding: 6px; scrollbar-width: thin; white-space: normal; ' + 
-                                           'background-color: var(--color-alt); ' + 
-                                           'color: var(--color-text); ' + 
-                                           'border: 1px solid var(--color-border); ' + 
-                                           'border-radius: 4px; font-size: 0.9em; line-height: 1.4;">' + 
-                                           (rec.description || '<i style="opacity: 0.6;">No description</i>') + 
-                                     '</div>'});
+             urlState = setPage(urlState, '1'); // set the page to 1 anytime they choose to filter.
+
+             if( getComponent(appState) === COMPONENT_VISITS ) {
+                 values.push({innerHTML: furl2('./field_study.html'+buildParameterList(urlState),rec.observed_on_details?.date ?? null) });
+             }
+
+             const relatedObs = rec.ofvs.find(item => item.field_id === 948)?.value;
+
+             let relatedObsUrl = relatedObs 
+                 ? '<br>Related Observation: ' + furl2(root_observations + relatedObs, relatedObs) 
+                 : '';
+
+             const rawDescription = rec.description || 'No description';
+             const fullText = escapeHtml(rawDescription);
+
+             // The cell preview template can safely render the raw HTML link
+             const displayHtml = rec.description 
+                 ? escapeHtml(rec.description) + relatedObsUrl 
+                 : '<i style="opacity: 0.6;">No description</i>' + relatedObsUrl;
+
+             values.push({
+                 innerHTML: '<div class="clickable-note-cell" ' +
+                            'style="max-width: 300px; max-height: 45px; overflow-y: auto; padding: 6px; scrollbar-width: thin; white-space: normal; ' +
+                            'background-color: var(--color-alt); color: var(--color-text); border: 1px solid var(--color-border); ' +
+                            'border-radius: 4px; font-size: 0.9em; line-height: 1.4; cursor: pointer;" ' +
+                            'onclick="openNoteModal(this)" ' +
+                            'data-full-note="' + fullText + '" ' +
+                            'data-related-url="' + escapeHtml(relatedObsUrl) + '">' + // Passed safely escaped
+                            displayHtml + 
+                 '</div>'
+             });
          }
+                
          let urlState = appState;
          urlState = setUser(urlState, rec.user.login);
          urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
@@ -954,8 +1133,8 @@ function fresults( xobj, config ) {
       let hrow = faddelem('tr',thead);
 
       //labels.push({innerText:'User Photo'});
-      if( getComponent(appState) === COMPONENT_VISITS ) {
-          labels.push({innerText:'Date'});
+      if( getComponent(appState) === COMPONENT_VISITS || p_show_notes === 'yes' ) {
+          if( getComponent(appState) ===  COMPONENT_VISITS ) { labels.push({innerText:'Date'}); }
           labels.push({innerText:'Field Notes'});
       }
 
@@ -1089,6 +1268,15 @@ function setupAPIParams( config ) {
            api_params += '&without_term_id=1';
        } else {
            api_params += '&term_id=1&term_value_id='  + getLifeStage(appState);
+       }
+   }
+
+   // filter for sex annotation...
+   if( getSex(appState) ) {
+       if( getSex(appState) === 'null' ) {
+           api_params += '&without_term_id=9';
+       } else {
+           api_params += '&term_id=9&term_value_id=' + getSex(appState);
        }
    }
 
