@@ -1,6 +1,6 @@
-<!DOCTYPE html>                 
-<html lang="en">                        
-           
+<!DOCTYPE html>                
+<html lang="en">                       
+          
 <head> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />   
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
@@ -231,10 +231,12 @@ let winurlexsearchstr = winurlstr.replace(winurlsearchstr,'');
 let winurlparams = new URLSearchParams(winurlsearchstr); 
 
 let p_hide_dash = winurlparams.get('hide_dash') || 'no'; 
+let p_mode      = winurlparams.get('mode') || '';
 let p_without_term_id = winurlparams.get('without_term_id'); 
 let p_not_user_id = winurlparams.get('without_user_id'); 
-let p_show_ls = winurlparams.get('show_ls') || 'no'; 
-let p_tags    = winurlparams.get('tags') || 'no';
+let p_show_ls    = winurlparams.get('show_ls') || 'no'; 
+let p_show_sex   = winurlparams.get('show_sex') || 'no';
+let p_show_notes = winurlparams.get('show_notes') || 'no';
 let p_field = ''; 
 let p_field_value = ''; 
 let field_array = []; 
@@ -252,15 +254,63 @@ for (const [key, value] of winurlparams.entries()) {
 }   
  
 let url = window.location.origin + window.location.pathname;   
-//let apibase = 'https://api.inaturalist.org/v1/observations';
-//let apiurl = apibase+((winurlparams!='')?('?'+winurlparams):'');
-//let apirefurl = 'https://api.inaturalist.org/v1/docs/#!/Observations/get_observations';
 
+function escapeHtml(str) { 
+    if (!str) return ''; 
+    return str 
+        .replace(/&/g, '&amp;') 
+        .replace(/</g, '&lt;') 
+        .replace(/>/g, '&gt;') 
+        .replace(/"/g, '&quot;') 
+        .replace(/'/g, '&#39;'); 
+}
+           
+// Opens the modal and injects the text
+function openNoteModal(element) {
+    const fullNote = element.getAttribute('data-full-note');
+    const relatedUrl = element.getAttribute('data-related-url');
+    
+    const textTarget = document.getElementById('globalNoteModalText');
+    
+    // 1. Set the main description safely as plain text
+    textTarget.innerText = fullNote; 
+    
+    // 2. Append the link dynamically as HTML if it exists
+    if (relatedUrl) {
+        textTarget.innerHTML += relatedUrl;
+    }
+    
+    document.getElementById('globalNoteModal').style.display = 'flex';
+}
+
+// Closes the modal
+function closeNoteModal() {
+  document.getElementById('globalNoteModal').style.display = 'none';
+}
+
+// Close the modal when clicking outside the content area
+window.addEventListener('click', function(event) {
+  const modal = document.getElementById('globalNoteModal');
+  if (event.target === modal) {
+    closeNoteModal();
+  }
+});
+          
 function replaceDoubleQuotes(str) {
   return str.replace(/"/g, '%22');
 }
 
-function furl2(url,txt=url) { return '<a href="'+url+'">'+txt+'</a>'; };
+function furl2(url, txt = url) {
+    // 1. Block malicious javascript: protocols
+    const safeUrl = url.trim().toLowerCase().startsWith('javascript:') ? '#' : url;
+    
+    // 2. Escape both variables so they can safely sit inside an HTML string
+    const escapedUrl = escapeHtml(safeUrl);
+    const escapedTxt = escapeHtml(txt);
+    
+    // 3. Return the raw HTML string
+    return '<a href="' + escapedUrl + '">' + escapedTxt + '</a>';
+}
           
 function furl_out(config, url, txt = url) { 
     if( config.blankTargets === 'yes' ) {
@@ -294,8 +344,8 @@ function checkAndLoadMgddScript( config ) {
     document.head.appendChild(dynamicScript);
   });
 }
-           
-function buildMenu( results, config ) {
+          
+function buildMenu2( results, config ) {
       // Create the main navbar container
       let navbar = document.createElement('div');
       navbar.className = 'navbar v2-menu';
@@ -323,14 +373,12 @@ function buildMenu( results, config ) {
           buildNavActivityFiltersDD( navbar, 'Filters', config, baseUrl, appState );
       }
 
-      if( getComponent(appState) === 'plantings' || getComponent(appState) === 'visits' || config.showStudyGrid === 'yes' ) {
-          let urlState = Object.assign({}, appState);
-          buildNavLink( navbar, './study_grid.html', urlState, 'Grid' );
-      }
-
       if( config.showStudyGrid === 'widget' ) {
           let urlState = Object.assign({}, appState);
           buildNavLink( navbar, '../admin/widget_grid.html', urlState, 'Grid' );
+      } else if( getComponent(appState) === 'plantings' || getComponent(appState) === 'visits' || config.showStudyGrid === 'yes' ) {
+          let urlState = Object.assign({}, appState);
+          buildNavLink( navbar, './study_grid.html', urlState, 'Grid' );
       }
 
       if( identify_params ) {
@@ -343,10 +391,21 @@ function buildMenu( results, config ) {
       }
 
       if( p_hide_dash === 'no' ) {
+        if( p_mode === 'beds' || p_mode === 'all' || p_mode === 'activity' || p_mode === 'flower' ) {
+            let homeState = clearForDashParams(appState);
+            homeState = setParams(homeState, 'nnn');
+            homeState = setComponent(homeState, '');
+            let homeUrl = '../studies/navigational_map/map.html';
+            
+            let homeDiv = faddelem('div', navbar, { id: 'home' });
+            let hLink   = faddelem('a', homeDiv, { href: ( homeUrl + buildParameterList(homeState) ) });
+            faddelem('span', hLink, { innerHTML: '&#127758;' });
+        } else {
           let homeState = clearForDashParams(appState);
           let homeUrl = '../admin/dashboard.html';
           console.log('utf8 ' + config.home_utf8);
           buildNavHome( navbar, homeUrl, homeState, config );
+        }
       }
 
       // Append the DOM nodes to the body
@@ -397,17 +456,57 @@ const getUrlWithoutFilter = (queryString, targetFieldId) => {
   params.set('page', '1');
   return params.toString();
 };
+    
+function fresults( xobj, config ) { 
+   let results = xobj.results; 
+   let box_array = []; 
+  
+   if( config.obsFields ) { 
+       field_array = config.obsFields.split(","); 
+    
+       // Parse the current URL parameters to grab any active filter values 
+       const urlParams = new URLSearchParams(window.location.search); 
+      
+       const urlIds    = urlParams.getAll('fieldid'); 
+       const urlValues = urlParams.getAll('fieldvalue'); 
+       const urlNames  = urlParams.getAll('fieldname'); 
+    
+       for( let f = 0; f < field_array.length; f++ ) { 
+            const currentId = field_array[f].toString(); 
+      
+            // Find if this specific ID already has a value or name stored in the URL 
+            const urlIndex = urlIds.indexOf(currentId); 
+      
+            let activeValue = ''; 
+            let activeName = ''; 
+      
+            if( urlIndex !== -1 ) { 
+                activeValue = urlValues[urlIndex] || ''; 
+                activeName = urlNames[urlIndex] || ''; 
+            } 
+      
+            // Push the boxRow into the display array with its real URL state values 
+            box_array.push(new boxRow(currentId, activeName, activeValue)); 
+       } 
+   }
+  
+   // store box_array into appState
+   appState.activeFilters = box_array;
+ 
+   if (results) {
+      let total_results = xobj.total_results;
+      let per_page = xobj.per_page;
+      let page_curr = xobj.page;
+      let page_max = Math.ceil(total_results/per_page);
+      let page_prev = ((page_curr>1)?page_curr-1:null);
+      let page_next = ((page_curr<page_max)?page_curr+1:null);
 
-// **********************************
-// to common_function.js
-// **********************************
-// declares for paging and headers.
-let total_results, per_page, page_curr, page_max, page_prev, page_next;
-          
-function buildMainTable( results, config, box_array ) {
+      buildMenu2(results, config);
+
       let labels = [];
       let mismatch = '';
       let field_array_copy = field_array;
+      let flower = '';
       let dlString = '<div id="divhead"><span id="topright">';
       let labelCount = 0;
       let iconHtml = '<span class="clear-btn" style="font-size:18px; padding-left:6px; display:inline-block; vertical-align:middle; line-height:1;">ⓧ</span>';
@@ -423,7 +522,7 @@ function buildMainTable( results, config, box_array ) {
       nameState = setTaxonId(nameState, '');
       nameState = setTaxonName(nameState, '');
       nameState = setPage(nameState, '1'); 
-      let taxonUrl = './fs.html' + buildParameterList(nameState); 
+      let taxonUrl = './field_study.html' + buildParameterList(nameState); 
 
       // Is a valid, active taxon filter currently in the URL string? 
       let hasTaxonFilter = window.location.search.includes('taxonid=') && 
@@ -438,7 +537,7 @@ function buildMainTable( results, config, box_array ) {
           let urlState = appState; 
           urlState = setLifeStage(urlState, ''); 
           urlState = setPage(urlState, '1'); 
-          let resetUrl = './fs.html' + buildParameterList(urlState); 
+          let resetUrl = './field_study.html' + buildParameterList(urlState); 
 
           // Is a valid, active lifestage filter currently in the URL string? 
           let hasFilter = window.location.search.includes('lifestage=') && 
@@ -448,28 +547,28 @@ function buildMainTable( results, config, box_array ) {
 
           labels.push({ innerHTML: '<span class="filterable-header">Life Stage' + resetLink + '</span>' });
       }
+
+      // sex column...
+      if( p_show_sex === 'yes' ) { 
+          let urlState = appState; 
+          urlState = setSex(urlState, '');  
+          urlState = setPage(urlState, '1'); 
+          let resetUrl = './field_study.html' + buildParameterList(urlState); 
+
+          // Is a valid, active sx filter currently in the URL string? 
+          let hasFilter = window.location.search.includes('sx=') && 
+                         !window.location.search.includes('sx=&'); 
+
+          let resetLink = hasFilter ? ' ' + furl2(resetUrl, iconHtml) : '';
+
+          labels.push({ innerHTML: '<span class="filterable-header">M/F' + resetLink + '</span>' });
+      }
     
       labels.push({innerText:'Obs Photo'});
 
       if( config.merge === 'yes' ){
           merged = 'merged observation field';
       } 
-
-      // tags column...
-      if( p_tags === 'yes' ) {
-          let urlState = appState; 
-          urlState = setTag(urlState, ''); 
-          urlState = setPage(urlState, '1'); 
-          let resetUrl = './fs.html' + buildParameterList(urlState); 
-
-          // Is a valid, active lifestage filter currently in the URL string? 
-          let hasFilter = window.location.search.includes('tag=') && 
-                         !window.location.search.includes('tag=&'); 
-
-          let resetLink = hasFilter ? ' ' + furl2(resetUrl, iconHtml) : '';
-
-          labels.push({ innerHTML: '<span class="filterable-header">Tags' + resetLink + '</span>' });
-      }
 
       // mgdd column...
       if( config.showMGDD === 'yes' ) { 
@@ -481,7 +580,7 @@ function buildMainTable( results, config, box_array ) {
           let urlState = appState; 
           urlState = setMonth(urlState, ''); 
           urlState = setPage(urlState, '1'); 
-          let resetUrl = './fs.html' + buildParameterList(urlState); 
+          let resetUrl = './field_study.html' + buildParameterList(urlState); 
 
           // Is a valid, active lifestage filter currently in the URL string? 
           let hasFilter = window.location.search.includes('month=') && 
@@ -577,7 +676,7 @@ function buildMainTable( results, config, box_array ) {
                            newParams.delete('plantname'); 
                        }
         
-                       const resetUrl = './fs.html?' + newParams.toString(); 
+                       const resetUrl = './field_study.html?' + newParams.toString(); 
                        const resetLink = ' ' + furl2(resetUrl, iconHtml); 
         
                        labels.push({ innerHTML: '<span class="filterable-header">' + truncate(box_array[e].field_name, 25) + resetLink + '</span>' }); 
@@ -613,7 +712,7 @@ function buildMainTable( results, config, box_array ) {
                    '</table>' +
                  '</div>' +
                  '<span class="clear-all-filters">' + 
-                    '<span style="white-space: nowrap; margin-bottom: 2px;">' + furl2('./fs.html'+buildParameterList(clearState), 'clear all filters') + '</span>' + 
+                    '<span style="white-space: nowrap; margin-bottom: 2px;">' + furl2('./field_study.html'+buildParameterList(clearState), 'clear all filters') + '</span>' + 
                  '</span>' +              
                '</div>' +
                dlString + 
@@ -658,7 +757,7 @@ function buildMainTable( results, config, box_array ) {
              urlState = setTaxonId(urlState, tax_id);
              urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
              urlState = setTaxonName(urlState, pref_tax_name||tax_name);
-             taxon = furl2('./fs.html'+buildParameterList(urlState),'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
+             taxon = furl2('./field_study.html'+buildParameterList(urlState),'<span style=\"font-size:larger\">'+pref_tax_name.toLowerCase()+'</span><span style=\"font-style:italic\"><br>('+tax_name+')</span>');         
          }
        
          values = [{innerText:i+1}];
@@ -688,7 +787,33 @@ function buildMainTable( results, config, box_array ) {
                  urlState = setPage(urlState, '1'); // set the page to 1 anytime they choose to filter. 
         
                  urlState = setLifeStage(urlState, valueId || 'null');     
-                 values.push({ innerHTML: furl2('./fs.html' + buildParameterList(urlState), stage || '[none]') }); 
+                 values.push({ innerHTML: furl2('./field_study.html' + buildParameterList(urlState), stage || '[none]') }); 
+             } 
+         } 
+
+         if( p_show_sex === 'yes' ) { 
+             let sx = ''; // Default placeholder if missing or empty 
+             let valueId = ''; 
+    
+             if( rec.annotations && rec.annotations.length > 0 ) { 
+                 for( let i = 0; i < rec.annotations.length; i++ ) { 
+                      if( rec.annotations[i].controlled_attribute_id?.toString() === '9' ) { 
+                          valueId = rec.annotations[i].controlled_value_id?.toString() || ''; 
+                          // look up the sex in the life stages map... 
+                          sx = SEX_MAP[valueId] || 'unknown'; 
+                          break; 
+                      } 
+                 }  
+             } 
+    
+             if( sx === 'unknown' ) { 
+                 values.push({ innerHTML: sx }); 
+             } else { 
+                 let urlState = appState; 
+                 urlState = setPage(urlState, '1'); // set the page to 1 anytime they choose to filter. 
+        
+                 urlState = setSex(urlState, valueId || 'null');     
+                 values.push({ innerHTML: furl2('./field_study.html' + buildParameterList(urlState), sx || '[none]') }); 
              } 
          } 
 
@@ -704,46 +829,6 @@ function buildMainTable( results, config, box_array ) {
                                                                           'border-radius: 4px; font-size: 0.9em; line-height: 1.4;">' + 
                                                                           rec.description + '</div>')});
          }
-
-         // render the tag pills...
-         if( p_tags === 'yes' ) { 
-let valueId = ''; 
-
-for (let i = 0; i < rec.tags.length; i++) {
-    if (rec.tags[i]) {
-        let urlState = appState;
-        urlState = setPage(urlState, '1');
-        urlState = setTag(urlState, rec.tags[i]);
-        
-        // This is the clean pill styling (NO importants)
-        let pillStyle = 'display: inline-block; ' +
-                        'max-width: 300px; ' +
-                        'margin: 3px; ' +
-                        'padding: 4px 12px; ' +
-                        'font-size: 13px; ' +
-                        'font-family: sans-serif; ' +
-                        'font-weight: 500; ' +
-                        'border-radius: 9999px; ' +
-                        'background-color: #1e293b; ' +
-                        'border: 1px solid #334155; ' +
-                        'color: #38bdf8; ' + 
-                        'text-decoration: none; ' +
-                        'overflow: hidden; ' +
-                        'text-overflow: ellipsis; ' +
-                        'white-space: nowrap;';
-
-        // Wrap each individual link as its own independent inline pill block
-        valueId += furl2('./fs.html' + buildParameterList(urlState), rec.tags[i])
-                   .replace('<a ', '<a style="' + pillStyle + '" ');
-    }
-}
-
-// Mirroring your working description box: One outer div wrapper with white-space: normal
-let containerStyle = 'max-width: 300px; white-space: normal; padding: 4px;';
-valueId = '<div style="' + containerStyle + '">' + valueId + '</div>';
-
-values.push({ innerHTML: valueId });
-         } 
 
          if( config.showMGDD === 'yes' ) {
              var mgddValue = getMgddForObservationId( rec.id );
@@ -764,17 +849,11 @@ values.push({ innerHTML: valueId });
                  displayDates = '02-01-' + year + ' to ' + month + '-' + day + '-' + year;
              }
 
-values.push({ 
-    innerHTML: furl2(
-        'javascript:void(0)" onclick="showMgddBreakdownModal(\'' + latVal + '\', \'' + lonVal + '\', \'' + dateVal + '\')', 
-        '<span style="display: inline-block; line-height: 1.4;">' + mgddValue + '<br><span style="font-size: 0.85em; font-style: italic;">(' + displayDates + ')</span></span>'
-    ) 
-});
+             values.push({ innerHTML: furl2( 'javascript:void(0)" onclick="showMgddBreakdownModal(\'' + latVal + '\', \'' + lonVal + '\', \'' + dateVal + '\')', '<span style="display: inline-block; line-height: 1.4;">' + mgddValue + 
+                                             '<br><span style="font-size: 0.85em; font-style: italic;">(' + displayDates + ')</span></span>') });
                     
-                    /*values.push({ innerHTML: furl2( 'javascript:void(0)" onclick="showMgddBreakdownModal(\'' + latVal + '\', \'' + lonVal + '\', \'' + dateVal + '\')', mgddValue + 
-                                             '<br><span style="font-size: 0.85em; font-style: italic;">(' + displayDates + ')</span>')  }); */
          }
-                
+
          if( config.showMonth === 'yes' ) { 
              let month = ''; // Default placeholder if missing or empty 
              let valueId = ''; 
@@ -793,7 +872,7 @@ values.push({
                  urlState = setPage(urlState, '1'); // set the page to 1 anytime they choose to filter. 
         
                  urlState = setMonth(urlState, valueId || 'null');     
-                 values.push({ innerHTML: furl2('./fs.html' + buildParameterList(urlState), month || '[none]') }); 
+                 values.push({ innerHTML: furl2('./field_study.html' + buildParameterList(urlState), month || '[none]') }); 
              } 
          } 
        
@@ -896,7 +975,7 @@ values.push({
                                    } 
       
                                    // 2. Safely restore furl2 now that parameter pollution is fully resolved
-                                   let url = furl2('./fs.html?' + finalParams.toString(), field1); 
+                                   let url = furl2('./field_study.html?' + finalParams.toString(), field1); 
       
                                    if( isPrimaryField && config.fieldOutlink ) { 
                                        let outlink = furl2( config.fieldOutlink + ofvValue.toString(), '<span style="font-size: 1.3rem; padding-right: 10px; display: inline-block; vertical-align: middle; margin-bottom: -0.3rem;">🛈</span>' ); 
@@ -940,24 +1019,47 @@ values.push({
               values.push({innerHTML:displayName});
          }          
 
-         if( getComponent(appState) === COMPONENT_VISITS ) {
+         if( getComponent(appState) === COMPONENT_VISITS || p_show_notes === 'yes' ) {
              let urlState = appState;
              urlState = setObsDate(urlState, rec.observed_on_details?.date ?? null);
-             urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
-             values.push({innerHTML: furl2('./fs.html'+buildParameterList(urlState),rec.observed_on_details?.date ?? null) });
-             values.push({innerHTML: '<div style="max-width: 300px; max-height: 45px; overflow-y: auto; padding: 6px; scrollbar-width: thin; white-space: normal; ' + 
-                                           'background-color: var(--color-alt); ' + 
-                                           'color: var(--color-text); ' + 
-                                           'border: 1px solid var(--color-border); ' + 
-                                           'border-radius: 4px; font-size: 0.9em; line-height: 1.4;">' + 
-                                           (rec.description || '<i style="opacity: 0.6;">No description</i>') + 
-                                     '</div>'});
+             urlState = setPage(urlState, '1'); // set the page to 1 anytime they choose to filter.
+
+             if( getComponent(appState) === COMPONENT_VISITS ) {
+                 values.push({innerHTML: furl2('./field_study.html'+buildParameterList(urlState),rec.observed_on_details?.date ?? null) });
+             }
+
+             const relatedObs = rec.ofvs.find(item => item.field_id === 948)?.value;
+
+             let relatedObsUrl = relatedObs 
+                 ? '<br>Related Observation: ' + furl2(root_observations + relatedObs, relatedObs) 
+                 : '';
+
+             const rawDescription = rec.description || 'No description';
+             const fullText = escapeHtml(rawDescription);
+
+             // The cell preview template can safely render the raw HTML link
+             const displayHtml = rec.description 
+                 ? escapeHtml(rec.description) + relatedObsUrl 
+                 : '<i style="opacity: 0.6;">No description</i>' + relatedObsUrl;
+
+             values.push({
+                 innerHTML: '<div class="clickable-note-cell" ' +
+                            'style="max-width: 300px; max-height: 45px; overflow-y: auto; padding: 6px; scrollbar-width: thin; white-space: normal; ' +
+                            'background-color: var(--color-alt); color: var(--color-text); border: 1px solid var(--color-border); ' +
+                            'border-radius: 4px; font-size: 0.9em; line-height: 1.4; cursor: pointer;" ' +
+                            'onclick="openNoteModal(this)" ' +
+                            'data-full-note="' + fullText + '" ' +
+                            'data-related-url="' + escapeHtml(relatedObsUrl) + '">' + // Passed safely escaped
+                            displayHtml + 
+                 '</div>'
+             });
          }
+                
          let urlState = appState;
          urlState = setUser(urlState, rec.user.login);
          urlState = setPage(urlState, '1');     // set the page to 1 anytime they choose to filter.
 
-         values.push({innerHTML:'<span class="user">'+user_icon+furl2('./fs.html'+buildParameterList(urlState),rec.user.login)+'</span>'});
+         values.push({innerHTML:'<span class="user">'+user_icon+furl2('./field_study.html'+buildParameterList(urlState),rec.user.login)+'</span>'});
          
          tempBrow.push(values);
       };
@@ -967,8 +1069,8 @@ values.push({
       let hrow = faddelem('tr',thead);
 
       //labels.push({innerText:'User Photo'});
-      if( getComponent(appState) === COMPONENT_VISITS ) {
-          labels.push({innerText:'Date'});
+      if( getComponent(appState) === COMPONENT_VISITS || p_show_notes === 'yes' ) {
+          if( getComponent(appState) ===  COMPONENT_VISITS ) { labels.push({innerText:'Date'}); }
           labels.push({innerText:'Field Notes'});
       }
 
@@ -976,7 +1078,7 @@ values.push({
       let obsState = appState; 
       obsState = setUser(obsState, '');
       obsState = setPage(obsState, '1'); 
-      let obsUrl = './fs.html' + buildParameterList(obsState); 
+      let obsUrl = './field_study.html' + buildParameterList(obsState); 
 
       // Is a valid, active observer filter currently in the URL string? 
       let hasObsFilter = window.location.search.includes('user=') && 
@@ -995,58 +1097,7 @@ values.push({
            let brow = faddelem('tr',tbody);
            faddelems('td',brow,tempBrow[q]);
       }
-}
-    
-function fresults( xobj, config ) { 
-   let results = xobj.results; 
-   let box_array = []; 
-  
-   if( config.obsFields ) { 
-       field_array = config.obsFields.split(","); 
-    
-       // Parse the current URL parameters to grab any active filter values 
-       const urlParams = new URLSearchParams(window.location.search); 
-      
-       const urlIds    = urlParams.getAll('fieldid'); 
-       const urlValues = urlParams.getAll('fieldvalue'); 
-       const urlNames  = urlParams.getAll('fieldname'); 
-    
-       for( let f = 0; f < field_array.length; f++ ) { 
-            const currentId = field_array[f].toString(); 
-      
-            // Find if this specific ID already has a value or name stored in the URL 
-            const urlIndex = urlIds.indexOf(currentId); 
-      
-            let activeValue = ''; 
-            let activeName = ''; 
-      
-            if( urlIndex !== -1 ) { 
-                activeValue = urlValues[urlIndex] || ''; 
-                activeName = urlNames[urlIndex] || ''; 
-            } 
-      
-            // Push the boxRow into the display array with its real URL state values 
-            box_array.push(new boxRow(currentId, activeName, activeValue)); 
-       } 
-   }
-  
-   // store box_array into appState
-   appState.activeFilters = box_array;
- 
-   if (results) {
 
-      // grab the data for the paging buttons if paging is enabled.
-      total_results = xobj.total_results;
-      per_page = xobj.per_page;
-      page_curr = xobj.page;
-      page_max = Math.ceil(total_results/per_page);
-      page_prev = ((page_curr>1)?page_curr-1:null);
-      page_next = ((page_curr<page_max)?page_curr+1:null);
-
-      buildMenu(results, config);
-
-      buildMainTable( results, config, box_array );
-             
       if( config.pagingEnabled ) {
           // buttons to go to prev or next page
           let nav = faddelem('div',document.body,{id:'nav'});
@@ -1059,10 +1110,8 @@ function fresults( xobj, config ) {
           let url = root_observations + api_params; 
           faddelem('a', nav, { title: 'entire dataset', classList: 'button inat-wide-button', innerText: 'View more on iNaturalist', href: url, target: '_blank', rel: 'noopener noreferrer' });
       }
-             
-   } else { 
-          faddelem('p',document.body,{innerText:'No results returned.'}); 
-   }; 
+   }
+   else { faddelem('p',document.body,{innerText:'No results returned.'}); }; 
 };
 
 </script>
@@ -1072,8 +1121,15 @@ function fresults( xobj, config ) {
  
 <script>
 function setupAPIParams( config ) {
- 
-   api_params += '?project_id='+config.project;
+
+   if( config.obsExclusionParams ) {
+       // Strips any combination of leading '?' or '&' from the start of the string
+       const cleanExclusions = config.obsExclusionParams.replace(/^[?&]+/, '');
+       api_params += '?' + cleanExclusions;
+       api_params += '&project_id=' + config.project;
+   } else {
+       api_params += '?project_id='+config.project;
+   }
 
    // --- Consolidated iNat Multi-Field API Builder ---
    const initialParams = new URLSearchParams(window.location.search);
@@ -1105,7 +1161,7 @@ function setupAPIParams( config ) {
    } else if( config.userId ) { 
        api_params += '&user_id='  + config.userId; 
    }
- 
+
    if( getPlaceMenuId(appState) ) {
        api_params += getPlaceMenuIdParam(appState, '&place_id=');
    } else {
@@ -1133,13 +1189,6 @@ function setupAPIParams( config ) {
        api_params += getFilterAPIParams(config);
    }
 
-   // filter for tags...
-   if( getTag(appState) ) {
-       if( getTag(appState) !== 'null' ) {
-           api_params += '&q=' + getTag(appState) + '&search_on=tags';
-       }
-   } 
-          
    // filter for month...
    if( getMonth(appState) ) {
        if( getMonth(appState) !== 'null' ) {
@@ -1155,6 +1204,15 @@ function setupAPIParams( config ) {
            api_params += '&without_term_id=1';
        } else {
            api_params += '&term_id=1&term_value_id='  + getLifeStage(appState);
+       }
+   }
+
+   // filter for sex annotation...
+   if( getSex(appState) ) {
+       if( getSex(appState) === 'null' ) {
+           api_params += '&without_term_id=9';
+       } else {
+           api_params += '&term_id=9&term_value_id=' + getSex(appState);
        }
    }
 
@@ -1174,8 +1232,8 @@ function setupAPIParams( config ) {
 
    // default all of these so they stay consistent across inat identify page, inat explore page, and the table.
    // may need to revisit if/when the table sorts by quality_grade.
-   api_params += '&reviewed=any&quality_grade=needs_id,research,casual';
-           
+   api_params += '&reviewed=any&quality_grade=needs_id,research,casual&verifiable=any';
+
    // set the params for the identify link to the exact filtration parameters
    // to be used in the api transaction that will populate the table with whatever 
    // filtrations were selected.
@@ -1206,9 +1264,11 @@ async function gatherResources() {
       const api_url       = api_base+api_params;
       console.log('api url: ' + api_url);
       const obs_data      = await apiFetch( api_url ); 
-             
-      await checkAndLoadMgddScript( config );   
-             
+
+      if( config.showMGDD === 'yes' ) { 
+          await checkAndLoadMgddScript( config );   
+      }
+     
       // Pass the data to the buildPage function
       fresults(obs_data, config); 
 
