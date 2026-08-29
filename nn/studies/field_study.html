@@ -1338,7 +1338,7 @@ async function gatherResources() {
 
     } catch (error) {
       console.error("An error occurred:", error);
-      faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + error.message + '</span>')}); 
+      faddelem('p', document.body, {innerHTML:('<span id="error">⚠️<br><br>' + error.message + '</span>')});
       throw error;
     }
 }
@@ -1346,7 +1346,7 @@ async function gatherResources() {
 let message = validateConfig(appState);
  
 if( message ) {
-    faddelem('p',document.body,{innerHTML:('<span id="error">&#9888;<br>' + message + '</span>')}); 
+    faddelem('p', document.body, {innerHTML:('<span id="error">⚠️<br><br>' +message + '</span>')});
 } else {
     gatherResources(); 
 }
