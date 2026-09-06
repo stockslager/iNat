@@ -792,12 +792,20 @@ async function gatherResources() {
         const overlayMaps = {
           //'Communities <span style="font-size: 14px; filter: hue-rotate(140deg);">📍</span>': parentLocationsLayer
         };
-      
+
         // i'm commenting this out for now since i'm controlling sat view based on zoom level and there
         // aren't really any conditional pin groups to allow them to select from.
         L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
         parentLocationsLayer.addTo(map);
 
+// Mount UI Controls and Layer Checkboxes
+map.getContainer().classList.remove('hide-first-rule');
+      
+// Add the control panel to your Leaflet map instance
+map.addControl(new ModeControl());
+L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+
+      
         // Base Layer Visual Theme Toggle Listeners
         map.on('baselayerchange', function(e) {
           const pins = document.querySelectorAll('.custom-utf8-pin');
@@ -807,9 +815,6 @@ async function gatherResources() {
             pins.forEach(el => { el.classList.remove('satellite-theme'); el.classList.add('default-theme'); });
           }
         });
-
-// Add the control panel to your Leaflet map instance
-//map.addControl(new ModeControl());
 
         document.getElementById('info').style.display = 'none';
       
