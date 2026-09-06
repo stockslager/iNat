@@ -316,8 +316,6 @@ const ModeControl = L.Control.extend({
   }
 });
 
-// 4. Add the control panel to your Leaflet map instance
-map.addControl(new ModeControl());
 
 
 
@@ -808,6 +806,9 @@ async function gatherResources() {
             pins.forEach(el => { el.classList.remove('satellite-theme'); el.classList.add('default-theme'); });
           }
         });
+
+// Add the control panel to your Leaflet map instance
+map.addControl(new ModeControl());
 
         document.getElementById('info').style.display = 'none';
       
