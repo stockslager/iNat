@@ -425,6 +425,15 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
     className: 'custom-pin-reset'
   });
 
+  // Define visual colony icon parameters
+  const colonyIcon = L.divIcon({
+    html: '<span class="custom-flower-pin">🐦</span>',
+    iconSize: [16, 16],
+    iconAnchor: [8, 8],
+    popupAnchor: [0, -16],
+    className: 'custom-pin-reset'
+  });
+
   // Extract the actual array from iNaturalist's wrapper
   const records = (obs_data && obs_data.results) ? obs_data.results : [];
     
@@ -433,6 +442,7 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
 
       const [lat, lon] = rec.location.split(',');
       const flowerMarker = L.marker([lat, lon], { icon: flowerIcon });
+      const colonyMarker = L.marker([lat, lon], { icon: colonyIcon });
           
       // Bind existing standard popup bubble
       if( p_mode === 'plants' ) {
@@ -447,6 +457,9 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
       } else if( p_mode === 'flower' ) {
           flowerMarker.on('click', () => { window.location.href = buildFlowerURL( config, rec ); });
           flowerLocationsLayer.addLayer(flowerMarker);
+      } else if( p_mode === 'colony' ) {
+          colonyMarker.on('click', () => { window.location.href = buildFlowerURL( config, rec ); });
+          flowerLocationsLayer.addLayer(colonyMarker);
       } else if( p_mode === 'all' ) {
           flowerMarker.bindPopup(buildBubble(flower, config));
           flowerLocationsLayer.addLayer(flowerMarker);
