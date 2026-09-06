@@ -797,14 +797,6 @@ async function gatherResources() {
         // aren't really any conditional pin groups to allow them to select from.
         L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
         parentLocationsLayer.addTo(map);
-
-// Mount UI Controls and Layer Checkboxes
-map.getContainer().classList.remove('hide-first-rule');
-      
-// Add the control panel to your Leaflet map instance
-map.addControl(new ModeControl());
-L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
-
       
         // Base Layer Visual Theme Toggle Listeners
         map.on('baselayerchange', function(e) {
