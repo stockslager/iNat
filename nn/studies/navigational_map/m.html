@@ -255,6 +255,84 @@ const osm  = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const streetView    = L.tileLayer(osm,  { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }); 
 const satelliteView = L.tileLayer(esri, { maxZoom: 19, attribution: 'Tiles &copy; Esri &mdash; Source: Esri and the GIS User Community' }); 
 
+
+
+
+
+
+
+
+
+
+// 1. Create a global state tracker for your current mode
+let currentMode = 'flower'; 
+
+// 2. Define the Custom Control Panel
+const ModeControl = L.Control.extend({
+  options: {
+    position: 'topright' // Places it in the top-right corner of the map
+  },
+
+  onAdd: function (map) {
+    // Create the container element
+    const container = L.DomUtil.create('div', 'leaflet-bar custom-mode-control');
+    
+    // Inline CSS to style the panel nicely (or move this to your CSS file)
+    container.style.backgroundColor = 'white';
+    container.style.padding = '10px';
+    container.style.borderRadius = '5px';
+    container.style.boxShadow = '0 1px 5px rgba(0,0,0,0.65)';
+    container.style.cursor = 'pointer';
+
+    // HTML Structure for the radio buttons
+    container.innerHTML = `
+      <h4 style="margin: 0 0 8px 0; font-family: sans-serif; font-size: 14px;">Select Mode</h4>
+      <label style="display: block; margin-bottom: 4px; font-family: sans-serif; font-size: 13px;">
+        <input type="radio" name="map-mode" value="flower" checked> 🌼 Flower
+      </label>
+      <label style="display: block; margin-bottom: 4px; font-family: sans-serif; font-size: 13px;">
+        <input type="radio" name="map-mode" value="beds"> 🛏️ Beds
+      </label>
+      <label style="display: block; font-family: sans-serif; font-size: 13px;">
+        <input type="radio" name="map-mode" value="colony"> 🐦 Colony
+      </label>
+    `;
+
+    // Prevent map dragging/clicking when interacting with the control UI
+    L.DomEvent.disableClickPropagation(container);
+
+    // 3. Listen for changes on the radio buttons
+    container.querySelectorAll('input[name="map-mode"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        currentMode = e.target.value;
+        console.log(`Switched to mode: ${currentMode}`);
+        
+        // Optional: Trigger a custom function when the mode changes
+        handleModeChange(currentMode); 
+      });
+    });
+
+    return container;
+  }
+});
+
+// 4. Add the control panel to your Leaflet map instance
+map.addControl(new ModeControl());
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
 document.addEventListener('DOMContentLoaded', async () => { 
     console.log("--- 1. DOMContentLoaded Fired Successfully ---");
         
