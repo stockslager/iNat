@@ -395,7 +395,7 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
 
         // If the map exists, zoom in smoothly first
         if (mapInstance) {
-            mapInstance.flyTo(e.latlng, 16, { animate: true, duration: 1.2 }); // Zoom takes 1.2 seconds 
+            mapInstance.flyTo(e.latlng, 15, { animate: true, duration: 1.2 }); // Zoom takes 1.2 seconds 
 
             // Wait for the zoom animation to finish before moving to the next page
             setTimeout(() => { window.location.href = targetURL; }, 1300); // 1300ms slightly outlasts the 1.2s animation
