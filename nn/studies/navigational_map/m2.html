@@ -347,12 +347,38 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
     if (parentPin.lat && parentPin.lon) {
       const marker = L.marker([parentPin.lat, parentPin.lon], { icon: communityPin });
       
-      // Bind your clean browser-back bubble link framework
-      if( p_mode === 'plants' ) {
-          marker.on('click', () => { window.location.href = buildPlantsURL( parentPin ); });
-      } else if( p_mode === 'activity' ) {
-          marker.on('click', () => { window.location.href = buildInsectActivityURL( parentPin ); });
-      } 
+      // 🌟 AUTOMATIC ZOOM INTERCEPT
+      marker.on('click', function(e) {
+          console.log("🎯 PARENT PIN CLICKED: Zooming in smoothly to parent position...");
+
+          // Stop Leaflet from passing the click through to background map elements
+          if (e && e.originalEvent) {
+              L.DomEvent.stopPropagation(e.originalEvent);
+              e.originalEvent.preventDefault();
+          }
+
+          // 1. Determine which URL to route to based on mode
+          let targetURL = '';
+          if (p_mode === 'plants') {
+              targetURL = buildPlantsURL(parentPin);
+          } else if (p_mode === 'activity') {
+              targetURL = buildInsectActivityURL(parentPin);
+          }
+
+          // 2. Animate map zoom straight into the parent coordinate
+          // Your 'zoomend' handler will catch this flight midway and swap views natively!
+          map.flyTo(e.latlng, 16, {
+              animate: true,
+              duration: 1.2
+          });
+
+          // 3. Delay redirect until the zoom flight animation completely finishes
+          setTimeout(function() {
+              if (targetURL) {
+                  window.location.href = targetURL;
+              }
+          }, 1400);
+      });
       
       // Keep your child link identifier tags intact
       marker.parentIdentifier = parentPin.name;
