@@ -382,12 +382,19 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
  * @param {MapConfiguration} config - The instantiated configuration class object.
  */
 function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
-  // Clear any existing layers first to prevent double-rendering bugs if config changes
   flowerLocationsLayer.clearLayers();
 
-  // Define visual flower icon parameters using classes that match your CSS layout engine
+  // Resolve your map and zoom parameters safely first
+  const targetMap = mapInstance || window.map;
+  const currentZoom = targetMap ? targetMap.getZoom() : (p_default_zoom || config.defaultMapZoom || 12);
+  const thresholdZoom = config.showUnderZoomLevel || 15;
+
+  // Determine initial theme string based on current starting zoom level 🌟
+  const initialTheme = (currentZoom >= thresholdZoom) ? 'satellite-theme' : 'default-theme';
+
+  // Inject the accurate initial theme directly into the markup template
   const flowerIcon = L.divIcon({
-    html: '<span class="custom-utf8-pin default-theme"><span class="flower-glyph">🌼</span></span>',
+    html: '<span class="custom-utf8-pin ' + initialTheme + '"><span class="flower-glyph">🌼</span></span>',
     iconSize: [16, 16],
     iconAnchor: [8, 8],
     popupAnchor: [0, -16],
