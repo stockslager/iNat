@@ -371,17 +371,19 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
   // Extract the actual array from iNaturalist's wrapper
   const records = (obs_data && obs_data.results) ? obs_data.results : [];
     
-  for (let i=0; i<records.length; i++) {
-      let rec  = records[i];
+  for (let i = 0; i < records.length; i++) {
+      let rec = records[i];
 
       const [lat, lon] = rec.location.split(',');
       const flowerMarker = L.marker([lat, lon], { icon: flowerIcon });
-
-      // Handle click events
+          
       flowerMarker.on('click', function(e) {
-        
-          let targetURL = '';
+          // Prevent Leaflet from passing the click through to underlying layers/map container
+          if (e && e.originalEvent) {
+              L.DomEvent.stopPropagation(e.originalEvent);
+          }
 
+          let targetURL = '';
           if (p_mode === 'plants') {
               targetURL = buildPlantsURL(rec, config);
           } else if (p_mode === 'activity') {
@@ -392,13 +394,12 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
               targetURL = buildFlowerURL(config, rec);
           }
 
-          // Zoom & Layer Switch Check
+          // If mapInstance is valid, swap the base layer and animate zoom
           if (mapInstance) {
               const targetZoom = 16;
               const thresholdZoom = config.showUnderZoomLevel || 15;
 
-              // 🌟 PRESERVE SATELLITE SWITCH LOGIC:
-              // If the target zoom crosses your threshold, explicitly swap the layers out smoothly
+              // Force the map layer swap to satellite view instantly if above threshold
               if (targetZoom >= thresholdZoom && typeof satelliteView !== 'undefined' && typeof streetView !== 'undefined') {
                   if (!mapInstance.hasLayer(satelliteView)) {
                       mapInstance.removeLayer(streetView);
@@ -406,13 +407,13 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
                   }
               }
 
-              // Fire smooth zoom animation
+              // Fire Leaflet zoom animation explicitly on the marker's coordinate point
               mapInstance.flyTo(e.latlng, targetZoom, {
                   animate: true,
                   duration: 1.2
               });
 
-              // Delay redirect so user can see the zoom and satellite switch complete
+              // Delay redirect until the zoom transition window completes safely
               setTimeout(() => {
                   window.location.href = targetURL;
               }, 1300);
@@ -421,7 +422,6 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
           }
       });
 
-      // Always add the marker to the layer group
       flowerLocationsLayer.addLayer(flowerMarker);
   }
 
