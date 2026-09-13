@@ -268,36 +268,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-function buildPlantsURL( pin, config ) {
-  
-  // Instantly locks the taxonId value exclusively to this specific pin instance
-  const taxon_query = pin.taxonId ? '&fieldvalue=' + pin.taxonId : '';
-  
-  // Instantly locks the fieldname exclusively to this config file state
-  const field_id    = (config && config.fieldId)   ? '&fieldid='   + config.fieldId : '';
-  const field_query = (config && config.fieldName) ? '&fieldname=' + config.fieldName : '';
-  
-  return( '../../studies/navigational_map/recent_activity_tabs.html?params=' + pin.params + '&component=studies' + 
-                   taxon_query + field_id + field_query );
-}
-
-function buildInsectActivityURL( pin, config ) {
-
-  // Instantly locks the taxonId value exclusively to this specific pin instance
-  const study_title = pin.studyTitle ? '&studytitle=' + pin.studyTitle : '';
-  const taxon_query = pin.taxonId ? '&fieldvalue=' + pin.taxonId : '';
-  
-  // Instantly locks the fieldname exclusively to this config file state
-  const field_id    = (config && config.fieldId)    ? '&fieldid='   + config.fieldId : '';
-  const field_query = (config && config.fieldName)  ? '&fieldname=' + config.fieldName : '';
-  
-  return( '../../studies/field_study.html?params=' + pin.params + '&component=studies&mode=' + p_mode + study_title +
-                                             '&defaultlat=' + p_default_lat + 
-                                             '&defaultlon=' + p_default_lon + 
-                                             '&defaultzoom=' + p_default_zoom +
-                                             taxon_query + field_id + field_query );
-}
-
 function buildFlowerBedURL( config, rec ) {
 
       let garden = 'pylon';
@@ -407,20 +377,36 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
       const [lat, lon] = rec.location.split(',');
       const flowerMarker = L.marker([lat, lon], { icon: flowerIcon });
           
-      // Bind existing standard popup bubble
-      if( p_mode === 'plants' ) {
-          flowerMarker.on('click', () => { window.location.href = buildPlantsURL( flower, config ); });  
-          flowerLocationsLayer.addLayer(flowerMarker);
-      } else if( p_mode === 'activity' ) {
-          flowerMarker.on('click', () => { window.location.href = buildInsectActivityURL( flower, config ); });
-          flowerLocationsLayer.addLayer(flowerMarker);
-      } else if( p_mode === 'beds' ) {
-          flowerMarker.on('click', () => { window.location.href = buildFlowerBedURL( config, rec ); });
-          flowerLocationsLayer.addLayer(flowerMarker);
-      } else if( p_mode === 'flower' ) {
-          flowerMarker.on('click', () => { window.location.href = buildFlowerURL( config, rec ); });
-          flowerLocationsLayer.addLayer(flowerMarker);
-      } 
+      // Handle click events
+      flowerMarker.on('click', function(e) {
+          
+        let targetURL = '';
+
+        // Determine which URL to redirect to based on mode
+        if (p_mode === 'plants') {
+            targetURL = buildPlantsURL(flower, config);
+        } else if (p_mode === 'activity') {
+            targetURL = buildInsectActivityURL(flower, config);
+        } else if (p_mode === 'beds') {
+            targetURL = buildFlowerBedURL(config, rec);
+        } else if (p_mode === 'flower') {
+            targetURL = buildFlowerURL(config, rec);
+        }
+
+        // If the map exists, zoom in smoothly first
+        if (mapInstance) {
+            mapInstance.flyTo(e.latlng, 16, { animate: true, duration: 1.2 }); // Zoom takes 1.2 seconds 
+
+            // Wait for the zoom animation to finish before moving to the next page
+            setTimeout(() => { window.location.href = targetURL; }, 1300); // 1300ms slightly outlasts the 1.2s animation
+        } else {
+            // If mapInstance wasn't passed, just redirect immediately
+            window.location.href = targetURL;
+        }
+      });
+
+      // Always add the marker to the layer group
+      flowerLocationsLayer.addLayer(flowerMarker);
   }
 
   // if a map instance is provided, add the entire layer group to it 
