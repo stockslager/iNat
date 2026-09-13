@@ -666,14 +666,10 @@ async function gatherResources() {
 
         // Mount UI Controls and Layer Checkboxes
         map.getContainer().classList.remove('hide-first-rule');
-        
-        const overlayMaps = {
-          'Communities <span style="font-size: 14px; filter: hue-rotate(140deg);">📍</span>': parentLocationsLayer
-        };
-      
+              
         // 🌟 Programmatically generate interactive layer checkboxes for each discovered trail
         for (let trail in trailLayers) {
-            overlayMaps[trail + ' 🌿'] = trailLayers[trail];
+            overlayMaps[trail] = trailLayers[trail];
         }
 
         // Mount control grid interface panels
