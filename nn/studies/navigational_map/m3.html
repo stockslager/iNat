@@ -247,7 +247,8 @@ body {
 
 let thresholdZoom = '';
 const flowerLocationsLayer = L.layerGroup();
-
+const trailLayers = {}; 
+  
 // Define the tile layer instances globally so the zoom handler can see them
 const esri = "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
 const osm  = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
@@ -381,53 +382,46 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
  * then packs them into the global zoom-controlled layer group.
  * @param {MapConfiguration} config - The instantiated configuration class object.
  */
-function buildFlowerPinsLayer(config, obs_data, mapInstance = null, forcedMode, targetLayerGroup) {
-  // Clear out the layer group being populated on this specific pass
-  targetLayerGroup.clearLayers();
+function buildFlowerPinsLayer(config, obs_data, mapInstance = null, targetLayerGroup = flowerLocationsLayer) {
+  flowerLocationsLayer.clearLayers();
 
+  // Resolve your map and zoom parameters safely first
   const targetMap = mapInstance || window.map;
-  const initialZoom = targetMap ? targetMap.getZoom() : (p_default_zoom || config.defaultMapZoom || 12);
-  const threshold = config.showUnderZoomLevel || 15;
-  const initialTheme = (initialZoom >= threshold) ? 'satellite-theme' : 'default-theme';
+  const currentZoom = targetMap ? targetMap.getZoom() : (p_default_zoom || config.defaultMapZoom || 12);
+  const thresholdZoom = config.showUnderZoomLevel || 15;
 
-  // Customize icon character based on mode
-  const pinEmoji = (forcedMode === 'beds') ? '🌱' : '🌼';
+  // Determine initial theme string based on current starting zoom level 🌟
+  const initialTheme = (currentZoom >= thresholdZoom) ? 'satellite-theme' : 'default-theme';
 
+  // Inject the accurate initial theme directly into the markup template
   const flowerIcon = L.divIcon({
-    html: '<span class="custom-utf8-pin ' + initialTheme + '"><span class="flower-glyph">' + pinEmoji + '</span></span>',
+    html: '<span class="custom-utf8-pin ' + initialTheme + '"><span class="flower-glyph">🌼</span></span>',
     iconSize: [16, 16],
     iconAnchor: [8, 8],
     popupAnchor: [0, -16],
     className: 'custom-pin-reset' 
   });
 
+  // Extract the actual array from iNaturalist's wrapper
   const records = (obs_data && obs_data.results) ? obs_data.results : [];
     
   for (let i = 0; i < records.length; i++) {
       let rec = records[i];
-      if (!rec || !rec.location || !rec.ofvs) continue;
-
-      // 🌟 FRONT-END DISCRIMINATION FILTER
-      // Find the specific value of the 'pin type' field for this record
-      let actualPinType = '';
-      for (let j = 0; j < rec.ofvs.length; j++) {
-          if (rec.ofvs[j].field_id.toString() === '12337') {
-              actualPinType = rec.ofvs[j].value.toString().toLowerCase();
-          }
-      }
-
-      // If the record value doesn't match the current mode, skip to the next loop iteration
-      if (actualPinType !== forcedMode) continue;
+      if (!rec || !rec.location) continue;
 
       const [lat, lon] = rec.location.split(',');
       
+      // Force interactive state natively via individual marker parameters
       const flowerMarker = L.marker([parseFloat(lat), parseFloat(lon)], { 
           icon: flowerIcon,
           interactive: true,
           bubblingMouseEvents: false
       });
           
+      // Standard marker click listener (Isolated per pin)
       flowerMarker.on('click', function(e) {
+          console.log("🎯 CHILD FLOWER PIN CLICKED!");
+
           if (e && e.originalEvent) {
               L.DomEvent.stopPropagation(e.originalEvent);
               e.originalEvent.preventDefault();
@@ -435,29 +429,26 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null, forcedMode, 
 
           let targetURL = '';
           try {
-              if (forcedMode === 'plants') {
+              if (p_mode === 'plants') {
                   targetURL = typeof buildPlantsURL === 'function' ? buildPlantsURL(rec, config) : '#';
-              } else if (forcedMode === 'activity') {
+              } else if (p_mode === 'activity') {
                   targetURL = typeof buildInsectActivityURL === 'function' ? buildInsectActivityURL(rec, config) : '#';
-              } else if (forcedMode === 'beds') {
+              } else if (p_mode === 'beds') {
                   targetURL = typeof buildFlowerBedURL === 'function' ? buildFlowerBedURL(config, rec) : '#';
-              } else if (forcedMode === 'flower') {
+              } else if (p_mode === 'flower') {
                   targetURL = typeof buildFlowerURL === 'function' ? buildFlowerURL(config, rec) : '#';
               }
           } catch (urlError) {
               console.error("URL Building Error: ", urlError);
           }
 
+          // Redirect to detail page immediately since we are already zoomed in
           if (targetURL && targetURL !== '#') {
               window.location.href = targetURL;
           }
       });
 
       targetLayerGroup.addLayer(flowerMarker);
-  }
-
-  if (targetMap && targetMap.getZoom() >= threshold) {
-      targetLayerGroup.addTo(targetMap);
   }
 }
 
@@ -511,6 +502,61 @@ function initializeZoomViewHandler(map, config) {
   });
 }
 
+/**
+ * Dynamically loads map layers based on trail name
+ */
+function loadLayers(config, obs_data, mapInstance = null) {
+  // 1. Clear everything to prevent duplicate rendering bugs
+  flowerLocationsLayer.clearLayers();
+  for (let trail in trailLayers) {
+      trailLayers[trail].clearLayers();
+  }
+
+  const records = (obs_data && obs_data.results) ? obs_data.results : [];
+  
+  // 2. This temporary object will hold arrays of records grouped by trail name
+  // E.g., { "Oak Trail": [rec1, rec2], "Pine Path": [rec3] }
+  const recordsByTrail = {};
+
+  for (let i = 0; i < records.length; i++) {
+      let rec = records[i];
+      if (!rec || !rec.location || !rec.ofvs) continue;
+
+      let trailName = 'Unassigned Pins'; // Fallback if field 1019 is missing or blank
+
+      // 3. Find field 1019 to extract the trail name value
+      for (let j = 0; j < rec.ofvs.length; j++) {
+          if (rec.ofvs[j].field_id === 1019) {
+              trailName = rec.ofvs[j].value.toString();
+              break;
+          }
+      }
+
+      // Group the records array by trail name strings
+      if (!recordsByTrail[trailName]) {
+          recordsByTrail[trailName] = [];
+      }
+      recordsByTrail[trailName].push(rec);
+  }
+
+  // 4. Loop through each discovered trail, spin up its map layer, and build its pins
+  for (let trailName in recordsByTrail) {
+      // Create the dynamic layer group for this trail if it doesn't exist
+      if (!trailLayers[trailName]) {
+          trailLayers[trailName] = L.layerGroup();
+      }
+
+      // Nest this trail's layer straight inside our main zoom container
+      flowerLocationsLayer.addLayer(trailLayers[trailName]);
+
+      // 🌟 Re-use your existing pin builder function by wrapping the subset array
+      // back into iNaturalist's expected data structure layout!
+      const subsetObsData = { results: recordsByTrail[trailName] };
+      
+      buildFlowerPinsLayer(config, subsetObsData, mapInstance, trailLayers[trailName]);
+  }
+}
+  
 </script>
 <script type="text/javascript"   src="../../core/js/api_fetch.js">     </script>
 <script>
@@ -522,15 +568,37 @@ async function gatherResources() {
         // Fetch, parse, and instantiate the map configuration object in one shot
         config = await MapConfiguration.loadFromUrl(json_path);
 
-        let api_base   = 'https://api.inaturalist.org/v1/observations'
-        let inat_params = '';
-        if( config.pinsProject ) { inat_params += '?project_id=' + config.pinsProject; }
-        
-        inat_params += '&field:pin+type=';
+        if( p_mode === 'flower' ) {
+            let api_base   = 'https://api.inaturalist.org/v1/observations'
+            let inat_params = '';
+            if( config.pinsProject ) { inat_params += '?project_id=' + config.pinsProject; }
+            inat_params += '&field:pin+type=flower';
 
-        const api_url        = api_base+inat_params;
-        console.log('api url: ' + api_url);
-        obs_data             = await apiFetch( api_url ); 
+            const api_url        = api_base+inat_params;
+            console.log('api url: ' + api_url);
+            obs_data             = await apiFetch( api_url ); 
+        }
+
+        if( p_mode === 'beds' ) {
+            let api_base   = 'https://api.inaturalist.org/v1/observations'
+            let inat_params = '';
+            if( config.pinsProject ) { inat_params += '?project_id=' + config.pinsProject; }
+            inat_params += '&field:pin+type=beds';
+
+            const api_url        = api_base+inat_params;
+            console.log('api url: ' + api_url);
+            obs_data             = await apiFetch( api_url ); 
+        }
+
+        // load the layers based on trail name
+        if (typeof loadLayers === 'function' && obs_data) {
+           loadLayers(config, obs_data, map); 
+           
+           // Ensure the main master container respects your zoom threshold state on page boot
+           if (defaultZoom >= thresholdZoom) {
+               flowerLocationsLayer.addTo(map);
+           }
+        }
 
         // Build your navigation components
         buildMenu(config);
@@ -564,25 +632,25 @@ async function gatherResources() {
       
         // Generate parent marker overlays
         buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers);
-
-        if (typeof buildFlowerPinsLayer === 'function' && obs_data) {
-            // Build the Flower markers into the flower layer group
-            buildFlowerPinsLayer(config, obs_data, map, 'flower', flowerPinsLayer); 
-            
-            // Build the Beds markers into the beds layer group
-            buildFlowerPinsLayer(config, obs_data, map, 'beds', bedPinsLayer); 
-        }
       
+        if (typeof buildFlowerPinsLayer === 'function' && obs_data) {
+           buildFlowerPinsLayer(config, obs_data, map); 
+           
+           // If we are initially zoomed out, make sure the layer matches the map state
+           if (defaultZoom < thresholdZoom && map.hasLayer(flowerLocationsLayer)) {
+              map.removeLayer(flowerLocationsLayer);
+           }
+        }
+
         // Mount UI Controls and Layer Checkboxes
         map.getContainer().classList.remove('hide-first-rule');
         const overlayMaps = {
-          'Flowers 🌼': flowerPinsLayer,
-          'Flower Beds 🌱': bedPinsLayer
+          'Communities <span style="font-size: 14px; filter: hue-rotate(140deg);">📍</span>': parentLocationsLayer
         };
       
         // i'm commenting this out for now since i'm controlling sat view based on zoom level and there
         // aren't really any conditional pin groups to allow them to select from.
-        L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+        //L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
         parentLocationsLayer.addTo(map);
 
         // Base Layer Visual Theme Toggle Listeners
