@@ -378,14 +378,14 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
       const flowerMarker = L.marker([lat, lon], { icon: flowerIcon });
           
       flowerMarker.on('click', function(e) {
-          // Prevent Leaflet from passing the click through to underlying layers/map container
+          // Prevent the click event from bubbling up and breaking state
           if (e && e.originalEvent) {
               L.DomEvent.stopPropagation(e.originalEvent);
           }
 
           let targetURL = '';
           if (p_mode === 'plants') {
-              targetURL = buildPlantsURL(rec, config);
+              targetURL = buildPlantsURL(rec, config); // Ensure rec is passed instead of flower
           } else if (p_mode === 'activity') {
               targetURL = buildInsectActivityURL(rec, config);
           } else if (p_mode === 'beds') {
@@ -394,29 +394,18 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
               targetURL = buildFlowerURL(config, rec);
           }
 
-          // If mapInstance is valid, swap the base layer and animate zoom
           if (mapInstance) {
-              const targetZoom = 16;
-              const thresholdZoom = config.showUnderZoomLevel || 15;
-
-              // Force the map layer swap to satellite view instantly if above threshold
-              if (targetZoom >= thresholdZoom && typeof satelliteView !== 'undefined' && typeof streetView !== 'undefined') {
-                  if (!mapInstance.hasLayer(satelliteView)) {
-                      mapInstance.removeLayer(streetView);
-                      mapInstance.addLayer(satelliteView);
-                  }
-              }
-
-              // Fire Leaflet zoom animation explicitly on the marker's coordinate point
-              mapInstance.flyTo(e.latlng, targetZoom, {
+              // Simply zoom in. Your 'zoomend' handler will catch this 
+              // and automatically swap to Satellite view midway!
+              mapInstance.flyTo(e.latlng, 15, {
                   animate: true,
                   duration: 1.2
               });
 
-              // Delay redirect until the zoom transition window completes safely
+              // Hold the page redirect until the zoom and view swap complete
               setTimeout(() => {
                   window.location.href = targetURL;
-              }, 1300);
+              }, 1400);
           } else {
               window.location.href = targetURL;
           }
@@ -550,13 +539,12 @@ async function gatherResources() {
         buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers);
       
         if (typeof buildFlowerPinsLayer === 'function' && obs_data) {
-           if (defaultZoom >= thresholdZoom) {
-              // Pass 'map' so the function can immediately run .addTo(map)
-              buildFlowerPinsLayer(config, obs_data, map); 
-           } else {
-              // Initialize the layer dataset layout, but do not attach to map yet
-              buildFlowerPinsLayer(config, obs_data, map); 
-           }   
+           buildFlowerPinsLayer(config, obs_data, map); 
+           
+           // If we are initially zoomed out, make sure the layer matches the map state
+           if (defaultZoom < thresholdZoom && map.hasLayer(flowerLocationsLayer)) {
+              map.removeLayer(flowerLocationsLayer);
+           }
         }
 
         // Mount UI Controls and Layer Checkboxes
