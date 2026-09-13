@@ -664,7 +664,9 @@ async function gatherResources() {
 
         // Mount UI Controls and Layer Checkboxes
         map.getContainer().classList.remove('hide-first-rule');
-              
+
+        const overlayMaps = {};
+      
         // 🌟 Programmatically generate interactive layer checkboxes for each discovered trail
         for (let trail in trailLayers) {
             overlayMaps[trail] = trailLayers[trail];
