@@ -376,33 +376,49 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
 
       const [lat, lon] = rec.location.split(',');
       const flowerMarker = L.marker([lat, lon], { icon: flowerIcon });
-          
+
       // Handle click events
       flowerMarker.on('click', function(e) {
-          
-        let targetURL = '';
+        
+          let targetURL = '';
 
-        // Determine which URL to redirect to based on mode
-        if (p_mode === 'plants') {
-            targetURL = buildPlantsURL(flower, config);
-        } else if (p_mode === 'activity') {
-            targetURL = buildInsectActivityURL(flower, config);
-        } else if (p_mode === 'beds') {
-            targetURL = buildFlowerBedURL(config, rec);
-        } else if (p_mode === 'flower') {
-            targetURL = buildFlowerURL(config, rec);
-        }
+          if (p_mode === 'plants') {
+              targetURL = buildPlantsURL(rec, config);
+          } else if (p_mode === 'activity') {
+              targetURL = buildInsectActivityURL(rec, config);
+          } else if (p_mode === 'beds') {
+              targetURL = buildFlowerBedURL(config, rec);
+          } else if (p_mode === 'flower') {
+              targetURL = buildFlowerURL(config, rec);
+          }
 
-        // If the map exists, zoom in smoothly first
-        if (mapInstance) {
-            mapInstance.flyTo(e.latlng, 15, { animate: true, duration: 1.2 }); // Zoom takes 1.2 seconds 
+          // Zoom & Layer Switch Check
+          if (mapInstance) {
+              const targetZoom = 16;
+              const thresholdZoom = config.showUnderZoomLevel || 15;
 
-            // Wait for the zoom animation to finish before moving to the next page
-            setTimeout(() => { window.location.href = targetURL; }, 1300); // 1300ms slightly outlasts the 1.2s animation
-        } else {
-            // If mapInstance wasn't passed, just redirect immediately
-            window.location.href = targetURL;
-        }
+              // 🌟 PRESERVE SATELLITE SWITCH LOGIC:
+              // If the target zoom crosses your threshold, explicitly swap the layers out smoothly
+              if (targetZoom >= thresholdZoom && typeof satelliteView !== 'undefined' && typeof streetView !== 'undefined') {
+                  if (!mapInstance.hasLayer(satelliteView)) {
+                      mapInstance.removeLayer(streetView);
+                      mapInstance.addLayer(satelliteView);
+                  }
+              }
+
+              // Fire smooth zoom animation
+              mapInstance.flyTo(e.latlng, targetZoom, {
+                  animate: true,
+                  duration: 1.2
+              });
+
+              // Delay redirect so user can see the zoom and satellite switch complete
+              setTimeout(() => {
+                  window.location.href = targetURL;
+              }, 1300);
+          } else {
+              window.location.href = targetURL;
+          }
       });
 
       // Always add the marker to the layer group
