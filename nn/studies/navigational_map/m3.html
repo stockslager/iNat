@@ -277,11 +277,22 @@ body {
     margin-bottom: 0;
 }
 
-/* Remove Leaflet's default native indent padding on text strings */
-#map .leaflet-control-layers-overlays label span,
-#map .leaflet-control-layers-base label span {
+/* Force the entire layers container to align flush to the left edge */
+#map .leaflet-control-layers-overlays,
+#map .leaflet-control-layers-base {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Clear any possible residual indentation on the wrapper container */
+#map .leaflet-control-layers-overlays label,
+#map .leaflet-control-layers-base label {
     padding-left: 0;
     margin-left: 0;
+    text-indent: 0;
 }
   
 </style>
