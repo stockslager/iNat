@@ -599,7 +599,19 @@ async function gatherResources() {
         }
 
         // Mount control grid interface panels
-        L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+        const layerControl = L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+
+        // Extract the physical HTML block Leaflet built for the container
+        const controlContainer = layerControl.getContainer();
+
+        // Create a clean text title element
+        const menuTitle = document.createElement('div');
+        menuTitle.className = 'layer-menu-title';
+        menuTitle.innerHTML = 'Trail Name'; 
+
+        // Inject it right at the very top of the layout panel box
+        controlContainer.insertBefore(menuTitle, controlContainer.firstChild);
+      
         parentLocationsLayer.addTo(map);
 
         // Base Layer Visual Theme Toggle Listeners
