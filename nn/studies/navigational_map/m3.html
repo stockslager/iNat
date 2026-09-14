@@ -252,12 +252,17 @@ body {
 }
 
 /* Center checkboxes and their text labels vertically */
-.leaflet-control-layers-selector,
-.leaflet-control-layers-overlays label,
-.leaflet-control-layers-base label {
+#map .leaflet-control-layers-overlays label,
+#map .leaflet-control-layers-base label {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 6px; /* Adds clean, uniform spacing between the box and your text string */
+}
+
+#map input.leaflet-control-layers-selector {
+    float: none;
+    margin: 0 6px 0 0; /* Clear margins: Top, Right (6px space to text), Bottom, Left */
+    vertical-align: middle;
 }
 
 </style>
