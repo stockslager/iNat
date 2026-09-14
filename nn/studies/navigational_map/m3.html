@@ -52,7 +52,7 @@
   <title>Observations Map</title>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  
+
 <style>
 /* ==========================================================================
    BASE LAYOUT & APPLICATION WRAPPER
@@ -135,15 +135,6 @@ body {
     font-weight: bold;
 }
 
-/* Targets the absolute last checkbox line item in the Leaflet overlay menu */
-/* Only add the fake line if the map DOES NOT have the .hide-first-rule class */
-/*#map:not(.hide-first-rule) .leaflet-control-layers-overlays label:first-child {
-    border-top: 1px solid #ccc;
-    margin-top: 8px;
-    padding-top: 8px;
-    display: block;
-}*/
-
 /* let the parent pins stay black instead of toggling color on satellite view */
 .parent-utf8-pin {
     font-size: 12px;
@@ -162,7 +153,6 @@ body {
     display: inline-block;
     text-align: center;
     width: 100%;
-    /*transition: filter 0.2s ease; /* Adds a clean transition when swapping views */
     transition: filter 0.2s ease, color 0.2s ease;
 }
 
@@ -200,7 +190,7 @@ body {
 
 /* Satellite View Theme (White or Neon Yellow Flower for visibility) */
 .satellite-theme .flower-glyph {
-  color: #ffffff; /* Or use #ccff00 for high-contrast neon green/yellow */
+  color: #ffffff; 
 }
 
 /* Handles the default state directly without inline styles */
@@ -241,9 +231,10 @@ body {
     font-size: 13px;
     font-weight: bold;
     color: #1e293b; 
-    padding: 2px 6px 2px 6px;
+    /* 🌟 Adjusted left-padding to 4px to align text exactly with the checkbox boxes */
+    padding: 2px 6px 2px 4px;
     border-bottom: 1px solid #1e293b;
-    margin-bottom: 3px;
+    margin-bottom: 5px;
 }
 
 /* 2. Automatically show the title block ONLY when the panel is hovered/expanded */
@@ -257,11 +248,14 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
+    /* 🌟 Reset inner padding on the rows to ensure a clean left margin */
+    padding: 0;
 }
 
 #map input.leaflet-control-layers-selector {
     float: none;
-    margin: 0 6px 0 0; /* Clear margins: Top, Right (6px space to text), Bottom, Left */
+    /* 🌟 Standardized left margin to 4px to align squarely below the title header text */
+    margin: 0 6px 0 4px; 
     vertical-align: middle;
 }
 
@@ -277,25 +271,8 @@ body {
     margin-bottom: 0;
 }
 
-/* Force the entire layers container to align flush to the left edge */
-#map .leaflet-control-layers-overlays,
-#map .leaflet-control-layers-base {
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-/* Clear any possible residual indentation on the wrapper container */
-#map .leaflet-control-layers-overlays label,
-#map .leaflet-control-layers-base label {
-    padding-left: 0;
-    margin-left: 0;
-    text-indent: 0;
-}
-  
 </style>
+  
 </head>
 <body>
   
