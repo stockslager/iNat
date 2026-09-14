@@ -309,6 +309,45 @@ function buildPage(xobj, config) {
    img.style.objectFit = 'contain'; 
    img.className = 'anchored-image';
 
+   // Always append the image immediately since it is your base asset
+   wrapper.appendChild(img);
+
+   // 🌟 CHECK IF THE MP3 FILE EXISTS BEFORE CREATING PLAYER UI
+   const mp3Url = './artwork/' + image_audio_name + '.mp3';
+
+   fetch(mp3Url, { method: 'HEAD' })
+       .then(response => {
+           // If the file returns a valid 200 code status, render the player elements safely
+           if (response.ok) {
+               const audioPlayerContainer = document.createElement('div');
+               audioPlayerContainer.className = 'custom-audio-player';
+               audioPlayerContainer.innerHTML = 
+                  '<audio class="dynamic-audio-track" preload="auto"> ' + 
+                  '<source src="' + mp3Url + '" type="audio/mpeg">' + 
+                  '</audio> ' + 
+                  '<button class="dynamic-play-btn player-btn" type="button">▶</button> ' + 
+                  '<span class="dynamic-time-display">0:00</span>';   
+
+               wrapper.appendChild(audioPlayerContainer);
+               
+               // 🌟 Re-initialize your player click listeners here if you have them!
+               // setupAudioPlayerListeners(audioPlayerContainer);
+           } else {
+               console.log("ℹ️ No MP3 file found for " + image_audio_name + ". Skipping audio UI.");
+           }
+       })
+       .catch(err => {
+           console.error("⚠️ Server check failed or network offline: ", err);
+       });
+
+   // Create dynamic image element (keeping exact styling rules)
+  /* const img = document.createElement('img');
+   img.src = './artwork/' + image_audio_name + '.jpg'; 
+   img.style.height = 'auto';
+   img.style.borderRadius = '5px';  
+   img.style.objectFit = 'contain'; 
+   img.className = 'anchored-image';
+
    // Create custom audio player block using a template string
    const audioPlayerContainer = document.createElement('div');
    audioPlayerContainer.className = 'custom-audio-player';
@@ -320,7 +359,7 @@ function buildPage(xobj, config) {
 
    // Nest everything safely together
    wrapper.appendChild(img);
-   wrapper.appendChild(audioPlayerContainer);
+   wrapper.appendChild(audioPlayerContainer);*/
 
    header.appendChild(wrapper);
 
