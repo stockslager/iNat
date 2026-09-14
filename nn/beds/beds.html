@@ -312,12 +312,11 @@ function buildPage(xobj, config) {
    // Always append the image immediately since it is your base asset
    wrapper.appendChild(img);
 
-   // 🌟 CHECK IF THE MP3 FILE EXISTS BEFORE CREATING PLAYER UI
+   // Check if the MP3 file exists before creating player UI
    const mp3Url = './artwork/' + image_audio_name + '.mp3';
 
    fetch(mp3Url, { method: 'HEAD' })
        .then(response => {
-           // If the file returns a valid 200 code status, render the player elements safely
            if (response.ok) {
                const audioPlayerContainer = document.createElement('div');
                audioPlayerContainer.className = 'custom-audio-player';
@@ -330,14 +329,37 @@ function buildPage(xobj, config) {
 
                wrapper.appendChild(audioPlayerContainer);
                
-               // 🌟 Re-initialize your player click listeners here if you have them!
-               // setupAudioPlayerListeners(audioPlayerContainer);
+               // ============================================================
+               // 🌟 MOVE YOUR PLAYBUTTON / TIME LISTENERS INSIDE HERE!
+               // ============================================================
+               const playBtn    = audioPlayerContainer.querySelector('.dynamic-play-btn');
+               const audioTrack = audioPlayerContainer.querySelector('.dynamic-audio-track');
+               const timeDisp   = audioPlayerContainer.querySelector('.dynamic-time-display');
+
+               playBtn.addEventListener('click', () => {
+                   if (audioTrack.paused) {
+                       audioTrack.play();
+                       playBtn.textContent = '⏸';
+                   } else {
+                       audioTrack.pause();
+                       playBtn.textContent = '▶';
+                   }
+               });
+
+               // Update time display as it plays
+               audioTrack.addEventListener('timeupdate', () => {
+                   let minutes = Math.floor(audioTrack.currentTime / 60);
+                   let seconds = Math.floor(audioTrack.currentTime % 60);
+                   if (seconds < 10) seconds = '0' + seconds;
+                   timeDisp.textContent = minutes + ':' + seconds;
+               });
+
            } else {
-               console.log("ℹ️ No MP3 file found for " + image_audio_name + ". Skipping audio UI.");
+               console.log("ℹ️ No MP3 file found. Skipping audio UI.");
            }
        })
        .catch(err => {
-           console.error("⚠️ Server check failed or network offline: ", err);
+           console.error("⚠️ Server check failed: ", err);
        });
 
    // Create dynamic image element (keeping exact styling rules)
