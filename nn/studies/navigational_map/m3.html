@@ -137,12 +137,12 @@ body {
 
 /* Targets the absolute last checkbox line item in the Leaflet overlay menu */
 /* Only add the fake line if the map DOES NOT have the .hide-first-rule class */
-#map:not(.hide-first-rule) .leaflet-control-layers-overlays label:first-child {
+/*#map:not(.hide-first-rule) .leaflet-control-layers-overlays label:first-child {
     border-top: 1px solid #ccc;
     margin-top: 8px;
     padding-top: 8px;
     display: block;
-}
+}*/
 
 /* let the parent pins stay black instead of toggling color on satellite view */
 .parent-utf8-pin {
@@ -233,7 +233,24 @@ body {
   color: #1d4ed8;          /* Changes text color on hover instead */
   text-decoration: underline;
 }
-  
+
+/* 1. Hide the title by default when the menu is just a small closed icon */
+.layer-menu-title {
+    display: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    color: #e2e8f0;
+    padding: 2px 6px 6px 6px;
+    border-bottom: 1px solid #475569;
+    margin-bottom: 6px;
+}
+
+/* 2. Automatically show the title block ONLY when the panel is hovered/expanded */
+.leaflet-control-layers-expanded .layer-menu-title {
+    display: block;
+}
+
 </style>
 </head>
 <body>
