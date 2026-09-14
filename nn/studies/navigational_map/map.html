@@ -1,5 +1,5 @@
-<!DOCTYPE html>    
-<html lang="en">  
+<!DOCTYPE html>      
+<html lang="en">   
 <head> 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -52,7 +52,7 @@
   <title>Observations Map</title>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  
+
 <style>
 /* ==========================================================================
    BASE LAYOUT & APPLICATION WRAPPER
@@ -135,15 +135,6 @@ body {
     font-weight: bold;
 }
 
-/* Targets the absolute last checkbox line item in the Leaflet overlay menu */
-/* Only add the fake line if the map DOES NOT have the .hide-first-rule class */
-#map:not(.hide-first-rule) .leaflet-control-layers-overlays label:first-child {
-    border-top: 1px solid #ccc;
-    margin-top: 8px;
-    padding-top: 8px;
-    display: block;
-}
-
 /* let the parent pins stay black instead of toggling color on satellite view */
 .parent-utf8-pin {
     font-size: 12px;
@@ -162,7 +153,6 @@ body {
     display: inline-block;
     text-align: center;
     width: 100%;
-    /*transition: filter 0.2s ease; /* Adds a clean transition when swapping views */
     transition: filter 0.2s ease, color 0.2s ease;
 }
 
@@ -200,7 +190,7 @@ body {
 
 /* Satellite View Theme (White or Neon Yellow Flower for visibility) */
 .satellite-theme .flower-glyph {
-  color: #ffffff; /* Or use #ccff00 for high-contrast neon green/yellow */
+  color: #ffffff; 
 }
 
 /* Handles the default state directly without inline styles */
@@ -233,8 +223,56 @@ body {
   color: #1d4ed8;          /* Changes text color on hover instead */
   text-decoration: underline;
 }
-  
+
+/* 1. Hide the title by default when the menu is just a small closed icon */
+.layer-menu-title {
+    display: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    color: #1e293b; 
+    /* 🌟 Adjusted left-padding to 4px to align text exactly with the checkbox boxes */
+    padding: 2px 6px 2px 4px;
+    border-bottom: 1px solid #1e293b;
+    margin-bottom: 5px;
+}
+
+/* 2. Automatically show the title block ONLY when the panel is hovered/expanded */
+.leaflet-control-layers-expanded .layer-menu-title {
+    display: block;
+}
+
+/* Center checkboxes and their text labels vertically */
+#map .leaflet-control-layers-overlays label,
+#map .leaflet-control-layers-base label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* 🌟 Reset inner padding on the rows to ensure a clean left margin */
+    padding: 0;
+}
+
+#map input.leaflet-control-layers-selector {
+    float: none;
+    /* 🌟 Standardized left margin to 4px to align squarely below the title header text */
+    margin: 0 6px 0 4px; 
+    vertical-align: middle;
+}
+
+/* Add vertical spacing between each checkbox row item */
+#map .leaflet-control-layers-overlays label,
+#map .leaflet-control-layers-base label {
+    margin-bottom: 6px; /* Adjust this number up or down to tweak the spacing */
+}
+
+/* Zero out the margin on the absolute last item so it doesn't add extra empty padding to the bottom of the box */
+#map .leaflet-control-layers-overlays label:last-child,
+#map .leaflet-control-layers-base label:last-child {
+    margin-bottom: 0;
+}
+
 </style>
+  
 </head>
 <body>
   
@@ -247,7 +285,8 @@ body {
 
 let thresholdZoom = '';
 const flowerLocationsLayer = L.layerGroup();
-
+const trailLayers = {}; 
+  
 // Define the tile layer instances globally so the zoom handler can see them
 const esri = "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
 const osm  = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
@@ -267,36 +306,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;     
     }
 });
-
-function buildPlantsURL( pin, config ) {
-  
-  // Instantly locks the taxonId value exclusively to this specific pin instance
-  const taxon_query = pin.taxonId ? '&fieldvalue=' + pin.taxonId : '';
-  
-  // Instantly locks the fieldname exclusively to this config file state
-  const field_id    = (config && config.fieldId)   ? '&fieldid='   + config.fieldId : '';
-  const field_query = (config && config.fieldName) ? '&fieldname=' + config.fieldName : '';
-  
-  return( '../../studies/navigational_map/recent_activity_tabs.html?params=' + pin.params + '&component=studies' + 
-                   taxon_query + field_id + field_query );
-}
-
-function buildInsectActivityURL( pin, config ) {
-
-  // Instantly locks the taxonId value exclusively to this specific pin instance
-  const study_title = pin.studyTitle ? '&studytitle=' + pin.studyTitle : '';
-  const taxon_query = pin.taxonId ? '&fieldvalue=' + pin.taxonId : '';
-  
-  // Instantly locks the fieldname exclusively to this config file state
-  const field_id    = (config && config.fieldId)    ? '&fieldid='   + config.fieldId : '';
-  const field_query = (config && config.fieldName)  ? '&fieldname=' + config.fieldName : '';
-  
-  return( '../../studies/field_study.html?params=' + pin.params + '&component=studies&mode=' + p_mode + study_title +
-                                             '&defaultlat=' + p_default_lat + 
-                                             '&defaultlon=' + p_default_lon + 
-                                             '&defaultzoom=' + p_default_zoom +
-                                             taxon_query + field_id + field_query );
-}
 
 function buildFlowerBedURL( config, rec ) {
 
@@ -328,27 +337,6 @@ function buildFlowerURL( config, rec ) {
                                              '&defaultzoom=' + p_default_zoom );
 }
 
-
-// builds a bubble for the click of a pin
-function buildBubble( pin, config=null ) {
-  
-  // Assembles structured HTML layout blocks directly inside the pop-up container
-  let bubbleContent = '<div style="font-family: sans-serif; padding: 2px;">';  
-  bubbleContent += '<strong style="display: block; font-size: 14px; color: #1e293b; margin-bottom: 4px;">' + pin.name + '</strong>';
-  bubbleContent += '<p style="font-size: 12px; color: #64748b; margin: 0 0 8px 0; line-height: 1.4;">' + pin.notes + '</p>';
-
-  // Append the strings cleanly using your isolated local variables
-  bubbleContent += '<a href="' + buildPlantsURL( pin, config ) + '" class="popup-link">Recent Observations</a><br>';
-  
-  bubbleContent += '<a href="' + buildInsectActivityURL( pin, config ) + '" class="popup-link">Plant / Insect Interactions</a>';
-
-  /*if( pin.bed ) {
-      bubbleContent += '<br><a href="' + buildFlowerBedURL( pin, config ) + '" class="popup-link">Flower Bed Overview</a><br>';
-  }*/
-  
-  bubbleContent += '</div>';
-  return bubbleContent;
-}
 
 /**
  * Processes config parent pins, builds Leaflet markers, and binds layer events.
@@ -385,14 +373,38 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
     if (parentPin.lat && parentPin.lon) {
       const marker = L.marker([parentPin.lat, parentPin.lon], { icon: communityPin });
       
-      // Bind your clean browser-back bubble link framework
-      if( p_mode === 'plants' ) {
-          marker.on('click', () => { window.location.href = buildPlantsURL( parentPin ); });
-      } else if( p_mode === 'activity' ) {
-          marker.on('click', () => { window.location.href = buildInsectActivityURL( parentPin ); });
-      } else {
-          marker.bindPopup(buildBubble(parentPin));
-      }
+      // 🌟 AUTOMATIC ZOOM INTERCEPT
+      marker.on('click', function(e) {
+          console.log("🎯 PARENT PIN CLICKED: Zooming in smoothly to parent position...");
+
+          // Stop Leaflet from passing the click through to background map elements
+          if (e && e.originalEvent) {
+              L.DomEvent.stopPropagation(e.originalEvent);
+              e.originalEvent.preventDefault();
+          }
+
+          // 1. Determine which URL to route to based on mode
+          let targetURL = '';
+          if (p_mode === 'plants') {
+              targetURL = buildPlantsURL(parentPin);
+          } else if (p_mode === 'activity') {
+              targetURL = buildInsectActivityURL(parentPin);
+          }
+
+          // 2. Animate map zoom straight into the parent coordinate
+          // Your 'zoomend' handler will catch this flight midway and swap views natively!
+          map.flyTo(e.latlng, 16, {
+              animate: true,
+              duration: 1.2
+          });
+
+          // 3. Delay redirect until the zoom flight animation completely finishes
+          setTimeout(function() {
+              if (targetURL) {
+                  window.location.href = targetURL;
+              }
+          }, 1400);
+      });
       
       // Keep your child link identifier tags intact
       marker.parentIdentifier = parentPin.name;
@@ -400,164 +412,6 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
       mySavedMarkers.push(marker);
       parentLocationsLayer.addLayer(marker);
     }
-  });
-
-  // Bind dynamic children markers if you populated parents successfully
-  if (mySavedMarkers.length > 0) {
-    bindDynamicChildPins(map, mySavedMarkers, config);
-  }
-}
-
-/**
- * Scans all parents to extract and build nested flower markers,
- * then packs them into the global zoom-controlled layer group.
- * @param {MapConfiguration} config - The instantiated configuration class object.
- */
-function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
-  // Clear any existing layers first to prevent double-rendering bugs if config changes
-  flowerLocationsLayer.clearLayers();
-
-  // Define visual flower icon parameters
-  const flowerIcon = L.divIcon({
-    html: '<span class="custom-flower-pin">🌼</span>',
-    iconSize: [16, 16],
-    iconAnchor: [8, 8],
-    popupAnchor: [0, -16],
-    className: 'custom-pin-reset'
-  });
-
-  // Extract the actual array from iNaturalist's wrapper
-  const records = (obs_data && obs_data.results) ? obs_data.results : [];
-    
-  for (let i=0; i<records.length; i++) {
-      let rec  = records[i];
-
-      const [lat, lon] = rec.location.split(',');
-      const flowerMarker = L.marker([lat, lon], { icon: flowerIcon });
-          
-      // Bind existing standard popup bubble
-      if( p_mode === 'plants' ) {
-          flowerMarker.on('click', () => { window.location.href = buildPlantsURL( flower, config ); });  
-          flowerLocationsLayer.addLayer(flowerMarker);
-      } else if( p_mode === 'activity' ) {
-          flowerMarker.on('click', () => { window.location.href = buildInsectActivityURL( flower, config ); });
-          flowerLocationsLayer.addLayer(flowerMarker);
-      } else if( p_mode === 'beds' ) {
-          flowerMarker.on('click', () => { window.location.href = buildFlowerBedURL( config, rec ); });
-          flowerLocationsLayer.addLayer(flowerMarker);
-      } else if( p_mode === 'flower' ) {
-          flowerMarker.on('click', () => { window.location.href = buildFlowerURL( config, rec ); });
-          flowerLocationsLayer.addLayer(flowerMarker);
-      } else if( p_mode === 'all' ) {
-          flowerMarker.bindPopup(buildBubble(flower, config));
-          flowerLocationsLayer.addLayer(flowerMarker);
-      }
-  }
-
-  // if a map instance is provided, add the entire layer group to it 
-  // (for initialization of flower pins if a default zoom over the threshold was
-  // passed in as a url parameter).
-  if (mapInstance) {
-      flowerLocationsLayer.addTo(mapInstance);
-  }
-}
-
-/**
- * Handles binding dynamic child pins to a parent marker popup action
- * @param {L.Map} mapInstance - The active Leaflet map instance
- * @param {L.Marker} parentMarker - The parent marker target
- */
-function bindDynamicChildPins(map, parentInput, config) {
-  let isClickingChild = false;
-  const markersToProcess = Array.isArray(parentInput) ? parentInput : [parentInput];
-
-  markersToProcess.forEach(parentMarker => {
-    // 1. CHANGED: Moved layer group creation inside the loop so each parent owns an isolated group
-    parentMarker.myOwnChildLayer = L.layerGroup();
-
-    parentMarker.on('popupopen', (e) => {
-      isClickingChild = false;
-
-      // 2. CHANGED: Force clear and hide all other sibling layers immediately on click
-      markersToProcess.forEach(m => {
-        if (m.myOwnChildLayer) {
-          map.removeLayer(m.myOwnChildLayer);
-          m.myOwnChildLayer.clearLayers();
-        }
-      });
-
-      // Check if the map layout is currently showing Satellite view
-      const activeParentPin = document.querySelector('.custom-utf8-pin');
-      const isSatelliteActive = activeParentPin ? activeParentPin.classList.contains('satellite-theme') : false;
-
-      // Set the starting theme class string based on that active map view state
-      const currentThemeClass = isSatelliteActive ? 'satellite-theme' : 'default-theme';
-
-      // Define the clean 12px child template matching your custom CSS parameters
-      const child_utf8 = '<span class="custom-utf8-pin ' + currentThemeClass + '">✿</span>'
-      const childIcon = L.divIcon({
-        html: child_utf8,
-        iconSize:[12, 12], 
-        iconAnchor:[6, 12], 
-        popupAnchor: [0, -12], 
-        className: 'custom-pin-reset'
-      });
-
-      const targetId = e.target.parentIdentifier;
-      const parentDataRecord = config.parentPins ? config.parentPins.find(item => item.name === targetId) : null;
-      const children = parentDataRecord ? parentDataRecord.childPins : [];
-
-      children.forEach(child => {
-        const childMarker = L.marker([child.lat, child.lon], { icon: childIcon });
-
-        if( p_mode === 'plants' ) {
-            childMarker.on('click', () => { window.location.href = buildPlantsURL( child ); });
-        } else if( p_mode === 'activity' ) {
-            childMarker.on('click', () => { window.location.href = buildInsectActivityURL( child ); });
-        } else {
-            childMarker.bindPopup( buildBubble(child) );
-        }
-
-        childMarker.on('click', () => {
-          isClickingChild = true;
-        });
-
-        childMarker.on('popupclose', () => {
-          setTimeout(() => {
-            if (!isClickingChild) {
-              // 3. CHANGED: Targets only this parent's specific layer group instance
-              map.removeLayer(parentMarker.myOwnChildLayer);
-            }
-          }, 50);
-        });
-
-        // 4. CHANGED: Pushes child pins to the isolated layer sandbox
-        parentMarker.myOwnChildLayer.addLayer(childMarker);
-      });
-
-      // 5. CHANGED: Mounts the safe isolated layer onto the map container view
-      parentMarker.myOwnChildLayer.addTo(map);
-    });
-
-    parentMarker.on('popupclose', () => {
-      setTimeout(() => {
-        if (!isClickingChild) {
-          // 6. CHANGED: Targets the isolated layer cleanup path
-          map.removeLayer(parentMarker.myOwnChildLayer);
-        }
-        isClickingChild = false;
-      }, 50);
-    });
-  });
-
-  map.on('click', () => {
-    isClickingChild = false;
-    // 7. CHANGED: Wipes all child layers completely when clicking the blank map space
-    markersToProcess.forEach(m => {
-      if (m.myOwnChildLayer) {
-        map.removeLayer(m.myOwnChildLayer);
-      }
-    });
   });
 }
 
@@ -611,6 +465,89 @@ function initializeZoomViewHandler(map, config) {
   });
 }
 
+/**
+ * Dynamically loads map layers based on trail name
+ */
+function loadLayers(obs_data) {
+  // Extract the actual array from iNaturalist's wrapper
+  const records = (obs_data && obs_data.results) ? obs_data.results : [];
+    
+  for (let i = 0; i < records.length; i++) {
+      let rec = records[i];
+      if (!rec || !rec.ofvs) continue;
+
+      let trailName = 'Not Specified'; // Fallback container name
+
+      // 1. Extract the unique trail name using field_id 1019
+      for (let j = 0; j < rec.ofvs.length; j++) {
+          if (rec.ofvs[j].field_id === 1019) {   // trail name
+              trailName = capitalizeWords(rec.ofvs[j].value.toString());
+              break;
+          }
+      }
+
+      // 2. Dynamically create the trail layer group if it doesn't exist yet
+      if (!trailLayers[trailName]) {
+          trailLayers[trailName] = L.layerGroup();
+          
+          // Nest the trail layer group directly inside your overarching parent container
+          flowerLocationsLayer.addLayer(trailLayers[trailName]);
+      }
+      
+      // 3. Create the pin using your original logic (matching your page mode icon rules)
+      const [lat, lon] = rec.location.split(',');
+      
+      // Look up target zoom level globally or default it safely to frame the pin
+      const initialTheme = (typeof defaultZoom !== 'undefined' && typeof thresholdZoom !== 'undefined' && defaultZoom >= thresholdZoom) 
+          ? 'satellite-theme' 
+          : 'default-theme';
+          
+      const flowerIcon = L.divIcon({
+        html: '<span class="custom-utf8-pin satellite-theme"><span class="flower-glyph">' + '🌼' + '</span></span>',
+        iconSize: [16, 16],
+        iconAnchor: [8, 8],
+        popupAnchor: [0, -16],
+        className: 'custom-pin-reset'
+      });
+
+      const flowerMarker = L.marker([parseFloat(lat), parseFloat(lon)], { 
+          icon: flowerIcon,
+          interactive: true,
+          bubblingMouseEvents: false
+      });
+          
+      // Click redirection logic
+      flowerMarker.on('click', function(e) {
+          if (e && e.originalEvent) {
+              L.DomEvent.stopPropagation(e.originalEvent);
+              e.originalEvent.preventDefault();
+          }
+
+          let targetURL = '';
+          try {
+              if (p_mode === 'plants') {
+                  targetURL = typeof buildPlantsURL === 'function' ? buildPlantsURL(rec, config) : '#';
+              } else if (p_mode === 'activity') {
+                  targetURL = typeof buildInsectActivityURL === 'function' ? buildInsectActivityURL(rec, config) : '#';
+              } else if (p_mode === 'beds') {
+                  targetURL = typeof buildFlowerBedURL === 'function' ? buildFlowerBedURL(config, rec) : '#';
+              } else if (p_mode === 'flower') {
+                  targetURL = typeof buildFlowerURL === 'function' ? buildFlowerURL(config, rec) : '#';
+              }
+          } catch (urlError) {
+              console.error("URL Parsing Error: ", urlError);
+          }
+
+          if (targetURL && targetURL !== '#') {
+              window.location.href = targetURL;
+          }
+      });
+
+      // 4. Drop the marker into its matching trail layer group container
+      trailLayers[trailName].addLayer(flowerMarker);
+  }
+}
+  
 </script>
 <script type="text/javascript"   src="../../core/js/api_fetch.js">     </script>
 <script>
@@ -664,12 +601,14 @@ async function gatherResources() {
         let mySavedMarkers = [];
 
         // Initialize Core Leaflet Map View Window
-        const baseMaps = { "Street View": streetView, "Satellite": satelliteView };
+        //const baseMaps = { "Street View": streetView, "Satellite": satelliteView };
+        const baseMaps = {};
         const map = L.map('map', {
           center: [defaultLat, defaultLng],
           zoom: defaultZoom,
           layers: [ defaultZoom >= thresholdZoom ? satelliteView : streetView ]
         });
+        window.map = map; // Expose globally for references
 
         // 🌸 zoom handler for conditional display of flower pins
         initializeZoomViewHandler(map, config);
@@ -677,25 +616,40 @@ async function gatherResources() {
         // Generate parent marker overlays
         buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers);
       
-        if (typeof buildFlowerPinsLayer === 'function' && obs_data) {
+        // 🌟 LOAD TRAIL LAYERS DYNAMICALLY AFTER MAP IS COMPLETELY READY
+        if (typeof loadLayers === 'function' && obs_data) {
+           loadLayers(obs_data); 
+           
+           // Ensure the main master container respects your zoom threshold state on page boot
            if (defaultZoom >= thresholdZoom) {
-              // Pass 'map' so the function can immediately run .addTo(map)
-              buildFlowerPinsLayer(config, obs_data, map); 
-           } else {
-              // Initialize the layer dataset layout, but do not attach to map yet
-              buildFlowerPinsLayer(config, obs_data); 
-           }   
+               flowerLocationsLayer.addTo(map);
+           }
         }
 
         // Mount UI Controls and Layer Checkboxes
         map.getContainer().classList.remove('hide-first-rule');
-        const overlayMaps = {
-          'Communities <span style="font-size: 14px; filter: hue-rotate(140deg);">📍</span>': parentLocationsLayer
-        };
+
+        const overlayMaps = {};
       
-        // i'm commenting this out for now since i'm controlling sat view based on zoom level and there
-        // aren't really any conditional pin groups to allow them to select from.
-        //L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+        // 🌟 Programmatically generate interactive layer checkboxes for each discovered trail
+        for (let trail in trailLayers) {
+            overlayMaps[trail] = trailLayers[trail];
+        }
+
+        // Mount control grid interface panels
+        const layerControl = L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+
+        // Extract the physical HTML block Leaflet built for the container
+        const controlContainer = layerControl.getContainer();
+
+        // Create a clean text title element
+        const menuTitle = document.createElement('div');
+        menuTitle.className = 'layer-menu-title';
+        menuTitle.innerHTML = 'Trail Name'; 
+
+        // Inject it right at the very top of the layout panel box
+        controlContainer.insertBefore(menuTitle, controlContainer.firstChild);
+      
         parentLocationsLayer.addTo(map);
 
         // Base Layer Visual Theme Toggle Listeners
