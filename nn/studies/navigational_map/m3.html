@@ -242,7 +242,7 @@ body {
     font-weight: bold;
     color: #1e293b; 
     padding: 2px 6px 2px 6px;
-    border-bottom: 1px solid #cbd5e1; 
+    border-bottom: 1px solid #1e293b;
     margin-bottom: 3px;
 }
 
@@ -455,12 +455,12 @@ function loadLayers(obs_data) {
       let rec = records[i];
       if (!rec || !rec.ofvs) continue;
 
-      let trailName = 'Unassigned Pins'; // Fallback container name
+      let trailName = 'Not Specified'; // Fallback container name
 
       // 1. Extract the unique trail name using field_id 1019
       for (let j = 0; j < rec.ofvs.length; j++) {
           if (rec.ofvs[j].field_id === 1019) {   // trail name
-              trailName = rec.ofvs[j].value.toString();
+              trailName = capitalizeWords(rec.ofvs[j].value.toString());
               break;
           }
       }
