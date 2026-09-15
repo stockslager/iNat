@@ -613,9 +613,6 @@ async function gatherResources() {
             console.log('api url: ' + api_url);
             obs_data             = await apiFetch( api_url ); 
         }
-
-        // Build your navigation components
-        buildMenu(config);
       
         // ==========================================================================
         // MAP INITIALIZATION 
@@ -694,6 +691,9 @@ async function gatherResources() {
             pins.forEach(el => { el.classList.remove('satellite-theme'); el.classList.add('default-theme'); });
           }
         });
+
+        // Build your navigation components
+        buildMenu(config);
 
         document.getElementById('info').style.display = 'none';
       
