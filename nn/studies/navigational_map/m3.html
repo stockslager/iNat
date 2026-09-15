@@ -35,61 +35,35 @@ function buildMenu( config ) {
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
+   // Build the Title using your native framework builder function
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
-   const titleLink = navbar.querySelector('a');
-   if (titleLink) {
-       titleLink.setAttribute('data-href', titleLink.getAttribute('href'));
-       titleLink.removeAttribute('href');
-       titleLink.style.cursor = 'pointer';
-   }
-
+   // ==========================================================================
+   // 🗺️ LEAFLET INTERCEPT CLICK HANDLER
+   // ==========================================================================
    navbar.addEventListener('click', function(e) {
-       const targetedLink = e.target.closest('a');
-       if (targetedLink) {
-           e.preventDefault(); 
+       const titleLink = e.target.closest('a');
+   
+       if (titleLink) {
+           e.preventDefault(); // Stop the page from reloading/navigating away
 
            if (window.map) {
                const defaultZoom  = config.defaultMapZoom || 12;
                const centerCoords = config.getParsedCenter();
+               
                const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
                const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
+               // Run smooth Leaflet transit back to original view bounds
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
                    duration: 1.5 
                });
            } else {
-               const savedUrl = targetedLink.getAttribute('data-href');
-               if (savedUrl) {
-                   window.location.href = savedUrl;
-               }
+               window.location.href = titleLink.href;
            }
        }
    });
-
-   // ==========================================================================
-   // 🌟 HARDWARE TOUCH PIPELINE: FORCE DOM RE-PAINT ON RELEASE
-   // ==========================================================================
-   navbar.addEventListener('touchend', function(e) {
-       const targetedLink = e.target.closest('a');
-       if (targetedLink) {
-           
-           // 🌟 THE FIX: Momentarily hide and show the link element.
-           // This shatters the mobile WebKit active click/tint overlay thread immediately!
-           targetedLink.style.display = 'none';
-           
-           // Read layout property to force immediate engine synchronization
-           const forceRepaint = targetedLink.offsetHeight; 
-           
-           // Re-apply original inline-block design rules
-           targetedLink.style.display = 'inline-block';
-
-           if (document.activeElement) {
-               document.activeElement.blur();
-           }
-       }
-   }, { passive: true });
    // ==========================================================================
 
    let appContainer = document.getElementById('app');
@@ -322,6 +296,23 @@ body {
 #map .leaflet-control-layers-overlays label:last-child,
 #map .leaflet-control-layers-base label:last-child {
     margin-bottom: 0;
+}
+
+/* ==========================================================================
+   🌟 ANTI-STICKY OVERRIDE: WIPE HOVER AND FOCUS MODIFIERS FOR MOBILE PIPELINES
+   ========================================================================== */
+@media (hover: none) {
+  /* 1. Prevent mobile browsers from locking into the sticky hover color loop */
+  .navbar a:hover {
+    background-color: transparent; 
+  }
+
+  /* 2. FORCE the focus state to instantly return to your native branding color 
+     the moment the finger lifts up and breaks selection focus */
+  .navbar a:focus,
+  .dropbtn:focus {
+    background-color: var(--color-brand);
+  }
 }
 
 </style>
