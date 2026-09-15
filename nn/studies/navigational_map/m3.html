@@ -32,7 +32,13 @@
     let obs_data   = '';
 
 function buildMenu( config ) {
-   // Create the main navbar container
+   // 🌟 THE FIX: Detect and remove any existing navbar duplicate before injecting a new one!
+   let existingNavbar = document.querySelector('.navbar.v2-menu');
+   if (existingNavbar) {
+       existingNavbar.remove();
+   }
+
+   // Create the main navbar container fresh
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
@@ -40,21 +46,20 @@ function buildMenu( config ) {
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
    // ==========================================================================
-   //  DEVICE-AWARE INTERCEPT HANDLER
+   // 🗺️ DEVICE-AWARE INTERCEPT HANDLER
    // ==========================================================================
    navbar.addEventListener('click', function(e) {
        const titleLink = e.target.closest('a');
    
        if (titleLink) {
-           // 📱 CHECK DEVICE TYPE: If it is a mobile touchscreen, do NOT call e.preventDefault()
-           // Let the phone naturally navigate and refresh the page, wiping out sticky touch tints!
+           // Check Device Type: If it is a mobile touchscreen, do NOT cancel the click
            const isMobileTouch = window.matchMedia('(hover: none)').matches;
            
            if (isMobileTouch) {
-               return; // Exit early and let standard href URL navigation happen natively
+               return; // Let standard native link page navigation happen flawlessly
            }
 
-           // DESKTOP LOGIC: Intercept and perform the smooth Leaflet drift animation
+           // DESKTOP ONLY: Intercept and perform the smooth Leaflet zoom animation
            e.preventDefault(); 
 
            if (window.map) {
@@ -65,7 +70,7 @@ function buildMenu( config ) {
 
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
-                   duration: 1.2 
+                   duration: 1.5 
                });
            } else {
                window.location.href = titleLink.href;
