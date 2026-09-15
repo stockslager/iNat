@@ -147,19 +147,6 @@ body {
     flex-shrink: 0; /* Prevents map canvas from squishing navbar dimensions */
 }
 
-.navbar a,
-.navbar a * {
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* Removes the native iOS Safari/Android Webkit block shadow */
-}
-
-/* Explicitly sets focus states to reset background behavior when clicked on mobile */
-.navbar a:focus,
-.navbar a:active {
-    background-color: transparent;
-    outline: none;
-    box-shadow: none;
-}
-
 /* ==========================================================================
    MAP RENDERING ENGINE & FLOATING COMPONENTS
    ========================================================================== */
@@ -319,6 +306,34 @@ body {
 #map .leaflet-control-layers-overlays label:last-child,
 #map .leaflet-control-layers-base label:last-child {
     margin-bottom: 0;
+}
+
+/* ==========================================================================
+   FIX FOR THE STICKY NAVLINK HIGHLIGHT
+   ========================================================================= */
+.v2-menu #navlink,
+.v2-menu #navlink a,
+.v2-menu #navlink span {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.v2-menu #navlink:focus,
+.v2-menu #navlink:active,
+.v2-menu #navlink a:focus,
+.v2-menu #navlink a:active {
+  background: transparent;
+  background-color: transparent;
+  outline: none;
+  box-shadow: none;
+}
+
+@media (hover: none) {
+  .v2-menu #navlink a:hover,
+  .v2-menu #navlink:hover {
+    background: transparent;
+    background-color: transparent;
+  }
 }
 
 </style>
