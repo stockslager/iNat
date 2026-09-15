@@ -37,14 +37,13 @@ function buildMenu( config ) {
 
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
+   // ==========================================================================
+   // 🌟 LEAFLET INTERCEPT CLICK HANDLER WITH FAST TOUCH TIMING LIFECYCLE
+   // ==========================================================================
    navbar.addEventListener('click', function(e) {
        const titleLink = e.target.closest('a');
-   
        if (titleLink) {
-           e.preventDefault(); 
-
-           // 1. Turn the navbar transparent immediately on tap
-           navbar.classList.add('menu-clicked');
+           e.preventDefault(); // Stop the page from reloading/navigating away!
 
            if (window.map) {
                const defaultZoom  = config.defaultMapZoom || 12;
@@ -52,27 +51,30 @@ function buildMenu( config ) {
                const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
                const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
-               // 2. Start the smooth Leaflet transition
+               // Run smooth Leaflet zoom-out transit animation
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
                    duration: 1.5 
                });
-
-               // 3. 🌟 THE LIFECYCLE FIX: Listen for Leaflet to finish moving, then restore the color!
-               window.map.once('moveend', function() {
-                   navbar.classList.remove('menu-clicked');
-                   
-                   // Cleanly clear any lingering browser element focus highlights
-                   if (document.activeElement) {
-                       document.activeElement.blur();
-                   }
-               });
-
            } else {
                window.location.href = titleLink.href;
            }
        }
    });
+
+   // 🌟 THE TOUCH SCREEN OVERRIDE: Uses native mobile hardware events to snap the background back
+   navbar.addEventListener('touchstart', function() {
+       navbar.classList.add('menu-active-touch');
+   }, { passive: true });
+
+   navbar.addEventListener('touchend', function() {
+       // Instantly forces the mobile browser to destroy the transparency class upon finger lift
+       navbar.classList.remove('menu-active-touch');
+       if (document.activeElement) {
+           document.activeElement.blur();
+       }
+   }, { passive: true });
+   // ==========================================================================
 
    let appContainer = document.getElementById('app');
    if( appContainer ) {
@@ -307,10 +309,9 @@ body {
 }
 
 /* ==========================================================================
-   THE SINGLE PURE-CSS TOUCH TRANSPARENCY FIX
+   FORCE TRANSPARENCY ONLY WHILE FINGER IS IN CONTACT WITH SCREEN
    ========================================================================== */
-html body #app .v2-menu:active,
-html body #app .v2-menu:focus-within {
+html body #app .v2-menu.menu-active-touch {
     background: transparent;
     background-color: transparent;
 }
