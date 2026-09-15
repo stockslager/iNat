@@ -31,56 +31,53 @@
     let config     = null;
     let obs_data   = '';
     
-function buildMenu( config ) {
-   // Create the main navbar container
-   let navbar = document.createElement('div');
-   navbar.className = 'navbar v2-menu';
+    function buildMenu( config ) {
+       // Create the main navbar container
+       let navbar = document.createElement('div');
+       navbar.className = 'navbar v2-menu';
 
-   // Build the Title
-   buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
-   //buildNavTitle(navbar, config.title);
+       // Build the Title
+       buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
-   // ==========================================================================
-   // 🌟 INTERCEPT THE CLICK EVENT TO EXECUTE A SMOOTH FLYTO (FIXED FOR LEAFLET)
-   // ==========================================================================
-   navbar.addEventListener('click', function(e) {
-       // Find the closest anchor tag or title text block within the navbar
-       const titleLink = e.target.closest('a');
+       // ==========================================================================
+       // 🌟 INTERCEPT THE CLICK EVENT TO EXECUTE A SMOOTH FLYTO (FIXED FOR LEAFLET)
+       // ==========================================================================
+       navbar.addEventListener('click', function(e) {
+           // Find the closest anchor tag or title text block within the navbar
+           const titleLink = e.target.closest('a');
    
-       if (titleLink) {
-           e.preventDefault(); // Stop the page from reloading/navigating away!
+           if (titleLink) {
+               e.preventDefault(); // Stop the page from reloading/navigating away!
 
-           // 🌟 FIX 1: Check window.map to cross the async function boundary
-           if (window.map) {
+               if (window.map) {
 
-               const defaultZoom  = config.defaultMapZoom || 12;
-               const centerCoords = config.getParsedCenter();
+                   const defaultZoom  = config.defaultMapZoom || 12;
+                   const centerCoords = config.getParsedCenter();
 
-               const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
-               const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
+                   const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
+                   const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
-               // 🌟 FIX 2: Swapped to Leaflet's native array argument signature
-               window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
-                   animate: true,
-                   duration: 1.2 // Smooth transit timing in seconds
-               });
+                   window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
+                       animate: true,
+                       duration: 1.2 // Smooth transit timing in seconds
+                   });
            
-           } else {
-               console.warn("Map instance not found on window. Unable to fly to default view.");
-               // Fallback: If map is not initialized yet, navigate normally
-               window.location.href = titleLink.href;
+               } else {
+                   console.warn("Map instance not found on window. Unable to fly to default view.");
+                   // Fallback: If map is not initialized yet, navigate normally
+                   window.location.href = titleLink.href;
+               }
            }
-       }
-   });
-   // ==========================================================================
+       });
+       // ==========================================================================
 
-   let appContainer = document.getElementById('app');
-   if( appContainer ) {
-       document.body.insertBefore(navbar, appContainer);
-   } else {
-       document.body.insertBefore(navbar, document.body.firstChild);
-   }
-}
+       let appContainer = document.getElementById('app');
+       if( appContainer ) {
+           document.body.insertBefore(navbar, appContainer);
+       } else {
+           document.body.insertBefore(navbar, document.body.firstChild);
+       }
+    }
     
   </script>
   
