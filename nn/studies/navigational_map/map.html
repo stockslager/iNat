@@ -30,15 +30,49 @@
     let map;
     let config     = null;
     let obs_data   = '';
-    
+
     function buildMenu( config ) {
-       // Create the main navbar container
+       // Create the main navbar container fresh
        let navbar = document.createElement('div');
        navbar.className = 'navbar v2-menu';
-  
-       // Build the Title
-       buildNavTitle(navbar, config.title);
-  
+
+       // Build the Title natively via your framework to preserve layout styles
+       buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
+
+       // ==========================================================================
+       // DEVICE-AWARE INTERCEPT HANDLER
+       // ==========================================================================
+       navbar.addEventListener('click', function(e) {
+           const titleLink = e.target.closest('a');
+   
+           if (titleLink) {
+               // Check Device Type: If it is a mobile touchscreen, do NOT cancel the click
+               const isMobileTouch = window.matchMedia('(hover: none)').matches;
+           
+               if (isMobileTouch) {
+                   return; // Let standard native link page navigation happen flawlessly
+               }
+
+               // DESKTOP ONLY: Intercept and perform the smooth Leaflet zoom animation
+               e.preventDefault(); 
+
+               if (window.map) {
+                   const defaultZoom  = config.defaultMapZoom || 12;
+                   const centerCoords = config.getParsedCenter();
+                   const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
+                   const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
+
+                   window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
+                       animate: true,
+                       duration: 1.2 
+                   });
+               } else {
+                   window.location.href = titleLink.href;
+               }
+           }
+       });
+       // ==========================================================================
+
        let appContainer = document.getElementById('app');
        if( appContainer ) {
            document.body.insertBefore(navbar, appContainer);
@@ -580,9 +614,6 @@ async function gatherResources() {
             console.log('api url: ' + api_url);
             obs_data             = await apiFetch( api_url ); 
         }
-
-        // Build your navigation components
-        buildMenu(config);
       
         // ==========================================================================
         // MAP INITIALIZATION 
@@ -661,6 +692,9 @@ async function gatherResources() {
             pins.forEach(el => { el.classList.remove('satellite-theme'); el.classList.add('default-theme'); });
           }
         });
+
+        // Build your navigation components
+        buildMenu(config);
 
         document.getElementById('info').style.display = 'none';
       
