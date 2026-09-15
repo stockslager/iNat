@@ -30,59 +30,62 @@
     let map;
     let config     = null;
     let obs_data   = '';
+
+    function buildNavURL( navbar, url, label, openInNewTab = false ) { 
+      let homeDiv = faddelem('div', navbar, { id: 'navlink' }); 
+  
+      let hLink = faddelem('span', homeDiv, { 
+          style: 'cursor: pointer; display: inline-block;' 
+      }); 
+  
+      faddelem('span', hLink, { textContent: label }); 
+    }
     
-    function buildMenu( config ) {
-       // Create the main navbar container
-       let navbar = document.createElement('div');
-       navbar.className = 'navbar v2-menu';
+function buildMenu( config ) {
+   let navbar = document.createElement('div');
+   navbar.className = 'navbar v2-menu';
 
-       // Build the Title
-       buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
+   buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
-       // ==========================================================================
-       // 🌟 INTERCEPT THE CLICK EVENT TO EXECUTE A SMOOTH FLYTO (FIXED FOR LEAFLET)
-       // ==========================================================================
-       navbar.addEventListener('click', function(e) {
-           // Find the closest anchor tag or title text block within the navbar
-           const titleLink = e.target.closest('a');
+   // ==========================================================================
+   // 🌟 LEAFLET FLYTO INTERCEPT (UPDATED FOR SPAN TARGETING)
+   // ==========================================================================
+   navbar.addEventListener('click', function(e) {
+       // 🌟 CHANGE: Find the closest span within the navlink wrapper
+       const titleSpan = e.target.closest('#navlink span');
    
-           if (titleLink) {
-               e.preventDefault(); // Stop the page from reloading/navigating away!
+       if (titleSpan) {
+           // No e.preventDefault() needed for spans since they don't navigate natively!
 
-               if (window.map) {
+           if (window.map) {
+               const defaultZoom  = config.defaultMapZoom || 12;
+               const centerCoords = config.getParsedCenter();
 
-                   const defaultZoom  = config.defaultMapZoom || 12;
-                   const centerCoords = config.getParsedCenter();
+               const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
+               const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
-                   const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
-                   const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
-
-                   window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
-                       animate: true,
-                       duration: 1.2 // Smooth transit timing in seconds
-                   });
-
-                   // FIX FOR MOBILE HANDSETS: Force blur to clear persistent touch highlights
-                   if (document.activeElement) {
-                       document.activeElement.blur();
-                   }
-                 
-               } else {
-                   console.warn("Map instance not found on window. Unable to fly to default view.");
-                   // Fallback: If map is not initialized yet, navigate normally
-                   window.location.href = titleLink.href;
+               // Run smooth Leaflet flyback animation
+               window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
+                   animate: true,
+                   duration: 1.5 
+               });
+               
+               // Force focus away from the viewport element
+               if (document.activeElement) {
+                   document.activeElement.blur();
                }
            }
-       });
-       // ==========================================================================
-
-       let appContainer = document.getElementById('app');
-       if( appContainer ) {
-           document.body.insertBefore(navbar, appContainer);
-       } else {
-           document.body.insertBefore(navbar, document.body.firstChild);
        }
-    }
+   });
+   // ==========================================================================
+
+   let appContainer = document.getElementById('app');
+   if( appContainer ) {
+       document.body.insertBefore(navbar, appContainer);
+   } else {
+       document.body.insertBefore(navbar, document.body.firstChild);
+   }
+}
     
   </script>
   
@@ -306,34 +309,6 @@ body {
 #map .leaflet-control-layers-overlays label:last-child,
 #map .leaflet-control-layers-base label:last-child {
     margin-bottom: 0;
-}
-
-/* ==========================================================================
-   FIX FOR THE STICKY NAVLINK HIGHLIGHT
-   ========================================================================= */
-.v2-menu #navlink,
-.v2-menu #navlink a,
-.v2-menu #navlink span {
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  -webkit-tap-highlight-color: transparent;
-}
-
-.v2-menu #navlink:focus,
-.v2-menu #navlink:active,
-.v2-menu #navlink a:focus,
-.v2-menu #navlink a:active {
-  background: transparent;
-  background-color: transparent;
-  outline: none;
-  box-shadow: none;
-}
-
-@media (hover: none) {
-  .v2-menu #navlink a:hover,
-  .v2-menu #navlink:hover {
-    background: transparent;
-    background-color: transparent;
-  }
 }
 
 </style>
