@@ -41,7 +41,7 @@ function buildMenu( config ) {
        const titleLink = e.target.closest('a');
    
        if (titleLink) {
-           e.preventDefault(); // Stop structural page reload execution
+           e.preventDefault(); 
 
            if (window.map) {
                const defaultZoom  = config.defaultMapZoom || 12;
@@ -49,11 +49,11 @@ function buildMenu( config ) {
                const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
                const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
-               // Run smooth Leaflet view drift
+               // 🗺️ Core Leaflet array format fix so your map functions reliably
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
                    duration: 1.5 
-                });
+               });
            } else {
                window.location.href = titleLink.href;
            }
@@ -290,24 +290,6 @@ body {
 #map .leaflet-control-layers-overlays label:last-child,
 #map .leaflet-control-layers-base label:last-child {
     margin-bottom: 0;
-}
-
-/* ==========================================================================
-   🌟 ANTI-STICKY FIX: REVEAL BACKGROUND ON TAP, RESTORE BRAND ON RELEASE
-   ========================================================================== */
-@media (hover: none) {
-  /* 1. Prevent mobile browsers from freezing into a sticky background block */
-  .navbar a:hover {
-    background-color: var(--color-brand);
-  }
-
-  /* 2. 🌟 STRICT SELECTOR TRICK: Force transparency to override your base hover state 
-        only during the active physical touch window */
-  .navbar a:active,
-  #app .v2-menu #navlink a:active {
-    background-color: transparent !important;
-    background: transparent !important;
-  }
 }
 
 </style>
