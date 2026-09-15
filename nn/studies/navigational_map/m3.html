@@ -32,12 +32,6 @@
     let obs_data   = '';
 
 function buildMenu( config ) {
-   // 🌟 THE FIX: Detect and remove any existing navbar duplicate before injecting a new one!
-   let existingNavbar = document.querySelector('.navbar.v2-menu');
-   if (existingNavbar) {
-       existingNavbar.remove();
-   }
-
    // Create the main navbar container fresh
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
@@ -70,7 +64,7 @@ function buildMenu( config ) {
 
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
-                   duration: 1.5 
+                   duration: 1.2 
                });
            } else {
                window.location.href = titleLink.href;
