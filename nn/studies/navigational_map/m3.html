@@ -35,13 +35,30 @@ function buildMenu( config ) {
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
+   // Let your framework function build the layout structure natively to preserve styles
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
+   // ==========================================================================
+   // 🌟 THE FIX: DECOUPLE ACTIVE URL ROUTING TO DROP MOBILE TINT BLOCKS
+   // ==========================================================================
+   const titleLink = navbar.querySelector('a');
+   if (titleLink) {
+       // Save the real URL address to a custom data property for reference safekeeping
+       titleLink.setAttribute('data-href', titleLink.getAttribute('href'));
+       
+       // Force the browser's matching engine to ignore it by removing the live link path
+       titleLink.removeAttribute('href');
+       
+       // Keep it looking like a clickable pointer on desktop viewports
+       titleLink.style.cursor = 'pointer';
+   }
+
+   // Handle the standard click execution block seamlessly
    navbar.addEventListener('click', function(e) {
-       const titleLink = e.target.closest('a');
+       const targetedLink = e.target.closest('a');
    
-       if (titleLink) {
-           e.preventDefault(); // Lock browser navigation pipeline
+       if (targetedLink) {
+           e.preventDefault(); // Stop any default link bubbles
 
            if (window.map) {
                const defaultZoom  = config.defaultMapZoom || 12;
@@ -49,16 +66,21 @@ function buildMenu( config ) {
                const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
                const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
-               // Smoothly run Leaflet drift transition
+               // Executing smooth Leaflet view drift
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
-                   duration: 1.2 
+                   duration: 1.5 
                });
            } else {
-               window.location.href = titleLink.href;
+               // Fallback: If map somehow fails, pull the route back out of your safe-store
+               const savedUrl = targetedLink.getAttribute('data-href');
+               if (savedUrl) {
+                   window.location.href = savedUrl;
+               }
            }
        }
    });
+   // ==========================================================================
 
    let appContainer = document.getElementById('app');
    if( appContainer ) {
@@ -290,23 +312,6 @@ body {
 #map .leaflet-control-layers-overlays label:last-child,
 #map .leaflet-control-layers-base label:last-child {
     margin-bottom: 0;
-}
-
-/* ==========================================================================
-   🌟 ANTI-STICKY HOVER-CLEAR: TRANSPARENT ON TAP, RESTORE BRAND ON RELEASE
-   ========================================================================== */
-@media (hover: none) {
-  /* Let it stay transparent on mobile touch to reveal the black background container */
-  .navbar a:hover, 
-  .navbar a:active {
-    background-color: transparent;
-  }
-
-  /* Forces the background back to your brand color the millisecond the touch finishes */
-  .navbar a:focus-within,
-  .navbar a:focus {
-    background-color: var(--color-brand);
-  }
 }
 
 </style>
@@ -709,9 +714,6 @@ async function gatherResources() {
       document.body.innerHTML = '<div style="background:#1e293b; color:#e2e8f0; font-family:sans-serif; padding:24px; border:2px solid #334155; border-radius:8px; margin:20px;">⚠️ Data Load Error: ' + errMsg + '</div>';
     }
 }
-
-// 🌟 THE MASTER SWITCH: Forces iOS & Android to respect CSS :hover and :active rules
-document.body.addEventListener('touchstart', function() {}, { passive: true });
 
 </script>
 </body>
