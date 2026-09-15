@@ -69,22 +69,22 @@ function buildMenu( config ) {
    });
 
    // ==========================================================================
-   // 🌟 THE LIFECYCLE RECOVERY: FORCE BRAND RECOVERY ON FINGER LIFT
+   // 🌟 HARDWARE TOUCH PIPELINE: FORCE DOM RE-PAINT ON RELEASE
    // ==========================================================================
-   navbar.addEventListener('touchstart', function(e) {
-       const targetedLink = e.target.closest('a');
-       if (targetedLink) {
-           // Clear our recovery class so your natural hover-clear transparency can flash
-           targetedLink.classList.remove('force-brand');
-       }
-   }, { passive: true });
-
    navbar.addEventListener('touchend', function(e) {
        const targetedLink = e.target.closest('a');
        if (targetedLink) {
-           // 🌟 THE FIX: Inject a style overwrite class the millisecond your finger leaves the glass
-           targetedLink.classList.add('force-brand');
            
+           // 🌟 THE FIX: Momentarily hide and show the link element.
+           // This shatters the mobile WebKit active click/tint overlay thread immediately!
+           targetedLink.style.display = 'none';
+           
+           // Read layout property to force immediate engine synchronization
+           const forceRepaint = targetedLink.offsetHeight; 
+           
+           // Re-apply original inline-block design rules
+           targetedLink.style.display = 'inline-block';
+
            if (document.activeElement) {
                document.activeElement.blur();
            }
@@ -322,13 +322,6 @@ body {
 #map .leaflet-control-layers-overlays label:last-child,
 #map .leaflet-control-layers-base label:last-child {
     margin-bottom: 0;
-}
-
-/* ==========================================================================
-   FORCE BRAND RECOVERY STATE ON TOUCHEND
-   ========================================================================== */
-#app .v2-menu #navlink a.force-brand {
-    background-color: var(--color-brand);
 }
 
 </style>
