@@ -38,7 +38,7 @@ function buildMenu( config ) {
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
    // ==========================================================================
-   // 🌟 LEAFLET INTERCEPT CLICK HANDLER WITH SYSTEM-LEVEL INLINE INJECTION
+   // 🗺️ LEAFLET CLUTCH INTERCEPT AUTOMATION
    // ==========================================================================
    navbar.addEventListener('click', function(e) {
        const titleLink = e.target.closest('a');
@@ -46,17 +46,15 @@ function buildMenu( config ) {
        if (titleLink) {
            e.preventDefault(); // Stop structural page reload execution
 
-           // 🌟 THE FIX: Inject transparency with an 'important' flag to beat the CSS .navbar a:hover black color!
-           titleLink.style.setProperty('background-color', 'transparent', 'important');
+           // 1. Force the background to transparent right now
+           titleLink.style.setProperty('--click-bg', 'transparent');
 
            if (window.map) {
                const defaultZoom  = config.defaultMapZoom || 12;
                const centerCoords = config.getParsedCenter();
-               
                const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
                const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
-               // Run smooth Leaflet view drift
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
                    duration: 1.5 
@@ -65,13 +63,14 @@ function buildMenu( config ) {
                window.location.href = titleLink.href;
            }
 
-           // Wipe out the inline property completely after 50ms so your brand color snaps back
+           // 2. 🌟 THE LIFECYCLE FIX: Wipe the variable and break browser selection focus
            setTimeout(() => {
-               titleLink.style.removeProperty('background-color');
+               titleLink.style.removeProperty('--click-bg');
+               
                if (document.activeElement) {
                    document.activeElement.blur();
                }
-           }, 50);
+           }, 150); // A 150ms window allows the physical tap to clear before resetting
        }
    });
    // ==========================================================================
@@ -306,6 +305,14 @@ body {
 #map .leaflet-control-layers-overlays label:last-child,
 #map .leaflet-control-layers-base label:last-child {
     margin-bottom: 0;
+}
+
+/* ==========================================================================
+   🌟 ANTI-STICKY OVERRIDE: OVERPOWER PHANTOM HOVER EVENT PATHS
+   ========================================================================== */
+#app .v2-menu #navlink a {
+    /* Fallback to whatever value your JavaScript sets dynamically */
+    background-color: var(--click-bg, inherit);
 }
 
 </style>
