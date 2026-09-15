@@ -39,6 +39,38 @@
        // Build the Title
        buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
        //buildNavTitle(navbar, config.title);
+
+       // ==========================================================================
+       // 🌟 intercept the click event to execute a smooth flyto
+       // ==========================================================================
+       navbar.addEventListener('click', function(e) {
+           // Find the closest anchor tag or title text block within the navbar
+           const titleLink = e.target.closest('a');
+       
+           if (titleLink) {
+               e.preventDefault(); // Stop the page from reloading/navigating away!
+
+               // Execute your map engine's smooth flyTo/zoom-out animation
+               if (typeof map !== 'undefined') {
+
+                   const defaultZoom  = config.defaultMapZoom || 12;
+                   const centerCoords = config.getParsedCenter();
+
+                   const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
+                   const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
+
+                   map.flyTo({
+                       center: [defaultLat, defaultLng], 
+                       zoom: defaultZoom,
+                       essential: true
+                   });
+               
+               } else {
+                   console.warn("Map instance not found. Unable to fly to default view.");
+               }
+           }
+       });
+       // ==========================================================================
   
        let appContainer = document.getElementById('app');
        if( appContainer ) {
