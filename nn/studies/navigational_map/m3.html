@@ -299,18 +299,17 @@ body {
 }
 
 /* ==========================================================================
-   🌟 ANTI-STICKY OVERRIDE: WIPE HOVER AND FOCUS MODIFIERS FOR MOBILE PIPELINES
+   🌟 THE CORRECTION: FLASH BLACK (TRANSPARENT EFFECT) ON TAP, RESTORE BRAND ON RELEASE
    ========================================================================== */
 @media (hover: none) {
-  /* 1. Prevent mobile browsers from locking into the sticky hover color loop */
-  .navbar a:hover {
-    background-color: transparent; 
+  /* 1. Force the background to go black (transparent look) while pressed */
+  .navbar a:active {
+    background-color: black;
   }
 
-  /* 2. FORCE the focus state to instantly return to your native branding color 
-     the moment the finger lifts up and breaks selection focus */
-  .navbar a:focus,
-  .dropbtn:focus {
+  /* 2. Overwrite the sticky states to force the brand color back on release */
+  .navbar a:hover,
+  .navbar a:focus {
     background-color: var(--color-brand);
   }
 }
