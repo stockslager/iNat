@@ -31,31 +31,22 @@
     let config     = null;
     let obs_data   = '';
 
-    function buildNavURL( navbar, url, label, openInNewTab = false ) { 
-      let homeDiv = faddelem('div', navbar, { id: 'navlink' }); 
-  
-      let hLink = faddelem('span', homeDiv, { 
-          style: 'cursor: pointer; display: inline-block;' 
-      }); 
-  
-      faddelem('span', hLink, { textContent: label }); 
-    }
-    
 function buildMenu( config ) {
+   // Create the main navbar container
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
+   // Build the Title natively via your framework
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
    // ==========================================================================
-   // 🌟 LEAFLET FLYTO INTERCEPT (UPDATED FOR SPAN TARGETING)
+   // 🌟 LEAFLET INTERCEPT CLICK HANDLER WITH MOBILE FOCUS STEAL
    // ==========================================================================
    navbar.addEventListener('click', function(e) {
-       // 🌟 CHANGE: Find the closest span within the navlink wrapper
-       const titleSpan = e.target.closest('#navlink span');
+       const titleLink = e.target.closest('a');
    
-       if (titleSpan) {
-           // No e.preventDefault() needed for spans since they don't navigate natively!
+       if (titleLink) {
+           e.preventDefault(); // Stop the page from reloading/navigating away!
 
            if (window.map) {
                const defaultZoom  = config.defaultMapZoom || 12;
@@ -64,16 +55,24 @@ function buildMenu( config ) {
                const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
                const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
-               // Run smooth Leaflet flyback animation
+               // Run smooth Leaflet zoom-out transit
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
                    duration: 1.5 
                });
                
-               // Force focus away from the viewport element
+               // This forces mobile browsers to instantly drop the sticky tap highlight.
+               const mapContainer = window.map.getContainer();
+               if (mapContainer) {
+                   mapContainer.setAttribute('tabindex', '-1'); // Makes it focusable via JS
+                   mapContainer.focus();
+               }
+               
                if (document.activeElement) {
                    document.activeElement.blur();
                }
+           } else {
+               window.location.href = titleLink.href;
            }
        }
    });
