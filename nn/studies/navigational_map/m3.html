@@ -31,19 +31,6 @@
     let config     = null;
     let obs_data   = '';
 
-function buildNavURL( navbar, url, label, openInNewTab = false ) { 
-  let homeDiv = faddelem('div', navbar, { id: 'navlink' }); 
-  let linkAttributes = { href: url };
-  
-  if (openInNewTab) {
-    linkAttributes.target = '_blank';
-    linkAttributes.rel = 'noopener noreferrer';
-  }
-  
-  let hLink = faddelem('a', homeDiv, linkAttributes); 
-  faddelem('span', hLink, { textContent: label }); 
-}
-
 function buildMenu( config ) {
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
@@ -56,23 +43,22 @@ function buildMenu( config ) {
        if (titleLink) {
            e.preventDefault(); 
 
-           // 🌟 THE FIX: Push the Leaflet code to the next execution cycle
-           // This lets the mobile web engine finish processing the tap state and drop the tint!
-           setTimeout(() => {
-               if (window.map) {
-                   const defaultZoom  = config.defaultMapZoom || 12;
-                   const centerCoords = config.getParsedCenter();
-                   const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
-                   const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
+           // 🌟 THE FIX: Directly toggle a clicked class on the parent navbar container
+           navbar.classList.add('menu-clicked');
 
-                   window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
-                       animate: true,
-                       duration: 1.5 
-                   });
-               } else {
-                   window.location.href = titleLink.href;
-               }
-           }, 0);
+           if (window.map) {
+               const defaultZoom  = config.defaultMapZoom || 12;
+               const centerCoords = config.getParsedCenter();
+               const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
+               const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
+
+               window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
+                   animate: true,
+                   duration: 1.5 
+               });
+           } else {
+               window.location.href = titleLink.href;
+           }
        }
    });
 
@@ -309,22 +295,11 @@ body {
 }
 
 /* ==========================================================================
-   FORCE INNER CONTAINERS TO STAY TRANSPARENT WITHOUT KILLING THE NAVBAR
+   FORCE NAVBAR BACKGROUND TRANSPARENT ON ACTIVE CLICK STATE
    ========================================================================== */
-.v2-menu #navlink,
-.v2-menu #navlink a,
-.v2-menu #navlink a:link,
-.v2-menu #navlink a:visited,
-.v2-menu #navlink a:hover,
-.v2-menu #navlink a:focus,
-.v2-menu #navlink a:active,
-.v2-menu #navlink span {
+#app .v2-menu.menu-clicked {
     background: transparent;
     background-color: transparent;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    box-shadow: none;
-    outline: none;
 }
 
 </style>
