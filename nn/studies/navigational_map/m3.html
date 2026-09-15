@@ -35,30 +35,21 @@ function buildMenu( config ) {
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
-   // Let your framework function build the layout structure natively to preserve styles
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
-   // ==========================================================================
-   // 🌟 THE FIX: DECOUPLE ACTIVE URL ROUTING TO DROP MOBILE TINT BLOCKS
-   // ==========================================================================
    const titleLink = navbar.querySelector('a');
    if (titleLink) {
-       // Save the real URL address to a custom data property for reference safekeeping
        titleLink.setAttribute('data-href', titleLink.getAttribute('href'));
-       
-       // Force the browser's matching engine to ignore it by removing the live link path
        titleLink.removeAttribute('href');
-       
-       // Keep it looking like a clickable pointer on desktop viewports
        titleLink.style.cursor = 'pointer';
    }
 
-   // Handle the standard click execution block seamlessly
+   // 🗺️ Leaflet Click and Navigation Management Pipeline
    navbar.addEventListener('click', function(e) {
        const targetedLink = e.target.closest('a');
    
        if (targetedLink) {
-           e.preventDefault(); // Stop any default link bubbles
+           e.preventDefault(); 
 
            if (window.map) {
                const defaultZoom  = config.defaultMapZoom || 12;
@@ -66,13 +57,11 @@ function buildMenu( config ) {
                const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
                const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
-               // Executing smooth Leaflet view drift
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
                    duration: 1.5 
                });
            } else {
-               // Fallback: If map somehow fails, pull the route back out of your safe-store
                const savedUrl = targetedLink.getAttribute('data-href');
                if (savedUrl) {
                    window.location.href = savedUrl;
@@ -80,6 +69,16 @@ function buildMenu( config ) {
            }
        }
    });
+
+   // ==========================================================================
+   // 🌟 THE FINISHING OVERRIDE: CLEAR STICKY STATES WHEN TOUCH RELEASES
+   // ==========================================================================
+   navbar.addEventListener('touchend', function() {
+       // Forces the handset hardware layer to drop focus immediately on release
+       if (document.activeElement) {
+           document.activeElement.blur();
+       }
+   }, { passive: true });
    // ==========================================================================
 
    let appContainer = document.getElementById('app');
