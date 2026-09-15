@@ -35,11 +35,11 @@ function buildMenu( config ) {
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
-   // Build the Title natively via your framework to preserve layout styles
+   // Keep your essential framework builder function intact
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
    // ==========================================================================
-   // 🗺️ LEAFLET CLUTCH INTERCEPT AUTOMATION
+   // 🗺️ LEAFLET CLUTCH INTERCEPT AUTOMATION (POINTER INTERRUPT METHOD)
    // ==========================================================================
    navbar.addEventListener('click', function(e) {
        const titleLink = e.target.closest('a');
@@ -61,32 +61,20 @@ function buildMenu( config ) {
            } else {
                window.location.href = titleLink.href;
            }
+
+           // 🌟 THE FIX: Apply an ephemeral class to turn off pointer detection.
+           // This forces the phone to immediately break its frozen hover state!
+           titleLink.classList.add('mobile-release');
+
+           // Clear the property after 50ms so it remains perfectly clickable next time
+           setTimeout(() => {
+               titleLink.classList.remove('mobile-release');
+               if (document.activeElement) {
+                   document.activeElement.blur();
+               }
+           }, 50);
        }
    });
-
-   // ==========================================================================
-   // 🌟 THE HARDWARE PIPELINE OVERRIDE: SWAP THE NODE ON FINGER LIFT
-   // ==========================================================================
-   navbar.addEventListener('touchend', function(e) {
-       const titleLink = e.target.closest('a');
-       
-       if (titleLink) {
-           // 1. Create a deep clone of the link to completely strip the browser's touch state memory
-           const cleanClone = titleLink.cloneNode(true);
-           
-           // 2. Force the clone's inline style back to your brand color instantly
-           cleanClone.style.backgroundColor = 'var(--color-brand)';
-           
-           // 3. Forcibly replace the old frozen link element with the fresh, pristine clone
-           titleLink.parentNode.replaceChild(cleanClone, titleLink);
-           
-           // Break any remaining hardware focus highlights
-           if (document.activeElement) {
-               document.activeElement.blur();
-           }
-       }
-   }, { passive: true });
-   // ==========================================================================
 
    let appContainer = document.getElementById('app');
    if( appContainer ) {
@@ -318,6 +306,24 @@ body {
 #map .leaflet-control-layers-overlays label:last-child,
 #map .leaflet-control-layers-base label:last-child {
     margin-bottom: 0;
+}
+
+/* ==========================================================================
+   🌟 ANTI-STICKY HOVER-CLEAR: FORCE BRAND RESET BY BREAKING HOVER FLOW
+   ========================================================================== */
+@media (hover: none) {
+  /* 1. Ensure the element drops to transparent natively to match hover-clear layout */
+  .navbar a:hover,
+  .navbar a:active {
+    background-color: transparent;
+  }
+
+  /* 2. When the dynamic release class hits, freeze interactive hover tracking 
+     and immediately restore your core brand layout color scheme */
+  .navbar a.mobile-release {
+    pointer-events: none;
+    background-color: var(--color-brand);
+  }
 }
 
 </style>
