@@ -32,15 +32,29 @@
     let obs_data   = '';
 
 function buildMenu( config ) {
+   // Create the main navbar container
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
+   // Build the Title natively via your framework to preserve layout styles
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
+   // ==========================================================================
+   //  DEVICE-AWARE INTERCEPT HANDLER
+   // ==========================================================================
    navbar.addEventListener('click', function(e) {
        const titleLink = e.target.closest('a');
    
        if (titleLink) {
+           // 📱 CHECK DEVICE TYPE: If it is a mobile touchscreen, do NOT call e.preventDefault()
+           // Let the phone naturally navigate and refresh the page, wiping out sticky touch tints!
+           const isMobileTouch = window.matchMedia('(hover: none)').matches;
+           
+           if (isMobileTouch) {
+               return; // Exit early and let standard href URL navigation happen natively
+           }
+
+           // DESKTOP LOGIC: Intercept and perform the smooth Leaflet drift animation
            e.preventDefault(); 
 
            if (window.map) {
@@ -49,16 +63,16 @@ function buildMenu( config ) {
                const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
                const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
-               // 🗺️ Core Leaflet array format fix so your map functions reliably
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
-                   duration: 1.5 
+                   duration: 1.2 
                });
            } else {
                window.location.href = titleLink.href;
            }
        }
    });
+   // ==========================================================================
 
    let appContainer = document.getElementById('app');
    if( appContainer ) {
