@@ -303,23 +303,18 @@ body {
 }
 
 /* ==========================================================================
-   ANTI-STICKY FIX: OVERRIDE THE HOVER-BLACK ON MOBILE TOUCH SCREENS
-   ========================================================================== */
-/* ==========================================================================
-   🌟 ANTI-STICKY FIX: FLASH TRANSPARENT ON MOBILE ONLY WHILE PRESSED
-   ========================================================================== */
-/* ==========================================================================
-   🌟 MOBILE TAP HIGHLIGHT: FLASH BLACK ON CLICK, SNAP BACK ON RELEASE
+   🌟 MOBILE TRANSPARENCY: SHOW THE BLACK #APP BACKGROUND ON CLICK, SNAP BACK
    ========================================================================== */
 @media (hover: none) {
-  /* 1. Prevent the browser from getting permanently stuck black after a tap */
+  /* 1. Stop the mobile browser from permanently freezing on the solid black hover rule */
   .navbar a:hover {
     background-color: var(--color-brand);
   }
 
-  /* 2. Force it to turn black ONLY while your finger is physically pressing it */
+  /* 2. Force the link background transparent ONLY while your finger is pressing the glass */
   .navbar a:active {
-    background-color: black;
+    background-color: transparent;
+    background: transparent;
   }
 }
 /*@media (hover: none) {
