@@ -31,22 +31,37 @@
     let config     = null;
     let obs_data   = '';
 
+function buildNavURL( navbar, url, label, openInNewTab = false ) { 
+  let homeDiv = faddelem('div', navbar, { id: 'navlink' }); 
+  
+  // 🌟 FIX: Change the active target URL string to a dummy anchor route
+  // This tricks the browser engine into ignoring active/visited routing highlights!
+  let linkAttributes = { href: 'javascript:void(0);' };
+  
+  if (openInNewTab) {
+    linkAttributes.target = '_blank';
+    linkAttributes.rel = 'noopener noreferrer';
+  }
+  
+  let hLink = faddelem('a', homeDiv, linkAttributes); 
+  
+  faddelem('span', hLink, { textContent: label }); 
+}
+
 function buildMenu( config ) {
-   // Create the main navbar container
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
-   // Build the Title natively via your framework
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
    // ==========================================================================
-   // 🌟 LEAFLET INTERCEPT CLICK HANDLER WITH MOBILE FOCUS STEAL
+   // 🌟 LEAFLET INTERCEPT CLICK HANDLER
    // ==========================================================================
    navbar.addEventListener('click', function(e) {
        const titleLink = e.target.closest('a');
    
        if (titleLink) {
-           e.preventDefault(); // Stop the page from reloading/navigating away!
+           e.preventDefault(); // Lock viewport navigation pipeline
 
            if (window.map) {
                const defaultZoom  = config.defaultMapZoom || 12;
@@ -55,24 +70,16 @@ function buildMenu( config ) {
                const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
                const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
-               // Run smooth Leaflet zoom-out transit
+               // Smoothly run Leaflet drift transition
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
                    duration: 1.5 
                });
                
-               // This forces mobile browsers to instantly drop the sticky tap highlight.
-               const mapContainer = window.map.getContainer();
-               if (mapContainer) {
-                   mapContainer.setAttribute('tabindex', '-1'); // Makes it focusable via JS
-                   mapContainer.focus();
-               }
-               
+               // Drop physical hardware focus 
                if (document.activeElement) {
                    document.activeElement.blur();
                }
-           } else {
-               window.location.href = titleLink.href;
            }
        }
    });
