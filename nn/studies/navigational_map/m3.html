@@ -293,18 +293,20 @@ body {
 }
 
 /* ==========================================================================
-   🌟 PURE CSS MOBILE FIX: TRUE TRANSPARENCY FLASH ON TOUCH
+   🌟 ANTI-STICKY FIX: REVEAL BACKGROUND ON TAP, RESTORE BRAND ON RELEASE
    ========================================================================== */
 @media (hover: none) {
-  /* 1. Prevent the mobile browser from permanently freezing on the old hover color */
+  /* 1. Prevent mobile browsers from freezing into a sticky background block */
   .navbar a:hover {
     background-color: var(--color-brand);
   }
 
-  /* 2. Force it to go truly transparent ONLY while your finger is pressing it */
-  .navbar a:active {
-    background-color: transparent;
-    background: transparent;
+  /* 2. 🌟 STRICT SELECTOR TRICK: Force transparency to override your base hover state 
+        only during the active physical touch window */
+  .navbar a:active,
+  #app .v2-menu #navlink a:active {
+    background-color: transparent !important;
+    background: transparent !important;
   }
 }
 
