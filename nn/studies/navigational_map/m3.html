@@ -303,10 +303,19 @@ body {
 }
 
 /* ==========================================================================
-   🌟 ANTI-STICKY FIX: OVERRIDE THE HOVER-BLACK ON MOBILE TOUCH SCREENS
+   🌟 ANTI-STICKY HOVER-CLEAR: TRANSPARENT ON TAP, RESTORE BRAND ON RELEASE
    ========================================================================== */
 @media (hover: none) {
-  .navbar a:hover {
+  /* When tapped on mobile, let it stay transparent to show the black background */
+  .navbar a:hover, 
+  .navbar a:active {
+    background-color: transparent;
+  }
+
+  /* 🌟 THE RECOVERY FIX: Forces the navbar background back to your brand color 
+     the exact millisecond the user interacts with the rest of the map canvas */
+  .navbar a:focus-within,
+  .navbar a:focus {
     background-color: var(--color-brand);
   }
 }
