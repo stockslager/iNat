@@ -32,34 +32,48 @@
     let obs_data   = '';
 
 function buildMenu( config ) {
-   // Create the main navbar container
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
+   // Keep your essential framework builder function intact
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
-  
-   // ==========================================================================
-   // LEAFLET SMOOTH FLYTO HANDLER
-   // ==========================================================================
-   titleClickTarget.addEventListener('click', function() {
-       if (window.map) {
-           const defaultZoom  = config.defaultMapZoom || 12;
-           const centerCoords = config.getParsedCenter();
-           const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
-           const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
-           // Smoothly zoom out to trail bounds
-           window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
-               animate: true,
-               duration: 1.5 
-           });
-       } else {
-           // Fallback: If map object isn't ready yet, jump out to default page string route
-           window.location.href = './map.html?params='+p_params+'&mode='+p_mode;
+   // ==========================================================================
+   // 🌟 LEAFLET FLYTO INTERCEPT WITH CORRECT VARIABLE TARGETING
+   // ==========================================================================
+   navbar.addEventListener('click', function(e) {
+       const titleLink = e.target.closest('a');
+   
+       if (titleLink) {
+           e.preventDefault(); // Lock browser navigation pipeline
+
+           // Apply a temporary class to instantly zero out the background tint
+           titleLink.classList.add('no-tint');
+
+           if (window.map) {
+               const defaultZoom  = config.defaultMapZoom || 12;
+               const centerCoords = config.getParsedCenter();
+               const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
+               const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
+
+               // Smoothly run Leaflet drift transition
+               window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
+                   animate: true,
+                   duration: 1.5 
+               });
+           }
+
+           // Remove the tint override after 50ms using the correct variable reference
+           setTimeout(() => {
+               titleLink.classList.remove('no-tint');
+               if (document.activeElement) {
+                   document.activeElement.blur();
+               }
+           }, 50);
        }
    });
+   // ==========================================================================
 
-   // Mount your navigation component to the layout canvas natively
    let appContainer = document.getElementById('app');
    if( appContainer ) {
        document.body.insertBefore(navbar, appContainer);
