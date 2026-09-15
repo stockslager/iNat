@@ -63,21 +63,19 @@ function buildMenu( config ) {
    });
 
    // ==========================================================================
-   // 🌟 THE TOUCH SCREEN OVERRIDE: Forces transparency on physical touch pipelines
+   // 🌟 FULL-HEADER TRANSPARENCY PIPELINE
    // ==========================================================================
    navbar.addEventListener('touchstart', function(e) {
+       // Target the link to make sure they are tapping the title text area specifically
        const titleLink = e.target.closest('a');
        if (titleLink) {
-           titleLink.classList.add('touch-transparent');
+           navbar.classList.add('header-touch-transparent');
        }
    }, { passive: true });
 
-   navbar.addEventListener('touchend', function(e) {
-       const titleLink = e.target.closest('a');
-       if (titleLink) {
-           // Instantly restores the brand color the exact millisecond your finger leaves the glass
-           titleLink.classList.remove('touch-transparent');
-       }
+   navbar.addEventListener('touchend', function() {
+       // Instantly restores the brand color across the entire header block on release
+       navbar.classList.remove('header-touch-transparent');
    }, { passive: true });
    // ==========================================================================
 
@@ -314,7 +312,7 @@ body {
 }
 
 /* ==========================================================================
-   🌟 ANTI-STICKY TRANSPARENCY OVERRIDE FOR MOBILE HARDWARE TOUCH PIPELINES
+   🌟 ANTI-STICKY FULL HEADER TRANSPARENCY OVERRIDE
    ========================================================================== */
 @media (hover: none) {
   /* Prevents your base stylesheet from locking the link into a solid black hover block */
@@ -322,8 +320,9 @@ body {
     background-color: var(--color-brand);
   }
 
-  /* Forces transparency instantly when the touch-start class is injected via JS */
-  .navbar a.touch-transparent {
+  /* Forces BOTH the navbar wrapper and the link to go transparent together */
+  #app .v2-menu.header-touch-transparent,
+  #app .v2-menu.header-touch-transparent a {
     background-color: transparent !important;
     background: transparent !important;
   }
