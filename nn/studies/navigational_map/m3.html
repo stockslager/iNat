@@ -308,16 +308,18 @@ body {
 /* ==========================================================================
    🌟 ANTI-STICKY FIX: FLASH TRANSPARENT ON MOBILE ONLY WHILE PRESSED
    ========================================================================== */
+/* ==========================================================================
+   🌟 MOBILE TAP HIGHLIGHT: FLASH BLACK ON CLICK, SNAP BACK ON RELEASE
+   ========================================================================== */
 @media (hover: none) {
-  /* Prevent it from locking into the solid black hover state */
+  /* 1. Prevent the browser from getting permanently stuck black after a tap */
   .navbar a:hover {
     background-color: var(--color-brand);
   }
 
-  /* 🌟 THE FIX: Forces transparency ONLY during the active physical touch frame */
+  /* 2. Force it to turn black ONLY while your finger is physically pressing it */
   .navbar a:active {
-    background-color: transparent;
-    background: transparent;
+    background-color: black;
   }
 }
 /*@media (hover: none) {
