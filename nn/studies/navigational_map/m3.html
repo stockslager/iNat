@@ -38,7 +38,7 @@ function buildMenu( config ) {
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
    // ==========================================================================
-   // 🌟 HARDWARE-LEVEL STATE BREAKING INTERCEPT LOOP
+   // 🌟 LEAFLET INTERCEPT CLICK HANDLER WITH SYSTEM-LEVEL INLINE INJECTION
    // ==========================================================================
    navbar.addEventListener('click', function(e) {
        const titleLink = e.target.closest('a');
@@ -46,8 +46,8 @@ function buildMenu( config ) {
        if (titleLink) {
            e.preventDefault(); // Stop structural page reload execution
 
-           // 1. Force true transparency inline right now to flash your background
-           titleLink.style.backgroundColor = 'transparent';
+           // 🌟 THE FIX: Inject transparency with an 'important' flag to beat the CSS .navbar a:hover black color!
+           titleLink.style.setProperty('background-color', 'transparent', 'important');
 
            if (window.map) {
                const defaultZoom  = config.defaultMapZoom || 12;
@@ -65,14 +65,13 @@ function buildMenu( config ) {
                window.location.href = titleLink.href;
            }
 
-           // 2. 🌟 THE BREAKTHROUGH: Drop inline color rules on a 20ms physics thread delay.
-           // This overpowers the phone hardware's frozen state and forces your brand color back!
+           // Wipe out the inline property completely after 50ms so your brand color snaps back
            setTimeout(() => {
-               titleLink.style.backgroundColor = '';
+               titleLink.style.removeProperty('background-color');
                if (document.activeElement) {
                    document.activeElement.blur();
                }
-           }, 20);
+           }, 50);
        }
    });
    // ==========================================================================
