@@ -35,19 +35,30 @@ function buildMenu( config ) {
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
+   // Let your framework function build the layout structure natively to preserve styles
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
    // ==========================================================================
-   // 🗺️ LEAFLET CLUTCH INTERCEPT AUTOMATION
+   // 🌟 THE FIX: DECOUPLE ACTIVE URL ROUTING TO DROP MOBILE TINT BLOCKS
    // ==========================================================================
-   navbar.addEventListener('click', function(e) {
-       const titleLink = e.target.closest('a');
-   
-       if (titleLink) {
-           e.preventDefault(); // Stop structural page reload execution
+   const titleLink = navbar.querySelector('a');
+   if (titleLink) {
+       // Save the real URL address to a custom data property for reference safekeeping
+       titleLink.setAttribute('data-href', titleLink.getAttribute('href'));
+       
+       // Force the browser's matching engine to ignore it by removing the live link path
+       titleLink.removeAttribute('href');
+       
+       // Keep it looking like a clickable pointer on desktop viewports
+       titleLink.style.cursor = 'pointer';
+   }
 
-           // 1. Force the background to transparent right now
-           titleLink.style.setProperty('--click-bg', 'transparent');
+   // Handle the standard click execution block seamlessly
+   navbar.addEventListener('click', function(e) {
+       const targetedLink = e.target.closest('a');
+   
+       if (targetedLink) {
+           e.preventDefault(); // Stop any default link bubbles
 
            if (window.map) {
                const defaultZoom  = config.defaultMapZoom || 12;
@@ -55,22 +66,18 @@ function buildMenu( config ) {
                const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
                const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
+               // Executing smooth Leaflet view drift
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
                    duration: 1.5 
                });
            } else {
-               window.location.href = titleLink.href;
-           }
-
-           // 2. 🌟 THE LIFECYCLE FIX: Wipe the variable and break browser selection focus
-           setTimeout(() => {
-               titleLink.style.removeProperty('--click-bg');
-               
-               if (document.activeElement) {
-                   document.activeElement.blur();
+               // Fallback: If map somehow fails, pull the route back out of your safe-store
+               const savedUrl = targetedLink.getAttribute('data-href');
+               if (savedUrl) {
+                   window.location.href = savedUrl;
                }
-           }, 150); // A 150ms window allows the physical tap to clear before resetting
+           }
        }
    });
    // ==========================================================================
@@ -305,14 +312,6 @@ body {
 #map .leaflet-control-layers-overlays label:last-child,
 #map .leaflet-control-layers-base label:last-child {
     margin-bottom: 0;
-}
-
-/* ==========================================================================
-   🌟 ANTI-STICKY OVERRIDE: OVERPOWER PHANTOM HOVER EVENT PATHS
-   ========================================================================== */
-#app .v2-menu #navlink a {
-    /* 🌟 THE CORRECTIONS: Fall back to your brand variable when the click finishes! */
-    background-color: var(--click-bg, var(--color-brand));
 }
 
 </style>
