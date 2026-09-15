@@ -36,15 +36,10 @@ function buildMenu( config ) {
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
-   // 🌟 REPLACEMENT: Build a simple, clean title element natively without buildNavURL
-   let menuTitleWrapper = faddelem('div', navbar, { id: 'navlink' });
-   let titleClickTarget = faddelem('span', menuTitleWrapper, { 
-       textContent: config.title,
-       style: 'cursor: pointer; display: inline-block;' // Keeps desktop hover feel clean
-   });
-
+   buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
+  
    // ==========================================================================
-   // 🗺️ LEAFLET SMOOTH FLYTO HANDLER
+   // LEAFLET SMOOTH FLYTO HANDLER
    // ==========================================================================
    titleClickTarget.addEventListener('click', function() {
        if (window.map) {
