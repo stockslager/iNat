@@ -35,17 +35,19 @@ function buildMenu( config ) {
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
-   // Build the Title using your native framework builder function
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
    // ==========================================================================
-   // 🗺️ LEAFLET INTERCEPT CLICK HANDLER
+   // 🌟 HARDWARE-LEVEL STATE BREAKING INTERCEPT LOOP
    // ==========================================================================
    navbar.addEventListener('click', function(e) {
        const titleLink = e.target.closest('a');
    
        if (titleLink) {
-           e.preventDefault(); // Stop the page from reloading/navigating away
+           e.preventDefault(); // Stop structural page reload execution
+
+           // 1. Force true transparency inline right now to flash your background
+           titleLink.style.backgroundColor = 'transparent';
 
            if (window.map) {
                const defaultZoom  = config.defaultMapZoom || 12;
@@ -54,7 +56,7 @@ function buildMenu( config ) {
                const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
                const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
-               // Run smooth Leaflet transit back to original view bounds
+               // Run smooth Leaflet view drift
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
                    duration: 1.5 
@@ -62,6 +64,15 @@ function buildMenu( config ) {
            } else {
                window.location.href = titleLink.href;
            }
+
+           // 2. 🌟 THE BREAKTHROUGH: Drop inline color rules on a 20ms physics thread delay.
+           // This overpowers the phone hardware's frozen state and forces your brand color back!
+           setTimeout(() => {
+               titleLink.style.backgroundColor = '';
+               if (document.activeElement) {
+                   document.activeElement.blur();
+               }
+           }, 20);
        }
    });
    // ==========================================================================
@@ -296,22 +307,6 @@ body {
 #map .leaflet-control-layers-overlays label:last-child,
 #map .leaflet-control-layers-base label:last-child {
     margin-bottom: 0;
-}
-
-/* ==========================================================================
-   🌟 THE CORRECTION: FLASH BLACK (TRANSPARENT EFFECT) ON TAP, RESTORE BRAND ON RELEASE
-   ========================================================================== */
-@media (hover: none) {
-  /* 1. Force the background to go black (transparent look) while pressed */
-  .navbar a:active {
-    background-color: black;
-  }
-
-  /* 2. Overwrite the sticky states to force the brand color back on release */
-  .navbar a:hover,
-  .navbar a:focus {
-    background-color: var(--color-brand);
-  }
 }
 
 </style>
