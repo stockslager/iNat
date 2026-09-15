@@ -147,6 +147,19 @@ body {
     flex-shrink: 0; /* Prevents map canvas from squishing navbar dimensions */
 }
 
+.navbar a,
+.navbar a * {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* Removes the native iOS Safari/Android Webkit block shadow */
+}
+
+/* Explicitly sets focus states to reset background behavior when clicked on mobile */
+.navbar a:focus,
+.navbar a:active {
+    background-color: transparent;
+    outline: none;
+    box-shadow: none;
+}
+
 /* ==========================================================================
    MAP RENDERING ENGINE & FLOATING COMPONENTS
    ========================================================================== */
