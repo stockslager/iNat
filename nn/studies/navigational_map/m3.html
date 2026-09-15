@@ -43,7 +43,7 @@ function buildMenu( config ) {
        if (titleLink) {
            e.preventDefault(); 
 
-           // 🌟 THE FIX: Directly toggle a clicked class on the parent navbar container
+           // 1. Turn the navbar transparent immediately on tap
            navbar.classList.add('menu-clicked');
 
            if (window.map) {
@@ -52,10 +52,22 @@ function buildMenu( config ) {
                const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
                const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
+               // 2. Start the smooth Leaflet transition
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
                    duration: 1.5 
                });
+
+               // 3. 🌟 THE LIFECYCLE FIX: Listen for Leaflet to finish moving, then restore the color!
+               window.map.once('moveend', function() {
+                   navbar.classList.remove('menu-clicked');
+                   
+                   // Cleanly clear any lingering browser element focus highlights
+                   if (document.activeElement) {
+                       document.activeElement.blur();
+                   }
+               });
+
            } else {
                window.location.href = titleLink.href;
            }
