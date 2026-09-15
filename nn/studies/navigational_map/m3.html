@@ -31,60 +31,40 @@
     let config     = null;
     let obs_data   = '';
 
-function buildNavURL( navbar, url, label, openInNewTab = false ) { 
-  let homeDiv = faddelem('div', navbar, { id: 'navlink' }); 
-  
-  // 🌟 FIX: Change the active target URL string to a dummy anchor route
-  // This tricks the browser engine into ignoring active/visited routing highlights!
-  let linkAttributes = { href: 'javascript:void(0);' };
-  
-  if (openInNewTab) {
-    linkAttributes.target = '_blank';
-    linkAttributes.rel = 'noopener noreferrer';
-  }
-  
-  let hLink = faddelem('a', homeDiv, linkAttributes); 
-  
-  faddelem('span', hLink, { textContent: label }); 
-}
-
 function buildMenu( config ) {
+   // Create the main navbar container
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
-   buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
+   // 🌟 REPLACEMENT: Build a simple, clean title element natively without buildNavURL
+   let menuTitleWrapper = faddelem('div', navbar, { id: 'navlink' });
+   let titleClickTarget = faddelem('span', menuTitleWrapper, { 
+       textContent: config.title,
+       style: 'cursor: pointer; display: inline-block;' // Keeps desktop hover feel clean
+   });
 
    // ==========================================================================
-   // 🌟 LEAFLET INTERCEPT CLICK HANDLER
+   // 🗺️ LEAFLET SMOOTH FLYTO HANDLER
    // ==========================================================================
-   navbar.addEventListener('click', function(e) {
-       const titleLink = e.target.closest('a');
-   
-       if (titleLink) {
-           e.preventDefault(); // Lock viewport navigation pipeline
+   titleClickTarget.addEventListener('click', function() {
+       if (window.map) {
+           const defaultZoom  = config.defaultMapZoom || 12;
+           const centerCoords = config.getParsedCenter();
+           const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
+           const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
-           if (window.map) {
-               const defaultZoom  = config.defaultMapZoom || 12;
-               const centerCoords = config.getParsedCenter();
-
-               const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
-               const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
-
-               // Smoothly run Leaflet drift transition
-               window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
-                   animate: true,
-                   duration: 1.5 
-               });
-               
-               // Drop physical hardware focus 
-               if (document.activeElement) {
-                   document.activeElement.blur();
-               }
-           }
+           // Smoothly zoom out to trail bounds
+           window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
+               animate: true,
+               duration: 1.5 
+           });
+       } else {
+           // Fallback: If map object isn't ready yet, jump out to default page string route
+           window.location.href = './map.html?params='+p_params+'&mode='+p_mode;
        }
    });
-   // ==========================================================================
 
+   // Mount your navigation component to the layout canvas natively
    let appContainer = document.getElementById('app');
    if( appContainer ) {
        document.body.insertBefore(navbar, appContainer);
@@ -317,6 +297,17 @@ body {
     margin-bottom: 0;
 }
 
+/* ==========================================================================
+   MOBILE TINT FIX 
+   ========================================================================== */
+html body #app .v2-menu #navlink,
+html body #app .v2-menu #navlink a,
+html body #app .v2-menu #navlink span {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  background-color: transparent;
+}
+  
 </style>
   
 </head>
