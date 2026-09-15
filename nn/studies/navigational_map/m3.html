@@ -35,12 +35,8 @@ function buildMenu( config ) {
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
-   // Keep your essential framework builder function intact
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
-   // ==========================================================================
-   // 🗺️ LEAFLET CLUTCH INTERCEPT AUTOMATION (POINTER INTERRUPT METHOD)
-   // ==========================================================================
    navbar.addEventListener('click', function(e) {
        const titleLink = e.target.closest('a');
    
@@ -57,22 +53,10 @@ function buildMenu( config ) {
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
                    duration: 1.5 
-               });
+                });
            } else {
                window.location.href = titleLink.href;
            }
-
-           // 🌟 THE FIX: Apply an ephemeral class to turn off pointer detection.
-           // This forces the phone to immediately break its frozen hover state!
-           titleLink.classList.add('mobile-release');
-
-           // Clear the property after 50ms so it remains perfectly clickable next time
-           setTimeout(() => {
-               titleLink.classList.remove('mobile-release');
-               if (document.activeElement) {
-                   document.activeElement.blur();
-               }
-           }, 50);
        }
    });
 
@@ -309,20 +293,18 @@ body {
 }
 
 /* ==========================================================================
-   🌟 ANTI-STICKY HOVER-CLEAR: FORCE BRAND RESET BY BREAKING HOVER FLOW
+   🌟 PURE CSS MOBILE FIX: TRUE TRANSPARENCY FLASH ON TOUCH
    ========================================================================== */
 @media (hover: none) {
-  /* 1. Ensure the element drops to transparent natively to match hover-clear layout */
-  .navbar a:hover,
-  .navbar a:active {
-    background-color: transparent;
+  /* 1. Prevent the mobile browser from permanently freezing on the old hover color */
+  .navbar a:hover {
+    background-color: var(--color-brand);
   }
 
-  /* 2. When the dynamic release class hits, freeze interactive hover tracking 
-     and immediately restore your core brand layout color scheme */
-  .navbar a.mobile-release {
-    pointer-events: none;
-    background-color: var(--color-brand);
+  /* 2. Force it to go truly transparent ONLY while your finger is pressing it */
+  .navbar a:active {
+    background-color: transparent;
+    background: transparent;
   }
 }
 
