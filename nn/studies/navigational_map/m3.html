@@ -31,55 +31,55 @@
     let config     = null;
     let obs_data   = '';
 
-function buildMenu( config ) {
-   // Create the main navbar container fresh
-   let navbar = document.createElement('div');
-   navbar.className = 'navbar v2-menu';
+    function buildMenu( config ) {
+       // Create the main navbar container fresh
+       let navbar = document.createElement('div');
+       navbar.className = 'navbar v2-menu';
 
-   // Build the Title natively via your framework to preserve layout styles
-   buildNavURL( navbar, './m3.html?params='+p_params+'&mode='+p_mode, config.title );
+       // Build the Title natively via your framework to preserve layout styles
+       buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
-   // ==========================================================================
-   // 🗺️ DEVICE-AWARE INTERCEPT HANDLER
-   // ==========================================================================
-   navbar.addEventListener('click', function(e) {
-       const titleLink = e.target.closest('a');
+       // ==========================================================================
+       // DEVICE-AWARE INTERCEPT HANDLER
+       // ==========================================================================
+       navbar.addEventListener('click', function(e) {
+           const titleLink = e.target.closest('a');
    
-       if (titleLink) {
-           // Check Device Type: If it is a mobile touchscreen, do NOT cancel the click
-           const isMobileTouch = window.matchMedia('(hover: none)').matches;
+           if (titleLink) {
+               // Check Device Type: If it is a mobile touchscreen, do NOT cancel the click
+               const isMobileTouch = window.matchMedia('(hover: none)').matches;
            
-           if (isMobileTouch) {
-               return; // Let standard native link page navigation happen flawlessly
+               if (isMobileTouch) {
+                   return; // Let standard native link page navigation happen flawlessly
+               }
+
+               // DESKTOP ONLY: Intercept and perform the smooth Leaflet zoom animation
+               e.preventDefault(); 
+
+               if (window.map) {
+                   const defaultZoom  = config.defaultMapZoom || 12;
+                   const centerCoords = config.getParsedCenter();
+                   const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
+                   const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
+
+                   window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
+                       animate: true,
+                       duration: 1.2 
+                   });
+               } else {
+                   window.location.href = titleLink.href;
+               }
            }
+       });
+       // ==========================================================================
 
-           // DESKTOP ONLY: Intercept and perform the smooth Leaflet zoom animation
-           e.preventDefault(); 
-
-           if (window.map) {
-               const defaultZoom  = config.defaultMapZoom || 12;
-               const centerCoords = config.getParsedCenter();
-               const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
-               const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
-
-               window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
-                   animate: true,
-                   duration: 1.2 
-               });
-           } else {
-               window.location.href = titleLink.href;
-           }
+       let appContainer = document.getElementById('app');
+       if( appContainer ) {
+           document.body.insertBefore(navbar, appContainer);
+       } else {
+           document.body.insertBefore(navbar, document.body.firstChild);
        }
-   });
-   // ==========================================================================
-
-   let appContainer = document.getElementById('app');
-   if( appContainer ) {
-       document.body.insertBefore(navbar, appContainer);
-   } else {
-       document.body.insertBefore(navbar, document.body.firstChild);
-   }
-}
+    }
     
   </script>
   
