@@ -44,10 +44,8 @@ function buildMenu( config ) {
        titleLink.style.cursor = 'pointer';
    }
 
-   // 🗺️ Leaflet Click and Navigation Management Pipeline
    navbar.addEventListener('click', function(e) {
        const targetedLink = e.target.closest('a');
-   
        if (targetedLink) {
            e.preventDefault(); 
 
@@ -71,12 +69,25 @@ function buildMenu( config ) {
    });
 
    // ==========================================================================
-   // 🌟 THE FINISHING OVERRIDE: CLEAR STICKY STATES WHEN TOUCH RELEASES
+   // 🌟 THE LIFECYCLE RECOVERY: FORCE BRAND RECOVERY ON FINGER LIFT
    // ==========================================================================
-   navbar.addEventListener('touchend', function() {
-       // Forces the handset hardware layer to drop focus immediately on release
-       if (document.activeElement) {
-           document.activeElement.blur();
+   navbar.addEventListener('touchstart', function(e) {
+       const targetedLink = e.target.closest('a');
+       if (targetedLink) {
+           // Clear our recovery class so your natural hover-clear transparency can flash
+           targetedLink.classList.remove('force-brand');
+       }
+   }, { passive: true });
+
+   navbar.addEventListener('touchend', function(e) {
+       const targetedLink = e.target.closest('a');
+       if (targetedLink) {
+           // 🌟 THE FIX: Inject a style overwrite class the millisecond your finger leaves the glass
+           targetedLink.classList.add('force-brand');
+           
+           if (document.activeElement) {
+               document.activeElement.blur();
+           }
        }
    }, { passive: true });
    // ==========================================================================
@@ -311,6 +322,13 @@ body {
 #map .leaflet-control-layers-overlays label:last-child,
 #map .leaflet-control-layers-base label:last-child {
     margin-bottom: 0;
+}
+
+/* ==========================================================================
+   FORCE BRAND RECOVERY STATE ON TOUCHEND
+   ========================================================================== */
+#app .v2-menu #navlink a.force-brand {
+    background-color: var(--color-brand);
 }
 
 </style>
