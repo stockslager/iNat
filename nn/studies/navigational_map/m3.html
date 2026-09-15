@@ -32,51 +32,42 @@
     let obs_data   = '';
 
 function buildMenu( config ) {
+   // Create the main navbar container
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
+   // Build the Title using your framework utility
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
    // ==========================================================================
    // 🗺️ LEAFLET INTERCEPT CLICK HANDLER
    // ==========================================================================
    navbar.addEventListener('click', function(e) {
+       // Find the closest anchor tag inside the navbar wrapper
        const titleLink = e.target.closest('a');
    
        if (titleLink) {
-           e.preventDefault(); // Stops the page reload
+           e.preventDefault(); // Stop the page from reloading/navigating away
 
+           // Verify the global Leaflet map engine is alive and ready
            if (window.map) {
                const defaultZoom  = config.defaultMapZoom || 12;
                const centerCoords = config.getParsedCenter();
+               
                const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
                const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
+               // Smoothly run Leaflet transit back to original view bounds
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
-                   duration: 1.5 
+                   duration: 1.2 
                });
            } else {
+               // Fallback: If map object isn't ready yet, navigate normally
                window.location.href = titleLink.href;
            }
        }
    });
-
-   // ==========================================================================
-   // 🌟 FULL-HEADER TRANSPARENCY PIPELINE
-   // ==========================================================================
-   navbar.addEventListener('touchstart', function(e) {
-       // Target the link to make sure they are tapping the title text area specifically
-       const titleLink = e.target.closest('a');
-       if (titleLink) {
-           navbar.classList.add('header-touch-transparent');
-       }
-   }, { passive: true });
-
-   navbar.addEventListener('touchend', function() {
-       // Instantly restores the brand color across the entire header block on release
-       navbar.classList.remove('header-touch-transparent');
-   }, { passive: true });
    // ==========================================================================
 
    let appContainer = document.getElementById('app');
@@ -312,19 +303,11 @@ body {
 }
 
 /* ==========================================================================
-   🌟 ANTI-STICKY FULL HEADER TRANSPARENCY OVERRIDE
+   🌟 ANTI-STICKY FIX: OVERRIDE THE HOVER-BLACK ON MOBILE TOUCH SCREENS
    ========================================================================== */
 @media (hover: none) {
-  /* Prevents your base stylesheet from locking the link into a solid black hover block */
   .navbar a:hover {
     background-color: var(--color-brand);
-  }
-
-  /* Forces BOTH the navbar wrapper and the link to go transparent together */
-  #app .v2-menu.header-touch-transparent,
-  #app .v2-menu.header-touch-transparent a {
-    background-color: transparent !important;
-    background: transparent !important;
   }
 }
 
