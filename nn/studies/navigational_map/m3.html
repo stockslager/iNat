@@ -33,12 +33,14 @@
 
 function buildNavURL( navbar, url, label, openInNewTab = false ) { 
   let homeDiv = faddelem('div', navbar, { id: 'navlink' }); 
+  let linkAttributes = { href: url };
   
-  // 🌟 FIX: Create a button instead of an 'a' tag to kill the native browser URL tint loop
-  let hLink = faddelem('button', homeDiv, {
-      className: 'nav-btn-target'
-  }); 
+  if (openInNewTab) {
+    linkAttributes.target = '_blank';
+    linkAttributes.rel = 'noopener noreferrer';
+  }
   
+  let hLink = faddelem('a', homeDiv, linkAttributes); 
   faddelem('span', hLink, { textContent: label }); 
 }
 
@@ -48,31 +50,31 @@ function buildMenu( config ) {
 
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
-   // ==========================================================================
-   // 🌟 LEAFLET INTERCEPT CLICK HANDLER (CLEAN BUTTON ROUTE)
-   // ==========================================================================
    navbar.addEventListener('click', function(e) {
-       // Look for the closest button target inside your nav wrapper
-       const titleBtn = e.target.closest('button.nav-btn-target');
+       const titleLink = e.target.closest('a');
    
-       if (titleBtn) {
+       if (titleLink) {
            e.preventDefault(); 
 
-           if (window.map) {
-               const defaultZoom  = config.defaultMapZoom || 12;
-               const centerCoords = config.getParsedCenter();
-               const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
-               const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
+           // 🌟 THE FIX: Push the Leaflet code to the next execution cycle
+           // This lets the mobile web engine finish processing the tap state and drop the tint!
+           setTimeout(() => {
+               if (window.map) {
+                   const defaultZoom  = config.defaultMapZoom || 12;
+                   const centerCoords = config.getParsedCenter();
+                   const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
+                   const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
-               // Smoothly run Leaflet drift transition
-               window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
-                   animate: true,
-                   duration: 1.5 
-               });
-           }
+                   window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
+                       animate: true,
+                       duration: 1.5 
+                   });
+               } else {
+                   window.location.href = titleLink.href;
+               }
+           }, 0);
        }
    });
-   // ==========================================================================
 
    let appContainer = document.getElementById('app');
    if( appContainer ) {
@@ -306,19 +308,6 @@ body {
     margin-bottom: 0;
 }
 
-/* Ensure the button matches your old link style exactly */
-#navlink button.nav-btn-target {
-    background: transparent;
-    border: none;
-    padding: 0;
-    margin: 0;
-    font: inherit;
-    color: inherit;
-    text-align: inherit;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-}
-  
 </style>
   
 </head>
