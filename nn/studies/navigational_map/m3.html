@@ -61,7 +61,12 @@
                        animate: true,
                        duration: 1.2 // Smooth transit timing in seconds
                    });
-           
+
+                   // FIX FOR MOBILE HANDSETS: Force blur to clear persistent touch highlights
+                   if (document.activeElement) {
+                       document.activeElement.blur();
+                   }
+                 
                } else {
                    console.warn("Map instance not found on window. Unable to fly to default view.");
                    // Fallback: If map is not initialized yet, navigate normally
