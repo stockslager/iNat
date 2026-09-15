@@ -35,10 +35,11 @@ function buildMenu( config ) {
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
+   // Build the Title natively via your framework to preserve layout styles
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
    // ==========================================================================
-   // 🗺️ LEAFLET INTERCEPT CLICK HANDLER WITH TEXT REPAINT RESET
+   // 🗺️ LEAFLET CLUTCH INTERCEPT AUTOMATION
    // ==========================================================================
    navbar.addEventListener('click', function(e) {
        const titleLink = e.target.closest('a');
@@ -57,26 +58,34 @@ function buildMenu( config ) {
                    animate: true,
                    duration: 1.5 
                });
-               
-               // 🌟 THE FIX: Wipe and rebuild the inner text nodes instantly.
-               // This forces mobile browsers to break their frozen touch/hover state!
-               const currentText = titleLink.textContent;
-               titleLink.textContent = ''; // Clear it completely
-               
-               // Read a layout property to force immediate browser synchronization
-               const forceRepaint = titleLink.offsetHeight; 
-               
-               titleLink.textContent = currentText; // Snap the text right back
-               
-               // Break hardware focus tracking
-               if (document.activeElement) {
-                   document.activeElement.blur();
-               }
            } else {
                window.location.href = titleLink.href;
            }
        }
    });
+
+   // ==========================================================================
+   // 🌟 THE HARDWARE PIPELINE OVERRIDE: SWAP THE NODE ON FINGER LIFT
+   // ==========================================================================
+   navbar.addEventListener('touchend', function(e) {
+       const titleLink = e.target.closest('a');
+       
+       if (titleLink) {
+           // 1. Create a deep clone of the link to completely strip the browser's touch state memory
+           const cleanClone = titleLink.cloneNode(true);
+           
+           // 2. Force the clone's inline style back to your brand color instantly
+           cleanClone.style.backgroundColor = 'var(--color-brand)';
+           
+           // 3. Forcibly replace the old frozen link element with the fresh, pristine clone
+           titleLink.parentNode.replaceChild(cleanClone, titleLink);
+           
+           // Break any remaining hardware focus highlights
+           if (document.activeElement) {
+               document.activeElement.blur();
+           }
+       }
+   }, { passive: true });
    // ==========================================================================
 
    let appContainer = document.getElementById('app');
