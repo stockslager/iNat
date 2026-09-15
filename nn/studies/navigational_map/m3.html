@@ -32,48 +32,42 @@
     let obs_data   = '';
 
 function buildMenu( config ) {
+   // Create the main navbar container
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
+   // Build the Title using your framework utility
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
    // ==========================================================================
-   // 🌟 LEAFLET INTERCEPT CLICK HANDLER WITH FAST TOUCH TIMING LIFECYCLE
+   // 🗺️ LEAFLET INTERCEPT CLICK HANDLER
    // ==========================================================================
    navbar.addEventListener('click', function(e) {
+       // Find the closest anchor tag inside the navbar wrapper
        const titleLink = e.target.closest('a');
+   
        if (titleLink) {
-           e.preventDefault(); // Stop the page from reloading/navigating away!
+           e.preventDefault(); // Stop the page from reloading/navigating away
 
+           // Verify the global Leaflet map engine is alive and ready
            if (window.map) {
                const defaultZoom  = config.defaultMapZoom || 12;
                const centerCoords = config.getParsedCenter();
+               
                const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
                const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
-               // Run smooth Leaflet zoom-out transit animation
+               // Smoothly run Leaflet transit back to original view bounds
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
                    duration: 1.5 
                });
            } else {
+               // Fallback: If map object isn't ready yet, navigate normally
                window.location.href = titleLink.href;
            }
        }
    });
-
-   // 🌟 THE TOUCH SCREEN OVERRIDE: Uses native mobile hardware events to snap the background back
-   navbar.addEventListener('touchstart', function() {
-       navbar.classList.add('menu-active-touch');
-   }, { passive: true });
-
-   navbar.addEventListener('touchend', function() {
-       // Instantly forces the mobile browser to destroy the transparency class upon finger lift
-       navbar.classList.remove('menu-active-touch');
-       if (document.activeElement) {
-           document.activeElement.blur();
-       }
-   }, { passive: true });
    // ==========================================================================
 
    let appContainer = document.getElementById('app');
@@ -309,11 +303,12 @@ body {
 }
 
 /* ==========================================================================
-   FORCE TRANSPARENCY ONLY WHILE FINGER IS IN CONTACT WITH SCREEN
+   ANTI-STICKY FIX: OVERRIDE THE HOVER-BLACK ON MOBILE TOUCH SCREENS
    ========================================================================== */
-html body #app .v2-menu.menu-active-touch {
-    background: transparent;
-    background-color: transparent;
+@media (hover: none) {
+  .navbar a:hover {
+    background-color: var(--color-brand);
+  }
 }
 
 </style>
