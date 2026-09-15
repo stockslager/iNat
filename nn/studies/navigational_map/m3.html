@@ -32,42 +32,53 @@
     let obs_data   = '';
 
 function buildMenu( config ) {
-   // Create the main navbar container
    let navbar = document.createElement('div');
    navbar.className = 'navbar v2-menu';
 
-   // Build the Title using your framework utility
    buildNavURL( navbar, './map.html?params='+p_params+'&mode='+p_mode, config.title );
 
    // ==========================================================================
    // 🗺️ LEAFLET INTERCEPT CLICK HANDLER
    // ==========================================================================
    navbar.addEventListener('click', function(e) {
-       // Find the closest anchor tag inside the navbar wrapper
        const titleLink = e.target.closest('a');
    
        if (titleLink) {
-           e.preventDefault(); // Stop the page from reloading/navigating away
+           e.preventDefault(); // Stops the page reload
 
-           // Verify the global Leaflet map engine is alive and ready
            if (window.map) {
                const defaultZoom  = config.defaultMapZoom || 12;
                const centerCoords = config.getParsedCenter();
-               
                const defaultLat = (centerCoords ? centerCoords.lat : 39.1337);
                const defaultLng = (centerCoords ? centerCoords.lng : -84.3525);   
 
-               // Smoothly run Leaflet transit back to original view bounds
                window.map.flyTo([defaultLat, defaultLng], defaultZoom, {
                    animate: true,
                    duration: 1.5 
                });
            } else {
-               // Fallback: If map object isn't ready yet, navigate normally
                window.location.href = titleLink.href;
            }
        }
    });
+
+   // ==========================================================================
+   // 🌟 THE TOUCH SCREEN OVERRIDE: Forces transparency on physical touch pipelines
+   // ==========================================================================
+   navbar.addEventListener('touchstart', function(e) {
+       const titleLink = e.target.closest('a');
+       if (titleLink) {
+           titleLink.classList.add('touch-transparent');
+       }
+   }, { passive: true });
+
+   navbar.addEventListener('touchend', function(e) {
+       const titleLink = e.target.closest('a');
+       if (titleLink) {
+           // Instantly restores the brand color the exact millisecond your finger leaves the glass
+           titleLink.classList.remove('touch-transparent');
+       }
+   }, { passive: true });
    // ==========================================================================
 
    let appContainer = document.getElementById('app');
@@ -303,25 +314,20 @@ body {
 }
 
 /* ==========================================================================
-   🌟 MOBILE TRANSPARENCY: SHOW THE BLACK #APP BACKGROUND ON CLICK, SNAP BACK
+   🌟 ANTI-STICKY TRANSPARENCY OVERRIDE FOR MOBILE HARDWARE TOUCH PIPELINES
    ========================================================================== */
 @media (hover: none) {
-  /* 1. Stop the mobile browser from permanently freezing on the solid black hover rule */
+  /* Prevents your base stylesheet from locking the link into a solid black hover block */
   .navbar a:hover {
     background-color: var(--color-brand);
   }
 
-  /* 2. Force the link background transparent ONLY while your finger is pressing the glass */
-  .navbar a:active {
-    background-color: transparent;
-    background: transparent;
+  /* Forces transparency instantly when the touch-start class is injected via JS */
+  .navbar a.touch-transparent {
+    background-color: transparent !important;
+    background: transparent !important;
   }
 }
-/*@media (hover: none) {
-  .navbar a:hover {
-    background-color: var(--color-brand);
-  }
-}*/
 
 </style>
   
