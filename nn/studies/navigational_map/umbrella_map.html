@@ -386,13 +386,13 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
       const marker = L.marker([parentPin.lat, parentPin.lon], { icon: communityPin });
       
       // Bind your clean browser-back bubble link framework
-      /*if( p_mode === 'plants' ) {
+      if( p_mode === 'plants' ) {
           marker.on('click', () => { window.location.href = buildPlantsURL( parentPin ); });
       } else if( p_mode === 'activity' ) {
           marker.on('click', () => { window.location.href = buildInsectActivityURL( parentPin ); });
       } else {
           marker.bindPopup(buildBubble(parentPin));
-      }*/
+      }
       
       // Keep your child link identifier tags intact
       marker.parentIdentifier = parentPin.params;
