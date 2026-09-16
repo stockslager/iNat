@@ -371,6 +371,104 @@ function buildFlowerURL( config, rec ) {
                                              '&defaultzoom=' + p_default_zoom );
 }
 
+/**
+ * Handles binding dynamic child pins to a parent marker popup action
+ * @param {L.Map} mapInstance - The active Leaflet map instance
+ * @param {L.Marker} parentMarker - The parent marker target
+ */
+function bindDynamicChildPins(map, parentInput, config) {
+  let isClickingChild = false;
+  const markersToProcess = Array.isArray(parentInput) ? parentInput : [parentInput];
+
+  markersToProcess.forEach(parentMarker => {
+    // 1. CHANGED: Moved layer group creation inside the loop so each parent owns an isolated group
+    parentMarker.myOwnChildLayer = L.layerGroup();
+
+    parentMarker.on('popupopen', (e) => {
+      isClickingChild = false;
+
+      // 2. CHANGED: Force clear and hide all other sibling layers immediately on click
+      markersToProcess.forEach(m => {
+        if (m.myOwnChildLayer) {
+          map.removeLayer(m.myOwnChildLayer);
+          m.myOwnChildLayer.clearLayers();
+        }
+      });
+
+      // Check if the map layout is currently showing Satellite view
+      const activeParentPin = document.querySelector('.custom-utf8-pin');
+      const isSatelliteActive = activeParentPin ? activeParentPin.classList.contains('satellite-theme') : false;
+
+      // Set the starting theme class string based on that active map view state
+      const currentThemeClass = isSatelliteActive ? 'satellite-theme' : 'default-theme';
+
+      // Define the clean 12px child template matching your custom CSS parameters
+      const child_utf8 = '<span class="custom-utf8-pin ' + currentThemeClass + '">✿</span>'
+      const childIcon = L.divIcon({
+        html: child_utf8,
+        iconSize:[12, 12], 
+        iconAnchor:[6, 12], 
+        popupAnchor: [0, -12], 
+        className: 'custom-pin-reset'
+      });
+
+      const targetId = e.target.parentIdentifier;
+      const parentDataRecord = config.parentPins ? config.parentPins.find(item => item.name === targetId) : null;
+      const children = parentDataRecord ? parentDataRecord.childPins : [];
+
+      children.forEach(child => {
+        const childMarker = L.marker([child.lat, child.lon], { icon: childIcon });
+
+      /*  if( p_mode === 'plants' ) {
+            childMarker.on('click', () => { window.location.href = buildPlantsURL( child ); });
+        } else if( p_mode === 'activity' ) {
+            childMarker.on('click', () => { window.location.href = buildInsectActivityURL( child ); });
+        } else {
+            childMarker.bindPopup( buildBubble(child) );
+        }*/
+
+        childMarker.on('click', () => {
+          isClickingChild = true;
+        });
+
+        childMarker.on('popupclose', () => {
+          setTimeout(() => {
+            if (!isClickingChild) {
+              // 3. CHANGED: Targets only this parent's specific layer group instance
+              map.removeLayer(parentMarker.myOwnChildLayer);
+            }
+          }, 50);
+        });
+
+        // 4. CHANGED: Pushes child pins to the isolated layer sandbox
+        parentMarker.myOwnChildLayer.addLayer(childMarker);
+      });
+
+      // 5. CHANGED: Mounts the safe isolated layer onto the map container view
+      parentMarker.myOwnChildLayer.addTo(map);
+    });
+
+    parentMarker.on('popupclose', () => {
+      setTimeout(() => {
+        if (!isClickingChild) {
+          // 6. CHANGED: Targets the isolated layer cleanup path
+          map.removeLayer(parentMarker.myOwnChildLayer);
+        }
+        isClickingChild = false;
+      }, 50);
+    });
+  });
+
+  map.on('click', () => {
+    isClickingChild = false;
+    // 7. CHANGED: Wipes all child layers completely when clicking the blank map space
+    markersToProcess.forEach(m => {
+      if (m.myOwnChildLayer) {
+        map.removeLayer(m.myOwnChildLayer);
+      }
+    });
+  });
+}
 
 /**
  * Processes config parent pins, builds Leaflet markers, and binds layer events.
