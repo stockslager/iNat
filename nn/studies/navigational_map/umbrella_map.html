@@ -619,7 +619,7 @@ async function gatherResources() {
 
         // Initialize Core Leaflet Map View Window
         const baseMaps = { "Street View": streetView, "Satellite": satelliteView };
-        const map = L.map('map', {
+        map = L.map('map', {
           center: [defaultLat, defaultLng],
           zoom: defaultZoom,
           layers: [ defaultZoom >= thresholdZoom ? satelliteView : streetView ]
