@@ -364,7 +364,7 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
       const marker = L.marker([parentPin.lat, parentPin.lon], { icon: communityPin });
       
       // Bind your clean browser-back bubble link framework
-      marker.bindPopup(buildBubble(parentPin));
+      //marker.bindPopup(buildBubble(parentPin));
       
       // Keep your child link identifier tags intact
       marker.parentIdentifier = parentPin.name;
@@ -470,7 +470,7 @@ function bindDynamicChildPins(map, parentInput, config) {
       children.forEach(child => {
         const childMarker = L.marker([child.lat, child.lon], { icon: childIcon });
 
-        childMarker.bindPopup( buildBubble(child) );
+        //childMarker.bindPopup( buildBubble(child) );
 
         childMarker.on('click', () => {
           isClickingChild = true;
