@@ -386,13 +386,13 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
       const marker = L.marker([parentPin.lat, parentPin.lon], { icon: communityPin });
       
       // Bind your clean browser-back bubble link framework
-      if( p_mode === 'plants' ) {
+      /*if( p_mode === 'plants' ) {
           marker.on('click', () => { window.location.href = buildPlantsURL( parentPin ); });
       } else if( p_mode === 'activity' ) {
           marker.on('click', () => { window.location.href = buildInsectActivityURL( parentPin ); });
       } else {
           marker.bindPopup(buildBubble(parentPin));
-      }
+      }*/
       
       // Keep your child link identifier tags intact
       marker.parentIdentifier = parentPin.params;
@@ -448,10 +448,7 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
       } else if( p_mode === 'flower' ) {
           flowerMarker.on('click', () => { window.location.href = buildFlowerURL( config, rec ); });
           flowerLocationsLayer.addLayer(flowerMarker);
-      } else if( p_mode === 'all' ) {
-          flowerMarker.bindPopup(buildBubble(flower, config));
-          flowerLocationsLayer.addLayer(flowerMarker);
-      }
+      } 
   }
 
   // if a map instance is provided, add the entire layer group to it 
@@ -514,9 +511,7 @@ function bindDynamicChildPins(map, parentInput, config) {
             childMarker.on('click', () => { window.location.href = buildPlantsURL( child ); });
         } else if( p_mode === 'activity' ) {
             childMarker.on('click', () => { window.location.href = buildInsectActivityURL( child ); });
-        } else {
-            childMarker.bindPopup( buildBubble(child) );
-        }
+        } 
 
         childMarker.on('click', () => {
           isClickingChild = true;
