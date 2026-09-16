@@ -601,9 +601,6 @@ async function gatherResources() {
             obs_data             = await apiFetch( api_url ); 
         }
 
-        // Build your navigation components
-        buildMenu(config);
-      
         // ==========================================================================
         // MAP INITIALIZATION 
         // ==========================================================================
@@ -665,6 +662,9 @@ async function gatherResources() {
           }
         });
 
+        // Build your navigation components
+        buildMenu(config);
+      
         document.getElementById('info').style.display = 'none';
       
     } catch (error) { 
