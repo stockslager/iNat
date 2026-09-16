@@ -719,6 +719,9 @@ async function gatherResources() {
             obs_data             = await apiFetch( api_url ); 
         }
       
+        // Build your navigation components
+        buildMenu(config);
+      
         // ==========================================================================
         // MAP INITIALIZATION 
         // ==========================================================================
@@ -736,14 +739,12 @@ async function gatherResources() {
         let mySavedMarkers = [];
 
         // Initialize Core Leaflet Map View Window
-        //const baseMaps = { "Street View": streetView, "Satellite": satelliteView };
-        const baseMaps = {};
+        const baseMaps = { "Street View": streetView, "Satellite": satelliteView };
         const map = L.map('map', {
           center: [defaultLat, defaultLng],
           zoom: defaultZoom,
           layers: [ defaultZoom >= thresholdZoom ? satelliteView : streetView ]
         });
-        window.map = map; // Expose globally for references
 
         // 🌸 zoom handler for conditional display of flower pins
         initializeZoomViewHandler(map, config);
@@ -751,40 +752,25 @@ async function gatherResources() {
         // Generate parent marker overlays
         buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers);
       
-        // 🌟 LOAD TRAIL LAYERS DYNAMICALLY AFTER MAP IS COMPLETELY READY
-        if (typeof loadLayers === 'function' && obs_data) {
-           loadLayers(obs_data); 
-           
-           // Ensure the main master container respects your zoom threshold state on page boot
+        if (typeof buildFlowerPinsLayer === 'function' && obs_data) {
            if (defaultZoom >= thresholdZoom) {
-               flowerLocationsLayer.addTo(map);
-           }
+              // Pass 'map' so the function can immediately run .addTo(map)
+              buildFlowerPinsLayer(config, obs_data, map); 
+           } else {
+              // Initialize the layer dataset layout, but do not attach to map yet
+              buildFlowerPinsLayer(config, obs_data); 
+           }   
         }
 
         // Mount UI Controls and Layer Checkboxes
         map.getContainer().classList.remove('hide-first-rule');
-
-        const overlayMaps = {};
+        const overlayMaps = {
+          'Communities <span style="font-size: 14px; filter: hue-rotate(140deg);">📍</span>': parentLocationsLayer
+        };
       
-        // 🌟 Programmatically generate interactive layer checkboxes for each discovered trail
-        for (let trail in trailLayers) {
-            overlayMaps[trail] = trailLayers[trail];
-        }
-
-        // Mount control grid interface panels
-        const layerControl = L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
-
-        // Extract the physical HTML block Leaflet built for the container
-        const controlContainer = layerControl.getContainer();
-
-        // Create a clean text title element
-        const menuTitle = document.createElement('div');
-        menuTitle.className = 'layer-menu-title';
-        menuTitle.innerHTML = 'Trail Name'; 
-
-        // Inject it right at the very top of the layout panel box
-        controlContainer.insertBefore(menuTitle, controlContainer.firstChild);
-      
+        // i'm commenting this out for now since i'm controlling sat view based on zoom level and there
+        // aren't really any conditional pin groups to allow them to select from.
+        //L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
         parentLocationsLayer.addTo(map);
 
         // Base Layer Visual Theme Toggle Listeners
@@ -796,9 +782,6 @@ async function gatherResources() {
             pins.forEach(el => { el.classList.remove('satellite-theme'); el.classList.add('default-theme'); });
           }
         });
-
-        // Build your navigation components
-        buildMenu(config);
 
         document.getElementById('info').style.display = 'none';
       
