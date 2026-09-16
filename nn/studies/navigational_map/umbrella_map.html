@@ -504,7 +504,7 @@ function bindDynamicChildPins(map, parentInput, config) {
       });
 
       const targetId = e.target.parentIdentifier;
-      const parentDataRecord = config.parentPins ? config.parentPins.find(item => item.name === targetId) : null;
+      const parentDataRecord = config.parentPins ? config.parentPins.find(item => item.params === targetId) : null;
       const children = parentDataRecord ? parentDataRecord.childPins : [];
 
       children.forEach(child => {
