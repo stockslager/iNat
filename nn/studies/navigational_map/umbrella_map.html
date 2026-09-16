@@ -447,6 +447,12 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
       parentLocationsLayer.addLayer(marker);
     }
   });
+
+  // Bind dynamic children markers if you populated parents successfully
+  if (mySavedMarkers.length > 0) {
+    bindDynamicChildPins(map, mySavedMarkers, config);
+  }
+  
 }
 
 /**
