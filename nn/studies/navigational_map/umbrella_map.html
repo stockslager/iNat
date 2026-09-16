@@ -391,7 +391,7 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
       } else if( p_mode === 'activity' ) {
           marker.on('click', () => { window.location.href = buildInsectActivityURL( parentPin ); });
       } else {
-          marker.bindPopup(buildBubble(parentPin));
+          marker.bindPopup();
       }
       
       // Keep your child link identifier tags intact
