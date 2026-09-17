@@ -353,8 +353,11 @@ function buildFlowerBedURL( config, rec ) {
            }
       }
 
-      return( '../../beds/beds.html?params=horizon&component=beds&garden='+garden+'&mode=' + p_mode + 
-                                             '&photoid=' + rec.observation_photos[0].photo_id +
+      let pinner = '';
+      if( p_pinner ) { pinner += ( '&pinner=' + p_pinner ); }
+
+      return( '../../beds/beds.html?params=horizon&component=beds&garden='+garden+'&mode=' + p_mode + pinner +
+                                             '&photoid=' + rec.observation_photos[0].photo_id + 
                                              '&defaultlat=' + p_default_lat + 
                                              '&defaultlon=' + p_default_lon + 
                                              '&defaultzoom=' + p_default_zoom );
@@ -364,8 +367,11 @@ function buildFlowerURL( config, rec ) {
   // Instantly locks the taxonId value exclusively to this specific instance
   let plant_id   = rec.taxon.id ? '&plantid='   + rec.taxon.id : '';
   let plant_name = '&plantname=' + (rec.taxon.preferred_common_name || rec.taxon.name || 'unknown name');
+
+  let pinner = '';
+  if( p_pinner ) { pinner += ( '&pinner=' + p_pinner ); }
   
-  return( '../../garden/plant_detail.html?params=horizon&component=plants&mode=' + p_mode + 
+  return( '../../garden/plant_detail.html?params=horizon&component=plants&mode=' + p_mode + pinner +
                                              plant_id + plant_name + 
                                              '&photoid=' + rec.observation_photos[0].photo_id +
                                              '&defaultlat=' + p_default_lat + 
