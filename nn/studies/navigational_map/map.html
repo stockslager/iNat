@@ -433,7 +433,22 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
               targetURL = buildInsectActivityURL(parentPin);
           }
 
-          // 2. Animate map zoom straight into the parent coordinate
+          // Extract active coordinates dynamically from the event object
+          // Handles Leaflet click events (e.latlng) or direct marker instance lookups
+          const currentLat = e.latlng ? e.latlng.lat : e.target.getLatLng().lat;
+          const currentLon = e.latlng ? e.latlng.lng : e.target.getLatLng().lng;
+          const currentZoom = 16; 
+        
+          // delete any lat/lon zoom parameters from previous zooms before
+          // zooming to the parent lat / lon
+          winurlparams.delete('defaultlat');
+          winurlparams.delete('defaultlon');
+          winurlparams.delete('defaultzoom');
+          winurlparams.append('defaultlat', currentLat);
+          winurlparams.append('defaultlon', currentLon);
+          winurlparams.append('defaultzoom', currentZoom);
+
+        // Animate map zoom straight into the parent coordinate
           // Your 'zoomend' handler will catch this flight midway and swap views natively!
           map.flyTo(e.latlng, 16, {
               animate: true,
