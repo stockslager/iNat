@@ -506,37 +506,31 @@ function initializeZoomViewHandler(map, config) {
  * by a specific user (the pinner), ensuring the observation contains valid location data.
  */
 function filterObservationsByPinner(config, obs_data) {
-  
   // Guard clause if data is missing or empty
-  if (!obs_data || !Array.isArray(obs_data)) {
-    return [];
+  if (!obs_data || !Array.isArray(obs_data)) return [];
+
+  // If p_pinner is completely empty, pass everything with a location string straight through
+  if (!p_pinner) {
+    return obs_data.filter(obs => obs && obs.location);
   }
 
   // Parse p_pinner into a clean array of lowercase username slugs
-  // e.g., "Bob, nature_girl" becomes ["bob", "nature_girl"]
-  const pinnerUsernames = String(p_pinner)
+  const pinnerUsernames = activePinner
     .split(',')
     .map(username => username.trim().toLowerCase())
     .filter(username => username !== '');
 
-  // Add any observation whose adding user matches one of the text slugs
+  // Add any observation whose project adding user matches one of our slugs
   return obs_data.filter(obs => {
-    // Safety check: ensure the record has map coordinates
-    if (!obs.location) return false;
+    if (!obs || !obs.location) return false;
+    if (!obs.project_observations) return false;
 
-    // Scan project entries to find the user who added it
-    return obs.project_observations?.some(projObs => {
-      // Check if project matches config.pinsProject
-      const matchesProject = String(projObs.project_id) === String(config.pinsProject) || 
-                            projObs.project?.slug === config.pinsProject;
-      
-      // Extract the username string ('login' field) from the project adding user payload
+    return obs.project_observations.some(projObs => {
+      // Safely extract the adder username string
       const adderUsername = projObs.user?.login ? String(projObs.user.login).toLowerCase() : '';
 
-      // Check if our string username list includes this specific user login
-      const matchesUser = pinnerUsernames.includes(adderUsername);
-
-      return matchesProject && matchesUser;
+      // Check if our array includes this username
+      return pinnerUsernames.includes(adderUsername);
     });
   });
 }
