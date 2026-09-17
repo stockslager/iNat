@@ -356,8 +356,14 @@ function buildFlowerBedURL( config, rec ) {
       let pinner = '';
       if( p_pinner ) { pinner += ( '&pinner=' + p_pinner ); }
 
+      // get the raw audio url from iNat: "https://static.inaturalist.org/sounds/229366.m4a?1621685446"
+      let sound_param = '';
+      if (rec.sounds && rec.sounds.length > 0) {
+         sound_param += ('&soundurl=' + rec.sounds[0].file_url);
+      } 
+
       return( '../../beds/beds.html?params=horizon&component=beds&garden='+garden+'&mode=' + p_mode + pinner +
-                                             '&photoid=' + rec.observation_photos[0].photo_id + 
+                                             '&photoid=' + rec.observation_photos[0].photo_id + sound_param + 
                                              '&defaultlat=' + p_default_lat + 
                                              '&defaultlon=' + p_default_lon + 
                                              '&defaultzoom=' + p_default_zoom );
@@ -370,10 +376,16 @@ function buildFlowerURL( config, rec ) {
 
   let pinner = '';
   if( p_pinner ) { pinner += ( '&pinner=' + p_pinner ); }
+
+  // get the raw audio url from iNat: "https://static.inaturalist.org/sounds/229366.m4a?1621685446"
+  let sound_param = '';
+  if (rec.sounds && rec.sounds.length > 0) {
+     sound_param += ('&soundurl=' + rec.sounds[0].file_url);
+  } 
   
   return( '../../garden/plant_detail.html?params=horizon&component=plants&mode=' + p_mode + pinner +
                                              plant_id + plant_name + 
-                                             '&photoid=' + rec.observation_photos[0].photo_id +
+                                             '&photoid=' + rec.observation_photos[0].photo_id + sound_param + 
                                              '&defaultlat=' + p_default_lat + 
                                              '&defaultlon=' + p_default_lon + 
                                              '&defaultzoom=' + p_default_zoom );
