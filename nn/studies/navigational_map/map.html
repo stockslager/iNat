@@ -506,13 +506,9 @@ function initializeZoomViewHandler(map, config) {
  * by a specific user (the pinner), ensuring the observation contains valid location data.
  */
 function filterObservationsByPinner(config, obs_data) {
-  // 🔍 DEBUG 1: Look at what the data actually looks like
-  console.log("Raw obs_data passed into filter:", obs_data);
-
+  
   // Guard clause if data is missing or empty
   if (!obs_data || !Array.isArray(obs_data)) {
-    // 🔍 DEBUG 2: If this logs, your data is wrapped inside an object or is undefined!
-    console.log("Filter aborted because obs_data is not an array. Type is:", typeof obs_data);
     return [];
   }
 
@@ -549,8 +545,10 @@ function filterObservationsByPinner(config, obs_data) {
  * Dynamically loads map layers based on trail name
  */
 function loadLayers(obs_data) {
+  const actualArray = (obs_data && obs_data.results) ? obs_data.results : obs_data;
+
   // find only the pins added by the user who added them when p_pinner is present
-  const obs_by_pinner = filterObservationsByPinner(config, obs_data);
+  const obs_by_pinner = filterObservationsByPinner(config, actualArray);
   
   // Use the filtered array directly with a safe fallback loop container
   const records = obs_by_pinner || [];
