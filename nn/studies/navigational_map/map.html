@@ -551,7 +551,8 @@ function loadLayers(obs_data) {
   const obs_by_pinner = filterObservationsByPinner(config, actualArray);
   
   // Use the filtered array directly with a safe fallback loop container
-  const records = obs_by_pinner || [];
+  const records = actualArray;
+  //const records = obs_by_pinner || [];
   
   for (let i = 0; i < records.length; i++) {
       let rec = records[i];
