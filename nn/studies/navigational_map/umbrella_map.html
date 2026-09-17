@@ -26,6 +26,8 @@
     let p_default_lat  = winurlparams.get('defaultlat') || '';
     let p_default_lon  = winurlparams.get('defaultlon') || '';
     let p_default_zoom = winurlparams.get('defaultzoom') || '';
+    let p_tag          = winurlparams.get('tag') || '';
+    let p_pinner       = winurlparams.get('pinner') || '';
 
     let map;
     let config     = null;
@@ -571,6 +573,15 @@ function initializeZoomViewHandler(map, config) {
 </script>
 <script type="text/javascript"   src="../../core/js/api_fetch.js">     </script>
 <script>
+
+function buildInatParams( config ) {
+  let inat_params = '';
+  
+  if( config.pinsProject ) { inat_params += '?project_id=' + config.pinsProject; }
+  if( p_tag )              { inat_params += '&q=' + p_tag  + '&search_on=tags'; }
+  if( p_pinner             { inat_params += '&user_id=' + p_pinner; }
+  
+}
       
 async function gatherResources() {
     let json_path = '../../core/json/maps/' + p_params + '.json';
@@ -579,11 +590,11 @@ async function gatherResources() {
         // Fetch, parse, and instantiate the map configuration object in one shot
         config = await MapConfiguration.loadFromUrl(json_path);
 
+        let inat_params = buildInatParams( config );
+
         if( p_mode === 'flower' ) {
             let api_base   = 'https://api.inaturalist.org/v1/observations'
-            let inat_params = '';
-            if( config.pinsProject ) { inat_params += '?project_id=' + config.pinsProject; }
-            inat_params += '&field:pin+type=flower';
+            inat_params   += '&field:pin+type=flower';
 
             const api_url        = api_base+inat_params;
             console.log('api url: ' + api_url);
@@ -592,9 +603,7 @@ async function gatherResources() {
 
         if( p_mode === 'beds' ) {
             let api_base   = 'https://api.inaturalist.org/v1/observations'
-            let inat_params = '';
-            if( config.pinsProject ) { inat_params += '?project_id=' + config.pinsProject; }
-            inat_params += '&field:pin+type=beds';
+            inat_params   += '&field:pin+type=beds';
 
             const api_url        = api_base+inat_params;
             console.log('api url: ' + api_url);
