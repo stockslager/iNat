@@ -404,7 +404,7 @@ function buildMenu( results, config ) {
 // ==========================================================================
 // UNIFIED CUSTOM HEADER GENERATION FUNCTION
 // ==========================================================================
-function renderHeaderWithImage(appState, config, total_results, per_page, page_curr, page_max, image_id) {
+function renderHeaderWithImage(appState, config, total_results, per_page, page_curr, page_max, image_id, sound_url = null) {
   let title_1 = '', title_2 = '', title_3 = ''; 
   let titleText = CONST_ON + capitalizeWords(getPlantName(appState)); 
   let urlState = appState; 
@@ -442,7 +442,6 @@ function renderHeaderWithImage(appState, config, total_results, per_page, page_c
 
   // Create your high-resolution dynamic image 
   const img = document.createElement('img'); 
-  // FIX: Swapped out the hardcoded ID '722533441' for your dynamic 'image_id' parameter string
   img.src = root_photos + image_id + '/small.jpg'; 
   img.className = 'header-left-image'; 
 
@@ -458,8 +457,8 @@ function renderHeaderWithImage(appState, config, total_results, per_page, page_c
   // 4. Remove the left stats box (counts) and insert the complete image unit
   const headerLeftBox = header.querySelector('#lbox');
   if (headerLeftBox) {
-    headerLeftBox.remove(); // Delete the counts box completely
-    header.prepend(imageWrapper); // Insert the image container at the far left edge
+    headerLeftBox.remove(); 
+    header.prepend(imageWrapper); 
   }
 
   // 5. Append the modified header component to the page body layout natively
@@ -476,18 +475,82 @@ function renderHeaderWithImage(appState, config, total_results, per_page, page_c
       const modalContentBox = document.createElement('div');
       modalContentBox.className = 'image-modal-content-box';
 
+      // NEW: Create the wrapper element to lock absolute layout styling coordinates
+      const imageAudioWrapper = document.createElement('div');
+      imageAudioWrapper.className = 'image-audio-wrapper';
+
       // Create the expanded, high-resolution image element
       const modalImg = document.createElement('img');
       modalImg.src = img.src.includes('small.jpg') ? img.src.replace('small.jpg', 'large.jpg') : img.src; 
       modalImg.className = 'image-modal-content';
+
+      // Nest the image asset inside the absolute wrapper framework
+      imageAudioWrapper.appendChild(modalImg);
+
+      // Integration of the Custom Audio Player UI
+      let audioInstance = null;
+      if (sound_url) {
+        audioInstance = new Audio(sound_url);
+
+        // Core container framework matching your CSS class selector
+        const audioPlayer = document.createElement('div');
+        audioPlayer.className = 'custom-audio-player';
+
+        // Play / Pause Control Button
+        const playBtn = document.createElement('button');
+        playBtn.className = 'player-btn';
+        playBtn.innerHTML = '▶'; 
+        
+        playBtn.addEventListener('click', function(e) {
+          e.stopPropagation(); // Prevent backdrop click events from closing modal
+          if (audioInstance.paused) {
+            audioInstance.play();
+            playBtn.innerHTML = '⏸'; 
+          } else {
+            audioInstance.pause();
+            playBtn.innerHTML = '▶'; 
+          }
+        });
+
+        // Dynamic Time Elapsed Display Span
+        const timeDisplay = document.createElement('span');
+        timeDisplay.id = 'dynamic-time-display';
+        timeDisplay.textContent = '0:00'; 
+
+        // Helper function to format seconds into m:ss strings cleanly
+        function formatPlayerTime(seconds) {
+          if (isNaN(seconds)) return '0:00';
+          const mins = Math.floor(seconds / 60);
+          const secs = Math.floor(seconds % 60);
+          return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Update the display text layout on every clock frame update loop natively
+        audioInstance.addEventListener('timeupdate', function() {
+          timeDisplay.textContent = formatPlayerTime(audioInstance.currentTime);
+        });
+
+        // Revert the trigger layout icons automatically back when track ends
+        audioInstance.addEventListener('ended', function() {
+          playBtn.innerHTML = '▶';
+          timeDisplay.textContent = '0:00';
+        });
+
+        // Assemble player tree elements together
+        audioPlayer.appendChild(playBtn);
+        audioPlayer.appendChild(timeDisplay);
+        
+        // Append player into the wrapper context container directly over the image target footprint
+        imageAudioWrapper.appendChild(audioPlayer);
+      }
 
       // Create the clean circular dark 'X' button badge
       const closeBtn = document.createElement('span');
       closeBtn.className = 'image-modal-close';
       closeBtn.innerHTML = '&times;'; 
 
-      // Nest elements cleanly: Image + Close Button into Content Box -> onto Backdrop
-      modalContentBox.appendChild(modalImg);
+      // Nest elements cleanly: Content Wrapper + Close Button into Content Box -> onto Backdrop
+      modalContentBox.appendChild(imageAudioWrapper);
       modalContentBox.appendChild(closeBtn);
       modalBackdrop.appendChild(modalContentBox);
       document.body.appendChild(modalBackdrop);
@@ -495,6 +558,11 @@ function renderHeaderWithImage(appState, config, total_results, per_page, page_c
       // Dismiss the modal instantly when clicking background elements or the 'X' button
       modalBackdrop.addEventListener('click', function(e) {
         if (e.target === modalBackdrop || e.target === closeBtn) {
+          // Clean up track thread execution loops immediately upon exit
+          if (audioInstance) {
+            audioInstance.pause();
+            audioInstance = null;
+          }
           modalBackdrop.remove();
         }
       });
@@ -544,7 +612,7 @@ function buildPage(xobj, config) {
       if( p_mode === 'beds' ) {
           renderHeaderWithStats(appState, config, total_results, per_page, page_curr, page_max);
       } else {
-          renderHeaderWithImage(appState, config, total_results, per_page, page_curr, page_max, getPhotoId(appState));
+          renderHeaderWithImage(appState, config, total_results, per_page, page_curr, page_max, getPhotoId(appState), getSoundUrl(appState));
       }
     
       labels = [
