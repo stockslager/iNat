@@ -506,12 +506,14 @@ function initializeZoomViewHandler(map, config) {
  * by a specific user (the pinner), ensuring the observation contains valid location data.
  */
 function filterObservationsByPinner(config, obs_data) {
-  // Guard clause if data is missing or empty
-  if (!obs_data || !Array.isArray(obs_data)) return [];
+  // 🔍 DEBUG 1: Look at what the data actually looks like
+  console.log("Raw obs_data passed into filter:", obs_data);
 
-  // If p_pinner is not defined or an empty string, return everything with a location
-  if (!p_pinner || p_pinner === '') {
-    return obs_data.filter(obs => obs.location);
+  // Guard clause if data is missing or empty
+  if (!obs_data || !Array.isArray(obs_data)) {
+    // 🔍 DEBUG 2: If this logs, your data is wrapped inside an object or is undefined!
+    console.log("Filter aborted because obs_data is not an array. Type is:", typeof obs_data);
+    return [];
   }
 
   // Parse p_pinner into a clean array of lowercase username slugs
