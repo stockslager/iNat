@@ -27,6 +27,7 @@
     let p_default_lon  = winurlparams.get('defaultlon') || '';
     let p_default_zoom = winurlparams.get('defaultzoom') || '';
     let p_tag          = winurlparams.get('tag') || '';
+    let p_pinner       = winurlparams.get('pinner') || '';
 
     let map;
     let config     = null;
@@ -401,15 +402,25 @@ function buildFlowerPinsLayer(config, obs_data, mapInstance = null) {
     className: 'custom-pin-reset'
   });
 
-  // Extract the actual array from iNaturalist's wrapper
-  const records = (obs_data && obs_data.results) ? obs_data.results : [];
-    
-  for (let i=0; i<records.length; i++) {
-      let rec  = records[i];
+  // Filter results where the user who added it matches your target user
+  const filteredObservations = obs_data.filter(obs => {
+    return obs.project_observations?.some(projObs => {
+      // Check if project matches config.pinsProject
+      const matchesProject = String(projObs.project_id) === String(config.pinsProject) || projObs.project?.slug === config.pinsProject;
+      
+      // Check if the user who added it matches p_pinner
+      const matchesUser = projObs.user_id === p_pinner;
+
+      return matchesProject && matchesUser;
+    });
+  });
+  
+  for (let i=0; i<filteredObservations.length; i++) {
+      let rec  = filteredObservations[i];
 
       const [lat, lon] = rec.location.split(',');
       const flowerMarker = L.marker([lat, lon], { icon: flowerIcon });
-          
+
       // Bind existing standard popup bubble
       if( p_mode === 'beds' ) {
           flowerMarker.on('click', () => { window.location.href = buildFlowerBedURL( config, rec ); });
