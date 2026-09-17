@@ -441,14 +441,14 @@ function buildParentPinsLayer(map, config, parentLocationsLayer, mySavedMarkers)
         
           // delete any lat/lon zoom parameters from previous zooms before
           // zooming to the parent lat / lon
-          winurlparams.delete('defaultlat');
-          winurlparams.delete('defaultlon');
-          winurlparams.delete('defaultzoom');
-          winurlparams.append('defaultlat', currentLat);
-          winurlparams.append('defaultlon', currentLon);
-          winurlparams.append('defaultzoom', currentZoom);
+          winurlparams.set('defaultlat', currentLat);
+          winurlparams.set('defaultlon', currentLon);
+          winurlparams.set('defaultzoom', currentZoom);
 
-        // Animate map zoom straight into the parent coordinate
+          // Push the updated parameters straight into the browser URL bar
+          window.history.replaceState(null, '', '?' + winurlparams.toString());
+
+          // Animate map zoom straight into the parent coordinate
           // Your 'zoomend' handler will catch this flight midway and swap views natively!
           map.flyTo(e.latlng, 16, {
               animate: true,
