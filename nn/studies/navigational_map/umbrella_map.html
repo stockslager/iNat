@@ -27,7 +27,6 @@
     let p_default_lon  = winurlparams.get('defaultlon') || '';
     let p_default_zoom = winurlparams.get('defaultzoom') || '';
     let p_tag          = winurlparams.get('tag') || '';
-    let p_pinner       = winurlparams.get('pinner') || '';
 
     let map;
     let config     = null;
@@ -579,7 +578,6 @@ function buildInatParams( config ) {
   
   if( config.pinsProject ) { inat_params += '?project_id=' + config.pinsProject; }
   if( p_tag )              { inat_params += '&q=' + p_tag  + '&search_on=tags'; }
-  if( p_pinner             { inat_params += '&user_id=' + p_pinner; }
   
 }
       
