@@ -34,6 +34,7 @@ const ATTRIBUTE_GARDENLISTVALUE = 'gardenlistvalue';
 const ATTRIBUTE_TAXONDD         = 'taxondd';
 const ATTRIBUTE_OBSID           = 'obsid';
 const ATTRIBUTE_PHOTOID         = 'photoid';
+const ATTRIBUTE_SOUNDURL        = 'soundurl';
 const ATTRIBUTE_OBSDATE         = 'obsdate';
 const ATTRIBUTE_ACTIVITYFILTER  = 'activityfilter';
 const ATTRIBUTE_FIELDNAME       = 'fieldname';
@@ -69,6 +70,7 @@ let appState = {
   [ATTRIBUTE_TAXONDD]:   '',
   [ATTRIBUTE_OBSID]:     '',
   [ATTRIBUTE_PHOTOID]:   '',
+  [ATTRIBUTE_SOUNDURL]:  '',
   [ATTRIBUTE_OBSDATE]:   '',
   [ATTRIBUTE_ACTIVITYFILTER]: '',
   [ATTRIBUTE_FIELDNAME]: '',
@@ -113,6 +115,7 @@ function createNewStateInstance(initialValues = {}) {
     [ATTRIBUTE_TAXONDD]:   '',
     [ATTRIBUTE_OBSID]:     '',
     [ATTRIBUTE_PHOTOID]:   '',
+    [ATTRIBUTE_SOUNDURL]:  '',
     [ATTRIBUTE_OBSDATE]:   '',
     [ATTRIBUTE_ACTIVITYFILTER]:  '',
     [ATTRIBUTE_FIELDNAME]: '',
@@ -230,6 +233,7 @@ function getGardenListValue(state) { return (getAttribute(state, ATTRIBUTE_GARDE
 function getTaxonDD(state)         { return (getAttribute(state, ATTRIBUTE_TAXONDD)); }
 function getObsId(state)           { return (getAttribute(state, ATTRIBUTE_OBSID)); }
 function getPhotoId(state)         { return (getAttribute(state, ATTRIBUTE_PHOTOID)); }
+function getSoundUrl(state)        { return (getAttribute(state, ATTRIBUTE_SOUNDURL)); }
 function getObsDate(state)         { return (getAttribute(state, ATTRIBUTE_OBSDATE)); }
 function getActivityFilter(state)  { return (getAttribute(state, ATTRIBUTE_ACTIVITYFILTER)); }
 function getFieldName(state)       { return (getAttribute(state, ATTRIBUTE_FIELDNAME)); }
@@ -268,6 +272,7 @@ function setGardenListValue(state, value) { return (setAttribute(state, ATTRIBUT
 function setTaxonDD(state, value)         { return (setAttribute(state, ATTRIBUTE_TAXONDD, value)); }
 function setObsId(state, value)           { return (setAttribute(state, ATTRIBUTE_OBSID, value)); }
 function setPhotoId(state, value)         { return (setAttribute(state, ATTRIBUTE_PHOTOID, value)); }
+function setSoundUrl(state, value)        { return (setAttribute(state, ATTRIBUTE_SOUNDURL, value)); }
 function setObsDate(state, value)         { return (setAttribute(state, ATTRIBUTE_OBSDATE, value)); }
 function setActivityFilter(state, value)  { return (setAttribute(state, ATTRIBUTE_ACTIVITYFILTER, value)); }
 function setFieldName(state, value)       { return (setAttribute(state, ATTRIBUTE_FIELDNAME, value)); }
@@ -886,6 +891,7 @@ function clearForDashParams(state) {
   urlState = setTaxonDD(urlState, '');
   urlState = setObsId(urlState, '');
   urlState = setPhotoId(urlState, '');
+  urlState = setSoundUrl(urlState, '');
   urlState = setObsDate(urlState, '');
   urlState = setPage(urlState, '');
   urlState = setPerPage(urlState, '');
