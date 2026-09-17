@@ -26,6 +26,8 @@
     let p_default_lat  = winurlparams.get('defaultlat') || '';
     let p_default_lon  = winurlparams.get('defaultlon') || '';
     let p_default_zoom = winurlparams.get('defaultzoom') || '';
+    let p_tag          = winurlparams.get('tag') || '';
+    let p_pinner       = winurlparams.get('pinner') || '';
 
     let map;
     let config     = null;
@@ -500,12 +502,57 @@ function initializeZoomViewHandler(map, config) {
 }
 
 /**
+ * Filters iNaturalist observations to find only those pins added 
+ * by a specific user (the pinner), ensuring the observation contains valid location data.
+ */
+function filterObservationsByPinner(config, obs_data) {
+  // Guard clause if data is missing or empty
+  if (!obs_data || !Array.isArray(obs_data)) return [];
+
+  // If p_pinner is not defined or an empty string, return everything with a location
+  if (!p_pinner || p_pinner === '') {
+    return obs_data.filter(obs => obs.location);
+  }
+
+  // Parse p_pinner into a clean array of lowercase username slugs
+  // e.g., "Bob, nature_girl" becomes ["bob", "nature_girl"]
+  const pinnerUsernames = String(p_pinner)
+    .split(',')
+    .map(username => username.trim().toLowerCase())
+    .filter(username => username !== '');
+
+  // Add any observation whose adding user matches one of the text slugs
+  return obs_data.filter(obs => {
+    // Safety check: ensure the record has map coordinates
+    if (!obs.location) return false;
+
+    // Scan project entries to find the user who added it
+    return obs.project_observations?.some(projObs => {
+      // Check if project matches config.pinsProject
+      const matchesProject = String(projObs.project_id) === String(config.pinsProject) || 
+                            projObs.project?.slug === config.pinsProject;
+      
+      // Extract the username string ('login' field) from the project adding user payload
+      const adderUsername = projObs.user?.login ? String(projObs.user.login).toLowerCase() : '';
+
+      // Check if our string username list includes this specific user login
+      const matchesUser = pinnerUsernames.includes(adderUsername);
+
+      return matchesProject && matchesUser;
+    });
+  });
+}
+
+/**
  * Dynamically loads map layers based on trail name
  */
 function loadLayers(obs_data) {
-  // Extract the actual array from iNaturalist's wrapper
-  const records = (obs_data && obs_data.results) ? obs_data.results : [];
-    
+  // find only the pins added by the user who added them when p_pinner is present
+  const obs_by_pinner = filterObservationsByPinner(config, obs_data);
+  
+  // Use the filtered array directly with a safe fallback loop container
+  const records = obs_by_pinner || [];
+  
   for (let i = 0; i < records.length; i++) {
       let rec = records[i];
       if (!rec || !rec.ofvs) continue;
