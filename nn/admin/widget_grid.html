@@ -380,7 +380,7 @@ function buildWidget( config ) {
 
     // Form clean single-widget container layout view assignments
     var widgetHtml = 
-      '<div id="themeContainer" class="widget-component-container ' + '">' +
+      '<div id="themeContainer" class="widget-component-container">' +
         '<div id="inat-widget-container" ' +
             'data-inat-widget ' +
             'data-inat-source="' + config.project + '" ' +
@@ -391,14 +391,19 @@ function buildWidget( config ) {
             'data-inat-limit="' + CONST_OBSERVATIONS_PER_PAGE + '" ' +
             'data-inat-order-by="created_at" ' +
              inatParams + taxonId + 
-            'data-inat-compact="false" ' +
+            'data-inat-compact="false" ' + // <--- This is what you wrote
             'data-inat-show-title="false" ' + 
             'data-inat-header-text="' + config.title + '" >' + 
         '</div>' +
       '</div>';
 
-    console.log('inat widget parameters - ' + widgetHtml);
+    // 🛠️ THE FORCE-FIX: Forcefully overwrite whatever leaked into the string
+    if (widgetHtml.includes('data-inat-compact="true"')) {
+        widgetHtml = widgetHtml.replace('data-inat-compact="true"', 'data-inat-compact="false"');
+    }
 
+    console.log('inat widget parameters - ' + widgetHtml);
+           
     // Render the HTML view structure directly to the application mount point
     document.getElementById('app').innerHTML = widgetHtml;
 
