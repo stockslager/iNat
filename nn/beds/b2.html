@@ -301,16 +301,15 @@ function buildMenu( config, results ) {
  * @param {HTMLElement} wrapper - The DOM element where the player should be mounted.
  */
 function createAudioPlayer(mp3Url, wrapper) {
-    // 1. Structural Check
+    // Structural Check
     if (!mp3Url || !wrapper) {
         console.log("ℹ️ Missing audio path or wrapper element. Skipping audio UI.");
         return; 
     }
 
-    // 2. Build the player container shell (hidden by default)
+    // Build the player container shell (hidden by default)
     const audioPlayerContainer = document.createElement('div');
     audioPlayerContainer.className = 'custom-audio-player';
-    audioPlayerContainer.style.display = 'none'; 
 
     audioPlayerContainer.innerHTML = `
         <audio class="dynamic-audio-track" preload="auto">
@@ -322,16 +321,10 @@ function createAudioPlayer(mp3Url, wrapper) {
 
     wrapper.appendChild(audioPlayerContainer);
 
-    // 3. Cache DOM Node Elements
+    // Cache DOM Node Elements
     const playBtn    = audioPlayerContainer.querySelector('.dynamic-play-btn');
     const audioTrack = audioPlayerContainer.querySelector('.dynamic-audio-track');
     const timeDisp   = audioPlayerContainer.querySelector('.dynamic-time-display');
-
-    // 4. Verification Handlers
-    audioTrack.addEventListener('canplaythrough', () => {
-        // File verified successfully! Show the player container.
-        audioPlayerContainer.style.display = 'flex'; 
-    });
 
     audioTrack.addEventListener('error', () => {
         console.warn("⚠️ Audio file failed to load or does not exist at path:", mp3Url);
@@ -339,7 +332,7 @@ function createAudioPlayer(mp3Url, wrapper) {
         audioPlayerContainer.remove();
     });
 
-    // 5. Control Listeners
+    // Control Listeners
     playBtn.addEventListener('click', () => {
         if (audioTrack.paused) {
             audioTrack.play();
