@@ -396,14 +396,7 @@ function buildWidget( config ) {
             'data-inat-header-text="' + config.title + '" >' + 
         '</div>' +
       '</div>';
-console.log('hello ');
-console.log('SPLIT TEXT:', widgetHtml.split('data-inat-compact='));
            
-    // 🛠️ THE FORCE-FIX: Forcefully overwrite whatever leaked into the string
-    if (widgetHtml.includes('data-inat-compact="true"')) {
-        widgetHtml = widgetHtml.replace('data-inat-compact="true"', 'data-inat-compact="false"');
-    }
-
     console.log('inat widget parameters - ' + widgetHtml);
            
     // Render the HTML view structure directly to the application mount point
