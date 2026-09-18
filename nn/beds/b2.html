@@ -129,14 +129,28 @@
   justify-content: flex-start;
   gap: 8px; 
   
-  /* Uses a semi-transparent dark tint instead of full element opacity. */
-  /* This prevents the text and play button from turning invisible on phones. */
-  background-color: rgba(30, 41, 59, 0.85); 
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #333333; 
   border-radius: 5px;
-  
   padding: 0 10px; 
   box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+
+  /* MOBILE SAFE DEFAULT: Fully solid on touchscreens */
+  opacity: 1; 
+}
+
+/* --- THE HOVER SPLIT --- */
+/* This block executes ONLY on desktops/laptops with a mouse pointer */
+@media (hover: hover) {
+  .custom-audio-player {
+    opacity: 0.35; /* Dims initially on desktop */
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  /* Smooth fade-in on desktop hover */
+  .image-audio-wrapper:hover .custom-audio-player,
+  .custom-audio-player:hover {
+    opacity: 1;
+  }
 }
 
 /* Button sizing adjustments */
@@ -167,7 +181,7 @@
 .image-audio-wrapper {
   position: relative;
   display: inline-block;
-  min-width: 120px; /* Safety layout constraint for small screens */
+  min-width: 120px;
 }
 
 .image-audio-wrapper img {
@@ -175,6 +189,8 @@
   max-width: 100%;
   height: auto;
 }
+
+/***** end audio ******/
 
 /***** end audio ******/
     
