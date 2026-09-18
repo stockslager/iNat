@@ -116,12 +116,13 @@
 /**** audio player *****/
     
 .custom-audio-player {
+  /* Positions the player in the bottom-right corner of the image */
   position: absolute; 
   bottom: 10px;        
   right: 10px;         
   z-index: 10;         
   
-  /* Shrink-wraps the capsule tightly around the layout content nodes */
+  /* Shrink-wraps the background perfectly to the text & button size */
   width: fit-content;        
   height: 40px;        
   
@@ -130,24 +131,25 @@
   justify-content: flex-start;
   gap: 8px; 
   
-  /* A permanent, slightly translucent 75% dark tint background */
-  background-color: rgba(30, 41, 59, 0.75); 
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  /* Solid dark background with no opacity variables to freak out mobile graphics engines */
+  background-color: #27272a; 
+  border: 1px solid #3f3f46;
   border-radius: 5px;
   
+  /* Balanced symmetric padding for a tight capsule feel */
   padding: 0 10px; 
   box-shadow: 0 4px 10px rgba(0,0,0,0.4);
 }
 
 /* Button sizing adjustments */
 .player-btn {
-  flex-shrink: 0; 
+  flex-shrink: 0; /* Prevents the circle button from turning into an oval */
   width: 28px;    
   height: 28px;
   border-radius: 50%;
   border: none;
   background-color: #ffffff;
-  color: #333333;
+  color: #27272a;
   font-size: 12px;
   cursor: pointer;
   display: flex;
@@ -155,7 +157,7 @@
   justify-content: center;
 }
 
-/* Class selector matched to JavaScript output */
+/* Selector matched to the class in your JavaScript */
 .dynamic-time-display {
   color: #ffffff;
   font-family: sans-serif;
@@ -164,9 +166,14 @@
   padding-right: 2px;
 }
 
+/* THE FIX: Forces the wrapper to accurately hold dimensions on mobile devices */
 .image-audio-wrapper {
   position: relative;
-  display: inline-block;
+  display: block;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content; 
+  max-width: 100%;
 }
 
 .image-audio-wrapper img {
