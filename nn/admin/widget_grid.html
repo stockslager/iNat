@@ -259,6 +259,10 @@ function buildMenu( config ) {
         urlState = setTaxonId(urlState, '');
         homeUrl = '../garden/plant_detail.html'; 
         buildNavHome( navbar, homeUrl, urlState, config );
+   } else if( getComponent(appState) === COMPONENT_BEDS ) {
+        let urlState = appState;
+        homeUrl = '../beds/beds.html'; 
+        buildNavHome( navbar, homeUrl, urlState, config );
    } else {
         buildNavHome( navbar, homeUrl, appState, config );
    }
