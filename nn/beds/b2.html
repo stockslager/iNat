@@ -113,31 +113,39 @@
     overflow: hidden;
   }
 
-/********audio*********/
-/* Container placement and sizing */
 .custom-audio-player {
   position: absolute; 
   bottom: 10px;        
   right: 10px;         
   z-index: 10;         
   
-  /* FIX 1: Shrink-wraps the background perfectly around the content nodes */
+  /* Shrink-wraps the background perfectly around the content nodes */
   width: fit-content;        
   height: 40px;        
   
   display: flex;
   align-items: center;
   
-  /* FIX 2: Tightens up layout alignment using a fixed element gap */
+  /* Tightens up layout alignment using a fixed element gap */
   justify-content: flex-start;
   gap: 8px; 
   
   background-color: #333333;
   border-radius: 5px;
   
-  /* FIX 3: Balanced clean side padding for a tight capsule design style */
+  /* Balanced clean side padding for a tight capsule design style */
   padding: 0 10px; 
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+
+  /* HOVER EFFECT STEP 1: Dim the player initially and set up the transition timer */
+  opacity: 0.35;
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* HOVER EFFECT STEP 2: Light up to full opacity when hovering over image container or player */
+.image-audio-wrapper:hover .custom-audio-player,
+.custom-audio-player:hover {
+  opacity: 1;
 }
 
 /* Button sizing adjustments */
@@ -156,7 +164,7 @@
   justify-content: center;
 }
 
-/* FIX 4: Changed selector from # ID to . class to match your JavaScript output */
+/* Class selector matched to JavaScript output */
 .dynamic-time-display {
   color: #ffffff;
   font-family: sans-serif;
@@ -176,6 +184,76 @@
   height: auto;
 }
 
+.custom-audio-player {
+  position: absolute; 
+  bottom: 10px;        
+  right: 10px;         
+  z-index: 10;         
+  
+  /* Shrink-wraps the background perfectly around the content nodes */
+  width: fit-content;        
+  height: 40px;        
+  
+  display: flex;
+  align-items: center;
+  
+  /* Tightens up layout alignment using a fixed element gap */
+  justify-content: flex-start;
+  gap: 8px; 
+  
+  background-color: #333333;
+  border-radius: 5px;
+  
+  /* Balanced clean side padding for a tight capsule design style */
+  padding: 0 10px; 
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+
+  /* HOVER EFFECT STEP 1: Dim the player initially and set up the transition timer */
+  opacity: 0.35;
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* HOVER EFFECT STEP 2: Light up to full opacity when hovering over image container or player */
+.image-audio-wrapper:hover .custom-audio-player,
+.custom-audio-player:hover {
+  opacity: 1;
+}
+
+/* Button sizing adjustments */
+.player-btn {
+  flex-shrink: 0; /* Prevents the circle button from warping on tiny screens */
+  width: 28px;    
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background-color: #ffffff;
+  color: #333333;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Class selector matched to JavaScript output */
+.dynamic-time-display {
+  color: #ffffff;
+  font-family: sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding-right: 2px;
+}
+
+.image-audio-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.image-audio-wrapper img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
 /***** end audio ******/
     
   /* Original Helpers */
