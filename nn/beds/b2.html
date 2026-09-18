@@ -121,7 +121,6 @@
   right: 10px;         
   z-index: 10;         
   
-  /* Fits snugly around the button and timer text */
   width: fit-content;        
   height: 40px;        
   
@@ -130,11 +129,26 @@
   justify-content: flex-start;
   gap: 8px; 
   
-  /* 100% solid, standard background color */
   background-color: #333333;
   border-radius: 5px;
   padding: 0 10px; 
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+
+  /* SAFE DEFAULT: Solid on mobile touch screens */
+  opacity: 1; 
+}
+
+/* SLEEK DESKTOP HOVER: Runs ONLY on devices with a mouse cursor */
+@media (hover: hover) {
+  .custom-audio-player {
+    opacity: 0.35; /* Semi-opaque until hovered */
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  .image-audio-wrapper:hover .custom-audio-player,
+  .custom-audio-player:hover {
+    opacity: 1;
+  }
 }
 
 /* Button sizing adjustments */
@@ -153,7 +167,6 @@
   justify-content: center;
 }
 
-/* Class selector matched to JavaScript output */
 .dynamic-time-display {
   color: #ffffff;
   font-family: sans-serif;
