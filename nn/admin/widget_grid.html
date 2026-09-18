@@ -394,13 +394,23 @@ function buildWidget( config ) {
       '</div>';
 
     console.log('inat widget parameters - ' + widgetHtml);
-           
+
     // Render the HTML view structure directly to the application mount point
+    document.getElementById('app').innerHTML = widgetHtml;
+
+    // THE FIX: Defer script injection to let the browser compute layout dimensions
+    setTimeout(function() {
+        var scriptNode = document.createElement('script');
+        scriptNode.src = '../core/js/inat_widget.js';
+        document.body.appendChild(scriptNode);
+    }, 50); // A brief 50ms pause ensures the container is wide and stable
+           
+    /*// Render the HTML view structure directly to the application mount point
     document.getElementById('app').innerHTML = widgetHtml;
 
     var scriptNode = document.createElement('script');
     scriptNode.src = '../core/js/inat_widget.js';
-    document.body.appendChild(scriptNode);
+    document.body.appendChild(scriptNode);*/
 }
 
 </script>           
