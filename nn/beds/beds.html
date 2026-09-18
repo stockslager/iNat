@@ -113,59 +113,6 @@
     overflow: hidden;
   }
 
-/********audio*********/
-/* Container placement and sizing */
-.custom-audio-player {
-  /* FIX: Changed from fixed to absolute to lock onto the parent wrapper */
-  position: absolute; 
-  
-  /* Positions the player in the bottom-right corner of the image */
-  bottom: 10px;        
-  right: 10px;         
-  z-index: 10;         /* Ensures player sits on top of the image graphic */
-  
-  width: 150px;        /* Explicitly set custom width */
-  height: 40px;        /* Explicitly set custom height */
-  
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  background-color: #333333;
-  border-radius: 5px;
-  padding: 5px 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-
-/* Button sizing adjustments */
-.player-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background-color: #ffffff;
-  color: #333333;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-#dynamic-time-display {
-  color: #ffffff;
-  font-family: sans-serif;
-  font-size: 12px;
-}
-
-.image-audio-wrapper {
-  position: relative;
-  display: inline-block;
-}
-.image-audio-wrapper img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-/***** end audio ******/
-    
   /* Original Helpers */
   #h2 { font-weight:bold; font-size:20px; }
   p { width:100%; }
@@ -284,6 +231,64 @@ function buildMenu( config, results ) {
     faddelem('p', document.body).appendChild(navbar);
 }
 
+/**
+ * Generates and mounts a custom audio player if the file is verified by the browser.
+ * Bypasses CORS fetch restrictions by leveraging HTML5 media events.
+ * 
+ * @param {string} mp3Url - The destination path of the audio track.
+ * @param {HTMLElement} wrapper - The DOM element where the player should be mounted.
+ */
+function createAudioPlayer(mp3Url, wrapper) {
+    // Structural Check
+    if (!mp3Url || !wrapper) {
+        console.log("ℹ️ Missing audio path or wrapper element. Skipping audio UI.");
+        return; 
+    }
+
+    // Build the player container shell (hidden by default)
+    const audioPlayerContainer = document.createElement('div');
+    audioPlayerContainer.className = 'custom-audio-player';
+
+    audioPlayerContainer.innerHTML = `
+        <audio class="dynamic-audio-track" preload="auto">
+            <source src="${mp3Url}" type="audio/mpeg">
+        </audio>
+        <button class="dynamic-play-btn player-btn" type="button">▶</button>
+        <span class="dynamic-time-display">0:00</span>
+    `;   
+
+    wrapper.appendChild(audioPlayerContainer);
+
+    // Cache DOM Node Elements
+    const playBtn    = audioPlayerContainer.querySelector('.dynamic-play-btn');
+    const audioTrack = audioPlayerContainer.querySelector('.dynamic-audio-track');
+    const timeDisp   = audioPlayerContainer.querySelector('.dynamic-time-display');
+
+    audioTrack.addEventListener('error', () => {
+        console.warn("⚠️ Audio file failed to load or does not exist at path:", mp3Url);
+        // Silently dismantle the hidden UI element to keep DOM clean.
+        audioPlayerContainer.remove();
+    });
+
+    // Control Listeners
+    playBtn.addEventListener('click', () => {
+        if (audioTrack.paused) {
+            audioTrack.play();
+            playBtn.textContent = '⏸';
+        } else {
+            audioTrack.pause();
+            playBtn.textContent = '▶';
+        }
+    });
+
+    audioTrack.addEventListener('timeupdate', () => {
+        const minutes = Math.floor(audioTrack.currentTime / 60);
+        let seconds = Math.floor(audioTrack.currentTime % 60);
+        if (seconds < 10) seconds = '0' + seconds;
+        timeDisp.textContent = `${minutes}:${seconds}`;
+    });
+}
+
 function buildPage(xobj, config) {
    let results = xobj.results;
    let box_array = [];
@@ -303,7 +308,8 @@ function buildPage(xobj, config) {
 
    // Create dynamic image element (keeping exact styling rules)
    const img = document.createElement('img');
-   img.src = './artwork/' + image_audio_name + '.jpg'; 
+   //img.src = './artwork/' + image_audio_name + '.jpg'; 
+   img.src = root_photos + getPhotoId(appState) + '/large.jpg'; 
    img.style.height = 'auto';
    img.style.borderRadius = '5px';  
    img.style.objectFit = 'contain'; 
@@ -313,54 +319,11 @@ function buildPage(xobj, config) {
    wrapper.appendChild(img);
 
    // Check if the MP3 file exists before creating player UI
-   const mp3Url = './artwork/' + image_audio_name + '.mp3';
+   //const mp3Url = './artwork/' + image_audio_name + '.mp3';
+   const mp3Url = getSoundUrl(appState);
 
-   fetch(mp3Url, { method: 'HEAD' })
-       .then(response => {
-           if (response.ok) {
-               const audioPlayerContainer = document.createElement('div');
-               audioPlayerContainer.className = 'custom-audio-player';
-               audioPlayerContainer.innerHTML = 
-                  '<audio class="dynamic-audio-track" preload="auto"> ' + 
-                  '<source src="' + mp3Url + '" type="audio/mpeg">' + 
-                  '</audio> ' + 
-                  '<button class="dynamic-play-btn player-btn" type="button">▶</button> ' + 
-                  '<span class="dynamic-time-display">0:00</span>';   
-
-               wrapper.appendChild(audioPlayerContainer);
-               
-               // ============================================================
-               // 🌟 MOVE YOUR PLAYBUTTON / TIME LISTENERS INSIDE HERE!
-               // ============================================================
-               const playBtn    = audioPlayerContainer.querySelector('.dynamic-play-btn');
-               const audioTrack = audioPlayerContainer.querySelector('.dynamic-audio-track');
-               const timeDisp   = audioPlayerContainer.querySelector('.dynamic-time-display');
-
-               playBtn.addEventListener('click', () => {
-                   if (audioTrack.paused) {
-                       audioTrack.play();
-                       playBtn.textContent = '⏸';
-                   } else {
-                       audioTrack.pause();
-                       playBtn.textContent = '▶';
-                   }
-               });
-
-               // Update time display as it plays
-               audioTrack.addEventListener('timeupdate', () => {
-                   let minutes = Math.floor(audioTrack.currentTime / 60);
-                   let seconds = Math.floor(audioTrack.currentTime % 60);
-                   if (seconds < 10) seconds = '0' + seconds;
-                   timeDisp.textContent = minutes + ':' + seconds;
-               });
-
-           } else {
-               console.log("ℹ️ No MP3 file found. Skipping audio UI.");
-           }
-       })
-       .catch(err => {
-           console.error("⚠️ Server check failed: ", err);
-       });
+   // attach audio to image if it's at the path specified in from the api
+   createAudioPlayer(mp3Url, wrapper);
 
    header.appendChild(wrapper);
     
