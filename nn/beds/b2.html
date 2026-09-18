@@ -116,13 +116,12 @@
 /**** audio player *****/
     
 .custom-audio-player {
-  /* Positions the player in the bottom-right corner of the image */
   position: absolute; 
   bottom: 10px;        
   right: 10px;         
   z-index: 10;         
   
-  /* Shrink-wraps the background perfectly to the text & button size */
+  /* Fits snugly around the button and timer text */
   width: fit-content;        
   height: 40px;        
   
@@ -131,25 +130,22 @@
   justify-content: flex-start;
   gap: 8px; 
   
-  /* Solid dark background with no opacity variables to freak out mobile graphics engines */
-  background-color: #27272a; 
-  border: 1px solid #3f3f46;
+  /* 100% solid, standard background color */
+  background-color: #333333;
   border-radius: 5px;
-  
-  /* Balanced symmetric padding for a tight capsule feel */
   padding: 0 10px; 
-  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 /* Button sizing adjustments */
 .player-btn {
-  flex-shrink: 0; /* Prevents the circle button from turning into an oval */
+  flex-shrink: 0; 
   width: 28px;    
   height: 28px;
   border-radius: 50%;
   border: none;
   background-color: #ffffff;
-  color: #27272a;
+  color: #333333;
   font-size: 12px;
   cursor: pointer;
   display: flex;
@@ -157,7 +153,7 @@
   justify-content: center;
 }
 
-/* Selector matched to the class in your JavaScript */
+/* Class selector matched to JavaScript output */
 .dynamic-time-display {
   color: #ffffff;
   font-family: sans-serif;
@@ -166,14 +162,9 @@
   padding-right: 2px;
 }
 
-/* THE FIX: Forces the wrapper to accurately hold dimensions on mobile devices */
 .image-audio-wrapper {
   position: relative;
-  display: block;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content; 
-  max-width: 100%;
+  display: inline-block;
 }
 
 .image-audio-wrapper img {
