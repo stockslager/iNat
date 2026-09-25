@@ -746,15 +746,6 @@ async function gatherResources() {
         //const layerControl = L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
         const layerControl = L.control.layers(baseMaps, trailLayers, { position: 'topright' }).addTo(map);
 
-        // STRICT SINGLE-SELECT: Enforces radio behavior natively on the checkboxes
-        map.on('overlayadd', function(e) {
-            for (let trail in trailLayers) {
-                if (trail !== e.name && map.hasLayer(trailLayers[trail])) {
-                    map.removeLayer(trailLayers[trail]);
-                }
-            }
-        });
-      
         // Extract the physical HTML block Leaflet built for the container
         const controlContainer = layerControl.getContainer();
 
