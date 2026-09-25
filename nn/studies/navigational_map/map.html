@@ -214,12 +214,24 @@ body {
   align-items: center;
 }
   
+/*.flower-glyph {
+  font-size: 12px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}*/
+
 .flower-glyph {
   font-size: 12px;
   line-height: 1;
-  transition: color 0.2s ease; /* Adds a smooth fade transition when toggled */
-}
+  
+  /* 1. Change color transition to opacity to prevent the black rendering bug */
+  transition: opacity 0.2s ease; 
 
+  /* 2. Force the browser to use full-color emoji rendering system fonts */
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
+  display: inline-block;
+}
+  
 /* Base View Theme (Black Flower) */
 .default-theme .flower-glyph {
   color: #000000;
