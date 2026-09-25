@@ -763,12 +763,6 @@ async function gatherResources() {
         // Inject it right at the very top of the layout panel box
         controlContainer.insertBefore(menuTitle, controlContainer.firstChild);
 
-        // if a default layer was passed in as a url parameter there's no need to render the clickable layers icon
-        // so just remove it from the map.
-        if( p_layer ) {
-            controlContainer.remove();
-        }      
-      
         parentLocationsLayer.addTo(map);
 
         // Base Layer Visual Theme Toggle Listeners
