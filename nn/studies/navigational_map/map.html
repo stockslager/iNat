@@ -213,39 +213,26 @@ body {
   justify-content: center;
   align-items: center;
 }
-  
-/*.flower-glyph {
-  font-size: 12px;
-  line-height: 1;
-  transition: color 0.2s ease;
-}*/
 
-.flower-glyph {
-  font-size: 12px;
-  line-height: 1;
-  display: inline-block;
-  
-  /* Force system emoji rendering paths */
-  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Segoe UI Symbol", sans-serif !important;
-  
-  /* The Fix: Force the text layer to be transparent so black text can't bleed through */
-  color: transparent !important;
-  text-shadow: 0 0 0 currentcolor !important;
-  
-  /* Fallback override against satellite-theme color injections */
-  -webkit-text-fill-color: initial !important;
-}
-  
-/* Base View Theme (Black Flower) */
-.default-theme .flower-glyph {
-  color: #000000;
+/* ==========================================================================
+   SVG VECTOR PROTECTION (SPECIFICITY-BASED OVERRIDES)
+   ========================================================================== */
+
+/* High-specificity base rule for the flower vector */
+#map .custom-utf8-pin .flower-vector {
+    filter: none;
 }
 
-/* Satellite View Theme (White or Neon Yellow Flower for visibility) */
-.satellite-theme .flower-glyph {
-  color: #ffffff; 
+/* Explicitly overrides the grayscale/brightness filter when the map defaults to black/white */
+#map .default-theme .flower-vector {
+    filter: none;
 }
 
+/* Explicitly locks in place when switching to the satellite theme */
+#map .satellite-theme .flower-vector {
+    filter: none;
+}
+  
 /* Handles the default state directly without inline styles */
 .leaflet-popup-content a.popup-link {
   display: inline-block;
@@ -630,7 +617,7 @@ function loadLayers(obs_data) {
       const [lat, lon] = rec.location.split(',');
       
       // Look up target zoom level globally or default it safely to frame the pin
-      const initialTheme = (typeof defaultZoom !== 'undefined' && typeof thresholdZoom !== 'undefined' && defaultZoom >= thresholdZoom) 
+/*      const initialTheme = (typeof defaultZoom !== 'undefined' && typeof thresholdZoom !== 'undefined' && defaultZoom >= thresholdZoom) 
           ? 'satellite-theme' 
           : 'default-theme';
           
@@ -640,6 +627,20 @@ function loadLayers(obs_data) {
         iconAnchor: [8, 8],
         popupAnchor: [0, -16],
         className: 'custom-pin-reset'
+      });*/
+      // Look up target zoom level globally or default it safely to frame the pin
+      const initialTheme = (typeof defaultZoom !== 'undefined' && typeof thresholdZoom !== 'undefined' && defaultZoom >= thresholdZoom) ? 'satellite-theme' : 'default-theme';
+
+      const flowerIcon = L.divIcon({
+         // Kept the precise wrapper classes so our nested CSS selectors target it effortlessly
+         html: '<span class="custom-utf8-pin ' + initialTheme + '">' +
+               '<svg class="flower-vector" viewBox="0 0 24 24" width="14" height="14" style="display:inline-block; vertical-align:middle;">' +
+               '<path fill="#ffd700" d="M12 2a3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3zm0 14a3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3zm7-7a3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3zM5 9a3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3zm7 0a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/>' +
+               '</svg></span>',
+         iconSize:,
+         iconAnchor:,
+         popupAnchor: [0, -16],
+         className: 'custom-pin-reset'
       });
 
       const flowerMarker = L.marker([parseFloat(lat), parseFloat(lon)], { 
