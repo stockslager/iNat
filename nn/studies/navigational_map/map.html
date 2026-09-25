@@ -607,13 +607,13 @@ function loadLayers(obs_data) {
       if (!trailLayers[trailName]) {
           trailLayers[trailName] = L.layerGroup();
 
-          if (!p_layer) {
-              // Adds to the parent container which builds the clickable menu icon for layers
+          if (!p_layer && typeof flowerLocationsLayer !== 'undefined' && flowerLocationsLayer) {
+              // Standard behavior: Adds to the parent container which builds the clickable menu icon
               flowerLocationsLayer.addLayer(trailLayers[trailName]);
-          } else {
-              // Force the layer directly onto the map bypasses the menu container icon entirely
+          } else if (typeof map !== 'undefined' && map) {
+              // Hidden behavior: Force the layer directly onto the map bypasses the menu container icon entirely
               trailLayers[trailName].addTo(map); 
-          }          
+          }
       }
       
       // Create the pin using your original logic (matching your page mode icon rules)
