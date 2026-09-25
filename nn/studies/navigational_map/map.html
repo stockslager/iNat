@@ -223,13 +223,17 @@ body {
 .flower-glyph {
   font-size: 12px;
   line-height: 1;
-  
-  /* 1. Change color transition to opacity to prevent the black rendering bug */
-  transition: opacity 0.2s ease; 
-
-  /* 2. Force the browser to use full-color emoji rendering system fonts */
-  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
   display: inline-block;
+  
+  /* Force system emoji rendering paths */
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Segoe UI Symbol", sans-serif !important;
+  
+  /* The Fix: Force the text layer to be transparent so black text can't bleed through */
+  color: transparent !important;
+  text-shadow: 0 0 0 currentcolor !important;
+  
+  /* Fallback override against satellite-theme color injections */
+  -webkit-text-fill-color: initial !important;
 }
   
 /* Base View Theme (Black Flower) */
