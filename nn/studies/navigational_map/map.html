@@ -214,28 +214,15 @@ body {
   align-items: center;
 }
 
-/* ==========================================================================
-   SVG VECTOR PROTECTION (SPECIFICITY-BASED OVERRIDES)
-   ========================================================================== */
-
-/* Highly specific selector that protects the flower emoji from parent filters */
-#map .custom-utf8-pin .flower-glyph {
-    display: inline-block;
-    font-size: 12px;
-    line-height: 1;
-    /* Forces system color emoji rendering engines */
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
-    
-    /* THE FIX: Reverts the grayscale/brightness filters back to normal strictly for the flower */
-    filter: none;
+.flower-glyph {
+  font-size: 12px;
+  line-height: 1;
 }
 
-/* Explicitly overrides the default-theme black filters so the flower stays yellow */
-#map .default-theme .flower-glyph {
-    filter: none;
+/* Force the flower to keep its native colors on the default layout */
+.default-theme .flower-glyph {
+  color: initial;
 }
-
-/*************/
   
 /* Handles the default state directly without inline styles */
 .leaflet-popup-content a.popup-link {
@@ -621,22 +608,12 @@ function loadLayers(obs_data) {
       const [lat, lon] = rec.location.split(',');
       
       // Look up target zoom level globally or default it safely to frame the pin
-/*      const initialTheme = (typeof defaultZoom !== 'undefined' && typeof thresholdZoom !== 'undefined' && defaultZoom >= thresholdZoom) 
+      const initialTheme = (typeof defaultZoom !== 'undefined' && typeof thresholdZoom !== 'undefined' && defaultZoom >= thresholdZoom) 
           ? 'satellite-theme' 
           : 'default-theme';
           
       const flowerIcon = L.divIcon({
         html: '<span class="custom-utf8-pin satellite-theme"><span class="flower-glyph">' + '🌼' + '</span></span>',
-        iconSize: [16, 16],
-        iconAnchor: [8, 8],
-        popupAnchor: [0, -16],
-        className: 'custom-pin-reset'
-      });*/
-      // Look up target zoom level globally or default it safely to frame the pin
-      const initialTheme = (typeof defaultZoom !== 'undefined' && typeof thresholdZoom !== 'undefined' && defaultZoom >= thresholdZoom) ? 'satellite-theme' : 'default-theme';
-
-      const flowerIcon = L.divIcon({
-        html: '<span class="custom-utf8-pin"><span class="flower-glyph">' + '🌼' + '</span></span>',
         iconSize: [16, 16],
         iconAnchor: [8, 8],
         popupAnchor: [0, -16],
