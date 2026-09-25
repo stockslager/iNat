@@ -750,7 +750,9 @@ async function gatherResources() {
         }
 
         // Mount control grid interface panels
-        const layerControl = L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+        //const layerControl = L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+        // trailLayers acts as the base map, forcing radio buttons
+        const layerControl = L.control.layers(trailLayers, null, { position: 'topright' }).addTo(map);
 
         // Extract the physical HTML block Leaflet built for the container
         const controlContainer = layerControl.getContainer();
