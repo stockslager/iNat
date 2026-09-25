@@ -608,7 +608,9 @@ function loadLayers(obs_data) {
           trailLayers[trailName] = L.layerGroup();
           
           // Nest the trail layer group directly inside your overarching parent container
-          flowerLocationsLayer.addLayer(trailLayers[trailName]);
+          if( !p_layer ) {   // only add the clickable layer icon if they didn't pass in a layer
+              flowerLocationsLayer.addLayer(trailLayers[trailName]);
+          }
       }
       
       // Create the pin using your original logic (matching your page mode icon rules)
