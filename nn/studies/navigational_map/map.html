@@ -354,8 +354,9 @@ function buildFlowerBedURL( config, rec ) {
            }
       }
 
-      let pinner = '';
-      if( p_pinner ) { pinner += ( '&pinner=' + p_pinner ); }
+      let map_params = ''; 
+      if( p_pinner ) { map_params += ( '&pinner=' + p_pinner ); }
+      if( p_layer  ) { map_params += ( '&layer='  + p_layer ); }
 
       // get the raw audio url from iNat: "https://static.inaturalist.org/sounds/229366.m4a?1621685446"
       let sound_param = '';
@@ -363,7 +364,7 @@ function buildFlowerBedURL( config, rec ) {
          sound_param += ('&soundurl=' + rec.sounds[0].file_url);
       } 
 
-      return( '../../beds/beds.html?params=horizon&component=beds&garden='+garden+'&mode=' + p_mode + pinner +
+      return( '../../beds/beds.html?params=horizon&component=beds&garden='+garden+'&mode=' + p_mode + map_params +
                                              '&photoid=' + rec.observation_photos[0].photo_id + sound_param + 
                                              '&defaultlat=' + p_default_lat + 
                                              '&defaultlon=' + p_default_lon + 
@@ -375,8 +376,9 @@ function buildFlowerURL( config, rec ) {
   let plant_id   = rec.taxon.id ? '&plantid='   + rec.taxon.id : '';
   let plant_name = '&plantname=' + (rec.taxon.preferred_common_name || rec.taxon.name || 'unknown name');
 
-  let pinner = '';
-  if( p_pinner ) { pinner += ( '&pinner=' + p_pinner ); }
+  let map_params = '';
+  if( p_pinner ) { map_params += ( '&pinner=' + p_pinner ); }
+  if( p_layer  ) { map_params += ( '&layer='  + p_layer ); }
 
   // get the raw audio url from iNat: "https://static.inaturalist.org/sounds/229366.m4a?1621685446"
   let sound_param = '';
@@ -384,7 +386,7 @@ function buildFlowerURL( config, rec ) {
      sound_param += ('&soundurl=' + rec.sounds[0].file_url);
   } 
   
-  return( '../../garden/plant_detail.html?params=horizon&component=plants&mode=' + p_mode + pinner +
+  return( '../../garden/plant_detail.html?params=horizon&component=plants&mode=' + p_mode + map_params +
                                              plant_id + plant_name + 
                                              '&photoid=' + rec.observation_photos[0].photo_id + sound_param + 
                                              '&defaultlat=' + p_default_lat + 
