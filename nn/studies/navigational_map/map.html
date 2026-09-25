@@ -302,6 +302,42 @@ body {
     margin-bottom: 0;
 }
 
+/**********************/
+/* Transforms the trail overlay checkboxes into visual radio circles */
+#map .leaflet-control-layers-overlays input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border: 1px solid #777;
+    border-radius: 50%;
+    outline: none;
+    background-color: #fff;
+    cursor: pointer;
+    vertical-align: middle;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+/* Styled active state indicator */
+#map .leaflet-control-layers-overlays input[type="checkbox"]:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+/* Radio button center dot layout */
+#map .leaflet-control-layers-overlays input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: white;
+}
+
+
 </style>
   
 </head>
@@ -743,17 +779,16 @@ async function gatherResources() {
             overlayMaps[trail] = trailLayers[trail];
         }
 
-        // Mount control grid interface panels
         //const layerControl = L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
-        // trailLayers acts as the base map, forcing radio buttons
-        const layerControl = L.control.layers(trailLayers, null, { position: 'topright' }).addTo(map);
+        const layerControl = L.control.layers(baseMaps, trailLayers, { position: 'topright' }).addTo(map);
 
-        // listener for baselayerchange
-        map.on('baselayerchange', function() {
-            document.querySelectorAll('.flower-glyph').forEach(el => {
-                el.style.setProperty('filter', 'none', 'important');
-                el.style.setProperty('color', 'initial', 'important');
-            });
+        // STRICT SINGLE-SELECT: Enforces radio behavior natively on the checkboxes
+        map.on('overlayadd', function(e) {
+            for (let trail in trailLayers) {
+                if (trail !== e.name && map.hasLayer(trailLayers[trail])) {
+                    map.removeLayer(trailLayers[trail]);
+                }
+            }
         });
       
         // Extract the physical HTML block Leaflet built for the container
