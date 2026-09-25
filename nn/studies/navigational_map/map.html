@@ -28,6 +28,7 @@
     let p_default_zoom = winurlparams.get('defaultzoom') || '';
     let p_tag          = winurlparams.get('tag') || '';
     let p_pinner       = winurlparams.get('pinner') || '';
+    let p_layer        = winurlparams.get('layer') || '';
 
     let map;
     let config     = null;
@@ -587,7 +588,7 @@ function loadLayers(obs_data) {
 
       let trailName = 'Not Specified'; // Fallback container name
 
-      // 1. Extract the unique trail name using field_id 1019
+      // Extract the unique trail name using field_id 1019
       for (let j = 0; j < rec.ofvs.length; j++) {
           if (rec.ofvs[j].field_id === 1019) {   // trail name
               trailName = capitalizeWords(rec.ofvs[j].value.toString());
@@ -595,7 +596,12 @@ function loadLayers(obs_data) {
           }
       }
 
-      // 2. Dynamically create the trail layer group if it doesn't exist yet
+      // Filter: If p_layer parameter is provided, skip this record if the trail name doesn't match
+      if (p_layer.toLowerCase() && trailName.toLowerCase().trim() !== p_layer.toLowerCase() ) {
+          continue;
+      }
+    
+      // Dynamically create the trail layer group if it doesn't exist yet
       if (!trailLayers[trailName]) {
           trailLayers[trailName] = L.layerGroup();
           
@@ -603,7 +609,7 @@ function loadLayers(obs_data) {
           flowerLocationsLayer.addLayer(trailLayers[trailName]);
       }
       
-      // 3. Create the pin using your original logic (matching your page mode icon rules)
+      // Create the pin using your original logic (matching your page mode icon rules)
       const [lat, lon] = rec.location.split(',');
       
       // Look up target zoom level globally or default it safely to frame the pin
@@ -652,7 +658,7 @@ function loadLayers(obs_data) {
           }
       });
 
-      // 4. Drop the marker into its matching trail layer group container
+      // Drop the marker into its matching trail layer group container
       trailLayers[trailName].addLayer(flowerMarker);
   }
 }
