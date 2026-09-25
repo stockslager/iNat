@@ -748,6 +748,14 @@ async function gatherResources() {
         // trailLayers acts as the base map, forcing radio buttons
         const layerControl = L.control.layers(trailLayers, null, { position: 'topright' }).addTo(map);
 
+        // listener for baselayerchange
+        map.on('baselayerchange', function() {
+            document.querySelectorAll('.flower-glyph').forEach(el => {
+                el.style.setProperty('filter', 'none', 'important');
+                el.style.setProperty('color', 'initial', 'important');
+            });
+        });
+      
         // Extract the physical HTML block Leaflet built for the container
         const controlContainer = layerControl.getContainer();
 
