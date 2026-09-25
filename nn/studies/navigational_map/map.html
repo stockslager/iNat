@@ -606,11 +606,14 @@ function loadLayers(obs_data) {
       // Dynamically create the trail layer group if it doesn't exist yet
       if (!trailLayers[trailName]) {
           trailLayers[trailName] = L.layerGroup();
-          
-          // Nest the trail layer group directly inside your overarching parent container
-          if( !p_layer ) {   // only add the clickable layer icon if they didn't pass in a layer
+
+          if (!p_layer) {
+              // Adds to the parent container which builds the clickable menu icon for layers
               flowerLocationsLayer.addLayer(trailLayers[trailName]);
-          }
+          } else {
+              // Force the layer directly onto the map bypasses the menu container icon entirely
+              trailLayers[trailName].addTo(map); 
+          }          
       }
       
       // Create the pin using your original logic (matching your page mode icon rules)
